@@ -27,14 +27,14 @@
                         brand: {
                             base: '#0B1120',
                             surface: '#111827',
-                            primary: '#10B981',
-                            primaryHover: '#059669',
+                            primary: '#B5541C', /* Sienna Brown for TopoWalk globally */
+                            primaryHover: '#8E4014', /* Darker Sienna */
                             secondary: '#3B82F6',
                             accent: '#06B6D4',
                         }
                     },
                     boxShadow: {
-                        'glow': '0 0 20px rgba(16, 185, 129, 0.4)',
+                        'glow': '0 0 20px rgba(181, 84, 28, 0.4)',
                         'glow-blue': '0 0 20px rgba(59, 130, 246, 0.4)'
                     },
                     backgroundImage: {
@@ -87,7 +87,7 @@
     <nav id="navbar"
         class="fixed w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center transition-all duration-300">
         <a href="index.html" class="flex items-center group">
-            <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+            <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(181,84,28,0.5)]">
         </a>
 
         <!-- Desktop Menu -->
@@ -134,7 +134,7 @@
     <div class="w-full pt-32 pb-12 bg-grid-pattern relative border-b border-gray-800/50">
         <div class="absolute inset-0 bg-gradient-to-b from-brand-base via-transparent to-brand-base z-0"></div>
         <div class="container mx-auto px-6 md:px-12 relative z-10 text-center">
-            <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-amber-500/20 bg-amber-900/10 text-sm text-amber-400 font-medium">
+            <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-brand-primary/30 bg-brand-primary/20 text-sm text-brand-primary font-semibold">
                 <i class="fa-solid fa-shield-halved mr-2"></i> Documento Legal
             </div>
             <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight" data-i18n="page_title">
@@ -172,12 +172,12 @@
     <!-- Footer -->
     <footer id="contato" class="bg-brand-surface pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden">
         <div class="container mx-auto px-6 md:px-12 relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
 
                 <!-- Brand Info -->
-                <div class="md:col-span-2">
+                <div class="md:col-span-2 lg:col-span-2">
                     <a href="index.html" class="inline-block mb-6 group">
-                        <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                        <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(181,84,28,0.5)]">
                     </a>
                     <p class="text-gray-400 max-w-sm mb-6" data-i18n="footer_desc">
                         Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro,
@@ -193,9 +193,18 @@
                 <div>
                     <h4 class="text-white font-semibold mb-6" data-i18n="footer_inst">Institucional</h4>
                     <ul class="space-y-3">
-                        <li><a href="index.html#sobre" class="text-gray-400 hover:text-brand-primary transition-colors text-sm" data-i18n="nav_about">Sobre Nós</a></li>
-                        <li><a href="index.html#portfolio" class="text-gray-400 hover:text-brand-primary transition-colors text-sm" data-i18n="footer_port">Portfólio de Apps</a></li>
-                        <li><a href="index.html#contato" class="text-gray-400 hover:text-brand-primary transition-colors text-sm" data-i18n="footer_cont">Contato Profissional</a></li>
+                        <li><a href="index.html#sobre" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm" data-i18n="nav_about">Sobre Nós</a></li>
+                        <li><a href="index.html#portfolio" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm" data-i18n="footer_port">Portfólio de Apps</a></li>
+                        <li><a href="index.html#contato" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm" data-i18n="footer_cont">Contato Profissional</a></li>
+                    </ul>
+                </div>
+
+                <!-- Aplicativos -->
+                <div>
+                    <h4 class="text-white font-semibold mb-6" data-i18n="footer_apps">Aplicativos</h4>
+                    <ul class="space-y-3">
+                        <li><a href="topowalk.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">TopoWalk</a></li>
+                        <li><a href="poleposition.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">Pole Position</a></li>
                     </ul>
                 </div>
 
@@ -203,8 +212,8 @@
                 <div>
                     <h4 class="text-white font-semibold mb-6" data-i18n="footer_transp">Transparência & Políticas</h4>
                     <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_pole">Privacidade - Pole Position</span></a></li>
-                        <li><a href="topowalk-privacy.html" class="text-brand-primary hover:text-white transition-colors text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-brand-primary text-xs"></i> <span data-i18n="footer_priv_topo">Privacidade - TopoWalk</span></a></li>
+                        <li><a href="poleposition-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_pole">Privacidade - Pole Position</span></a></li>
+                        <li><a href="topowalk-privacy.html" class="text-brand-primary hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-brand-primary text-xs"></i> <span data-i18n="footer_priv_topo">Privacidade - TopoWalk</span></a></li>
                     </ul>
                 </div>
 
@@ -233,6 +242,7 @@
                 last_updated: "Última atualização: março de 2026",
                 intro: "Esta Política de Privacidade descreve como o aplicativo <strong>TopoWalk</strong>, desenvolvido por <strong>GHF Software</strong>, trata as informações do usuário. Ao utilizar o TopoWalk, você concorda com os termos descritos neste documento.",
                 btn_back: "Voltar para a GHF Software",
+                footer_apps: "Aplicativos",
                 footer_desc: "Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.",
                 footer_inst: "Institucional",
                 footer_port: "Portfólio de Apps",
@@ -342,6 +352,7 @@
                 last_updated: "Last updated: March 2026",
                 intro: "This Privacy Policy describes how the <strong>TopoWalk</strong> application, developed by <strong>GHF Software</strong>, handles user information. By using TopoWalk, you agree to the terms described in this document.",
                 btn_back: "Back to GHF Software",
+                footer_apps: "Applications",
                 footer_desc: "Cutting-edge software engineering for Mobile and IoT applications. Creating the future with performance since 2004.",
                 footer_inst: "Institutional",
                 footer_port: "App Portfolio",
