@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHF Software - Soluções Inovadoras em IoT e Engenharia de Software</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="GHF Software. Trazendo soluções inovadoras com foco em IoT e mobilidade para facilitar o dia a dia das pessoas.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            base: '#0B1120',      /* Very dark blue, almost black */
+                            surface: '#111827',   /* Slightly lighter dark background */
+                            primary: '#10B981',   /* Emerald Green (Tech/Success) */
+                            primaryHover: '#059669',
+                            secondary: '#3B82F6', /* Bright Blue */
+                            accent: '#06B6D4',    /* Cyan */
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(16, 185, 129, 0.4)',
+                        'glow-blue': '0 0 20px rgba(59, 130, 246, 0.4)'
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'tech-grid': 'linear-gradient(to right, #1f2937 1px, transparent 1px), linear-gradient(to bottom, #1f2937 1px, transparent 1px)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS Base & Utilities -->
+    <style>
+        body {
+            background-color: #0B1120;
+            color: #f3f4f6;
+        }
+
+        /* Tech Grid Background Pattern */
+        .bg-grid-pattern {
+            background-color: #0B1120;
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(135deg, #3B82F6, #10B981);
+        }
+
+        /* Subtle floating animation */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Fade in animation */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-down {
+            animation: fadeInDown 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* Reveal on scroll base state */
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation glass transition */
+        #navbar {
+            transition: all 0.3s ease;
+        }
+
+        #navbar.scrolled {
+            background: rgba(11, 17, 32, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body class="bg-brand-base text-gray-100 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav id="navbar"
+        class="fixed w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center transition-all duration-300">
+        <a href="#" class="flex items-center group">
+            <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+            <a href="#sobre" class="text-gray-300 hover:text-white hover:text-brand-primary transition-colors" data-i18n="nav_about">Sobre Nós</a>
+            <a href="#portfolio"
+                class="text-gray-300 hover:text-white hover:text-brand-primary transition-colors" data-i18n="nav_portfolio">Portfólio</a>
+            <a href="#contato"
+                class="px-5 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-brand-primary hover:text-brand-primary transition-all duration-300" data-i18n="nav_contact">Contato</a>
+            
+            <button onclick="toggleLang()" class="flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold tracking-wide">
+                <i class="fa-solid fa-globe"></i>
+                <span id="lang-indicator">EN</span>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="flex items-center gap-4 md:hidden">
+            <button onclick="toggleLang()" class="flex items-center gap-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold text-sm">
+                <i class="fa-solid fa-globe"></i>
+                <span id="lang-indicator-mobile">EN</span>
+            </button>
+            <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none ml-2">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-brand-base z-40 hidden flex-col justify-center items-center gap-8 text-lg font-medium glass-panel opacity-0 transition-opacity duration-300">
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-gray-400 hover:text-white text-2xl">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <a href="#sobre"
+            class="mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors" data-i18n="nav_about">Sobre Nós</a>
+        <a href="#portfolio"
+            class="mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors" data-i18n="nav_portfolio">Portfólio</a>
+        <a href="#contato"
+            class="mobile-link px-6 py-2 rounded-full bg-brand-primary text-white hover:bg-brand-primaryHover transition-colors" data-i18n="nav_contact">Contato</a>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center pt-24 pb-12 overflow-hidden bg-grid-pattern">
+        <!-- Overlay escuro centralizado para super contraste sobre o grid -->
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0B1120_100%)] z-0"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-base/50 to-brand-base z-0"></div>
+        
+        <!-- Abstract gradient blobs -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-primary rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-float"
+            style="animation-delay: 0s;"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-secondary rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-float"
+            style="animation-delay: 2s;"></div>
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10 text-center">
+            <div
+                class="inline-block mb-4 px-4 py-1.5 rounded-full border border-gray-700/50 bg-gray-800/30 backdrop-blur-sm text-sm text-gray-300 font-medium animate-fade-in-down">
+                <i class="fa-solid fa-microchip text-brand-primary mr-2"></i> <span data-i18n="hero_badge">Elevando o Padrão do Software</span>
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6 animate-fade-in-down"
+                style="animation-delay: 0.1s; opacity: 0;" data-i18n="hero_title">
+                Construímos o futuro da<br class="hidden md:block">
+                <span class="text-gradient">Mobilidade e IoT</span>
+            </h1>
+
+            <p class="mt-4 text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed mb-10 animate-fade-in-up"
+                style="animation-delay: 0.2s; opacity: 0;" data-i18n="hero_desc">
+                Trazer soluções inovadoras com foco em Internet das Coisas e mobilidade para facilitar e empoderar o seu
+                dia a dia.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in-up"
+                style="animation-delay: 0.3s; opacity: 0;">
+                <a href="#portfolio"
+                    class="px-8 py-4 bg-brand-primary hover:bg-brand-primaryHover text-white font-semibold rounded-lg shadow-glow hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
+                    <span data-i18n="btn_portfolio">Ver Portfólio</span> <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <a href="#sobre"
+                    class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center" data-i18n="btn_about">
+                    Conheça a GHF
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Down indicator -->
+        <div
+            class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce flex flex-col items-center text-gray-500">
+            <span class="text-xs tracking-widest uppercase mb-2" data-i18n="scroll">Rolar</span>
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </header>
+
+    <!-- Sobre Section -->
+    <section id="sobre" class="py-24 relative z-10 bg-brand-base">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-surface/50 opacity-50 z-[-1]"></div>
+        <div class="container mx-auto px-6 md:px-12">
+
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <!-- Image / Graphics Side -->
+                <div class="w-full lg:w-1/2">
+                    <div class="relative w-full aspect-square max-w-md mx-auto">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-tr from-brand-primary to-brand-secondary rounded-2xl transform rotate-3 opacity-20 blur-xl">
+                        </div>
+                        <div
+                            class="absolute inset-0 border border-gray-700/50 bg-brand-surface rounded-2xl p-8 flex flex-col justify-center relative overflow-hidden glass-panel group hover:border-gray-600 transition-colors duration-500">
+                            <!-- Tech decorations -->
+                            <i
+                                class="fa-solid fa-server text-5xl text-gray-800 mb-6 group-hover:text-gray-700 transition-colors duration-500"></i>
+
+                            <h3 class="text-2xl font-bold text-white mb-2" data-i18n="solid_foundation">Fundação Sólida</h3>
+                            <p class="text-brand-primary font-medium mb-4" data-i18n="since_2004">Desde 2004</p>
+
+                            <div class="space-y-3 mb-6">
+                                <div
+                                    class="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                                    <i class="fa-solid fa-check text-brand-primary"></i> <span data-i18n="arch_perf">Arquitetura de Alta
+                                        Performance</span>
+                                </div>
+                                <div
+                                    class="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                                    <i class="fa-solid fa-check text-brand-primary"></i> <span data-i18n="extreme_scale">Escalabilidade
+                                        Extrema</span>
+                                </div>
+                                <div
+                                    class="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                                    <i class="fa-solid fa-check text-brand-primary"></i> <span data-i18n="code_quality">Qualidade de
+                                        Código</span>
+                                </div>
+                                <div
+                                    class="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                                    <i class="fa-solid fa-check text-brand-primary"></i> <span data-i18n="ai_solutions">Soluções com Inteligência Artificial</span>
+                                </div>
+                            </div>
+
+                            <!-- Expand Tech Stack -->
+                            <div class="pt-4 border-t border-gray-800/80 w-full mt-auto">
+                                <p class="text-[10px] text-gray-500 font-semibold uppercase tracking-wider mb-3" data-i18n="stack_title">Stack Tecnológico</p>
+                                <div class="flex flex-wrap gap-3 items-center opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                                    <!-- AWS e Docker -->
+                                    <i class="fa-brands fa-aws text-xl hover:text-orange-500 transition-colors cursor-pointer" title="AWS"></i>
+                                    <i class="fa-brands fa-docker text-xl hover:text-blue-500 transition-colors cursor-pointer" title="Docker"></i>
+                                    <!-- GCP e Azure -->
+                                    <i class="fa-brands fa-google text-xl hover:text-brand-secondary transition-colors cursor-pointer" title="Google Cloud (GCP)"></i>
+                                    <i class="fa-brands fa-microsoft text-xl hover:text-blue-400 transition-colors cursor-pointer" title="Azure"></i>
+                                    <!-- Java, Python -->
+                                    <i class="fa-brands fa-java text-2xl hover:text-red-500 transition-colors cursor-pointer" title="Java"></i>
+                                    <i class="fa-brands fa-python text-xl hover:text-yellow-500 transition-colors cursor-pointer" title="Python"></i>
+                                    <!-- Kotlin e Flutter -->
+                                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded border border-purple-500/50 text-purple-400 hover:bg-purple-500/10 transition-colors cursor-default" title="Kotlin">KOTLIN</span>
+                                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 transition-colors cursor-default" title="Flutter">FLUTTER</span>
+                                    <!-- AIs do Mercado -->
+                                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded border border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 transition-colors cursor-default" title="OpenAI">OPENAI</span>
+                                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded border border-orange-500/50 text-orange-400 hover:bg-orange-500/10 transition-colors cursor-default" title="Claude AI">CLAUDE</span>
+                                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded border border-blue-500/50 text-blue-400 hover:bg-blue-500/10 transition-colors cursor-default" title="Google Gemini">GEMINI</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Side -->
+                <div class="w-full lg:w-1/2">
+                    <div
+                        class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-secondary/10 text-brand-secondary text-sm font-semibold tracking-wide uppercase border border-brand-secondary/20" data-i18n="about_badge">
+                        Nossa Essência
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6" data-i18n="about_title">Excelência em <span
+                            class="text-gray-300">Engenharia</span></h2>
+
+                    <div class="space-y-6 text-gray-400 text-lg leading-relaxed">
+                        <p data-i18n="about_p1">
+                            A <strong>GHF Software</strong> é impulsionada pela paixão por resolver problemas complexos
+                            com soluções elegantes. Nossa empresa foi fundada por um <strong>Arquiteto de Sistemas</strong> com profunda bagagem
+                            técnica e experiência em desenvolvimento de software e soluções atuando ativamente
+                            <strong>desde 2004</strong>.
+                        </p>
+                        <p data-i18n="about_p2">
+                            Não apenas escrevemos código; nós desenhamos ecossistemas. Nossas aplicações mobile e IoT
+                            são construídas sobre pilares rigorosos de engenharia moderna, garantindo que entreguemos
+                            performance impecável, tolerância a falhas e escalabilidade contínua.
+                        </p>
+                        <p class="pl-4 border-l-2 border-brand-primary text-gray-300 italic" data-i18n="about_quote">
+                            "Acreditamos que a tecnologia deve ser invisível, proporcionando ferramentas robustas que
+                            elevam a experiência e a eficiência no dia a dia."
+                        </p>
+                    </div>
+
+                    <div class="mt-8 pt-8 border-t border-gray-800 flex flex-wrap gap-8">
+                        <div>
+                            <div class="text-3xl font-bold text-white mb-1" data-i18n="stat_years_title">+22<span class="text-brand-primary">
+                                    Anos</span></div>
+                            <div class="text-sm border-gray-500 font-medium" data-i18n="stat_years_desc">De Experiência</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-white mb-1" data-i18n="stat_focus_title">IoT <span class="text-brand-primary">&
+                                    Mobile</span></div>
+                            <div class="text-sm text-gray-500 font-medium" data-i18n="stat_focus_desc">Foco Principal</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-24 bg-brand-surface relative z-10 border-t border-gray-800/50">
+        <div class="container mx-auto px-6 md:px-12">
+
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div
+                    class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-sm font-semibold tracking-wide uppercase border border-brand-primary/20" data-i18n="port_badge">
+                    Nossos Projetos
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6" data-i18n="port_title">Soluções no Mercado</h2>
+                <p class="text-gray-400 text-lg" data-i18n="port_desc">
+                    Conheça os aplicativos desenhados e mantidos pela GHF Software, projetados para transformar áreas
+                    específicas da sua vida.
+                </p>
+            </div>
+
+            <!-- Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 max-w-5xl mx-auto gap-8">
+
+                <!-- Card 1: Pole Position -->
+                <div
+                    class="glass-panel rounded-2xl p-1 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(132,204,22,0.4)] group">
+                    <div
+                        class="bg-brand-base rounded-xl h-full p-6 flex flex-col relative overflow-hidden z-10 group-hover:bg-brand-base/80 transition-colors">
+                        <!-- Icon Header -->
+                        <img src="./assets/poleposition.png" alt="Pole Position Logo" class="w-14 h-14 object-contain rounded-xl mb-6 shadow-[0_0_15px_rgba(132,204,22,0.2)] border border-lime-500/20">
+
+                        <h3 class="text-2xl font-bold text-white mb-3">Pole Position</h3>
+                        <p class="text-gray-400 mb-8 flex-grow" data-i18n="app_pole_desc">
+                            Aplicativo avançado focado na análise de telemetria automotiva e controle preciso de tempo
+                            de volta, destinado a entusiastas e profissionais de corrida.
+                        </p>
+
+                        <div class="space-y-3 mt-auto pt-6 border-t border-gray-800">
+                            <a href="#"
+                                class="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-medium transition-colors">
+                                <i class="fa-brands fa-google-play text-brand-primary"></i> <span data-i18n="btn_google_play">Ver na Google
+                                    Play</span>
+                            </a>
+                            <div class="grid grid-cols-2 gap-3 pt-1">
+                                <a href="#"
+                                    class="flex items-center justify-center py-2 rounded text-[11px] font-semibold tracking-wide text-gray-400 border border-gray-700 hover:border-gray-500 hover:text-white transition-colors bg-gray-800/30" data-i18n="btn_app_page">
+                                    PÁGINA DO APP
+                                </a>
+                                <a href="#"
+                                    class="flex items-center justify-center py-2 rounded text-[11px] font-semibold tracking-wide text-gray-400 border border-gray-700 hover:border-gray-500 hover:text-white transition-colors bg-gray-800/30 text-center px-1" data-i18n="btn_privacy">
+                                    PRIVACIDADE
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: TopoWalk -->
+                <div
+                    class="glass-panel rounded-2xl p-1 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(217,119,6,0.4)] group">
+                    <div
+                        class="bg-brand-base rounded-xl h-full p-6 flex flex-col relative overflow-hidden z-10 group-hover:bg-brand-base/80 transition-colors">
+                        <!-- Icon Header -->
+                        <div class="h-14 mb-6">
+                            <img src="./assets/topo-walk.png" alt="TopoWalk" class="h-full w-auto object-contain rounded-lg shadow-lg border border-amber-500/30">
+                        </div>
+
+                        <h3 class="text-2xl font-bold text-white mb-3">TopoWalk</h3>
+                        <p class="text-gray-400 mb-8 flex-grow" data-i18n="app_topo_desc">
+                            Ferramenta de utilidade imprescindível, baseada em geolocalização precisa e altimetria,
+                            desenhada para navegação, planejamento de trilhas ou análises de campo.
+                        </p>
+
+                        <div class="space-y-3 mt-auto pt-6 border-t border-gray-800">
+                            <a href="https://play.google.com/store/apps/details?id=br.com.ghfsoftware.topowalk&hl=pt_BR" target="_blank" rel="noopener noreferrer"
+                                class="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-medium transition-colors">
+                                <i class="fa-brands fa-google-play text-brand-primary"></i> <span data-i18n="btn_google_play">Ver na Google
+                                    Play</span>
+                            </a>
+                            <div class="grid grid-cols-2 gap-3 pt-1">
+                                <a href="topowalk.html"
+                                    class="flex items-center justify-center py-2 rounded text-[11px] font-semibold tracking-wide text-gray-400 border border-gray-700 hover:border-gray-500 hover:text-white transition-colors bg-gray-800/30" data-i18n="btn_app_page">
+                                    PÁGINA DO APP
+                                </a>
+                                <a href="topowalk-privacy.html"
+                                    class="flex items-center justify-center py-2 rounded text-[11px] font-semibold tracking-wide text-gray-400 border border-gray-700 hover:border-gray-500 hover:text-white transition-colors bg-gray-800/30 text-center px-1" data-i18n="btn_privacy">
+                                    PRIVACIDADE
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contato" class="bg-brand-base pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden">
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+
+                <!-- Brand Info -->
+                <div class="md:col-span-2">
+                    <a href="#" class="inline-block mb-6 group">
+                        <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                    </a>
+                    <p class="text-gray-400 max-w-sm mb-6" data-i18n="footer_desc">
+                        Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro,
+                        com performance desde 2004.
+                    </p>
+                    <div class="flex items-center gap-4 text-gray-400">
+                        <a href="https://www.linkedin.com/in/gustavo-hypp%C3%B3lito-32049911/" target="_blank" rel="noopener noreferrer"
+                            class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-brand-primary hover:border-brand-primary hover:text-white transition-all"><i
+                                class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="mailto:ghfsoftware@gmail.com"
+                            class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-gray-700 hover:text-white transition-all"><i
+                                class="fa-solid fa-envelope"></i></a>
+                    </div>
+                </div>
+
+                <!-- Links Institucionais -->
+                <div>
+                    <h4 class="text-white font-semibold mb-6" data-i18n="footer_inst">Institucional</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#sobre"
+                                class="text-gray-400 hover:text-brand-primary transition-colors text-sm" data-i18n="nav_about">Sobre Nós</a>
+                        </li>
+                        <li><a href="#portfolio"
+                                class="text-gray-400 hover:text-brand-primary transition-colors text-sm" data-i18n="footer_port">Portfólio de
+                                Apps</a></li>
+                        <li><a href="#contato"
+                                class="text-gray-400 hover:text-brand-primary transition-colors text-sm" data-i18n="footer_cont">Contato
+                                Profissional</a></li>
+                    </ul>
+                </div>
+
+                <!-- Políticas -->
+                <div>
+                    <h4 class="text-white font-semibold mb-6" data-i18n="footer_transp">Transparência & Políticas</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_pole">Privacidade - Pole
+                                Position</span>
+                            </a></li>
+
+                        <li><a href="topowalk-privacy.html"
+                                class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_topo">Privacidade - TopoWalk</span>
+                            </a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Copyright Banner -->
+            <div class="pt-8 border-t border-gray-800/80 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">
+                    &copy; <span id="year"></span> <span data-i18n="footer_rights">GHF Software. Todos os direitos reservados.</span>
+                </p>
+                <p class="text-sm text-gray-600 flex items-center gap-2">
+                    <span data-i18n="footer_dev">Desenvolvido com</span> <i class="fa-solid fa-heart text-brand-primary/50 text-xs"></i> <span data-i18n="footer_dev2">por especialistas.</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Language Dictionary
+        const i18n = {
+            pt: {
+                nav_about: "Sobre Nós",
+                nav_portfolio: "Portfólio",
+                nav_contact: "Contato",
+                hero_badge: "Elevando o Padrão do Software",
+                hero_title: `Construímos o futuro da<br class="hidden md:block"> <span class="text-gradient">Mobilidade e IoT</span>`,
+                hero_desc: "Trazer soluções inovadoras com foco em Internet das Coisas e mobilidade para facilitar e empoderar o seu dia a dia.",
+                btn_portfolio: "Ver Portfólio",
+                btn_about: "Conheça a GHF",
+                scroll: "Rolar",
+                solid_foundation: "Fundação Sólida",
+                since_2004: "Desde 2004",
+                arch_perf: "Arquitetura de Alta Performance",
+                extreme_scale: "Escalabilidade Extrema",
+                code_quality: "Qualidade de Código",
+                ai_solutions: "Soluções com Inteligência Artificial",
+                stack_title: "Stack Tecnológico",
+                about_badge: "Nossa Essência",
+                about_title: `Excelência em <span class="text-gray-300">Engenharia</span>`,
+                about_p1: `A <strong>GHF Software</strong> é impulsionada pela paixão por resolver problemas complexos com soluções elegantes. Nossa empresa foi fundada por um <strong>Arquiteto de Sistemas</strong> com profunda bagagem técnica e experiência em desenvolvimento de software e soluções atuando ativamente <strong>desde 2004</strong>.`,
+                about_p2: "Não apenas escrevemos código; nós desenhamos ecossistemas. Nossas aplicações mobile e IoT são construídas sobre pilares rigorosos de engenharia moderna, garantindo que entreguemos performance impecável, tolerância a falhas e escalabilidade contínua.",
+                about_quote: `"Acreditamos que a tecnologia deve ser invisível, proporcionando ferramentas robustas que elevam a experiência e a eficiência no dia a dia."`,
+                stat_years_title: `+22<span class="text-brand-primary"> Anos</span>`,
+                stat_years_desc: "De Experiência",
+                stat_focus_title: `IoT <span class="text-brand-primary">& Mobile</span>`,
+                stat_focus_desc: "Foco Principal",
+                port_badge: "Nossos Projetos",
+                port_title: "Soluções no Mercado",
+                port_desc: "Conheça os aplicativos desenhados e mantidos pela GHF Software, projetados para transformar áreas específicas da sua vida.",
+                app_pole_desc: "Aplicativo avançado focado na análise de telemetria automotiva e controle preciso de tempo de volta, destinado a entusiastas e profissionais de corrida.",
+                app_topo_desc: "Ferramenta de utilidade imprescindível, baseada em geolocalização precisa e altimetria, desenhada para navegação, planejamento de trilhas ou análises de campo.",
+                btn_google_play: "Ver na Google Play",
+                btn_app_page: "PÁGINA DO APP",
+                btn_privacy: "PRIVACIDADE",
+                footer_desc: "Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.",
+                footer_inst: "Institucional",
+                footer_port: "Portfólio de Apps",
+                footer_cont: "Contato Profissional",
+                footer_transp: "Transparência & Políticas",
+                footer_priv_pole: "Privacidade - Pole Position",
+                footer_priv_topo: "Privacidade - TopoWalk",
+                footer_rights: "GHF Software. Todos os direitos reservados.",
+                footer_dev: "Desenvolvido com ",
+                footer_dev2: " por especialistas."
+            },
+            en: {
+                nav_about: "About Us",
+                nav_portfolio: "Portfolio",
+                nav_contact: "Contact",
+                hero_badge: "Elevating Software Standards",
+                hero_title: `Building the future of<br class="hidden md:block"> <span class="text-gradient">Mobility & IoT</span>`,
+                hero_desc: "Bringing innovative solutions focused on Internet of Things and mobility to empower and simplify your daily routines.",
+                btn_portfolio: "View Portfolio",
+                btn_about: "Discover GHF",
+                scroll: "Scroll",
+                solid_foundation: "Solid Foundation",
+                since_2004: "Since 2004",
+                arch_perf: "High-Performance Architecture",
+                extreme_scale: "Extreme Scalability",
+                code_quality: "Code Quality",
+                ai_solutions: "Artificial Intelligence Solutions",
+                stack_title: "Tech Stack",
+                about_badge: "Our Essence",
+                about_title: `Excellence in <span class="text-gray-300">Engineering</span>`,
+                about_p1: `<strong>GHF Software</strong> is driven by a passion for solving complex mechanics into elegant solutions. Founded by a <strong>Systems Architect</strong> with profound technical background actively operating <strong>since 2004</strong>.`,
+                about_p2: "We don't just write code; we design ecosystems. Our mobile and IoT applications are built upon rigorous modern engineering pillars, ensuring flawless performance, fault tolerance, and continuous scalability.",
+                about_quote: `"We believe technology should be invisible, providing robust tools that elevate experience and daily efficiency."`,
+                stat_years_title: `+22<span class="text-brand-primary"> Years</span>`,
+                stat_years_desc: "Of Experience",
+                stat_focus_title: `IoT <span class="text-brand-primary">& Mobile</span>`,
+                stat_focus_desc: "Main Focus",
+                port_badge: "Our Projects",
+                port_title: "Market Solutions",
+                port_desc: "Discover applications designed and maintained by GHF Software, engineered to transform specific areas of your life.",
+                app_pole_desc: "Advanced application focused on automotive telemetry analysis and precise lap time tracking, aimed at racing enthusiasts and professionals.",
+                app_topo_desc: "Indispensable utility tool based on precise geolocation and altimetry, designed for navigation, trail planning, or field analysis.",
+                btn_google_play: "Get it on Google Play",
+                btn_app_page: "APP PAGE",
+                btn_privacy: "PRIVACY POLICY",
+                footer_desc: "Cutting-edge software engineering for Mobile and IoT applications. Creating the future with performance since 2004.",
+                footer_inst: "Institutional",
+                footer_port: "App Portfolio",
+                footer_cont: "Professional Contact",
+                footer_transp: "Transparency & Policies",
+                footer_priv_pole: "Privacy - Pole Position",
+                footer_priv_topo: "Privacy - TopoWalk",
+                footer_rights: "GHF Software. All rights reserved.",
+                footer_dev: "Developed with ",
+                footer_dev2: " by experts."
+            }
+        };
+
+        // Current Language Logic
+        let currentLang = localStorage.getItem('ghf_lang') || 'pt';
+
+        function updateTexts() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang] && i18n[currentLang][key]) {
+                    el.innerHTML = i18n[currentLang][key];
+                }
+            });
+            
+            // Update labels
+            document.getElementById('lang-indicator').innerText = currentLang === 'pt' ? 'EN' : 'PT';
+            document.getElementById('lang-indicator-mobile').innerText = currentLang === 'pt' ? 'EN' : 'PT';
+            document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
+        }
+
+        function toggleLang() {
+            currentLang = currentLang === 'pt' ? 'en' : 'pt';
+            localStorage.setItem('ghf_lang', currentLang);
+            updateTexts();
+        }
+
+        // Initialize translations
+        updateTexts();
+
+        // Set dynamic year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+                navbar.classList.replace('py-5', 'py-3');
+            } else {
+                navbar.classList.remove('scrolled');
+                navbar.classList.replace('py-3', 'py-5');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    mobileMenu.classList.replace('opacity-0', 'opacity-100');
+                }, 10);
+            } else {
+                mobileMenu.classList.replace('opacity-100', 'opacity-0');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+        closeBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+    </script>
+</body>
+
+</html>
