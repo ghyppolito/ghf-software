@@ -490,14 +490,14 @@
 
         function toggleMenu() {
             if (mobileMenu.classList.contains('hidden')) {
-                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.replace('hidden', 'flex');
                 setTimeout(() => {
                     mobileMenu.classList.replace('opacity-0', 'opacity-100');
                 }, 10);
             } else {
                 mobileMenu.classList.replace('opacity-100', 'opacity-0');
                 setTimeout(() => {
-                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.replace('flex', 'hidden');
                 }, 300);
             }
         }
