@@ -131,7 +131,7 @@
 
     <!-- Mobile Menu Overlay -->
     <div id="mobile-menu"
-        class="fixed inset-0 bg-brand-base z-40 hidden flex-col justify-center items-center gap-8 text-lg font-medium glass-panel opacity-0 transition-opacity duration-300">
+        class="fixed inset-0 bg-brand-base z-40 flex flex-col justify-center items-center gap-8 text-lg font-medium glass-panel opacity-0 pointer-events-none transition-opacity duration-300">
         <button id="close-menu-btn" class="absolute top-6 right-6 text-gray-400 hover:text-white text-2xl">
             <i class="fa-solid fa-xmark"></i>
         </button>
@@ -489,16 +489,12 @@
         const mobileLinks = document.querySelectorAll('.mobile-link');
 
         function toggleMenu() {
-            if (mobileMenu.classList.contains('hidden')) {
-                mobileMenu.classList.replace('hidden', 'flex');
-                setTimeout(() => {
-                    mobileMenu.classList.replace('opacity-0', 'opacity-100');
-                }, 10);
+            if (mobileMenu.classList.contains('opacity-0')) {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
             } else {
-                mobileMenu.classList.replace('opacity-100', 'opacity-0');
-                setTimeout(() => {
-                    mobileMenu.classList.replace('flex', 'hidden');
-                }, 300);
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
             }
         }
 
