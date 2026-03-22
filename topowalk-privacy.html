@@ -119,9 +119,6 @@
     <!-- Mobile Menu Overlay -->
     <div id="mobile-menu"
         class="fixed inset-0 bg-brand-base z-40 flex flex-col justify-center items-center gap-8 text-lg font-medium glass-panel opacity-0 pointer-events-none transition-opacity duration-300">
-        <button id="close-menu-btn" class="absolute top-6 right-6 text-gray-400 hover:text-white text-2xl">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
         <a href="index.html#sobre"
             class="mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors" data-i18n="nav_about">Sobre Nós</a>
         <a href="index.html#portfolio"
@@ -496,7 +493,7 @@
         });
 
         const mobileBtn = document.getElementById('mobile-menu-btn');
-        const closeBtn = document.getElementById('close-menu-btn');
+        const mobileBtnIcon = mobileBtn.querySelector('i');
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileLinks = document.querySelectorAll('.mobile-link');
 
@@ -504,14 +501,15 @@
             if (mobileMenu.classList.contains('opacity-0')) {
                 mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
                 mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
+                mobileBtnIcon.classList.replace('fa-bars', 'fa-xmark');
             } else {
                 mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
                 mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                mobileBtnIcon.classList.replace('fa-xmark', 'fa-bars');
             }
         }
 
         mobileBtn.addEventListener('click', toggleMenu);
-        closeBtn.addEventListener('click', toggleMenu);
         mobileLinks.forEach(link => {
             link.addEventListener('click', toggleMenu);
         });
