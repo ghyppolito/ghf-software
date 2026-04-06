@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LottoExpert - GHF Software</title>
+    <meta name="description" content="LottoExpert - O motor matemático definitivo para desdobramentos de loterias.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            base: '#0B1120',
+                            surface: '#111827',
+                            primary: '#8B5CF6', /* Violet for LottoExpert */
+                            primaryHover: '#7C3AED', 
+                            secondary: '#3B82F6',
+                            accent: '#06B6D4',
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(139, 92, 246, 0.4)',
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'tech-grid': 'linear-gradient(to right, #1f2937 1px, transparent 1px), linear-gradient(to bottom, #1f2937 1px, transparent 1px)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #0B1120; color: #f3f4f6; }
+        .bg-grid-pattern {
+            background-color: #0B1120;
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-gradient-purple {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(135deg, #A855F7, #8B5CF6);
+        }
+        #navbar { transition: all 0.3s ease; }
+        #navbar.scrolled {
+            background: rgba(11, 17, 32, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body class="bg-brand-base text-gray-100 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden">
+
+    <nav id="navbar" class="fixed w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center transition-all duration-300">
+        <a href="index.html" class="flex items-center group">
+            <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+        </a>
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+            <a href="index.html#sobre" class="text-gray-300 hover:text-white hover:text-brand-primary transition-colors" data-i18n="nav_about">Sobre Nós</a>
+            <a href="index.html#portfolio" class="text-gray-300 hover:text-white hover:text-brand-primary transition-colors" data-i18n="nav_portfolio">Portfólio</a>
+            <a href="index.html#contato" class="px-5 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-brand-primary hover:text-brand-primary transition-all duration-300" data-i18n="nav_contact">Contato</a>
+            <button onclick="toggleLang()" class="flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold tracking-wide">
+                <i class="fa-solid fa-globe"></i> <span id="lang-indicator">EN</span>
+            </button>
+        </div>
+        <div class="flex items-center gap-4 md:hidden">
+            <button onclick="toggleLang()" class="flex items-center gap-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold text-sm">
+                <i class="fa-solid fa-globe"></i> <span id="lang-indicator-mobile">EN</span>
+            </button>
+            <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none ml-2">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-brand-base z-40 flex flex-col justify-center items-center gap-8 text-lg font-medium glass-panel opacity-0 pointer-events-none transition-opacity duration-300">
+        <a href="index.html#sobre" class="mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors" data-i18n="nav_about">Sobre Nós</a>
+        <a href="index.html#portfolio" class="mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors" data-i18n="nav_portfolio">Portfólio</a>
+        <a href="index.html#contato" class="mobile-link px-6 py-2 rounded-full bg-brand-primary text-white hover:bg-brand-primaryHover transition-colors" data-i18n="nav_contact">Contato</a>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden bg-grid-pattern border-b border-gray-800">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,transparent_0%,#0B1120_100%)] z-0"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-base via-transparent to-brand-base z-0"></div>
+        
+        <!-- App icon floating dynamically -->
+        <div class="absolute top-1/3 right-10 md:right-32 w-64 md:w-96 h-64 md:h-96 opacity-10 animate-pulse pointer-events-none filter blur-sm">
+             <i class="fa-solid fa-gem text-[300px] text-brand-primary"></i>
+        </div>
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="w-full lg:w-1/2">
+                    <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-brand-primary/30 bg-brand-primary/20 backdrop-blur-sm text-sm text-brand-primary font-semibold tracking-wide uppercase">
+                        <i class="fa-solid fa-calculator mr-2"></i> <span data-i18n="hero_badge">Engenharia Estatística para Loterias</span>
+                    </div>
+
+                    <h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6" data-i18n="hero_title">
+                        Jogue de forma <br class="hidden md:block">
+                        <span class="text-gradient-purple">Inteligente</span>
+                    </h1>
+
+                    <p class="mt-4 text-xl text-gray-400 leading-relaxed mb-10" data-i18n="hero_desc">
+                        LottoExpert é um motor matemático robusto para criar e analisar fechamentos de loterias brasileiras. Elimine o "fator sorte" desmedido e conte com probabilidade, 100% processada no dispositivo.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="px-8 py-4 bg-gray-800 text-gray-400 font-semibold rounded-lg shadow-inner cursor-not-allowed w-full sm:w-auto text-center flex items-center justify-center gap-2 border border-brand-primary/20" disabled>
+                            <i class="fa-brands fa-google-play text-brand-primary"></i> <span data-i18n="btn_play">Disponível em breve</span>
+                        </button>
+                        <a href="#features" class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center" data-i18n="btn_learn">
+                            Como Funciona
+                        </a>
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-1/2 flex justify-center lg:justify-end">
+                    <div class="relative w-72 md:w-96 rounded-3xl p-1 bg-gradient-to-tr from-brand-primary/40 to-brand-primaryHover shadow-glow">
+                        <div class="bg-brand-surface rounded-3xl overflow-hidden aspect-[4/5] flex items-center justify-center">
+                            <img src="./assets/lottoexpert.png" alt="LottoExpert Screenshot ou Ícone" class="w-4/5 h-auto object-contain rounded-2xl shadow-xl">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features -->
+    <section id="features" class="py-24 bg-brand-surface relative z-10 border-b border-gray-800">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-sm font-semibold tracking-wide uppercase border border-brand-primary/20" data-i18n="features_badge">
+                    Vantagem Competitiva
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white" data-i18n="features_title">Projetado para Fechamentos</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass-panel p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50">
+                    <div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-microchip text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat1_title">Motor de Fechamentos</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat1_desc">
+                        Cálculos baseados em matriz combinatória (C(n,k)) usando Sequences avançadas, suportando gerar milhares de jogos simultâneos sem estourar a memória.
+                    </p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="glass-panel p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50">
+                    <div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-camera text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat2_title">Leitor de Bilhetes (OCR)</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat2_desc">
+                        Integração nativa com ML Kit Text Recognition para usar a câmera do dispositivo, escanear as dezenas dos bilhetes na hora e conferir premiações.
+                    </p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="glass-panel p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50">
+                    <div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-cloud-arrow-down text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat3_title">Sincronização CEF</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat3_desc">
+                        O app se conecta nativamente à API da Caixa para buscar os resultados ao fim do dia, consolidando ganhos automáticos com apostas salvas.
+                    </p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="glass-panel p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50">
+                    <div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-lock text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat4_title">Offline e Seguro</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat4_desc">
+                        As informações de apostas criadas por você residem obrigatoriamente no banco local do SQLite. Seus dados nunca alcançam servidores secundários.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contato" class="bg-brand-base pt-16 pb-8 block relative z-10 overflow-hidden">
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+                <div class="md:col-span-2 lg:col-span-2">
+                    <a href="index.html" class="inline-block mb-6 group">
+                        <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+                    </a>
+                    <p class="text-gray-400 max-w-sm mb-6" data-i18n="footer_desc">
+                        Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.
+                    </p>
+                    <div class="flex items-center gap-4 text-gray-400">
+                        <a href="https://www.linkedin.com/in/gustavo-hypp%C3%B3lito-32049911/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-brand-primary hover:border-brand-primary hover:text-white transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="mailto:ghfsoftware@gmail.com" class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-gray-700 hover:text-white transition-all"><i class="fa-solid fa-envelope"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-6" data-i18n="footer_inst">Institucional</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html#sobre" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm" data-i18n="nav_about">Sobre Nós</a></li>
+                        <li><a href="index.html#portfolio" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm" data-i18n="footer_port">Portfólio de Apps</a></li>
+                        <li><a href="index.html#contato" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm" data-i18n="footer_cont">Contato Profissional</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-6" data-i18n="footer_apps">Aplicativos</h4>
+                    <ul class="space-y-3">
+                        <li><a href="lottoexpert.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">LottoExpert</a></li>
+                        <li><a href="topowalk.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">TopoWalk</a></li>
+                        <li><a href="poleposition.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">Pole Position</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-6" data-i18n="footer_transp">Transparência & Políticas</h4>
+                    <ul class="space-y-3">
+                        <li><a href="lottoexpert-privacy.html" class="text-brand-primary hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-brand-primary text-xs"></i> <span data-i18n="footer_priv_lotto">Privacidade - LottoExpert</span></a></li>
+                        <li><a href="poleposition-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_pole">Privacidade - Pole Position</span></a></li>
+                        <li><a href="topowalk-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_topo">Privacidade - TopoWalk</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-gray-800/80 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">&copy; <span id="year"></span> <span data-i18n="footer_rights">GHF Software. Todos os direitos reservados.</span></p>
+                <p class="text-sm text-gray-600 flex items-center gap-2"><span data-i18n="footer_dev">Desenvolvido com</span> <i class="fa-solid fa-heart text-brand-primary/50 text-xs"></i> <span data-i18n="footer_dev2">por especialistas.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        const i18n = {
+            pt: {
+                nav_about: "Sobre Nós",
+                nav_portfolio: "Portfólio",
+                nav_contact: "Contato",
+                hero_badge: "Engenharia Estatística para Loterias",
+                hero_title: `Jogue de forma<br class="hidden md:block"> <span class="text-gradient-purple">Inteligente</span>`,
+                hero_desc: "LottoExpert é um motor matemático robusto para criar e analisar fechamentos de loterias brasileiras. Elimine o 'fator sorte' desmedido e conte com probabilidade real processada 100% no dispositivo.",
+                btn_play: "Disponível em Breve",
+                btn_learn: "Como Funciona",
+                features_badge: "Vantagem Competitiva",
+                features_title: "Projetado para Fechamentos Matemáticos",
+                feat1_title: "Motor de Fechamentos (Math Engine)",
+                feat1_desc: "Cálculos interligados em uma matriz combinatória (C(n,k)) usando coroutines, gerando milhares de bilhetes em paralelo sem estourar memória.",
+                feat2_title: "Leitor de Bilhetes (OCR Scanning)",
+                feat2_desc: "Integração local com Machine Learning CameraX para decifrar os bilhetes da lotérica instântaneamente pela sua câmera, cruzando o prêmio sem internet.",
+                feat3_title: "Sincronização Online e Consulta",
+                feat3_desc: "Os resultados CEF são baixados de forma assíncrona ao fim de cada dia, cruzando com os seus jogos salvos em busca de acertos.",
+                feat4_title: "Privacidade Rigorosa Offline-First",
+                feat4_desc: "Os únicos tickets armazenados no Room DB são retidos na memória do seu aparelho por criptografia local. Nulo tráfego de apostas para terceiros.",
+                footer_apps: "Aplicativos",
+                footer_desc: "Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.",
+                footer_inst: "Institucional",
+                footer_port: "Portfólio de Apps",
+                footer_cont: "Contato Profissional",
+                footer_transp: "Transparência & Políticas",
+                footer_priv_pole: "Privacidade - Pole Position",
+                footer_priv_topo: "Privacidade - TopoWalk",
+                footer_priv_lotto: "Privacidade - LottoExpert",
+                footer_rights: "GHF Software. Todos os direitos reservados.",
+                footer_dev: "Desenvolvido com ",
+                footer_dev2: " por especialistas."
+            },
+            en: {
+                nav_about: "About Us",
+                nav_portfolio: "Portfolio",
+                nav_contact: "Contact",
+                hero_badge: "Statistical Engineering For Lotteries",
+                hero_title: `Play Extremely<br class="hidden md:block"> <span class="text-gradient-purple">Smart</span>`,
+                hero_desc: "LottoExpert is a heavy-duty mathematical engine to create combination matrices for Brazilian Lotteries. Neutralize blind luck and unleash real device-processed probability computation.",
+                btn_play: "Available Soon",
+                btn_learn: "How It Works",
+                features_badge: "Competitive Edge",
+                features_title: "Engineered For Combinatorics",
+                feat1_title: "Math Combination Engine",
+                feat1_desc: "Tied mathematical loops outputting vast matrices (C(n,k)) using coroutines, enabling generation of thousands of combinations parallelizing load.",
+                feat2_title: "Ticket Scanning Engine (OCR)",
+                feat2_desc: "CameraX integrated with Machine Learning natively translates physical tickets via image-scan directly crossing official lottery hits completely offline.",
+                feat3_title: "Sync Updates & History",
+                feat3_desc: "Official API endpoint hits seamlessly background download real results cross-matching your local bets database with green lights for wins.",
+                feat4_title: "Rigorous Offline Privacy",
+                feat4_desc: "Your plays belong strictly to you. Our architecture is SQLite anchored, absolutely zero game metrics are dispatched outward via telemetry.",
+                footer_apps: "Applications",
+                footer_desc: "Cutting-edge software engineering for Mobile and IoT applications. Creating the future with performance since 2004.",
+                footer_inst: "Institutional",
+                footer_port: "App Portfolio",
+                footer_cont: "Professional Contact",
+                footer_transp: "Transparency & Policies",
+                footer_priv_pole: "Privacy - Pole Position",
+                footer_priv_topo: "Privacy - TopoWalk",
+                footer_priv_lotto: "Privacy - LottoExpert",
+                footer_rights: "GHF Software. All rights reserved.",
+                footer_dev: "Developed with ",
+                footer_dev2: " by experts."
+            }
+        };
+
+        let currentLang = localStorage.getItem('ghf_lang') || 'pt';
+
+        function updateTexts() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang] && i18n[currentLang][key]) {
+                    el.innerHTML = i18n[currentLang][key];
+                }
+            });
+            document.getElementById('lang-indicator').innerText = currentLang === 'pt' ? 'EN' : 'PT';
+            document.getElementById('lang-indicator-mobile').innerText = currentLang === 'pt' ? 'EN' : 'PT';
+            document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
+        }
+
+        function toggleLang() {
+            currentLang = currentLang === 'pt' ? 'en' : 'pt';
+            localStorage.setItem('ghf_lang', currentLang);
+            updateTexts();
+        }
+
+        updateTexts();
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+                navbar.classList.replace('py-5', 'py-3');
+            } else {
+                navbar.classList.remove('scrolled');
+                navbar.classList.replace('py-3', 'py-5');
+            }
+        });
+
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            if (mobileMenu.classList.contains('opacity-0')) {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
+            } else {
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+    </script>
+</body>
+</html>

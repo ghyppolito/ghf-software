@@ -389,7 +389,7 @@
             </div>
 
             <!-- Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 max-w-5xl mx-auto gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto gap-8">
 
                 <!-- Card 1: Pole Position -->
                 <div
@@ -458,6 +458,39 @@
                     </div>
                 </div>
 
+                <!-- Card 3: LottoExpert -->
+                <div
+                    class="glass-panel rounded-2xl p-1 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] group">
+                    <div
+                        class="bg-brand-base rounded-xl h-full p-6 flex flex-col relative overflow-hidden z-10 group-hover:bg-brand-base/80 transition-colors">
+                        <!-- Icon Header -->
+                        <div class="h-14 mb-6">
+                            <img src="./assets/lottoexpert.png" alt="LottoExpert" class="h-full w-auto object-contain rounded-lg shadow-lg border border-purple-500/30">
+                        </div>
+
+                        <h3 class="text-2xl font-bold text-white mb-3">LottoExpert</h3>
+                        <p class="text-gray-400 mb-8 flex-grow" data-i18n="app_lotto_desc">
+                            Motor matemático para gerar fechamentos de loterias em matriz offline. Integra OCR e leitor CameraX para detecção de bilhetes físicos.
+                        </p>
+
+                        <div class="space-y-3 mt-auto pt-6 border-t border-gray-800">
+                            <button class="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gray-800/80 text-gray-500 font-medium transition-colors cursor-not-allowed border border-purple-500/10" disabled>
+                                <i class="fa-brands fa-google-play text-gray-600"></i> <span data-i18n="btn_google_play_soon">Em breve na Google Play</span>
+                            </button>
+                            <div class="grid grid-cols-2 gap-3 pt-1">
+                                <a href="lottoexpert.html"
+                                    class="flex items-center justify-center py-2 rounded text-[11px] font-semibold tracking-wide text-gray-400 border border-gray-700 hover:border-brand-primary hover:text-white transition-colors bg-gray-800/30 text-center" data-i18n="btn_app_page">
+                                    PÁGINA DO APP
+                                </a>
+                                <a href="lottoexpert-privacy.html"
+                                    class="flex items-center justify-center py-2 rounded text-[11px] font-semibold tracking-wide text-gray-400 border border-gray-700 hover:border-brand-primary hover:text-white transition-colors bg-gray-800/30 text-center px-1" data-i18n="btn_privacy">
+                                    PRIVACIDADE
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -507,6 +540,7 @@
                 <div>
                     <h4 class="text-white font-semibold mb-6" data-i18n="footer_apps">Aplicativos</h4>
                     <ul class="space-y-3">
+                        <li><a href="lottoexpert.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">LottoExpert</a></li>
                         <li><a href="topowalk.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">TopoWalk</a></li>
                         <li><a href="poleposition.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">Pole Position</a></li>
                     </ul>
@@ -516,6 +550,11 @@
                 <div>
                     <h4 class="text-white font-semibold mb-6" data-i18n="footer_transp">Transparência & Políticas</h4>
                     <ul class="space-y-3">
+                        <li><a href="lottoexpert-privacy.html"
+                                class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_lotto">Privacidade - LottoExpert</span>
+                            </a></li>
+                            
                         <li><a href="poleposition-privacy.html"
                                 class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2">
                                 <i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_pole">Privacidade - Pole
@@ -578,6 +617,7 @@
                 port_desc: "Conheça os aplicativos desenhados e mantidos pela GHF Software, projetados para transformar áreas específicas da sua vida.",
                 app_pole_desc: "Transforma seu smartphone numa interface de telemetria offline. Com GPS de alta frequência, Força G lateral em tempo real e detecção vetorial de parciais.",
                 app_topo_desc: "Transforma seu smartphone numa ferramenta topográfica de campo com precisão barométrica. Calcule distâncias, inclinações e desníveis em tempo real, gerando relatórios em PDF 100% offline.",
+                app_lotto_desc: "Motor matemático para gerar fechamentos de loterias em matriz offline. Integra OCR e leitor CameraX para detecção de bilhetes físicos.",
                 btn_google_play: "Ver na Google Play",
                 btn_google_play_soon: "Em breve na Google Play",
                 btn_app_page: "PÁGINA DO APP",
@@ -590,6 +630,7 @@
                 footer_transp: "Transparência & Políticas",
                 footer_priv_pole: "Privacidade - Pole Position",
                 footer_priv_topo: "Privacidade - TopoWalk",
+                footer_priv_lotto: "Privacidade - LottoExpert",
                 footer_rights: "GHF Software. Todos os direitos reservados.",
                 footer_dev: "Desenvolvido com ",
                 footer_dev2: " por especialistas."
@@ -625,6 +666,7 @@
                 port_desc: "Discover applications designed and maintained by GHF Software, engineered to transform specific areas of your life.",
                 app_pole_desc: "Transforms your smartphone into an offline telemetry dashboard. Featuring high-frequency GPS, real-time lateral G-force, and rigorous vector split detection.",
                 app_topo_desc: "Transforms your smartphone into an advanced field topographic tool with barometric precision. Calculate distances, slopes, and elevation on the fly, generating 100% offline PDF reports.",
+                app_lotto_desc: "Mathematical engine for creating lotto combination matrices offline natively. Integrates camera-based OCR reading to validate physical tickets vs drawn results.",
                 btn_google_play: "Get it on Google Play",
                 btn_google_play_soon: "Coming soon on Google Play",
                 btn_app_page: "APP PAGE",
@@ -637,6 +679,7 @@
                 footer_transp: "Transparency & Policies",
                 footer_priv_pole: "Privacy - Pole Position",
                 footer_priv_topo: "Privacy - TopoWalk",
+                footer_priv_lotto: "Privacy - LottoExpert",
                 footer_rights: "GHF Software. All rights reserved.",
                 footer_dev: "Developed with ",
                 footer_dev2: " by experts."
