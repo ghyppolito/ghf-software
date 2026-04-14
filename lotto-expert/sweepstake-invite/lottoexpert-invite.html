@@ -73,7 +73,7 @@
             width: 80px;
             height: 80px;
             background: white;
-            border-radius: 20px;
+            border-radius: 50%;
             margin: 0 auto 16px;
             display: flex;
             align-items: center;
@@ -239,7 +239,7 @@
         <div id="main-card" class="card" style="display: none;">
             <div class="header">
                 <div class="app-icon">
-                    <img src="https://ghyppolito.github.io/ghf-software/logo_transp.png" alt="LottoExpert" onerror="this.src='https://placehold.co/60x60?text=LE'">
+                    <img id="lottery-icon" src="../../assets/lottoexpert/MegaSena.png" alt="LottoExpert" onerror="this.src='https://ghyppolito.github.io/ghf-software/logo_transp.png'">
                 </div>
                 <h1 id="lottery-display-name">Carregando...</h1>
             </div>
@@ -283,15 +283,15 @@
 
     <script>
         const LOTTERY_MAP = {
-            1: { name: 'Mega-Sena', theme: 'theme-mega' },
-            2: { name: 'Lotofácil', theme: 'theme-facil' },
-            3: { name: 'Quina', theme: 'theme-quina' },
-            4: { name: 'Lotomania', theme: 'theme-mania' },
-            5: { name: 'Timemania', theme: 'theme-timemania' },
-            6: { name: 'Dupla Sena', theme: 'theme-dupla' },
-            7: { name: '+Milionária', theme: 'theme-milionaria' },
-            8: { name: 'Dia de Sorte', theme: 'theme-sorte' },
-            9: { name: 'Super Sete', theme: 'theme-super' }
+            1: { name: 'Lotofácil', theme: 'theme-facil', icon: 'Lotofacil.png' },
+            2: { name: 'Mega-Sena', theme: 'theme-mega', icon: 'MegaSena.png' },
+            3: { name: 'Super Sete', theme: 'theme-super', icon: 'SuperSete.png' },
+            4: { name: 'Quina', theme: 'theme-quina', icon: 'Quina.png' },
+            5: { name: 'Lotomania', theme: 'theme-mania', icon: 'Lotomania.png' },
+            6: { name: 'Timemania', theme: 'theme-timemania', icon: 'Timemania.png' },
+            7: { name: 'Dupla Sena', theme: 'theme-dupla', icon: 'DuplaSena.png' },
+            8: { name: 'Dia de Sorte', theme: 'theme-sorte', icon: 'DiaDeSorte.png' },
+            9: { name: '+Milionária', theme: 'theme-milionaria', icon: 'MaisMilionaria.png' }
         };
 
         function decodeToken(encoded) {
@@ -335,6 +335,9 @@
 
             // Update UI
             document.body.className = lottery.theme;
+            if (lottery.icon) {
+                document.getElementById('lottery-icon').src = `../../assets/lottoexpert/${lottery.icon}`;
+            }
             document.getElementById('lottery-display-name').textContent = lottery.name;
             document.getElementById('sweepstake-name').textContent = data.n;
             document.getElementById('lottery-tag').textContent = lottery.name;
