@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LottoExpert - Convite de Bolão</title>
+    
+    <!-- Meta tags para o preview no WhatsApp/Redes Sociais -->
+    <meta property="og:title" content="Convite para Bolão no LottoExpert">
+    <meta property="og:description" content="Acesse os jogos e participe do bolão através do aplicativo LottoExpert.">
+    <meta property="og:image" content="https://ghyppolito.github.io/ghf-software/icon_app.png">
+    <meta name="theme-color" content="#209869">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #209869; /* Default MegaSena */
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #1a1a1a;
+            --text-secondary: #666666;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-color 0.5s ease;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            perspective: 1000px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(30px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), rgba(0,0,0,0.8));
+            padding: 40px 24px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .app-icon img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .content {
+            padding: 32px 24px;
+        }
+
+        .sweepstake-info {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .sweepstake-name {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .lottery-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: var(--primary-color);
+            color: white;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .detail-item {
+            background: #f8faf9;
+            padding: 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+            filter: brightness(1.1);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e5e5;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        #error-message {
+            display: none;
+            color: #d32f2f;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        /* Tema por Loteria */
+        .theme-mega { --primary-color: #209869; }
+        .theme-facil { --primary-color: #930089; }
+        .theme-quina { --primary-color: #260085; }
+        .theme-mania { --primary-color: #F78100; }
+        .theme-timemania { --primary-color: #049645; }
+        .theme-milionaria { --primary-color: #616161; }
+        .theme-sorte { --primary-color: #CB852B; }
+        .theme-dupla { --primary-color: #A61324; }
+        .theme-super { --primary-color: #a8cf45; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="loading" class="loading">
+            <p>Carregando convite...</p>
+        </div>
+
+        <div id="error-message">
+            <p>Não foi possível carregar as informações deste bolão. Verifique o link e tente novamente.</p>
+        </div>
+
+        <div id="main-card" class="card" style="display: none;">
+            <div class="header">
+                <div class="app-icon">
+                    <img id="lottery-icon" src="../../assets/lottoexpert/MegaSena.png" alt="LottoExpert" onerror="this.src='https://ghyppolito.github.io/ghf-software/logo_transp.png'">
+                </div>
+                <h1 id="lottery-display-name">Carregando...</h1>
+            </div>
+
+            <div class="content">
+                <div class="sweepstake-info">
+                    <div id="sweepstake-name" class="sweepstake-name">Nome do Bolão</div>
+                    <div id="lottery-tag" class="lottery-badge">Loteria</div>
+                    
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Concurso</div>
+                            <div id="contest-number" class="detail-value">---</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Cotas Totais</div>
+                            <div id="total-shares" class="detail-value">---</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Total de Jogos</div>
+                            <div id="total-tickets" class="detail-value">---</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Valor Estimado</div>
+                            <div id="total-cost" class="detail-value">R$ 0,00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <a id="open-app-btn" href="#" class="btn btn-primary">Abrir no LottoExpert</a>
+                    <a href="https://play.google.com/store/apps/details?id=br.com.ghfsoftware.lottoexpert" class="btn btn-secondary">Baixar na Google Play</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Este convite foi gerado pelo app LottoExpert.<br>Analise, gere e organize seus bolões com inteligência.</p>
+        </div>
+    </div>
+
+    <script>
+        const LOTTERY_MAP = {
+            1: { name: 'Lotofácil', theme: 'theme-facil', icon: 'Lotofacil.png' },
+            2: { name: 'Mega-Sena', theme: 'theme-mega', icon: 'MegaSena.png' },
+            3: { name: 'Super Sete', theme: 'theme-super', icon: 'SuperSete.png' },
+            4: { name: 'Quina', theme: 'theme-quina', icon: 'Quina.png' },
+            5: { name: 'Lotomania', theme: 'theme-mania', icon: 'Lotomania.png' },
+            6: { name: 'Timemania', theme: 'theme-timemania', icon: 'Timemania.png' },
+            7: { name: 'Dupla Sena', theme: 'theme-dupla', icon: 'DuplaSena.png' },
+            8: { name: 'Dia de Sorte', theme: 'theme-sorte', icon: 'DiaDeSorte.png' },
+            9: { name: '+Milionária', theme: 'theme-milionaria', icon: 'MaisMilionaria.png' }
+        };
+
+        function decodeToken(encoded) {
+            try {
+                // Base64 URL Safe Decode
+                const base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+                const binaryString = atob(base64);
+                const bytes = Uint8Array.from(binaryString, c => c.charCodeAt(0));
+                
+                // GZIP Decompress (using pako)
+                const jsonString = pako.ungzip(bytes, { to: 'string' });
+                return JSON.parse(jsonString);
+            } catch (e) {
+                console.error("Decode error", e);
+                return null;
+            }
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+        }
+
+        function init() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('d');
+
+            if (!token) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-message').style.display = 'block';
+                return;
+            }
+
+            const data = decodeToken(token);
+            if (!data) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-message').style.display = 'block';
+                return;
+            }
+
+            const lottery = LOTTERY_MAP[data.l] || { name: 'Loteria', theme: '' };
+
+            // Update UI
+            document.body.className = lottery.theme;
+            if (lottery.icon) {
+                document.getElementById('lottery-icon').src = `../../assets/lottoexpert/${lottery.icon}`;
+            }
+            document.getElementById('lottery-display-name').textContent = lottery.name;
+            document.getElementById('sweepstake-name').textContent = data.n;
+            document.getElementById('lottery-tag').textContent = lottery.name;
+            document.getElementById('contest-number').textContent = data.c;
+            document.getElementById('total-shares').textContent = data.s;
+            document.getElementById('total-tickets').textContent = data.t.length;
+            document.getElementById('total-cost').textContent = formatCurrency(data.cost);
+
+            const appUrl = `lottoexpert://sweepstake?d=${token}`;
+            document.getElementById('open-app-btn').href = appUrl;
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('main-card').style.display = 'block';
+
+            // Auto-redirect attempt
+            setTimeout(() => {
+                window.location = appUrl;
+            }, 1500);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
