@@ -1,6 +1,6 @@
 # Política de Privacidade — LottoExpert
 
-**Última atualização:** 06 de Abril de 2026
+**Última atualização:** 20 de Abril de 2026
 
 Esta Política de Privacidade descreve como o aplicativo **LottoExpert** coleta, usa e protege suas informações. Nosso compromisso fundamental é com a **privacidade absoluta** e a segurança dos dados dos usuários.
 
@@ -19,9 +19,11 @@ O LottoExpert **não coleta, não transmite e não armazena** em servidores remo
 - Suas dezenas selecionadas ou estratégias de jogo
 - Jogos criados ou salvos por você
 - Seu histórico de apostas
-- Dados de identificação pessoal (nome, e-mail, telefone, CPF)
+- Dados de identificação pessoal (e-mail, telefone, CPF)
 - Imagens capturadas pela câmera
 - Dados de localização
+
+**Nota sobre nomes em Bolões:** Os nomes de participantes inseridos no módulo "Meus Bolões" são armazenados exclusivamente no banco de dados local do seu dispositivo e nunca são enviados para nossos servidores. Estes nomes permanecem privados no seu aparelho e não são incluídos no compartilhamento por Links Mágicos ou exportações de PDF (que contêm apenas os dados técnicos dos jogos).
 
 ---
 
@@ -29,11 +31,12 @@ O LottoExpert **não coleta, não transmite e não armazena** em servidores remo
 
 Os seguintes dados são armazenados no banco de dados privado do app (Room Database, SQLite), acessível apenas pelo próprio aplicativo:
 
-- **Histórico de sorteios:** Resultados das loterias obtidos da API pública da CEF, salvos para consulta offline.
-- **Jogos salvos:** Tickets gerados pelo algoritmo ou criados manualmente pelo usuário. Identificados pela data/hora de criação e pela origem (algoritmo ou usuário).
-- **Preferências de filtros:** Configurações locais de uso da interface.
+- Histórico de sorteios: Resultados das loterias obtidos da API pública da CEF, salvos para consulta offline.
+- Jogos salvos: Tickets gerados pelo algoritmo ou criados manualmente pelo usuário.
+- Bolões: Dados de grupos criados pelo usuário, incluindo nomes de participantes e vinculação de cotas.
+- Preferências de filtros: Configurações locais de uso da interface.
 
-Ao **desinstalar o aplicativo**, todos esses dados locais são removidos permanentemente do dispositivo.
+O usuário tem total controle sobre esses dados e pode **excluí-los manualmente** a qualquer momento através das opções de "Limpar" ou "Remover" dentro do aplicativo. Ao **desinstalar o aplicativo**, todos esses dados locais são removidos permanentemente do dispositivo.
 
 ---
 
@@ -52,6 +55,21 @@ Para o funcionamento do app, comunicamos com os seguintes serviços externos:
 - **Dados tratados pelo Google:** Dados de pagamento gerenciados exclusivamente pelo Google Play. O LottoExpert recebe apenas a confirmação criptografada da transação para liberar os recursos — sem acesso a dados de cartão ou métodos de pagamento.
 - **Política do Google:** Sujeita aos [Termos de Serviço do Google Play](https://play.google.com/about/play-terms/).
 
+### 4.3 Firebase Remote Config (Google)
+- **Finalidade:** Manter os preços mínimos das apostas atualizados sem necessidade de atualizar o aplicativo. Os valores são lidos pelo app para exibir estimativas de custo ao usuário.
+- **Dados enviados:** Nenhum dado pessoal. A requisição inclui apenas metadados técnicos anônimos do app (identificador do aplicativo e versão), utilizados pelo Firebase para controle de taxa de requisições.
+- **Política do Google:** Sujeita à [Política de Privacidade do Google](https://policies.google.com/privacy).
+
+### 4.4 Google Play In-App Review
+- **Finalidade:** Exibir a caixa de diálogo nativa do Google Play solicitando avaliação do aplicativo após uma experiência positiva (ex.: conferência de bilhete premiado).
+- **Dados tratados pelo Google:** O fluxo de avaliação é gerenciado inteiramente pelo Google Play. O LottoExpert não coleta nem visualiza o conteúdo ou a nota da avaliação enviada.
+- **Política do Google:** Sujeita aos [Termos de Serviço do Google Play](https://play.google.com/about/play-terms/).
+
+### 4.5 Links Mágicos (Deep Links)
+- **Finalidade:** Compartilhamento de dados de bolões entre usuários.
+- **Funcionamento:** O app gera um link que contém os dados do bolão codificados via GZIP e Base64.
+- **Privacidade:** O desenvolvedor não tem acesso aos links gerados ou compartilhados. Como os dados estão contidos na própria URL, a segurança do compartilhamento depende da cautela do usuário ao enviar o link para terceiros.
+
 ---
 
 ## 5. Permissões Solicitadas
@@ -61,6 +79,7 @@ Para o funcionamento do app, comunicamos com os seguintes serviços externos:
 | `INTERNET` | Baixar resultados oficiais dos sorteios da CEF e processar compras via Google Play. |
 | `BILLING` | Validar e processar compras de recursos premium via Google Play Store. |
 | `CAMERA` | Escanear bilhetes físicos para conferência automática de dezenas (funcionalidade OCR). A câmera só é ativada quando o usuário abre explicitamente a tela de escaneamento. Nenhuma imagem é armazenada ou transmitida. |
+| `POST_NOTIFICATIONS` | Exibir alertas de resultados, prêmios acumulados e lembretes de sorteio (requer permissão explícita no Android 13+). |
 | `RECEIVE_BOOT_COMPLETED` | Reagendar a sincronização automática após reinicialização do dispositivo. |
 | `SCHEDULE_EXACT_ALARM` / `USE_EXACT_ALARM` | Agendar a sincronização diária de resultados no horário correto (21h). |
 

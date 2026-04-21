@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LottoExpert - GHF Software</title>
+    <link rel="icon" type="image/png" href="./assets/lottoexpert_favicon_v2.png">
     <meta name="description" content="LottoExpert - O motor matemático definitivo para desdobramentos de loterias.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -71,6 +72,13 @@
             padding-top: 1rem;
             padding-bottom: 1rem;
         }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 20s linear infinite;
+        }
     </style>
 </head>
 
@@ -109,11 +117,6 @@
         <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,transparent_0%,#0B1120_100%)] z-0"></div>
         <div class="absolute inset-0 bg-gradient-to-r from-brand-base via-transparent to-brand-base z-0"></div>
         
-        <!-- App icon floating dynamically -->
-        <div class="absolute top-1/3 right-10 md:right-32 w-64 md:w-96 h-64 md:h-96 opacity-10 animate-pulse pointer-events-none filter blur-sm">
-             <i class="fa-solid fa-gem text-[300px] text-brand-primary"></i>
-        </div>
-
         <div class="container mx-auto px-6 md:px-12 relative z-10">
             <div class="flex flex-col lg:flex-row items-center gap-16">
                 <div class="w-full lg:w-1/2">
@@ -135,79 +138,242 @@
                             <i class="fa-brands fa-google-play text-brand-primary"></i> <span data-i18n="btn_play">Disponível em breve</span>
                         </button>
                         <a href="#features" class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center" data-i18n="btn_learn">
-                            Como Funciona
+                            Ver Funcionalidades
                         </a>
                     </div>
                 </div>
 
                 <div class="w-full lg:w-1/2 flex justify-center lg:justify-end">
-                    <div class="relative w-72 md:w-96 rounded-3xl p-1 bg-gradient-to-tr from-brand-primary/40 to-brand-primaryHover shadow-glow">
-                        <div class="bg-brand-surface rounded-3xl overflow-hidden aspect-[4/5] flex items-center justify-center">
-                            <img src="./assets/lottoexpert.png" alt="LottoExpert Screenshot ou Ícone" class="w-4/5 h-auto object-contain rounded-2xl shadow-xl">
-                        </div>
+                    <div class="relative w-full max-w-lg group">
+                        <div class="absolute -inset-4 bg-brand-primary/20 rounded-[2.5rem] blur-2xl group-hover:bg-brand-primary/30 transition-all duration-500"></div>
+                        <img src="./assets/lottoexpert_app_mockup.png" alt="LottoExpert Premium Mockup" class="relative w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(139,92,246,0.3)] hover:scale-[1.02] transition-transform duration-500">
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Features -->
+    <!-- Features Grid -->
     <section id="features" class="py-24 bg-brand-surface relative z-10 border-b border-gray-800">
         <div class="container mx-auto px-6 md:px-12">
-            <div class="text-center max-w-2xl mx-auto mb-16">
+            <div class="text-center max-w-3xl mx-auto mb-20">
                 <div class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-sm font-semibold tracking-wide uppercase border border-brand-primary/20" data-i18n="features_badge">
                     Vantagem Competitiva
                 </div>
-                <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white" data-i18n="features_title">Projetado para Fechamentos</h2>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white" data-i18n="features_title">Projetado por Especialistas</h2>
+                <p class="text-gray-400 text-lg" data-i18n="features_subtitle">Tudo o que você precisa para gerenciar suas apostas com rigor científico.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Feature 1 -->
-                <div class="glass-panel p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50">
-                    <div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
-                        <i class="fa-solid fa-microchip text-2xl text-brand-primary"></i>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1: Motor Combinatório -->
+                <div class="glass-panel p-10 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-microchip text-8xl text-brand-primary"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat1_title">Motor de Fechamentos</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat1_desc">
-                        Cálculos baseados em matriz combinatória (C(n,k)) usando Sequences avançadas, suportando gerar milhares de jogos simultâneos sem estourar a memória.
-                    </p>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-8 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-gears text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4" data-i18n="feat1_title">Motor Combinatório</h3>
+                    <p class="text-gray-400 leading-relaxed" data-i18n="feat1_desc">Geração de fechamentos C(n,k) otimizada para dispositivos móveis, sem risco de estouro de memória.</p>
                 </div>
-                <!-- Feature 2 -->
-                <div class="glass-panel p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50">
-                    <div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
-                        <i class="fa-solid fa-camera text-2xl text-brand-primary"></i>
+
+                <!-- Feature 2: OCR ML Kit -->
+                <div class="glass-panel p-10 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-camera-retro text-8xl text-brand-primary"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat2_title">Leitor de Bilhetes (OCR)</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat2_desc">
-                        Integração nativa com ML Kit Text Recognition para usar a câmera do dispositivo, escanear as dezenas dos bilhetes na hora e conferir premiações.
-                    </p>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-8 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-eye text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4" data-i18n="feat2_title">Scanner Inteligente</h3>
+                    <p class="text-gray-400 leading-relaxed" data-i18n="feat2_desc">Reconhecimento de texto (OCR) via Google ML Kit para conferir seus bilhetes físicos em segundos.</p>
                 </div>
-                <!-- Feature 3 -->
-                <div class="glass-panel p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50">
-                    <div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
-                        <i class="fa-solid fa-cloud-arrow-down text-2xl text-brand-primary"></i>
+
+                <!-- Feature 3: Bolão Digital -->
+                <div class="glass-panel p-10 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-users-viewfinder text-8xl text-brand-primary"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat3_title">Sincronização CEF</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat3_desc">
-                        O app se conecta nativamente à API da Caixa para buscar os resultados ao fim do dia, consolidando ganhos automáticos com apostas salvas.
-                    </p>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-8 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-people-group text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4" data-i18n="feat3_title">Gestão de Bolões</h3>
+                    <p class="text-gray-400 leading-relaxed" data-i18n="feat3_desc">Gerencie participantes e cotas. Compartilhe convites via Links Mágicos ou arquivos PDF.</p>
                 </div>
-                <!-- Feature 4 -->
-                <div class="glass-panel p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50">
-                    <div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
-                        <i class="fa-solid fa-lock text-2xl text-brand-primary"></i>
+
+                <!-- Feature 4: Backtesting -->
+                <div class="glass-panel p-10 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-chart-line text-8xl text-brand-primary"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat4_title">Offline e Seguro</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat4_desc">
-                        As informações de apostas criadas por você residem obrigatoriamente no banco local do SQLite. Seus dados nunca alcançam servidores secundários.
-                    </p>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-8 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-history text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4" data-i18n="feat4_title">Simulação de ROI</h3>
+                    <p class="text-gray-400 leading-relaxed" data-i18n="feat4_desc">Backtesting contra todo o histórico oficial. Saiba exatamente qual seria o seu retorno real.</p>
+                </div>
+
+                <!-- Feature 5: Sync Automático -->
+                <div class="glass-panel p-10 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-rotate text-8xl text-brand-primary"></i>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-8 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-sync text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4" data-i18n="feat5_title">Sync Inteligente</h3>
+                    <p class="text-gray-400 leading-relaxed" data-i18n="feat5_desc">Sincronização delta via API oficial. Receba alertas de premiação assim que o sorteio ocorrer.</p>
+                </div>
+
+                <!-- Feature 6: Privacy-First -->
+                <div class="glass-panel p-10 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-shield-virus text-8xl text-brand-primary"></i>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-8 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-vault text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4" data-i18n="feat6_title">Privacidade Total</h3>
+                    <p class="text-gray-400 leading-relaxed" data-i18n="feat6_desc">Processamento 100% local. Suas estratégias e jogos nunca saem do seu dispositivo.</p>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Support Section -->
+    <section class="py-24 bg-brand-base border-b border-gray-800 overflow-hidden">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="w-full lg:w-1/2">
+                    <h2 class="text-4xl font-bold text-white mb-8" data-i18n="lotteries_title">Todas as Loterias em um só lugar</h2>
+                    <div class="grid grid-cols-3 gap-4 md:gap-6">
+                        <!-- Mega-Sena -->
+                        <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-3 hover:border-brand-primary/50 transition-all group">
+                             <img src="./assets/lottoexpert/MegaSena.png" alt="Mega-Sena" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform">
+                             <span class="text-xs md:text-sm font-semibold">Mega-Sena</span>
+                        </div>
+                        <!-- Lotofácil -->
+                        <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-3 hover:border-brand-primary/50 transition-all group">
+                             <img src="./assets/lottoexpert/Lotofacil.png" alt="Lotofácil" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform">
+                             <span class="text-xs md:text-sm font-semibold">Lotofácil</span>
+                        </div>
+                        <!-- Quina -->
+                        <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-3 hover:border-brand-primary/50 transition-all group">
+                             <img src="./assets/lottoexpert/Quina.png" alt="Quina" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform">
+                             <span class="text-xs md:text-sm font-semibold">Quina</span>
+                        </div>
+                        <!-- Lotomania -->
+                        <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-3 hover:border-brand-primary/50 transition-all group">
+                             <img src="./assets/lottoexpert/Lotomania.png" alt="Lotomania" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform">
+                             <span class="text-xs md:text-sm font-semibold">Lotomania</span>
+                        </div>
+                        <!-- Timemania -->
+                        <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-3 hover:border-brand-primary/50 transition-all group">
+                             <img src="./assets/lottoexpert/Timemania.png" alt="Timemania" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform">
+                             <span class="text-xs md:text-sm font-semibold">Timemania</span>
+                        </div>
+                        <!-- Dia de Sorte -->
+                        <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-3 hover:border-brand-primary/50 transition-all group">
+                             <img src="./assets/lottoexpert/DiaDeSorte.png" alt="Dia de Sorte" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform">
+                             <span class="text-xs md:text-sm font-semibold">Dia de Sorte</span>
+                        </div>
+                        <!-- Dupla Sena -->
+                        <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-3 hover:border-brand-primary/50 transition-all group">
+                             <img src="./assets/lottoexpert/DuplaSena.png" alt="Dupla Sena" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform">
+                             <span class="text-xs md:text-sm font-semibold">Dupla Sena</span>
+                        </div>
+                        <!-- +Milionária -->
+                        <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-3 hover:border-brand-primary/50 transition-all group">
+                             <img src="./assets/lottoexpert/MaisMilionaria.png" alt="+Milionária" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform">
+                             <span class="text-xs md:text-sm font-semibold">+Milionária</span>
+                        </div>
+                        <!-- Super Sete -->
+                        <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-3 hover:border-brand-primary/50 transition-all group">
+                             <img src="./assets/lottoexpert/SuperSete.png" alt="Super Sete" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform">
+                             <span class="text-xs md:text-sm font-semibold">Super Sete</span>
+                        </div>
+                    </div>
+                    <p class="mt-8 text-gray-400 text-sm" data-i18n="lotteries_desc">Todas as modalidades oficiais da Caixa Econômica Federal suportadas nativamente.</p>
+                </div>
+                <div class="w-full lg:w-1/2 relative">
+                    <div class="aspect-square rounded-3xl bg-gradient-to-br from-brand-primary/10 to-brand-primary/5 border border-brand-primary/10 flex items-center justify-center overflow-hidden">
+                        <div class="absolute inset-0 bg-tech-grid opacity-20"></div>
+                        <i class="fa-solid fa-cube text-[200px] text-brand-primary/10 animate-spin-slow"></i>
+                        <div class="relative z-10 glass-panel p-10 rounded-2xl shadow-2xl border-brand-primary/20 max-w-sm">
+                             <div class="flex items-center gap-4 mb-6">
+                                 <img src="./assets/lottoexpert.png" alt="LottoExpert Logo" class="w-12 h-12 rounded-full object-contain shadow-lg border border-brand-primary/30">
+                                 <div class="text-white font-bold">LottoExpert Engine</div>
+                             </div>
+                             <div class="space-y-4">
+                                 <div class="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
+                                     <div class="h-full w-2/3 bg-brand-primary animate-pulse"></div>
+                                 </div>
+                                 <div class="h-2 w-3/4 bg-gray-800 rounded-full overflow-hidden">
+                                     <div class="h-full w-1/2 bg-brand-primary animate-pulse delay-75"></div>
+                                 </div>
+                                 <div class="h-2 w-1/2 bg-gray-800 rounded-full overflow-hidden">
+                                     <div class="h-full w-4/5 bg-brand-primary animate-pulse delay-150"></div>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Table -->
+    <section class="py-24 bg-brand-surface relative z-10">
+        <div class="container mx-auto px-6 md:px-12 text-center">
+            <h2 class="text-4xl font-bold text-white mb-16" data-i18n="pricing_title">Grátis ou PRO? Você escolhe.</h2>
+            <div class="max-w-4xl mx-auto glass-panel rounded-3xl overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-800/30 border-b border-gray-700">
+                            <th class="p-6 text-white font-bold md:text-xl" data-i18n="pricing_th_features">Funcionalidade</th>
+                            <th class="p-6 text-center text-gray-400 font-bold uppercase text-xs tracking-widest" data-i18n="pricing_th_free">Free</th>
+                            <th class="p-6 text-center text-brand-primary font-bold uppercase text-xs tracking-widest" data-i18n="pricing_th_premium">Premium</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-300">
+                        <tr class="border-b border-gray-800 hover:bg-gray-800/20 transition-colors">
+                            <td class="p-6 font-medium" data-i18n="price_feat1">Loterias Básicas (Mega-Sena/Lotofácil)</td>
+                            <td class="p-6 text-center text-green-500"><i class="fa-solid fa-circle-check"></i></td>
+                            <td class="p-6 text-center text-green-500"><i class="fa-solid fa-circle-check"></i></td>
+                        </tr>
+                        <tr class="border-b border-gray-800 hover:bg-gray-800/20 transition-colors">
+                            <td class="p-6 font-medium" data-i18n="price_feat2">Todas as Loterias (9 modalidades)</td>
+                            <td class="p-6 text-center text-gray-600">—</td>
+                            <td class="p-6 text-center text-green-500"><i class="fa-solid fa-circle-check"></i></td>
+                        </tr>
+                        <tr class="border-b border-gray-800 hover:bg-gray-800/20 transition-colors">
+                            <td class="p-6 font-medium" data-i18n="price_feat3">Scanner de Bilhetes (OCR)</td>
+                            <td class="p-6 text-center text-gray-600">—</td>
+                            <td class="p-6 text-center text-green-500"><i class="fa-solid fa-circle-check"></i></td>
+                        </tr>
+                        <tr class="border-b border-gray-800 hover:bg-gray-800/20 transition-colors">
+                            <td class="p-6 font-medium" data-i18n="price_feat4">Backtesting Histórico</td>
+                            <td class="p-6 text-center text-gray-600">—</td>
+                            <td class="p-6 text-center text-green-500"><i class="fa-solid fa-circle-check"></i></td>
+                        </tr>
+                        <tr class="border-b border-gray-800 hover:bg-gray-800/20 transition-colors">
+                            <td class="p-6 font-medium" data-i18n="price_feat5">PDF Limpo (Sem marca d'água)</td>
+                            <td class="p-6 text-center text-gray-600">—</td>
+                            <td class="p-6 text-center text-green-500"><i class="fa-solid fa-circle-check"></i></td>
+                        </tr>
+                        <tr class="border-b border-gray-800 hover:bg-gray-800/20 transition-colors">
+                            <td class="p-6 font-medium" data-i18n="price_feat6">Bolões Simultâneos</td>
+                            <td class="p-6 text-center font-semibold text-xs" data-i18n="price_val_free_bolao">1 Ativo</td>
+                            <td class="p-6 text-center text-green-500 font-semibold text-xs" data-i18n="price_val_premium_bolao">Ilimitado</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer id="contato" class="bg-brand-base pt-16 pb-8 block relative z-10 overflow-hidden">
+    <footer id="contato" class="bg-brand-base pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden">
         <div class="container mx-auto px-6 md:px-12 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
                 <div class="md:col-span-2 lg:col-span-2">
@@ -235,7 +401,7 @@
                 <div>
                     <h4 class="text-white font-semibold mb-6" data-i18n="footer_apps">Aplicativos</h4>
                     <ul class="space-y-3">
-                        <li><a href="lottoexpert.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">LottoExpert</a></li>
+                        <li><a href="lottoexpert.html" class="text-brand-primary font-semibold transition-colors text-sm flex items-center gap-1"><i class="fa-solid fa-chevron-right text-xs"></i> LottoExpert</a></li>
                         <li><a href="topowalk.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">TopoWalk</a></li>
                         <li><a href="poleposition.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">Pole Position</a></li>
                     </ul>
@@ -244,7 +410,7 @@
                 <div>
                     <h4 class="text-white font-semibold mb-6" data-i18n="footer_transp">Transparência & Políticas</h4>
                     <ul class="space-y-3">
-                        <li><a href="lottoexpert-privacy.html" class="text-brand-primary hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-brand-primary text-xs"></i> <span data-i18n="footer_priv_lotto">Privacidade - LottoExpert</span></a></li>
+                        <li><a href="lottoexpert-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_lotto">Privacidade - LottoExpert</span></a></li>
                         <li><a href="poleposition-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_pole">Privacidade - Pole Position</span></a></li>
                         <li><a href="topowalk-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_topo">Privacidade - TopoWalk</span></a></li>
                     </ul>
@@ -269,17 +435,36 @@
                 hero_title: `Jogue de forma<br class="hidden md:block"> <span class="text-gradient-purple">Inteligente</span>`,
                 hero_desc: "LottoExpert é um motor matemático robusto para criar e analisar fechamentos de loterias brasileiras. Elimine o 'fator sorte' desmedido e conte com probabilidade real processada 100% no dispositivo.",
                 btn_play: "Disponível em Breve",
-                btn_learn: "Como Funciona",
+                btn_learn: "Ver Funcionalidades",
                 features_badge: "Vantagem Competitiva",
-                features_title: "Projetado para Fechamentos Matemáticos",
-                feat1_title: "Motor de Fechamentos (Math Engine)",
-                feat1_desc: "Cálculos interligados em uma matriz combinatória (C(n,k)) usando coroutines, gerando milhares de bilhetes em paralelo sem estourar memória.",
-                feat2_title: "Leitor de Bilhetes (OCR Scanning)",
-                feat2_desc: "Integração local com Machine Learning CameraX para decifrar os bilhetes da lotérica instântaneamente pela sua câmera, cruzando o prêmio sem internet.",
-                feat3_title: "Sincronização Online e Consulta",
-                feat3_desc: "Os resultados CEF são baixados de forma assíncrona ao fim de cada dia, cruzando com os seus jogos salvos em busca de acertos.",
-                feat4_title: "Privacidade Rigorosa Offline-First",
-                feat4_desc: "Os únicos tickets armazenados no Room DB são retidos na memória do seu aparelho por criptografia local. Nulo tráfego de apostas para terceiros.",
+                features_title: "Projetado por Especialistas",
+                features_subtitle: "Tudo o que você precisa para gerenciar suas apostas com rigor científico.",
+                feat1_title: "Motor Combinatório",
+                feat1_desc: "Geração de fechamentos C(n,k) otimizada para dispositivos móveis, sem risco de estouro de memória.",
+                feat2_title: "Scanner Inteligente",
+                feat2_desc: "Reconhecimento de texto (OCR) via Google ML Kit para conferir seus bilhetes físicos em segundos.",
+                feat3_title: "Gestão de Bolões",
+                feat3_desc: "Gerencie participantes e cotas. Compartilhe convites via Links Mágicos ou arquivos PDF.",
+                feat4_title: "Simulação de ROI",
+                feat4_desc: "Backtesting contra todo o histórico oficial. Saiba exatamente qual seria o seu retorno real.",
+                feat5_title: "Sync Inteligente",
+                feat5_desc: "Sincronização delta via API oficial. Receba alertas de premiação assim que o sorteio ocorrer.",
+                feat6_title: "Privacidade Total",
+                feat6_desc: "Processamento 100% local. Suas estratégias e jogos nunca saem do seu dispositivo.",
+                lotteries_title: "Todas as Loterias em um só lugar",
+                lotteries_desc: "Todas as modalidades oficiais da Caixa Econômica Federal suportadas nativamente.",
+                pricing_title: "Grátis ou PRO? Você escolhe.",
+                pricing_th_features: "Funcionalidade",
+                pricing_th_free: "Free",
+                pricing_th_premium: "Premium",
+                price_feat1: "Loterias Básicas (Mega-Sena/Lotofácil)",
+                price_feat2: "Todas as Loterias (9 modalidades)",
+                price_feat3: "Scanner de Bilhetes (OCR)",
+                price_feat4: "Backtesting Histórico",
+                price_feat5: "PDF Limpo (Sem marca d'água)",
+                price_feat6: "Bolões Simultâneos",
+                price_val_free_bolao: "1 Ativo",
+                price_val_premium_bolao: "Ilimitado",
                 footer_apps: "Aplicativos",
                 footer_desc: "Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.",
                 footer_inst: "Institucional",
@@ -301,17 +486,36 @@
                 hero_title: `Play Extremely<br class="hidden md:block"> <span class="text-gradient-purple">Smart</span>`,
                 hero_desc: "LottoExpert is a heavy-duty mathematical engine to create combination matrices for Brazilian Lotteries. Neutralize blind luck and unleash real device-processed probability computation.",
                 btn_play: "Available Soon",
-                btn_learn: "How It Works",
+                btn_learn: "View Features",
                 features_badge: "Competitive Edge",
-                features_title: "Engineered For Combinatorics",
-                feat1_title: "Math Combination Engine",
-                feat1_desc: "Tied mathematical loops outputting vast matrices (C(n,k)) using coroutines, enabling generation of thousands of combinations parallelizing load.",
-                feat2_title: "Ticket Scanning Engine (OCR)",
-                feat2_desc: "CameraX integrated with Machine Learning natively translates physical tickets via image-scan directly crossing official lottery hits completely offline.",
-                feat3_title: "Sync Updates & History",
-                feat3_desc: "Official API endpoint hits seamlessly background download real results cross-matching your local bets database with green lights for wins.",
-                feat4_title: "Rigorous Offline Privacy",
-                feat4_desc: "Your plays belong strictly to you. Our architecture is SQLite anchored, absolutely zero game metrics are dispatched outward via telemetry.",
+                features_title: "Engineered By Experts",
+                features_subtitle: "Everything you need to manage your bets with scientific rigor.",
+                feat1_title: "Combinatorial Engine",
+                feat1_desc: "Optimized mobile-first C(n,k) combination generation, ensuring memory stability at any scale.",
+                feat2_title: "Smart Scanner",
+                feat2_desc: "OCR text recognition via Google ML Kit to cross-check physical tickets instantly with your phone.",
+                feat3_title: "Sweepstakes Management",
+                feat3_desc: "Manage participants and quotas. Share invites via Magic Links or professional PDF files.",
+                feat4_title: "ROI Simulation",
+                feat4_desc: "Backtesting against entire official history. Know exactly what your real return would be.",
+                feat5_title: "Intelligent Sync",
+                feat5_desc: "Delta sync via official API. Get prize alerts immediately after draw results are out.",
+                feat6_title: "Total Privacy",
+                feat6_desc: "100% on-device processing. Your strategies and tickets never leave the security of your device.",
+                lotteries_title: "All Lotteries in One Place",
+                lotteries_desc: "All official Caixa Econômica Federal modalities supported natively.",
+                pricing_title: "Free or PRO? Your Choice.",
+                pricing_th_features: "Features",
+                pricing_th_free: "Free",
+                pricing_th_premium: "Premium",
+                price_feat1: "Basic Lotteries (Mega-Sena/Lotofácil)",
+                price_feat2: "All Lotteries (9 modalities)",
+                price_feat3: "Ticket Scanner (OCR)",
+                price_feat4: "Historical Backtesting",
+                price_feat5: "Clean PDF (No watermark)",
+                price_feat6: "Simultaneous Sweepstakes",
+                price_val_free_bolao: "1 Active",
+                price_val_premium_bolao: "Unlimited",
                 footer_apps: "Applications",
                 footer_desc: "Cutting-edge software engineering for Mobile and IoT applications. Creating the future with performance since 2004.",
                 footer_inst: "Institutional",
