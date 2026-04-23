@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Política de Privacidade TopoWalk - GHF Software</title>
+    <link rel="icon" type="image/png" href="./assets/topo-walk.png">
 
     <meta name="description" content="Política de Privacidade do aplicativo TopoWalk desenvolvido pela GHF Software.">
 
@@ -138,7 +139,7 @@
                 Política de Privacidade — TopoWalk
             </h1>
             <p class="text-gray-500 text-lg" data-i18n="last_updated">
-                Última atualização: março de 2026
+                Última atualização: abril de 2026
             </p>
         </div>
     </div>
@@ -200,6 +201,7 @@
                 <div>
                     <h4 class="text-white font-semibold mb-6" data-i18n="footer_apps">Aplicativos</h4>
                     <ul class="space-y-3">
+                        <li><a href="lottoexpert.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">LottoExpert</a></li>
                         <li><a href="topowalk.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">TopoWalk</a></li>
                         <li><a href="poleposition.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">Pole Position</a></li>
                     </ul>
@@ -209,6 +211,7 @@
                 <div>
                     <h4 class="text-white font-semibold mb-6" data-i18n="footer_transp">Transparência & Políticas</h4>
                     <ul class="space-y-3">
+                        <li><a href="lottoexpert-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_lotto">Privacidade - LottoExpert</span></a></li>
                         <li><a href="poleposition-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_pole">Privacidade - Pole Position</span></a></li>
                         <li><a href="topowalk-privacy.html" class="text-brand-primary hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-brand-primary text-xs"></i> <span data-i18n="footer_priv_topo">Privacidade - TopoWalk</span></a></li>
                     </ul>
@@ -236,7 +239,7 @@
                 nav_portfolio: "Portfólio",
                 nav_contact: "Contato",
                 page_title: "Política de Privacidade — TopoWalk",
-                last_updated: "Última atualização: março de 2026",
+                last_updated: "Última atualização: abril de 2026",
                 intro: "Esta Política de Privacidade descreve como o aplicativo <strong>TopoWalk</strong>, desenvolvido por <strong>GHF Software</strong>, trata as informações do usuário. Ao utilizar o TopoWalk, você concorda com os termos descritos neste documento.",
                 btn_back: "Voltar para a GHF Software",
                 footer_apps: "Aplicativos",
@@ -247,6 +250,7 @@
                 footer_transp: "Transparência & Políticas",
                 footer_priv_pole: "Privacidade - Pole Position",
                 footer_priv_topo: "Privacidade - TopoWalk",
+                footer_priv_lotto: "Privacidade - LottoExpert",
                 footer_rights: "GHF Software. Todos os direitos reservados.",
                 footer_dev: "Desenvolvido com ",
                 footer_dev2: " por especialistas.",
@@ -254,48 +258,61 @@
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">1. Quem Somos</h2>
                     <p class="mb-4">O TopoWalk é um aplicativo Android desenvolvido por <strong>GHF Software</strong> para fins de levantamento topográfico de campo. Não somos uma empresa de coleta de dados e não operamos servidores de armazenamento de informações pessoais.</p>
                     
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">2. Dados Coletados pelo Aplicativo</h2>
-                    <p class="mb-4">O TopoWalk acessa as seguintes informações durante seu uso:</p>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">2. Dados Acessados e Utilizados pelo Aplicativo</h2>
+                    <p class="mb-4">O TopoWalk acessa as seguintes informações durante o uso:</p>
                     
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.1 Localização (GPS)</h3>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li><strong>O que é acessado:</strong> Latitude, longitude e altitude dos pontos A e B marcados pelo usuário.</li>
-                        <li><strong>Finalidade:</strong> Exclusivamente para realizar os cálculos topográficos (distância horizontal, desnível, distância inclinada e ângulo de inclinação).</li>
+                        <li><strong>O que é acessado:</strong> Latitude, longitude e altitude dos pontos marcados pelo usuário durante a medição.</li>
+                        <li><strong>Finalidade:</strong> Exclusivamente para realizar os cálculos topográficos (distância horizontal, desnível, distância inclinada, ângulo de inclinação, azimute e área de polígono) e para renderizar visualização no mapa.</li>
                         <li><strong>Quando é acessado:</strong> Somente enquanto o aplicativo está aberto e em uso ativo (foreground). O app não acessa a localização em segundo plano.</li>
-                        <li><strong>Retenção:</strong> Os dados de localização são mantidos apenas na memória do dispositivo durante a sessão ativa. Não são gravados em banco de dados, arquivo local ou enviados a qualquer servidor.</li>
+                        <li><strong>Retenção:</strong> Os dados de localização ficam na memória durante a sessão. Se o usuário optar por salvar a medição, as coordenadas são armazenadas localmente no banco de dados do dispositivo. Nenhum dado de localização é enviado a servidores externos.</li>
                     </ul>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.2 Sensor de Pressão Atmosférica (Barômetro)</h3>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li><strong>O que é acessado:</strong> Leitura da pressão atmosférica do sensor físico do dispositivo.</li>
-                        <li><strong>Finalidade:</strong> Calcular a altitude dos pontos com maior precisão do que o GPS isolado.</li>
-                        <li><strong>Quando é acessado:</strong> Continuamente enquanto o aplicativo está aberto, exclusivamente para conversão de pressão em altitude (fórmula barométrica padrão).</li>
-                        <li><strong>Retenção:</strong> Os valores de pressão não são armazenados em nenhum momento.</li>
+                        <li><strong>Finalidade:</strong> Calcular a altitude dos pontos com maior precisão do que o GPS isolado, por meio da fórmula barométrica padrão.</li>
+                        <li><strong>Quando é acessado:</strong> Continuamente enquanto o aplicativo está aberto, exclusivamente para conversão de pressão em altitude.</li>
+                        <li><strong>Retenção:</strong> Os valores de pressão brutos não são armazenados. Apenas a altitude derivada é usada nos cálculos e salva com a medição.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.3 Acesso à Internet (Tiles de Mapa)</h3>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>O que é acessado:</strong> O aplicativo realiza requisições HTTP à rede de tiles do <strong>OpenStreetMap</strong> (OpenTopoMap).</li>
+                        <li><strong>Finalidade:</strong> Renderizar o mapa de relevo de fundo sobre o qual a demarcação é plotada.</li>
+                        <li><strong>Dados enviados:</strong> Apenas coordenadas genéricas de posição geográfica dos tiles visíveis, sem identificação do usuário.</li>
+                        <li><strong>Quando é acessado:</strong> Somente ao navegar para a aba "Mapa" dentro de uma medição.</li>
+                        <li><strong>Armazenamento em cache:</strong> Imagens de mapa podem ser armazenadas em cache local para melhor performance.</li>
                     </ul>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">3. Dados NÃO Coletados</h2>
-                    <p class="mb-4">O TopoWalk <strong>não coleta, não armazena e não transmite</strong>:</p>
+                    <p class="mb-4">O TopoWalk <strong>não coleta, não armazena remotamente e não transmite</strong>:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Nome, e-mail ou qualquer dado de identificação pessoal</li>
-                        <li>Histórico de medições ou trajetos</li>
                         <li>Dados de uso, telemetria ou analytics</li>
                         <li>Informações do dispositivo (modelo, IMEI, versão de SO)</li>
-                        <li>Dados de rede ou endereço IP</li>
-                        <li>Localização em segundo plano ou histórico de localização</li>
+                        <li>Endereço IP ou dados de rede além do necessário para carregar tiles de mapa</li>
+                        <li>Localização em segundo plano ou histórico de localização fora do uso ativo</li>
                     </ul>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Compartilhamento de Dados com Terceiros</h2>
-                    <p class="mb-4"><strong>Não compartilhamos nenhum dado com terceiros.</strong></p>
-                    <p class="mb-4">O aplicativo não integra SDKs de publicidade, plataformas de analytics (como Firebase Analytics, Crashlytics ou similares), redes sociais ou qualquer serviço externo de coleta de dados.</p>
+                    <p class="mb-4"><strong>Não compartilhamos dados pessoais com terceiros.</strong></p>
+                    <p class="mb-4">O aplicativo não integra SDKs de publicidade, plataformas de analytics, redes sociais ou qualquer serviço externo de coleta de dados pessoais.</p>
+                    <p class="mb-4">A única comunicação externa do app é com os servidores de tiles do OpenStreetMap, exclusivamente para renderização do mapa de relevo.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">5. Armazenamento Local e Relatórios em PDF</h2>
-                    <p class="mb-4">Ao solicitar a geração de um relatório PDF, o aplicativo:</p>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">5. Armazenamento Local</h2>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">5.1 Banco de Dados Local (Histórico)</h3>
+                    <p class="mb-4">Quando o usuário salva uma medição, os dados (coordenadas e resultados) são guardados localmente no banco de dados SQLite do dispositivo. Esses dados <strong>nunca são enviados a servidores externos</strong> e permanecem acessíveis apenas pelo app.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">5.2 Relatórios em PDF, GeoJSON e KML</h3>
+                    <p class="mb-4">Ao solicitar a exportação de relatórios PDF ou arquivos geográficos (GeoJSON/KML), o aplicativo:</p>
                     <ol class="list-decimal pl-6 mb-4 space-y-2">
-                        <li>Cria o arquivo PDF temporariamente no <strong>diretório de cache privado</strong> do app (<code>cacheDir</code>), acessível apenas pelo próprio aplicativo.</li>
-                        <li>Compartilha o arquivo via <code>FileProvider</code> com o aplicativo de sua escolha (WhatsApp, e-mail, Google Drive, etc.) usando o mecanismo padrão do Android.</li>
-                        <li>Após o compartilhamento, o arquivo permanece no cache do dispositivo até que o sistema operacional Android realize a limpeza automática de cache ou o usuário limpe os dados do app.</li>
+                        <li>Cria o arquivo temporariamente no <strong>diretório de cache privado</strong> do app (<code>cacheDir</code>).</li>
+                        <li>Compartilha o arquivo via <code>FileProvider</code> com o aplicativo de sua escolha (WhatsApp, e-mail, etc.) do Android.</li>
+                        <li>O TopoWalk não tem acesso ao destino escolhido pelo usuário para o compartilhamento.</li>
                     </ol>
-                    <p class="mb-4">O conteúdo do PDF inclui as coordenadas e resultados da medição realizada. <strong>O TopoWalk não tem acesso ao destino escolhido pelo usuário para o compartilhamento</strong> — essa operação é gerenciada inteiramente pelo sistema Android e pelo aplicativo de destino.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. Permissões do Aplicativo</h2>
                     <div class="overflow-x-auto mb-4">
@@ -315,20 +332,22 @@
                                     <td class="py-2 pr-4 font-mono text-sm text-brand-primary">ACCESS_COARSE_LOCATION</td>
                                     <td class="py-2">Permissão complementar exigida pelo Android para localização</td>
                                 </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">INTERNET</td>
+                                    <td class="py-2">Carregar tiles de mapa do OpenStreetMap para visualização cartográfica</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <p class="mb-4">Nenhuma outra permissão é solicitada. O aplicativo não solicita acesso à câmera, microfone, contatos, armazenamento externo ou qualquer outro recurso do dispositivo.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Uso por Menores</h2>
                     <p class="mb-4">O TopoWalk não é direcionado a crianças menores de 13 anos e não coleta intencionalmente dados de menores. Por se tratar de uma ferramenta técnica de campo, o uso por menores deve ocorrer sob supervisão de um adulto responsável.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">8. Segurança</h2>
-                    <p class="mb-4">Como o TopoWalk não transmite dados para servidores externos e processa todas as informações localmente no dispositivo, os riscos associados a vazamentos de dados remotos são eliminados por design. A segurança dos dados no dispositivo é gerenciada pelo próprio sistema operacional Android.</p>
+                    <p class="mb-4">O TopoWalk processa todas as informações topográficas localmente. A única comunicação de rede é com servidores públicos de tiles de mapa, sem processamento de dados de identificação pessoal. A segurança dos dados armazenados localmente e do cache de exportação é gerenciada pelo sistema operacional Android e pelo isolamento de aplicativos (sandbox).</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Alterações nesta Política</h2>
                     <p class="mb-4">Podemos atualizar esta Política de Privacidade periodicamente. Alterações relevantes serão comunicadas por meio de uma nova versão do aplicativo publicada na Google Play Store. A data de "Última atualização" no topo deste documento sempre refletirá a versão vigente.</p>
-                    <p class="mb-4">Recomendamos que você revise esta política periodicamente.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">10. Contato</h2>
                     <p class="mb-4">Dúvidas, solicitações ou comentários sobre esta Política de Privacidade podem ser enviados para:</p>
@@ -346,7 +365,7 @@
                 nav_portfolio: "Portfolio",
                 nav_contact: "Contact",
                 page_title: "Privacy Policy — TopoWalk",
-                last_updated: "Last updated: March 2026",
+                last_updated: "Last updated: April 2026",
                 intro: "This Privacy Policy describes how the <strong>TopoWalk</strong> application, developed by <strong>GHF Software</strong>, handles user information. By using TopoWalk, you agree to the terms described in this document.",
                 btn_back: "Back to GHF Software",
                 footer_apps: "Applications",
@@ -357,6 +376,7 @@
                 footer_transp: "Transparency & Policies",
                 footer_priv_pole: "Privacy - Pole Position",
                 footer_priv_topo: "Privacy - TopoWalk",
+                footer_priv_lotto: "Privacy - LottoExpert",
                 footer_rights: "GHF Software. All rights reserved.",
                 footer_dev: "Developed with ",
                 footer_dev2: " by experts.",
@@ -364,48 +384,61 @@
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">1. Who We Are</h2>
                     <p class="mb-4">TopoWalk is an Android application developed by <strong>GHF Software</strong> for field topographic surveying purposes. We are not a data collection company and do not operate servers to store personal information.</p>
                     
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">2. Data Collected by the Application</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">2. Data Accessed and Used by the Application</h2>
                     <p class="mb-4">TopoWalk accesses the following information during its use:</p>
                     
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.1 Location (GPS)</h3>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li><strong>What is accessed:</strong> Latitude, longitude, and altitude of points A and B marked by the user.</li>
-                        <li><strong>Purpose:</strong> Exclusively to perform topographic calculations (horizontal distance, elevation difference, slope distance, and slope angle).</li>
+                        <li><strong>What is accessed:</strong> Latitude, longitude, and altitude of points marked by the user during measurement.</li>
+                        <li><strong>Purpose:</strong> Exclusively to perform topographic calculations (horizontal distance, elevation difference, slope distance, slope angle, azimuth, and polygon area) and to render the map visualization.</li>
                         <li><strong>When it is accessed:</strong> Only while the application is open and in active use (foreground). The app does not access location in the background.</li>
-                        <li><strong>Retention:</strong> Location data is kept only in the device's memory during the active session. It is not recorded in a database, local file, or sent to any server.</li>
+                        <li><strong>Retention:</strong> Location data is kept in the memory during the session. If the user chooses to save the measurement, coordinates are stored locally in the device's database. No location data is sent to external servers.</li>
                     </ul>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.2 Atmospheric Pressure Sensor (Barometer)</h3>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li><strong>What is accessed:</strong> Atmospheric pressure reading from the device's physical sensor.</li>
-                        <li><strong>Purpose:</strong> To calculate the altitude of the points with greater precision than GPS alone.</li>
-                        <li><strong>When it is accessed:</strong> Continuously while the application is open, exclusively for converting pressure to altitude (standard barometric formula).</li>
-                        <li><strong>Retention:</strong> Pressure values are not stored at any time.</li>
+                        <li><strong>Purpose:</strong> To calculate the altitude of points with greater precision than GPS alone, using the standard barometric formula.</li>
+                        <li><strong>When it is accessed:</strong> Continuously while the application is open, exclusively for converting pressure to altitude.</li>
+                        <li><strong>Retention:</strong> Raw pressure values are not stored. Only the derived altitude is used for calculations and saved with the measurement.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.3 Internet Access (Map Tiles)</h3>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>What is accessed:</strong> The application makes HTTP requests to the <strong>OpenStreetMap</strong> (OpenTopoMap) tile network.</li>
+                        <li><strong>Purpose:</strong> To render the background relief map upon which the demarcation is plotted.</li>
+                        <li><strong>Data sent:</strong> Only generic geographic coordinate data of visible tiles, without user identification.</li>
+                        <li><strong>When it is accessed:</strong> Only when navigating to the "Map" tab within a measurement.</li>
+                        <li><strong>Caching:</strong> Map images may be cached locally to improve performance.</li>
                     </ul>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">3. Data NOT Collected</h2>
-                    <p class="mb-4">TopoWalk <strong>does not collect, does not store, and does not transmit</strong>:</p>
+                    <p class="mb-4">TopoWalk <strong>does not collect, does not remotely store, and does not transmit</strong>:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Name, email, or any personally identifiable data</li>
-                        <li>Measurement or route history</li>
                         <li>Usage data, telemetry, or analytics</li>
                         <li>Device information (model, IMEI, OS version)</li>
-                        <li>Network data or IP address</li>
-                        <li>Background location or location history</li>
+                        <li>Network data or IP address other than necessary to load map tiles</li>
+                        <li>Background location or location history outside active app usage</li>
                     </ul>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Data Sharing with Third Parties</h2>
-                    <p class="mb-4"><strong>We do not share any data with third parties.</strong></p>
-                    <p class="mb-4">The application does not integrate advertising SDKs, analytics platforms (such as Firebase Analytics, Crashlytics, or similar), social networks, or any external data collection service.</p>
+                    <p class="mb-4"><strong>We do not share personal data with third parties.</strong></p>
+                    <p class="mb-4">The application does not integrate advertising SDKs, analytics platforms, social networks, or any external personal data collection services.</p>
+                    <p class="mb-4">The sole external communication of the app is with the OpenStreetMap tile servers to render the relief map.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">5. Local Storage and PDF Reports</h2>
-                    <p class="mb-4">When requesting the generation of a PDF report, the application:</p>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">5. Local Storage</h2>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">5.1 Local Database (History)</h3>
+                    <p class="mb-4">When a measurement is saved, data is stored locally in the device's SQLite database. This data is <strong>never sent to external servers</strong> and remains accessible only to the app.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">5.2 PDF, GeoJSON, and KML Reports</h3>
+                    <p class="mb-4">Upon exporting reports or geographic files, the application:</p>
                     <ol class="list-decimal pl-6 mb-4 space-y-2">
-                        <li>Creates the PDF file temporarily in the app's <strong>private cache directory</strong> (<code>cacheDir</code>), accessible only by the application itself.</li>
-                        <li>Shares the file via <code>FileProvider</code> with the application of your choice (WhatsApp, email, Google Drive, etc.) using the standard Android mechanism.</li>
-                        <li>After sharing, the file remains in the device cache until the Android operating system performs automatic cache cleaning or the user clears the app data.</li>
+                        <li>Temporarily creates the file in the app's <strong>private cache directory</strong> (<code>cacheDir</code>).</li>
+                        <li>Shares the file via <code>FileProvider</code> with an app of your choice (WhatsApp, email, etc.).</li>
+                        <li>TopoWalk does not have access to the destination chosen by the user for sharing.</li>
                     </ol>
-                    <p class="mb-4">The PDF content includes the coordinates and results of the measurement performed. <strong>TopoWalk does not have access to the destination chosen by the user for sharing</strong> — this operation is managed entirely by the Android system and the destination application.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. Application Permissions</h2>
                     <div class="overflow-x-auto mb-4">
@@ -425,30 +458,32 @@
                                     <td class="py-2 pr-4 font-mono text-sm text-brand-primary">ACCESS_COARSE_LOCATION</td>
                                     <td class="py-2">Complementary permission required by Android for location</td>
                                 </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">INTERNET</td>
+                                    <td class="py-2">To load OpenStreetMap tiles for cartographic visualization</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <p class="mb-4">No other permissions are requested. The application does not request access to the camera, microphone, contacts, external storage, or any other device resource.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Use by Minors</h2>
-                    <p class="mb-4">TopoWalk is not directed to children under 13 and does not intentionally collect data from minors. Because it is a technical field tool, use by minors should occur under the supervision of a responsible adult.</p>
+                    <p class="mb-4">TopoWalk is not directed to children under 13 and does not intentionally collect data from minors. Being a technical field tool, use by minors should occur under adult supervision.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">8. Security</h2>
-                    <p class="mb-4">Because TopoWalk does not transmit data to external servers and processes all information locally on the device, the risks associated with remote data breaches are eliminated by design. Data security on the device is managed by the Android operating system itself.</p>
+                    <p class="mb-4">TopoWalk processes all topographic information locally. The only network communication consists of fetching map tiles from public servers, securely without user tracking. Sandboxing handles local data security.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Changes to this Policy</h2>
-                    <p class="mb-4">We may update this Privacy Policy periodically. Relevant changes will be communicated through a new version of the application published on the Google Play Store. The "Last updated" date at the top of this document will always reflect the current version.</p>
-                    <p class="mb-4">We recommend that you review this policy periodically.</p>
+                    <p class="mb-4">We may update this Privacy Policy periodically. Relevant changes will be communicated via new app versions on Google Play. The "Last updated" date will always reflect the current version.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">10. Contact</h2>
-                    <p class="mb-4">Questions, requests, or comments about this Privacy Policy can be sent to:</p>
+                    <p class="mb-4">Questions or comments about this Privacy Policy can be sent to:</p>
                     <p class="mb-4">
                         <strong>GHF Software</strong><br>
                         Email: <strong>ghfsoftware@gmail.com</strong> 
                     </p>
                     
                     <hr class="border-gray-800 my-8">
-                    <p class="text-sm text-gray-500 italic">This policy was drafted in compliance with the General Data Protection Law (LGPD — Law No. 13,709/2018), the European Union General Data Protection Regulation (GDPR), and Google Play Store privacy policies.</p>
+                    <p class="text-sm text-gray-500 italic">This policy complies with the General Data Protection Law (LGPD), the General Data Protection Regulation (GDPR), and Google Play Store privacy policies.</p>
                 `
             }
         };
