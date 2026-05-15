@@ -1,6 +1,6 @@
 # Política de Privacidade — TopoWalk
 
-**Última atualização:** abril de 2026
+**Última atualização:** maio de 2026
 
 Esta Política de Privacidade descreve como o aplicativo **TopoWalk**, desenvolvido por **GHF Software**, trata as informações do usuário. Ao utilizar o TopoWalk, você concorda com os termos descritos neste documento.
 
@@ -43,26 +43,54 @@ O TopoWalk é um aplicativo Android desenvolvido por **GHF Software** para fins 
 O TopoWalk **não coleta, não armazena remotamente e não transmite**:
 
 - Nome, e-mail ou qualquer dado de identificação pessoal
-- Dados de uso, telemetria ou analytics
-- Informações do dispositivo (modelo, IMEI, versão de SO)
-- Endereço IP ou dados de rede além do necessário para carregar tiles de mapa
+- Endereço IP ou dados de rede além do necessário para carregar tiles de mapa e enviar eventos de analytics
 - Localização em segundo plano ou histórico de localização fora do uso ativo do app
+- ID de publicidade (o aplicativo remove explicitamente esta permissão)
 
 ---
 
-## 4. Compartilhamento de Dados com Terceiros
+## 4. Analytics — Firebase Analytics (Google)
 
-**Não compartilhamos dados pessoais com terceiros.**
+A partir da versão 3.10, o TopoWalk utiliza o **Firebase Analytics**, um serviço de análise de uso fornecido pelo Google LLC.
 
-O aplicativo não integra SDKs de publicidade, plataformas de analytics (como Firebase Analytics, Crashlytics ou similares), redes sociais ou qualquer serviço externo de coleta de dados pessoais.
+### O que é coletado e enviado ao Firebase:
 
-A única comunicação externa do app é com os servidores de tiles do **OpenStreetMap** (opentopomap.org), exclusivamente para renderização do mapa, conforme descrito na seção 2.3.
+- **Interações no app:** telas visualizadas, funcionalidades utilizadas (ex.: captura de pontos, exportação de arquivos, acesso ao histórico) e fluxo de navegação.
+- **ID de instalação do Firebase:** identificador anônimo gerado pelo SDK para agregar sessões. Não identifica pessoalmente o usuário e pode ser redefinido desinstalando e reinstalando o app.
+- **Informações do dispositivo:** modelo, versão do sistema operacional e idioma — coletados automaticamente pelo SDK para segmentação de relatórios.
+
+### O que NÃO é coletado pelo Firebase:
+
+- Coordenadas GPS ou dados das medições topográficas
+- Nome, e-mail ou qualquer informação pessoal inserida no app
+- ID de publicidade (explicitamente removido do app)
+
+### Finalidade:
+
+Os dados são utilizados exclusivamente para entender como os usuários interagem com o app, identificar funcionalidades mais usadas e orientar melhorias futuras. Não são utilizados para publicidade ou personalização.
+
+### Retenção e controle:
+
+Os dados são retidos pelo Google conforme a [Política de Privacidade do Google](https://policies.google.com/privacy). O usuário pode limpar o ID de instalação do Firebase desinstalando o aplicativo.
 
 ---
 
-## 5. Armazenamento Local
+## 5. Compartilhamento de Dados com Terceiros
 
-### 5.1 Banco de Dados (Histórico de Medições)
+O TopoWalk compartilha dados com os seguintes terceiros:
+
+| Terceiro | Dados compartilhados | Finalidade |
+|---|---|---|
+| **Google LLC (Firebase Analytics)** | Interações no app, ID de instalação, informações do dispositivo | Analytics de uso |
+| **OpenStreetMap / OpenTopoMap** | Coordenadas dos tiles de mapa solicitados | Renderização do mapa |
+
+O aplicativo não integra SDKs de publicidade, redes sociais ou qualquer outro serviço externo além dos listados acima.
+
+---
+
+## 6. Armazenamento Local
+
+### 6.1 Banco de Dados (Histórico de Medições)
 
 Quando o usuário opta por salvar uma medição, os seguintes dados são armazenados **localmente no dispositivo** em um banco de dados Room (SQLite), acessível apenas pelo aplicativo:
 
@@ -73,7 +101,7 @@ Quando o usuário opta por salvar uma medição, os seguintes dados são armazen
 
 Esses dados **nunca são enviados a servidores externos** e permanecem no dispositivo até que o usuário os exclua manualmente pelo aplicativo ou desinstale o app.
 
-### 5.2 Relatórios em PDF
+### 6.2 Relatórios em PDF
 
 Ao solicitar a geração de um relatório PDF, o aplicativo:
 
@@ -83,37 +111,38 @@ Ao solicitar a geração de um relatório PDF, o aplicativo:
 
 O TopoWalk não tem acesso ao destino escolhido pelo usuário para o compartilhamento — essa operação é gerenciada inteiramente pelo sistema Android e pelo aplicativo receptor.
 
-### 5.3 Exportação GeoJSON e KML
+### 6.3 Exportação GeoJSON e KML
 
 O usuário pode exportar medições nos formatos GeoJSON e KML. Esses arquivos são gerados localmente no cache do dispositivo e compartilhados da mesma forma que o PDF (seção 5.2). O app não tem acesso ao destino do compartilhamento.
 
 ---
 
-## 6. Permissões do Aplicativo
+## 7. Permissões do Aplicativo
 
 | Permissão | Motivo |
 |---|---|
 | `ACCESS_FINE_LOCATION` | Obter coordenadas GPS precisas para os pontos de medição |
 | `ACCESS_COARSE_LOCATION` | Permissão complementar exigida pelo Android para localização |
-| `INTERNET` | Carregar tiles de mapa do OpenStreetMap para a visualização cartográfica |
+| `INTERNET` | Carregar tiles de mapa do OpenStreetMap e enviar eventos ao Firebase Analytics |
+| `VIBRATE` | Feedback háptico ao capturar um ponto de medição |
 
-Nenhuma outra permissão é solicitada. O aplicativo não solicita acesso à câmera, microfone, contatos ou armazenamento externo.
+O aplicativo não solicita acesso à câmera, microfone, contatos ou armazenamento externo. O ID de publicidade (`AD_ID`) é explicitamente removido do app e não é coletado.
 
 ---
 
-## 7. Uso por Menores
+## 8. Uso por Menores
 
 O TopoWalk não é direcionado a crianças menores de 13 anos e não coleta intencionalmente dados de menores. Por se tratar de uma ferramenta técnica de campo, o uso por menores deve ocorrer sob supervisão de um adulto responsável.
 
 ---
 
-## 8. Segurança
+## 9. Segurança
 
-O TopoWalk processa todas as informações localmente no dispositivo e não transmite dados pessoais para servidores externos. A única comunicação de rede é com servidores públicos de tiles de mapa, sem envio de dados de identificação pessoal. A segurança dos dados armazenados localmente é gerenciada pelo sistema operacional Android e pelo isolamento de aplicativos (sandbox).
+Os dados de medição do TopoWalk são processados e armazenados exclusivamente no dispositivo do usuário. A comunicação com serviços externos (Firebase Analytics e OpenStreetMap) é realizada exclusivamente via HTTPS com criptografia em trânsito. Os dados enviados ao Firebase não contêm informações pessoais identificáveis. A segurança dos dados armazenados localmente é gerenciada pelo sistema operacional Android e pelo isolamento de aplicativos (sandbox).
 
 ---
 
-## 9. Alterações nesta Política
+## 10. Alterações nesta Política
 
 Podemos atualizar esta Política de Privacidade periodicamente. Alterações relevantes serão comunicadas por meio de uma nova versão do aplicativo publicada na Google Play Store. A data de "Última atualização" no topo deste documento sempre refletirá a versão vigente.
 
@@ -121,7 +150,7 @@ Recomendamos que você revise esta política periodicamente.
 
 ---
 
-## 10. Contato
+## 11. Contato
 
 Dúvidas, solicitações ou comentários sobre esta Política de Privacidade podem ser enviados para:
 
