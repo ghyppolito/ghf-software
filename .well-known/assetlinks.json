@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "br.com.ghfsoftware.lottoexpert",
+    "sha256_cert_fingerprints": [
+      "7B:27:65:27:75:E4:BA:CA:75:14:42:7B:25:BC:D8:2F:DC:44:A8:5D:CD:A7:C8:9F:A1:51:54:D2:D3:1E:24:61"
+    ]
+  }
+}]
