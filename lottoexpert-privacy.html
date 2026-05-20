@@ -137,7 +137,7 @@
                 Política de Privacidade — LottoExpert
             </h1>
             <p class="text-gray-500 text-lg" data-i18n="last_updated">
-                Última atualização: Abril de 2026
+                Última atualização: 19 de Maio de 2026
             </p>
         </div>
     </div>
@@ -236,7 +236,7 @@
                 nav_portfolio: "Portfólio",
                 nav_contact: "Contato",
                 page_title: "Política de Privacidade — LottoExpert",
-                last_updated: "Última atualização: 02 de Maio de 2026",
+                last_updated: "Última atualização: 19 de Maio de 2026",
                 intro: "Esta Política de Privacidade descreve como o aplicativo <strong>LottoExpert</strong> coleta, usa e protege suas informações. Nosso compromisso fundamental é com a <strong>privacidade absoluta</strong> e a segurança dos dados dos usuários.",
                 btn_back: "Voltar para a GHF Software",
                 footer_apps: "Aplicativos",
@@ -253,7 +253,8 @@
                 footer_dev2: " por especialistas.",
                 content: `
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">1. Princípio Geral: Privacidade por Padrão</h2>
-                    <p class="mb-4">O LottoExpert é um aplicativo <strong>Offline-First e Privacy-First</strong>. Todo processamento de dados — geração de jogos, análise estatística, conferência de bilhetes e armazenamento do histórico — ocorre <strong>exclusivamente no seu dispositivo</strong>. Nenhuma informação pessoal ou estratégia de aposta é transmitida a servidores do desenvolvedor.</p>
+                    <p class="mb-4">O LottoExpert é um aplicativo <strong>Privacy-First</strong>. Todo processamento de dados — geração de jogos, análise estatística, conferência de bilhetes e armazenamento do histórico — ocorre <strong>exclusivamente no seu dispositivo</strong>. Nenhuma informação pessoal, estratégia de aposta ou jogo criado por você é transmitida a qualquer servidor.</p>
+                    <p class="mb-4">Para obter os resultados oficiais dos sorteios, o app comunica com servidores próprios do desenvolvedor hospedados no Google Cloud Platform (GCP) — descritos na Seção 4.1. Essas requisições são anônimas e não contêm qualquer dado pessoal.</p>
                     
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">2. Dados que o App NÃO Coleta</h2>
                     <p class="mb-4">O LottoExpert <strong>não coleta, não transmite e não armazena</strong> em servidores remotos:</p>
@@ -270,33 +271,49 @@
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">3. Dados Tratados Localmente no Dispositivo</h2>
                     <p class="mb-4">Os seguintes dados são armazenados no banco de dados privado do app (Room Database, SQLite), acessível apenas pelo próprio aplicativo:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li><strong>Histórico de sorteios:</strong> Resultados das loterias obtidos da API pública da CEF, salvos para consulta offline.</li>
+                        <li><strong>Histórico de sorteios:</strong> Resultados das loterias obtidos da nossa infraestrutura de dados (GCP), salvos para consulta offline.</li>
                         <li><strong>Jogos salvos:</strong> Tickets gerados pelo algoritmo ou criados manualmente pelo usuário.</li>
                         <li><strong>Bolões:</strong> Dados de grupos criados pelo usuário, incluindo nomes de participantes e vinculação de cotas.</li>
                         <li><strong>Preferências de filtros:</strong> Configurações locais de uso da interface.</li>
                     </ul>
-                    <p class="mb-4">O usuário tem total controle sobre esses dados e pode <strong>excluí-los manualmente</strong> a qualquer momento. Ao <strong>desinstalar o aplicativo</strong>, todos esses dados locais são removidos permanentemente do dispositivo.</p>
+                    <p class="mb-4">O usuário tem total controle sobre esses dados e pode <strong>excluí-los manualmente</strong> a qualquer momento através das opções de "Limpar" ou "Remover" dentro do aplicativo. Ao <strong>desinstalar o aplicativo</strong>, todos esses dados locais são removidos permanentemente do dispositivo.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Comunicação com Serviços de Terceiros</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Comunicação com Serviços Externos</h2>
                     <p class="mb-4">Para o funcionamento do app, comunicamos com os seguintes serviços externos:</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.1 API Pública da Caixa Econômica Federal</h3>
-                    <p class="mb-2"><strong>Finalidade:</strong> Obter os resultados oficiais dos sorteios. A requisição é anônima e serve exclusivamente para leitura de dados públicos no endpoint <code>servicebus2.caixa.gov.br</code>. A sincronização ocorre automaticamente às 21h nos dias de sorteio ou manualmente pelo usuário.</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.1 Infraestrutura de Dados do Desenvolvedor (Google Cloud Platform)</h3>
+                    <p class="mb-2"><strong>Finalidade:</strong> Fornecer os resultados oficiais dos sorteios das loterias brasileiras ao aplicativo.</p>
+                    <p class="mb-2"><strong>Funcionamento:</strong> Os resultados são coletados periodicamente da API pública da Caixa Econômica Federal por um processo automatizado do desenvolvedor e armazenados em um banco de dados privado hospedado no Google Cloud Platform (GCP). O aplicativo consulta esse banco de dados para sincronizar os resultados — sem chamar a API da Caixa diretamente.</p>
+                    <p class="mb-2"><strong>Dados enviados pelo app:</strong> Nenhum dado pessoal. A requisição inclui apenas o nome da loteria e, opcionalmente, o número do concurso solicitado. Adicionalmente, um token de atestação do Firebase App Check é enviado para autenticar que a requisição parte de uma instalação legítima do aplicativo (ver Seção 4.2).</p>
+                    <p class="mb-2"><strong>Dados armazenados no servidor:</strong> Apenas os resultados públicos dos sorteios. Nenhum dado do usuário é gravado nos servidores do desenvolvedor.</p>
+                    <p class="mb-4"><strong>Frequência:</strong> Sincronização automática três vezes ao dia (aproximadamente 22:30, 08:30 e 12:30 BRT), garantindo que os resultados estejam disponíveis mesmo em caso de atraso na publicação oficial. O usuário também pode atualizar manualmente.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.2 Google Play Billing</h3>
-                    <p class="mb-2"><strong>Finalidade:</strong> Processar compras in-app para desbloqueio de recursos premium. O LottoExpert recebe apenas a confirmação criptografada da transação, sem acesso a dados de pagamento.</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.2 Firebase App Check (Google)</h3>
+                    <p class="mb-2"><strong>Finalidade:</strong> Garantir que apenas instalações legítimas do LottoExpert possam acessar a infraestrutura de dados do desenvolvedor (Seção 4.1), protegendo contra uso abusivo.</p>
+                    <p class="mb-2"><strong>Funcionamento:</strong> O App Check utiliza o <strong>Google Play Integrity</strong> para gerar um token de atestação que confirma a integridade do dispositivo e da instalação do app. Esse token é enviado junto com cada requisição de sincronização. O token não contém dados pessoais, não identifica o usuário individualmente e não é armazenado pelo desenvolvedor.</p>
+                    <p class="mb-4"><strong>Dados processados pelo Google:</strong> A avaliação de integridade do dispositivo é realizada pelo Google Play Integrity. O LottoExpert não tem acesso ao conteúdo do token — apenas à confirmação de que ele é válido.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.3 Firebase Remote Config (Google)</h3>
-                    <p class="mb-2"><strong>Finalidade:</strong> Manter os preços mínimos das apostas atualizados. Envia apenas metadados técnicos anônimos do app para controle de taxa de requisições.</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.3 Google Play Billing</h3>
+                    <p class="mb-2"><strong>Finalidade:</strong> Processar compras e assinaturas in-app para desbloqueio de recursos Premium. O app oferece três modalidades: assinatura mensal, assinatura anual e compra única vitalícia.</p>
+                    <p class="mb-4"><strong>Dados tratados pelo Google:</strong> Dados de pagamento e histórico de compras gerenciados exclusivamente pelo Google Play. O LottoExpert recebe apenas a confirmação criptografada da transação para liberar os recursos Premium — sem acesso a dados de cartão ou informações financeiras.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.4 Firebase Crashlytics & Analytics (Google)</h3>
-                    <p class="mb-2"><strong>Finalidade:</strong> Diagnóstico de falhas e medição de uso agregado e anônimo das funcionalidades. <strong>Nenhum dado pessoal, de jogo ou identificador de usuário é transmitido.</strong> A coleta de Advertising ID está desativada.</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.4 Firebase Remote Config (Google)</h3>
+                    <p class="mb-4"><strong>Finalidade:</strong> Manter os preços mínimos das apostas atualizados sem necessidade de atualizar o aplicativo. Envia apenas metadados técnicos anônimos do app para controle de taxa de requisições.</p>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.5 Google Play In-App Review</h3>
-                    <p class="mb-2"><strong>Finalidade:</strong> Exibir a caixa de diálogo nativa do Google Play para avaliação do aplicativo. O fluxo é gerenciado inteiramente pelo Google.</p>
+                    <p class="mb-4"><strong>Finalidade:</strong> Exibir a caixa de diálogo nativa do Google Play solicitando avaliação do aplicativo. O fluxo é gerenciado inteiramente pelo Google.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.6 Links Mágicos (Deep Links)</h3>
-                    <p class="mb-2"><strong>Finalidade:</strong> Compartilhamento de dados de bolões. O app gera um link codificado (GZIP + Base64) que contém os dados. O desenvolvedor não tem acesso aos links gerados.</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.6 Firebase Crashlytics (Google)</h3>
+                    <p class="mb-4"><strong>Finalidade:</strong> Detectar e registrar falhas técnicas do aplicativo para diagnóstico e correção. Envia stack trace anônimo, versão do app, tipo de dispositivo e versão do Android. <strong>Nenhum dado pessoal é transmitido.</strong></p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.7 Firebase Analytics (Google)</h3>
+                    <p class="mb-2"><strong>Finalidade:</strong> Medir o uso agregado e anônimo das funcionalidades do app para melhorar a experiência do usuário, orientar o desenvolvimento e — em forma estritamente agregada, sem identificação individual — otimizar campanhas publicitárias do próprio desenvolvedor em plataformas como Google Ads e Meta Ads. Nenhum dado individual é compartilhado.</p>
+                    <p class="mb-2"><strong>Dados enviados:</strong> Eventos pseudônimos e agregados como <code>generate_matrix</code>, <code>scan_ocr</code>, <code>export_pdf</code>, <code>sweepstake_created</code>, <code>sweepstake_copied</code>, <code>backtest_run</code>, <code>view_paywall</code>, <code>purchase_premium</code>, <code>onboarding_completed</code>, <code>notification_permission_granted</code>. <strong>Nenhuma dezena selecionada e nenhum dado pessoal identificável é transmitido.</strong></p>
+                    <p class="mb-2"><strong>Identificador técnico:</strong> Utiliza um <code>app_instance_id</code> pseudônimo por instalação. A coleta do Advertising ID (GAID) está <strong>desativada</strong> de forma explícita.</p>
+                    <p class="mb-4"><strong>Base legal (LGPD):</strong> Legítimo interesse do desenvolvedor (Art. 7º, IX, LGPD) para melhoria do produto e otimização de campanhas próprias.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.8 Links de Compartilhamento e QR Code (Bolões)</h3>
+                    <p class="mb-4"><strong>Finalidade e Funcionamento:</strong> Compartilhamento de bolões. O app gera um link contendo os dados codificados via GZIP e Base64, sem passar por servidores. O desenvolvedor não tem acesso aos links ou QR codes gerados.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">5. Permissões Solicitadas</h2>
                     <div class="overflow-x-auto mb-4">
@@ -309,36 +326,99 @@
                             </thead>
                             <tbody>
                                 <tr class="border-b border-gray-800">
-                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">INTERNET/BILLING</td>
-                                    <td class="py-2">Baixar resultados oficiais e processar compras premium via Google Play.</td>
+                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">INTERNET</td>
+                                    <td class="py-2">Sincronizar resultados com o GCP, processar compras premium e comunicar com serviços Firebase.</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">BILLING</td>
+                                    <td class="py-2">Validar e processar compras únicas e assinaturas Premium via Google Play Store.</td>
                                 </tr>
                                 <tr class="border-b border-gray-800">
                                     <td class="py-2 pr-4 font-mono text-sm text-brand-primary">CAMERA</td>
-                                    <td class="py-2">Escanear bilhetes físicos para conferência automática (OCR). Nenhuma imagem é armazenada.</td>
+                                    <td class="py-2">Escaneamento OCR de bilhetes físicos. A câmera só é ativada sob ação explícita. Nenhuma imagem é transmitida ou salva.</td>
                                 </tr>
                                 <tr class="border-b border-gray-800">
                                     <td class="py-2 pr-4 font-mono text-sm text-brand-primary">POST_NOTIFICATIONS</td>
-                                    <td class="py-2">Exibir alertas de resultados e prêmios acumulados (Android 13+).</td>
+                                    <td class="py-2">Exibir alertas de resultados e prêmios acumulados (Android 13+). Pode ser revogada a qualquer momento.</td>
                                 </tr>
                                 <tr class="border-b border-gray-800">
-                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">EXACT_ALARM/BOOT</td>
-                                    <td class="py-2">Agendar e sincronizar resultados automaticamente em horários precisos.</td>
+                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">RECEIVE_BOOT_COMPLETED</td>
+                                    <td class="py-2">Reagendar alarmes de sincronização e lembretes automaticamente após reinicialização do dispositivo.</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. Processamento de Imagens (OCR)</h2>
-                    <p class="mb-4">A funcionalidade "Conferir Bilhete" utiliza o <strong>ML Kit Text Recognition</strong> (Google). O processamento ocorre <strong>inteiramente no dispositivo</strong>. As imagens capturadas <strong>não são salvas</strong> e são descartadas imediatamente após o processamento.</p>
+                    <p class="mb-4">O recurso de scanner usa a câmera e o <strong>ML Kit Text Recognition</strong> offline <strong>no dispositivo</strong>. Nenhuma imagem é transmitida ou salva em cache/banco de dados; elas são descartadas logo após a identificação das dezenas.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Público-Alvo</h2>
-                    <p class="mb-4">O LottoExpert é destinado a usuários <strong>maiores de 18 anos</strong>. Não coletamos intencionalmente informações de menores de idade.</p>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Público-Alvo e Restrição de Idade</h2>
+                    <p class="mb-4">O LottoExpert é destinado a maiores de <strong>18 anos</strong> devido à temática de loterias. Não coletamos dados de menores.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">8. Segurança dos Dados</h2>
-                    <p class="mb-4">Todo dado local fica no sandbox do Android. Utilizamos Firebase Analytics exclusivamente com eventos anônimos e agregados para melhoria do produto, sem coleta de Advertising ID. Não utilizamos SDKs de publicidade ou rastreadores comerciais. O código-fonte pode ser auditado conforme termos de licenciamento.</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>Dados locais protegidos pela sandbox do Android.</li>
+                        <li>Comunicação via HTTPS protegida por atestação de integridade do Firebase App Check.</li>
+                        <li>Bucket GCP privado para gravação e protegido por token de leitura.</li>
+                        <li>Eventos anônimos e agregados no Firebase Analytics, sem GAID ou SDKs publicitários.</li>
+                    </ul>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Alterações e 10. Contato</h2>
-                    <p class="mb-4">Podemos atualizar esta política ocasionalmente. Para dúvidas ou suporte, entre em contato através do canal oficial na <strong>Google Play Store</strong>.</p>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Lei Geral de Proteção de Dados (LGPD)</h2>
+                    <p class="mb-4">O LottoExpert atende integralmente às diretrizes da LGPD (Lei nº 13.709/2018).</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">9.1 Bases Legais</h3>
+                    <div class="overflow-x-auto mb-4">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="py-2 pr-4 font-bold text-white">Tratamento</th>
+                                    <th class="py-2 font-bold text-white">Base Legal (LGPD)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Sincronização de Resultados (GCP)</td>
+                                    <td class="py-2 text-sm">Execução de Contrato / Legítimo Interesse (Art. 7º, V e IX)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 text-sm">Firebase App Check (Integridade)</td>
+                                    <td class="py-2 text-sm">Legítimo Interesse (Art. 7º, IX)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Google Play Billing (Compras)</td>
+                                    <td class="py-2 text-sm">Execução de Contrato (Art. 7º, V)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Firebase Crashlytics (Manutenção)</td>
+                                    <td class="py-2 text-sm">Legítimo Interesse (Art. 7º, IX)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Firebase Analytics (Melhoria)</td>
+                                    <td class="py-2 text-sm">Legítimo Interesse (Art. 7º, IX)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Remote Config (Parâmetros)</td>
+                                    <td class="py-2 text-sm">Legítimo Interesse (Art. 7º, IX)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Dados Locais (Jogos/Bolões)</td>
+                                    <td class="py-2 text-sm">Execução de Contrato / Consentimento Implícito (Art. 7º, V)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">9.2 Direitos do Titular</h3>
+                    <p class="mb-4">Sob o Artigo 18 da LGPD, você possui direito à confirmação de tratamento, acesso, correção, eliminação de dados locais consentidos, portabilidade e oposição ao legítimo interesse quando desproporcional. Para exercer seus direitos, contate-nos no canal oficial da Google Play Store (retorno em 15 dias úteis).</p>
+                    <p class="mb-4 text-sm bg-gray-800/50 p-4 rounded-lg"><strong>Como excluir dados locais:</strong> Use a limpeza de dados interna do app ou desinstale o aplicativo do seu aparelho.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">9.3 Transferência Internacional</h3>
+                    <p class="mb-4">Os serviços do Google/Firebase são operados com infraestrutura externa ao Brasil. Esta transferência é protegida sob Cláusulas Contratuais Padrão (Art. 33, II da LGPD).</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">10. Alterações nesta Política</h2>
+                    <p class="mb-4">Podemos atualizar esta política periodicamente. A data de atualização no topo indica a entrada em vigor.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">11. Contato</h2>
+                    <p class="mb-4">Para dúvidas ou suporte legal, contate-nos pelo suporte da <strong>Google Play Store</strong>.</p>
                 `
             },
             en: {
@@ -346,7 +426,7 @@
                 nav_portfolio: "Portfolio",
                 nav_contact: "Contact",
                 page_title: "Privacy Policy — LottoExpert",
-                last_updated: "Last updated: May 02, 2026",
+                last_updated: "Last updated: May 19, 2026",
                 intro: "This Privacy Policy describes how the <strong>LottoExpert</strong> application collects, uses, and protects your information. Our fundamental commitment is to <strong>absolute privacy</strong> and data security.",
                 btn_back: "Back to GHF Software",
                 footer_apps: "Applications",
@@ -363,7 +443,8 @@
                 footer_dev2: " by experts.",
                 content: `
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">1. General Principle: Privacy by Default</h2>
-                    <p class="mb-4">LottoExpert is an <strong>Offline-First and Privacy-First</strong> application. All data processing—game generation, statistical analysis, ticket checking, and history storage—occurs <strong>exclusively on your device</strong>. No personal information or betting strategy is transmitted to developer servers.</p>
+                    <p class="mb-4">LottoExpert is a <strong>Privacy-First</strong> application. All data processing—game generation, statistical analysis, ticket checking, and history storage—occurs <strong>exclusively on your device</strong>. No personal information, betting strategy, or tickets created by you are transmitted to any server.</p>
+                    <p class="mb-4">To retrieve official draw results, the app communicates with the developer's own servers hosted on Google Cloud Platform (GCP)—described in Section 4.1. These requests are anonymous and do not contain any personal data.</p>
                     
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">2. Data the App DOES NOT Collect</h2>
                     <p class="mb-4">LottoExpert <strong>does not collect, transmit, or store</strong> on remote servers:</p>
@@ -371,7 +452,7 @@
                         <li>Your selected numbers or betting strategies</li>
                         <li>Tickets created or saved by you</li>
                         <li>Your betting history</li>
-                        <li>Identifying personal data (email, phone, tax ID)</li>
+                        <li>Identifying personal data (email, phone, tax ID/CPF)</li>
                         <li>Images captured by the camera</li>
                         <li>Location data</li>
                     </ul>
@@ -380,33 +461,49 @@
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">3. Data Processed Locally on the Device</h2>
                     <p class="mb-4">The following data is stored in the app's private database (Room Database, SQLite), accessible only by the application itself:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li><strong>Draw history:</strong> Lottery results obtained from the public CEF API, saved for offline consultation.</li>
+                        <li><strong>Draw history:</strong> Lottery results obtained from our data infrastructure (GCP), saved for offline consultation.</li>
                         <li><strong>Saved games:</strong> Tickets generated by the algorithm or created manually by the user.</li>
                         <li><strong>Sweepstakes:</strong> Data from groups created by the user, including participant names and quota links.</li>
                         <li><strong>Filter preferences:</strong> Local UI configuration settings.</li>
                     </ul>
-                    <p class="mb-4">The user has full control over this data and can <strong>manually delete it</strong> at any time. When <strong>uninstalling the application</strong>, all local data is permanently removed from the device.</p>
+                    <p class="mb-4">The user has full control over this data and can <strong>manually delete it</strong> at any time using the "Clear" or "Remove" options in the app. When <strong>uninstalling the application</strong>, all local data is permanently removed from the device.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Communication with Third-Party Services</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Communication with External Services</h2>
                     <p class="mb-4">For the app to function, we communicate with the following external services:</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.1 Official Public Lottery API</h3>
-                    <p class="mb-2"><strong>Purpose:</strong> Obtain official draw results. The request is anonymous and serves exclusively to read public data at the <code>servicebus2.caixa.gov.br</code> endpoint. Synchronization occurs automatically at 9 PM on draw days or manually by the user.</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.1 Developer Data Infrastructure (Google Cloud Platform)</h3>
+                    <p class="mb-2"><strong>Purpose:</strong> Provide official Brazilian lottery draw results to the app.</p>
+                    <p class="mb-2"><strong>Operation:</strong> The results are periodically collected from the Caixa API via an automated developer backend and stored in a private GCP database. The app queries this database to sync results, avoiding direct calls to Caixa's public API.</p>
+                    <p class="mb-2"><strong>Data sent:</strong> No personal data. The request includes only the lottery type and, optionally, the requested draw number. A Firebase App Check attestation token is sent to verify that the request comes from a legitimate installation (see Section 4.2).</p>
+                    <p class="mb-2"><strong>Data stored:</strong> Only public draw results. No user data is recorded on developer servers.</p>
+                    <p class="mb-4"><strong>Frequency:</strong> Automatic sync three times a day (approx. 10:30 PM, 08:30 AM, and 12:30 PM BRT). Manual sync is also available.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.2 Google Play Billing</h3>
-                    <p class="mb-2"><strong>Purpose:</strong> Process in-app purchases to unlock premium features. LottoExpert receives only the encrypted transaction confirmation, without access to payment data.</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.2 Firebase App Check (Google)</h3>
+                    <p class="mb-2"><strong>Purpose:</strong> Guarantee that only legitimate LottoExpert installations can access the backend API (Section 4.1), protecting against abuse.</p>
+                    <p class="mb-2"><strong>Operation:</strong> App Check uses <strong>Google Play Integrity</strong> to verify device and app integrity, creating an attestation token sent with sync requests. This token does not contain personal data, does not identify the user, and is not stored.</p>
+                    <p class="mb-4"><strong>Data processed by Google:</strong> Device integrity assessment is handled by Google Play Integrity. LottoExpert only accesses the validity confirmation.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.3 Firebase Remote Config (Google)</h3>
-                    <p class="mb-2"><strong>Purpose:</strong> Keep minimum bet prices updated. Sends only anonymous technical metadata from the app for request rate control.</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.3 Google Play Billing</h3>
+                    <p class="mb-2"><strong>Purpose:</strong> Process in-app purchases and subscriptions to unlock Premium features. The app offers three options: monthly subscription, annual subscription, and one-time lifetime purchase.</p>
+                    <p class="mb-4"><strong>Data processed by Google:</strong> Payment details and purchase history are managed entirely by Google Play. LottoExpert only receives encrypted confirmation to unlock Premium features—without access to card or financial details.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.4 Firebase Crashlytics & Analytics (Google)</h3>
-                    <p class="mb-2"><strong>Purpose:</strong> Fault diagnosis and measurement of aggregate and anonymous use of features. <strong>No personal data, game data, or user identifiers are transmitted.</strong> Advertising ID collection is disabled.</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.4 Firebase Remote Config (Google)</h3>
+                    <p class="mb-4"><strong>Purpose:</strong> Keep minimum bet prices updated. Sends only anonymous technical metadata from the app for request rate control.</p>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.5 Google Play In-App Review</h3>
-                    <p class="mb-2"><strong>Purpose:</strong> Display the native Google Play dialog box for app rating. The flow is managed entirely by Google.</p>
+                    <p class="mb-4"><strong>Purpose:</strong> Display the native Google Play dialog box for app rating. The rating flow is managed entirely by Google.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.6 Magic Links (Deep Links)</h3>
-                    <p class="mb-2"><strong>Purpose:</strong> Sharing sweepstake data. The app generates an encoded link (GZIP + Base64) containing the data. The developer has no access to the generated links.</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.6 Firebase Crashlytics (Google)</h3>
+                    <p class="mb-4"><strong>Purpose:</strong> Detect and record technical app crashes for diagnosis and fixes. Sends anonymous stack traces, app version, device type, and Android version. <strong>No personal data is transmitted.</strong></p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.7 Firebase Analytics (Google)</h3>
+                    <p class="mb-2"><strong>Purpose:</strong> Measure aggregate and anonymous usage of features to improve the user experience and, in strictly aggregate form, optimize developer campaigns in platforms like Google Ads and Meta Ads. No individual data is shared.</p>
+                    <p class="mb-2"><strong>Data sent:</strong> Anonymous aggregate events (e.g., <code>generate_matrix</code>, <code>scan_ocr</code>, <code>export_pdf</code>, <code>sweepstake_created</code>, <code>sweepstake_copied</code>, <code>backtest_run</code>, <code>view_paywall</code>, <code>purchase_premium</code>, <code>onboarding_completed</code>, <code>notification_permission_granted</code>). <strong>No selected numbers or identifiable personal details are transmitted.</strong></p>
+                    <p class="mb-2"><strong>Technical identifier:</strong> Uses a pseudonymous <code>app_instance_id</code> per installation. Advertising ID (GAID) collection is explicitly <strong>disabled</strong>.</p>
+                    <p class="mb-4"><strong>Legal basis (LGPD):</strong> Developer's legitimate interest (Art. 7, IX, LGPD) for product improvement and self-campaign optimization.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">4.8 Sharing Links and QR Codes (Sweepstakes)</h3>
+                    <p class="mb-4"><strong>Purpose and Operation:</strong> Share sweepstake data. The app creates a link containing the data encoded via GZIP and Base64. No data passes through servers, and the developer cannot access generated links or QR codes.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">5. Requested Permissions</h2>
                     <div class="overflow-x-auto mb-4">
@@ -419,36 +516,99 @@
                             </thead>
                             <tbody>
                                 <tr class="border-b border-gray-800">
-                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">INTERNET/BILLING</td>
-                                    <td class="py-2">Download official results and process premium purchases via Google Play.</td>
+                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">INTERNET</td>
+                                    <td class="py-2">Sync results with GCP, process premium purchases, and communicate with Firebase services.</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">BILLING</td>
+                                    <td class="py-2">Validate and process single purchases and premium subscriptions via Google Play.</td>
                                 </tr>
                                 <tr class="border-b border-gray-800">
                                     <td class="py-2 pr-4 font-mono text-sm text-brand-primary">CAMERA</td>
-                                    <td class="py-2">Scan physical tickets for automatic checking (OCR). No images are stored.</td>
+                                    <td class="py-2">Scan physical tickets for automatic checking (OCR). The camera is only activated on explicit request. No images are stored or sent.</td>
                                 </tr>
                                 <tr class="border-b border-gray-800">
                                     <td class="py-2 pr-4 font-mono text-sm text-brand-primary">POST_NOTIFICATIONS</td>
-                                    <td class="py-2">Display result alerts and jackpots (Android 13+).</td>
+                                    <td class="py-2">Display result alerts and jackpots (Android 13+). Can be managed or disabled in settings.</td>
                                 </tr>
                                 <tr class="border-b border-gray-800">
-                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">EXACT_ALARM/BOOT</td>
-                                    <td class="py-2">Schedule and sync results automatically at precise times.</td>
+                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">RECEIVE_BOOT_COMPLETED</td>
+                                    <td class="py-2">Reschedule sync alarms and reminders automatically after device reboot.</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. Image Processing (OCR)</h2>
-                    <p class="mb-4">The "Check Ticket" feature uses <strong>ML Kit Text Recognition</strong> (Google). Processing occurs <strong>entirely on the device</strong>. Captured images <strong>are not saved</strong> and are discarded immediately after processing.</p>
+                    <p class="mb-4">The ticket checking feature uses the camera and offline <strong>ML Kit Text Recognition</strong> (Google) <strong>on the device</strong>. No images are saved, and they are immediately discarded after number identification.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Target Audience</h2>
-                    <p class="mb-4">LottoExpert is intended for users <strong>over 18 years old</strong>. We do not intentionally collect information from minors.</p>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Target Audience & Age Limits</h2>
+                    <p class="mb-4">LottoExpert is intended for users <strong>over 18 years old</strong>. We do not intentionally collect data from minors.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">8. Data Security</h2>
-                    <p class="mb-4">All local data remains in the Android sandbox. We use Firebase Analytics exclusively with anonymous and aggregate events for product improvement, without collecting Advertising ID. We do not use advertising SDKs or commercial trackers. The source code can be audited according to licensing terms.</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>Local data is secured within the Android app sandbox.</li>
+                        <li>Requests to developer infrastructure (GCP) are secured via Firebase App Check attestation and HTTPS.</li>
+                        <li>GCP storage bucket has public access blocked.</li>
+                        <li>Firebase Analytics uses anonymous aggregate events, with no GAID or tracking SDKs.</li>
+                    </ul>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Policy Changes & 10. Contact</h2>
-                    <p class="mb-4">We may update this policy occasionally. For questions or support, contact us via the official channel on the <strong>Google Play Store</strong>.</p>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. General Data Protection Law (LGPD)</h2>
+                    <p class="mb-4">LottoExpert fully complies with the Brazilian LGPD (Law No. 13,709/2018).</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">9.1 Legal Bases</h3>
+                    <div class="overflow-x-auto mb-4">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="py-2 pr-4 font-bold text-white">Processing Activity</th>
+                                    <th class="py-2 font-bold text-white">LGPD Legal Basis</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Draw Results Sincronization (GCP)</td>
+                                    <td class="py-2 text-sm">Contract Execution / Legitimate Interest (Art. 7, V and IX)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Firebase App Check (Integrity)</td>
+                                    <td class="py-2 text-sm">Legitimate Interest (Art. 7, IX)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Google Play Billing (Purchases)</td>
+                                    <td class="py-2 text-sm">Contract Execution (Art. 7, V)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Firebase Crashlytics (Maintenance)</td>
+                                    <td class="py-2 text-sm">Legitimate Interest (Art. 7, IX)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Firebase Analytics (Improvement)</td>
+                                    <td class="py-2 text-sm">Legitimate Interest (Art. 7, IX)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Remote Config (Configuration)</td>
+                                    <td class="py-2 text-sm">Legitimate Interest (Art. 7, IX)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 text-sm">Local Data (Games/Sweepstakes)</td>
+                                    <td class="py-2 text-sm">Contract Execution / Implied Consent (Art. 7, V)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">9.2 Data Subject Rights</h3>
+                    <p class="mb-4">Under Art. 18 of LGPD, you have the right to confirm processing, access, correct, delete consent-based local data, request portability, and object to legitimate interest processing when disproportionate. Contact us via the Google Play Store (replies within 15 business days).</p>
+                    <p class="mb-4 text-sm bg-gray-800/50 p-4 rounded-lg"><strong>How to delete local data:</strong> Use the internal app clear feature or uninstall the application from your device.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">9.3 International Transfers</h3>
+                    <p class="mb-4">Google/Firebase services are operated outside Brazil. These transfers are governed by Google's Standard Contractual Clauses, providing equivalent safeguards (Art. 33, II of LGPD).</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">10. Policy Changes</h2>
+                    <p class="mb-4">We may update this policy occasionally. The date at the top indicates when the version took effect.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">11. Contact</h2>
+                    <p class="mb-4">For questions or support, contact us via the official channel on the <strong>Google Play Store</strong>.</p>
                 `
             }
         };
@@ -490,6 +650,7 @@
         });
 
         const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileBtnIcon = mobileBtn.querySelector('i');
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileLinks = document.querySelectorAll('.mobile-link');
 
@@ -497,9 +658,11 @@
             if (mobileMenu.classList.contains('opacity-0')) {
                 mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
                 mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
+                if (mobileBtnIcon) mobileBtnIcon.classList.replace('fa-bars', 'fa-xmark');
             } else {
                 mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
                 mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                if (mobileBtnIcon) mobileBtnIcon.classList.replace('fa-xmark', 'fa-bars');
             }
         }
 

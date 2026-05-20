@@ -1,6 +1,6 @@
 # LottoExpert
 
-**LottoExpert** é uma solução de engenharia estatística para apostadores das Loterias da Caixa Econômica Federal. O aplicativo foi desenhado com foco em **processamento local e privacidade** — toda a geração de fechamentos, conferência de bilhetes e reconhecimento OCR acontece no próprio dispositivo, sem envio de dados para servidores externos.
+**LottoExpert** é uma solução de engenharia estatística para apostadores das Loterias da Caixa Econômica Federal. O aplicativo foi desenhado com foco em **processamento local e privacidade** — toda a geração de fechamentos, conferência de bilhetes e reconhecimento OCR acontece no próprio dispositivo. Os resultados oficiais dos sorteios são sincronizados via infraestrutura própria no Google Cloud Platform, sem expor dados do usuário a nenhum servidor.
 
 ---
 
@@ -16,10 +16,11 @@
 - **Exportação Direta:** Os jogos gerados podem ser exportados como PDF ou salvos na carteira com um toque.
 
 ### Resultados e Sincronização
-- **API Oficial da Caixa:** Consome diretamente `servicebus2.caixa.gov.br/portaldeloterias/api/` para obter resultados oficiais de todas as modalidades.
+- **Infraestrutura Própria (GCP):** Os resultados são coletados da API pública da Caixa por um Cloud Function (`lottery-sync`) e armazenados em um bucket GCS privado. O app consulta o segundo Cloud Function (`lottery-serve`), nunca a API da Caixa diretamente.
+- **Firebase App Check:** Cada requisição ao `lottery-serve` carrega um token de atestação do Play Integrity, garantindo que apenas instalações legítimas do app acessem a infraestrutura.
 - **Histórico Offline:** Todo o histórico de concursos é armazenado localmente via Room Database para consulta instantânea sem internet.
 - **Sync Inteligente:** Sincronização automática via WorkManager + AlarmManager, com filtro por calendário de sorteio.
-- **Resiliência e Erros:** Sistema de retentativa automática (exponential backoff) em falhas de conexão, com banners de status e opção de retry manual para o usuário.
+- **Resiliência e Erros:** OkHttp disk cache (5 MB) reduz requisições redundantes. Sistema de retentativa automática com banners de status e retry manual.
 - **Delta Sync:** Apenas os concursos novos são buscados; o histórico já salvo não é baixado novamente.
 - **Onboarding e Compliance:** Fluxo guiado para novos usuários, garantindo aceitação de Termos de Uso, Política de Privacidade e avisos de Jogo Responsável (Play Store Ready).
 
@@ -33,10 +34,12 @@
 
 ### Bolão (Sweepstake)
 - **Criação de Bolão:** O usuário cria um bolão informando nome, loteria, número do concurso alvo e total de cotas.
+- **Copiar Bolão (Premium):** Reutilize a estrutura de um bolão existente — mesmos jogos e participantes — em um novo concurso com um toque, sem recadastrar nada. Acessível pelo ícone de cópia na lista de bolões.
 - **Gerenciamento de Participantes:** Adicione participantes com nome e número de cotas. O valor por cota é calculado automaticamente com base no custo total dos jogos.
 - **Vinculação de Jogos:** Associe tickets salvos da carteira ao bolão com um toque.
-- **Compartilhamento Dual-Format:**
+- **Compartilhamento Multi-Format:**
     - **Links Mágicos (Deep Links):** Gera um convite compacto codificado (GZIP + Base64) que permite importação automática entre dispositivos. Disponível para todos os usuários — canal de aquisição viral.
+    - **QR Code:** Card de compartilhamento inclui QR code gerado localmente para convite presencial sem necessidade de digitar link.
     - **PDF de Bolão:** Gera um documento profissional com todos os jogos e detalhes das cotas. Usuários free recebem PDF com marca d'água; premium recebem PDF limpo.
 - **Importação Dinâmica:** Detecta convites via link ou via clipboard para rápida adesão a grupos existentes.
 - **Conferência do Bolão:** Resultado consolidado do bolão cruzado com os sorteios reais.
@@ -45,8 +48,9 @@
     | Feature | Free | Premium |
     |---|---|---|
     | Criar bolão | 1 bolão ativo | Ilimitados |
+    | Copiar bolão para novo concurso | — | ✓ |
     | Participantes por bolão | Máximo 10 | Ilimitado |
-    | Compartilhar deep link | ✓ | ✓ |
+    | Compartilhar deep link + QR code | ✓ | ✓ |
     | PDF do bolão | Com marca d'água | Limpo |
 
 ### Conferência por OCR (Check-Scan)
@@ -66,9 +70,13 @@
 
 ### Notificações Inteligentes
 - **Alerta de Acumulada:** Notifica quando o prêmio principal de uma loteria acumula.
-- **Confirmação de Acerto:** Após sync, notifica se algum ticket salvo acertou alguma faixa de premiação.
-- **Design Moderno:** Uso de ícone vetorial monocromático otimizado para a barra de status (compliance Android 14+), evitando o efeito "quadrado branco".
-- **Canais Granulares:** Três canais distintos (`results`, `alerts` e `reminders`) para controle total do usuário nas configurações do sistema.
+- **Confirmação de Acerto:** Após sync, notifica se algum ticket salvo ou bolão acertou alguma faixa de premiação.
+- **Lembrete de Sorteio:** Aviso matinal quando há sorteio hoje para jogos ou bolões salvos pelo usuário.
+- **Resiliência pós-Reboot:** `BootReceiver` reagenda automaticamente os alarmes de sync (22:30, 08:30 e 12:30 BRT) e lembretes após reinicialização do dispositivo, sem necessidade de abrir o app.
+- **Onboarding de Permissão:** A permissão de notificação é solicitada em uma página dedicada do onboarding, com explicação prévia do valor de cada tipo de alerta — antes de o sistema Android exibir o diálogo nativo.
+- **Configurações no App:** Tela em **Sobre → Notificações** exibe o status global de permissão e oferece atalhos diretos para as configurações de cada canal no Android.
+- **Design Moderno:** Ícone vetorial monocromático otimizado para a barra de status (compliance Android 14+), evitando o efeito "quadrado branco".
+- **Canais Granulares:** Três canais distintos (`results`, `alerts` e `reminders`) para controle total do usuário.
 
 ### Exportação PDF
 - **Layout Profissional:** Header com gradiente na cor oficial da loteria, bolas numeradas por jogo e rodapé promocional.
@@ -80,20 +88,33 @@
 
 ## Modelo Freemium
 
-O LottoExpert utiliza Google Play Billing para monetização. Os gates de paywall estão concentrados em funcionalidades de escala e produtividade, mantendo as funcionalidades de uso básico e aquisição viral gratuitas.
+O LottoExpert utiliza Google Play Billing Library v7+ com três planos Premium e produto vitalício. Os gates estão concentrados em funcionalidades de escala e produtividade, mantendo uso básico e aquisição viral gratuitos.
+
+### Planos Premium
+
+| Plano | Preço | Produto no Play Console |
+|-------|-------|------------------------|
+| Mensal | R$ 7,90/mês | `premium_monthly` (SUBS) |
+| Anual ⭐ | R$ 34,90/ano | `premium_annual` (SUBS) |
+| Vitalício | R$ 69,90 (único) | `expert_pro_tier` (INAPP) |
+
+O paywall abre com o plano Anual pré-selecionado. Compradores legados do `expert_pro_tier` continuam Premium sem nenhuma ação.
+
+### Features por tier
 
 | Feature | Free | Premium |
 |---|---|---|
 | Loterias disponíveis (Mega-Sena e Lotofácil) | ✓ | ✓ |
 | Loterias avançadas (7 loterias) | — | ✓ |
 | Filtros Pro no Gerador | — | ✓ |
-| OCR de bilhetes | — | ✓ |
+| OCR de bilhetes | 3 capturas de teste | Ilimitado |
 | Backtesting histórico | — | ✓ |
 | Jogos salvos | Até 10 | Ilimitado |
 | PDF limpo (sem marca d'água) | — | ✓ |
 | Bolões simultâneos | 1 ativo | Ilimitado |
 | Participantes por bolão | Até 10 | Ilimitado |
-| Compartilhar deep link de bolão | ✓ | ✓ |
+| Compartilhar deep link + QR code de bolão | ✓ | ✓ |
+| Copiar bolão para novo concurso | — | ✓ |
 
 Em builds de debug, o `BillingManager` opera em modo mock com toggle manual na tela **Sobre → Developer Options**.
 
@@ -125,14 +146,17 @@ Os preços são mantidos atualizados via **Firebase Remote Config** (`LotteryPri
 | UI | Jetpack Compose + Material Design 3 |
 | Injeção de Dependências | Dagger Hilt 2.50 |
 | Persistência | Room Database v3 (migrations explícitas + seed) |
-| Rede | Retrofit 2.9 + OkHttp 4.12 |
+| Rede | Retrofit 2.9 + OkHttp 4.12 (disk cache 5 MB) |
 | Concorrência | Kotlin Coroutines + Flow |
 | Background Work | WorkManager (HiltWorker) + AlarmManager |
 | Câmera | CameraX 1.3 |
 | OCR | ML Kit Text Recognition 16.0 |
-| Billing | Google Play Billing Library 6.1 |
+| Billing | Google Play Billing Library 7+ (INAPP + SUBS) |
+| Segurança de API | Firebase App Check (Play Integrity / Debug) |
 | Configuração Remota | Firebase Remote Config |
 | Avaliação | Google Play In-App Review 2.0 |
+| Observabilidade | Firebase Crashlytics + Firebase Analytics + Timber 5.0 |
+| Infraestrutura backend | Google Cloud Platform (Cloud Functions Gen 2 + GCS) |
 | Testes | JUnit 4 + Mockito-Kotlin + kotlinx-coroutines-test |
 
 ---
@@ -147,9 +171,10 @@ app/
 │   ├── billing/        BillingManager — mock em debug, Google Play em release
 │   ├── local/          Room DB v3: entities, DAOs, migrations, converters
 │   ├── mapper/         DrawResultMapper (DTO → Entity → Domain)
-│   ├── remote/         Retrofit + DTOs (API Caixa) + LotteryPriceRepository
+│   ├── remote/         LotteryDataApi (Retrofit → GCP), AppCheckInterceptor, DTOs, LotteryPriceRepository
 │   ├── repository/     DrawResultRepositoryImpl
-│   └── worker/         SyncWorker, SyncAlarmReceiver, ReminderAlarmReceiver
+│   └── worker/         SyncWorker, SyncAlarmReceiver, ReminderAlarmReceiver,
+│                       BootReceiver, AlarmScheduler
 ├── di/                 DatabaseModule, NetworkModule, RepositoryModule
 ├── domain/
 │   ├── export/         PdfExporter (com suporte a marca d'água por tier)
@@ -161,10 +186,10 @@ app/
 │   └── usecase/        CheckTicketMatchesUseCase, ComputeNumberStatsUseCase
 └── ui/
     ├── components/     PaywallBottomSheet (gate freemium reutilizável)
-    ├── navigation/     NavGraph + Screen (12 rotas)
+    ├── navigation/     NavGraph + Screen (18 rotas)
     ├── screens/        dashboard, generator, results, statistics,
     │                   backtesting, savedgames, scan, sweepstake (bolão),
-    │                   onboarding, about, terms, responsiblegambling
+    │                   notifications, onboarding, about, help, terms, responsiblegambling
     └── theme/          Tema Material 3 com cores dinâmicas por loteria
 ```
 
@@ -197,17 +222,24 @@ app/
 
 | Script | Descrição |
 |--------|-----------|
+| `infra/scripts/bootstrap_history.py` | Popula o bucket GCS com os últimos N concursos de cada loteria (executar uma vez após o deploy) |
 | `infra/scripts/update_prices.py` | Raspa os preços mínimos do portal CEF e publica no Firebase Remote Config |
 | `infra/scripts/run_update_prices.sh` | Wrapper que cria o virtualenv Python e executa o script acima |
 
 ```bash
-# Testar sem publicar
-cd infra/scripts
-./run_update_prices.sh --credentials SERVICE_ACCOUNT.json --project lotto-expert --dry-run
+# Popular histórico inicial (após terraform apply)
+python infra/scripts/bootstrap_history.py \
+  --project SEU_PROJECT_ID \
+  --bucket SEU_PROJECT_ID-lottery-results \
+  --credentials infra/terraform/service-account.json \
+  --count 100
 
-# Publicar preços atualizados
-./run_update_prices.sh --credentials SERVICE_ACCOUNT.json --project lotto-expert
+# Atualizar preços remotos
+cd infra/scripts
+./run_update_prices.sh --credentials SERVICE_ACCOUNT.json --project SEU_PROJECT_ID
 ```
+
+O deploy completo da infraestrutura GCP está documentado em [docs/GCP_DEPLOY.md](docs/GCP_DEPLOY.md).
 
 ---
 
@@ -215,11 +247,19 @@ cd infra/scripts
 
 | Documento | Descrição |
 |-----------|-----------|
-| [SPECS.md](docs/SPECS.md) | Especificação técnica do MVP (Sprints 1–5) |
-| [SPECS2.md](docs/SPECS2.md) | Roadmap de funcionalidades futuras (Sprints 6–8) |
-| [LANCAMENTO.md](docs/LANCAMENTO.md) | Plano de lançamento com itens pendentes e blockers |
+| [ARQUITETURA.md](docs/ARQUITETURA.md) | Documento completo de arquitetura (camadas, DB, rede, padrões, testes) |
+| [SPECS.md](docs/SPECS.md) | Especificação técnica do MVP (Sprints 1–5) — ✅ Implementado |
+| [SPECS2.md](docs/SPECS2.md) | Especificação das evoluções (Sprints 6–8 + extras) — ✅ Implementado |
+| [MATURIDADE_E_CONCORRENTES.md](docs/MATURIDADE_E_CONCORRENTES.md) | Avaliação de maturidade (9,5/10) e análise competitiva |
+| [PLANO_LANCAMENTO.md](docs/PLANO_LANCAMENTO.md) | Plano de lançamento com checklist Go/No-Go |
+| [PLANO_MARKETING.md](docs/PLANO_MARKETING.md) | Estratégia de marketing e aquisição |
+| [PLANO_VENDAS.md](docs/PLANO_VENDAS.md) | Funil de conversão, paywall e KPIs de vendas |
 | [ASO_METADATA.md](docs/ASO_METADATA.md) | Estratégia de loja (título, descrição, keywords) |
 | [PRIVACY_POLICY.md](docs/PRIVACY_POLICY.md) | Política de Privacidade |
+| [GOOGLE_PLAY_POLITICAS.md](docs/GOOGLE_PLAY_POLITICAS.md) | Preenchimento das políticas da Play Store (classificação como Ferramenta, IARC, Data Safety) |
+| [GOOGLE_PLAY_BILLING_SETUP.md](docs/GOOGLE_PLAY_BILLING_SETUP.md) | Criação e configuração dos 3 produtos de billing no Play Console (INAPP + SUBS, base plans, testes) |
+| [PROJECAO_FINANCEIRA.md](docs/PROJECAO_FINANCEIRA.md) | Projeção financeira D+180: unit economics, cenários, custos GCP/ads, painel de acompanhamento mensal |
+| [GCP_DEPLOY.md](docs/GCP_DEPLOY.md) | Deploy da infraestrutura GCP (Cloud Functions, GCS, App Check, bootstrap) |
 
 ---
 
