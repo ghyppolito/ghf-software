@@ -21,13 +21,21 @@
 - **Congelamento Pós-Volta:** Ao fechar uma volta, tempo e parciais ficam congelados por 3 segundos para o piloto conferir antes de atualizar.
 - **Delta da Melhor Volta:** Mostra a diferença em relação à melhor volta registrada. Se a volta completada for um novo recorde, exibe o ganho sobre o recorde anterior.
 - **Parciais com 3 Níveis de Cor:**
-  - Roxo — melhor parcial de todas as sessão
+  - Roxo — melhor parcial de todas as sessões
   - Verde — melhor que a parcial da volta anterior, mas não a melhor de todas
   - Amarelo — pior que a volta anterior e que o melhor histórico
 - **Última Volta:** Mesma escala de cores das parciais.
 - **Barra de Força G Lateral:** Visualização dinâmica da carga lateral em curvas.
 - **Indicadores de Status:** GPS, sessão ativa, out-lap, número de volta.
-- **Voz do Engenheiro (TTS):** Feedback por voz dos tempos ao completar cada volta.
+- **Voz do Engenheiro (TTS):** Feedback por voz ao completar cada volta e cada setor (configurável individualmente).
+
+### Modo Pista Aberta (Open Track)
+
+Para sessões em pistas sem linha de chegada fixa — trackdays, rodovias fechadas ou qualquer trecho cronometrado livremente:
+
+- **Configuração sem Linha de Chegada:** O circuito é definido apenas com uma linha de início — sem necessidade de volta completa predefinida.
+- **Cronometragem entre Passagens:** Cada cruzamento pela linha de início encerra uma volta e abre a próxima automaticamente.
+- **Tela de Análise Dedicada:** `OpenTrackAnalyzerScreen` exibe os resultados com detalhe de volta e comparativo de parciais, adaptado à ausência de circuito fixo.
 
 ### Configuração de Circuito
 
@@ -49,6 +57,9 @@
 - **Modo de Exibição:** Claro, Escuro ou Seguir Sistema (padrão).
 - **Orientação de Tela:** Portrait, Landscape ou Automático (padrão) — fixável para uso no cockpit.
 - **Modo de Localização:** Sempre ativo ou Apenas em Sessão (padrão) — economiza bateria fora da pista.
+- **Brilho da Tela:** Controle de intensidade independente do sistema.
+- **Bloquear Notificações:** Suprime notificações de outros apps durante a sessão para evitar distrações.
+- **Voz — Volta / Setor:** Habilita ou desabilita TTS individualmente para tempo de volta e tempo de setor.
 
 ---
 
@@ -68,6 +79,8 @@
 | Mapa | Google Maps Compose |
 | TTS | Android TextToSpeech |
 | Preferências | SharedPreferences via AppPreferences singleton |
+| Analytics | Firebase Analytics |
+| Avaliação | Play In-App Review API |
 
 ---
 
@@ -76,20 +89,25 @@
 ```
 br.com.ghfsoftware.polepositionapp
 ├── core/
-│   ├── di/             # Módulos Hilt (AppModule, LocationModule)
+│   ├── analytics/      # AnalyticsTracker — Firebase Analytics
+│   ├── di/             # Módulos Hilt (AppModule, LocationModule, AnalyticsModule)
 │   ├── preferences/    # AppPreferences (SharedPreferences)
+│   ├── review/         # AppReviewHelper (Play In-App Review)
 │   └── util/           # GeometryUtil (cálculo de gates, intersecção de vetores)
 ├── data/
-│   ├── local/
-│   │   ├── dao/        # SessionDao, TrackDao
-│   │   ├── entities/   # TrackEntity, SplitEntity, SessionEntity, LapEntity, LapSplitEntity
-│   │   └── AppDatabase # Room Database (versão 3, com migrações)
+│   └── local/
+│       ├── dao/        # SessionDao, TrackDao
+│       ├── entities/   # TrackEntity, SplitEntity, SessionEntity, LapEntity, LapSplitEntity
+│       └── AppDatabase # Room Database (versão 5, com migrações)
 ├── service/
 │   └── TelemetryService  # Coração do app — GPS, sensores, cronômetro, detecção de volta
 └── ui/
+    ├── help/           # HelpScreen
     ├── history/        # HistoryScreen + HistoryViewModel
-    ├── session/        # SessionAnalyzerScreen + SessionViewModel
+    ├── onboarding/     # OnboardingScreen
+    ├── session/        # SessionAnalyzerScreen, OpenTrackAnalyzerScreen, SessionViewModel
     ├── settings/       # SettingsScreen
+    ├── theme/          # AppColors (constantes de cor centralizadas)
     └── track/          # TrackConfigScreen + TrackViewModel
     MainActivity.kt     # NavHost, Dashboard (Portrait/Landscape), HomeScreen
 ```
@@ -106,6 +124,8 @@ br.com.ghfsoftware.polepositionapp
 4. Toque em **LINHA DE CHEGADA** para marcar.
 5. Opcionalmente, marque até 2 linhas de setor com o botão **SETOR**.
 6. Dê um nome ao circuito e toque em **SALVAR**.
+
+> Para pistas abertas (trackdays), ative a opção **Pista Aberta** antes de salvar — apenas a linha de início é necessária.
 
 ### 2. Iniciar uma Sessão
 
