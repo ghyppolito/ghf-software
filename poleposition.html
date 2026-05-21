@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pole Position: Race Analytics - GHF Software</title>
+    <title>Pole Position: Race Telemetry & Analytics - GHF Software</title>
     <link rel="icon" type="image/png" href="./assets/poleposition.png">
 
-    <meta name="description" content="Telemetria Automotiva profissional e offline direto no seu dispositivo Android.">
+    <meta name="description" content="Telemetria Automotiva profissional e offline direto no seu dispositivo Android. Desenvolvido para kart e trackdays com GPS 10Hz e intersecção vetorial.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -22,15 +22,16 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
                         brand: {
                             base: '#0B1120',
                             surface: '#111827',
-                            primary: '#10B981',
-                            primaryHover: '#059669',
+                            primary: '#84cc16', /* Lime theme for Pole Position */
+                            primaryHover: '#65a30d',
                             secondary: '#3B82F6',
-                            accent: '#84cc16', /* Lime theme for Pole Position */
+                            accent: '#a3e635',
                         }
                     },
                     boxShadow: {
@@ -87,16 +88,26 @@
         
         .mockup-frame {
             position: relative;
-            width: 300px;
-            height: 600px;
-            border-radius: 40px;
+            width: 260px;
+            height: 520px;
+            border-radius: 36px;
             background: #000;
-            border: 8px solid #333;
-            box-shadow: inset 0 0 0 4px #111, 0 25px 50px -12px rgba(132, 204, 22, 0.5);
+            border: 8px solid #222;
+            box-shadow: inset 0 0 0 4px #111, 0 25px 60px -15px rgba(132, 204, 22, 0.4);
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.5s ease;
+        }
+        
+        @media (min-width: 768px) {
+            .mockup-frame {
+                width: 320px;
+                height: 640px;
+                border-radius: 40px;
+                border-width: 10px;
+            }
         }
         
         .mockup-frame::before {
@@ -105,7 +116,7 @@
             top: 0;
             width: 150px;
             height: 25px;
-            background: #111;
+            background: #222;
             border-bottom-left-radius: 20px;
             border-bottom-right-radius: 20px;
             z-index: 20;
@@ -113,7 +124,7 @@
     </style>
 </head>
 
-<body class="bg-brand-base text-gray-400 antialiased selection:bg-brand-accent selection:text-black font-sans overflow-x-hidden">
+<body class="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden">
 
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center transition-all duration-300">
@@ -123,11 +134,11 @@
 
         <!-- Desktop Menu -->
         <div class="hidden md:flex items-center gap-8 text-sm font-medium">
-            <a href="index.html#sobre" class="text-gray-300 hover:text-white hover:text-brand-accent transition-colors" data-i18n="nav_about">Sobre Nós</a>
-            <a href="index.html#portfolio" class="text-gray-300 hover:text-white hover:text-brand-accent transition-colors" data-i18n="nav_portfolio">Portfólio</a>
-            <a href="index.html#contato" class="px-5 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-brand-accent hover:text-brand-accent transition-all duration-300" data-i18n="nav_contact">Contato</a>
+            <a href="index.html#sobre" class="text-gray-300 hover:text-white hover:text-brand-primary transition-colors" data-i18n="nav_about">Sobre Nós</a>
+            <a href="index.html#portfolio" class="text-gray-300 hover:text-white hover:text-brand-primary transition-colors" data-i18n="nav_portfolio">Portfólio</a>
+            <a href="index.html#contato" class="px-5 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-brand-primary hover:text-brand-primary transition-all duration-300" data-i18n="nav_contact">Contato</a>
             
-            <button onclick="toggleLang()" class="flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-accent transition-colors font-semibold tracking-wide">
+            <button onclick="toggleLang()" class="flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold tracking-wide">
                 <i class="fa-solid fa-globe"></i>
                 <span id="lang-indicator">EN</span>
             </button>
@@ -135,7 +146,7 @@
 
         <!-- Mobile Menu Button -->
         <div class="flex items-center gap-4 md:hidden">
-            <button onclick="toggleLang()" class="flex items-center gap-2 text-gray-400 hover:text-brand-accent transition-colors font-semibold text-sm">
+            <button onclick="toggleLang()" class="flex items-center gap-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold text-sm">
                 <i class="fa-solid fa-globe"></i>
                 <span id="lang-indicator-mobile">EN</span>
             </button>
@@ -147,35 +158,36 @@
 
     <!-- Mobile Menu Overlay -->
     <div id="mobile-menu" class="fixed inset-0 bg-brand-base z-40 flex flex-col justify-center items-center gap-8 text-lg font-medium glass-panel opacity-0 pointer-events-none transition-opacity duration-300">
-        <a href="index.html#sobre" class="mobile-link text-gray-300 hover:text-brand-accent font-semibold transition-colors" data-i18n="nav_about">Sobre Nós</a>
-        <a href="index.html#portfolio" class="mobile-link text-gray-300 hover:text-brand-accent font-semibold transition-colors" data-i18n="nav_portfolio">Portfólio</a>
-        <a href="index.html#contato" class="mobile-link px-6 py-2 rounded-full bg-brand-accent text-black font-bold hover:bg-lime-400 transition-colors" data-i18n="nav_contact">Contato</a>
+        <a href="index.html#sobre" class="mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors" data-i18n="nav_about">Sobre Nós</a>
+        <a href="index.html#portfolio" class="mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors" data-i18n="nav_portfolio">Portfólio</a>
+        <a href="index.html#contato" class="mobile-link px-6 py-2 rounded-full bg-brand-primary text-black font-bold hover:bg-lime-400 transition-colors" data-i18n="nav_contact">Contato</a>
     </div>
 
     <!-- Hero Section -->
-    <header class="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden bg-grid-pattern">
+    <header class="relative min-h-screen flex items-center pt-32 pb-16 overflow-hidden bg-grid-pattern border-b border-gray-800">
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0B1120_100%)] z-0"></div>
-        <div class="absolute top-1/2 left-1/4 w-96 h-96 bg-brand-accent/20 rounded-full blur-[120px] mix-blend-screen transform -translate-y-1/2 z-0"></div>
+        <div class="absolute top-1/2 left-1/4 w-96 h-96 bg-brand-primary/20 rounded-full blur-[120px] mix-blend-screen transform -translate-y-1/2 z-0"></div>
 
         <div class="container mx-auto px-6 md:px-12 relative z-10">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <!-- Text Content -->
                 <div class="text-left animate-fade-in-up">
-                    <div class="inline-flex items-center mb-6 px-3 py-1.5 rounded-full bg-lime-900/30 border border-lime-500/30 text-lime-400 text-sm font-semibold tracking-wide uppercase shadow-[0_0_10px_rgba(132,204,22,0.2)]">
-                        <i class="fa-solid fa-flag-checkered mr-2"></i> <span data-i18n="page_badge">Telemetria Esportiva</span>
+                    <div class="inline-flex items-center mb-6 px-4 py-1.5 rounded-full bg-lime-950/40 border border-lime-500/30 text-brand-primary text-sm font-semibold tracking-wide uppercase shadow-[0_0_15px_rgba(132,204,22,0.2)]">
+                        <i class="fa-solid fa-flag-checkered mr-2"></i> <span data-i18n="hero_badge">Telemetria Automotiva Profissional</span>
                     </div>
 
                     <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
-                        Pole Position:<br> <span class="text-gradient hover:drop-shadow-[0_0_15px_rgba(132,204,22,0.8)] transition-all" data-i18n="hero_title">Painel de Perfomance para seu Cockpit</span>
+                        <span data-i18n="hero_title_1">Pole Position</span><br>
+                        <span class="text-gradient hover:drop-shadow-[0_0_15px_rgba(132,204,22,0.8)] transition-all" data-i18n="hero_title_2">Telemetria de Alta Performance no Cockpit</span>
                     </h1>
 
                     <p class="text-xl text-gray-400 mb-10 max-w-2xl leading-relaxed" data-i18n="hero_desc">
-                        O Pole Position transforma seu smartphone num sistema avançado de telemetria automotiva. GPS de alta frequência, análise de Força G lateral em tempo real e detecção rigorosa de volta, 100% offline.
+                        O Pole Position transforma seu smartphone num sistema completo de telemetria offline para kart e trackdays. GPS de alta frequência, intersecção de gates por vetor e áudio TTS integrados.
                     </p>
 
                     <div class="flex flex-col sm:flex-row items-center gap-4">
-                        <a href="https://play.google.com/store/apps/details?id=br.com.ghfsoftware.polepositionapp" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-accent hover:bg-lime-400 text-black font-bold rounded-lg shadow-glow-accent hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
-                            <i class="fa-brands fa-google-play text-xl"></i> <span data-i18n="btn_download">Ver na Google Play</span>
+                        <a href="https://play.google.com/store/apps/details?id=br.com.ghfsoftware.polepositionapp" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-primary hover:bg-lime-400 text-black font-bold rounded-lg shadow-glow-accent hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
+                            <i class="fa-brands fa-google-play text-xl"></i> <span data-i18n="btn_download">Baixar na Google Play</span>
                         </a>
                         <a href="poleposition-privacy.html" class="px-6 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
                             <i class="fa-solid fa-shield-halved"></i> <span data-i18n="btn_privacy">Privacidade</span>
@@ -183,11 +195,18 @@
                     </div>
                 </div>
 
-                <!-- Product Display -->
-                <div class="flex justify-center relative animate-fade-in-up" style="animation-delay: 0.2s;">
-                    <div class="absolute -inset-4 bg-brand-accent/20 rounded-full blur-3xl z-0"></div>
-                    <div class="mockup-frame relative z-10 transition-transform duration-500 hover:scale-105 group">
-                        <img src="./assets/poleposition.png" alt="Pole Position" class="w-32 h-32 object-contain group-hover:drop-shadow-[0_0_20px_rgba(132,204,22,0.8)] transition-all duration-500">
+                <!-- Product Display (Overlapping Mockups) -->
+                <div class="flex justify-center items-center relative animate-fade-in-up h-[550px] md:h-[680px] w-full" style="animation-delay: 0.2s;">
+                    <div class="absolute inset-0 bg-brand-primary/10 rounded-full blur-3xl z-0"></div>
+                    
+                    <!-- Background Mockup: Session Analysis -->
+                    <div class="mockup-frame absolute z-10 transform -translate-x-8 translate-y-6 scale-90 opacity-80 border-gray-700/80 shadow-md hover:scale-95 hover:opacity-100 hover:z-30 cursor-pointer">
+                        <img src="./assets/poleposition_session_analysis.png" alt="Pole Position Session Analysis" class="w-full h-full object-cover">
+                    </div>
+                    
+                    <!-- Foreground Mockup: Live Dashboard -->
+                    <div class="mockup-frame absolute z-20 transform translate-x-8 -translate-y-4 scale-100 shadow-glow-accent border-gray-800 hover:scale-[1.02] hover:z-30 cursor-pointer">
+                        <img src="./assets/poleposition_live_dashboard.png" alt="Pole Position Live Dashboard" class="w-full h-full object-cover">
                     </div>
                 </div>
             </div>
@@ -195,59 +214,270 @@
     </header>
 
     <!-- Features Section -->
-    <section class="py-24 bg-brand-surface relative z-10 border-y border-gray-800">
+    <section id="features" class="py-24 bg-brand-surface relative z-10 border-b border-gray-800">
         <div class="container mx-auto px-6 md:px-12">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-bold text-white mb-6" data-i18n="feat_title">Engenharia de Pista no Seu Bolso</h2>
-                <p class="text-xl text-gray-400 max-w-2xl mx-auto" data-i18n="feat_desc">
-                    Feito para pilotos de kart e automobilismo amador que buscam raspar milissegundos a cada volta.
-                </p>
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <div class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-sm font-semibold tracking-wide uppercase border border-brand-primary/20" data-i18n="features_badge">
+                    Recursos de Pista
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white" data-i18n="features_title">Engenharia de Telemetria no Bolso</h2>
+                <p class="text-gray-400 text-lg" data-i18n="features_subtitle">Tecnologias avançadas desenvolvidas para extrair cada milissegundo de performance em pista.</p>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Feature 1 -->
-                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group border-t border-t-lime-500/20">
-                    <div class="w-14 h-14 rounded-xl bg-lime-900/40 border border-lime-500/30 flex items-center justify-center mb-6 text-2xl text-lime-400 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-satellite-dish"></i>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1: Telemetria em Tempo Real -->
+                <div class="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-satellite-dish text-8xl text-brand-primary"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="f1_title">GPS de Alta Frequência (10 Hz)</h3>
-                    <p class="text-gray-400 leading-relaxed" data-i18n="f1_desc">
-                        Suporte a antenas Bluetooth externas com interpolação precisa de cruzamento da linha de chegada (milissegundos).
-                    </p>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-satellite-dish text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat1_title">Telemetria em Tempo Real</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="feat1_desc">GPS de 10 Hz com suporte a antenas externas Bluetooth. Algoritmo de intersecção por vetores (raio zero) com interpolação de milissegundos.</p>
                 </div>
 
-                <!-- Feature 2 -->
-                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group border-t border-t-lime-500/20">
-                    <div class="w-14 h-14 rounded-xl bg-lime-900/40 border border-lime-500/30 flex items-center justify-center mb-6 text-2xl text-lime-400 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-gauge-high"></i>
+                <!-- Feature 2: Painel F1 -->
+                <div class="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-gauge-high text-8xl text-brand-primary"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="f2_title">Painel de Alto Contraste</h3>
-                    <p class="text-gray-400 leading-relaxed" data-i18n="f2_desc">
-                        Layout escuro estilo F1 desenhado para excelente leitura sob luz do sol, com feedback TTS por voz integrado do Engenheiro.
-                    </p>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-gauge-high text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat2_title">Painel do Piloto (Live Dash)</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="feat2_desc">Design de alto contraste F1 otimizado para sol direto. Dígitos tabelados, congelamento pós-volta de 3s, deltas e parciais coloridas.</p>
                 </div>
 
-                <!-- Feature 3 -->
-                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group border-t border-t-lime-500/20">
-                    <div class="w-14 h-14 rounded-xl bg-lime-900/40 border border-lime-500/30 flex items-center justify-center mb-6 text-2xl text-lime-400 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-compress"></i>
+                <!-- Feature 3: Engenheiro de Voz TTS -->
+                <div class="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-bullhorn text-8xl text-brand-primary"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="f3_title">Detecção Vetorial Rigorosa</h3>
-                    <p class="text-gray-400 leading-relaxed" data-i18n="f3_desc">
-                        Algoritmo matemático de intersecção em reta em vez de raios genéricos de distância, eliminando detecções de parciais falsos.
-                    </p>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-bullhorn text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat3_title">Voz do Engenheiro (TTS)</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="feat3_desc">Feedback em áudio em tempo real por sintetizador de voz (TTS) das suas parciais e tempos ao fechar setores e voltas.</p>
                 </div>
 
-                <!-- Feature 4 -->
-                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group border-t border-t-lime-500/20">
-                    <div class="w-14 h-14 rounded-xl bg-lime-900/40 border border-lime-500/30 flex items-center justify-center mb-6 text-2xl text-lime-400 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-car-side"></i>
+                <!-- Feature 4: Modo Pista Aberta -->
+                <div class="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-road text-8xl text-brand-primary"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="f4_title">Força G Latente</h3>
-                    <p class="text-gray-400 leading-relaxed" data-i18n="f4_desc">
-                        Barra analítica dinâmica com filtro EMA no acelerômetro, mostrando com suavidade sua força gravitacional durante as cruvas.
-                    </p>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-road text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat4_title">Modo Pista Aberta</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="feat4_desc">Cronometragem baseada apenas na linha de início. Ideal para sessões de circuito aberto, trackdays e trajetos livres.</p>
                 </div>
+
+                <!-- Feature 5: Configuração de Circuito -->
+                <div class="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-map-location-dot text-8xl text-brand-primary"></i>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-map-location-dot text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat5_title">Configuração de Circuito</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="feat5_desc">Mira interativa com ajuste de ângulo do gate (passos de 1° e 15°). Suporta até 2 setores customizados por circuito.</p>
+                </div>
+
+                <!-- Feature 6: Análise e CSV -->
+                <div class="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-file-csv text-8xl text-brand-primary"></i>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-chart-line text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat6_title">Análise de Sessão & CSV</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="feat6_desc">Históricos organizados por pista, com velocidade máxima, velocidades mínimas, Força G e exportação estruturada para arquivos CSV.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Workflow Section -->
+    <section class="py-24 bg-brand-base relative z-10 border-b border-gray-800">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <div class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-sm font-semibold tracking-wide uppercase border border-brand-primary/20" data-i18n="workflow_badge">
+                    Fluxo de Trabalho
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white" data-i18n="workflow_title">Como Utilizar no Cockpit</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Step 1 -->
+                <div class="relative flex flex-col items-center text-center p-6">
+                    <div class="w-16 h-16 rounded-full bg-brand-primary/10 border-2 border-brand-primary text-brand-primary flex items-center justify-center text-2xl font-bold mb-6 relative z-10">
+                        1
+                    </div>
+                    <h4 class="text-white font-bold text-lg mb-2" data-i18n="step1_title">Traçar a Linha</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="step1_desc">Ajuste o gate da linha de chegada no mapa de satélite e adicione os setores desejados.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative flex flex-col items-center text-center p-6">
+                    <div class="w-16 h-16 rounded-full bg-brand-primary/10 border-2 border-brand-primary text-brand-primary flex items-center justify-center text-2xl font-bold mb-6 relative z-10">
+                        2
+                    </div>
+                    <h4 class="text-white font-bold text-lg mb-2" data-i18n="step2_title">Configurar</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="step2_desc">Fixe o celular firmemente no cockpit, calibre os acelerômetros de Força G e conecte seus fones de ouvido.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative flex flex-col items-center text-center p-6">
+                    <div class="w-16 h-16 rounded-full bg-brand-primary/10 border-2 border-brand-primary text-brand-primary flex items-center justify-center text-2xl font-bold mb-6 relative z-10">
+                        3
+                    </div>
+                    <h4 class="text-white font-bold text-lg mb-2" data-i18n="step3_title">Acelerar</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="step3_desc">Inicie a sessão e pilote. A primeira passagem cruza a linha iniciando a telemetria automaticamente.</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative flex flex-col items-center text-center p-6">
+                    <div class="w-16 h-16 rounded-full bg-brand-primary/10 border-2 border-brand-primary text-brand-primary flex items-center justify-center text-2xl font-bold mb-6 relative z-10">
+                        4
+                    </div>
+                    <h4 class="text-white font-bold text-lg mb-2" data-i18n="step4_title">Analisar</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="step4_desc">Finalize a sessão no pit lane e exporte o relatório das voltas e dados consolidados em formato CSV.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="py-24 bg-brand-surface relative z-10 border-b border-gray-800">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <div class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-sm font-semibold tracking-wide uppercase border border-brand-primary/20" data-i18n="compare_badge">
+                    Comparativo
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white" data-i18n="compare_title">Pole Position vs. Alternativas</h2>
+                <p class="text-gray-400 text-lg" data-i18n="compare_subtitle">Veja como nos comparamos com cronômetros de hardware caros e aplicativos convencionais.</p>
+            </div>
+
+            <div class="overflow-x-auto max-w-5xl mx-auto glass-panel rounded-3xl shadow-xl">
+                <table class="w-full border-collapse text-left">
+                    <thead>
+                        <tr class="border-b border-gray-800 bg-gray-900/50">
+                            <th class="py-6 px-6 font-semibold text-white text-sm" data-i18n="th_feature">Recurso</th>
+                            <th class="py-6 px-6 font-semibold text-gray-300 text-sm" data-i18n="th_hardware">Telemetria dedicada (MyChron/Alfano)</th>
+                            <th class="py-6 px-6 font-semibold text-gray-300 text-sm" data-i18n="th_common_app">Aplicativos de GPS comuns</th>
+                            <th class="py-6 px-6 font-semibold text-brand-primary text-sm bg-brand-primary/5" data-i18n="th_pole">Pole Position App</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-800/50 hover:bg-gray-800/10">
+                            <td class="py-5 px-6 font-semibold text-white text-sm" data-i18n="row1_name">Frequência GPS</td>
+                            <td class="py-5 px-6 text-sm text-gray-400" data-i18n="row1_hardware">Alta (10 Hz — 20 Hz)</td>
+                            <td class="py-5 px-6 text-sm text-gray-400" data-i18n="row1_common">Baixa (1 Hz típica)</td>
+                            <td class="py-5 px-6 text-sm text-brand-primary font-semibold bg-brand-primary/5" data-i18n="row1_pole">Alta (Até 10 Hz com antena externa)</td>
+                        </tr>
+                        <tr class="border-b border-gray-800/50 hover:bg-gray-800/10">
+                            <td class="py-5 px-6 font-semibold text-white text-sm" data-i18n="row2_name">Custo</td>
+                            <td class="py-5 px-6 text-sm text-gray-400" data-i18n="row2_hardware">Elevado (R$ 3.000+)</td>
+                            <td class="py-5 px-6 text-sm text-gray-400" data-i18n="row2_common">Grátis / Assinatura</td>
+                            <td class="py-5 px-6 text-sm text-brand-primary font-semibold bg-brand-primary/5" data-i18n="row2_pole">Gratuito (100% livre de custos)</td>
+                        </tr>
+                        <tr class="border-b border-gray-800/50 hover:bg-gray-800/10">
+                            <td class="py-5 px-6 font-semibold text-white text-sm" data-i18n="row3_name">Detecção de Linha</td>
+                            <td class="py-5 px-6 text-sm text-gray-400" data-i18n="row3_hardware">Sensor Magnético ou GPS</td>
+                            <td class="py-5 px-6 text-sm text-gray-400" data-i18n="row3_common">Raio de Proximidade (Inexato)</td>
+                            <td class="py-5 px-6 text-sm text-brand-primary font-semibold bg-brand-primary/5" data-i18n="row3_pole">Intersecção Vetorial Rigorosa</td>
+                        </tr>
+                        <tr class="border-b border-gray-800/50 hover:bg-gray-800/10">
+                            <td class="py-5 px-6 font-semibold text-white text-sm" data-i18n="row4_name">Feedback de Áudio</td>
+                            <td class="py-5 px-6 text-sm text-gray-400" data-i18n="row4_hardware">Não possui</td>
+                            <td class="py-5 px-6 text-sm text-gray-400" data-i18n="row4_common">Simples ou Inexistente</td>
+                            <td class="py-5 px-6 text-sm text-brand-primary font-semibold bg-brand-primary/5" data-i18n="row4_pole">Voz do Engenheiro (TTS volta e setores)</td>
+                        </tr>
+                        <tr class="border-b border-gray-800/50 hover:bg-gray-800/10">
+                            <td class="py-5 px-6 font-semibold text-white text-sm" data-i18n="row5_name">Exportação de Dados</td>
+                            <td class="py-5 px-6 text-sm text-gray-400" data-i18n="row5_hardware">Software proprietário / Cabo</td>
+                            <td class="py-5 px-6 text-sm text-gray-400" data-i18n="row5_common">Limitada ou Paga</td>
+                            <td class="py-5 px-6 text-sm text-brand-primary font-semibold bg-brand-primary/5" data-i18n="row5_pole">CSV Aberto com colunas alinhadas</td>
+                        </tr>
+                        <tr class="hover:bg-gray-800/10">
+                            <td class="py-5 px-6 font-semibold text-white text-sm" data-i18n="row6_name">Processamento</td>
+                            <td class="py-5 px-6 text-sm text-gray-400" data-i18n="row6_hardware">100% Local</td>
+                            <td class="py-5 px-6 text-sm text-gray-400" data-i18n="row6_common">Geralmente em Nuvem</td>
+                            <td class="py-5 px-6 text-sm text-brand-primary font-semibold bg-brand-primary/5" data-i18n="row6_pole">100% Offline no Dispositivo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Smart Cockpit Settings Section -->
+    <section class="py-24 bg-brand-base relative z-10 border-b border-gray-800">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <div class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-sm font-semibold tracking-wide uppercase border border-brand-primary/20" data-i18n="settings_badge">
+                    Configurações Inteligentes
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white" data-i18n="settings_title">Controle Total do Cockpit</h2>
+                <p class="text-gray-400 text-lg" data-i18n="settings_desc">Ajustes criados para quem está dentro do cockpit pilotando, não apenas olhando para a tela.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Location Mode -->
+                <div class="glass-panel p-8 rounded-3xl hover:border-brand-primary/30 transition-all duration-300">
+                    <div class="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-battery-three-quarters text-2xl text-brand-primary"></i>
+                    </div>
+                    <h4 class="text-white font-bold text-xl mb-3" data-i18n="set1_title">Modo de Localização Inteligente</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="set1_desc">Ativação inteligente do GPS de alta precisão apenas durante sessões ativas para economizar bateria.</p>
+                </div>
+
+                <!-- Alert blocker -->
+                <div class="glass-panel p-8 rounded-3xl hover:border-brand-primary/30 transition-all duration-300">
+                    <div class="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-bell-slash text-2xl text-brand-primary"></i>
+                    </div>
+                    <h4 class="text-white font-bold text-xl mb-3" data-i18n="set2_title">Bloqueio de Notificações</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="set2_desc">Desativa notificações de outros aplicativos enquanto a sessão estiver rodando para manter o foco total.</p>
+                </div>
+
+                <!-- Orientation Lock -->
+                <div class="glass-panel p-8 rounded-3xl hover:border-brand-primary/30 transition-all duration-300">
+                    <div class="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-mobile-screen-button text-2xl text-brand-primary"></i>
+                    </div>
+                    <h4 class="text-white font-bold text-xl mb-3" data-i18n="set3_title">Brilho e Orientação Travados</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="set3_desc">Controle de intensidade de luz independente e travamento de orientação para visualização estável no suporte.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack -->
+    <section class="py-24 bg-brand-surface relative z-10 border-b border-gray-800">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <div class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-sm font-semibold tracking-wide uppercase border border-brand-primary/20" data-i18n="tech_badge">
+                    Stack de Tecnologia
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white" data-i18n="tech_title">Arquitetura Nativa e Confiável</h2>
+                <p class="text-gray-400 text-lg" data-i18n="tech_subtitle">Desenvolvido com tecnologias modernas do ecossistema Android para máxima eficiência.</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Kotlin</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Jetpack Compose (Material 3)</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">MVVM + StateFlow</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Hilt Injection</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Room Database (Room v5)</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Google Play Services Location (10Hz)</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">SensorManager (Accelerometer & Gyroscope)</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Foreground Service (TelemetryService)</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Google Maps Compose API</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Android TextToSpeech (TTS)</span>
             </div>
         </div>
     </section>
@@ -261,11 +491,9 @@
                         <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(132,204,22,0.5)]">
                     </a>
                     <p class="text-gray-400 max-w-sm mb-6" data-i18n="footer_desc">
-                        Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro,
-                        com performance desde 2004.
+                        Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.
                     </p>
                     <div class="flex items-center gap-4 text-gray-400">
-
                         <a href="mailto:support@ghfsoftware.com" class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-gray-700 hover:text-white transition-all"><i class="fa-solid fa-envelope"></i></a>
                     </div>
                 </div>
@@ -285,7 +513,7 @@
                     <ul class="space-y-3">
                         <li><a href="lottoexpert.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">LottoExpert</a></li>
                         <li><a href="topowalk.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">TopoWalk</a></li>
-                        <li><a href="poleposition.html" class="text-brand-accent font-semibold transition-colors text-sm flex items-center gap-1"><i class="fa-solid fa-chevron-right text-xs"></i> Pole Position</a></li>
+                        <li><a href="poleposition.html" class="text-brand-primary font-semibold transition-colors text-sm flex items-center gap-1"><i class="fa-solid fa-chevron-right text-xs"></i> Pole Position</a></li>
                     </ul>
                 </div>
 
@@ -304,7 +532,7 @@
                     &copy; <span id="year"></span> <span data-i18n="footer_rights">GHF Software. Todos os direitos reservados.</span>
                 </p>
                 <p class="text-sm text-gray-600 flex items-center gap-2">
-                    <span data-i18n="footer_dev">Desenvolvido com</span> <i class="fa-solid fa-heart text-brand-accent/50 text-xs"></i> <span data-i18n="footer_dev2">por especialistas.</span>
+                    <span data-i18n="footer_dev">Desenvolvido com</span> <i class="fa-solid fa-heart text-brand-primary/50 text-xs"></i> <span data-i18n="footer_dev2">por especialistas.</span>
                 </p>
             </div>
         </div>
@@ -318,24 +546,86 @@
                 nav_portfolio: "Portfólio",
                 nav_contact: "Contato",
                 
-                page_badge: "Telemetria Esportiva",
-                hero_title: "Painel de Perfomance para seu Cockpit",
-                hero_desc: "O Pole Position transforma seu smartphone num sistema avançado de telemetria automotiva. GPS de alta frequência, análise de Força G lateral em tempo real e relatórios precisos, 100% offline.",
-                btn_download: "Ver na Google Play",
-                btn_download_soon: "Em breve na Google Play",
+                hero_badge: "Telemetria Automotiva Profissional",
+                hero_title_1: "Pole Position",
+                hero_title_2: "Telemetria de Alta Performance no Cockpit",
+                hero_desc: "O Pole Position transforma seu smartphone num sistema completo de telemetria offline para kart e trackdays. GPS de alta frequência, intersecção de gates por vetor e áudio TTS integrados.",
+                btn_download: "Baixar na Google Play",
                 btn_privacy: "Privacidade",
                 
-                feat_title: "Engenharia de Pista no Seu Bolso",
-                feat_desc: "Feito para pilotos de kart e automobilismo amador que buscam raspar milissegundos a cada volta.",
+                features_badge: "Recursos de Pista",
+                features_title: "Engenharia de Telemetria no Bolso",
+                features_subtitle: "Tecnologias avançadas desenvolvidas para extrair cada milissegundo de performance em pista.",
                 
-                f1_title: "GPS de Alta Frequência (10 Hz)",
-                f1_desc: "Suporte a antenas Bluetooth externas com interpolação precisa de cruzamento da linha de chegada (milissegundos).",
-                f2_title: "Painel de Alto Contraste",
-                f2_desc: "Layout escuro estilo F1 desenhado para excelente leitura sob luz do sol, com feedback TTS por voz integrado do Engenheiro.",
-                f3_title: "Detecção Vetorial Rigorosa",
-                f3_desc: "Algoritmo matemático de intersecção em reta em vez de raios genéricos de distância, eliminando detecções de parciais falsos.",
-                f4_title: "Força G Latente",
-                f4_desc: "Barra analítica dinâmica com filtro EMA no acelerômetro, mostrando com suavidade sua força gravitacional durante as curvas.",
+                feat1_title: "Telemetria em Tempo Real",
+                feat1_desc: "GPS de 10 Hz com suporte a antenas externas Bluetooth. Algoritmo de intersecção por vetores (raio zero) com interpolação de milissegundos.",
+                feat2_title: "Painel do Piloto (Live Dash)",
+                feat2_desc: "Design de alto contraste F1 otimizado para sol direto. Dígitos tabelados, congelamento pós-volta de 3s, deltas e parciais coloridas.",
+                feat3_title: "Voz do Engenheiro (TTS)",
+                feat3_desc: "Feedback em áudio em tempo real por sintetizador de voz (TTS) das suas parciais e tempos ao fechar setores e voltas.",
+                feat4_title: "Modo Pista Aberta",
+                feat4_desc: "Cronometragem baseada apenas na linha de início. Ideal para sessões de circuito aberto, trackdays e trajetos livres.",
+                feat5_title: "Configuração de Circuito",
+                feat5_desc: "Mira interativa com ajuste de ângulo do gate (passos de 1° e 15°). Suporta até 2 setores customizados por circuito.",
+                feat6_title: "Análise de Sessão & CSV",
+                feat6_desc: "Históricos organizados por pista, com velocidade máxima, velocidades mínimas, Força G e exportação estruturada para arquivos CSV.",
+
+                workflow_badge: "Fluxo de Trabalho",
+                workflow_title: "Como Utilizar no Cockpit",
+                step1_title: "Traçar a Linha",
+                step1_desc: "Ajuste o gate da linha de chegada no mapa de satélite e adicione os setores desejados.",
+                step2_title: "Configurar",
+                step2_desc: "Fixe o celular firmemente no cockpit, calibre os acelerômetros de Força G e conecte seus fones de ouvido.",
+                step3_title: "Acelerar",
+                step3_desc: "Inicie a sessão e pilote. A primeira passagem cruza a linha iniciando a telemetria automaticamente.",
+                step4_title: "Analisar",
+                step4_desc: "Finalize a sessão no pit lane e exporte o relatório das voltas e dados consolidados em formato CSV.",
+
+                compare_badge: "Comparativo",
+                compare_title: "Pole Position vs. Alternativas",
+                compare_subtitle: "Veja como nos comparamos com cronômetros de hardware caros e aplicativos convencionais.",
+                th_feature: "Recurso",
+                th_hardware: "Telemetria dedicada (MyChron/Alfano)",
+                th_common_app: "Aplicativos de GPS comuns",
+                th_pole: "Pole Position App",
+                row1_name: "Frequência GPS",
+                row1_hardware: "Alta (10 Hz — 20 Hz)",
+                row1_common: "Baixa (1 Hz típica)",
+                row1_pole: "Alta (Até 10 Hz com antena externa)",
+                row2_name: "Custo",
+                row2_hardware: "Elevado (R$ 3.000+)",
+                row2_common: "Grátis / Assinatura",
+                row2_pole: "Gratuito (100% livre de custos)",
+                row3_name: "Detecção de Linha",
+                row3_hardware: "Sensor Magnético ou GPS",
+                row3_common: "Raio de Proximidade (Inexato)",
+                row3_pole: "Intersecção Vetorial Rigorosa",
+                row4_name: "Feedback de Áudio",
+                row4_hardware: "Não possui",
+                row4_common: "Simples ou Inexistente",
+                row4_pole: "Voz do Engenheiro (TTS volta e setores)",
+                row5_name: "Exportação de Dados",
+                row5_hardware: "Software proprietário / Cabo",
+                row5_common: "Limitada ou Paga",
+                row5_pole: "CSV Aberto com colunas alinhadas",
+                row6_name: "Processamento",
+                row6_hardware: "100% Local",
+                row6_common: "Geralmente em Nuvem",
+                row6_pole: "100% Offline no Dispositivo",
+
+                settings_badge: "Configurações Inteligentes",
+                settings_title: "Controle Total do Cockpit",
+                settings_desc: "Ajustes criados para quem está dentro do cockpit pilotando, não apenas olhando para a tela.",
+                set1_title: "Modo de Localização Inteligente",
+                set1_desc: "Ativação inteligente do GPS de alta precisão apenas durante sessões ativas para economizar bateria.",
+                set2_title: "Bloqueio de Notificações",
+                set2_desc: "Desativa notificações de outros aplicativos enquanto a sessão estiver rodando para manter o foco total.",
+                set3_title: "Brilho e Orientação Travados",
+                set3_desc: "Controle de intensidade de luz independente e travamento de orientação para visualização estável no suporte.",
+
+                tech_badge: "Stack de Tecnologia",
+                tech_title: "Arquitetura Nativa e Confiável",
+                tech_subtitle: "Desenvolvido com tecnologias modernas do ecossistema Android para máxima eficiência.",
                 
                 footer_apps: "Aplicativos",
                 footer_desc: "Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.",
@@ -355,24 +645,86 @@
                 nav_portfolio: "Portfolio",
                 nav_contact: "Contact",
                 
-                page_badge: "Sports Telemetry",
-                hero_title: "Performance Dashboard for your Cockpit",
-                hero_desc: "Pole Position transforms your smartphone into an advanced automotive telemetry system. High-frequency GPS, dynamic lateral G-force analysis, and 100% offline session reporting.",
+                hero_badge: "Professional Motorsports Telemetry",
+                hero_title_1: "Pole Position",
+                hero_title_2: "High Performance Cockpit Telemetry",
+                hero_desc: "Pole Position transforms your smartphone into a complete offline telemetry system for karting and trackdays. Featuring high-frequency GPS support, vector gate intersection, and integrated TTS audio.",
                 btn_download: "Get it on Google Play",
-                btn_download_soon: "Coming soon on Google Play",
                 btn_privacy: "Privacy Policy",
                 
-                feat_title: "Track Engineering in your Pocket",
-                feat_desc: "Crafted for karting and amateur competitive motorsport drivers seeking to shave off milliseconds every lap.",
+                features_badge: "Track Features",
+                features_title: "Telemetry Engineering in your Pocket",
+                features_subtitle: "Advanced features developed to extract every millisecond of performance on track.",
                 
-                f1_title: "High-Frequency GPS (10 Hz)",
-                f1_desc: "Bluetooth external antenna support executing highly-precise vector interpolation mapping on the finish line (milliseconds).",
-                f2_title: "High Contrast Dashboard",
-                f2_desc: "F1-style dark layout tailored for spectacular glare readability, featuring seamless Text-To-Speech racing engineer audio feedback.",
-                f3_title: "Strict Vector Parsing",
-                f3_desc: "Rigorous mathematical ray-casting intersection eliminating false positives entirely instead of generic proximity radial algorithms.",
-                f4_title: "Latent Dynamic G-Force",
-                f4_desc: "Analytic graphic bar heavily infused with an EMA filter on inertial sensors to display smooth cornering gravity forces.",
+                feat1_title: "Real-time Telemetry",
+                feat1_desc: "10 Hz GPS support for external Bluetooth antennas. Vector gate intersection algorithm (zero radius) with millisecond interpolation.",
+                feat2_title: "Pilot Panel (Live Dash)",
+                feat2_desc: "F1-style high contrast design optimized for direct sunlight. Monospace table digits, 3s post-lap freeze, deltas, and color-coded sectors.",
+                feat3_title: "Engineer Voice (TTS)",
+                feat3_desc: "Real-time text-to-speech audio feedback for lap times and split sector updates while keeping your eyes on the track.",
+                feat4_title: "Open Track Mode",
+                feat4_desc: "Timing based strictly on a single start line gate. Designed for open trackdays, custom routes, and open-circuit timing.",
+                feat5_title: "Circuit Configuration",
+                feat5_desc: "Interactive map targeting with fine-grained gate rotation adjustments (1° and 15° steps). Set up to 2 splits per track.",
+                feat6_title: "Session Analytics & CSV",
+                feat6_desc: "Track-grouped logs with detailed analysis: top speeds, minimum speeds, maximum G-forces, split delta comparison, and CSV export.",
+
+                workflow_badge: "Workflow",
+                workflow_title: "How to Use in the Cockpit",
+                step1_title: "Draw the Line",
+                step1_desc: "Set the finish line and optional sector gates using the interactive satellite view and gate rotation controls.",
+                step2_title: "Mount & Setup",
+                step2_desc: "Securely mount the smartphone inside the cockpit, calibrate the G-force sensors, and connect your headsets.",
+                step3_title: "Drive",
+                step3_desc: "Start monitoring and drive out. The timer starts automatically upon your first crossing of the finish line gate.",
+                step4_title: "Analyze & Share",
+                step4_desc: "Stop tracking in the pit lane, review lap details, and share/export session data into structured CSV spreadsheets.",
+
+                compare_badge: "Comparison",
+                compare_title: "Pole Position vs. Alternatives",
+                compare_subtitle: "See how we compare against expensive hardware timers and conventional apps.",
+                th_feature: "Feature",
+                th_hardware: "Dedicated Telemetry (MyChron/Alfano)",
+                th_common_app: "Standard GPS Apps",
+                th_pole: "Pole Position App",
+                row1_name: "GPS Update Rate",
+                row1_hardware: "High (10 Hz — 20 Hz)",
+                row1_common: "Low (1 Hz typical)",
+                row1_pole: "High (Up to 10 Hz with external antenna)",
+                row2_name: "Cost",
+                row2_hardware: "Very High ($500+)",
+                row2_common: "Free / Subscription",
+                row2_pole: "Free (100% free of charge)",
+                row3_name: "Line Detection",
+                row3_hardware: "Magnetic Loop or GPS Gate",
+                row3_common: "Radial Proximity (Inaccurate)",
+                row3_pole: "Strict Vector Intersection",
+                row4_name: "Audio Feedback",
+                row4_hardware: "None",
+                row4_common: "Simple or None",
+                row4_pole: "Engineer Voice (TTS lap and sectors)",
+                row5_name: "Data Export",
+                row5_hardware: "Proprietary software / Cable",
+                row5_common: "Limited or Paid",
+                row5_pole: "Open CSV format with aligned headers",
+                row6_name: "Processing",
+                row6_hardware: "100% Offline/Local",
+                row6_common: "Cloud-dependent",
+                row6_pole: "100% Offline on Device",
+
+                settings_badge: "Smart Settings",
+                settings_title: "Total Cockpit Control",
+                settings_desc: "Telemetry settings designed for drivers inside the cockpit, not just spectators looking at a screen.",
+                set1_title: "Smart Location Service",
+                set1_desc: "Automatically toggles high-accuracy telemetry GPS only when a tracking session is active to conserve battery life.",
+                set2_title: "Suppress Alerts",
+                set2_desc: "Mutes incoming notifications and alerts during sessions to maintain total concentration.",
+                set3_title: "Brightness & Screen Lock",
+                set3_desc: "Independent screen brightness controls and rotation locking for stable dashboard mounting.",
+
+                tech_badge: "Technology Stack",
+                tech_title: "Native and Reliable Architecture",
+                tech_subtitle: "Built with the modern Android software development ecosystem for performance and reliability.",
                 
                 footer_apps: "Applications",
                 footer_desc: "Cutting-edge software engineering for Mobile and IoT applications. Creating the future with performance since 2004.",
