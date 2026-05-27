@@ -8,6 +8,22 @@
     <link rel="icon" type="image/png" href="./assets/lottoexpert_favicon_v3.png">
     <meta name="description" content="LottoExpert - O motor matemático definitivo para desdobramentos de loterias.">
 
+    <!-- Open Graph (WhatsApp, LinkedIn, Facebook) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="GHF Software" />
+    <meta property="og:url" content="https://ghfsoftware.com/lottoexpert.html" />
+    <meta property="og:title" content="LottoExpert — Motor Matemático para Loterias" />
+    <meta property="og:description" content="Fechamentos combinatórios, OCR de bilhetes e backtesting offline para Mega-Sena, Lotofácil e mais." />
+    <meta property="og:image" content="https://ghfsoftware.com/assets/lottoexpert_app_mockup.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="pt_BR" />
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="LottoExpert — Motor Matemático para Loterias" />
+    <meta name="twitter:description" content="Fechamentos combinatórios, OCR de bilhetes e backtesting offline." />
+    <meta name="twitter:image" content="https://ghfsoftware.com/assets/lottoexpert_app_mockup.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -146,7 +162,7 @@
                 <div class="w-full lg:w-1/2 flex justify-center lg:justify-end">
                     <div class="relative w-full max-w-lg group">
                         <div class="absolute -inset-4 bg-brand-primary/20 rounded-[2.5rem] blur-2xl group-hover:bg-brand-primary/30 transition-all duration-500"></div>
-                        <img src="./assets/lottoexpert_app_mockup.png" alt="LottoExpert Premium Mockup" class="relative w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(139,92,246,0.3)] hover:scale-[1.02] transition-transform duration-500">
+                        <img src="./assets/lottoexpert_app_mockup.png" alt="Tela principal do app LottoExpert com gerador de fechamentos e estatísticas" class="relative w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(139,92,246,0.3)] hover:scale-[1.02] transition-transform duration-500">
                     </div>
                 </div>
             </div>
@@ -285,55 +301,55 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
                         <!-- Mega-Sena -->
                         <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-2 hover:border-[#209853]/60 hover:shadow-[0_0_15px_rgba(32,152,83,0.2)] transition-all duration-300 group text-center">
-                             <img src="./assets/lottoexpert/MegaSena.png" alt="Mega-Sena" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
+                             <img src="./assets/lottoexpert/MegaSena.png" alt="Logo da Mega-Sena — loteria suportada pelo LottoExpert" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
                              <span class="text-xs md:text-sm font-semibold text-white">Mega-Sena</span>
                              <span class="text-[9px] md:text-[10px] text-gray-400 font-medium" data-i18n="lot_mega_details">1–60 • Sel: 6–20 • R$ 6,00</span>
                         </div>
                         <!-- Lotofácil -->
                         <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-2 hover:border-[#930053]/60 hover:shadow-[0_0_15px_rgba(147,0,83,0.2)] transition-all duration-300 group text-center">
-                             <img src="./assets/lottoexpert/Lotofacil.png" alt="Lotofácil" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
+                             <img src="./assets/lottoexpert/Lotofacil.png" alt="Logo da Lotofácil — loteria suportada pelo LottoExpert" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
                              <span class="text-xs md:text-sm font-semibold text-white">Lotofácil</span>
                              <span class="text-[9px] md:text-[10px] text-gray-400 font-medium" data-i18n="lot_lotofacil_details">1–25 • Sel: 15–20 • R$ 3,50</span>
                         </div>
                         <!-- Quina -->
                         <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-2 hover:border-[#262f85]/60 hover:shadow-[0_0_15px_rgba(38,47,133,0.2)] transition-all duration-300 group text-center">
-                             <img src="./assets/lottoexpert/Quina.png" alt="Quina" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
+                             <img src="./assets/lottoexpert/Quina.png" alt="Logo da Quina — loteria suportada pelo LottoExpert" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
                              <span class="text-xs md:text-sm font-semibold text-white">Quina</span>
                              <span class="text-[9px] md:text-[10px] text-gray-400 font-medium" data-i18n="lot_quina_details">1–80 • Sel: 5–15 • R$ 3,00</span>
                         </div>
                         <!-- Lotomania -->
                         <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-2 hover:border-[#f26c22]/60 hover:shadow-[0_0_15px_rgba(242,108,34,0.2)] transition-all duration-300 group text-center">
-                             <img src="./assets/lottoexpert/Lotomania.png" alt="Lotomania" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
+                             <img src="./assets/lottoexpert/Lotomania.png" alt="Logo da Lotomania — loteria suportada pelo LottoExpert" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
                              <span class="text-xs md:text-sm font-semibold text-white">Lotomania</span>
                              <span class="text-[9px] md:text-[10px] text-gray-400 font-medium" data-i18n="lot_lotomania_details">1–100 • Sel: 50 • R$ 3,00</span>
                         </div>
                         <!-- Timemania -->
                         <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-2 hover:border-[#a0c917]/60 hover:shadow-[0_0_15px_rgba(160,201,23,0.2)] transition-all duration-300 group text-center">
-                             <img src="./assets/lottoexpert/Timemania.png" alt="Timemania" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
+                             <img src="./assets/lottoexpert/Timemania.png" alt="Logo da Timemania — loteria suportada pelo LottoExpert" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
                              <span class="text-xs md:text-sm font-semibold text-white">Timemania</span>
                              <span class="text-[9px] md:text-[10px] text-gray-400 font-medium" data-i18n="lot_timemania_details">1–80 • Sel: 10 • R$ 3,50</span>
                         </div>
                         <!-- Dia de Sorte -->
                         <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-2 hover:border-[#dcb810]/60 hover:shadow-[0_0_15px_rgba(220,184,16,0.2)] transition-all duration-300 group text-center">
-                             <img src="./assets/lottoexpert/DiaDeSorte.png" alt="Dia de Sorte" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
+                             <img src="./assets/lottoexpert/DiaDeSorte.png" alt="Logo do Dia de Sorte — loteria suportada pelo LottoExpert" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
                              <span class="text-xs md:text-sm font-semibold text-white">Dia de Sorte</span>
                              <span class="text-[9px] md:text-[10px] text-gray-400 font-medium" data-i18n="lot_diadesorte_details">1–31 • Sel: 7–15 • R$ 2,50</span>
                         </div>
                         <!-- Dupla Sena -->
                         <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-2 hover:border-[#930922]/60 hover:shadow-[0_0_15px_rgba(147,9,34,0.2)] transition-all duration-300 group text-center">
-                             <img src="./assets/lottoexpert/DuplaSena.png" alt="Dupla Sena" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
+                             <img src="./assets/lottoexpert/DuplaSena.png" alt="Logo da Dupla Sena — loteria suportada pelo LottoExpert" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
                              <span class="text-xs md:text-sm font-semibold text-white">Dupla Sena</span>
                              <span class="text-[9px] md:text-[10px] text-gray-400 font-medium" data-i18n="lot_duplasena_details">1–50 • Sel: 6–15 • R$ 3,00</span>
                         </div>
                         <!-- +Milionária -->
                         <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-2 hover:border-[#1e295d]/60 hover:shadow-[0_0_15px_rgba(30,41,93,0.2)] transition-all duration-300 group text-center">
-                             <img src="./assets/lottoexpert/MaisMilionaria.png" alt="+Milionária" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
+                             <img src="./assets/lottoexpert/MaisMilionaria.png" alt="Logo da +Milionária — loteria suportada pelo LottoExpert" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
                              <span class="text-xs md:text-sm font-semibold text-white">+Milionária</span>
                              <span class="text-[9px] md:text-[10px] text-gray-400 font-medium" data-i18n="lot_mais_milionaria_details">1–50 + trv • Sel: 6 • R$ 6,00</span>
                         </div>
                         <!-- Super Sete -->
                         <div class="p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-2 hover:border-[#00adba]/60 hover:shadow-[0_0_15px_rgba(0,173,186,0.2)] transition-all duration-300 group text-center">
-                             <img src="./assets/lottoexpert/SuperSete.png" alt="Super Sete" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
+                             <img src="./assets/lottoexpert/SuperSete.png" alt="Logo do Super Sete — loteria suportada pelo LottoExpert" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
                              <span class="text-xs md:text-sm font-semibold text-white">Super Sete</span>
                              <span class="text-[9px] md:text-[10px] text-gray-400 font-medium" data-i18n="lot_supersete_details">0–9 (7 col) • Sel: 7 • R$ 3,00</span>
                         </div>
