@@ -139,7 +139,7 @@
                 Política de Privacidade — Pole Position
             </h1>
             <p class="text-gray-500 text-lg" data-i18n="last_updated">
-                Última atualização: maio de 2026
+                Última atualização: junho de 2026
             </p>
         </div>
     </div>
@@ -239,7 +239,7 @@
                 nav_portfolio: "Portfólio",
                 nav_contact: "Contato",
                 page_title: "Política de Privacidade — Pole Position",
-                last_updated: "Última atualização: maio de 2026",
+                last_updated: "Última atualização: junho de 2026",
                 intro: "Esta Política de Privacidade descreve como o aplicativo <strong>Pole Position: Race Analytics</strong> (\"o App\", \"nós\") coleta, usa, armazena e protege as informações dos usuários (\"você\"). Ao instalar e utilizar o App, você concorda com os termos desta política.",
                 btn_back: "Voltar para a GHF Software",
                 footer_apps: "Aplicativos",
@@ -258,6 +258,63 @@
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">1. Sobre o Aplicativo</h2>
                     <p class="mb-4">O <strong>Pole Position: Race Analytics</strong> é um aplicativo de telemetria esportiva para Android desenvolvido para pilotos de kart e automobilismo amador. O App utiliza o GPS e os sensores de movimento do dispositivo para registrar voltas, calcular tempos, medir força G lateral e fornecer análise de desempenho em pista.</p>
                     
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">Resumo de Segurança dos Dados (Google Play)</h2>
+                    <p class="mb-4">Este resumo reflete as informações declaradas na seção <strong>Segurança dos Dados</strong> da ficha do App na Google Play Store. Conforme a definição do Google, <strong>dados processados exclusivamente no dispositivo e nunca transmitidos para fora dele não são considerados "coletados" nem "compartilhados"</strong>.</p>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Dados coletados (enviados para fora do dispositivo)</h3>
+                    <div class="overflow-x-auto my-6 border border-gray-800 rounded-xl">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-gray-800 bg-gray-800/30">
+                                    <th class="py-4 px-5 text-sm font-semibold text-white">Tipo de dado</th>
+                                    <th class="py-4 px-5 text-sm font-semibold text-white">Coletado</th>
+                                    <th class="py-4 px-5 text-sm font-semibold text-white">Compartilhado</th>
+                                    <th class="py-4 px-5 text-sm font-semibold text-white">Finalidade</th>
+                                    <th class="py-4 px-5 text-sm font-semibold text-white">Coleta opcional</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800/50">
+                                <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300">Localização aproximada (derivada do IP pelo Firebase)</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Sim</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Não</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Análises</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Não</td>
+                                </tr>
+                                <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300">Atividade no app (interações e eventos de uso)</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Sim</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Não</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Análises</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Não</td>
+                                </tr>
+                                <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300">IDs (ID de instância do app gerado pelo Firebase)</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Sim</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Não</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Análises</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Não</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Dados processados apenas no dispositivo (não declarados como coletados)</h3>
+                    <p class="mb-4">Os dados a seguir <strong>nunca saem do dispositivo</strong> e, portanto, não são declarados como coletados nem compartilhados na ficha — exceto quando o próprio usuário decide exportá-los ou compartilhá-los manualmente (ver seções 5 e 8):</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>Localização precisa (GPS)</strong> e o <strong>traçado da volta</strong> (sequência de coordenadas) — armazenados apenas no banco de dados local.</li>
+                        <li><strong>Dados dos sensores de movimento</strong> (força G lateral e longitudinal).</li>
+                        <li><strong>Conteúdo inserido pelo usuário</strong> (nomes de circuitos, notas de sessão, tempos de volta e parciais).</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Práticas de segurança</h3>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>Os dados são criptografados em trânsito</strong> (conexão HTTPS para o Firebase).</li>
+                        <li><strong>Você pode solicitar a exclusão dos seus dados:</strong> os dados locais são removidos ao desinstalar o App ou ao excluí-los individualmente nas telas do App; os dados de análise podem ser apagados redefinindo o identificador de análise do dispositivo (ver seção 8).</li>
+                        <li><strong>Nenhum dado é vendido nem compartilhado com terceiros</strong> para fins próprios desses terceiros.</li>
+                        <li>O App <strong>não coleta dados de identificação pessoal</strong> (nome, e-mail, telefone, dados financeiros).</li>
+                    </ul>
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">2. Dados Coletados</h2>
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.1 Dados de Localização (GPS)</h3>
                     <p class="mb-4">O App solicita permissão de <strong>localização precisa</strong> (<code class="font-mono bg-gray-800 px-1.5 py-0.5 rounded text-gray-200 text-sm">ACCESS_FINE_LOCATION</code>) para:</p>
@@ -265,17 +322,18 @@
                         <li>Detectar o cruzamento da linha de chegada e das linhas de setor com precisão de milissegundos.</li>
                         <li>Calcular a velocidade do veículo em tempo real (km/h) a partir dos dados de GPS.</li>
                         <li>Centralizar o mapa na posição atual durante a configuração de circuitos.</li>
+                        <li>Registrar o <strong>traçado da melhor volta</strong> (sequência de coordenadas GPS amostradas durante a sessão), quando o usuário ativa esse recurso para uma pista (ver seção 2.5).</li>
                     </ul>
                     <p class="mb-4">A localização é utilizada <strong>exclusivamente dentro do dispositivo</strong>. Nenhuma coordenada GPS é transmitida para servidores externos, terceiros ou qualquer serviço de nuvem.</p>
-
+                    
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.2 Dados de Sensores de Movimento</h3>
                     <p class="mb-4">O App acessa o <strong>acelerômetro</strong> e o <strong>giroscópio</strong> do dispositivo para:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Medir a força G lateral durante a pilotagem.</li>
                         <li>Exibir dados de aceleração em tempo real no painel.</li>
                     </ul>
-                    <p class="mb-4">Os dados dos sensores são processados localmente e em memória. Nenhum dado bruto de sensor é persistido no banco de dados ou transmitido externamente.</p>
-
+                    <p class="mb-4">Os dados dos sensores são processados localmente e em memória. As leituras de força G (lateral e longitudinal) <strong>não são transmitidas externamente</strong>. Elas são persistidas localmente apenas como parte do traçado da melhor volta, quando o usuário ativa esse recurso para uma pista (ver seção 2.5); fora desse recurso, nenhum dado bruto de sensor é gravado no banco de dados.</p>
+                    
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.3 Dados Inseridos pelo Usuário</h3>
                     <p class="mb-4">O App armazena localmente no dispositivo:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
@@ -285,7 +343,7 @@
                         <li><strong>Velocidade máxima e mínima</strong> e <strong>força G máxima</strong> por volta.</li>
                     </ul>
                     <p class="mb-4">Todos esses dados são armazenados exclusivamente no banco de dados local do dispositivo (Room/SQLite) e nunca saem do aparelho, exceto quando o próprio usuário escolhe exportá-los.</p>
-
+                    
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.4 Dados de Uso Coletados Automaticamente (Firebase Analytics)</h3>
                     <p class="mb-4">O App integra o <strong>Firebase Analytics</strong> (Google LLC) para coleta anônima de métricas de uso. Os dados coletados incluem:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
@@ -301,8 +359,17 @@
                         <li>Dados que permitam identificar o usuário individualmente (nome, e-mail, CPF etc.).</li>
                     </ul>
                     <p class="mb-4">Esses dados são usados exclusivamente para entender quais funcionalidades são utilizadas e melhorar o App em versões futuras. Não há venda ou compartilhamento dessas informações para fins publicitários.</p>
-
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.5 Dados NÃO Coletados</h3>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.5 Traçado da Volta (GPS) — Recurso Opcional</h3>
+                    <p class="mb-4">O App oferece um recurso de <strong>análise de traçado</strong> que registra a sequência de coordenadas GPS da melhor volta de cada sessão para gerar gráficos de velocidade, força G e o contorno do circuito. Sobre esse recurso:</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>É <strong>estritamente opcional e opt-in</strong>: o registro só ocorre depois que o usuário ativa explicitamente o traçado para uma pista específica. Por padrão, ele vem <strong>desativado</strong>.</li>
+                        <li>Os pontos registrados (coordenada GPS, velocidade e força G por instante) são armazenados <strong>exclusivamente no banco de dados local do dispositivo</strong> e nunca são enviados a servidores externos.</li>
+                        <li>A retenção é limitada: o App guarda o traçado de no máximo <strong>3 sessões por pista</strong>, removendo automaticamente os mais antigos para liberar espaço.</li>
+                        <li>O usuário pode desativar o recurso a qualquer momento e excluir os traçados armazenados (ver seção 8).</li>
+                    </ul>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.6 Dados NÃO Coletados</h3>
                     <p class="mb-4">O App <strong>não coleta, não armazena e não transmite</strong>:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Nome, e-mail, telefone ou qualquer dado de identificação pessoal.</li>
@@ -312,7 +379,7 @@
                         <li>Dados de localização ou telemetria fora do contexto de uma sessão ativa.</li>
                         <li>Relatórios automáticos de falha (Crashlytics ou equivalente).</li>
                     </ul>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">3. Uso das Permissões</h2>
                     <div class="overflow-x-auto my-6 border border-gray-800 rounded-xl">
                         <table class="w-full text-left border-collapse">
@@ -348,6 +415,10 @@
                                     <td class="py-4 px-5 text-sm text-gray-400">Acesso a leituras do acelerômetro e giroscópio em alta frequência</td>
                                 </tr>
                                 <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300 font-mono">ACCESS_NOTIFICATION_POLICY</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Suprimir notificações externas durante a sessão, quando o usuário ativa essa opção</td>
+                                </tr>
+                                <tr class="hover:bg-gray-800/10">
                                     <td class="py-4 px-5 text-sm text-gray-300 font-mono">INTERNET</td>
                                     <td class="py-4 px-5 text-sm text-gray-400">Envio de eventos anônimos ao Firebase Analytics e carregamento do mapa (Google Maps)</td>
                                 </tr>
@@ -355,7 +426,7 @@
                         </table>
                     </div>
                     <p class="mb-4">A permissão <code class="font-mono bg-gray-800 px-1 py-0.5 rounded text-gray-200 text-sm">ACCESS_BACKGROUND_LOCATION</code> é utilizada <strong>somente durante sessões de pilotagem ativas</strong>, quando o usuário inicia explicitamente uma sessão no App. Ela garante que o serviço de telemetria continue registrando corretamente mesmo que o piloto minimize o App ou o dispositivo apague a tela durante a corrida. O App não rastreia a localização do usuário fora do contexto de uma sessão ativa.</p>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Armazenamento e Segurança</h2>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Os dados de telemetria (circuitos, sessões, voltas) são armazenados exclusivamente no dispositivo do usuário.</li>
@@ -364,38 +435,44 @@
                         <li>A segurança dos dados locais depende das proteções nativas do sistema operacional Android e do bloqueio do dispositivo do usuário.</li>
                         <li>A desinstalação do App remove todos os dados armazenados localmente no dispositivo.</li>
                     </ul>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">5. Compartilhamento de Dados</h2>
                     <p class="mb-4">O App não compartilha dados de pilotagem com terceiros de forma automática.</p>
-                    <p class="mb-4">O único mecanismo de compartilhamento de dados de sessão disponível é a <strong>exportação manual de CSV</strong>, acionada exclusivamente pelo usuário no botão de compartilhamento da tela de análise de sessão. O arquivo gerado contém apenas os dados de telemetria da sessão selecionada e é entregue ao aplicativo de compartilhamento escolhido pelo próprio usuário (e-mail, mensageiro, armazenamento em nuvem etc.). O App não retém cópia do arquivo após o compartilhamento.</p>
+                    <p class="mb-4">Os mecanismos de compartilhamento de dados de sessão são sempre <strong>acionados manualmente pelo próprio usuário</strong> e o conteúdo é entregue ao aplicativo de destino escolhido por ele (e-mail, mensageiro, armazenamento em nuvem etc.). São eles:</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>Exportação de CSV</strong>, acionada no botão de compartilhamento da tela de análise de sessão. O arquivo gerado contém apenas os dados de telemetria da sessão selecionada.</li>
+                        <li><strong>Card de análise (imagem PNG)</strong>, gerado na tela de traçado da volta. A imagem é montada inteiramente no dispositivo e contém o contorno do circuito (uma forma normalizada, derivada do traçado GPS, sem coordenadas geográficas absolutas), gráficos de desempenho (velocidade, força G) e um QR code que aponta para a página do App na Google Play Store.</li>
+                    </ul>
+                    <p class="mb-4">Em ambos os casos, o App <strong>não retém cópia</strong> do arquivo após o compartilhamento e nenhum dado é enviado a servidores do desenvolvedor.</p>
                     <p class="mb-4">Dados anônimos de uso (eventos Firebase Analytics) são processados pelo Google conforme descrito na seção 6.</p>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. Serviços de Terceiros</h2>
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Google Maps SDK for Android</h3>
                     <p class="mb-4">Utilizado para exibição do mapa durante a configuração de circuitos. O App transmite ao SDK do Maps apenas as coordenadas necessárias para renderização do mapa na tela, conforme o funcionamento padrão da biblioteca. Sujeito à <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Política de Privacidade do Google</a>.</p>
-
+                    
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Firebase Analytics (Google LLC)</h3>
                     <p class="mb-4">Utilizado para coleta de métricas anônimas de uso conforme descrito na seção 2.4. Os dados são transmitidos aos servidores do Google e armazenados conforme os termos do Firebase. Sujeito à <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Política de Privacidade do Google</a> e aos <a href="https://firebase.google.com/terms" target="_blank" class="text-brand-primary hover:underline">Termos de Serviço do Firebase</a>.</p>
-
+                    
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Google Play In-App Review API</h3>
                     <p class="mb-4">Utilizado para exibir o fluxo nativo de avaliação do Google Play em momentos oportunos dentro do App (ex.: após análise de sessões). Nenhum dado inserido pelo usuário nesse fluxo é acessado ou armazenado pelo App — o processo ocorre inteiramente dentro do Google Play. Sujeito à <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Política de Privacidade do Google</a>.</p>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Privacidade de Menores</h2>
                     <p class="mb-4">O App é destinado a uso esportivo e não é direcionado a crianças menores de 13 anos. Não coletamos intencionalmente dados de menores de idade.</p>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">8. Direitos do Usuário</h2>
                     <p class="mb-4">Como os dados de pilotagem são armazenados localmente no seu dispositivo, você tem controle total sobre eles:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li><strong>Acesso:</strong> Os dados podem ser visualizados diretamente nas telas do App.</li>
                         <li><strong>Exportação:</strong> Os dados podem ser exportados via CSV a qualquer momento.</li>
                         <li><strong>Exclusão parcial:</strong> Voltas, sessões e circuitos podem ser excluídos individualmente pelo App.</li>
+                        <li><strong>Controle do traçado GPS:</strong> O registro do traçado da volta é opt-in por pista e pode ser desativado a qualquer momento; os traçados já armazenados podem ser removidos pelo App.</li>
                         <li><strong>Exclusão total:</strong> A desinstalação do App remove todos os dados armazenados localmente.</li>
                     </ul>
                     <p class="mb-4">Para dados coletados pelo Firebase Analytics, você pode desativar a coleta nas configurações do seu dispositivo Android em <strong>Configurações > Google > Anúncios > Cancelar personalização de anúncios</strong> ou, em versões mais recentes, por meio das opções de privacidade do Google Play Services.</p>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Alterações nesta Política</h2>
                     <p class="mb-4">Esta política pode ser atualizada periodicamente. Alterações relevantes serão comunicadas por meio de atualização do App na Google Play Store. A data da última atualização está indicada no topo deste documento.</p>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">10. Contato</h2>
                     <p class="mb-4">Em caso de dúvidas sobre esta Política de Privacidade, entre em contato pelo repositório oficial do projeto ou pelo e-mail do desenvolvedor em <strong>support@ghfsoftware.com</strong>.</p>
                     <p class="font-semibold text-white mt-6">Desenvolvido por Gustavo Hyppolito</p>
@@ -406,7 +483,7 @@
                 nav_portfolio: "Portfolio",
                 nav_contact: "Contact",
                 page_title: "Privacy Policy — Pole Position",
-                last_updated: "Last updated: May 2026",
+                last_updated: "Last updated: June 2026",
                 intro: "This Privacy Policy describes how the <strong>Pole Position: Race Analytics</strong> application (\"the App\", \"we\", \"us\") collects, uses, stores, and protects user information (\"you\"). By installing and using the App, you agree to the terms of this policy.",
                 btn_back: "Back to GHF Software",
                 footer_apps: "Applications",
@@ -425,6 +502,63 @@
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">1. About the App</h2>
                     <p class="mb-4"><strong>Pole Position: Race Analytics</strong> is a sports telemetry Android app developed for karting and amateur motorsports. The App utilizes GPS and motion sensors to record laps, calculate lap times, measure lateral G-forces, and provide on-track performance analysis.</p>
                     
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">Data Safety Summary (Google Play)</h2>
+                    <p class="mb-4">This summary reflects the information declared in the <strong>Data Safety</strong> section of the App's store listing on the Google Play Store. According to Google's definition, <strong>data processed exclusively on the device and never transmitted outside of it is not considered "collected" or "shared"</strong>.</p>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Data collected (sent outside the device)</h3>
+                    <div class="overflow-x-auto my-6 border border-gray-800 rounded-xl">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-gray-800 bg-gray-800/30">
+                                    <th class="py-4 px-5 text-sm font-semibold text-white">Data type</th>
+                                    <th class="py-4 px-5 text-sm font-semibold text-white">Collected</th>
+                                    <th class="py-4 px-5 text-sm font-semibold text-white">Shared</th>
+                                    <th class="py-4 px-5 text-sm font-semibold text-white">Purpose</th>
+                                    <th class="py-4 px-5 text-sm font-semibold text-white">Optional collection</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800/50">
+                                <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300">Approximate location (derived from IP by Firebase)</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Yes</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">No</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Analytics</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">No</td>
+                                </tr>
+                                <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300">App activity (interactions and usage events)</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Yes</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">No</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Analytics</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">No</td>
+                                </tr>
+                                <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300">IDs (App instance ID generated by Firebase)</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Yes</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">No</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Analytics</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">No</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Data processed only on the device (not declared as collected)</h3>
+                    <p class="mb-4">The following data <strong>never leaves the device</strong> and, therefore, is not declared as collected or shared in the store listing — except when the user chooses to manually export or share it (see sections 5 and 8):</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>Precise location (GPS)</strong> and <strong>lap trace</strong> (sequence of coordinates) — stored only in the local database.</li>
+                        <li><strong>Motion sensor data</strong> (lateral and longitudinal G-forces).</li>
+                        <li><strong>User-entered content</strong> (track names, session notes, lap and split times).</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Security practices</h3>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>Data is encrypted in transit</strong> (HTTPS connection to Firebase).</li>
+                        <li><strong>You can request the deletion of your data:</strong> local data is removed when uninstalling the App or by deleting them individually in the App's screens; analytics data can be cleared by resetting the device's advertising identifier (see section 8).</li>
+                        <li><strong>No data is sold or shared with third parties</strong> for their own purposes.</li>
+                        <li>The App <strong>does not collect personally identifiable information</strong> (name, email, phone number, financial data).</li>
+                    </ul>
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">2. Collected Data</h2>
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.1 Location Data (GPS)</h3>
                     <p class="mb-4">The App requests precise location permission (<code class="font-mono bg-gray-800 px-1.5 py-0.5 rounded text-gray-200 text-sm">ACCESS_FINE_LOCATION</code>) to:</p>
@@ -432,17 +566,18 @@
                         <li>Detect finish line and sector line crossings with millisecond precision.</li>
                         <li>Calculate real-time vehicle speed (km/h) based on GPS data.</li>
                         <li>Center the map on your current position during track configuration.</li>
+                        <li>Record the <strong>best lap trace</strong> (sequence of GPS coordinates sampled during the session), when the user enables this feature for a track (see section 2.5).</li>
                     </ul>
                     <p class="mb-4">Location data is used <strong>exclusively inside the device</strong>. No GPS coordinates are ever transmitted to external servers, third parties, or any cloud services.</p>
-
+                    
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.2 Motion Sensor Data</h3>
                     <p class="mb-4">The App accesses the device's <strong>accelerometer</strong> and <strong>gyroscope</strong> to:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Measure lateral G-forces during driving.</li>
                         <li>Display real-time acceleration data on the dashboard.</li>
                     </ul>
-                    <p class="mb-4">Sensor data is processed locally in memory. No raw sensor data is permanently stored in the database or transmitted externally.</p>
-
+                    <p class="mb-4">Sensor data is processed locally in memory. Lateral and longitudinal G-force readings <strong>are not transmitted externally</strong>. They are persisted locally only as part of the best lap trace, when the user enables this feature for a track (see section 2.5); outside this feature, no raw sensor data is written to the database.</p>
+                    
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.3 User-Input Data</h3>
                     <p class="mb-4">The App stores locally on the device:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
@@ -452,7 +587,7 @@
                         <li><strong>Maximum and minimum speeds</strong> and <strong>maximum G-force</strong> per lap.</li>
                     </ul>
                     <p class="mb-4">All of this data is stored exclusively in the local database of the device (Room/SQLite) and never leaves the device, except when the user manually chooses to export it.</p>
-
+                    
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.4 Automatically Collected Usage Data (Firebase Analytics)</h3>
                     <p class="mb-4">The App integrates <strong>Firebase Analytics</strong> (Google LLC) for anonymous usage metrics collection. Collected data includes:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
@@ -468,8 +603,17 @@
                         <li>Data that allows individual identification of the user (name, email, ID, etc.).</li>
                     </ul>
                     <p class="mb-4">This data is used exclusively to understand which features are used and improve the App in future versions. There is no selling or sharing of this information for advertising purposes.</p>
-
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.5 Data NOT Collected</h3>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.5 Lap Trace (GPS) — Optional Feature</h3>
+                    <p class="mb-4">The App offers a <strong>trace analysis</strong> feature that records the sequence of GPS coordinates of the best lap of each session to generate speed, G-force graphs, and the track outline. Regarding this feature:</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>It is <strong>strictly optional and opt-in</strong>: recording only occurs after the user explicitly enables tracing for a specific track. By default, it is <strong>disabled</strong>.</li>
+                        <li>The recorded points (GPS coordinate, speed, and G-force at each instant) are stored <strong>exclusively in the device's local database</strong> and are never sent to external servers.</li>
+                        <li>Retention is limited: the App keeps the trace of a maximum of <strong>3 sessions per track</strong>, automatically removing the oldest ones to free up space.</li>
+                        <li>The user can disable the feature at any time and delete the stored traces (see section 8).</li>
+                    </ul>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.6 Data NOT Collected</h3>
                     <p class="mb-4">The App <strong>does not collect, store, or transmit</strong>:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Name, email, phone number, or any personal identification data.</li>
@@ -479,7 +623,7 @@
                         <li>Location or telemetry data outside the context of an active session.</li>
                         <li>Automatic crash reports (Crashlytics or equivalent).</li>
                     </ul>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">3. Use of Permissions</h2>
                     <div class="overflow-x-auto my-6 border border-gray-800 rounded-xl">
                         <table class="w-full text-left border-collapse">
@@ -515,6 +659,10 @@
                                     <td class="py-4 px-5 text-sm text-gray-400">High-frequency access to accelerometer and gyroscope readings</td>
                                 </tr>
                                 <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300 font-mono">ACCESS_NOTIFICATION_POLICY</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Suppress external notifications during the session when the user enables this option</td>
+                                </tr>
+                                <tr class="hover:bg-gray-800/10">
                                     <td class="py-4 px-5 text-sm text-gray-300 font-mono">INTERNET</td>
                                     <td class="py-4 px-5 text-sm text-gray-400">Sends anonymous events to Firebase Analytics and fetches map layers from Google Maps API</td>
                                 </tr>
@@ -522,7 +670,7 @@
                         </table>
                     </div>
                     <p class="mb-4">The <code class="font-mono bg-gray-800 px-1 py-0.5 rounded text-gray-200 text-sm">ACCESS_BACKGROUND_LOCATION</code> permission is used <strong>only during active racing sessions</strong>, when the user explicitly starts a tracking session. It guarantees that the telemetry service continues recording accurately even if the driver minimizes the App or the screen turns off during the race. The App does not track user location outside an active session.</p>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Storage and Security</h2>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Telemetry data (tracks, sessions, laps) is stored exclusively on the user's device.</li>
@@ -531,38 +679,44 @@
                         <li>Local data security depends on Android's native OS protections and the lock screen security of the user's device.</li>
                         <li>Uninstalling the App removes all data stored locally on the device.</li>
                     </ul>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">5. Data Sharing</h2>
                     <p class="mb-4">The App does not automatically share driving data with third parties.</p>
-                    <p class="mb-4">The only available sharing mechanism is **manual CSV export**, triggered exclusively by the user using the share button on the session analysis screen. The generated file contains only the telemetry data of the selected session and is delivered to the sharing app chosen by the user (email, messaging app, cloud storage, etc.). The App does not retain a copy of the file after sharing.</p>
+                    <p class="mb-4">The sharing mechanisms for session data are always <strong>manually triggered by the user</strong> and the content is delivered to the destination app chosen by them (email, messaging app, cloud storage, etc.). They are:</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>CSV Export</strong>, triggered by the share button on the session analysis screen. The generated file contains only the telemetry data of the selected session.</li>
+                        <li><strong>Analysis Card (PNG image)</strong>, generated on the lap trace screen. The image is built entirely on the device and contains the track outline (a normalized shape, derived from the GPS trace, without absolute geographic coordinates), performance graphs (speed, G-force), and a QR code pointing to the App's page on the Google Play Store.</li>
+                    </ul>
+                    <p class="mb-4">In both cases, the App <strong>does not retain a copy</strong> of the file after sharing and no data is sent to the developer's servers.</p>
                     <p class="mb-4">Anonymous usage data (Firebase Analytics events) is processed by Google as described in section 6.</p>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. Third-Party Services</h2>
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Google Maps SDK for Android</h3>
                     <p class="mb-4">Used to display the map during track configuration. The App transmits only the coordinates necessary to render the map on screen, as per standard library operation. Subject to <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Google's Privacy Policy</a>.</p>
-
+                    
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Firebase Analytics (Google LLC)</h3>
                     <p class="mb-4">Used to collect anonymous usage metrics as described in section 2.4. Data is transmitted to Google servers and stored according to Firebase terms. Subject to <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Google's Privacy Policy</a> and <a href="https://firebase.google.com/terms" target="_blank" class="text-brand-primary hover:underline">Firebase Terms of Service</a>.</p>
-
+                    
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Google Play In-App Review API</h3>
                     <p class="mb-4">Used to prompt the native Google Play review dialog at opportune moments in the App (e.g., after session reviews). No user-input data in this flow is accessed or stored by the App — the process is handled entirely by Google Play. Subject to <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Google's Privacy Policy</a>.</p>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Children's Privacy</h2>
                     <p class="mb-4">The App is intended for sports use and is not directed at children under 13. We do not knowingly collect personal data from minors.</p>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">8. User Rights</h2>
                     <p class="mb-4">As your driving data is stored locally on your device, you have full control over it:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li><strong>Access:</strong> Data can be viewed directly on the App's screens.</li>
                         <li><strong>Export:</strong> Data can be exported to CSV at any time.</li>
                         <li><strong>Partial Deletion:</strong> Laps, sessions, and tracks can be deleted individually within the App.</li>
-                        <li><strong>Total Deletion:</strong> Uninstalling the App removes all locally stored data.</li>
+                        <li><strong>GPS Trace Control:</strong> Lap trace recording is opt-in per track and can be disabled at any time; already stored traces can be removed by the App.</li>
+                        <li><strong>Total Deletion:</strong> Uninstalling the App removes all data stored locally.</li>
                     </ul>
                     <p class="mb-4">For data collected by Firebase Analytics, you can opt out of analytics tracking in your Android settings under <strong>Settings > Google > Ads > Opt out of Ads Personalization</strong> or through Google Play Services privacy options.</p>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Changes to this Policy</h2>
                     <p class="mb-4">This policy may be updated periodically. Significant changes will be communicated via App updates on the Google Play Store. The date of the last update is indicated at the top of this document.</p>
-
+                    
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">10. Contact</h2>
                     <p class="mb-4">For questions regarding this Privacy Policy, feel free to contact us through the official project repository or the developer email at <strong>support@ghfsoftware.com</strong>.</p>
                     <p class="font-semibold text-white mt-6">Developed by Gustavo Hyppolito</p>

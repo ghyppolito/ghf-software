@@ -50,6 +50,8 @@ Para sessões em pistas sem linha de chegada fixa — trackdays, rodovias fechad
 
 - **Histórico por Circuito:** Lista de todos os circuitos com suas sessões agrupadas.
 - **Detalhe de Volta:** Tela dedicada por volta com velocidade máxima, velocidade mínima, G-force máxima, parciais e delta em relação à melhor volta da sessão.
+- **Análise de Traçado (Lap Trace):** Recurso opcional (opt-in por pista) que registra o traçado GPS da melhor volta e gera gráficos de velocidade, força G e o contorno do circuito, com comparação entre sessões. Os pontos ficam armazenados apenas no dispositivo, com retenção limitada (máx. 3 sessões por pista).
+- **Card de Compartilhamento:** Geração de um card de análise em imagem (PNG) com o contorno da pista, gráficos de desempenho e QR code para a Play Store — montado inteiramente no dispositivo e compartilhado manualmente pelo usuário.
 - **Exportação CSV:** Exporta todos os dados da sessão em formato CSV com colunas alinhadas — uma linha por volta, incluindo tempo formatado, velocidades, G-force e parciais.
 
 ### Configurações
@@ -91,22 +93,25 @@ br.com.ghfsoftware.polepositionapp
 ├── core/
 │   ├── analytics/      # AnalyticsTracker — Firebase Analytics
 │   ├── di/             # Módulos Hilt (AppModule, LocationModule, AnalyticsModule)
+│   ├── gps/            # GpsTrackingConfig (amostragem e retenção do traçado)
 │   ├── preferences/    # AppPreferences (SharedPreferences)
 │   ├── review/         # AppReviewHelper (Play In-App Review)
 │   └── util/           # GeometryUtil (cálculo de gates, intersecção de vetores)
 ├── data/
 │   └── local/
-│       ├── dao/        # SessionDao, TrackDao
-│       ├── entities/   # TrackEntity, SplitEntity, SessionEntity, LapEntity, LapSplitEntity
-│       └── AppDatabase # Room Database (versão 5, com migrações)
+│       ├── dao/        # SessionDao, TrackDao, TrackPointDao
+│       ├── entities/   # TrackEntity, SplitEntity, SessionEntity, LapEntity, LapSplitEntity, TrackPointEntity
+│       └── AppDatabase # Room Database (versão 6, com migrações)
 ├── service/
-│   └── TelemetryService  # Coração do app — GPS, sensores, cronômetro, detecção de volta
+│   └── TelemetryService  # Coração do app — GPS, sensores, cronômetro, detecção de volta, captura do traçado
 └── ui/
     ├── help/           # HelpScreen
     ├── history/        # HistoryScreen + HistoryViewModel
     ├── onboarding/     # OnboardingScreen
-    ├── session/        # SessionAnalyzerScreen, OpenTrackAnalyzerScreen, SessionViewModel
+    ├── session/        # SessionAnalyzerScreen, OpenTrackAnalyzerScreen, SessionViewModel,
+    │                   #   LapTraceScreen + LapTraceViewModel, ShareCardGenerator (card PNG)
     ├── settings/       # SettingsScreen
+    ├── shared/         # TrackOutlineView (contorno normalizado da pista)
     ├── theme/          # AppColors (constantes de cor centralizadas)
     └── track/          # TrackConfigScreen + TrackViewModel
     MainActivity.kt     # NavHost, Dashboard (Portrait/Landscape), HomeScreen
@@ -146,7 +151,8 @@ br.com.ghfsoftware.polepositionapp
 2. Acesse o **Histórico** para ver todas as sessões por circuito.
 3. Toque em uma sessão para ver a lista de voltas com tempos e delta.
 4. Toque em uma volta para ver o detalhe completo (velocidades, G-force, parciais).
-5. Toque no ícone de compartilhamento para exportar os dados em CSV.
+5. Toque no ícone de compartilhamento para exportar os dados em CSV ou gerar o card de análise em imagem.
+6. Se o traçado GPS estiver ativado para a pista, acesse a análise de traçado para ver os gráficos e comparar sessões.
 
 ---
 
@@ -155,6 +161,18 @@ br.com.ghfsoftware.polepositionapp
 - Android 8.0 (API 26) ou superior
 - Permissões: Localização (Precisa — em primeiro plano), Sensores
 - Google Play Services
+
+---
+
+## Documentação e Privacidade
+
+- [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md) — Política de privacidade publicada, com resumo no formato da ficha de **Segurança dos Dados** do Google Play.
+- [`docs/data_safety_form_guide.md`](docs/data_safety_form_guide.md) — Guia de preenchimento do formulário de Segurança dos Dados do Play Console.
+- [`docs/maturity_assessment.md`](docs/maturity_assessment.md) — Avaliação de maturidade do produto.
+- [`docs/aso_plan.md`](docs/aso_plan.md) — Plano de ASO (App Store Optimization).
+- [`docs/PolePositionContent.md`](docs/PolePositionContent.md) — Conteúdo de marketing e textos do app.
+
+> **Privacidade:** dados processados apenas no dispositivo (GPS preciso, traçado, sensores, conteúdo do usuário) nunca são transmitidos. Apenas métricas anônimas de uso vão para o Firebase Analytics. Ao alterar coleta/armazenamento de dados, atualizar a política **e** o guia da ficha de Segurança dos Dados.
 
 ---
 
