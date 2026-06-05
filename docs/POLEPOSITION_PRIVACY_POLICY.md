@@ -1,6 +1,6 @@
 # Política de Privacidade — Pole Position: Race Analytics
 
-**Última atualização:** maio de 2026
+**Última atualização:** junho de 2026
 
 Esta Política de Privacidade descreve como o aplicativo **Pole Position: Race Analytics** ("o App", "nós") coleta, usa, armazena e protege as informações dos usuários ("você"). Ao instalar e utilizar o App, você concorda com os termos desta política.
 
@@ -9,6 +9,35 @@ Esta Política de Privacidade descreve como o aplicativo **Pole Position: Race A
 ## 1. Sobre o Aplicativo
 
 O **Pole Position: Race Analytics** é um aplicativo de telemetria esportiva para Android desenvolvido para pilotos de kart e automobilismo amador. O App utiliza o GPS e os sensores de movimento do dispositivo para registrar voltas, calcular tempos, medir força G lateral e fornecer análise de desempenho em pista.
+
+---
+
+## Resumo de Segurança dos Dados (Google Play)
+
+Este resumo reflete as informações declaradas na seção **Segurança dos Dados** da ficha do App na Google Play Store. Conforme a definição do Google, **dados processados exclusivamente no dispositivo e nunca transmitidos para fora dele não são considerados "coletados" nem "compartilhados"**.
+
+### Dados coletados (enviados para fora do dispositivo)
+
+| Tipo de dado | Coletado | Compartilhado | Finalidade | Coleta opcional |
+|---|---|---|---|---|
+| Localização aproximada (derivada do IP pelo Firebase) | Sim | Não | Análises | Não |
+| Atividade no app (interações e eventos de uso) | Sim | Não | Análises | Não |
+| IDs (ID de instância do app gerado pelo Firebase) | Sim | Não | Análises | Não |
+
+### Dados processados apenas no dispositivo (não declarados como coletados)
+
+Os dados a seguir **nunca saem do dispositivo** e, portanto, não são declarados como coletados nem compartilhados na ficha — exceto quando o próprio usuário decide exportá-los ou compartilhá-los manualmente (ver seções 5 e 8):
+
+- **Localização precisa (GPS)** e o **traçado da volta** (sequência de coordenadas) — armazenados apenas no banco de dados local.
+- **Dados dos sensores de movimento** (força G lateral e longitudinal).
+- **Conteúdo inserido pelo usuário** (nomes de circuitos, notas de sessão, tempos de volta e parciais).
+
+### Práticas de segurança
+
+- **Os dados são criptografados em trânsito** (conexão HTTPS para o Firebase).
+- **Você pode solicitar a exclusão dos seus dados:** os dados locais são removidos ao desinstalar o App ou ao excluí-los individualmente nas telas do App; os dados de análise podem ser apagados redefinindo o identificador de análise do dispositivo (ver seção 8).
+- **Nenhum dado é vendido nem compartilhado com terceiros** para fins próprios desses terceiros.
+- O App **não coleta dados de identificação pessoal** (nome, e-mail, telefone, dados financeiros).
 
 ---
 
@@ -21,6 +50,7 @@ O App solicita permissão de **localização precisa** (`ACCESS_FINE_LOCATION`) 
 - Detectar o cruzamento da linha de chegada e das linhas de setor com precisão de milissegundos.
 - Calcular a velocidade do veículo em tempo real (km/h) a partir dos dados de GPS.
 - Centralizar o mapa na posição atual durante a configuração de circuitos.
+- Registrar o **traçado da melhor volta** (sequência de coordenadas GPS amostradas durante a sessão), quando o usuário ativa esse recurso para uma pista (ver seção 2.5).
 
 A localização é utilizada **exclusivamente dentro do dispositivo**. Nenhuma coordenada GPS é transmitida para servidores externos, terceiros ou qualquer serviço de nuvem.
 
@@ -31,7 +61,7 @@ O App acessa o **acelerômetro** e o **giroscópio** do dispositivo para:
 - Medir a força G lateral durante a pilotagem.
 - Exibir dados de aceleração em tempo real no painel.
 
-Os dados dos sensores são processados localmente e em memória. Nenhum dado bruto de sensor é persistido no banco de dados ou transmitido externamente.
+Os dados dos sensores são processados localmente e em memória. As leituras de força G (lateral e longitudinal) **não são transmitidas externamente**. Elas são persistidas localmente apenas como parte do traçado da melhor volta, quando o usuário ativa esse recurso para uma pista (ver seção 2.5); fora desse recurso, nenhum dado bruto de sensor é gravado no banco de dados.
 
 ### 2.3 Dados Inseridos pelo Usuário
 
@@ -60,7 +90,16 @@ O App integra o **Firebase Analytics** (Google LLC) para coleta anônima de mét
 
 Esses dados são usados exclusivamente para entender quais funcionalidades são utilizadas e melhorar o App em versões futuras. Não há venda ou compartilhamento dessas informações para fins publicitários.
 
-### 2.5 Dados NÃO Coletados
+### 2.5 Traçado da Volta (GPS) — Recurso Opcional
+
+O App oferece um recurso de **análise de traçado** que registra a sequência de coordenadas GPS da melhor volta de cada sessão para gerar gráficos de velocidade, força G e o contorno do circuito. Sobre esse recurso:
+
+- É **estritamente opcional e opt-in**: o registro só ocorre depois que o usuário ativa explicitamente o traçado para uma pista específica. Por padrão, ele vem **desativado**.
+- Os pontos registrados (coordenada GPS, velocidade e força G por instante) são armazenados **exclusivamente no banco de dados local do dispositivo** e nunca são enviados a servidores externos.
+- A retenção é limitada: o App guarda o traçado de no máximo **3 sessões por pista**, removendo automaticamente os mais antigos para liberar espaço.
+- O usuário pode desativar o recurso a qualquer momento e excluir os traçados armazenados (ver seção 8).
+
+### 2.6 Dados NÃO Coletados
 
 O App **não coleta, não armazena e não transmite**:
 
@@ -83,6 +122,7 @@ O App **não coleta, não armazena e não transmite**:
 | `FOREGROUND_SERVICE_LOCATION` | Classificação do serviço de localização em primeiro plano (exigência Android 14+) |
 | `WAKE_LOCK` | Impede que o processador suspenda durante sessões para garantir captura contínua |
 | `HIGH_SAMPLING_RATE_SENSORS` | Acesso a leituras do acelerômetro e giroscópio em alta frequência |
+| `ACCESS_NOTIFICATION_POLICY` | Suprimir notificações externas durante a sessão, quando o usuário ativa essa opção |
 | `INTERNET` | Envio de eventos anônimos ao Firebase Analytics e carregamento do mapa (Google Maps) |
 
 A permissão `ACCESS_BACKGROUND_LOCATION` é utilizada **somente durante sessões de pilotagem ativas**, quando o usuário inicia explicitamente uma sessão no App. Ela garante que o serviço de telemetria continue registrando corretamente mesmo que o piloto minimize o App ou o dispositivo apague a tela durante a corrida. O App não rastreia a localização do usuário fora do contexto de uma sessão ativa.
@@ -103,7 +143,12 @@ A permissão `ACCESS_BACKGROUND_LOCATION` é utilizada **somente durante sessõe
 
 O App não compartilha dados de pilotagem com terceiros de forma automática.
 
-O único mecanismo de compartilhamento de dados de sessão disponível é a **exportação manual de CSV**, acionada exclusivamente pelo usuário no botão de compartilhamento da tela de análise de sessão. O arquivo gerado contém apenas os dados de telemetria da sessão selecionada e é entregue ao aplicativo de compartilhamento escolhido pelo próprio usuário (e-mail, mensageiro, armazenamento em nuvem etc.). O App não retém cópia do arquivo após o compartilhamento.
+Os mecanismos de compartilhamento de dados de sessão são sempre **acionados manualmente pelo próprio usuário** e o conteúdo é entregue ao aplicativo de destino escolhido por ele (e-mail, mensageiro, armazenamento em nuvem etc.). São eles:
+
+- **Exportação de CSV**, acionada no botão de compartilhamento da tela de análise de sessão. O arquivo gerado contém apenas os dados de telemetria da sessão selecionada.
+- **Card de análise (imagem PNG)**, gerado na tela de traçado da volta. A imagem é montada inteiramente no dispositivo e contém o contorno do circuito (uma forma normalizada, derivada do traçado GPS, sem coordenadas geográficas absolutas), gráficos de desempenho (velocidade, força G) e um QR code que aponta para a página do App na Google Play Store.
+
+Em ambos os casos, o App **não retém cópia** do arquivo após o compartilhamento e nenhum dado é enviado a servidores do desenvolvedor.
 
 Dados anônimos de uso (eventos Firebase Analytics) são processados pelo Google conforme descrito na seção 6.
 
@@ -138,6 +183,7 @@ Como os dados de pilotagem são armazenados localmente no seu dispositivo, você
 - **Acesso:** Os dados podem ser visualizados diretamente nas telas do App.
 - **Exportação:** Os dados podem ser exportados via CSV a qualquer momento.
 - **Exclusão parcial:** Voltas, sessões e circuitos podem ser excluídos individualmente pelo App.
+- **Controle do traçado GPS:** O registro do traçado da volta é opt-in por pista e pode ser desativado a qualquer momento; os traçados já armazenados podem ser removidos pelo App.
 - **Exclusão total:** A desinstalação do App remove todos os dados armazenados localmente.
 
 Para dados coletados pelo Firebase Analytics, você pode desativar a coleta nas configurações do seu dispositivo Android em **Configurações > Google > Anúncios > Cancelar personalização de anúncios** ou, em versões mais recentes, por meio das opções de privacidade do Google Play Services.

@@ -312,6 +312,42 @@
                     <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat6_title">Análise de Sessão & CSV</h3>
                     <p class="text-sm text-gray-400 leading-relaxed" data-i18n="feat6_desc">Históricos organizados por pista, com velocidade máxima, velocidades mínimas, Força G e exportação estruturada para arquivos CSV.</p>
                 </div>
+
+                <!-- Feature 7: Análise de Traçado (Lap Trace) -->
+                <div class="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-route text-8xl text-brand-primary"></i>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-route text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat7_title">Análise de Traçado (Lap Trace)</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="feat7_desc">Visualização gráfica do traçado GPS da melhor volta com gráficos de velocidade e força G para comparar desempenho entre sessões.</p>
+                </div>
+
+                <!-- Feature 8: Card de Compartilhamento -->
+                <div class="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-image text-8xl text-brand-primary"></i>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-share-nodes text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat8_title">Card de Compartilhamento</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="feat8_desc">Geração de card em imagem (PNG) com o traçado da pista, dados de performance e QR code para compartilhar suas conquistas.</p>
+                </div>
+
+                <!-- Feature 9: 100% Offline & Seguro -->
+                <div class="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                         <i class="fa-solid fa-shield-halved text-8xl text-brand-primary"></i>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                        <i class="fa-solid fa-user-shield text-2xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat9_title">100% Offline & Seguro</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed" data-i18n="feat9_desc">Processamento local seguro no dispositivo. Sem necessidade de internet ou contas de usuário, mantendo seus dados protegidos.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -520,7 +556,7 @@
                 <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Jetpack Compose (Material 3)</span>
                 <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">MVVM + StateFlow</span>
                 <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Hilt Injection</span>
-                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Room Database (Room v5)</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Room Database (Room v6)</span>
                 <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Google Play Services Location (10Hz)</span>
                 <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">SensorManager (Accelerometer & Gyroscope)</span>
                 <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Foreground Service (TelemetryService)</span>
@@ -621,6 +657,12 @@
                 feat5_desc: "Mira interativa com ajuste de ângulo do gate (passos de 1° e 15°). Suporta até 2 setores customizados por circuito.",
                 feat6_title: "Análise de Sessão & CSV",
                 feat6_desc: "Históricos organizados por pista, com velocidade máxima, velocidades mínimas, Força G e exportação estruturada para arquivos CSV.",
+                feat7_title: "Análise de Traçado (Lap Trace)",
+                feat7_desc: "Visualização gráfica do traçado GPS da melhor volta com gráficos de velocidade e força G para comparar desempenho entre sessões.",
+                feat8_title: "Card de Compartilhamento",
+                feat8_desc: "Geração de card em imagem (PNG) com o traçado da pista, dados de performance e QR code para compartilhar suas conquistas.",
+                feat9_title: "100% Offline & Seguro",
+                feat9_desc: "Processamento local seguro no dispositivo. Sem necessidade de internet ou contas de usuário, mantendo seus dados protegidos.",
 
                 workflow_badge: "Fluxo de Trabalho",
                 workflow_title: "Como Utilizar no Cockpit",
@@ -631,7 +673,7 @@
                 step3_title: "Acelerar",
                 step3_desc: "Inicie a sessão e pilote. A primeira passagem cruza a linha iniciando a telemetria automaticamente.",
                 step4_title: "Analisar",
-                step4_desc: "Finalize a sessão no pit lane e exporte o relatório das voltas e dados consolidados em formato CSV.",
+                step4_desc: "Finalize a sessão, exporte em CSV, gere o card de análise em imagem ou confira os gráficos de traçado de volta (GPS).",
 
                 compare_badge: "Comparativo",
                 compare_title: "Pole Position vs. Alternativas",
@@ -720,6 +762,12 @@
                 feat5_desc: "Interactive map targeting with fine-grained gate rotation adjustments (1° and 15° steps). Set up to 2 splits per track.",
                 feat6_title: "Session Analytics & CSV",
                 feat6_desc: "Track-grouped logs with detailed analysis: top speeds, minimum speeds, maximum G-forces, split delta comparison, and CSV export.",
+                feat7_title: "Lap Trace Analysis",
+                feat7_desc: "Graphic visualization of the best lap's GPS trace with speed and G-force charts to compare performance between sessions.",
+                feat8_title: "Analysis Share Card",
+                feat8_desc: "Generate an analysis card as a PNG image with track outline, performance metrics, and a Play Store QR code to share achievements.",
+                feat9_title: "100% Offline & Secure",
+                feat9_desc: "Secure on-device local processing. No internet or accounts needed, keeping your data fully private.",
 
                 workflow_badge: "Workflow",
                 workflow_title: "How to Use in the Cockpit",
@@ -730,7 +778,7 @@
                 step3_title: "Drive",
                 step3_desc: "Start monitoring and drive out. The timer starts automatically upon your first crossing of the finish line gate.",
                 step4_title: "Analyze & Share",
-                step4_desc: "Stop tracking in the pit lane, review lap details, and share/export session data into structured CSV spreadsheets.",
+                step4_desc: "Finish your session, export data as CSV, generate image analysis cards, or review interactive lap trace charts.",
 
                 compare_badge: "Comparison",
                 compare_title: "Pole Position vs. Alternatives",
