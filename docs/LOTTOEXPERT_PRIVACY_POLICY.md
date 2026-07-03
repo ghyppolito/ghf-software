@@ -1,6 +1,6 @@
 # Política de Privacidade — LottoExpert
 
-**Última atualização:** 19 de Maio de 2026
+**Última atualização:** 03 de Julho de 2026
 
 Esta Política de Privacidade descreve como o aplicativo **LottoExpert** coleta, usa e protege suas informações. Nosso compromisso fundamental é com a **privacidade** e a segurança dos dados dos usuários.
 
@@ -25,7 +25,9 @@ O LottoExpert **não coleta, não transmite e não armazena** em servidores remo
 - Imagens capturadas pela câmera
 - Dados de localização
 
-**Nota sobre nomes em Bolões:** Os nomes de participantes inseridos no módulo "Meus Bolões" são armazenados exclusivamente no banco de dados local do seu dispositivo e nunca são enviados para nossos servidores. Esses nomes só deixam o aparelho se e quando você optar explicitamente por compartilhar um link de convite ou exportar um PDF.
+**Nota sobre nomes em Bolões:** Os nomes de participantes inseridos no módulo "Meus Bolões" são armazenados exclusivamente no banco de dados local do seu dispositivo e nunca são enviados para nossos servidores. Esses nomes só deixam o aparelho se e quando você optar explicitamente por compartilhar um link de convite, exportar um PDF ou ativar o backup no Google Drive (ver Seção 4.9).
+
+**Nota sobre o Backup no Google Drive (Premium):** Caso você ative explicitamente esse recurso opcional, uma cópia dos seus jogos salvos, bolões (incluindo nomes de participantes) e preferências é enviada para uma pasta oculta e privada do **seu próprio Google Drive**, controlada por você. Mesmo nesse caso, **o desenvolvedor não coleta, não recebe e não tem acesso** a esses dados — eles permanecem sob seu controle na sua conta Google. Detalhes na Seção 4.9.
 
 ---
 
@@ -89,7 +91,7 @@ Para o funcionamento do app, comunicamos com os seguintes serviços externos:
 ### 4.7 Firebase Analytics (Google)
 
 - **Finalidade:** Medir o uso agregado e anônimo das funcionalidades do app para melhorar a experiência do usuário, orientar o desenvolvimento e — em forma estritamente agregada, sem identificação individual — otimizar campanhas publicitárias do próprio desenvolvedor em plataformas como Google Ads e Meta Ads (Facebook/Instagram). Nenhum dado individual é compartilhado com essas plataformas; o uso é restrito a métricas agregadas de conversão (ex.: quantidade total de usuários que realizaram uma compra) para calibrar públicos de anúncios de forma estatística.
-- **Dados enviados:** Eventos de uso pseudônimos e agregados. Exemplos de eventos coletados: `generate_matrix`, `scan_ocr`, `export_pdf`, `sweepstake_created`, `sweepstake_copied`, `backtest_run`, `view_paywall`, `purchase_premium`, `ticket_checked`, `trial_scan_used`, `sync_complete`, `sync_error`, `onboarding_completed`, `notification_permission_granted`. **Nenhuma dezena selecionada, nenhum dado financeiro e nenhum dado pessoal identificável é transmitido.**
+- **Dados enviados:** Eventos de uso pseudônimos e agregados. Exemplos de eventos coletados: `generate_matrix`, `scan_ocr`, `export_pdf`, `sweepstake_created`, `sweepstake_copied`, `backtest_run`, `view_paywall`, `purchase_premium`, `ticket_checked`, `trial_scan_used`, `sync_complete`, `sync_error`, `onboarding_completed`, `notification_permission_granted`, `backup_started`, `backup_completed`, `backup_failed`, `restore_completed`. Os eventos de backup registram apenas metadados anônimos (ex.: quantidade total de itens e se a operação foi manual ou automática) — **nunca o conteúdo dos jogos, bolões ou preferências**. **Nenhuma dezena selecionada, nenhum dado financeiro e nenhum dado pessoal identificável é transmitido.**
 - **Identificador técnico:** O Firebase Analytics utiliza um `app_instance_id` pseudônimo por instalação, que não permite identificar o usuário individualmente. Esse identificador pode ser redefinido a qualquer momento desinstalando e reinstalando o aplicativo.
 - **Advertising ID:** A coleta do Advertising ID (GAID) está **desativada** de forma explícita no código do aplicativo. O LottoExpert não exibe anúncios e não integra nenhum SDK de publicidade de terceiros.
 - **Base legal (LGPD):** Legítimo interesse do desenvolvedor (Art. 7º, IX, LGPD) para melhoria do produto e otimização de campanhas próprias, com dados tratados de forma agregada e pseudônima, sem impacto desproporcional ao usuário.
@@ -100,6 +102,17 @@ Para o funcionamento do app, comunicamos com os seguintes serviços externos:
 - **Finalidade:** Compartilhamento de dados de bolões entre usuários via link ou QR code.
 - **Funcionamento:** O app gera um link (e opcionalmente um QR code) que contém os dados do bolão codificados via GZIP e Base64, sem passar por servidores do desenvolvedor.
 - **Privacidade:** O desenvolvedor não tem acesso aos links ou QR codes gerados. Como os dados estão contidos na própria URL, a segurança do compartilhamento depende da cautela do usuário ao enviar o link ou imagem para terceiros.
+
+### 4.9 Backup no Google Drive (Google) — Recurso Premium Opcional
+
+- **Finalidade:** Permitir que o usuário Premium salve e restaure seus próprios dados do aplicativo (jogos salvos, bolões e preferências) na **sua conta pessoal do Google Drive**, para recuperação em caso de troca ou perda do dispositivo.
+- **Natureza opcional:** O recurso é **desativado por padrão** e só entra em funcionamento quando o usuário **autoriza explicitamente** o acesso ao Drive por meio da tela de consentimento OAuth do Google. Nenhum dado é enviado ao Drive antes dessa autorização.
+- **Dados enviados:** Uma cópia dos seus **jogos salvos**, **bolões** (incluindo nomes de participantes e cotas) e **preferências de uso** do app, serializada em formato JSON e comprimida (GZIP).
+- **Onde são armazenados:** Exclusivamente na pasta oculta e privada de aplicativo (`appDataFolder`) do **Google Drive do próprio usuário**. Essa pasta é isolada: só é acessível por este aplicativo, não aparece na lista normal de arquivos do Drive do usuário, e **não é visível nem acessível a outros aplicativos ou a outros usuários**.
+- **Acesso do desenvolvedor:** **Nenhum.** Os dados trafegam diretamente entre o seu dispositivo e a sua conta Google. O desenvolvedor **não recebe, não armazena e não tem qualquer acesso** ao conteúdo do backup. O aplicativo utiliza apenas o escopo `https://www.googleapis.com/auth/drive.appdata`, que **restringe o acesso unicamente à pasta de dados do próprio app** — o app não pode ler nem modificar nenhum outro arquivo do seu Drive.
+- **Backup automático:** Se ativado pelo usuário, o app pode realizar backups periódicos em segundo plano, reutilizando a autorização já concedida. O usuário pode desativar o backup automático a qualquer momento nas configurações do recurso.
+- **Como revogar e excluir:** O usuário pode revogar o acesso do app ao Drive a qualquer momento em [myaccount.google.com/connections](https://myaccount.google.com/connections) (Segurança → Acesso de terceiros). Os dados do backup podem ser excluídos gerenciando os dados de aplicativos ocultos nas configurações do Google Drive, ou desinstalando o aplicativo.
+- **Política do Google:** Sujeita à [Política de Privacidade do Google](https://policies.google.com/privacy) e aos [Termos de Serviço do Google Drive](https://www.google.com/drive/terms-of-service/).
 
 ---
 
@@ -137,6 +150,7 @@ O LottoExpert é destinado a usuários **maiores de 18 anos**, dada a natureza d
 - As requisições à infraestrutura do desenvolvedor (GCP) são autenticadas via Firebase App Check e transmitidas exclusivamente via HTTPS.
 - O bucket de dados no GCP possui acesso público bloqueado — somente o serviço de sincronização do desenvolvedor pode gravar, e somente o serviço de leitura autenticado por App Check pode servir dados ao app.
 - Utilizamos Firebase Analytics exclusivamente com eventos anônimos e agregados para fins de melhoria do produto, sem coleta de Advertising ID ou identificadores de usuário (ver seção 4.7).
+- O backup opcional no Google Drive (Seção 4.9) trafega via HTTPS diretamente entre o dispositivo do usuário e a sua própria conta Google, utilizando o escopo restrito `drive.appdata`, sem intermediação nem acesso do desenvolvedor.
 - Não utilizamos SDKs de publicidade ou rastreadores de comportamento para fins comerciais.
 
 ---
@@ -155,6 +169,7 @@ O LottoExpert respeita integralmente a **Lei nº 13.709/2018 (LGPD)**. Esta seç
 | Firebase Crashlytics (diagnóstico de falhas) | Legítimo interesse — manutenção e melhoria do serviço — Art. 7º, IX |
 | Firebase Analytics (uso agregado do app) | Legítimo interesse — melhoria do produto e otimização de campanhas próprias — Art. 7º, IX |
 | Firebase Remote Config (preços de apostas) | Legítimo interesse — Art. 7º, IX |
+| Backup no Google Drive do usuário (Premium, opcional) | Consentimento — Art. 7º, I (autorização OAuth explícita, revogável a qualquer momento) |
 | Dados locais (jogos, bolões, preferências) | Execução de contrato / consentimento implícito pelo uso — Art. 7º, V |
 
 ### 9.2 Direitos do Titular
@@ -175,7 +190,7 @@ Como titular de dados, você tem os seguintes direitos garantidos pela LGPD (Art
 
 ### 9.3 Transferência Internacional de Dados
 
-Os serviços Firebase (Analytics, Crashlytics, App Check, Remote Config) e Google Cloud Platform são operados pelo Google, com servidores localizados fora do Brasil. Essas transferências são realizadas com base nas cláusulas contratuais padrão do Google, que fornecem garantias equivalentes às exigidas pela LGPD (Art. 33, II). Consulte a [Política de Privacidade do Google](https://policies.google.com/privacy) para detalhes.
+Os serviços Firebase (Analytics, Crashlytics, App Check, Remote Config), Google Cloud Platform e Google Drive (backup opcional na conta do usuário) são operados pelo Google, com servidores localizados fora do Brasil. Essas transferências são realizadas com base nas cláusulas contratuais padrão do Google, que fornecem garantias equivalentes às exigidas pela LGPD (Art. 33, II). Consulte a [Política de Privacidade do Google](https://policies.google.com/privacy) para detalhes.
 
 ---
 
