@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termos de Serviço LottoExpert - GHF Software</title>
+    <link rel="icon" type="image/png" href="./assets/lottoexpert_favicon_v3.png">
+    <meta name="description" content="Termos de Serviço do aplicativo LottoExpert desenvolvido pela GHF Software.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            base: '#0B1120',
+                            surface: '#111827',
+                            primary: '#8B5CF6', /* Violet for LottoExpert */
+                            primaryHover: '#7C3AED', 
+                            secondary: '#3B82F6',
+                            accent: '#06B6D4',
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(139, 92, 246, 0.4)',
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'tech-grid': 'linear-gradient(to right, #1f2937 1px, transparent 1px), linear-gradient(to bottom, #1f2937 1px, transparent 1px)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B1120;
+            color: #f3f4f6;
+        }
+
+        .bg-grid-pattern {
+            background-color: #0B1120;
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #navbar {
+            transition: all 0.3s ease;
+        }
+
+        #navbar.scrolled {
+            background: rgba(11, 17, 32, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body class="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav id="navbar"
+        class="fixed w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center transition-all duration-300">
+        <a href="index.html" class="flex items-center group">
+            <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+            <a href="index.html#sobre" class="text-gray-300 hover:text-white hover:text-brand-primary transition-colors" data-i18n="nav_about">Sobre Nós</a>
+            <a href="index.html#portfolio"
+                class="text-gray-300 hover:text-white hover:text-brand-primary transition-colors" data-i18n="nav_portfolio">Portfólio</a>
+            <a href="index.html#contato"
+                class="px-5 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-brand-primary hover:text-brand-primary transition-all duration-300" data-i18n="nav_contact">Contato</a>
+            
+            <button onclick="toggleLang()" class="flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold tracking-wide">
+                <i class="fa-solid fa-globe"></i>
+                <span id="lang-indicator">EN</span>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="flex items-center gap-4 md:hidden">
+            <button onclick="toggleLang()" class="flex items-center gap-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold text-sm">
+                <i class="fa-solid fa-globe"></i>
+                <span id="lang-indicator-mobile">EN</span>
+            </button>
+            <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none ml-2">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-brand-base z-40 flex flex-col justify-center items-center gap-8 text-lg font-medium glass-panel opacity-0 pointer-events-none transition-opacity duration-300">
+        <a href="index.html#sobre"
+            class="mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors" data-i18n="nav_about">Sobre Nós</a>
+        <a href="index.html#portfolio"
+            class="mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors" data-i18n="nav_portfolio">Portfólio</a>
+        <a href="index.html#contato"
+            class="mobile-link px-6 py-2 rounded-full bg-brand-primary text-white hover:bg-brand-primaryHover transition-colors" data-i18n="nav_contact">Contato</a>
+    </div>
+
+    <!-- Header Margin Compensation -->
+    <div class="w-full pt-32 pb-12 bg-grid-pattern relative border-b border-gray-800/50">
+        <div class="absolute inset-0 bg-gradient-to-b from-brand-base via-transparent to-brand-base z-0"></div>
+        <div class="container mx-auto px-6 md:px-12 relative z-10 text-center">
+            <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-brand-primary/30 bg-brand-primary/20 text-sm text-brand-primary font-semibold">
+                <i class="fa-solid fa-file-contract mr-2"></i> Documento Legal
+            </div>
+            <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight" data-i18n="page_title">
+                Termos de Serviço — LottoExpert
+            </h1>
+            <p class="text-gray-500 text-lg" data-i18n="last_updated">
+                Última atualização: 03 de Julho de 2026
+            </p>
+        </div>
+    </div>
+
+    <!-- Terms Content -->
+    <main class="py-16 relative z-10 bg-brand-base">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="max-w-4xl mx-auto glass-panel p-8 md:p-12 rounded-2xl shadow-xl">
+                
+                <p class="text-lg text-gray-300 leading-relaxed mb-8 pb-8 border-b border-gray-800" data-i18n="intro">
+                    Bem-vindo ao <strong>LottoExpert</strong>. Ao baixar, instalar ou utilizar o aplicativo, você concorda com os termos abaixo. Se não concordar, não utilize o aplicativo.
+                </p>
+
+                <div id="dynamic-content" class="leading-relaxed text-gray-400">
+                    <!-- Javascript injects content here -->
+                </div>
+
+            </div>
+            
+            <div class="max-w-4xl mx-auto mt-8 text-center">
+                <a href="index.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-gray-700 text-gray-300 hover:text-white hover:border-brand-primary hover:bg-gray-800/50 transition-all font-semibold">
+                    <i class="fa-solid fa-arrow-left"></i> <span data-i18n="btn_back">Voltar para a GHF Software</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contato" class="bg-brand-surface pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden">
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+
+                <!-- Brand Info -->
+                <div class="md:col-span-2 lg:col-span-2">
+                    <a href="index.html" class="inline-block mb-6 group">
+                        <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+                    </a>
+                    <p class="text-gray-400 max-w-sm mb-6" data-i18n="footer_desc">
+                        Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.
+                    </p>
+                    <div class="flex items-center gap-4 text-gray-400">
+                        <a href="mailto:support@ghfsoftware.com" class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-gray-700 hover:text-white transition-all"><i class="fa-solid fa-envelope"></i></a>
+                    </div>
+                </div>
+
+                <!-- Links Institucionais -->
+                <div>
+                    <h4 class="text-white font-semibold mb-6" data-i18n="footer_inst">Institucional</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html#sobre" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm" data-i18n="nav_about">Sobre Nós</a></li>
+                        <li><a href="index.html#portfolio" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm" data-i18n="footer_port">Portfólio de Apps</a></li>
+                        <li><a href="index.html#contato" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm" data-i18n="footer_cont">Contato Profissional</a></li>
+                    </ul>
+                </div>
+
+                <!-- Aplicativos -->
+                <div>
+                    <h4 class="text-white font-semibold mb-6" data-i18n="footer_apps">Aplicativos</h4>
+                    <ul class="space-y-3">
+                        <li><a href="lottoexpert.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">LottoExpert</a></li>
+                        <li><a href="topowalk.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">TopoWalk</a></li>
+                        <li><a href="poleposition.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">Pole Position</a></li>
+                    </ul>
+                </div>
+
+                <!-- Políticas -->
+                <div>
+                    <h4 class="text-white font-semibold mb-6" data-i18n="footer_transp">Transparência & Políticas</h4>
+                    <ul class="space-y-3">
+                        <li><a href="lottoexpert-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_lotto">Privacidade - LottoExpert</span></a></li>
+                        <li><a href="lottoexpert-terms.html" class="text-brand-primary hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-file-contract text-brand-primary text-xs"></i> <span data-i18n="footer_terms_lotto">Termos - LottoExpert</span></a></li>
+                        <li><a href="poleposition-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_pole">Privacidade - Pole Position</span></a></li>
+                        <li><a href="topowalk-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_topo">Privacidade - TopoWalk</span></a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Copyright Banner -->
+            <div class="pt-8 border-t border-gray-800/80 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">
+                    &copy; <span id="year"></span> <span data-i18n="footer_rights">GHF Software. Todos os direitos reservados.</span>
+                </p>
+                <p class="text-sm text-gray-600 flex items-center gap-2">
+                    <span data-i18n="footer_dev">Desenvolvido com</span> <i class="fa-solid fa-heart text-brand-primary/50 text-xs"></i> <span data-i18n="footer_dev2">por especialistas.</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts & i18n -->
+    <script>
+        const i18n = {
+            pt: {
+                nav_about: "Sobre Nós",
+                nav_portfolio: "Portfólio",
+                nav_contact: "Contato",
+                page_title: "Termos de Serviço — LottoExpert",
+                last_updated: "Última atualização: 03 de Julho de 2026",
+                intro: "Bem-vindo ao <strong>LottoExpert</strong>. Ao baixar, instalar ou utilizar o aplicativo, você concorda com os termos abaixo. Se não concordar, não utilize o aplicativo.",
+                btn_back: "Voltar para a GHF Software",
+                footer_apps: "Aplicativos",
+                footer_desc: "Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.",
+                footer_inst: "Institucional",
+                footer_port: "Portfólio de Apps",
+                footer_cont: "Contato Profissional",
+                footer_transp: "Transparência & Políticas",
+                footer_priv_pole: "Privacidade - Pole Position",
+                footer_priv_topo: "Privacidade - TopoWalk",
+                footer_priv_lotto: "Privacidade - LottoExpert",
+                footer_terms_lotto: "Termos - LottoExpert",
+                footer_rights: "GHF Software. Todos os direitos reservados.",
+                footer_dev: "Desenvolvido com ",
+                footer_dev2: " por especialistas.",
+                content: `
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">1. Sobre o Serviço</h2>
+                    <p class="mb-4">O LottoExpert é um aplicativo de <strong>análise estatística e matemática</strong> para loterias brasileiras. Ele oferece geração de fechamentos, filtros matemáticos, backtesting histórico, conferência de bilhetes, estatísticas de frequência/atraso e organização de bolões entre participantes.</p>
+                    <p class="mb-4">O aplicativo é desenvolvido e mantido pela <strong>GHF Software</strong> ("desenvolvedor", "nós").</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">2. Isenção de Responsabilidade</h2>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>O LottoExpert é uma <strong>ferramenta de simulação e estatística matemática</strong>. Todas as análises, combinações e probabilidades geradas pelo aplicativo são baseadas exclusivamente em dados históricos e modelos matemáticos.</li>
+                        <li>Este aplicativo <strong>NÃO realiza apostas reais</strong> e não possui qualquer vínculo, parceria ou endosso da Caixa Econômica Federal ou de qualquer outra empresa de loterias.</li>
+                        <li>O desenvolvedor <strong>não se responsabiliza</strong> por perdas financeiras, danos diretos ou indiretos decorrentes de apostas realizadas em canais oficiais com base nas análises fornecidas por este aplicativo.</li>
+                        <li>Os resultados gerados são baseados em análise estatística histórica e <strong>não constituem garantia, previsão ou promessa de premiação</strong>. Jogos de loteria são eventos aleatórios, e nenhum método estatístico altera as probabilidades oficiais de cada modalidade.</li>
+                        <li>O aplicativo é fornecido <strong>"como está"</strong> ("as is"), sem garantias de disponibilidade ininterrupta, ausência de erros, ou de que os resultados sincronizados estarão sempre atualizados no momento exato da consulta.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">3. Elegibilidade e Uso Responsável</h2>
+                    <p class="mb-4">O LottoExpert é destinado a usuários <strong>maiores de 18 anos</strong>, dada a natureza do conteúdo (loterias e jogos de azar regulamentados pela legislação brasileira).</p>
+                    <p class="mb-4">Loterias são uma forma de <strong>entretenimento</strong>. Recomendamos tratá-las como lazer, nunca como fonte de renda ou investimento, definir um orçamento fixo e respeitá-lo, e nunca jogar com dinheiro destinado a necessidades básicas.</p>
+                    <p class="mb-4 text-sm bg-gray-800/50 p-4 rounded-lg border-l-4 border-brand-primary">Caso você ou alguém que conhece esteja com dificuldades relacionadas ao jogo, há suporte disponível: <strong>Jogadores Anônimos do Brasil</strong> (<a href="https://www.jogadoresanonimos.com.br/" target="_blank" class="text-brand-primary hover:underline">jogadoresanonimos.com.br</a>) ou <strong>CVV — Ligue 188</strong> (apoio emocional, 24 horas). Essas informações também estão disponíveis dentro do app em Sobre &rarr; Jogo Responsável.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Conta Premium — Assinaturas e Pagamentos</h2>
+                    <p class="mb-4">O LottoExpert Premium é oferecido em três planos, processados via <strong>Google Play Billing</strong>:</p>
+                    <div class="overflow-x-auto mb-6">
+                        <table class="w-full text-left border-collapse font-sans">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="py-2 pr-4 font-bold text-white">Plano</th>
+                                    <th class="py-2 pr-4 font-bold text-white">Valor</th>
+                                    <th class="py-2 font-bold text-white">Cobrança</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-semibold text-brand-primary">Mensal</td>
+                                    <td class="py-2 pr-4 text-white">R$ 7,90/mês</td>
+                                    <td class="py-2">Renovação automática mensal</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-semibold text-brand-primary">Anual</td>
+                                    <td class="py-2 pr-4 text-white">R$ 34,90/ano</td>
+                                    <td class="py-2">Renovação automática anual, com 3 dias de teste grátis para novos assinantes</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-semibold text-brand-primary">Vitalício</td>
+                                    <td class="py-2 pr-4 text-white">R$ 69,90</td>
+                                    <td class="py-2">Pagamento único, sem renovação</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>Os valores são cobrados pela sua conta do Google Play no momento da confirmação da compra.</li>
+                        <li>Novos assinantes do plano Anual têm <strong>3 dias de teste grátis</strong>. Ao fim do teste, se não for cancelado, a assinatura passa a custar R$ 34,90/ano automaticamente.</li>
+                        <li>Os planos Mensal e Anual são <strong>renovados automaticamente</strong> ao fim de cada período até que você cancele.</li>
+                        <li>O plano Vitalício é uma <strong>compra única</strong> e não tem renovação nem cobrança recorrente.</li>
+                        <li>Você pode <strong>cancelar a qualquer momento</strong> em Google Play &rsaquo; Assinaturas. Para não ser cobrado pelo plano Anual, cancele antes do fim do período de teste grátis.</li>
+                        <li>O cancelamento encerra a renovação futura, mas <strong>mantém o acesso Premium</strong> até o fim do período já pago.</li>
+                        <li><strong>Reembolsos</strong> seguem exclusivamente a política do Google Play — o desenvolvedor não processa reembolsos diretamente.</li>
+                        <li>Os preços exibidos no app (incluindo estimativas de custo de apostas) podem ser atualizados remotamente sem necessidade de nova versão do aplicativo (ver Política de Privacidade, Seção 4.4).</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">5. Backup no Google Drive (Recurso Premium)</h2>
+                    <p class="mb-4">Usuários Premium podem ativar, de forma <strong>opcional e mediante consentimento explícito</strong>, um backup dos seus jogos salvos, bolões e preferências na pasta privada de dados do próprio aplicativo (<code>appDataFolder</code>) da sua conta pessoal do Google Drive.</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>O desenvolvedor <strong>não tem acesso</strong> ao conteúdo desse backup — ele permanece sob seu controle, na sua própria conta Google.</li>
+                        <li>Você pode revogar o acesso a qualquer momento em <a href="https://myaccount.google.com/connections" target="_blank" class="text-brand-primary hover:underline">myaccount.google.com/connections</a>.</li>
+                        <li>Detalhes completos sobre o tratamento desses dados estão na <a href="lottoexpert-privacy.html" class="text-brand-primary hover:underline">Política de Privacidade</a>, Seção 4.9.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. Conteúdo Gerado pelo Usuário (Bolões)</h2>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>Ao criar um <strong>Bolão</strong>, você é responsável pela veracidade dos nomes de participantes e demais informações inseridas.</li>
+                        <li>Links de convite e QR codes gerados para compartilhamento de bolões contêm os dados codificados diretamente na URL, sem passar pelos servidores do desenvolvedor. Você é responsável por controlar com quem compartilha esses links.</li>
+                        <li>O desenvolvedor não modera, acessa nem armazena em servidores próprios o conteúdo dos bolões criados pelos usuários.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Propriedade Intelectual</h2>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>O aplicativo, sua marca, design, algoritmos e código são de propriedade da <strong>GHF Software</strong>, protegidos pela legislação de direitos autorais e propriedade intelectual aplicável.</li>
+                        <li>É concedida ao usuário uma licença <strong>pessoal, intransferível e não exclusiva</strong> de uso do aplicativo, exclusivamente para os fins a que se destina.</li>
+                        <li>É vedada a engenharia reversa, descompilação, redistribuição ou uso comercial não autorizado do aplicativo.</li>
+                    </ul>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Licenças de Terceiros</h3>
+                    <p class="mb-4">Este aplicativo utiliza as seguintes bibliotecas de código aberto, todas sob <strong>Apache License 2.0</strong>: Jetpack Compose, Jetpack Navigation Compose, Room, DataStore Preferences, WorkManager, CameraX, Hilt (Dagger), Retrofit, OkHttp, Kotlin Coroutines, ML Kit Text Recognition (Google), Firebase Analytics, Firebase Crashlytics, Firebase Remote Config, Firebase App Check, Google Play Billing, Google Play In-App Review, e Timber.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">8. Privacidade</h2>
+                    <p class="mb-4">O tratamento de dados pessoais é regido pela nossa <a href="lottoexpert-privacy.html" class="text-brand-primary hover:underline">Política de Privacidade</a>, que descreve em detalhe quais dados são coletados, como são processados (majoritariamente no próprio dispositivo) e os direitos garantidos pela LGPD.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Modificações no Serviço e nos Termos</h2>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>Podemos alterar, suspender ou descontinuar funcionalidades do aplicativo a qualquer momento, com aviso razoável quando aplicável.</li>
+                        <li>Podemos atualizar estes Termos de Serviço ocasionalmente para refletir novas funcionalidades ou exigências legais. A data de "Última atualização" no topo deste documento indica quando a versão atual entrou em vigor. O uso continuado do aplicativo após uma atualização constitui aceitação dos novos termos.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">10. Rescisão</h2>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>Você pode encerrar o uso do aplicativo a qualquer momento desinstalando-o, o que remove permanentemente todos os dados armazenados localmente no dispositivo.</li>
+                        <li>Assinaturas ativas continuam vigentes até seu cancelamento em Google Play &rsaquo; Assinaturas, mesmo após a desinstalação do aplicativo.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">11. Lei Aplicável e Foro</h2>
+                    <p class="mb-4">Estes Termos são regidos pelas leis da <strong>República Federativa do Brasil</strong>. Fica eleito o foro do domicílio do desenvolvedor para dirimir quaisquer controvérsias decorrentes destes Termos, com renúncia a qualquer outro, por mais privilegiado que seja.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">12. Contato</h2>
+                    <p class="mb-4">Para dúvidas sobre estes Termos de Serviço, entre em contato pelo e-mail <strong>support@ghfsoftware.com</strong> ou através do canal oficial de suporte na página do aplicativo na Google Play Store.</p>
+                `
+            },
+            en: {
+                nav_about: "About Us",
+                nav_portfolio: "Portfolio",
+                nav_contact: "Contact",
+                page_title: "Terms of Service — LottoExpert",
+                last_updated: "Last updated: July 03, 2026",
+                intro: "Welcome to <strong>LottoExpert</strong>. By downloading, installing, or using the application, you agree to the terms below. If you do not agree, do not use the application.",
+                btn_back: "Back to GHF Software",
+                footer_apps: "Applications",
+                footer_desc: "Cutting-edge software engineering for Mobile and IoT applications. Creating the future with performance since 2004.",
+                footer_inst: "Institutional",
+                footer_port: "App Portfolio",
+                footer_cont: "Professional Contact",
+                footer_transp: "Transparency & Policies",
+                footer_priv_pole: "Privacy - Pole Position",
+                footer_priv_topo: "Privacy - TopoWalk",
+                footer_priv_lotto: "Privacy - LottoExpert",
+                footer_terms_lotto: "Terms - LottoExpert",
+                footer_rights: "GHF Software. All rights reserved.",
+                footer_dev: "Developed with ",
+                footer_dev2: " by experts.",
+                content: `
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">1. About the Service</h2>
+                    <p class="mb-4">LottoExpert is a <strong>statistical and mathematical analysis</strong> application for Brazilian lotteries. It offers wheel generation (closings), mathematical filters, historical backtesting, ticket checking, frequency/delay statistics, and sweepstakes organization among participants.</p>
+                    <p class="mb-4">The application is developed and maintained by <strong>GHF Software</strong> ("developer", "we", "us").</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">2. Disclaimer</h2>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>LottoExpert is a <strong>mathematical simulation and statistical tool</strong>. All analyses, combinations, and probabilities generated by the application are based exclusively on historical data and mathematical models.</li>
+                        <li>This application <strong>DOES NOT place real bets</strong> and has no affiliation, partnership, or endorsement from Caixa Econômica Federal or any other lottery company.</li>
+                        <li>The developer <strong>is not responsible</strong> for financial losses, direct or indirect damages resulting from bets placed on official channels based on the analyses provided by this application.</li>
+                        <li>The generated results are based on historical statistical analysis and <strong>do not constitute a guarantee, prediction, or promise of prizes</strong>. Lottery games are random events, and no statistical method alters the official probabilities of each game.</li>
+                        <li>The application is provided <strong>"as is"</strong>, without warranties of uninterrupted availability, absence of errors, or that synchronized results will always be updated at the exact moment of query.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">3. Eligibility and Responsible Gaming</h2>
+                    <p class="mb-4">LottoExpert is intended for users <strong>over 18 years of age</strong>, given the nature of the content (lotteries and gambling regulated by Brazilian legislation).</p>
+                    <p class="mb-4">Lotteries are a form of <strong>entertainment</strong>. We recommend treating them as leisure, never as a source of income or investment, setting a fixed budget and respecting it, and never playing with money intended for basic needs.</p>
+                    <p class="mb-4 text-sm bg-gray-800/50 p-4 rounded-lg border-l-4 border-brand-primary">If you or someone you know is struggling with gambling, support is available: <strong>Gamblers Anonymous of Brazil</strong> (<a href="https://www.jogadoresanonimos.com.br/" target="_blank" class="text-brand-primary hover:underline">jogadoresanonimos.com.br</a>) or <strong>CVV — Dial 188</strong> (emotional support, 24 hours). This information is also available within the app in About &rarr; Responsible Gaming.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Premium Account — Subscriptions and Payments</h2>
+                    <p class="mb-4">LottoExpert Premium is offered in three plans, processed via <strong>Google Play Billing</strong>:</p>
+                    <div class="overflow-x-auto mb-6">
+                        <table class="w-full text-left border-collapse font-sans">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="py-2 pr-4 font-bold text-white">Plan</th>
+                                    <th class="py-2 pr-4 font-bold text-white">Price</th>
+                                    <th class="py-2 font-bold text-white">Billing</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-semibold text-brand-primary">Monthly</td>
+                                    <td class="py-2 pr-4 text-white">R$ 7.90/month</td>
+                                    <td class="py-2">Automatic monthly renewal</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-semibold text-brand-primary">Annual</td>
+                                    <td class="py-2 pr-4 text-white">R$ 34.90/year</td>
+                                    <td class="py-2">Automatic annual renewal, with 3 days free trial for new subscribers</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-semibold text-brand-primary">Lifetime</td>
+                                    <td class="py-2 pr-4 text-white">R$ 69.90</td>
+                                    <td class="py-2">One-time payment, no renewal</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>Amounts are charged by your Google Play account at the time of purchase confirmation.</li>
+                        <li>New subscribers to the Annual plan get a <strong>3-day free trial</strong>. At the end of the trial, if not canceled, the subscription will automatically cost R$ 34.90/year.</li>
+                        <li>Monthly and Annual plans <strong>automatically renew</strong> at the end of each period until you cancel.</li>
+                        <li>The Lifetime plan is a <strong>one-time purchase</strong> and has no recurring billing or renewal.</li>
+                        <li>You can <strong>cancel at any time</strong> in Google Play &rsaquo; Subscriptions. To avoid being charged for the Annual plan, cancel before the free trial period ends.</li>
+                        <li>Cancellation stops future renewals but <strong>retains Premium access</strong> until the end of the already paid period.</li>
+                        <li><strong>Refunds</strong> strictly follow Google Play's refund policy — the developer does not process refunds directly.</li>
+                        <li>Prices displayed in the app (including bet cost estimations) can be updated remotely without requiring a new app release (see Privacy Policy, Section 4.4).</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">5. Google Drive Backup (Premium Feature)</h2>
+                    <p class="mb-4">Premium users can enable, <strong>optionally and with explicit consent</strong>, a backup of their saved games, sweepstakes, and preferences in the private data folder (<code>appDataFolder</code>) of their personal Google Drive account.</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>The developer <strong>has no access</strong> to the content of this backup — it remains under your control, in your own Google account.</li>
+                        <li>You can revoke access at any time at <a href="https://myaccount.google.com/connections" target="_blank" class="text-brand-primary hover:underline">myaccount.google.com/connections</a>.</li>
+                        <li>Full details on the treatment of this data can be found in the <a href="lottoexpert-privacy.html" class="text-brand-primary hover:underline">Privacy Policy</a>, Section 4.9.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. User Generated Content (Sweepstakes)</h2>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>When creating a <strong>Sweepstake</strong>, you are responsible for the accuracy of participant names and other entered information.</li>
+                        <li>Invite links and QR codes generated to share sweepstakes contain the encoded data directly in the URL, without passing through the developer's servers. You are responsible for controlling who you share these links with.</li>
+                        <li>The developer does not moderate, access, or store the sweepstake content created by users on its own servers.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Intellectual Property</h2>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>The application, its brand, design, algorithms, and code are owned by <strong>GHF Software</strong>, protected by applicable copyright and intellectual property laws.</li>
+                        <li>The user is granted a <strong>personal, non-transferable, and non-exclusive</strong> license to use the application, solely for its intended purposes.</li>
+                        <li>Reverse engineering, decompilation, redistribution, or unauthorized commercial use of the application is strictly prohibited.</li>
+                    </ul>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Third-Party Licenses</h3>
+                    <p class="mb-4">This application uses the following open-source libraries, all under the <strong>Apache License 2.0</strong>: Jetpack Compose, Jetpack Navigation Compose, Room, DataStore Preferences, WorkManager, CameraX, Hilt (Dagger), Retrofit, OkHttp, Kotlin Coroutines, ML Kit Text Recognition (Google), Firebase Analytics, Firebase Crashlytics, Firebase Remote Config, Firebase App Check, Google Play Billing, Google Play In-App Review, and Timber.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">8. Privacy</h2>
+                    <p class="mb-4">The processing of personal data is governed by our <a href="lottoexpert-privacy.html" class="text-brand-primary hover:underline">Privacy Policy</a>, which describes in detail what data is collected, how it is processed (mostly on the device itself), and the rights guaranteed by the LGPD.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Changes to the Service and Terms</h2>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>We may alter, suspend, or discontinue application features at any time, with reasonable notice when applicable.</li>
+                        <li>We may update these Terms of Service occasionally to reflect new features or legal requirements. The "Last updated" date at the top of this document indicates when the current version took effect. Continued use of the application after an update constitutes acceptance of the new terms.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">10. Termination</h2>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>You may terminate the use of the application at any time by uninstalling it, which permanently removes all local data stored on the device.</li>
+                        <li>Active subscriptions remain valid until canceled in Google Play &rsaquo; Subscriptions, even after uninstalling the application.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">11. Governing Law and Jurisdiction</h2>
+                    <p class="mb-4">These Terms are governed by the laws of the <strong>Federative Republic of Brazil</strong>. The court of the developer's domicile is elected to resolve any disputes arising from these Terms, with waiver of any other, however privileged.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">12. Contact</h2>
+                    <p class="mb-4">For questions about these Terms of Service, contact us at <strong>support@ghfsoftware.com</strong> or through the official support channel on the application's page in the Google Play Store.</p>
+                `
+            }
+        };
+
+        let currentLang = localStorage.getItem('ghf_lang') || 'pt';
+
+        function updateTexts() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang] && i18n[currentLang][key]) {
+                    el.innerHTML = i18n[currentLang][key];
+                }
+            });
+
+            document.getElementById('dynamic-content').innerHTML = i18n[currentLang]['content'];
+            document.getElementById('lang-indicator').innerText = currentLang === 'pt' ? 'EN' : 'PT';
+            document.getElementById('lang-indicator-mobile').innerText = currentLang === 'pt' ? 'EN' : 'PT';
+            document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
+        }
+
+        function toggleLang() {
+            currentLang = currentLang === 'pt' ? 'en' : 'pt';
+            localStorage.setItem('ghf_lang', currentLang);
+            updateTexts();
+        }
+
+        updateTexts();
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+                navbar.classList.replace('py-5', 'py-3');
+            } else {
+                navbar.classList.remove('scrolled');
+                navbar.classList.replace('py-3', 'py-5');
+            }
+        });
+
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileBtnIcon = mobileBtn.querySelector('i');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            if (mobileMenu.classList.contains('opacity-0')) {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
+                if (mobileBtnIcon) mobileBtnIcon.classList.replace('fa-bars', 'fa-xmark');
+            } else {
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                if (mobileBtnIcon) mobileBtnIcon.classList.replace('fa-xmark', 'fa-bars');
+            }
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+    </script>
+</body>
+</html>

@@ -84,6 +84,23 @@
 - **Paginação Automática:** PDFs com múltiplos jogos são paginados automaticamente em formato A4.
 - **Compatível com FileProvider:** Compartilhamento seguro via `Intent.ACTION_SEND` sem exposição do caminho interno do arquivo.
 
+### Backup no Google Drive (Premium)
+- **Backup Manual e Automático:** Salva jogos, bolões e preferências na pasta oculta do app (`appDataFolder`) no Google Drive da própria conta do usuário — via WorkManager diário quando ativado.
+- **Autorização Moderna:** Usa a Identity Authorization API (`drive.appdata`), sem SDK pesado do Drive — cliente REST próprio via OkHttp + Gson.
+- **Restauração com Merge Idempotente:** Reinsere os itens preservando os IDs originais (`REPLACE`/`IGNORE` nos DAOs), sem apagar dados criados localmente após o backup.
+- **Zero Acesso do Desenvolvedor:** Os dados trafegam diretamente entre o dispositivo e a conta Google do usuário; o escopo `drive.appdata` restringe o acesso apenas à pasta de dados do próprio app.
+
+### Widget de Tela Inicial (Premium)
+- **Jetpack Glance:** Widget configurável por instância, com uma loteria selecionável por widget.
+- **Conteúdo Combinado:** Último resultado (concurso, dezenas, "Acumulou") + próximo sorteio (concurso, prêmio estimado, data e contagem regressiva).
+- **Refresh Automático:** Atualizado ao final de cada sincronização (3 janelas/dia) e a cada 6h via `updatePeriodMillis`.
+- **Gate Freemium:** Usuários free veem o card bloqueado com CTA para o paywall; premium veem o conteúdo completo.
+
+### Badges de Atualizações Não Vistas
+- **Indicador por Loteria:** Contador de novidades (novo resultado, acerto em jogo/bolão) exibido na Home e no menu, zerado individualmente ao abrir cada tela.
+- **Destaque "NOVO":** Concursos ainda não vistos recebem chip e borda de destaque na tela de Resultados.
+- **Fonte Única:** `UpdatesBadgeStore` (DataStore), incrementado nos mesmos pontos já deduplicados do `SyncWorker`.
+
 ---
 
 ## Modelo Freemium
@@ -168,13 +185,14 @@ Clean Architecture com três camadas bem delimitadas e MVVM na camada de apresen
 ```
 app/
 ├── data/
+│   ├── backup/         BackupManager, DriveAuthManager, DriveBackupClient, BackupSerializer (Drive, Premium)
 │   ├── billing/        BillingManager — mock em debug, Google Play em release
-│   ├── local/          Room DB v3: entities, DAOs, migrations, converters
+│   ├── local/          Room DB v3: entities, DAOs, migrations, converters, UpdatesBadgeStore
 │   ├── mapper/         DrawResultMapper (DTO → Entity → Domain)
 │   ├── remote/         LotteryDataApi (Retrofit → GCP), AppCheckInterceptor, DTOs, LotteryPriceRepository
 │   ├── repository/     DrawResultRepositoryImpl
 │   └── worker/         SyncWorker, SyncAlarmReceiver, ReminderAlarmReceiver,
-│                       BootReceiver, AlarmScheduler
+│                       BootReceiver, AlarmScheduler, BackupWorker
 ├── di/                 DatabaseModule, NetworkModule, RepositoryModule
 ├── domain/
 │   ├── export/         PdfExporter (com suporte a marca d'água por tier)
@@ -185,12 +203,13 @@ app/
 │   ├── strategy/       9 implementações de LotteryStrategy + Factory
 │   └── usecase/        CheckTicketMatchesUseCase, ComputeNumberStatsUseCase
 └── ui/
-    ├── components/     PaywallBottomSheet (gate freemium reutilizável)
+    ├── components/     PaywallBottomSheet (gate freemium reutilizável), UnseenCountBadge
     ├── navigation/     NavGraph + Screen (18 rotas)
     ├── screens/        dashboard, generator, results, statistics,
-    │                   backtesting, savedgames, scan, sweepstake (bolão),
+    │                   backtesting, savedgames, scan, sweepstake (bolão), backup,
     │                   notifications, onboarding, about, help, terms, responsiblegambling
-    └── theme/          Tema Material 3 com cores dinâmicas por loteria
+    ├── theme/          Tema Material 3 com cores dinâmicas por loteria
+    └── widget/         Widget de tela inicial (Premium) via Jetpack Glance
 ```
 
 ---
@@ -256,6 +275,7 @@ O deploy completo da infraestrutura GCP está documentado em [docs/GCP_DEPLOY.md
 | [PLANO_VENDAS.md](docs/PLANO_VENDAS.md) | Funil de conversão, paywall e KPIs de vendas |
 | [ASO_METADATA.md](docs/ASO_METADATA.md) | Estratégia de loja (título, descrição, keywords) |
 | [PRIVACY_POLICY.md](docs/PRIVACY_POLICY.md) | Política de Privacidade |
+| [TERMS_OF_SERVICE.md](docs/TERMS_OF_SERVICE.md) | Termos de Serviço |
 | [GOOGLE_PLAY_POLITICAS.md](docs/GOOGLE_PLAY_POLITICAS.md) | Preenchimento das políticas da Play Store (classificação como Ferramenta, IARC, Data Safety) |
 | [GOOGLE_PLAY_BILLING_SETUP.md](docs/GOOGLE_PLAY_BILLING_SETUP.md) | Criação e configuração dos 3 produtos de billing no Play Console (INAPP + SUBS, base plans, testes) |
 | [PROJECAO_FINANCEIRA.md](docs/PROJECAO_FINANCEIRA.md) | Projeção financeira D+180: unit economics, cenários, custos GCP/ads, painel de acompanhamento mensal |
