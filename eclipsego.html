@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EclipseGo - Previsão de Eclipses Offline - GHF Software</title>
+    <link rel="icon" type="image/png" href="./assets/eclipse-go-favicon.png">
+
+    <meta name="description" content="EclipseGo calcula a visibilidade de eclipses solares e lunares de qualquer ponto do planeta de forma 100% offline. Desenvolvido pela GHF Software.">
+
+    <!-- Open Graph (WhatsApp, LinkedIn, Facebook) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="GHF Software" />
+    <meta property="og:url" content="https://ghfsoftware.com/eclipsego.html" />
+    <meta property="og:title" content="EclipseGo — Previsão de Eclipses Offline" />
+    <meta property="og:description" content="Circunstâncias locais, visibilidade e linha do tempo de eclipses solares e lunares. 100% offline." />
+    <meta property="og:image" content="https://ghfsoftware.com/assets/eclipse-go.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="pt_BR" />
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="EclipseGo — Previsão de Eclipses Offline" />
+    <meta name="twitter:description" content="Circunstâncias locais, visibilidade e linha do tempo de eclipses solares e lunares. 100% offline." />
+    <meta name="twitter:image" content="https://ghfsoftware.com/assets/eclipse-go.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            base: '#0B1120',
+                            surface: '#111827',
+                            primary: '#EAB308', /* Gold/Yellow for EclipseGo */
+                            primaryHover: '#CA8A04',
+                            secondary: '#6366F1', /* Indigo for space sky */
+                            accent: '#F59E0B', /* Amber for corona glow */
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 25px rgba(234, 179, 8, 0.35)',
+                        'glow-indigo': '0 0 25px rgba(99, 102, 241, 0.35)'
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'tech-grid': 'linear-gradient(to right, #1f2937 1px, transparent 1px), linear-gradient(to bottom, #1f2937 1px, transparent 1px)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B1120;
+            color: #f3f4f6;
+        }
+
+        .bg-grid-pattern {
+            background-color: #0B1120;
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(135deg, #EAB308, #6366F1);
+        }
+
+        #navbar {
+            transition: all 0.3s ease;
+        }
+
+        #navbar.scrolled {
+            background: rgba(11, 17, 32, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        /* Mockup Solar Eclipse Corona Glow animation */
+        @keyframes corona-pulse {
+            0%, 100% {
+                box-shadow: 0 0 25px rgba(234, 179, 8, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(234, 179, 8, 0.8), 0 0 10px rgba(99, 102, 241, 0.5);
+            }
+        }
+        .corona-glow {
+            animation: corona-pulse 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav id="navbar"
+        class="fixed w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center transition-all duration-300">
+        <a href="index.html" class="flex items-center group">
+            <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]">
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+            <a href="index.html#sobre" class="text-gray-300 hover:text-white hover:text-brand-primary transition-colors" data-i18n="nav_about">Sobre Nós</a>
+            <a href="index.html#portfolio"
+                class="text-gray-300 hover:text-white hover:text-brand-primary transition-colors" data-i18n="nav_portfolio">Portfólio</a>
+            <a href="index.html#contato"
+                class="px-5 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-brand-primary hover:text-brand-primary transition-all duration-300" data-i18n="nav_contact">Contato</a>
+            
+            <button onclick="toggleLang()" class="flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold tracking-wide">
+                <i class="fa-solid fa-globe"></i>
+                <span id="lang-indicator">EN</span>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="flex items-center gap-4 md:hidden">
+            <button onclick="toggleLang()" class="flex items-center gap-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold text-sm">
+                <i class="fa-solid fa-globe"></i>
+                <span id="lang-indicator-mobile">EN</span>
+            </button>
+            <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none ml-2">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-brand-base z-40 flex flex-col justify-center items-center gap-8 text-lg font-medium glass-panel opacity-0 pointer-events-none transition-opacity duration-300">
+        <a href="index.html#sobre"
+            class="mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors" data-i18n="nav_about">Sobre Nós</a>
+        <a href="index.html#portfolio"
+            class="mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors" data-i18n="nav_portfolio">Portfólio</a>
+        <a href="index.html#contato"
+            class="mobile-link px-6 py-2 rounded-full bg-brand-primary text-black font-bold hover:bg-brand-primaryHover transition-colors" data-i18n="nav_contact">Contato</a>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden bg-grid-pattern">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0B1120_100%)] z-0"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-base/80 to-brand-base z-0"></div>
+        
+        <!-- Abstract gradient blob -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-primary rounded-full mix-blend-screen filter blur-[150px] opacity-10" style="animation: float 8s ease-in-out infinite;"></div>
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <!-- Text Content -->
+                <div class="w-full lg:w-1/2 text-center lg:text-left">
+                    <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-900/20 backdrop-blur-sm text-sm text-yellow-400 font-medium">
+                        <i class="fa-solid fa-moon mr-2 animate-pulse"></i> <span data-i18n="hero_badge">Previsão de Eclipses Offline</span>
+                    </div>
+
+                    <h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6 text-white">
+                        <span data-i18n="hero_title_1">EclipseGo</span><br class="hidden md:block"> <span class="text-gradient" data-i18n="hero_title_2">Sombra & Luz no seu Bolso</span>
+                    </h1>
+
+                    <p class="mt-4 text-xl text-gray-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed mb-10" data-i18n="hero_desc">
+                        Saiba exatamente se um eclipse solar ou lunar é visível de onde você está. Um aplicativo totalmente offline que calcula horários locais de início, pico e fim sem fazer qualquer chamada de rede.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <!-- Inactive Coming Soon button -->
+                        <div class="px-8 py-4 bg-gray-800/80 text-gray-500 border border-gray-700/50 font-semibold rounded-lg flex items-center justify-center gap-3 cursor-default select-none w-full sm:w-auto" title="Aplicativo ainda em fase de testes">
+                            <i class="fa-brands fa-google-play text-xl opacity-50"></i> <span data-i18n="btn_google_play_soon">Em breve na Google Play</span>
+                        </div>
+                        <a href="eclipsego-privacy.html" class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-shield-halved"></i> <span data-i18n="btn_privacy">Privacidade</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Visual Content -->
+                <div class="w-full lg:w-1/2 flex justify-center">
+                    <div class="relative w-72 h-[600px] border-[8px] border-gray-900 rounded-[3rem] shadow-2xl overflow-hidden glass-panel flex flex-col items-center justify-center bg-brand-base corona-glow">
+                        <!-- Camera Notch -->
+                        <div class="absolute top-0 w-1/2 h-6 bg-gray-900 mx-auto rounded-b-3xl z-20"></div>
+                        
+                        <!-- Real App Screenshot -->
+                        <img src="./assets/eclipsego_phone_screen.png" alt="Tela real do aplicativo EclipseGo" class="absolute inset-0 w-full h-full object-cover z-10">
+                        
+                        <!-- Status Mention overlay -->
+                        <div class="absolute bottom-10 px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-950/80 text-xs font-semibold text-yellow-400 flex items-center gap-2 z-20 shadow-lg backdrop-blur-sm">
+                            <span class="w-2 h-2 rounded-full bg-yellow-400 animate-ping"></span>
+                            <span data-i18n="btn_google_play_soon">Em breve</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Grid -->
+    <section class="py-24 bg-brand-surface relative z-10 border-t border-gray-800/50">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="inline-block mb-3 px-3 py-1 rounded-full bg-yellow-500/10 text-brand-primary text-sm font-semibold tracking-wide uppercase border border-yellow-500/20" data-i18n="features_badge">
+                    Recursos Offline
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white" data-i18n="features_title">Astronomia de Bolso Sem Conexão</h2>
+                <p class="text-gray-400 text-lg" data-i18n="features_subtitle">Tecnologia de ponta e matemática astronômica local para prever eclipses a qualquer momento.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-14 h-14 rounded-xl bg-yellow-900/30 border border-yellow-500/20 flex items-center justify-center text-brand-primary text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-wifi-slash"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat1_title">100% Offline</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat1_desc">
+                        Todos os cálculos e a base de dados de mais de 34 mil cidades estão embutidos. Funciona perfeitamente no meio do deserto ou em alto mar.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-14 h-14 rounded-xl bg-yellow-900/30 border border-yellow-500/20 flex items-center justify-center text-brand-primary text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat2_title">Modos de Localização</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat2_desc">
+                        Minha localização (GPS), busca por cidade ou a ferramenta exclusiva que localiza o ponto de melhor visibilidade mais próximo de você.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-14 h-14 rounded-xl bg-yellow-900/30 border border-yellow-500/20 flex items-center justify-center text-brand-primary text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-timeline"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat3_title">Linha do Tempo do Evento</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat3_desc">
+                        Gráfico interativo e slider que demonstram o progresso exato da cobertura (início → pico → fim) no fuso horário local.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-14 h-14 rounded-xl bg-yellow-900/30 border border-yellow-500/20 flex items-center justify-center text-brand-primary text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat4_title">Calendário Completo</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat4_desc">
+                        Acesse o histórico e as datas futuras de eclipses solares e lunares com mecanismos rápidos de busca e filtragem.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section id="how" class="py-24 bg-brand-base relative z-10">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="inline-block mb-3 px-3 py-1 rounded-full bg-gray-800 text-gray-300 text-sm font-semibold tracking-wide uppercase border border-gray-700" data-i18n="workflow_badge">
+                    Fluxo de Uso
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold text-white" data-i18n="workflow_title">Como Funciona o EclipseGo</h2>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="relative border-l border-yellow-500/50 ml-6 md:ml-10 space-y-12">
+                    
+                    <!-- Step 1 -->
+                    <div class="relative pl-10 md:pl-16">
+                        <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-yellow-500 flex items-center justify-center text-brand-primary font-bold text-lg">1</div>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="step1_title">Selecionar Localização</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="step1_desc">Use o GPS atual, busque uma cidade na base de dados Room offline ou peça para encontrar a melhor visibilidade próxima.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative pl-10 md:pl-16">
+                        <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-yellow-500 flex items-center justify-center text-brand-primary font-bold text-lg">2</div>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="step2_title">Calcular Visibilidade</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="step2_desc">O motor matemático avalia as circunstâncias locais de visibilidade do eclipse selecionado para as coordenadas.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative pl-10 md:pl-16">
+                        <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-yellow-500 flex items-center justify-center text-brand-primary font-bold text-lg">3</div>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="step3_title">Simular Linha do Tempo</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="step3_desc">Use o slider interativo para ver a cobertura em cada horário e planeje sua observação com antecedência.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="relative pl-10 md:pl-16">
+                        <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-yellow-500 flex items-center justify-center text-brand-primary font-bold text-lg">4</div>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="step4_title">Acompanhar Offline</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="step4_desc">Consulte todos os dados de início, pico e fim em campo, sem precisar de internet ou sinal de celular.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack -->
+    <section class="py-24 bg-brand-surface relative z-10 border-b border-gray-800">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <div class="inline-block mb-3 px-3 py-1 rounded-full bg-yellow-500/10 text-brand-primary text-sm font-semibold tracking-wide uppercase border border-yellow-500/20" data-i18n="tech_badge">
+                    Stack de Tecnologia
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white" data-i18n="tech_title">Arquitetura Nativa e Livre de Rede</h2>
+                <p class="text-gray-400 text-lg" data-i18n="tech_subtitle">Desenvolvido com tecnologias modernas do ecossistema Android para máxima eficiência.</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Kotlin</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Jetpack Compose</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">MVVM Architecture</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">StateFlow & Coroutines</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Room Database (City Caching)</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Device Location Provider (GPS)</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">100% Offline calculations</span>
+                <span class="px-6 py-3 rounded-full border border-gray-800 bg-gray-900/40 text-gray-300 font-semibold text-sm hover:border-brand-primary transition-all duration-300">Mathematical Visibility Algorithms</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contato" class="bg-brand-surface pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden">
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+                <!-- Brand Info -->
+                <div class="md:col-span-2 lg:col-span-2">
+                    <a href="index.html" class="inline-block mb-6 group">
+                        <img src="./assets/GHFSoftware.png" alt="GHF Software Logo" class="h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]">
+                    </a>
+                    <p class="text-gray-400 max-w-sm mb-6" data-i18n="footer_desc">
+                        Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro,
+                        com performance desde 2004.
+                    </p>
+                    <div class="flex items-center gap-4 text-gray-400">
+                        <a href="mailto:support@ghfsoftware.com" class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-gray-700 hover:text-white transition-all"><i class="fa-solid fa-envelope"></i></a>
+                    </div>
+                </div>
+
+                <!-- Links Institucionais -->
+                <div>
+                    <h4 class="text-white font-semibold mb-6" data-i18n="footer_inst">Institucional</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html#sobre" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm" data-i18n="nav_about">Sobre Nós</a></li>
+                        <li><a href="index.html#portfolio" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm" data-i18n="nav_portfolio">Portfólio de Apps</a></li>
+                        <li><a href="index.html#contato" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm" data-i18n="footer_cont">Contato Profissional</a></li>
+                    </ul>
+                </div>
+
+                <!-- Aplicativos -->
+                <div>
+                    <h4 class="text-white font-semibold mb-6" data-i18n="footer_apps">Aplicativos</h4>
+                    <ul class="space-y-3">
+                        <li><a href="lottoexpert.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">LottoExpert</a></li>
+                        <li><a href="topowalk.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">TopoWalk</a></li>
+                        <li><a href="poleposition.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">Pole Position</a></li>
+                        <li><a href="eclipsego.html" class="text-brand-primary font-semibold transition-colors text-sm flex items-center gap-1"><i class="fa-solid fa-chevron-right text-xs"></i> EclipseGo</a></li>
+                    </ul>
+                </div>
+
+                <!-- Políticas -->
+                <div>
+                    <h4 class="text-white font-semibold mb-6" data-i18n="footer_transp">Transparência & Políticas</h4>
+                    <ul class="space-y-3">
+                        <li><a href="lottoexpert-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_lotto">Privacidade - LottoExpert</span></a></li>
+                        <li><a href="lottoexpert-terms.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-file-contract text-gray-600 text-xs"></i> <span data-i18n="footer_terms_lotto">Termos - LottoExpert</span></a></li>
+                        <li><a href="poleposition-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_pole">Privacidade - Pole Position</span></a></li>
+                        <li><a href="topowalk-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_topo">Privacidade - TopoWalk</span></a></li>
+                        <li><a href="eclipsego-privacy.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_eclipse">Privacidade - EclipseGo</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright Banner -->
+            <div class="pt-8 border-t border-gray-800/80 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">
+                    &copy; <span id="year"></span> <span data-i18n="footer_rights">GHF Software. Todos os direitos reservados.</span>
+                </p>
+                <p class="text-sm text-gray-600 flex items-center gap-2">
+                    <span data-i18n="footer_dev">Desenvolvido com</span> <i class="fa-solid fa-heart text-brand-primary/50 text-xs"></i> <span data-i18n="footer_dev2">por especialistas.</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts & i18n -->
+    <script>
+        const i18n = {
+            pt: {
+                nav_about: "Sobre Nós",
+                nav_portfolio: "Portfólio",
+                nav_contact: "Contato",
+                
+                hero_badge: "Previsão de Eclipses Offline",
+                hero_title_1: "EclipseGo",
+                hero_title_2: "Sombra & Luz no seu Bolso",
+                hero_desc: "Saiba exatamente se um eclipse solar ou lunar é visível de onde você está. Um aplicativo totalmente offline que calcula horários locais de início, pico e fim sem fazer qualquer chamada de rede.",
+                btn_google_play_soon: "Em breve na Google Play",
+                btn_privacy: "Privacidade",
+                
+                features_badge: "Recursos Offline",
+                features_title: "Astronomia de Bolso Sem Conexão",
+                features_subtitle: "Tecnologia de ponta e matemática astronômica local para prever eclipses a qualquer momento.",
+                
+                feat1_title: "100% Offline",
+                feat1_desc: "Todos os cálculos e a base de dados de mais de 34 mil cidades estão embutidos. Funciona perfeitamente no meio do deserto ou em alto mar.",
+                feat2_title: "Modos de Localização",
+                feat2_desc: "Minha localização (GPS), busca por cidade ou a ferramenta exclusiva que localiza o ponto de melhor visibilidade mais próximo de você.",
+                feat3_title: "Linha do Tempo do Evento",
+                feat3_desc: "Gráfico interativo e slider que demonstram o progresso exato da cobertura (início → pico → fim) no fuso horário local.",
+                feat4_title: "Calendário Completo",
+                feat4_desc: "Acesse o histórico e as datas futuras de eclipses solares e lunares com mecanismos rápidos de busca e filtragem.",
+
+                workflow_badge: "Fluxo de Uso",
+                workflow_title: "Como Funciona o EclipseGo",
+                step1_title: "Selecionar Localização",
+                step1_desc: "Use o GPS atual, busque uma cidade na base de dados Room offline ou peça para encontrar a melhor visibilidade próxima.",
+                step2_title: "Calcular Visibilidade",
+                step2_desc: "O motor matemático avalia as circunstâncias locais de visibilidade do eclipse selecionado para as coordenadas.",
+                step3_title: "Simular Linha do Tempo",
+                step3_desc: "Use o slider interativo para ver a cobertura em cada horário e planeje sua observação com antecedência.",
+                step4_title: "Acompanhar Offline",
+                step4_desc: "Consulte todos os dados de início, pico e fim em campo, sem precisar de internet ou sinal de celular.",
+
+                workflow_title: "Como Funciona o EclipseGo",
+                step1_title: "Selecionar Localização",
+                step1_desc: "Use o GPS atual, busque uma cidade na base de dados Room offline ou peça para encontrar a melhor visibilidade próxima.",
+                step2_title: "Calcular Visibilidade",
+                step2_desc: "O motor matemático avalia as circunstâncias locais de visibilidade do eclipse selecionado para as coordenadas.",
+                step3_title: "Simular Linha do Tempo",
+                step3_desc: "Use o slider interativo para ver a cobertura em cada horário e planeje sua observação com antecedência.",
+                step4_title: "Acompanhar Offline",
+                step4_desc: "Consulte todos os dados de início, pico e fim em campo, sem precisar de internet ou sinal de celular.",
+
+                tech_badge: "Stack de Tecnologia",
+                tech_title: "Arquitetura Nativa e Livre de Rede",
+                tech_subtitle: "Desenvolvido com tecnologias modernas do ecossistema Android para máxima eficiência.",
+                
+                footer_apps: "Aplicativos",
+                footer_desc: "Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.",
+                footer_inst: "Institucional",
+                footer_port: "Portfólio de Apps",
+                footer_cont: "Contato Profissional",
+                footer_transp: "Transparência & Políticas",
+                footer_priv_pole: "Privacidade - Pole Position",
+                footer_priv_topo: "Privacidade - TopoWalk",
+                footer_priv_lotto: "Privacidade - LottoExpert",
+                footer_priv_eclipse: "Privacidade - EclipseGo",
+                footer_terms_lotto: "Termos - LottoExpert",
+                footer_rights: "GHF Software. Todos os direitos reservados.",
+                footer_dev: "Desenvolvido com ",
+                footer_dev2: " por especialistas."
+            },
+            en: {
+                nav_about: "About Us",
+                nav_portfolio: "Portfolio",
+                nav_contact: "Contact",
+                
+                hero_badge: "Offline Eclipse Prediction",
+                hero_title_1: "EclipseGo",
+                hero_title_2: "Shadow & Light in Your Pocket",
+                hero_desc: "Know exactly if a solar or lunar eclipse is visible from your location. A fully offline application that calculates local start, peak, and end times without making any network calls.",
+                btn_google_play_soon: "Coming soon on Google Play",
+                btn_privacy: "Privacy Policy",
+                
+                features_badge: "Offline Features",
+                features_title: "Pocket Astronomy Without Connection",
+                features_subtitle: "State-of-the-art technology and local astronomical mathematics to predict eclipses anytime, anywhere.",
+                
+                feat1_title: "100% Offline",
+                feat1_desc: "All calculations and a database of over 34,000 cities are built-in. Works perfectly in the middle of a desert or in the high seas.",
+                feat2_title: "Location Modes",
+                feat2_desc: "My location (GPS), city search, or the exclusive tool that finds the nearest location with the best visibility.",
+                feat3_title: "Event Timeline",
+                feat3_desc: "Interactive graphic and slider showing the exact progress of coverage (start → peak → end) in your local timezone.",
+                feat4_title: "Full Calendar",
+                feat4_desc: "Access past and future dates of solar and lunar eclipses with fast searching and filtering mechanisms.",
+
+                workflow_badge: "Usage Flow",
+                workflow_title: "How EclipseGo Works",
+                step1_title: "Select Location",
+                step1_desc: "Use current GPS, search for a city in the offline Room database, or ask to find the nearest best visibility.",
+                step2_title: "Calculate Visibility",
+                step2_desc: "The mathematical engine calculates the local circumstances of visibility of the selected eclipse for the coordinates.",
+                step3_title: "Simulate Timeline",
+                step3_desc: "Use the interactive slider to see the coverage at each hour and plan your observation in advance.",
+                step4_title: "Track Offline",
+                step4_desc: "Consult all start, peak, and end data in the field, without needing internet or cellular signal.",
+
+                tech_badge: "Tech Stack",
+                tech_title: "Native Architecture and Network-Free",
+                tech_subtitle: "Built upon the most modern pillars of native Android development.",
+ 
+                footer_apps: "Applications",
+                footer_desc: "Cutting-edge software engineering for Mobile and IoT applications. Creating the future with performance since 2004.",
+                footer_inst: "Institutional",
+                footer_port: "App Portfolio",
+                footer_cont: "Professional Contact",
+                footer_transp: "Transparency & Policies",
+                footer_priv_pole: "Privacy - Pole Position",
+                footer_priv_topo: "Privacy - TopoWalk",
+                footer_priv_lotto: "Privacy - LottoExpert",
+                footer_priv_eclipse: "Privacy - EclipseGo",
+                footer_terms_lotto: "Terms - LottoExpert",
+                footer_rights: "GHF Software. All rights reserved.",
+                footer_dev: "Developed with ",
+                footer_dev2: " by experts."
+            }
+        };
+
+        let currentLang = localStorage.getItem('ghf_lang') || 'pt';
+
+        function updateTexts() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang] && i18n[currentLang][key]) {
+                    el.innerHTML = i18n[currentLang][key];
+                }
+            });
+
+            document.getElementById('lang-indicator').innerText = currentLang === 'pt' ? 'EN' : 'PT';
+            document.getElementById('lang-indicator-mobile').innerText = currentLang === 'pt' ? 'EN' : 'PT';
+            document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
+        }
+
+        function toggleLang() {
+            currentLang = currentLang === 'pt' ? 'en' : 'pt';
+            localStorage.setItem('ghf_lang', currentLang);
+            updateTexts();
+        }
+
+        updateTexts();
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+                navbar.classList.replace('py-5', 'py-3');
+            } else {
+                navbar.classList.remove('scrolled');
+                navbar.classList.replace('py-3', 'py-5');
+            }
+        });
+
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileBtnIcon = mobileBtn.querySelector('i');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            if (mobileMenu.classList.contains('opacity-0')) {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
+                mobileBtnIcon.classList.replace('fa-bars', 'fa-xmark');
+            } else {
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                mobileBtnIcon.classList.replace('fa-xmark', 'fa-bars');
+            }
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+    </script>
+</body>
+
+</html>

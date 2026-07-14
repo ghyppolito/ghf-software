@@ -271,51 +271,66 @@
                 <!-- Visual Gallery Column -->
                 <div class="w-full lg:w-1/2 flex justify-center items-center relative animate-fade-in-up" style="animation-delay: 0.4s; opacity: 0;">
                     <!-- Overlapping 3D interactive showcase -->
-                    <div class="relative w-full max-w-[450px] h-[340px] md:h-[420px] flex items-center justify-center mt-10 lg:mt-0">
+                    <div class="relative w-full max-w-[480px] h-[340px] md:h-[420px] flex items-center justify-center mt-10 lg:mt-0">
                         
-                        <!-- TopoWalk Card (Left) -->
-                        <a href="topowalk.html" class="absolute w-[170px] md:w-[210px] h-[240px] md:h-[290px] bg-gradient-to-b from-amber-600/10 to-brand-base border border-amber-500/20 rounded-2xl p-3 shadow-2xl glass-panel transform -rotate-12 -translate-x-20 md:-translate-x-24 -translate-y-4 hover:-translate-y-12 hover:rotate-[-8deg] hover:scale-105 transition-all duration-500 cursor-pointer group/hero-card block">
+                        <!-- TopoWalk Card (Far Left) -->
+                        <a href="topowalk.html" class="absolute w-[150px] md:w-[190px] h-[220px] md:h-[270px] bg-gradient-to-b from-amber-600/10 to-brand-base border border-amber-500/20 rounded-2xl p-3 shadow-2xl glass-panel transform -rotate-12 -translate-x-28 md:-translate-x-32 translate-y-6 hover:-translate-y-12 hover:rotate-[-8deg] hover:scale-105 transition-all duration-500 cursor-pointer group/hero-card block z-10">
                             <div class="flex items-center gap-2 mb-2">
                                 <img src="./assets/topo-walk.png" alt="Ícone do app TopoWalk" class="w-7 h-7 rounded-lg border border-amber-500/30">
                                 <span class="text-[11px] font-bold text-white tracking-tight">TopoWalk</span>
                             </div>
-                            <div class="h-28 md:h-36 bg-gray-950/80 rounded-lg flex items-center justify-center border border-gray-800 overflow-hidden relative">
+                            <div class="h-24 md:h-32 bg-gray-950/80 rounded-lg flex items-center justify-center border border-gray-800 overflow-hidden relative">
                                 <img src="./assets/topowalk_screenshot.png" alt="Tela do app TopoWalk com medição de desnível barométrico em campo" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/20 to-transparent flex items-end p-2 justify-center">
                                     <span class="text-[9px] text-amber-400 font-bold uppercase tracking-wider">Topografia</span>
                                 </div>
                             </div>
-                            <p class="text-[9px] md:text-[10px] text-gray-400 mt-2.5 line-clamp-2">Levantamento de campo barométrico de bolso.</p>
+                            <p class="text-[9px] md:text-[10px] text-gray-400 mt-2.5 line-clamp-2" data-i18n="hero_topo_desc">Levantamento de campo barométrico de bolso.</p>
                         </a>
 
-                        <!-- LottoExpert Card (Right) -->
-                        <a href="lottoexpert.html" class="absolute w-[170px] md:w-[210px] h-[240px] md:h-[290px] bg-gradient-to-b from-purple-600/10 to-brand-base border border-purple-500/20 rounded-2xl p-3 shadow-2xl glass-panel transform rotate-12 translate-x-20 md:translate-x-24 translate-y-4 hover:-translate-y-4 hover:rotate-[8deg] hover:scale-105 transition-all duration-500 cursor-pointer group/hero-card block">
+                        <!-- EclipseGo Card (Inner Left) -->
+                        <a href="eclipsego.html" class="absolute w-[150px] md:w-[190px] h-[220px] md:h-[270px] bg-gradient-to-b from-yellow-600/10 to-brand-base border border-yellow-500/20 rounded-2xl p-3 shadow-2xl glass-panel transform -rotate-4 -translate-x-10 md:-translate-x-12 -translate-y-4 hover:-translate-y-14 hover:rotate-[-2deg] hover:scale-105 transition-all duration-500 cursor-pointer group/hero-card block z-20">
                             <div class="flex items-center gap-2 mb-2">
-                                <img src="./assets/lottoexpert.png" alt="Ícone do app LottoExpert" class="w-7 h-7 rounded-lg border border-purple-500/30">
-                                <span class="text-[11px] font-bold text-white tracking-tight">LottoExpert</span>
+                                <img src="./assets/eclipse-go-favicon.png" alt="Ícone do app EclipseGo" class="w-7 h-7 rounded-lg border border-yellow-500/30">
+                                <span class="text-[11px] font-bold text-white tracking-tight">EclipseGo</span>
                             </div>
-                            <div class="h-28 md:h-36 bg-gray-950/80 rounded-lg flex items-center justify-center border border-gray-800 overflow-hidden relative">
-                                <img src="./assets/lottoexpert_app_mockup.png" alt="Tela do app LottoExpert com gerador de fechamentos para Mega-Sena" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500">
+                            <div class="h-24 md:h-32 bg-gray-950/80 rounded-lg flex items-center justify-center border border-gray-800 overflow-hidden relative">
+                                <img src="./assets/eclipsego_screenshot.png" alt="Tela do app EclipseGo" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/20 to-transparent flex items-end p-2 justify-center">
-                                    <span class="text-[9px] text-purple-400 font-bold uppercase tracking-wider">Loterias</span>
+                                    <span class="text-[9px] text-yellow-400 font-bold uppercase tracking-wider" data-i18n="app_eclipse_tag">Astronomia & GPS</span>
                                 </div>
                             </div>
-                            <p class="text-[9px] md:text-[10px] text-gray-400 mt-2.5 line-clamp-2">Análise matemática e fechamentos offline.</p>
+                            <p class="text-[9px] md:text-[10px] text-gray-400 mt-2.5 line-clamp-2" data-i18n="hero_eclipse_desc">Previsão local de eclipses 100% offline.</p>
                         </a>
 
-                        <!-- Pole Position Card (Center & Elevated) -->
-                        <a href="poleposition.html" class="absolute w-[190px] md:w-[230px] h-[270px] md:h-[320px] bg-gradient-to-b from-lime-600/10 to-brand-base border-2 border-lime-500/30 rounded-2xl p-3.5 shadow-[0_0_30px_rgba(132,204,22,0.25)] glass-panel transform -translate-y-2 hover:-translate-y-8 hover:scale-105 transition-all duration-500 cursor-pointer group/hero-card z-20 block">
+                        <!-- Pole Position Card (Inner Right) -->
+                        <a href="poleposition.html" class="absolute w-[160px] md:w-[200px] h-[240px] md:h-[295px] bg-gradient-to-b from-lime-600/10 to-brand-base border-2 border-lime-500/30 rounded-2xl p-3.5 shadow-[0_0_30px_rgba(132,204,22,0.25)] glass-panel transform rotate-4 translate-x-10 md:translate-x-12 -translate-y-6 hover:-translate-y-16 hover:rotate-[2deg] hover:scale-105 transition-all duration-500 cursor-pointer group/hero-card block z-30">
                             <div class="flex items-center gap-2 mb-2">
                                 <img src="./assets/poleposition.png" alt="Ícone do app Pole Position" class="w-8 h-8 rounded-lg border border-lime-500/30">
                                 <span class="text-xs font-bold text-white tracking-tight">Pole Position</span>
                             </div>
-                            <div class="h-32 md:h-40 bg-gray-950/80 rounded-lg flex items-center justify-center border border-gray-800 overflow-hidden relative">
+                            <div class="h-28 md:h-36 bg-gray-950/80 rounded-lg flex items-center justify-center border border-gray-800 overflow-hidden relative">
                                 <img src="./assets/poleposition_real_mockup.png" alt="Painel de telemetria do Pole Position com dados de volta e Força G" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/20 to-transparent flex items-end p-2 justify-center">
                                     <span class="text-[9px] text-lime-400 font-bold uppercase tracking-wider">Telemetria GPS</span>
                                 </div>
                             </div>
-                            <p class="text-[9px] md:text-[10px] text-gray-300 mt-2.5 line-clamp-2 font-medium">Telemetria de kart e automobilismo real-time.</p>
+                            <p class="text-[9px] md:text-[10px] text-gray-300 mt-2.5 line-clamp-2 font-medium" data-i18n="hero_pole_desc">Telemetria de kart e automobilismo real-time.</p>
+                        </a>
+
+                        <!-- LottoExpert Card (Far Right) -->
+                        <a href="lottoexpert.html" class="absolute w-[150px] md:w-[190px] h-[220px] md:h-[270px] bg-gradient-to-b from-purple-600/10 to-brand-base border border-purple-500/20 rounded-2xl p-3 shadow-2xl glass-panel transform rotate-12 translate-x-28 md:translate-x-32 translate-y-6 hover:-translate-y-12 hover:rotate-[8deg] hover:scale-105 transition-all duration-500 cursor-pointer group/hero-card block z-10">
+                            <div class="flex items-center gap-2 mb-2">
+                                <img src="./assets/lottoexpert.png" alt="Ícone do app LottoExpert" class="w-7 h-7 rounded-lg border border-purple-500/30">
+                                <span class="text-[11px] font-bold text-white tracking-tight">LottoExpert</span>
+                            </div>
+                            <div class="h-24 md:h-32 bg-gray-950/80 rounded-lg flex items-center justify-center border border-gray-800 overflow-hidden relative">
+                                <img src="./assets/lottoexpert_app_mockup.png" alt="Tela do app LottoExpert com gerador de fechamentos para Mega-Sena" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/20 to-transparent flex items-end p-2 justify-center">
+                                    <span class="text-[9px] text-purple-400 font-bold uppercase tracking-wider">Loterias</span>
+                                </div>
+                            </div>
+                            <p class="text-[9px] md:text-[10px] text-gray-400 mt-2.5 line-clamp-2" data-i18n="hero_lotto_desc">Análise matemática e fechamentos offline.</p>
                         </a>
 
                     </div>
@@ -464,7 +479,7 @@
             </div>
 
             <!-- Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 max-w-7xl mx-auto gap-8">
 
                 <!-- Card 1: Pole Position -->
                 <div
@@ -600,6 +615,50 @@
                     </div>
                 </div>
 
+                <!-- Card 4: EclipseGo -->
+                <div
+                    class="glass-panel rounded-2xl p-1 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_25px_rgba(234,179,8,0.3)] group">
+                    <div
+                        class="bg-brand-base rounded-xl h-full p-6 flex flex-col relative overflow-hidden z-10 group-hover:bg-brand-base/80 transition-colors">
+                        
+                        <!-- Icon Header & Title -->
+                        <div class="flex items-center gap-4 mb-6">
+                            <img src="./assets/eclipse-go.png" alt="EclipseGo Logo" class="w-12 h-12 object-contain rounded-xl shadow-[0_0_15px_rgba(234,179,8,0.2)] border border-yellow-500/20">
+                            <div>
+                                <h3 class="text-2xl font-bold text-white">EclipseGo</h3>
+                                <span class="text-xs text-yellow-500 font-semibold tracking-wide uppercase" data-i18n="app_eclipse_tag">Astronomia & GPS</span>
+                            </div>
+                        </div>
+
+                        <!-- Visual Screenshot Container -->
+                        <div class="w-full h-48 bg-gray-950/60 rounded-xl mb-6 border border-gray-800/80 overflow-hidden relative flex items-center justify-center group-hover:border-yellow-500/30 transition-all duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-yellow-500/5 to-transparent"></div>
+                            <img src="./assets/eclipsego_screenshot.png" alt="Tela do app EclipseGo mostrando previsão de eclipse solar" class="w-[125px] h-[160px] object-cover rounded-md shadow-2xl border border-gray-800/80 transform translate-y-4 group-hover:translate-y-1 group-hover:scale-105 transition-all duration-500">
+                        </div>
+
+                        <p class="text-gray-400 mb-8 flex-grow text-sm leading-relaxed" data-i18n="app_eclipse_desc">
+                            Cálculo local de visibilidade e linha do tempo de eclipses solares e lunares. Totalmente offline com suporte a GPS e busca por cidades.
+                        </p>
+
+                        <div class="space-y-3 mt-auto pt-6 border-t border-gray-800">
+                            <!-- Inactive Google Play button -->
+                            <div class="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gray-800/80 text-gray-500 border border-gray-700/50 font-medium cursor-default select-none text-sm" title="App em fase de testes">
+                                <i class="fa-brands fa-google-play opacity-50"></i> <span data-i18n="btn_google_play_soon">Em breve na Google Play</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 pt-1">
+                                <a href="eclipsego.html"
+                                    class="flex items-center justify-center py-2 rounded text-[11px] font-semibold tracking-wide text-gray-400 border border-gray-700 hover:border-yellow-500 hover:text-white transition-colors bg-gray-800/30 text-center" data-i18n="btn_app_page">
+                                    PÁGINA DO APP
+                                </a>
+                                <a href="eclipsego-privacy.html"
+                                    class="flex items-center justify-center py-2 rounded text-[11px] font-semibold tracking-wide text-gray-400 border border-gray-700 hover:border-yellow-500 hover:text-white transition-colors bg-gray-800/30 text-center px-1" data-i18n="btn_privacy">
+                                    PRIVACIDADE
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -655,6 +714,7 @@
                         <li><a href="lottoexpert.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">LottoExpert</a></li>
                         <li><a href="topowalk.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">TopoWalk</a></li>
                         <li><a href="poleposition.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">Pole Position</a></li>
+                        <li><a href="eclipsego.html" class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm">EclipseGo</a></li>
                     </ul>
                 </div>
 
@@ -681,6 +741,11 @@
                         <li><a href="topowalk-privacy.html"
                                 class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2">
                                 <i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_topo">Privacidade - TopoWalk</span>
+                            </a></li>
+
+                        <li><a href="eclipsego-privacy.html"
+                                class="text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-gray-600 text-xs"></i> <span data-i18n="footer_priv_eclipse">Privacidade - EclipseGo</span>
                             </a></li>
                     </ul>
                 </div>
@@ -735,6 +800,12 @@
                 app_pole_desc: "Transforma seu smartphone numa interface de telemetria offline. Com GPS de alta frequência, Força G lateral em tempo real e detecção vetorial de parciais.",
                 app_topo_desc: "Transforma seu smartphone numa ferramenta topográfica de campo com precisão barométrica. Calcule distâncias, inclinações e desníveis em tempo real, gerando relatórios em PDF 100% offline.",
                 app_lotto_desc: "Engenharia estatística para loterias com motor combinatório offline, scanner de bilhetes via OCR, gestão de bolões e simulação de ROI histórico.",
+                app_eclipse_tag: "Astronomia & GPS",
+                app_eclipse_desc: "Cálculo local de visibilidade e linha do tempo de eclipses solares e lunares. Totalmente offline com suporte a GPS e busca por cidades.",
+                hero_topo_desc: "Levantamento de campo barométrico de bolso.",
+                hero_lotto_desc: "Análise matemática e fechamentos offline.",
+                hero_pole_desc: "Telemetria de kart e automobilismo real-time.",
+                hero_eclipse_desc: "Previsão local de eclipses 100% offline.",
                 btn_google_play: "Ver na Google Play",
                 btn_google_play_soon: "Em breve na Google Play",
                 btn_app_page: "PÁGINA DO APP",
@@ -748,6 +819,7 @@
                 footer_priv_pole: "Privacidade - Pole Position",
                 footer_priv_topo: "Privacidade - TopoWalk",
                 footer_priv_lotto: "Privacidade - LottoExpert",
+                footer_priv_eclipse: "Privacidade - EclipseGo",
                 footer_terms_lotto: "Termos - LottoExpert",
                 footer_rights: "GHF Software. Todos os direitos reservados.",
                 footer_dev: "Desenvolvido com ",
@@ -785,6 +857,12 @@
                 app_pole_desc: "Transforms your smartphone into an offline telemetry dashboard. Featuring high-frequency GPS, real-time lateral G-force, and rigorous vector split detection.",
                 app_topo_desc: "Transforms your smartphone into an advanced field topographic tool with barometric precision. Calculate distances, slopes, and elevation on the fly, generating 100% offline PDF reports.",
                 app_lotto_desc: "Statistical engineering for lotteries featuring an offline combinatorial engine, OCR ticket scanner, sweepstakes management, and historical ROI simulation.",
+                app_eclipse_tag: "Astronomy & GPS",
+                app_eclipse_desc: "Local calculations of solar and lunar eclipse visibility and timeline. Fully offline with GPS support and city database search.",
+                hero_topo_desc: "Pocket barometric field survey tool.",
+                hero_lotto_desc: "Mathematical analysis and offline lotto wheels.",
+                hero_pole_desc: "Real-time kart and motorsport telemetry.",
+                hero_eclipse_desc: "100% offline local eclipse forecasting.",
                 btn_google_play: "Get it on Google Play",
                 btn_google_play_soon: "Coming soon on Google Play",
                 btn_app_page: "APP PAGE",
@@ -798,6 +876,7 @@
                 footer_priv_pole: "Privacy - Pole Position",
                 footer_priv_topo: "Privacy - TopoWalk",
                 footer_priv_lotto: "Privacy - LottoExpert",
+                footer_priv_eclipse: "Privacy - EclipseGo",
                 footer_terms_lotto: "Terms - LottoExpert",
                 footer_rights: "GHF Software. All rights reserved.",
                 footer_dev: "Developed with ",
