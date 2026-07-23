@@ -1,6 +1,6 @@
 # Termos de Serviço — LottoExpert
 
-**Última atualização:** 03 de Julho de 2026
+**Última atualização:** 23 de Julho de 2026
 
 Bem-vindo ao **LottoExpert**. Ao baixar, instalar ou utilizar o aplicativo, você concorda com os termos abaixo. Se não concordar, não utilize o aplicativo.
 
@@ -8,7 +8,7 @@ Bem-vindo ao **LottoExpert**. Ao baixar, instalar ou utilizar o aplicativo, voc�
 
 ## 1. Sobre o Serviço
 
-O LottoExpert é um aplicativo de **análise estatística e matemática** para loterias brasileiras. Ele oferece geração de fechamentos, filtros matemáticos, backtesting histórico, conferência de bilhetes, estatísticas de frequência/atraso e organização de bolões entre participantes.
+O LottoExpert é um aplicativo de **análise estatística e matemática** para loterias brasileiras. Ele oferece geração de fechamentos e desdobramentos com garantia matemática, filtros matemáticos, backtesting histórico, conferência de bilhetes (manual e, para assinantes Premium, automática), estatísticas de frequência/atraso, acompanhamento financeiro dos próprios jogos ("Meu desempenho") e organização de bolões entre participantes.
 
 O aplicativo é desenvolvido e mantido pela **GHF Software** ("desenvolvedor", "nós").
 
@@ -21,6 +21,7 @@ O aplicativo é desenvolvido e mantido pela **GHF Software** ("desenvolvedor", "
 - O desenvolvedor **não se responsabiliza** por perdas financeiras, danos diretos ou indiretos decorrentes de apostas realizadas em canais oficiais com base nas análises fornecidas por este aplicativo.
 - Os resultados gerados são baseados em análise estatística histórica e **não constituem garantia, previsão ou promessa de premiação**. Jogos de loteria são eventos aleatórios, e nenhum método estatístico altera as probabilidades oficiais de cada modalidade.
 - O aplicativo é fornecido **"como está"** ("as is"), sem garantias de disponibilidade ininterrupta, ausência de erros, ou de que os resultados sincronizados estarão sempre atualizados no momento exato da consulta.
+- A conferência de bilhetes (manual ou automática) e os valores de prêmio exibidos — incluindo no dashboard "Meu desempenho" e no relatório mensal — são **estimativas calculadas localmente** com base nos resultados e nas faixas de premiação sincronizadas. Eles têm caráter informativo e **não substituem a conferência oficial** junto à Caixa Econômica Federal ou casa lotérica credenciada, única via válida para reivindicar premiação.
 
 ---
 
@@ -55,7 +56,7 @@ O LottoExpert Premium é oferecido em três planos, processados via **Google Pla
 
 ## 5. Backup no Google Drive (Recurso Premium)
 
-Usuários Premium podem ativar, de forma **opcional e mediante consentimento explícito**, um backup dos seus jogos salvos, bolões e preferências na pasta privada de dados do próprio aplicativo (`appDataFolder`) da sua conta pessoal do Google Drive.
+Usuários Premium podem ativar, de forma **opcional e mediante consentimento explícito**, um backup dos seus jogos salvos, bolões, participações por concurso, dezenas monitoradas, estratégias de geração salvas e preferências na pasta privada de dados do próprio aplicativo (`appDataFolder`) da sua conta pessoal do Google Drive.
 
 - O desenvolvedor **não tem acesso** ao conteúdo desse backup — ele permanece sob seu controle, na sua própria conta Google.
 - Você pode revogar o acesso a qualquer momento em [myaccount.google.com/connections](https://myaccount.google.com/connections).
@@ -79,7 +80,9 @@ Usuários Premium podem ativar, de forma **opcional e mediante consentimento exp
 
 ### Licenças de Terceiros
 
-Este aplicativo utiliza as seguintes bibliotecas de código aberto, todas sob **Apache License 2.0**: Jetpack Compose, Jetpack Navigation Compose, Room, DataStore Preferences, WorkManager, CameraX, Hilt (Dagger), Retrofit, OkHttp, Kotlin Coroutines, ML Kit Text Recognition (Google), Firebase Analytics, Firebase Crashlytics, Firebase Remote Config, Firebase App Check, Google Play Billing, Google Play In-App Review, e Timber.
+Este aplicativo utiliza as seguintes bibliotecas de código aberto, todas sob **Apache License 2.0**: Jetpack Compose, Jetpack Navigation Compose, Room, DataStore Preferences, WorkManager, Jetpack Glance (widget de tela inicial), CameraX, Hilt (Dagger), Retrofit, OkHttp, Kotlin Coroutines, ML Kit Text Recognition (Google), ZXing (geração de QR code) e Timber.
+
+Adicionalmente, o aplicativo integra os seguintes SDKs e serviços da Google, sujeitos aos **Termos de Serviço do Google** e aos termos específicos de cada produto (não Apache License 2.0): Firebase Analytics, Firebase Crashlytics, Firebase Remote Config, Firebase App Check, Google Play Billing, Google Play In-App Review, Google Play Services (Identity Authorization API, usada na autorização do backup no Drive).
 
 ---
 

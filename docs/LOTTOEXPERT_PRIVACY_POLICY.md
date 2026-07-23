@@ -1,6 +1,6 @@
 # Política de Privacidade — LottoExpert
 
-**Última atualização:** 03 de Julho de 2026
+**Última atualização:** 23 de Julho de 2026
 
 Esta Política de Privacidade descreve como o aplicativo **LottoExpert** coleta, usa e protege suas informações. Nosso compromisso fundamental é com a **privacidade** e a segurança dos dados dos usuários.
 
@@ -8,7 +8,9 @@ Esta Política de Privacidade descreve como o aplicativo **LottoExpert** coleta,
 
 ## 1. Princípio Geral: Privacidade por Padrão
 
-O LottoExpert é um aplicativo **Privacy-First**. Todo processamento de dados — geração de jogos, análise estatística, conferência de bilhetes e armazenamento do histórico — ocorre **exclusivamente no seu dispositivo**. Nenhuma informação pessoal, estratégia de aposta ou jogo criado por você é transmitida a qualquer servidor.
+O LottoExpert é um aplicativo **Privacy-First**. Todo processamento de dados — geração de jogos, análise estatística, conferência de bilhetes, cálculo de desempenho financeiro e armazenamento do histórico — ocorre **exclusivamente no seu dispositivo**. Nenhuma informação pessoal, estratégia de aposta ou jogo criado por você é transmitida a qualquer servidor.
+
+As duas únicas exceções, ambas descritas em detalhe adiante, são: as **métricas de uso pseudônimas** do serviço de análise, que podem ser desativadas dentro do app (Seção 4.7), e o **backup opcional no seu próprio Google Drive**, que só funciona mediante autorização explícita e ao qual o desenvolvedor não tem acesso (Seção 4.9).
 
 Para obter os resultados oficiais dos sorteios, o app comunica com servidores próprios do desenvolvedor hospedados no Google Cloud Platform (GCP) — descritos na Seção 4.1. Essas requisições são anônimas e não contêm qualquer dado pessoal.
 
@@ -20,10 +22,12 @@ O LottoExpert **não coleta, não transmite e não armazena** em servidores remo
 
 - Suas dezenas selecionadas ou estratégias de jogo
 - Jogos criados ou salvos por você
-- Seu histórico de apostas
+- Seu histórico de apostas (quais jogos, em quais concursos, com quais dezenas)
 - Dados de identificação pessoal (e-mail, telefone, CPF)
 - Imagens capturadas pela câmera
 - Dados de localização
+
+**Nota sobre valores de prêmio:** o aplicativo conta com um serviço de análise de uso (Firebase Analytics, Seção 4.7) que registra, de forma **pseudônima e por evento**, valores monetários agregados de prêmio apurado — por exemplo, o total apurado numa conferência automática ou no relatório mensal. Esses valores não vêm acompanhados de dezenas, de identificação pessoal nem do valor apostado, e servem para medir se os recursos de conferência entregam resultado. Você pode desativar essa coleta a qualquer momento em **Sobre → Notificações → Privacidade** (Seção 4.7).
 
 **Nota sobre nomes em Bolões:** Os nomes de participantes inseridos no módulo "Meus Bolões" são armazenados exclusivamente no banco de dados local do seu dispositivo e nunca são enviados para nossos servidores. Esses nomes só deixam o aparelho se e quando você optar explicitamente por compartilhar um link de convite, exportar um PDF ou ativar o backup no Google Drive (ver Seção 4.9).
 
@@ -37,7 +41,9 @@ Os seguintes dados são armazenados no banco de dados privado do app (Room Datab
 
 - **Histórico de sorteios:** Resultados das loterias obtidos da nossa infraestrutura de dados (GCP), salvos para consulta offline.
 - **Jogos salvos:** Tickets gerados pelo algoritmo ou criados manualmente pelo usuário.
-- **Bolões:** Dados de grupos criados pelo usuário, incluindo nomes de participantes e vinculação de cotas.
+- **Bolões:** Dados de grupos criados pelo usuário, incluindo nomes de participantes, vinculação de cotas e a apuração do bolão (prêmio total e faixa atingida).
+- **Participações por concurso:** O vínculo entre um jogo salvo e o concurso em que ele foi apostado, com o custo registrado no momento da aposta e, após o sorteio, os acertos e o prêmio apurado. É a base do dashboard "Meu desempenho" e do relatório mensal — todo o cálculo financeiro é feito no dispositivo.
+- **Dezenas monitoradas e estratégias salvas:** Dezenas escolhidas para os alertas inteligentes e as configurações de geração salvas pelo usuário.
 - **Preferências de filtros:** Configurações locais de uso da interface.
 
 O usuário tem total controle sobre esses dados e pode **excluí-los manualmente** a qualquer momento através das opções de "Limpar" ou "Remover" dentro do aplicativo. Ao **desinstalar o aplicativo**, todos esses dados locais são removidos permanentemente do dispositivo.
@@ -54,7 +60,7 @@ Para o funcionamento do app, comunicamos com os seguintes serviços externos:
 - **Funcionamento:** Os resultados são coletados periodicamente da API pública da Caixa Econômica Federal por um processo automatizado do desenvolvedor e armazenados em um banco de dados privado hospedado no Google Cloud Platform (GCP). O aplicativo consulta esse banco de dados para sincronizar os resultados — sem chamar a API da Caixa diretamente.
 - **Dados enviados pelo app:** Nenhum dado pessoal. A requisição inclui apenas o nome da loteria e, opcionalmente, o número do concurso solicitado. Adicionalmente, um token de atestação do Firebase App Check é enviado para autenticar que a requisição parte de uma instalação legítima do aplicativo (ver Seção 4.2).
 - **Dados armazenados no servidor:** Apenas os resultados públicos dos sorteios. Nenhum dado do usuário é gravado nos servidores do desenvolvedor.
-- **Frequência:** Sincronização automática três vezes ao dia (aproximadamente 22:30, 08:30 e 12:30 BRT), garantindo que os resultados estejam disponíveis mesmo em caso de atraso na publicação oficial. O usuário também pode atualizar manualmente.
+- **Frequência:** A coleta dos resultados na fonte oficial é feita de hora em hora pelo processo automatizado do desenvolvedor (aproximadamente das 08:30 às 23:30 BRT), para cobrir os atrasos imprevisíveis na publicação oficial. Já o **aplicativo** consulta a infraestrutura em quatro janelas diárias (aproximadamente 08:30, 12:30, 22:30 e 23:35 BRT, com dispersão aleatória por dispositivo), além das atualizações manuais solicitadas pelo usuário.
 - **Provedor de infraestrutura:** Google Cloud Platform. Sujeito à [Política de Privacidade do Google](https://policies.google.com/privacy).
 
 ### 4.2 Firebase App Check (Google)
@@ -68,6 +74,7 @@ Para o funcionamento do app, comunicamos com os seguintes serviços externos:
 
 - **Finalidade:** Processar compras e assinaturas in-app para desbloqueio de recursos Premium. O app oferece três modalidades: assinatura mensal, assinatura anual e compra única vitalícia.
 - **Dados tratados pelo Google:** Dados de pagamento e histórico de compras gerenciados exclusivamente pelo Google Play. O LottoExpert recebe apenas a confirmação criptografada da transação para liberar os recursos Premium — sem acesso a dados de cartão, métodos de pagamento ou informações financeiras do usuário.
+- **Notificações de status da assinatura:** O Google Play envia à infraestrutura do desenvolvedor avisos automáticos sobre mudanças de estado da assinatura (renovação, cancelamento, expiração). Esse fluxo é descrito na Seção 4.10.
 - **Política do Google:** Sujeita aos [Termos de Serviço do Google Play](https://play.google.com/about/play-terms/).
 
 ### 4.4 Firebase Remote Config (Google)
@@ -91,8 +98,17 @@ Para o funcionamento do app, comunicamos com os seguintes serviços externos:
 ### 4.7 Firebase Analytics (Google)
 
 - **Finalidade:** Medir o uso agregado e anônimo das funcionalidades do app para melhorar a experiência do usuário, orientar o desenvolvimento e — em forma estritamente agregada, sem identificação individual — otimizar campanhas publicitárias do próprio desenvolvedor em plataformas como Google Ads e Meta Ads (Facebook/Instagram). Nenhum dado individual é compartilhado com essas plataformas; o uso é restrito a métricas agregadas de conversão (ex.: quantidade total de usuários que realizaram uma compra) para calibrar públicos de anúncios de forma estatística.
-- **Dados enviados:** Eventos de uso pseudônimos e agregados. Exemplos de eventos coletados: `generate_matrix`, `scan_ocr`, `export_pdf`, `sweepstake_created`, `sweepstake_copied`, `backtest_run`, `view_paywall`, `purchase_premium`, `ticket_checked`, `trial_scan_used`, `sync_complete`, `sync_error`, `onboarding_completed`, `notification_permission_granted`, `backup_started`, `backup_completed`, `backup_failed`, `restore_completed`. Os eventos de backup registram apenas metadados anônimos (ex.: quantidade total de itens e se a operação foi manual ou automática) — **nunca o conteúdo dos jogos, bolões ou preferências**. **Nenhuma dezena selecionada, nenhum dado financeiro e nenhum dado pessoal identificável é transmitido.**
-- **Identificador técnico:** O Firebase Analytics utiliza um `app_instance_id` pseudônimo por instalação, que não permite identificar o usuário individualmente. Esse identificador pode ser redefinido a qualquer momento desinstalando e reinstalando o aplicativo.
+- **Dados enviados:** Eventos de uso pseudônimos e agregados. Exemplos de eventos coletados:
+    - *Uso das funcionalidades:* `screen_view`, `generate_matrix`, `scan_ocr`, `export_pdf`, `backtest_run`, `ticket_checked`, `trial_scan_used`, `preset_saved`, `preset_regenerated`, `contests_view_opened`, `performance_viewed`, `monthly_report_opened`.
+    - *Bolões e loop de indicação:* `sweepstake_created`, `sweepstake_copied`, `sweepstake_shared`, `sweepstake_imported`, `sweepstake_auto_copied`, `sweepstake_checked`.
+    - *Conferência e acompanhamento:* `ticket_entry_registered`, `auto_check_completed`, `manual_check_used`, `smart_alert_sent`, `monthly_report_sent`.
+    - *Monetização:* `view_paywall`, `select_premium_plan`, `purchase`.
+    - *Ativação e onboarding:* `onboarding_started`, `onboarding_step`, `onboarding_completed`, `notification_permission_granted`, `journey_step_completed`, `journey_dismissed`, `journey_finished`, e os equivalentes `premium_journey_*`.
+    - *Infraestrutura e backup:* `sync_complete`, `sync_error`, `backup_started`, `backup_completed`, `backup_failed`, `restore_completed`.
+- **Valores monetários:** Alguns eventos de conferência (`auto_check_completed`, `sweepstake_checked`, `monthly_report_sent`) incluem o **valor total de prêmio apurado** naquela operação, e os eventos de compra incluem o valor pago pela assinatura. São valores agregados por evento e vinculados apenas ao identificador pseudônimo da instalação — **sem dezenas, sem valor apostado e sem identificação pessoal**. Servem para medir se os recursos de conferência entregam resultado real ao usuário.
+- **Limites da coleta:** Os eventos de backup registram apenas metadados anônimos (ex.: quantidade total de itens e se a operação foi manual ou automática) — **nunca o conteúdo dos jogos, bolões ou preferências**. **Nenhuma dezena selecionada, nenhum jogo, nenhum nome de participante e nenhum dado pessoal identificável é transmitido.**
+- **Identificador técnico:** O Firebase Analytics utiliza um `app_instance_id` pseudônimo por instalação, que não permite identificar o usuário individualmente. Esse identificador pode ser redefinido a qualquer momento desinstalando e reinstalando o aplicativo. O app também registra duas propriedades de segmentação igualmente pseudônimas: se a instalação é gratuita ou Premium e qual o tipo de plano (mensal, anual ou vitalício).
+- **Como desativar:** A coleta pode ser desligada a qualquer momento em **Sobre → Notificações → Privacidade**. A escolha é persistida no dispositivo e aplicada na inicialização do aplicativo, interrompendo o envio de todos os eventos descritos acima.
 - **Advertising ID:** A coleta do Advertising ID (GAID) está **desativada** de forma explícita no código do aplicativo. O LottoExpert não exibe anúncios e não integra nenhum SDK de publicidade de terceiros.
 - **Base legal (LGPD):** Legítimo interesse do desenvolvedor (Art. 7º, IX, LGPD) para melhoria do produto e otimização de campanhas próprias, com dados tratados de forma agregada e pseudônima, sem impacto desproporcional ao usuário.
 - **Política do Google:** Sujeita à [Política de Privacidade do Google](https://policies.google.com/privacy).
@@ -107,12 +123,21 @@ Para o funcionamento do app, comunicamos com os seguintes serviços externos:
 
 - **Finalidade:** Permitir que o usuário Premium salve e restaure seus próprios dados do aplicativo (jogos salvos, bolões e preferências) na **sua conta pessoal do Google Drive**, para recuperação em caso de troca ou perda do dispositivo.
 - **Natureza opcional:** O recurso é **desativado por padrão** e só entra em funcionamento quando o usuário **autoriza explicitamente** o acesso ao Drive por meio da tela de consentimento OAuth do Google. Nenhum dado é enviado ao Drive antes dessa autorização.
-- **Dados enviados:** Uma cópia dos seus **jogos salvos**, **bolões** (incluindo nomes de participantes e cotas) e **preferências de uso** do app, serializada em formato JSON e comprimida (GZIP).
+- **Dados enviados:** Uma cópia dos seus **jogos salvos**, **bolões** (incluindo nomes de participantes e cotas), **participações por concurso** (o vínculo jogo–concurso, com o custo registrado e o prêmio apurado), **dezenas monitoradas**, **estratégias de geração salvas** e **preferências de uso** do app, serializada em formato JSON e comprimida (GZIP).
 - **Onde são armazenados:** Exclusivamente na pasta oculta e privada de aplicativo (`appDataFolder`) do **Google Drive do próprio usuário**. Essa pasta é isolada: só é acessível por este aplicativo, não aparece na lista normal de arquivos do Drive do usuário, e **não é visível nem acessível a outros aplicativos ou a outros usuários**.
 - **Acesso do desenvolvedor:** **Nenhum.** Os dados trafegam diretamente entre o seu dispositivo e a sua conta Google. O desenvolvedor **não recebe, não armazena e não tem qualquer acesso** ao conteúdo do backup. O aplicativo utiliza apenas o escopo `https://www.googleapis.com/auth/drive.appdata`, que **restringe o acesso unicamente à pasta de dados do próprio app** — o app não pode ler nem modificar nenhum outro arquivo do seu Drive.
 - **Backup automático:** Se ativado pelo usuário, o app pode realizar backups periódicos em segundo plano, reutilizando a autorização já concedida. O usuário pode desativar o backup automático a qualquer momento nas configurações do recurso.
 - **Como revogar e excluir:** O usuário pode revogar o acesso do app ao Drive a qualquer momento em [myaccount.google.com/connections](https://myaccount.google.com/connections) (Segurança → Acesso de terceiros). Os dados do backup podem ser excluídos gerenciando os dados de aplicativos ocultos nas configurações do Google Drive, ou desinstalando o aplicativo.
 - **Política do Google:** Sujeita à [Política de Privacidade do Google](https://policies.google.com/privacy) e aos [Termos de Serviço do Google Drive](https://www.google.com/drive/terms-of-service/).
+
+### 4.10 Notificações de Assinatura do Google Play (RTDN)
+
+- **Finalidade:** Medir, de forma agregada, a duração média e a taxa de cancelamento das assinaturas Premium, para orientar decisões de produto e de preço.
+- **Funcionamento:** Quando o status de uma assinatura muda (compra, renovação, cancelamento, período de carência, expiração), o Google Play envia uma notificação automática para um serviço do desenvolvedor hospedado no Google Cloud Platform. **Esse fluxo ocorre inteiramente entre o Google Play e o servidor — o aplicativo instalado no seu aparelho não participa e não envia nada.**
+- **Dados recebidos:** O identificador do aplicativo, o tipo de evento (ex.: "assinatura renovada", "assinatura cancelada") e o momento em que ocorreu. O identificador da compra fornecido pelo Google é convertido em um **código irreversível (hash)** antes de qualquer registro, justamente para que não seja possível reconstruí-lo. **Não são recebidos nome, e-mail, dados de pagamento ou qualquer identificação do usuário** — o Google Play não fornece esses dados nesse fluxo.
+- **Armazenamento:** Os eventos são gravados apenas como registro técnico (log) no Google Cloud Logging, sem banco de dados, sem cruzamento com dados do aplicativo e sem qualquer ação automatizada sobre a conta do usuário. Os registros seguem a política de retenção padrão do Cloud Logging (30 dias) e depois são descartados.
+- **Base legal (LGPD):** Legítimo interesse do desenvolvedor (Art. 7º, IX) para gestão e sustentabilidade do serviço, com dados pseudonimizados e sem impacto sobre o titular.
+- **Política do Google:** Sujeita à [Política de Privacidade do Google](https://policies.google.com/privacy) e aos [Termos de Serviço do Google Play](https://play.google.com/about/play-terms/).
 
 ---
 
@@ -123,16 +148,16 @@ Para o funcionamento do app, comunicamos com os seguintes serviços externos:
 | `INTERNET` | Sincronizar resultados dos sorteios com a infraestrutura de dados do desenvolvedor (GCP), processar compras e assinaturas via Google Play, e comunicar com serviços Firebase. |
 | `BILLING` | Validar e processar compras únicas e assinaturas de recursos Premium via Google Play Store. |
 | `CAMERA` | Escanear bilhetes físicos para conferência automática de dezenas (funcionalidade OCR). A câmera só é ativada quando o usuário abre explicitamente a tela de escaneamento. Nenhuma imagem é armazenada ou transmitida. |
-| `POST_NOTIFICATIONS` | Exibir alertas de resultados, prêmios acumulados e lembretes de sorteio (requer permissão explícita no Android 13+). A permissão é solicitada durante o onboarding, com explicação prévia sobre o que será notificado. O usuário pode gerenciar ou revogar cada tipo de notificação individualmente nas configurações do Android ou dentro do próprio app (Sobre → Notificações). |
+| `POST_NOTIFICATIONS` | Exibir alertas de resultados, prêmios acumulados, lembretes de sorteio e, para assinantes Premium, o resumo da conferência automática dos seus jogos, os alertas de dezenas monitoradas e o relatório mensal de desempenho (requer permissão explícita no Android 13+). A permissão é solicitada durante o onboarding, com explicação prévia sobre o que será notificado. O usuário pode gerenciar ou revogar cada tipo de notificação individualmente nas configurações do Android ou dentro do próprio app (Sobre → Notificações). |
 | `RECEIVE_BOOT_COMPLETED` | Reagendar automaticamente os alarmes de sincronização e lembretes após reinicialização do dispositivo, garantindo que as notificações continuem funcionando sem necessidade de abrir o app. |
 
 ---
 
 ## 6. Processamento de Imagens (OCR)
 
-A funcionalidade "Conferir Bilhete" utiliza a câmera do dispositivo e o **ML Kit Text Recognition** (Google) para identificar dezenas em um bilhete físico fotografado.
+A funcionalidade "Conferir Bilhete" utiliza a câmera do dispositivo e o **ML Kit Text Recognition** (Google) para identificar dezenas em um bilhete físico fotografado. No caso da Lotomania, cuja cartela usa uma fonte não reconhecida pelo ML Kit, o app emprega um leitor próprio desenvolvido pelo desenvolvedor — que também opera **inteiramente no dispositivo**.
 
-- O processamento OCR ocorre **inteiramente no dispositivo** — o ML Kit opera offline, sem enviar imagens para servidores do Google ou do desenvolvedor.
+- O processamento OCR ocorre **inteiramente no dispositivo** — tanto o ML Kit quanto o leitor próprio operam offline, sem enviar imagens para servidores do Google ou do desenvolvedor.
 - As imagens capturadas **não são salvas** em nenhum local (galeria, cache ou banco de dados).
 - Apenas as dezenas identificadas no texto são utilizadas, descartando a imagem imediatamente após o processamento.
 
@@ -149,7 +174,8 @@ O LottoExpert é destinado a usuários **maiores de 18 anos**, dada a natureza d
 - Todo dado armazenado localmente fica no diretório privado do app, protegido pelo sandbox do Android.
 - As requisições à infraestrutura do desenvolvedor (GCP) são autenticadas via Firebase App Check e transmitidas exclusivamente via HTTPS.
 - O bucket de dados no GCP possui acesso público bloqueado — somente o serviço de sincronização do desenvolvedor pode gravar, e somente o serviço de leitura autenticado por App Check pode servir dados ao app.
-- Utilizamos Firebase Analytics exclusivamente com eventos anônimos e agregados para fins de melhoria do produto, sem coleta de Advertising ID ou identificadores de usuário (ver seção 4.7).
+- Utilizamos Firebase Analytics exclusivamente com eventos pseudônimos e agregados para fins de melhoria do produto, sem coleta de Advertising ID ou identificadores de usuário (ver seção 4.7), com opção de desativação dentro do app.
+- As notificações de assinatura recebidas do Google Play (Seção 4.10) têm o identificador de compra convertido em hash irreversível antes de qualquer registro, e ficam apenas em log técnico com retenção de 30 dias.
 - O backup opcional no Google Drive (Seção 4.9) trafega via HTTPS diretamente entre o dispositivo do usuário e a sua própria conta Google, utilizando o escopo restrito `drive.appdata`, sem intermediação nem acesso do desenvolvedor.
 - Não utilizamos SDKs de publicidade ou rastreadores de comportamento para fins comerciais.
 
@@ -169,6 +195,7 @@ O LottoExpert respeita integralmente a **Lei nº 13.709/2018 (LGPD)**. Esta seç
 | Firebase Crashlytics (diagnóstico de falhas) | Legítimo interesse — manutenção e melhoria do serviço — Art. 7º, IX |
 | Firebase Analytics (uso agregado do app) | Legítimo interesse — melhoria do produto e otimização de campanhas próprias — Art. 7º, IX |
 | Firebase Remote Config (preços de apostas) | Legítimo interesse — Art. 7º, IX |
+| Notificações de assinatura do Google Play — RTDN (Seção 4.10) | Legítimo interesse — gestão e sustentabilidade do serviço, com dados pseudonimizados — Art. 7º, IX |
 | Backup no Google Drive do usuário (Premium, opcional) | Consentimento — Art. 7º, I (autorização OAuth explícita, revogável a qualquer momento) |
 | Dados locais (jogos, bolões, preferências) | Execução de contrato / consentimento implícito pelo uso — Art. 7º, V |
 
