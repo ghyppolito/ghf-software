@@ -298,16 +298,67 @@
             9: { name: '+Milionária', theme: 'theme-milionaria', icon: 'MaisMilionaria.png' }
         };
 
+        // Base64 URL Safe -> bytes
+        function tokenToBytes(encoded) {
+            const base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+            const binaryString = atob(base64);
+            return Uint8Array.from(binaryString, c => c.charCodeAt(0));
+        }
+
+        // v1 (histórico): JSON -> GZIP -> Base64. As dezenas viajam como texto.
+        function decodeV1(encoded) {
+            const jsonString = pako.ungzip(tokenToBytes(encoded), { to: 'string' });
+            const data = JSON.parse(jsonString);
+            return {
+                n: data.n, l: data.l, c: data.c, s: data.s, cost: data.cost,
+                ticketCount: (data.t || []).length
+            };
+        }
+
+        // v2 (prefixo "2."): binário com bitmask de dezenas -> GZIP -> Base64. Um bolão de 115
+        // jogos de Lotomania sai em ~2 KB em vez de ~5 KB. A página só precisa do cabeçalho e do
+        // total de jogos — as máscaras ficam para o app.
+        function decodeV2(encoded) {
+            const raw = pako.ungzip(tokenToBytes(encoded.slice(2)));
+            let pos = 0;
+            const u8 = () => {
+                if (pos >= raw.length) throw new Error('payload truncado');
+                return raw[pos++];
+            };
+            const varint = () => {
+                let result = 0, shift = 0, b;
+                do {
+                    b = u8();
+                    result += (b & 0x7f) * Math.pow(2, shift);
+                    shift += 7;
+                } while (b & 0x80);
+                return result;
+            };
+            const str = () => {
+                const len = varint();
+                const slice = raw.subarray(pos, pos + len);
+                if (slice.length !== len) throw new Error('string truncada');
+                pos += len;
+                return new TextDecoder().decode(slice);
+            };
+
+            if (u8() !== 2) throw new Error('versão desconhecida');
+            const l = u8();
+            u8(); // flags — só interessam ao app, que remonta os jogos
+            u8(); // bytes de máscara por jogo
+            const c = varint();
+            const costCents = varint();
+            const s = varint();
+            const n = str();
+            const dictSize = varint();
+            for (let i = 0; i < dictSize; i++) str();
+            const ticketCount = varint();
+            return { n: n, l: l, c: c, s: s, cost: costCents / 100, ticketCount: ticketCount };
+        }
+
         function decodeToken(encoded) {
             try {
-                // Base64 URL Safe Decode
-                const base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
-                const binaryString = atob(base64);
-                const bytes = Uint8Array.from(binaryString, c => c.charCodeAt(0));
-                
-                // GZIP Decompress (using pako)
-                const jsonString = pako.ungzip(bytes, { to: 'string' });
-                return JSON.parse(jsonString);
+                return encoded.indexOf('2.') === 0 ? decodeV2(encoded) : decodeV1(encoded);
             } catch (e) {
                 console.error("Decode error", e);
                 return null;
@@ -328,10 +379,22 @@
                 return;
             }
 
+            const appUrl = `lottoexpert://sweepstake?d=${token}`;
             const data = decodeToken(token);
+
+            // Sem decode, ainda assim oferecemos o botão de abrir no app: uma página que ficou
+            // para trás do formato do link não pode bloquear um convite que o app entende.
             if (!data) {
                 document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-message').innerHTML =
+                    '<p>Não conseguimos exibir o resumo deste convite aqui, mas o link continua válido: abra no app para importar o bolão.</p>';
                 document.getElementById('error-message').style.display = 'block';
+                document.getElementById('open-app-btn').href = appUrl;
+                document.getElementById('sweepstake-name').textContent = 'Convite de Bolão';
+                document.getElementById('lottery-tag').style.display = 'none';
+                document.querySelector('.details-grid').style.display = 'none';
+                document.getElementById('main-card').style.display = 'block';
+                setTimeout(() => { window.location = appUrl; }, 1500);
                 return;
             }
 
@@ -347,10 +410,9 @@
             document.getElementById('lottery-tag').textContent = lottery.name;
             document.getElementById('contest-number').textContent = data.c;
             document.getElementById('total-shares').textContent = data.s;
-            document.getElementById('total-tickets').textContent = data.t.length;
+            document.getElementById('total-tickets').textContent = data.ticketCount;
             document.getElementById('total-cost').textContent = formatCurrency(data.cost);
 
-            const appUrl = `lottoexpert://sweepstake?d=${token}`;
             document.getElementById('open-app-btn').href = appUrl;
 
             document.getElementById('loading').style.display = 'none';
