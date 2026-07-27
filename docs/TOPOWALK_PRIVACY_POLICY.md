@@ -1,6 +1,6 @@
 # Política de Privacidade — TopoWalk
 
-**Última atualização:** maio de 2026
+**Última atualização:** julho de 2026
 
 Esta Política de Privacidade descreve como o aplicativo **TopoWalk**, desenvolvido por **GHF Software**, trata as informações do usuário. Ao utilizar o TopoWalk, você concorda com os termos descritos neste documento.
 
@@ -28,13 +28,28 @@ O TopoWalk é um aplicativo Android desenvolvido por **GHF Software** para fins 
 - **Quando é acessado:** Continuamente enquanto o aplicativo está aberto, exclusivamente para conversão de pressão em altitude.
 - **Retenção:** Os valores de pressão brutos não são armazenados. Apenas a altitude derivada é usada nos cálculos e, opcionalmente, salva com a medição.
 
-### 2.3 Acesso à Internet (Tiles de Mapa)
+### 2.3 Bluetooth (Receptor GNSS/RTK Externo — opcional, em Beta)
+
+- **O que é acessado:** Conexão Bluetooth com um receptor GNSS/RTK externo já pareado, escolhido pelo usuário, para leitura das sentenças de posição (NMEA 0183).
+- **Finalidade:** Obter coordenadas e altitude de alta precisão a partir do receptor externo, em vez do GPS interno do aparelho.
+- **Quando é acessado:** Somente quando o usuário ativa explicitamente o recurso "Receptor GNSS externo" e seleciona um dispositivo. O recurso vem **desligado por padrão**.
+- **Escopo:** O aplicativo **não faz descoberta** de dispositivos e não usa a permissão `BLUETOOTH_SCAN`; apenas dispositivos já pareados nas configurações do Android são listados. Os dados recebidos permanecem no aparelho, são usados apenas para os cálculos e, opcionalmente, salvos com a medição. **Nada é transmitido a terceiros.**
+- **Status Beta:** O recurso está sinalizado como Beta dentro do aplicativo. Isso não altera o tratamento de dados descrito acima — nenhuma informação adicional é coletada por conta do estágio de testes.
+
+### 2.4 Acesso à Internet (Tiles de Mapa)
 
 - **O que é acessado:** O aplicativo realiza requisições HTTP à rede de tiles do **OpenStreetMap** (OpenTopoMap) para exibir o mapa de relevo na tela de visualização.
 - **Finalidade:** Renderizar o mapa de fundo sobre o qual a demarcação é plotada.
 - **Dados enviados:** Apenas as coordenadas geográficas dos tiles necessários para renderizar a área visível — informação genérica de posição geográfica, sem identificação do usuário.
 - **Quando é acessado:** Somente quando o usuário navega para a aba "Mapa" dentro de uma medição ou no histórico.
 - **Armazenamento em cache:** O osmdroid pode armazenar tiles em cache local para melhorar a performance. Esse cache contém apenas imagens de mapa, sem dados pessoais do usuário.
+
+### 2.5 Envio de Feedback por E-mail (opcional)
+
+- **O que acontece:** Na tela do receptor GNSS externo, o botão "Enviar feedback" abre o **aplicativo de e-mail do próprio usuário** com uma mensagem pré-preenchida endereçada a `support@ghfsoftware.com`.
+- **Dados pré-preenchidos na mensagem:** versão do TopoWalk, versão do Android e fabricante/modelo do aparelho. Nenhuma coordenada, medição ou dado do histórico é incluído.
+- **Controle do usuário:** A mensagem só é enviada se o usuário decidir enviá-la, podendo editar ou apagar qualquer parte do texto antes disso. O TopoWalk não envia nada automaticamente e não tem acesso à conta de e-mail do usuário.
+- **O que recebemos:** Ao optar por enviar, o usuário nos revela o endereço de e-mail utilizado, junto ao conteúdo da mensagem. Esses e-mails são usados exclusivamente para responder e corrigir problemas do recurso, não são compartilhados com terceiros nem usados para marketing, e podem ser excluídos mediante solicitação ao mesmo endereço.
 
 ---
 
@@ -46,6 +61,8 @@ O TopoWalk **não coleta, não armazena remotamente e não transmite**:
 - Endereço IP ou dados de rede além do necessário para carregar tiles de mapa e enviar eventos de analytics
 - Localização em segundo plano ou histórico de localização fora do uso ativo do app
 - ID de publicidade (o aplicativo remove explicitamente esta permissão)
+
+Única exceção: se o usuário voluntariamente nos escrever pelo botão "Enviar feedback" (seção 2.5), passamos a conhecer o endereço de e-mail que ele escolheu usar e o conteúdo que ele escreveu. Isso depende sempre de uma ação explícita do usuário e não ocorre em nenhum outro fluxo do aplicativo.
 
 ---
 
@@ -113,7 +130,7 @@ O TopoWalk não tem acesso ao destino escolhido pelo usuário para o compartilha
 
 ### 6.3 Exportação GeoJSON e KML
 
-O usuário pode exportar medições nos formatos GeoJSON e KML. Esses arquivos são gerados localmente no cache do dispositivo e compartilhados da mesma forma que o PDF (seção 5.2). O app não tem acesso ao destino do compartilhamento.
+O usuário pode exportar medições nos formatos GeoJSON e KML. Esses arquivos são gerados localmente no cache do dispositivo e compartilhados da mesma forma que o PDF (seção 6.2). O app não tem acesso ao destino do compartilhamento.
 
 ---
 
@@ -125,6 +142,8 @@ O usuário pode exportar medições nos formatos GeoJSON e KML. Esses arquivos s
 | `ACCESS_COARSE_LOCATION` | Permissão complementar exigida pelo Android para localização |
 | `INTERNET` | Carregar tiles de mapa do OpenStreetMap e enviar eventos ao Firebase Analytics |
 | `VIBRATE` | Feedback háptico ao capturar um ponto de medição |
+| `BLUETOOTH_CONNECT` (Android 12+) | Conectar a um receptor GNSS/RTK externo já pareado, quando o recurso é ativado pelo usuário |
+| `BLUETOOTH` / `BLUETOOTH_ADMIN` (Android 11 e anteriores) | Equivalente às versões antigas do Android para a mesma conexão |
 
 O aplicativo não solicita acesso à câmera, microfone, contatos ou armazenamento externo. O ID de publicidade (`AD_ID`) é explicitamente removido do app e não é coletado.
 
@@ -155,7 +174,7 @@ Recomendamos que você revise esta política periodicamente.
 Dúvidas, solicitações ou comentários sobre esta Política de Privacidade podem ser enviados para:
 
 **GHF Software**
-E-mail: **[seu e-mail de contato]**
+E-mail: **support@ghfsoftware.com**
 
 ---
 
