@@ -189,10 +189,9 @@
                     </p>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                        <!-- Inactive Coming Soon button -->
-                        <div class="px-8 py-4 bg-gray-800/80 text-gray-500 border border-gray-700/50 font-semibold rounded-lg flex items-center justify-center gap-3 cursor-default select-none w-full sm:w-auto" title="Aplicativo ainda em fase de testes">
-                            <i class="fa-brands fa-google-play text-xl opacity-50"></i> <span data-i18n="btn_google_play_soon">Em breve na Google Play</span>
-                        </div>
+                        <a href="https://play.google.com/store/apps/details?id=br.com.ghfsoftware.eclipsego" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-primary hover:bg-brand-primaryHover text-black font-bold rounded-lg shadow-glow hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
+                            <i class="fa-brands fa-google-play text-xl"></i> <span data-i18n="btn_play">Baixar na Google Play</span>
+                        </a>
                         <a href="eclipsego-privacy.html" class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
                             <i class="fa-solid fa-shield-halved"></i> <span data-i18n="btn_privacy">Privacidade</span>
                         </a>
@@ -211,7 +210,7 @@
                         <!-- Status Mention overlay -->
                         <div class="absolute bottom-10 px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-950/80 text-xs font-semibold text-yellow-400 flex items-center gap-2 z-20 shadow-lg backdrop-blur-sm">
                             <span class="w-2 h-2 rounded-full bg-yellow-400 animate-ping"></span>
-                            <span data-i18n="btn_google_play_soon">Em breve</span>
+                            <span data-i18n="badge_available">Disponível na Google Play</span>
                         </div>
                     </div>
                 </div>
@@ -423,7 +422,8 @@
                 hero_title_1: "EclipseGo",
                 hero_title_2: "Sombra & Luz no seu Bolso",
                 hero_desc: "Saiba exatamente se um eclipse solar ou lunar é visível de onde você está. Um aplicativo totalmente offline que calcula horários locais de início, pico e fim sem fazer qualquer chamada de rede.",
-                btn_google_play_soon: "Em breve na Google Play",
+                btn_play: "Baixar na Google Play",
+                badge_available: "Disponível na Google Play",
                 btn_privacy: "Privacidade",
                 
                 features_badge: "Recursos Offline",
@@ -450,15 +450,6 @@
                 step4_title: "Acompanhar Offline",
                 step4_desc: "Consulte todos os dados de início, pico e fim em campo, sem precisar de internet ou sinal de celular.",
 
-                workflow_title: "Como Funciona o EclipseGo",
-                step1_title: "Selecionar Localização",
-                step1_desc: "Use o GPS atual, busque uma cidade na base de dados Room offline ou peça para encontrar a melhor visibilidade próxima.",
-                step2_title: "Calcular Visibilidade",
-                step2_desc: "O motor matemático avalia as circunstâncias locais de visibilidade do eclipse selecionado para as coordenadas.",
-                step3_title: "Simular Linha do Tempo",
-                step3_desc: "Use o slider interativo para ver a cobertura em cada horário e planeje sua observação com antecedência.",
-                step4_title: "Acompanhar Offline",
-                step4_desc: "Consulte todos os dados de início, pico e fim em campo, sem precisar de internet ou sinal de celular.",
 
                 tech_badge: "Stack de Tecnologia",
                 tech_title: "Arquitetura Nativa e Livre de Rede",
@@ -488,7 +479,8 @@
                 hero_title_1: "EclipseGo",
                 hero_title_2: "Shadow & Light in Your Pocket",
                 hero_desc: "Know exactly if a solar or lunar eclipse is visible from your location. A fully offline application that calculates local start, peak, and end times without making any network calls.",
-                btn_google_play_soon: "Coming soon on Google Play",
+                btn_play: "Get it on Google Play",
+                badge_available: "Available on Google Play",
                 btn_privacy: "Privacy Policy",
                 
                 features_badge: "Offline Features",
