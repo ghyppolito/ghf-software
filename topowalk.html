@@ -7,14 +7,14 @@
     <title>TopoWalk - Levantamento Topográfico de Bolso</title>
     <link rel="icon" type="image/png" href="./assets/topo-walk.png">
 
-    <meta name="description" content="TopoWalk transforma seu dispositivo em uma ferramenta topográfica avançada. Calcule distâncias, desníveis e inclinações em campo. GHF Software.">
+    <meta name="description" content="TopoWalk transforma seu dispositivo em uma ferramenta topográfica avançada. Receptores GNSS/RTK externos, altimetria barométrica, declividade, áreas e exportação em PDF, GeoJSON, KML e GPX. GHF Software.">
 
     <!-- Open Graph (WhatsApp, LinkedIn, Facebook) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="GHF Software" />
     <meta property="og:url" content="https://ghfsoftware.com/topowalk.html" />
     <meta property="og:title" content="TopoWalk — Topografia de Campo no Bolso" />
-    <meta property="og:description" content="Altimetria barométrica, cálculo de desníveis e relatórios PDF offline. Topografia profissional no seu Android." />
+    <meta property="og:description" content="Receptores GNSS/RTK Bluetooth, altimetria barométrica, declividade %, áreas de polígonos, laudos PDF e arquivos GeoJSON, KML e GPX. Topografia profissional no Android." />
     <meta property="og:image" content="https://ghfsoftware.com/assets/topowalk_screenshot.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -22,7 +22,7 @@
     <!-- Twitter/X Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="TopoWalk — Topografia de Campo no Bolso" />
-    <meta name="twitter:description" content="Altimetria barométrica, desníveis e relatórios PDF. 100% offline." />
+    <meta name="twitter:description" content="Receptores GNSS/RTK Bluetooth, altimetria barométrica, laudos PDF e exportação GeoJSON, KML e GPX. 100% gratuito." />
     <meta name="twitter:image" content="https://ghfsoftware.com/assets/topowalk_screenshot.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -215,48 +215,70 @@
                 <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white" data-i18n="features_title">Tecnologia para Área Externa</h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Feature 1 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1: RTK/GNSS Externo -->
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-satellite-dish"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat1_title">Receptor GNSS/RTK (Bluetooth)</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat1_desc">
+                        Conecta-se a receptores RTK externos via Bluetooth (NMEA 0183) para precisão centimétrica, monitoramento de fix (RTK FIX/FLOAT) e offset de altura de bastão.
+                    </p>
+                </div>
+
+                <!-- Feature 2: Altimetria Tripla -->
                 <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
                     <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-gauge-high"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat1_title">Precisão Barométrica</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat1_desc">
-                        Utiliza o sensor de pressão atmosférica para cálculos de altitude milimétricos, superando a imprecisão natural do eixo-z do GPS comum.
-                    </p>
-                </div>
-
-                <!-- Feature 2 -->
-                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
-                    <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-file-pdf"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat2_title">Relatórios em 1 Clique</h3>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat2_title">Altimetria de Alta Precisão</h3>
                     <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat2_desc">
-                        Exporte relatórios documentados em PDF formato A4 com um diagrama vetorial, enviando em 1 segundo via WhatsApp ou E-mail.
+                        Prioridade inteligente (Receptor RTK > Barômetro > GPS) para altitude exata via fórmula barométrica com calibração, eliminando a flutuação do eixo-z.
                     </p>
                 </div>
 
-                <!-- Feature 3 -->
+                <!-- Feature 3: Métricas Avançadas -->
                 <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
                     <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-calculator"></i>
+                        <i class="fa-solid fa-chart-area"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat3_title">Cálculos Avançados</h3>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat3_title">Cálculos & Declividade</h3>
                     <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat3_desc">
-                        Distância horizontal por Haversine e Distância inclinada por Pitágoras em uma matemática reativa processada em tempo real.
+                        Distância horizontal (Haversine), desnível, inclinação (Pitágoras), azimute, área de polígono, declividade em %, ganho/perda de elevação e vista 3D isométrica.
                     </p>
                 </div>
 
-                <!-- Feature 4 -->
+                <!-- Feature 4: Exportação Multi-Formato -->
                 <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
                     <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-lock"></i>
+                        <i class="fa-solid fa-file-export"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat4_title">100% Offline e Seguro</h3>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat4_title">Exportação Multi-Formato</h3>
                     <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat4_desc">
-                        Nenhum dado trafega na internet. Funcionalidade integral em matas fechadas e segurança nativa sem servidores ou analytics de terceiros.
+                        Laudos em PDF A4 com perfil 2D e vista 3D, mais exportações GeoJSON, KML e GPX (para QGIS, Google Earth e OsmAnd) com nomes de pontos.
+                    </p>
+                </div>
+
+                <!-- Feature 5: Edição, Rascunhos e Backup -->
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat5_title">Edição, Rascunhos & Backup</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat5_desc">
+                        Reabra e edite levantamentos salvos (adicione, remova ou insira pontos), conte com rascunhos protegidos contra desligamentos e backup/restauração do histórico.
+                    </p>
+                </div>
+
+                <!-- Feature 6: 100% Gratuito e Seguro -->
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat6_title">100% Gratuito & Seguro</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat6_desc">
+                        Sem anúncios e sem compras no app. Suas medições e coordenadas ficam salvas exclusivamente no seu dispositivo, com criptografia em trânsito.
                     </p>
                 </div>
             </div>
@@ -279,22 +301,22 @@
                     <!-- Step 1 -->
                     <div class="relative pl-10 md:pl-16">
                         <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-brand-accent flex items-center justify-center text-brand-accent font-bold text-lg">1</div>
-                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how1_title">Fixar Ponto A</h3>
-                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how1_desc">Aguarde o sinal verde do satélite indicando precisão aceitável. Pressione o botão inicial para cravar a localização da sua primeira baliza ou poste. Suas coordenadas e pressão atmosférica base são salvas.</p>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how1_title">1. Definir o Ponto Inicial</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how1_desc">Conecte seu receptor GNSS/RTK externo via Bluetooth ou use o GPS interno com o barômetro. Aguarde o fix de alta precisão e grave o primeiro ponto georreferenciado.</p>
                     </div>
 
                     <!-- Step 2 -->
                     <div class="relative pl-10 md:pl-16">
                         <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-brand-accent flex items-center justify-center text-brand-accent font-bold text-lg">2</div>
-                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how2_title">Caminhar ao Destino</h3>
-                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how2_desc">Coloque o celular no bolso e caminhe até o Ponto B da medição. O aplicativo continuará puxando as atualizações do Barômetro e do FusedLocation a cada 2 segundos no ambiente silencioso.</p>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how2_title">2. Captura & Nomeação</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how2_desc">Percorra o terreno capturando os pontos subsequentes do trajeto ou polígono. Adicione rótulos personalizados ("canto da cerca", "mourão 12") e acompanhe declividade e altitude.</p>
                     </div>
 
                     <!-- Step 3 -->
                     <div class="relative pl-10 md:pl-16">
                         <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-brand-accent flex items-center justify-center text-brand-accent font-bold text-lg">3</div>
-                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how3_title">Métricas e Compartilhamento</h3>
-                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how3_desc">Fixe o último ponto. A tela "Results" aparecerá construindo o painel geométrico e as grandezas (ΔH, ângulo). Clique em Exportar para que o PDF A4 topográfico passe do App Privado para a equipe do seu WhatsApp.</p>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how3_title">3. Laudos & Exportação</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how3_desc">Finalize o levantamento para visualizar gráficos 2D/3D e área de polígonos. Gere relatórios PDF A4 ou exporte arquivos GeoJSON, KML e GPX para SIGs e Google Earth.</p>
                     </div>
                 </div>
             </div>
@@ -378,31 +400,35 @@
                 // Hero
                 hero_badge: "Levantamento Topográfico de Bolso",
                 hero_title: `Precisão Profissional<br class="hidden md:block"> nas <span class="text-gradient-amber">Suas Mãos</span>`,
-                hero_desc: "O TopoWalk transforma seu smartphone em uma ferramenta topográfica avançada de campo. Calcule distâncias, desníveis, inclinações e áreas em tempo real.",
+                hero_desc: "O TopoWalk transforma seu smartphone em uma ferramenta topográfica avançada de campo. Suporta receptores GNSS/RTK externos via Bluetooth, altimetria barométrica, cálculo de declividade, área e exportação para PDF, GeoJSON, KML e GPX.",
                 btn_play: "Baixar na Google Play",
                 btn_learn: "Como Funciona",
                 
                 // Features
                 features_badge: "Poder no Terreno",
                 features_title: "Tecnologia Desenhada para a Área Externa",
-                feat1_title: "Precisão Barométrica",
-                feat1_desc: "Lê o sensor de pressão atmosférica para entregar cálculos de altitude (ΔH) incrivelmente superiores em comparação ao eixo z flutuante de um GPS comum.",
-                feat2_title: "Documentação Imediata",
-                feat2_desc: "A geração de PDF topográfico vetorial, KML e GeoJSON, é construída nativamente para ser remetida à sua equipe via WhatsApp ou E-mail.",
-                feat3_title: "Cálculos Robustos",
-                feat3_desc: "Distância Horizontal com Haversine, Desnível, Pitágoras, Azimute e Área poligonal renderizada com visualização 3D isométrica.",
-                feat4_title: "Offline-First e Seguro",
-                feat4_desc: "A ausência de SDKs de Analytics e telemetria entrega um comportamento offline-first seguro. Internet necessária apenas ao abrir o Mapa OSM.",
+                feat1_title: "Receptor GNSS/RTK (Bluetooth)",
+                feat1_desc: "Conecta-se a receptores RTK externos via Bluetooth (NMEA 0183) para precisão centimétrica, monitoramento de fix (RTK FIX/FLOAT) e offset de altura de bastão.",
+                feat2_title: "Altimetria de Alta Precisão",
+                feat2_desc: "Prioridade inteligente (Receptor RTK > Barômetro > GPS) para altitude exata via fórmula barométrica com calibração, eliminando a flutuação do eixo-z.",
+                feat3_title: "Cálculos & Declividade",
+                feat3_desc: "Distância horizontal (Haversine), desnível, inclinação (Pitágoras), azimute, área de polígono, declividade em %, ganho/perda de elevação e vista 3D isométrica.",
+                feat4_title: "Exportação Multi-Formato",
+                feat4_desc: "Laudos em PDF A4 com perfil 2D e vista 3D, mais exportações GeoJSON, KML e GPX (para QGIS, Google Earth e OsmAnd) com nomes de pontos.",
+                feat5_title: "Edição, Rascunhos & Backup",
+                feat5_desc: "Reabra e edite levantamentos salvos (adicione, remova ou insira pontos), conte com rascunhos protegidos contra desligamentos e backup/restauração do histórico.",
+                feat6_title: "100% Gratuito & Seguro",
+                feat6_desc: "Sem anúncios e sem compras no app. Suas medições e coordenadas ficam salvas exclusivamente no seu dispositivo, com criptografia em trânsito.",
 
                 // How it works
                 how_badge: "Simples e Direto",
                 how_title: "O Fluxo de Uso Mais Rápido",
-                how1_title: "1. Gravar a Base",
-                how1_desc: "Aguarde o 'lock' verde do satélite indicando acurácia no quadrante. Toque e deixe cravado no primeiro totem as coordenadas absolutas e a atmosfera base.",
-                how2_title: "2. Progressão",
-                how2_desc: "Caminhe para os pontos subsequentes demarcar seu trajeto ou polígono. O TopoWalk faz um loop silenciado puxando sua elevação a cada exatos 2s.",
-                how3_title: "3. Laudo e Mapa",
-                how3_desc: "Trave as últimas coordenadas do polígono. O canvas apresentará suas métricas junto ao mapa para imediata exportação de relatórios SIG e PDF.",
+                how1_title: "1. Definir o Ponto Inicial",
+                how1_desc: "Conecte seu receptor GNSS/RTK externo via Bluetooth ou use o GPS interno com o barômetro. Aguarde o fix de alta precisão e grave o primeiro ponto georreferenciado.",
+                how2_title: "2. Captura & Nomeação",
+                how2_desc: "Percorra o terreno capturando os pontos subsequentes do trajeto ou polígono. Adicione rótulos personalizados (\"canto da cerca\", \"mourão 12\") e acompanhe declividade e altitude.",
+                how3_title: "3. Laudos & Exportação",
+                how3_desc: "Finalize o levantamento para visualizar gráficos 2D/3D e área de polígonos. Gere relatórios PDF A4 ou exporte arquivos GeoJSON, KML e GPX para SIGs e Google Earth.",
 
                 // Footer
                 footer_apps: "Aplicativos",
@@ -415,7 +441,7 @@
                 footer_priv_topo: "Privacidade - TopoWalk",
                 footer_priv_lotto: "Privacidade - LottoExpert",
                 footer_priv_eclipse: "Privacidade - EclipseGo",
-                footer_terms_lotto: "Termos - LottoExpert,",
+                footer_terms_lotto: "Termos - LottoExpert",
                 footer_rights: "GHF Software. Todos os direitos reservados.",
                 footer_dev: "Desenvolvido com ",
                 footer_dev2: " por especialistas."
@@ -429,31 +455,35 @@
                 // Hero
                 hero_badge: "Pocket Topographic Survey",
                 hero_title: `Professional Precision<br class="hidden md:block"> in <span class="text-gradient-amber">Your Hands</span>`,
-                hero_desc: "TopoWalk morphs your modern smartphone into a heavy-duty fieldwork toolkit. Fetch distances, elevations, polygon areas and accurate tilt on the fly.",
+                hero_desc: "TopoWalk turns your smartphone into an advanced fieldwork surveying tool. Supports external Bluetooth GNSS/RTK receivers, barometric altimetry, slope %, area, and exports to PDF, GeoJSON, KML, and GPX.",
                 btn_play: "Get it on Google Play",
                 btn_learn: "How It Works",
                 
                 // Features
                 features_badge: "Off-Road Power",
                 features_title: "Engineered specifically for the Great Outdoors",
-                feat1_title: "Barometric Precision",
-                feat1_desc: "Fetches TYPE_PRESSURE variables to output highly granular altitude (ΔH) metrics drastically mitigating classic GPS z-axis floating issues.",
-                feat2_title: "One-Click Documentation",
-                feat2_desc: "Draft an immaculate vector-based A4 topographic PDF chart and export direct GeoJSON and KML paths cleanly onto the OS, ready to be forwarded immediately.",
-                feat3_title: "Heavy-Duty Metrics",
-                feat3_desc: "Instant Horizontal Distance via curvilinear Haversine formula, True Hypotenuse, Azimuth, and Polygon Area calculations alongside 3D Isometric View.",
-                feat4_title: "Offline-First Integrity",
-                feat4_desc: "Zero tracking, zero analytics servers. Utterly autonomous and functional in forest grids. Optional internet strictly for rendering OSM Map relief tiles.",
+                feat1_title: "External GNSS/RTK (Bluetooth)",
+                feat1_desc: "Connects to paired external RTK receivers via Bluetooth (NMEA 0183) for centimeter accuracy, real-time fix quality (RTK FIX/FLOAT), and rod height offset.",
+                feat2_title: "High-Precision Altimetry",
+                feat2_desc: "Smart priority (External RTK > Barometer > GPS) for exact altitude via barometric formula with manual offset calibration, overriding GPS z-axis floating.",
+                feat3_title: "Terrain Metrics & Slope",
+                feat3_desc: "Horizontal distance (Haversine), elevation delta, slope, azimuth, polygon area, slope %, elevation gain/loss, and 3D isometric polygon view.",
+                feat4_title: "Multi-Format Export",
+                feat4_desc: "A4 PDF reports with 2D elevation profiles and 3D views, plus direct GeoJSON, KML, and GPX exports with custom point labels for QGIS, Google Earth, and OsmAnd.",
+                feat5_title: "Editing, Drafts & Backup",
+                feat5_desc: "Reopen and edit saved surveys (add, remove, or insert points), rely on auto-saved draft recovery, and perform complete history backups via single files.",
+                feat6_title: "100% Free & Secure",
+                feat6_desc: "No ads and no in-app purchases. Your measurements and coordinates remain stored 100% locally on your device with transit encryption.",
 
                 // How it works
                 how_badge: "Keep It Simple",
                 how_title: "Frictionless Workflow",
-                how1_title: "1. Stick The Base",
-                how1_desc: "Halt for a brief second for the satellite GPS to grant a heavy green metric validation. Tag Point A tying down location and static baseline pressure.",
-                how2_title: "2. Traverse",
-                how2_desc: "Pacing through the woods, keep tagging consequent points to build linear paths or full polygons. The app queries atmospheric updates strictly every 2 seconds.",
-                how3_title: "3. Render & Export",
-                how3_desc: "Tag the final coordinate target. TopoWalk geometrically projects the terrain on map for internal review and provides a native SIG array and PDF export sheet.",
+                how1_title: "1. Set Initial Point",
+                how1_desc: "Connect your external GNSS/RTK receiver via Bluetooth or use internal GPS with barometer. Wait for a high-accuracy fix and capture the first georeferenced point.",
+                how2_title: "2. Traverse & Label",
+                how2_desc: "Walk the terrain capturing sequence points for paths or polygons. Add custom labels (\"fence corner\", \"post 12\") while tracking real-time slope % and elevation metrics.",
+                how3_title: "3. Reports & Export",
+                how3_desc: "Finalize the survey to review 2D/3D charts and polygon area. Generate A4 PDF reports or export GeoJSON, KML, and GPX files directly for GIS apps and Google Earth.",
 
                 // Footer
                 footer_apps: "Applications",
@@ -466,7 +496,7 @@
                 footer_priv_topo: "Privacy - TopoWalk",
                 footer_priv_lotto: "Privacy - LottoExpert",
                 footer_priv_eclipse: "Privacy - EclipseGo",
-                footer_terms_lotto: "Terms - LottoExpert,",
+                footer_terms_lotto: "Terms - LottoExpert",
                 footer_rights: "GHF Software. All rights reserved.",
                 footer_dev: "Developed with ",
                 footer_dev2: " by experts."
