@@ -1,6 +1,6 @@
 # Política de Privacidade — TopoWalk
 
-**Última atualização:** julho de 2026
+**Última atualização:** agosto de 2026
 
 Esta Política de Privacidade descreve como o aplicativo **TopoWalk**, desenvolvido por **GHF Software**, trata as informações do usuário. Ao utilizar o TopoWalk, você concorda com os termos descritos neste documento.
 
@@ -19,7 +19,7 @@ O TopoWalk é um aplicativo Android desenvolvido por **GHF Software** para fins 
 - **O que é acessado:** Latitude, longitude e altitude dos pontos marcados pelo usuário durante a medição.
 - **Finalidade:** Exclusivamente para realizar os cálculos topográficos (distância horizontal, desnível, distância inclinada, ângulo de inclinação, azimute e área de polígono) e para gerar a visualização no mapa.
 - **Quando é acessado:** Somente enquanto o aplicativo está aberto e em uso ativo (foreground). O app não acessa a localização em segundo plano.
-- **Retenção:** Os dados de localização ficam na memória durante a sessão. Se o usuário optar por **salvar a medição**, as coordenadas são armazenadas localmente no banco de dados do dispositivo (ver seção 5). Nenhum dado de localização é enviado a servidores externos.
+- **Retenção:** Os dados de localização ficam na memória durante a sessão. Se o usuário optar por **salvar a medição**, as coordenadas são armazenadas localmente no banco de dados do dispositivo (ver seção 7.1). O GHF Software não envia esses dados a servidores próprios; veja a seção 7.4 sobre o backup manual que o próprio TopoWalk oferece e a seção 7.5 sobre o backup automático do sistema Android, que pode incluir esse banco de dados na conta Google do próprio usuário.
 
 ### 2.2 Sensor de Pressão Atmosférica (Barômetro)
 
@@ -44,7 +44,13 @@ O TopoWalk é um aplicativo Android desenvolvido por **GHF Software** para fins 
 - **Quando é acessado:** Somente quando o usuário navega para a aba "Mapa" dentro de uma medição ou no histórico.
 - **Armazenamento em cache:** O osmdroid pode armazenar tiles em cache local para melhorar a performance. Esse cache contém apenas imagens de mapa, sem dados pessoais do usuário.
 
-### 2.5 Envio de Feedback por E-mail (opcional)
+### 2.5 Nomes de Pontos e Rótulos (a partir da versão 4.0)
+
+- **O que é acessado:** Texto opcional que o usuário digita para identificar um ponto capturado (ex.: "canto da cerca", "mourão 12").
+- **Finalidade:** Facilitar o reconhecimento de pontos na lista de captura, no relatório PDF e nos arquivos exportados.
+- **Retenção:** Armazenado junto com a medição, nos mesmos termos da seção 7.1. Nunca é enviado a servidores do GHF Software nem ao Firebase.
+
+### 2.6 Envio de Feedback por E-mail (opcional)
 
 - **O que acontece:** Na tela do receptor GNSS externo, o botão "Enviar feedback" abre o **aplicativo de e-mail do próprio usuário** com uma mensagem pré-preenchida endereçada a `support@ghfsoftware.com`.
 - **Dados pré-preenchidos na mensagem:** versão do TopoWalk, versão do Android e fabricante/modelo do aparelho. Nenhuma coordenada, medição ou dado do histórico é incluído.
@@ -58,11 +64,11 @@ O TopoWalk é um aplicativo Android desenvolvido por **GHF Software** para fins 
 O TopoWalk **não coleta, não armazena remotamente e não transmite**:
 
 - Nome, e-mail ou qualquer dado de identificação pessoal
-- Endereço IP ou dados de rede além do necessário para carregar tiles de mapa e enviar eventos de analytics
+- Endereço IP ou dados de rede além do necessário para carregar tiles de mapa e enviar eventos de analytics e relatórios de falha
 - Localização em segundo plano ou histórico de localização fora do uso ativo do app
 - ID de publicidade (o aplicativo remove explicitamente esta permissão)
 
-Única exceção: se o usuário voluntariamente nos escrever pelo botão "Enviar feedback" (seção 2.5), passamos a conhecer o endereço de e-mail que ele escolheu usar e o conteúdo que ele escreveu. Isso depende sempre de uma ação explícita do usuário e não ocorre em nenhum outro fluxo do aplicativo.
+Única exceção: se o usuário voluntariamente nos escrever pelo botão "Enviar feedback" (seção 2.6), passamos a conhecer o endereço de e-mail que ele escolheu usar e o conteúdo que ele escreveu. Isso depende sempre de uma ação explícita do usuário e não ocorre em nenhum outro fluxo do aplicativo.
 
 ---
 
@@ -73,6 +79,7 @@ A partir da versão 3.10, o TopoWalk utiliza o **Firebase Analytics**, um servi�
 ### O que é coletado e enviado ao Firebase:
 
 - **Interações no app:** telas visualizadas, funcionalidades utilizadas (ex.: captura de pontos, exportação de arquivos, acesso ao histórico) e fluxo de navegação.
+- **Interesse em formatos futuros (a partir da versão 4.0):** o menu de exportação lista DXF e CSV como formatos planejados; tocar neles não gera arquivo algum, apenas registra um evento anônimo (que o formato foi visto, e, se o usuário tocar num botão de confirmação dentro da tela, que ele tem interesse nele). **Nenhum contato é coletado nesse fluxo** — o aplicativo não pergunta e-mail nem telefone, e não existe lista de espera.
 - **ID de instalação do Firebase:** identificador anônimo gerado pelo SDK para agregar sessões. Não identifica pessoalmente o usuário e pode ser redefinido desinstalando e reinstalando o app.
 - **Informações do dispositivo:** modelo, versão do sistema operacional e idioma — coletados automaticamente pelo SDK para segmentação de relatórios.
 
@@ -92,22 +99,50 @@ Os dados são retidos pelo Google conforme a [Política de Privacidade do Google
 
 ---
 
-## 5. Compartilhamento de Dados com Terceiros
+## 5. Relatórios de Erro — Firebase Crashlytics (Google)
+
+A partir da versão 3.13, o TopoWalk utiliza o **Firebase Crashlytics**, serviço do Google LLC para relatório de falhas. Ele existe para detectar problemas que o usuário não consegue reportar sozinho — em especial falhas de conexão com o receptor GNSS/RTK externo, que ocorrem em campo e sem mensagem de erro útil.
+
+### O que é coletado e enviado ao Crashlytics:
+
+- **Falhas do aplicativo:** tipo da exceção, stack trace e estado da thread no momento do erro.
+- **Falhas não fatais do receptor externo:** motivo da desconexão, exceção original do Bluetooth, número da tentativa de reconexão e um trecho de até 16 caracteres do início do fluxo de dados do receptor — deliberadamente curto para conter apenas o cabeçalho da sentença (tipo e hora), nunca coordenadas.
+- **Contexto técnico da sessão:** se o receptor externo está ativado, nome do modelo do receptor pareado, estado da conexão, qualidade do fix (ex.: `RTK_FIXED`), número de satélites e HDOP.
+- **Informações do dispositivo e ID de instalação do Firebase:** coletados automaticamente pelo SDK, nos mesmos termos da seção 4.
+
+### O que NÃO é coletado pelo Crashlytics:
+
+- Coordenadas GPS, altitudes ou qualquer dado das medições do usuário
+- Nome, notas ou arquivos exportados dos levantamentos
+- Nome, e-mail ou qualquer informação pessoal inserida no app
+
+### Finalidade:
+
+Exclusivamente diagnosticar e corrigir defeitos do aplicativo. Os dados não são utilizados para publicidade, personalização ou perfilamento.
+
+### Retenção e controle:
+
+Os relatórios são retidos pelo Google conforme a [Política de Privacidade do Google](https://policies.google.com/privacy) e a [documentação do Crashlytics](https://firebase.google.com/support/privacy).
+
+---
+
+## 6. Compartilhamento de Dados com Terceiros
 
 O TopoWalk compartilha dados com os seguintes terceiros:
 
 | Terceiro | Dados compartilhados | Finalidade |
 |---|---|---|
 | **Google LLC (Firebase Analytics)** | Interações no app, ID de instalação, informações do dispositivo | Analytics de uso |
+| **Google LLC (Firebase Crashlytics)** | Stack traces, falhas do receptor externo, contexto técnico da sessão, ID de instalação, informações do dispositivo | Diagnóstico de falhas |
 | **OpenStreetMap / OpenTopoMap** | Coordenadas dos tiles de mapa solicitados | Renderização do mapa |
 
 O aplicativo não integra SDKs de publicidade, redes sociais ou qualquer outro serviço externo além dos listados acima.
 
 ---
 
-## 6. Armazenamento Local
+## 7. Armazenamento Local
 
-### 6.1 Banco de Dados (Histórico de Medições)
+### 7.1 Banco de Dados (Histórico de Medições)
 
 Quando o usuário opta por salvar uma medição, os seguintes dados são armazenados **localmente no dispositivo** em um banco de dados Room (SQLite), acessível apenas pelo aplicativo:
 
@@ -116,9 +151,9 @@ Quando o usuário opta por salvar uma medição, os seguintes dados são armazen
 - Resultados calculados (distâncias, desníveis, ângulos, área)
 - Data e hora da medição
 
-Esses dados **nunca são enviados a servidores externos** e permanecem no dispositivo até que o usuário os exclua manualmente pelo aplicativo ou desinstale o app.
+Esses dados **nunca são enviados a servidores do GHF Software** e permanecem no dispositivo até que o usuário os exclua manualmente pelo aplicativo ou limpe os dados do app. Veja a seção 7.4 sobre o backup manual que o próprio TopoWalk oferece, e a seção 7.5 sobre o backup automático do sistema Android — os dois são independentes entre si.
 
-### 6.2 Relatórios em PDF
+### 7.2 Relatórios em PDF
 
 Ao solicitar a geração de um relatório PDF, o aplicativo:
 
@@ -128,19 +163,41 @@ Ao solicitar a geração de um relatório PDF, o aplicativo:
 
 O TopoWalk não tem acesso ao destino escolhido pelo usuário para o compartilhamento — essa operação é gerenciada inteiramente pelo sistema Android e pelo aplicativo receptor.
 
-### 6.3 Exportação GeoJSON e KML
+### 7.3 Exportação GeoJSON, KML e GPX
 
-O usuário pode exportar medições nos formatos GeoJSON e KML. Esses arquivos são gerados localmente no cache do dispositivo e compartilhados da mesma forma que o PDF (seção 6.2). O app não tem acesso ao destino do compartilhamento.
+O usuário pode exportar medições nos formatos GeoJSON, KML e GPX (a partir da versão 4.0). Esses arquivos são gerados localmente no cache do dispositivo e compartilhados da mesma forma que o PDF (seção 7.2). O app não tem acesso ao destino do compartilhamento.
+
+### 7.4 Backup e Restauração do Histórico (a partir da versão 4.0)
+
+O TopoWalk permite que o usuário exporte manualmente **todo o histórico de medições** para um único arquivo, e o restaure depois — no mesmo aparelho, após reinstalação, ou em outro aparelho.
+
+- **Como funciona:** ao tocar em "Fazer backup do histórico", o app usa o seletor de arquivos do próprio Android (Storage Access Framework) para que o usuário escolha onde gravar o arquivo — Google Drive, cartão de memória, armazenamento interno ou qualquer outro local listado pelo sistema. **O app grava diretamente no local escolhido pelo usuário**, sem passar pelo seletor de compartilhamento entre aplicativos usado pelo PDF e pelos demais formatos (seções 7.2 e 7.3), e sem enviar o arquivo a servidores do GHF Software.
+- **O que o arquivo contém:** nome, observações, coordenadas, altitude, resultados calculados e rótulos de ponto de cada medição salva — os mesmos dados já descritos na seção 7.1, reunidos num arquivo só.
+- **Restaurar:** ao escolher "Restaurar backup" e selecionar um arquivo (pelo mesmo seletor do sistema), as medições do arquivo são acrescentadas ao histórico do dispositivo. Nada do que já está salvo é apagado, e medições já existentes são identificadas e não duplicadas. Um arquivo gerado por uma versão mais nova do TopoWalk do que a instalada é recusado, para não corromper o banco de dados local.
+- **Controle do usuário:** o GHF Software não tem acesso a esse arquivo em nenhum momento — ele existe apenas no local que o próprio usuário escolheu ao gravá-lo, sob o controle e a responsabilidade dele (incluindo a segurança de sua própria conta Google Drive, se for esse o destino escolhido).
+
+Este mecanismo é independente do Backup Automático do sistema Android, descrito na seção 7.5.
+
+### 7.5 Backup Automático do Sistema Android
+
+O TopoWalk **não opera nenhum serviço de backup ou sincronização em nuvem próprio**. No entanto, o aplicativo não desativa o recurso de **Backup automático do Android** ("Backup by Google"), que é um mecanismo do próprio sistema operacional, independente do TopoWalk:
+
+- Se o usuário tiver esse recurso ativado em sua conta Google (é o padrão de fábrica na maioria dos aparelhos Android) e o aparelho satisfizer as condições definidas pelo próprio Android (conectado ao Wi-Fi, carregando e ocioso), o sistema operacional pode, periodicamente e em segundo plano, incluir os dados do TopoWalk — incluindo o banco de dados local do histórico de medições — no backup da conta Google do usuário.
+- Esse backup é armazenado e gerenciado pela **infraestrutura do Google**, associada à própria conta Google do usuário — o GHF Software não tem acesso a esse backup, não o recebe, não o controla e não pode excluí-lo.
+- Caso o usuário reinstale o TopoWalk no mesmo aparelho ou em outro aparelho conectado à mesma conta Google, o Android pode restaurar automaticamente esses dados a partir desse backup.
+- Usuários que não desejam que o histórico de medições seja incluído nesse backup do sistema podem desativar o "Backup do Google" para o dispositivo, ou para o TopoWalk especificamente, nas configurações do Android (Configurações → Sistema → Backup, variando conforme o fabricante e a versão do Android).
+
+Esta seção descreve o comportamento padrão do Android para o gerenciamento de dados. Ela não altera nenhum outro compromisso desta política: o GHF Software continua sem operar servidores próprios de armazenamento de dados do usuário e sem ter acesso a esse conteúdo em nenhum momento.
 
 ---
 
-## 7. Permissões do Aplicativo
+## 8. Permissões do Aplicativo
 
 | Permissão | Motivo |
 |---|---|
 | `ACCESS_FINE_LOCATION` | Obter coordenadas GPS precisas para os pontos de medição |
 | `ACCESS_COARSE_LOCATION` | Permissão complementar exigida pelo Android para localização |
-| `INTERNET` | Carregar tiles de mapa do OpenStreetMap e enviar eventos ao Firebase Analytics |
+| `INTERNET` | Carregar tiles de mapa do OpenStreetMap e enviar eventos ao Firebase Analytics e relatórios de falha ao Crashlytics |
 | `VIBRATE` | Feedback háptico ao capturar um ponto de medição |
 | `BLUETOOTH_CONNECT` (Android 12+) | Conectar a um receptor GNSS/RTK externo já pareado, quando o recurso é ativado pelo usuário |
 | `BLUETOOTH` / `BLUETOOTH_ADMIN` (Android 11 e anteriores) | Equivalente às versões antigas do Android para a mesma conexão |
@@ -149,19 +206,19 @@ O aplicativo não solicita acesso à câmera, microfone, contatos ou armazenamen
 
 ---
 
-## 8. Uso por Menores
+## 9. Uso por Menores
 
 O TopoWalk não é direcionado a crianças menores de 13 anos e não coleta intencionalmente dados de menores. Por se tratar de uma ferramenta técnica de campo, o uso por menores deve ocorrer sob supervisão de um adulto responsável.
 
 ---
 
-## 9. Segurança
+## 10. Segurança
 
 Os dados de medição do TopoWalk são processados e armazenados exclusivamente no dispositivo do usuário. A comunicação com serviços externos (Firebase Analytics e OpenStreetMap) é realizada exclusivamente via HTTPS com criptografia em trânsito. Os dados enviados ao Firebase não contêm informações pessoais identificáveis. A segurança dos dados armazenados localmente é gerenciada pelo sistema operacional Android e pelo isolamento de aplicativos (sandbox).
 
 ---
 
-## 10. Alterações nesta Política
+## 11. Alterações nesta Política
 
 Podemos atualizar esta Política de Privacidade periodicamente. Alterações relevantes serão comunicadas por meio de uma nova versão do aplicativo publicada na Google Play Store. A data de "Última atualização" no topo deste documento sempre refletirá a versão vigente.
 
@@ -169,7 +226,7 @@ Recomendamos que você revise esta política periodicamente.
 
 ---
 
-## 11. Contato
+## 12. Contato
 
 Dúvidas, solicitações ou comentários sobre esta Política de Privacidade podem ser enviados para:
 
