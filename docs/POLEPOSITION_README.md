@@ -82,6 +82,7 @@ Para sessões em pistas sem linha de chegada fixa — trackdays, rodovias fechad
 | TTS | Android TextToSpeech |
 | Preferências | SharedPreferences via AppPreferences singleton |
 | Analytics | Firebase Analytics |
+| Relatórios de falha | Firebase Crashlytics — non-fatals dos modos de falha (perda de GPS, morte do serviço, sessão descartada) |
 | Avaliação | Play In-App Review API |
 
 ---
@@ -91,7 +92,7 @@ Para sessões em pistas sem linha de chegada fixa — trackdays, rodovias fechad
 ```
 br.com.ghfsoftware.polepositionapp
 ├── core/
-│   ├── analytics/      # AnalyticsTracker — Firebase Analytics
+│   ├── analytics/      # AnalyticsTracker — Firebase Analytics + TelemetryFailure (non-fatals)
 │   ├── di/             # Módulos Hilt (AppModule, LocationModule, AnalyticsModule)
 │   ├── gps/            # GpsTrackingConfig (amostragem e retenção do traçado)
 │   ├── preferences/    # AppPreferences (SharedPreferences)
@@ -101,7 +102,7 @@ br.com.ghfsoftware.polepositionapp
 │   └── local/
 │       ├── dao/        # SessionDao, TrackDao, TrackPointDao
 │       ├── entities/   # TrackEntity, SplitEntity, SessionEntity, LapEntity, LapSplitEntity, TrackPointEntity
-│       └── AppDatabase # Room Database (versão 6, com migrações)
+│       └── AppDatabase # Room Database (versão 7, com migrações)
 ├── service/
 │   └── TelemetryService  # Coração do app — GPS, sensores, cronômetro, detecção de volta, captura do traçado
 └── ui/
@@ -159,7 +160,7 @@ br.com.ghfsoftware.polepositionapp
 ## Requisitos
 
 - Android 8.0 (API 26) ou superior
-- Permissões: Localização (Precisa — em primeiro plano), Sensores
+- Permissões: Localização precisa (em primeiro plano e, durante sessões ativas, em segundo plano), Sensores
 - Google Play Services
 
 ---
@@ -172,7 +173,7 @@ br.com.ghfsoftware.polepositionapp
 - [`docs/aso_plan.md`](docs/aso_plan.md) — Plano de ASO (App Store Optimization).
 - [`docs/PolePositionContent.md`](docs/PolePositionContent.md) — Conteúdo de marketing e textos do app.
 
-> **Privacidade:** dados processados apenas no dispositivo (GPS preciso, traçado, sensores, conteúdo do usuário) nunca são transmitidos. Apenas métricas anônimas de uso vão para o Firebase Analytics. Ao alterar coleta/armazenamento de dados, atualizar a política **e** o guia da ficha de Segurança dos Dados.
+> **Privacidade:** dados processados apenas no dispositivo (GPS preciso, traçado, sensores, conteúdo do usuário) nunca são transmitidos. Saem do dispositivo apenas métricas anônimas de uso (Firebase Analytics) e relatórios de falha e diagnósticos (Firebase Crashlytics) — sem coordenadas, sem dados de pilotagem e sem conteúdo do usuário. Ao alterar coleta/armazenamento de dados, atualizar a política **e** o guia da ficha de Segurança dos Dados.
 
 ---
 
