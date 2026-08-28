@@ -1,6 +1,6 @@
 # Política de Privacidade — Pole Position: Race Analytics
 
-**Última atualização:** junho de 2026
+**Última atualização:** agosto de 2026
 
 Esta Política de Privacidade descreve como o aplicativo **Pole Position: Race Analytics** ("o App", "nós") coleta, usa, armazena e protege as informações dos usuários ("você"). Ao instalar e utilizar o App, você concorda com os termos desta política.
 
@@ -23,6 +23,7 @@ Este resumo reflete as informações declaradas na seção **Segurança dos Dado
 | Localização aproximada (derivada do IP pelo Firebase) | Sim | Não | Análises | Não |
 | Atividade no app (interações e eventos de uso) | Sim | Não | Análises | Não |
 | IDs (ID de instância do app gerado pelo Firebase) | Sim | Não | Análises | Não |
+| Registros de falhas e diagnósticos (Firebase Crashlytics) | Sim | Não | Análises e correção de erros | Não |
 
 ### Dados processados apenas no dispositivo (não declarados como coletados)
 
@@ -34,7 +35,7 @@ Os dados a seguir **nunca saem do dispositivo** e, portanto, não são declarado
 
 ### Práticas de segurança
 
-- **Os dados são criptografados em trânsito** (conexão HTTPS para o Firebase).
+- **Os dados são criptografados em trânsito** (conexão HTTPS para o Firebase — Analytics e Crashlytics).
 - **Você pode solicitar a exclusão dos seus dados:** os dados locais são removidos ao desinstalar o App ou ao excluí-los individualmente nas telas do App; os dados de análise podem ser apagados redefinindo o identificador de análise do dispositivo (ver seção 8).
 - **Nenhum dado é vendido nem compartilhado com terceiros** para fins próprios desses terceiros.
 - O App **não coleta dados de identificação pessoal** (nome, e-mail, telefone, dados financeiros).
@@ -99,7 +100,21 @@ O App oferece um recurso de **análise de traçado** que registra a sequência d
 - A retenção é limitada: o App guarda o traçado de no máximo **3 sessões por pista**, removendo automaticamente os mais antigos para liberar espaço.
 - O usuário pode desativar o recurso a qualquer momento e excluir os traçados armazenados (ver seção 8).
 
-### 2.6 Dados NÃO Coletados
+### 2.6 Relatórios de Falha e Diagnóstico (Firebase Crashlytics)
+
+O App integra o **Firebase Crashlytics** (Google LLC) para identificar falhas e problemas de funcionamento. São enviados:
+
+- **Registros de falha (crashes) e erros não fatais**, incluindo a pilha de execução (stack trace) do código do App.
+- **Modos de falha ambientais registrados pelo App**, sem os quais problemas que não geram crash ficariam invisíveis: perda de sinal de GPS durante uma sessão, encerramento do serviço de telemetria pelo sistema operacional (típico de otimizações agressivas de bateria) e sessão iniciada que não gerou registro salvo. Junto com cada ocorrência vão apenas valores de categoria fechada e numéricos — duração sem sinal, número da volta, contagem de voltas, motivo do descarte.
+- **Dados técnicos do dispositivo e do estado do App** coletados automaticamente pelo Crashlytics: modelo, versão do Android, memória e armazenamento disponíveis, e um identificador de instalação gerado pelo próprio Crashlytics.
+
+**O que NÃO é enviado ao Crashlytics:**
+- Coordenadas de GPS ou qualquer dado de localização.
+- Tempos de volta, velocidades, força G ou qualquer dado de desempenho de pilotagem.
+- Nomes de circuitos, notas ou conteúdo inserido pelo usuário.
+- Dados que permitam identificar o usuário individualmente.
+
+### 2.7 Dados NÃO Coletados
 
 O App **não coleta, não armazena e não transmite**:
 
@@ -108,7 +123,6 @@ O App **não coleta, não armazena e não transmite**:
 - Informações de pagamento.
 - Histórico de navegação ou dados de outros aplicativos.
 - Dados de localização ou telemetria fora do contexto de uma sessão ativa.
-- Relatórios automáticos de falha (Crashlytics ou equivalente).
 
 ---
 
@@ -123,7 +137,7 @@ O App **não coleta, não armazena e não transmite**:
 | `WAKE_LOCK` | Impede que o processador suspenda durante sessões para garantir captura contínua |
 | `HIGH_SAMPLING_RATE_SENSORS` | Acesso a leituras do acelerômetro e giroscópio em alta frequência |
 | `ACCESS_NOTIFICATION_POLICY` | Suprimir notificações externas durante a sessão, quando o usuário ativa essa opção |
-| `INTERNET` | Envio de eventos anônimos ao Firebase Analytics e carregamento do mapa (Google Maps) |
+| `INTERNET` | Envio de eventos anônimos ao Firebase Analytics, envio de relatórios de falha ao Firebase Crashlytics e carregamento do mapa (Google Maps) |
 
 A permissão `ACCESS_BACKGROUND_LOCATION` é utilizada **somente durante sessões de pilotagem ativas**, quando o usuário inicia explicitamente uma sessão no App. Ela garante que o serviço de telemetria continue registrando corretamente mesmo que o piloto minimize o App ou o dispositivo apague a tela durante a corrida. O App não rastreia a localização do usuário fora do contexto de uma sessão ativa.
 
@@ -134,6 +148,7 @@ A permissão `ACCESS_BACKGROUND_LOCATION` é utilizada **somente durante sessõe
 - Os dados de telemetria (circuitos, sessões, voltas) são armazenados exclusivamente no dispositivo do usuário.
 - O App não possui servidor próprio para dados de pilotagem e não os envia a nenhum servidor externo.
 - Dados anônimos de uso do app são enviados ao Firebase Analytics (Google LLC) por conexão HTTPS cifrada. Esses dados são gerenciados conforme a [Política de Privacidade do Google](https://policies.google.com/privacy).
+- Relatórios de falha e diagnósticos são enviados ao Firebase Crashlytics (Google LLC) pela mesma conexão cifrada, conforme descrito na seção 2.6.
 - A segurança dos dados locais depende das proteções nativas do sistema operacional Android e do bloqueio do dispositivo do usuário.
 - A desinstalação do App remove todos os dados armazenados localmente no dispositivo.
 
@@ -150,7 +165,7 @@ Os mecanismos de compartilhamento de dados de sessão são sempre **acionados ma
 
 Em ambos os casos, o App **não retém cópia** do arquivo após o compartilhamento e nenhum dado é enviado a servidores do desenvolvedor.
 
-Dados anônimos de uso (eventos Firebase Analytics) são processados pelo Google conforme descrito na seção 6.
+Dados anônimos de uso (eventos Firebase Analytics) e relatórios de falha (Firebase Crashlytics) são processados pelo Google conforme descrito na seção 6.
 
 ---
 
@@ -163,6 +178,10 @@ Utilizado para exibição do mapa durante a configuração de circuitos. O App t
 ### Firebase Analytics (Google LLC)
 
 Utilizado para coleta de métricas anônimas de uso conforme descrito na seção 2.4. Os dados são transmitidos aos servidores do Google e armazenados conforme os termos do Firebase. Sujeito à [Política de Privacidade do Google](https://policies.google.com/privacy) e aos [Termos de Serviço do Firebase](https://firebase.google.com/terms).
+
+### Firebase Crashlytics (Google LLC)
+
+Utilizado para relatórios de falha e diagnóstico conforme descrito na seção 2.6. Os dados são transmitidos aos servidores do Google e armazenados conforme os termos do Firebase. Sujeito à [Política de Privacidade do Google](https://policies.google.com/privacy) e aos [Termos de Serviço do Firebase](https://firebase.google.com/terms).
 
 ### Google Play In-App Review API
 
@@ -187,6 +206,8 @@ Como os dados de pilotagem são armazenados localmente no seu dispositivo, você
 - **Exclusão total:** A desinstalação do App remove todos os dados armazenados localmente.
 
 Para dados coletados pelo Firebase Analytics, você pode desativar a coleta nas configurações do seu dispositivo Android em **Configurações > Google > Anúncios > Cancelar personalização de anúncios** ou, em versões mais recentes, por meio das opções de privacidade do Google Play Services.
+
+Os relatórios de falha do Firebase Crashlytics não são vinculados à sua identidade e usam um identificador de instalação gerado pelo próprio serviço. Esse identificador é descartado ao desinstalar o App.
 
 ---
 

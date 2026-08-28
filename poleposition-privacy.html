@@ -242,7 +242,7 @@
                 nav_portfolio: "Portfólio",
                 nav_contact: "Contato",
                 page_title: "Política de Privacidade — Pole Position",
-                last_updated: "Última atualização: junho de 2026",
+                last_updated: "Última atualização: agosto de 2026",
                 intro: "Esta Política de Privacidade descreve como o aplicativo <strong>Pole Position: Race Analytics</strong> (\"o App\", \"nós\") coleta, usa, armazena e protege as informações dos usuários (\"você\"). Ao instalar e utilizar o App, você concorda com os termos desta política.",
                 btn_back: "Voltar para a GHF Software",
                 footer_apps: "Aplicativos",
@@ -300,6 +300,13 @@
                                     <td class="py-4 px-5 text-sm text-gray-400">Análises</td>
                                     <td class="py-4 px-5 text-sm text-gray-400">Não</td>
                                 </tr>
+                                <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300">Registros de falhas e diagnósticos (Firebase Crashlytics)</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Sim</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Não</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Análises e correção de erros</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Não</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -314,7 +321,7 @@
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Práticas de segurança</h3>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li><strong>Os dados são criptografados em trânsito</strong> (conexão HTTPS para o Firebase).</li>
+                        <li><strong>Os dados são criptografados em trânsito</strong> (conexão HTTPS para o Firebase — Analytics e Crashlytics).</li>
                         <li><strong>Você pode solicitar a exclusão dos seus dados:</strong> os dados locais são removidos ao desinstalar o App ou ao excluí-los individualmente nas telas do App; os dados de análise podem ser apagados redefinindo o identificador de análise do dispositivo (ver seção 8).</li>
                         <li><strong>Nenhum dado é vendido nem compartilhado com terceiros</strong> para fins próprios desses terceiros.</li>
                         <li>O App <strong>não coleta dados de identificação pessoal</strong> (nome, e-mail, telefone, dados financeiros).</li>
@@ -374,7 +381,22 @@
                         <li>O usuário pode desativar o recurso a qualquer momento e excluir os traçados armazenados (ver seção 8).</li>
                     </ul>
                     
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.6 Dados NÃO Coletados</h3>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.6 Relatórios de Falha e Diagnóstico (Firebase Crashlytics)</h3>
+                    <p class="mb-4">O App integra o <strong>Firebase Crashlytics</strong> (Google LLC) para identificar falhas e problemas de funcionamento. São enviados:</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>Registros de falha (crashes) e erros não fatais</strong>, incluindo a pilha de execução (stack trace) do código do App.</li>
+                        <li><strong>Modos de falha ambientais registrados pelo App</strong>, sem os quais problemas que não geram crash ficariam invisíveis: perda de sinal de GPS durante uma sessão, encerramento do serviço de telemetria pelo sistema operacional (típico de otimizações agressivas de bateria) e sessão iniciada que não gerou registro salvo. Junto com cada ocorrência vão apenas valores de categoria fechada e numéricos — duração sem sinal, número da volta, contagem de voltas, motivo do descarte.</li>
+                        <li><strong>Dados técnicos do dispositivo e do estado do App</strong> coletados automaticamente pelo Crashlytics: modelo, versão do Android, memória e armazenamento disponíveis, e um identificador de instalação gerado pelo próprio Crashlytics.</li>
+                    </ul>
+                    <p class="mb-4"><strong>O que NÃO é enviado ao Crashlytics:</strong></p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>Coordenadas de GPS ou qualquer dado de localização.</li>
+                        <li>Tempos de volta, velocidades, força G ou qualquer dado de desempenho de pilotagem.</li>
+                        <li>Nomes de circuitos, notas ou conteúdo inserido pelo usuário.</li>
+                        <li>Dados que permitam identificar o usuário individualmente.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.7 Dados NÃO Coletados</h3>
                     <p class="mb-4">O App <strong>não coleta, não armazena e não transmite</strong>:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Nome, e-mail, telefone ou qualquer dado de identificação pessoal.</li>
@@ -382,7 +404,6 @@
                         <li>Informações de pagamento.</li>
                         <li>Histórico de navegação ou dados de outros aplicativos.</li>
                         <li>Dados de localização ou telemetria fora do contexto de uma sessão ativa.</li>
-                        <li>Relatórios automáticos de falha (Crashlytics ou equivalente).</li>
                     </ul>
                     
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">3. Uso das Permissões</h2>
@@ -425,7 +446,7 @@
                                 </tr>
                                 <tr class="hover:bg-gray-800/10">
                                     <td class="py-4 px-5 text-sm text-gray-300 font-mono">INTERNET</td>
-                                    <td class="py-4 px-5 text-sm text-gray-400">Envio de eventos anônimos ao Firebase Analytics e carregamento do mapa (Google Maps)</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Envio de eventos anônimos ao Firebase Analytics, envio de relatórios de falha ao Firebase Crashlytics e carregamento do mapa (Google Maps)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -437,6 +458,7 @@
                         <li>Os dados de telemetria (circuitos, sessões, voltas) são armazenados exclusivamente no dispositivo do usuário.</li>
                         <li>O App não possui servidor próprio para dados de pilotagem e não os envia a nenhum servidor externo.</li>
                         <li>Dados anônimos de uso do app são enviados ao Firebase Analytics (Google LLC) por conexão HTTPS cifrada. Esses dados são gerenciados conforme a <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Política de Privacidade do Google</a>.</li>
+                        <li>Relatórios de falha e diagnósticos são enviados ao Firebase Crashlytics (Google LLC) pela mesma conexão cifrada, conforme descrito na seção 2.6.</li>
                         <li>A segurança dos dados locais depende das proteções nativas do sistema operacional Android e do bloqueio do dispositivo do usuário.</li>
                         <li>A desinstalação do App remove todos os dados armazenados localmente no dispositivo.</li>
                     </ul>
@@ -449,7 +471,7 @@
                         <li><strong>Card de análise (imagem PNG)</strong>, gerado na tela de traçado da volta. A imagem é montada inteiramente no dispositivo e contém o contorno do circuito (uma forma normalizada, derivada do traçado GPS, sem coordenadas geográficas absolutas), gráficos de desempenho (velocidade, força G) e um QR code que aponta para a página do App na Google Play Store.</li>
                     </ul>
                     <p class="mb-4">Em ambos os casos, o App <strong>não retém cópia</strong> do arquivo após o compartilhamento e nenhum dado é enviado a servidores do desenvolvedor.</p>
-                    <p class="mb-4">Dados anônimos de uso (eventos Firebase Analytics) são processados pelo Google conforme descrito na seção 6.</p>
+                    <p class="mb-4">Dados anônimos de uso (eventos Firebase Analytics) e relatórios de falha (Firebase Crashlytics) são processados pelo Google conforme descrito na seção 6.</p>
                     
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. Serviços de Terceiros</h2>
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Google Maps SDK for Android</h3>
@@ -457,6 +479,9 @@
                     
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Firebase Analytics (Google LLC)</h3>
                     <p class="mb-4">Utilizado para coleta de métricas anônimas de uso conforme descrito na seção 2.4. Os dados são transmitidos aos servidores do Google e armazenados conforme os termos do Firebase. Sujeito à <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Política de Privacidade do Google</a> e aos <a href="https://firebase.google.com/terms" target="_blank" class="text-brand-primary hover:underline">Termos de Serviço do Firebase</a>.</p>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Firebase Crashlytics (Google LLC)</h3>
+                    <p class="mb-4">Utilizado para relatórios de falha e diagnóstico conforme descrito na seção 2.6. Os dados são transmitidos aos servidores do Google e armazenados conforme os termos do Firebase. Sujeito à <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Política de Privacidade do Google</a> e aos <a href="https://firebase.google.com/terms" target="_blank" class="text-brand-primary hover:underline">Termos de Serviço do Firebase</a>.</p>
                     
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Google Play In-App Review API</h3>
                     <p class="mb-4">Utilizado para exibir o fluxo nativo de avaliação do Google Play em momentos oportunos dentro do App (ex.: após análise de sessões). Nenhum dado inserido pelo usuário nesse fluxo é acessado ou armazenado pelo App — o processo ocorre inteiramente dentro do Google Play. Sujeito à <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Política de Privacidade do Google</a>.</p>
@@ -474,6 +499,7 @@
                         <li><strong>Exclusão total:</strong> A desinstalação do App remove todos os dados armazenados localmente.</li>
                     </ul>
                     <p class="mb-4">Para dados coletados pelo Firebase Analytics, você pode desativar a coleta nas configurações do seu dispositivo Android em <strong>Configurações > Google > Anúncios > Cancelar personalização de anúncios</strong> ou, em versões mais recentes, por meio das opções de privacidade do Google Play Services.</p>
+                    <p class="mb-4">Os relatórios de falha do Firebase Crashlytics não são vinculados à sua identidade e usam um identificador de instalação gerado pelo próprio serviço. Esse identificador é descartado ao desinstalar o App.</p>
                     
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Alterações nesta Política</h2>
                     <p class="mb-4">Esta política pode ser atualizada periodicamente. Alterações relevantes serão comunicadas por meio de atualização do App na Google Play Store. A data da última atualização está indicada no topo deste documento.</p>
@@ -488,7 +514,7 @@
                 nav_portfolio: "Portfolio",
                 nav_contact: "Contact",
                 page_title: "Privacy Policy — Pole Position",
-                last_updated: "Last updated: June 2026",
+                last_updated: "Last updated: August 2026",
                 intro: "This Privacy Policy describes how the <strong>Pole Position: Race Analytics</strong> application (\"the App\", \"we\", \"us\") collects, uses, stores, and protects user information (\"you\"). By installing and using the App, you agree to the terms of this policy.",
                 btn_back: "Back to GHF Software",
                 footer_apps: "Applications",
@@ -546,6 +572,13 @@
                                     <td class="py-4 px-5 text-sm text-gray-400">Analytics</td>
                                     <td class="py-4 px-5 text-sm text-gray-400">No</td>
                                 </tr>
+                                <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300">Crash logs and diagnostics (Firebase Crashlytics)</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Yes</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">No</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Analytics and error fixing</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">No</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -560,7 +593,7 @@
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Security practices</h3>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li><strong>Data is encrypted in transit</strong> (HTTPS connection to Firebase).</li>
+                        <li><strong>Data is encrypted in transit</strong> (HTTPS connection to Firebase — Analytics and Crashlytics).</li>
                         <li><strong>You can request the deletion of your data:</strong> local data is removed when uninstalling the App or by deleting them individually in the App's screens; analytics data can be cleared by resetting the device's advertising identifier (see section 8).</li>
                         <li><strong>No data is sold or shared with third parties</strong> for their own purposes.</li>
                         <li>The App <strong>does not collect personally identifiable information</strong> (name, email, phone number, financial data).</li>
@@ -620,7 +653,22 @@
                         <li>The user can disable the feature at any time and delete the stored traces (see section 8).</li>
                     </ul>
                     
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.6 Data NOT Collected</h3>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.6 Crash Reports and Diagnostics (Firebase Crashlytics)</h3>
+                    <p class="mb-4">The App integrates <strong>Firebase Crashlytics</strong> (Google LLC) to identify crashes and operational issues. The following are sent:</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>Crash reports and non-fatal errors</strong>, including stack traces of the App's code.</li>
+                        <li><strong>Environmental failure modes tracked by the App</strong>, without which issues that do not trigger a crash would remain invisible: loss of GPS signal during a session, OS termination of the telemetry service (typical of aggressive battery optimizations), and started sessions that produced no saved record. Accompanied only by closed-category and numeric values — signal-loss duration, lap number, lap count, discard reason.</li>
+                        <li><strong>Technical device data and App state</strong> automatically collected by Crashlytics: model, Android version, available memory and storage, and an installation ID generated by Crashlytics itself.</li>
+                    </ul>
+                    <p class="mb-4"><strong>What is NOT sent to Crashlytics:</strong></p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>GPS coordinates or any location data.</li>
+                        <li>Lap times, speeds, G-forces, or any driving performance data.</li>
+                        <li>Track names, notes, or user-entered content.</li>
+                        <li>Data allowing individual identification of the user.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.7 Data NOT Collected</h3>
                     <p class="mb-4">The App <strong>does not collect, store, or transmit</strong>:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Name, email, phone number, or any personal identification data.</li>
@@ -628,7 +676,6 @@
                         <li>Payment information.</li>
                         <li>Browsing history or data from other apps.</li>
                         <li>Location or telemetry data outside the context of an active session.</li>
-                        <li>Automatic crash reports (Crashlytics or equivalent).</li>
                     </ul>
                     
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">3. Use of Permissions</h2>
@@ -671,7 +718,7 @@
                                 </tr>
                                 <tr class="hover:bg-gray-800/10">
                                     <td class="py-4 px-5 text-sm text-gray-300 font-mono">INTERNET</td>
-                                    <td class="py-4 px-5 text-sm text-gray-400">Sends anonymous events to Firebase Analytics and fetches map layers from Google Maps API</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Sends anonymous events to Firebase Analytics, sends crash reports to Firebase Crashlytics, and fetches map layers from Google Maps API</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -683,6 +730,7 @@
                         <li>Telemetry data (tracks, sessions, laps) is stored exclusively on the user's device.</li>
                         <li>The App does not have its own server for driving data and does not send it to any external server.</li>
                         <li>Anonymous app usage data is sent to Firebase Analytics (Google LLC) via encrypted HTTPS connections. This data is managed according to the <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Google Privacy Policy</a>.</li>
+                        <li>Crash reports and diagnostics are sent to Firebase Crashlytics (Google LLC) via the same encrypted connection, as described in section 2.6.</li>
                         <li>Local data security depends on Android's native OS protections and the lock screen security of the user's device.</li>
                         <li>Uninstalling the App removes all data stored locally on the device.</li>
                     </ul>
@@ -695,7 +743,7 @@
                         <li><strong>Analysis Card (PNG image)</strong>, generated on the lap trace screen. The image is built entirely on the device and contains the track outline (a normalized shape, derived from the GPS trace, without absolute geographic coordinates), performance graphs (speed, G-force), and a QR code pointing to the App's page on the Google Play Store.</li>
                     </ul>
                     <p class="mb-4">In both cases, the App <strong>does not retain a copy</strong> of the file after sharing and no data is sent to the developer's servers.</p>
-                    <p class="mb-4">Anonymous usage data (Firebase Analytics events) is processed by Google as described in section 6.</p>
+                    <p class="mb-4">Anonymous usage data (Firebase Analytics events) and crash reports (Firebase Crashlytics) are processed by Google as described in section 6.</p>
                     
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. Third-Party Services</h2>
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Google Maps SDK for Android</h3>
@@ -703,6 +751,9 @@
                     
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Firebase Analytics (Google LLC)</h3>
                     <p class="mb-4">Used to collect anonymous usage metrics as described in section 2.4. Data is transmitted to Google servers and stored according to Firebase terms. Subject to <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Google's Privacy Policy</a> and <a href="https://firebase.google.com/terms" target="_blank" class="text-brand-primary hover:underline">Firebase Terms of Service</a>.</p>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Firebase Crashlytics (Google LLC)</h3>
+                    <p class="mb-4">Used for crash reports and diagnostics as described in section 2.6. Data is transmitted to Google servers and stored according to Firebase terms. Subject to <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Google's Privacy Policy</a> and <a href="https://firebase.google.com/terms" target="_blank" class="text-brand-primary hover:underline">Firebase Terms of Service</a>.</p>
                     
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Google Play In-App Review API</h3>
                     <p class="mb-4">Used to prompt the native Google Play review dialog at opportune moments in the App (e.g., after session reviews). No user-input data in this flow is accessed or stored by the App — the process is handled entirely by Google Play. Subject to <a href="https://policies.google.com/privacy" target="_blank" class="text-brand-primary hover:underline">Google's Privacy Policy</a>.</p>
@@ -720,6 +771,7 @@
                         <li><strong>Total Deletion:</strong> Uninstalling the App removes all data stored locally.</li>
                     </ul>
                     <p class="mb-4">For data collected by Firebase Analytics, you can opt out of analytics tracking in your Android settings under <strong>Settings > Google > Ads > Opt out of Ads Personalization</strong> or through Google Play Services privacy options.</p>
+                    <p class="mb-4">Firebase Crashlytics crash reports are not linked to your identity and use an installation ID generated by the service itself. This identifier is discarded when uninstalling the App.</p>
                     
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Changes to this Policy</h2>
                     <p class="mb-4">This policy may be updated periodically. Significant changes will be communicated via App updates on the Google Play Store. The date of the last update is indicated at the top of this document.</p>
