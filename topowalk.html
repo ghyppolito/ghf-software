@@ -4,25 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TopoWalk - Levantamento Topográfico de Bolso</title>
+    <title>TopoWalk - Levantamento Topográfico de Bolso e RTK</title>
     <link rel="icon" type="image/png" href="./assets/topo-walk.png">
 
-    <meta name="description" content="TopoWalk transforma seu dispositivo em uma ferramenta topográfica avançada. Receptores GNSS/RTK externos, altimetria barométrica, declividade, áreas e exportação em PDF, GeoJSON, KML e GPX. GHF Software.">
+    <meta name="description" content="TopoWalk transforma seu Android em uma ferramenta topográfica avançada de campo. Receptores GNSS/RTK externos, áreas de exclusão e área líquida, importação KML/GeoJSON, locação, laudos PDF e exportação em DXF, CSV, GeoJSON, KML e GPX. GHF Software.">
 
     <!-- Open Graph (WhatsApp, LinkedIn, Facebook) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="GHF Software" />
     <meta property="og:url" content="https://ghfsoftware.com/topowalk.html" />
-    <meta property="og:title" content="TopoWalk — Topografia de Campo no Bolso" />
-    <meta property="og:description" content="Receptores GNSS/RTK Bluetooth, altimetria barométrica, declividade %, áreas de polígonos, laudos PDF e arquivos GeoJSON, KML e GPX. Topografia profissional no Android." />
+    <meta property="og:title" content="TopoWalk — Topografia de Campo no Bolso & RTK" />
+    <meta property="og:description" content="Receptores GNSS/RTK Bluetooth, áreas de exclusão (área líquida), locação de pontos, laudos PDF com logo e exportação em DXF, CSV, GeoJSON, KML e GPX. Topografia profissional no Android." />
     <meta property="og:image" content="https://ghfsoftware.com/assets/topowalk_screenshot.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="pt_BR" />
     <!-- Twitter/X Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="TopoWalk — Topografia de Campo no Bolso" />
-    <meta name="twitter:description" content="Receptores GNSS/RTK Bluetooth, altimetria barométrica, laudos PDF e exportação GeoJSON, KML e GPX. 100% gratuito." />
+    <meta name="twitter:title" content="TopoWalk — Topografia de Campo no Bolso & RTK" />
+    <meta name="twitter:description" content="Receptores GNSS/RTK Bluetooth, áreas de exclusão (área líquida), laudos PDF com logo e exportação DXF, CSV, GeoJSON, KML e GPX. Topografia profissional no Android." />
     <meta name="twitter:image" content="https://ghfsoftware.com/assets/topowalk_screenshot.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -170,7 +170,7 @@
                 <!-- Text Content -->
                 <div class="w-full lg:w-1/2 text-center lg:text-left">
                     <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-900/20 backdrop-blur-sm text-sm text-amber-400 font-medium">
-                        <i class="fa-solid fa-mountain mr-2"></i> <span data-i18n="hero_badge">Levantamento Topográfico de Bolso</span>
+                        <i class="fa-solid fa-mountain mr-2"></i> <span data-i18n="hero_badge">Levantamento Topográfico de Bolso & RTK</span>
                     </div>
 
                     <h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6 text-white" data-i18n="hero_title">
@@ -215,84 +215,153 @@
                 <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white" data-i18n="features_title">Tecnologia para Área Externa</h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Feature 1: RTK/GNSS Externo -->
-                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
-                    <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
+                <div class="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-xl mb-5 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-satellite-dish"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat1_title">Receptor GNSS/RTK (Bluetooth)</h3>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="feat1_title">Receptor GNSS/RTK (Bluetooth)</h3>
                     <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat1_desc">
                         Conecta-se a receptores RTK externos via Bluetooth (NMEA 0183) para precisão centimétrica, monitoramento de fix (RTK FIX/FLOAT) e offset de altura de bastão.
                     </p>
                 </div>
 
-                <!-- Feature 2: Altimetria Tripla -->
-                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
-                    <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-gauge-high"></i>
+                <!-- Feature 2: Áreas de Exclusão -->
+                <div class="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-vector-square"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat2_title">Altimetria de Alta Precisão</h3>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="feat2_title">Áreas de Exclusão & Área Líquida</h3>
                     <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat2_desc">
-                        Prioridade inteligente (Receptor RTK > Barômetro > GPS) para altitude exata via fórmula barométrica com calibração, eliminando a flutuação do eixo-z.
+                        Meça o talhão e desconte açudes, APPs ou benfeitorias: cálculo automático de área bruta, descontada e líquida (Pro), propagado para PDF, GeoJSON, KML, DXF e CSV.
                     </p>
                 </div>
 
-                <!-- Feature 3: Métricas Avançadas -->
-                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
-                    <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-chart-area"></i>
+                <!-- Feature 3: Importação de Camadas -->
+                <div class="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-layer-group"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat3_title">Cálculos & Declividade</h3>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="feat3_title">Importação de Camadas (KML/GeoJSON)</h3>
                     <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat3_desc">
-                        Distância horizontal (Haversine), desnível, inclinação (Pitágoras), azimute, área de polígono, declividade em %, ganho/perda de elevação e vista 3D isométrica.
+                        Carregue o KML do CAR, um KMZ do Google Earth, GeoJSON, GPX ou CSV para visualizar o perímetro no mapa e calcular a área líquida sem caminhar.
                     </p>
                 </div>
 
-                <!-- Feature 4: Exportação Multi-Formato -->
-                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
-                    <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-file-export"></i>
+                <!-- Feature 4: Locação Pro -->
+                <div class="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-location-crosshairs"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat4_title">Exportação Multi-Formato</h3>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="feat4_title">Locação de Pontos & Bússola (Pro)</h3>
                     <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat4_desc">
-                        Laudos em PDF A4 com perfil 2D e vista 3D, mais exportações GeoJSON, KML e GPX (para QGIS, Google Earth e OsmAnd) com nomes de pontos.
+                        Navegue de volta a qualquer ponto levantado com distância, azimute e seta com bússola orientada ao norte verdadeiro (corrigida por declinação magnética).
                     </p>
                 </div>
 
-                <!-- Feature 5: Edição, Rascunhos e Backup -->
-                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
-                    <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-database"></i>
+                <!-- Feature 5: Fotos & Waypoints -->
+                <div class="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-camera font-bold"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat5_title">Edição, Rascunhos & Backup</h3>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="feat5_title">Fotos de Campo & Waypoints</h3>
                     <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat5_desc">
-                        Reabra e edite levantamentos salvos (adicione, remova ou insira pontos), conte com rascunhos protegidos contra desligamentos e backup/restauração do histórico.
+                        Anexe até 5 fotos por levantamento e marque pontos de interesse (árvores, portões, erosões) com ícones e notas livres sem alterar a área.
                     </p>
                 </div>
 
-                <!-- Feature 6: 100% Gratuito e Seguro -->
-                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
-                    <div class="w-14 h-14 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-shield-halved"></i>
+                <!-- Feature 6: PDF Personalizado -->
+                <div class="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-file-pdf"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3" data-i18n="feat6_title">100% Gratuito & Seguro</h3>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="feat6_title">Laudo PDF Personalizado (Pro)</h3>
                     <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat6_desc">
-                        Sem anúncios e sem compras no app. Suas medições e coordenadas ficam salvas exclusivamente no seu dispositivo, com criptografia em trânsito.
+                        Gere relatórios em PDF A4 com a marca da sua empresa: adicione seu logotipo, nome do responsável técnico, registro profissional (CREA/CAU) e nota de rodapé.
+                    </p>
+                </div>
+
+                <!-- Feature 7: CAD & SIG Export -->
+                <div class="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-file-code"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="feat7_title">Exportação CAD & SIG Multi-Formato</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat7_desc">
+                        Exporte em DXF (AutoCAD R12 ASCII em metros no plano local), CSV em dois arquivos (pontos/segmentos), GeoJSON, KML (Google Earth) e GPX (trilhas/waypoints).
+                    </p>
+                </div>
+
+                <!-- Feature 8: Núcleo Gratuito -->
+                <div class="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-gift"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="feat8_title">Núcleo Gratuito + Pro sem Assinatura</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="feat8_desc">
+                        Sem anúncios. Todo o núcleo do app é 100% gratuito e sem limite. O TopoWalk Pro é uma compra única sem assinatura nem mensalidades.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- TopoWalk Pro Spotlight Banner -->
+    <section class="py-20 bg-brand-base relative z-10 border-t border-gray-800/50">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="glass-panel p-8 md:p-12 rounded-3xl border border-amber-500/30 relative overflow-hidden bg-gradient-to-r from-amber-950/40 via-brand-surface to-brand-base">
+                <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-brand-accent/10 rounded-full filter blur-3xl pointer-events-none"></div>
+
+                <div class="max-w-3xl mb-10">
+                    <div class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-accent/20 text-amber-400 text-sm font-semibold tracking-wide uppercase border border-amber-500/30" data-i18n="pro_badge">
+                        TopoWalk Pro
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-3" data-i18n="pro_title">Ferramentas Profissionais de Entrega ao Cliente</h2>
+                    <p class="text-amber-400/90 text-lg font-medium" data-i18n="pro_subtitle">Compra única e definitiva · Sem assinaturas nem taxas recorrentes</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="p-5 rounded-xl bg-brand-base/60 border border-gray-800">
+                        <div class="text-brand-accent text-lg font-bold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-compass"></i> <span data-i18n="pro1_title">Locação de Pontos</span>
+                        </div>
+                        <p class="text-gray-400 text-sm" data-i18n="pro1_desc">Bússola orientada ao norte verdadeiro e indicação de tolerância do equipamento.</p>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-brand-base/60 border border-gray-800">
+                        <div class="text-brand-accent text-lg font-bold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-scissors"></i> <span data-i18n="pro2_title">Áreas de Exclusão</span>
+                        </div>
+                        <p class="text-gray-400 text-sm" data-i18n="pro2_desc">Desconto de furos no terreno (açudes, APPs) com cálculo de área líquida real.</p>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-brand-base/60 border border-gray-800">
+                        <div class="text-brand-accent text-lg font-bold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-id-card"></i> <span data-i18n="pro3_title">PDF com Identidade Visual</span>
+                        </div>
+                        <p class="text-gray-400 text-sm" data-i18n="pro3_desc">Relatórios A4 personalizados com logotipo, responsável técnico e CREA.</p>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-brand-base/60 border border-gray-800">
+                        <div class="text-brand-accent text-lg font-bold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-drafting-compass"></i> <span data-i18n="pro4_title">Exportação DXF & CSV</span>
+                        </div>
+                        <p class="text-gray-400 text-sm" data-i18n="pro4_desc">Arquivos prontos para desenhos no AutoCAD e tabelas de cálculo em planilhas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- How it Works -->
-    <section id="how" class="py-24 bg-brand-base relative z-10">
+    <section id="how" class="py-24 bg-brand-surface relative z-10 border-t border-gray-800/50">
         <div class="container mx-auto px-6 md:px-12">
             <div class="text-center max-w-2xl mx-auto mb-16">
                 <div class="inline-block mb-3 px-3 py-1 rounded-full bg-gray-800 text-gray-300 text-sm font-semibold tracking-wide uppercase border border-gray-700" data-i18n="how_badge">
                     Simples e Direto
                 </div>
-                <h2 class="text-3xl md:text-5xl font-bold text-white" data-i18n="how_title">Fluxo de Uso Inteligente</h2>
+                <h2 class="text-3xl md:text-5xl font-bold text-white" data-i18n="how_title">O Fluxo de Uso Mais Rápido</h2>
             </div>
 
             <div class="max-w-4xl mx-auto">
@@ -301,22 +370,29 @@
                     <!-- Step 1 -->
                     <div class="relative pl-10 md:pl-16">
                         <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-brand-accent flex items-center justify-center text-brand-accent font-bold text-lg">1</div>
-                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how1_title">1. Definir o Ponto Inicial</h3>
-                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how1_desc">Conecte seu receptor GNSS/RTK externo via Bluetooth ou use o GPS interno com o barômetro. Aguarde o fix de alta precisão e grave o primeiro ponto georreferenciado.</p>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how1_title">1. Ponto Inicial & Receptor RTK</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how1_desc">Conecte seu receptor GNSS/RTK via Bluetooth ou use o GPS interno com o barômetro. Aguarde o fix de alta precisão e grave o primeiro ponto.</p>
                     </div>
 
                     <!-- Step 2 -->
                     <div class="relative pl-10 md:pl-16">
                         <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-brand-accent flex items-center justify-center text-brand-accent font-bold text-lg">2</div>
-                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how2_title">2. Captura & Nomeação</h3>
-                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how2_desc">Percorra o terreno capturando os pontos subsequentes do trajeto ou polígono. Adicione rótulos personalizados ("canto da cerca", "mourão 12") e acompanhe declividade e altitude.</p>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how2_title">2. Capturar, Excluir & Fotografar</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how2_desc">Percorra o terreno capturando pontos, anexe fotos de campo, marque pontos de interesse e defina áreas de exclusão para obter a área líquida.</p>
                     </div>
 
                     <!-- Step 3 -->
                     <div class="relative pl-10 md:pl-16">
                         <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-brand-accent flex items-center justify-center text-brand-accent font-bold text-lg">3</div>
-                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how3_title">3. Laudos & Exportação</h3>
-                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how3_desc">Finalize o levantamento para visualizar gráficos 2D/3D e área de polígonos. Gere relatórios PDF A4 ou exporte arquivos GeoJSON, KML e GPX para SIGs e Google Earth.</p>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how3_title">3. Importar & Locar</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how3_desc">Carregue camadas KML/GeoJSON enviadas pelo cliente como referência no mapa ou use a Locação Pro para encontrar marcos no terreno.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="relative pl-10 md:pl-16">
+                        <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-brand-accent flex items-center justify-center text-brand-accent font-bold text-lg">4</div>
+                        <h3 class="text-2xl font-bold text-white mb-3" data-i18n="how4_title">4. Laudos PDF & Exportação CAD/SIG</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-i18n="how4_desc">Finalize para gerar relatórios PDF A4 com sua identidade visual ou exporte arquivos DXF, CSV, GeoJSON, KML e GPX para seu software de escolha.</p>
                     </div>
                 </div>
             </div>
@@ -398,9 +474,9 @@
                 nav_contact: "Contato",
                 
                 // Hero
-                hero_badge: "Levantamento Topográfico de Bolso",
+                hero_badge: "Levantamento Topográfico de Bolso & RTK",
                 hero_title: `Precisão Profissional<br class="hidden md:block"> nas <span class="text-gradient-amber">Suas Mãos</span>`,
-                hero_desc: "O TopoWalk transforma seu smartphone em uma ferramenta topográfica avançada de campo. Suporta receptores GNSS/RTK externos via Bluetooth, altimetria barométrica, cálculo de declividade, área e exportação para PDF, GeoJSON, KML e GPX.",
+                hero_desc: "O TopoWalk transforma seu smartphone em uma ferramenta topográfica avançada de campo. Suporta receptores GNSS/RTK externos via Bluetooth, altimetria barométrica, áreas de exclusão e área líquida, importação KML/GeoJSON, locação de pontos, fotos de campo e exportação para PDF, DXF, CSV, GeoJSON, KML e GPX.",
                 btn_play: "Baixar na Google Play",
                 btn_learn: "Como Funciona",
                 
@@ -409,26 +485,45 @@
                 features_title: "Tecnologia Desenhada para a Área Externa",
                 feat1_title: "Receptor GNSS/RTK (Bluetooth)",
                 feat1_desc: "Conecta-se a receptores RTK externos via Bluetooth (NMEA 0183) para precisão centimétrica, monitoramento de fix (RTK FIX/FLOAT) e offset de altura de bastão.",
-                feat2_title: "Altimetria de Alta Precisão",
-                feat2_desc: "Prioridade inteligente (Receptor RTK > Barômetro > GPS) para altitude exata via fórmula barométrica com calibração, eliminando a flutuação do eixo-z.",
-                feat3_title: "Cálculos & Declividade",
-                feat3_desc: "Distância horizontal (Haversine), desnível, inclinação (Pitágoras), azimute, área de polígono, declividade em %, ganho/perda de elevação e vista 3D isométrica.",
-                feat4_title: "Exportação Multi-Formato",
-                feat4_desc: "Laudos em PDF A4 com perfil 2D e vista 3D, mais exportações GeoJSON, KML e GPX (para QGIS, Google Earth e OsmAnd) com nomes de pontos.",
-                feat5_title: "Edição, Rascunhos & Backup",
-                feat5_desc: "Reabra e edite levantamentos salvos (adicione, remova ou insira pontos), conte com rascunhos protegidos contra desligamentos e backup/restauração do histórico.",
-                feat6_title: "100% Gratuito & Seguro",
-                feat6_desc: "Sem anúncios e sem compras no app. Suas medições e coordenadas ficam salvas exclusivamente no seu dispositivo, com criptografia em trânsito.",
+                feat2_title: "Áreas de Exclusão & Área Líquida",
+                feat2_desc: "Meça o talhão e desconte açudes, APPs ou benfeitorias: cálculo automático de área bruta, descontada e líquida (Pro), propagado para PDF, GeoJSON, KML, DXF e CSV.",
+                feat3_title: "Importação de Camadas (KML/GeoJSON)",
+                feat3_desc: "Carregue o KML do CAR, um KMZ do Google Earth, GeoJSON, GPX ou CSV para visualizar o perímetro no mapa e calcular a área líquida sem caminhar.",
+                feat4_title: "Locação de Pontos & Bússola (Pro)",
+                feat4_desc: "Navegue de volta a qualquer ponto levantado com distância, azimute e seta com bússola orientada ao norte verdadeiro (corrigida por declinação magnética).",
+                feat5_title: "Fotos de Campo & Waypoints",
+                feat5_desc: "Anexe até 5 fotos por levantamento e marque pontos de interesse (árvores, portões, erosões) com ícones e notas livres sem alterar a área.",
+                feat6_title: "Laudo PDF Personalizado (Pro)",
+                feat6_desc: "Gere relatórios em PDF A4 com a marca da sua empresa: adicione seu logotipo, nome do responsável técnico, registro profissional (CREA/CAU) e nota de rodapé.",
+                feat7_title: "Exportação CAD & SIG Multi-Formato",
+                feat7_desc: "Exporte em DXF (AutoCAD R12 ASCII em metros no plano local), CSV em dois arquivos (pontos/segmentos), GeoJSON, KML (Google Earth) e GPX (trilhas/waypoints).",
+                feat8_title: "Núcleo Gratuito + Pro sem Assinatura",
+                feat8_desc: "Sem anúncios. Todo o núcleo do app é 100% gratuito e sem limite. O TopoWalk Pro é uma compra única sem assinatura nem mensalidades.",
+
+                // Pro Banner
+                pro_badge: "TopoWalk Pro",
+                pro_title: "Ferramentas Profissionais de Entrega ao Cliente",
+                pro_subtitle: "Compra única e definitiva · Sem assinaturas nem taxas recorrentes",
+                pro1_title: "Locação de Pontos",
+                pro1_desc: "Bússola orientada ao norte verdadeiro e indicação de tolerância do equipamento.",
+                pro2_title: "Áreas de Exclusão",
+                pro2_desc: "Desconto de furos no terreno (açudes, APPs) com cálculo de área líquida real.",
+                pro3_title: "PDF com Identidade Visual",
+                pro3_desc: "Relatórios A4 personalizados com logotipo, responsável técnico e CREA.",
+                pro4_title: "Exportação DXF & CSV",
+                pro4_desc: "Arquivos prontos para desenhos no AutoCAD e tabelas de cálculo em planilhas.",
 
                 // How it works
                 how_badge: "Simples e Direto",
                 how_title: "O Fluxo de Uso Mais Rápido",
-                how1_title: "1. Definir o Ponto Inicial",
-                how1_desc: "Conecte seu receptor GNSS/RTK externo via Bluetooth ou use o GPS interno com o barômetro. Aguarde o fix de alta precisão e grave o primeiro ponto georreferenciado.",
-                how2_title: "2. Captura & Nomeação",
-                how2_desc: "Percorra o terreno capturando os pontos subsequentes do trajeto ou polígono. Adicione rótulos personalizados (\"canto da cerca\", \"mourão 12\") e acompanhe declividade e altitude.",
-                how3_title: "3. Laudos & Exportação",
-                how3_desc: "Finalize o levantamento para visualizar gráficos 2D/3D e área de polígonos. Gere relatórios PDF A4 ou exporte arquivos GeoJSON, KML e GPX para SIGs e Google Earth.",
+                how1_title: "1. Ponto Inicial & Receptor RTK",
+                how1_desc: "Conecte seu receptor GNSS/RTK via Bluetooth ou use o GPS interno com o barômetro. Aguarde o fix de alta precisão e grave o primeiro ponto.",
+                how2_title: "2. Capturar, Excluir & Fotografar",
+                how2_desc: "Percorra o terreno capturando pontos, anexe fotos de campo, marque pontos de interesse e defina áreas de exclusão para obter a área líquida.",
+                how3_title: "3. Importar & Locar",
+                how3_desc: "Carregue camadas KML/GeoJSON enviadas pelo cliente como referência no mapa ou use a Locação Pro para encontrar marcos no terreno.",
+                how4_title: "4. Laudos PDF & Exportação CAD/SIG",
+                how4_desc: "Finalize para gerar relatórios PDF A4 com sua identidade visual ou exporte arquivos DXF, CSV, GeoJSON, KML e GPX para seu software de escolha.",
 
                 // Footer
                 footer_apps: "Aplicativos",
@@ -453,9 +548,9 @@
                 nav_contact: "Contact",
 
                 // Hero
-                hero_badge: "Pocket Topographic Survey",
+                hero_badge: "Pocket Topographic Survey & RTK",
                 hero_title: `Professional Precision<br class="hidden md:block"> in <span class="text-gradient-amber">Your Hands</span>`,
-                hero_desc: "TopoWalk turns your smartphone into an advanced fieldwork surveying tool. Supports external Bluetooth GNSS/RTK receivers, barometric altimetry, slope %, area, and exports to PDF, GeoJSON, KML, and GPX.",
+                hero_desc: "TopoWalk turns your smartphone into an advanced fieldwork surveying tool. Supports external Bluetooth GNSS/RTK receivers, barometric altimetry, exclusion zones & net area, KML/GeoJSON import, point stakeout, field photos, and exports to PDF, DXF, CSV, GeoJSON, KML, and GPX.",
                 btn_play: "Get it on Google Play",
                 btn_learn: "How It Works",
                 
@@ -464,26 +559,45 @@
                 features_title: "Engineered specifically for the Great Outdoors",
                 feat1_title: "External GNSS/RTK (Bluetooth)",
                 feat1_desc: "Connects to paired external RTK receivers via Bluetooth (NMEA 0183) for centimeter accuracy, real-time fix quality (RTK FIX/FLOAT), and rod height offset.",
-                feat2_title: "High-Precision Altimetry",
-                feat2_desc: "Smart priority (External RTK > Barometer > GPS) for exact altitude via barometric formula with manual offset calibration, overriding GPS z-axis floating.",
-                feat3_title: "Terrain Metrics & Slope",
-                feat3_desc: "Horizontal distance (Haversine), elevation delta, slope, azimuth, polygon area, slope %, elevation gain/loss, and 3D isometric polygon view.",
-                feat4_title: "Multi-Format Export",
-                feat4_desc: "A4 PDF reports with 2D elevation profiles and 3D views, plus direct GeoJSON, KML, and GPX exports with custom point labels for QGIS, Google Earth, and OsmAnd.",
-                feat5_title: "Editing, Drafts & Backup",
-                feat5_desc: "Reopen and edit saved surveys (add, remove, or insert points), rely on auto-saved draft recovery, and perform complete history backups via single files.",
-                feat6_title: "100% Free & Secure",
-                feat6_desc: "No ads and no in-app purchases. Your measurements and coordinates remain stored 100% locally on your device with transit encryption.",
+                feat2_title: "Exclusion Zones & Net Area",
+                feat2_desc: "Survey land plots and deduct ponds, APPs, or structures: automatic calculation of gross, deducted, and net area (Pro), exported across PDF, GeoJSON, KML, DXF, and CSV.",
+                feat3_title: "Layer Import (KML/GeoJSON)",
+                feat3_desc: "Load registry KMLs, Google Earth KMZ, GeoJSON, GPX, or CSV to overlay perimeters on the map and calculate net area instantly.",
+                feat4_title: "Point Stakeout & Compass (Pro)",
+                feat4_desc: "Navigate back to any saved survey point with distance, azimuth, and true-north compass guidance (magnetic declination corrected).",
+                feat5_title: "Field Photos & Waypoints",
+                feat5_desc: "Attach up to 5 photos per survey and mark points of interest (trees, gates, erosion) with custom icons and notes without affecting area calculations.",
+                feat6_title: "Custom Branded PDF Reports (Pro)",
+                feat6_desc: "Generate A4 PDF reports featuring your company branding: add your logo, technical manager name, professional license (CREA/CAU), and custom footers.",
+                feat7_title: "Multi-Format CAD & GIS Export",
+                feat7_desc: "Export to DXF (AutoCAD R12 ASCII in meters on local plane), dual CSV files (points/segments), GeoJSON, KML (Google Earth), and GPX (tracks/waypoints).",
+                feat8_title: "Free Core + One-Time Pro Upgrade",
+                feat8_desc: "Ad-free. All core surveying tools are 100% free with no usage limits. TopoWalk Pro is a one-time purchase with zero recurring subscriptions.",
+
+                // Pro Banner
+                pro_badge: "TopoWalk Pro",
+                pro_title: "Professional Deliverables for Your Clients",
+                pro_subtitle: "One-time lifetime purchase · No subscriptions or recurring fees",
+                pro1_title: "Point Stakeout",
+                pro1_desc: "True-north compass navigation and hardware tolerance indicators.",
+                pro2_title: "Exclusion Zones",
+                pro2_desc: "Deduct land cutouts (ponds, APPs) with precise net area calculation.",
+                pro3_title: "Custom Branded PDFs",
+                pro3_desc: "Professional A4 reports featuring your company logo and engineer license.",
+                pro4_title: "DXF & CSV Export",
+                pro4_desc: "Production-ready files for AutoCAD drawings and spreadsheet calculations.",
 
                 // How it works
                 how_badge: "Keep It Simple",
                 how_title: "Frictionless Workflow",
-                how1_title: "1. Set Initial Point",
-                how1_desc: "Connect your external GNSS/RTK receiver via Bluetooth or use internal GPS with barometer. Wait for a high-accuracy fix and capture the first georeferenced point.",
-                how2_title: "2. Traverse & Label",
-                how2_desc: "Walk the terrain capturing sequence points for paths or polygons. Add custom labels (\"fence corner\", \"post 12\") while tracking real-time slope % and elevation metrics.",
-                how3_title: "3. Reports & Export",
-                how3_desc: "Finalize the survey to review 2D/3D charts and polygon area. Generate A4 PDF reports or export GeoJSON, KML, and GPX files directly for GIS apps and Google Earth.",
+                how1_title: "1. Initial Point & RTK Receiver",
+                how1_desc: "Connect your GNSS/RTK receiver via Bluetooth or use internal GPS with barometer. Wait for high-accuracy fix and capture your origin point.",
+                how2_title: "2. Capture, Deduct & Photograph",
+                how2_desc: "Traverse the terrain capturing points, attach field photos, mark waypoints, and outline exclusion areas for net area calculations.",
+                how3_title: "3. Import & Stake Out",
+                how3_desc: "Load client KML/GeoJSON layers as map references or use Pro Stakeout to navigate directly back to boundary markers in the field.",
+                how4_title: "4. PDF Reports & CAD/GIS Export",
+                how4_desc: "Finalize to generate branded A4 PDF reports or export DXF, CSV, GeoJSON, KML, and GPX files for your preferred software.",
 
                 // Footer
                 footer_apps: "Applications",

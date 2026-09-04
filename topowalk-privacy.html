@@ -139,7 +139,7 @@
                 Política de Privacidade — TopoWalk
             </h1>
             <p class="text-gray-500 text-lg" data-i18n="last_updated">
-                Última atualização: agosto de 2026
+                Última atualização: setembro de 2026
             </p>
         </div>
     </div>
@@ -242,7 +242,7 @@
                 nav_portfolio: "Portfólio",
                 nav_contact: "Contato",
                 page_title: "Política de Privacidade — TopoWalk",
-                last_updated: "Última atualização: agosto de 2026",
+                last_updated: "Última atualização: setembro de 2026",
                 intro: "Esta Política de Privacidade descreve como o aplicativo <strong>TopoWalk</strong>, desenvolvido por <strong>GHF Software</strong>, trata as informações do usuário. Ao utilizar o TopoWalk, você concorda com os termos descritos neste documento.",
                 btn_back: "Voltar para a GHF Software",
                 footer_apps: "Aplicativos",
@@ -261,7 +261,8 @@
                 footer_dev2: " por especialistas.",
                 content: `
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">1. Quem Somos</h2>
-                    <p class="mb-4">O TopoWalk é um aplicativo Android desenvolvido por <strong>GHF Software</strong> para fins de levantamento topográfico de campo. Não somos uma empresa de coleta de dados e não operamos servidores de armazenamento de informações pessoais.</p>
+                    <p class="mb-4">O TopoWalk é um aplicativo Android desenvolvido por <strong>GHF Software</strong> para fins de levantamento topográfico de campo. Não somos uma empresa de coleta de dados.</p>
+                    <p class="mb-4">Os seus levantamentos — pontos, medições, fotos e relatórios — <strong>ficam no seu aparelho</strong> e não são enviados a nenhum servidor nosso. A única exceção é o serviço de <strong>migração do TopoWalk Pro</strong> descrito na seção 2.11, que existe por tempo limitado, guarda apenas um identificador sem nome nem e-mail, e <strong>não toca nos seus dados de levantamento</strong>.</p>
                     
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">2. Dados Acessados e Utilizados pelo Aplicativo</h2>
                     
@@ -270,7 +271,7 @@
                         <li><strong>O que é acessado:</strong> Latitude, longitude e altitude dos pontos marcados pelo usuário durante a medição.</li>
                         <li><strong>Finalidade:</strong> Exclusivamente para realizar os cálculos topográficos (distância horizontal, desnível, distância inclinada, ângulo de inclinação, azimute e área de polígono) e para gerar a visualização no mapa.</li>
                         <li><strong>Quando é acessado:</strong> Somente enquanto o aplicativo está aberto e em uso ativo (foreground). O app não acessa a localização em segundo plano.</li>
-                        <li><strong>Retenção:</strong> Os dados de localização ficam na memória durante a sessão. Se o usuário optar por <strong>salvar a medição</strong>, as coordenadas são armazenadas localmente no banco de dados do dispositivo (ver seção 7.1). O GHF Software não envia esses dados a servidores próprios; veja a seção 7.4 sobre o backup manual que o próprio TopoWalk oferece e a seção 7.5 sobre o backup automático do sistema Android, que pode incluir esse banco de dados na conta Google do próprio usuário.</li>
+                        <li><strong>Retenção:</strong> Os dados de localização ficam na memória durante a sessão. Se o usuário optar por <strong>salvar a medição</strong>, as coordenadas são armazenadas localmente no banco de dados do dispositivo (ver seção 8.1). O GHF Software não envia esses dados a servidores próprios; veja a seção 8.4 sobre o backup manual que o próprio TopoWalk oferece e a seção 8.5 sobre o backup automático do sistema Android, que pode incluir esse banco de dados na conta Google do próprio usuário.</li>
                     </ul>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.2 Sensor de Pressão Atmosférica (Barômetro)</h3>
@@ -303,7 +304,7 @@
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li><strong>O que é acessado:</strong> Texto opcional que o usuário digita para identificar um ponto capturado (ex.: "canto da cerca", "mourão 12").</li>
                         <li><strong>Finalidade:</strong> Facilitar o reconhecimento de pontos na lista de captura, no relatório PDF e nos arquivos exportados.</li>
-                        <li><strong>Retenção:</strong> Armazenado junto com a medição, nos mesmos termos da seção 7.1. Nunca é enviado a servidores do GHF Software nem ao Firebase.</li>
+                        <li><strong>Retenção:</strong> Armazenado junto com a medição, nos mesmos termos da seção 8.1. Nunca é enviado a servidores do GHF Software nem ao Firebase.</li>
                     </ul>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.6 Envio de Feedback por E-mail (opcional)</h3>
@@ -314,15 +315,83 @@
                         <li><strong>O que recebemos:</strong> Ao optar por enviar, o usuário nos revela o endereço de e-mail utilizado, junto ao conteúdo da mensagem. Esses e-mails são usados exclusivamente para responder e corrigir problemas do recurso, não são compartilhados com terceiros nem usados para marketing, e podem ser excluídos mediante solicitação ao mesmo endereço.</li>
                     </ul>
 
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.7 Sensores de Orientação — Bússola (a partir da versão 4.1)</h3>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>O que é acessado:</strong> Leitura do sensor de vetor de rotação do aparelho (que o Android compõe a partir de magnetômetro, acelerômetro e giroscópio), para determinar para onde o aparelho está apontado.</li>
+                        <li><strong>Finalidade:</strong> Exclusivamente para desenhar a seta da tela de <strong>Locação</strong>, que orienta o usuário até um ponto já levantado. A correção entre o norte magnético e o norte geográfico é calculada no próprio aparelho, a partir da posição atual e do modelo geomagnético do Android.</li>
+                        <li><strong>Quando é acessado:</strong> Somente enquanto a tela de Locação está aberta. O sensor é desligado ao sair dela.</li>
+                        <li><strong>Retenção:</strong> As leituras existem apenas em memória, durante o uso da tela. <strong>Nada é armazenado nem transmitido.</strong> Aparelhos sem bússola simplesmente não exibem a seta — o recurso degrada mostrando o azimute numérico.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.8 Identidade Visual do Relatório (a partir da versão 4.1)</h3>
+                    <p class="mb-4">Esta é a única parte do TopoWalk em que o usuário informa dados <strong>sobre si mesmo ou sobre sua empresa</strong>. Merece leitura atenta.</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>O que o usuário pode informar:</strong> nome da empresa, nome do responsável técnico, registro profissional (CREA, CAU ou equivalente), uma nota de rodapé livre, uma cor e um arquivo de imagem para servir de logotipo.</li>
+                        <li><strong>Finalidade:</strong> Compor o cabeçalho e o rodapé dos relatórios em PDF gerados pelo usuário, para que o documento entregue ao cliente dele tenha a identidade da empresa dele, e não a do aplicativo.</li>
+                        <li><strong>Como o logotipo é obtido:</strong> pelo seletor de arquivos do próprio Android (Storage Access Framework). O aplicativo <strong>não pede permissão de armazenamento</strong> e <strong>não enxerga nenhum outro arquivo</strong> além do único que o usuário escolher. A imagem é redimensionada e copiada para a área privada do aplicativo; o arquivo original permanece onde estava e não é alterado.</li>
+                        <li><strong>Onde esses dados ficam:</strong> exclusivamente no dispositivo, nas preferências locais do aplicativo e na sua área privada de arquivos. <strong>Nunca são enviados ao GHF Software, ao Firebase, ao Google Play nem a qualquer terceiro.</strong> Eles não aparecem em nenhum evento de analytics nem em relatório de falha.</li>
+                        <li><strong>Quando esses dados saem do dispositivo:</strong> apenas quando o <strong>próprio usuário</strong> compartilha um relatório em PDF — porque eles fazem parte visível do documento, que é justamente o objetivo do recurso. O destino desse compartilhamento é escolhido pelo usuário e está fora do controle do aplicativo (mesmos termos da seção 8.2).</li>
+                        <li><strong>Como remover:</strong> a tela "Personalizar o laudo em PDF" permite apagar o logotipo e esvaziar cada campo a qualquer momento. Limpar os dados do aplicativo também remove tudo.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.9 Arquivos Importados — Camadas de Referência (a partir da versão 4.2)</h3>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>O que é acessado:</strong> um único arquivo por vez, escolhido pelo usuário no seletor do próprio Android (Storage Access Framework), nos formatos KML, KMZ, GeoJSON, GPX ou CSV. O aplicativo <strong>não pede permissão de armazenamento</strong> e <strong>não enxerga nenhum outro arquivo</strong> além do que o usuário selecionar.</li>
+                        <li><strong>Finalidade:</strong> exibir o perímetro ou os pontos do arquivo como camada de referência sobre o mapa, e permitir caminhar até esses pontos pela tela de Locação. É o caso de quem já tem o KML do CAR, do SIGEF ou o arquivo enviado por um cliente.</li>
+                        <li><strong>O que o arquivo pode conter:</strong> coordenadas e nomes de pontos escolhidos por quem gerou o arquivo. Esse conteúdo pode ser um dado sobre um imóvel — e é por isso que ele merece esta seção.</li>
+                        <li><strong>Onde fica:</strong> o conteúdo é copiado para a <strong>área privada do aplicativo, no próprio aparelho</strong> (o arquivo original permanece onde estava e não é alterado). A cópia existe porque a permissão sobre o arquivo escolhido expira, e sem ela a camada desapareceria sozinha depois de algum tempo.</li>
+                        <li><strong>Para onde não vai:</strong> o conteúdo importado <strong>nunca é enviado</strong> ao GHF Software, ao Firebase, ao Google Play nem a qualquer terceiro. Não aparece em evento de analytics nem em relatório de falha — o que se registra é apenas que houve uma importação, de qual formato e com quantos pontos, sem nenhuma coordenada.</li>
+                        <li><strong>Como remover:</strong> a tela "Camadas importadas" permite remover cada camada a qualquer momento; remover apaga a cópia interna e não toca no arquivo original. Limpar os dados do aplicativo também remove tudo.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.10 Fotos de Campo (a partir da versão 4.2)</h3>
+                    <p class="mb-4">Esta seção descreve o <strong>único dado do aplicativo que pode conter imagem de pessoas ou de propriedade</strong>, e merece leitura atenta.</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>O que o usuário pode anexar:</strong> até 5 fotos por levantamento, tiradas na hora pela câmera ou escolhidas da galeria do aparelho.</li>
+                        <li><strong>Finalidade:</strong> documentar o campo — o marco, o portão, a erosão — junto do levantamento correspondente, e opcionalmente incluí-las no relatório em PDF que o usuário entrega ao cliente dele.</li>
+                        <li><strong>O aplicativo NÃO pede permissão de câmera nem de armazenamento.</strong> A foto tirada na hora passa pelo aplicativo de câmera do próprio sistema (<code>ACTION_IMAGE_CAPTURE</code>), e a escolha na galeria passa pelo seletor de fotos do Android — nos dois casos o aplicativo recebe apenas o arquivo que o usuário selecionou, e <strong>não enxerga nenhuma outra foto do aparelho</strong>.</li>
+                        <li><strong>Onde ficam:</strong> o aplicativo faz uma <strong>cópia reduzida</strong> (no máximo 1280 px, JPEG) na sua área privada, no próprio aparelho. A foto original permanece onde estava e não é alterada. A cópia existe porque o endereço temporário devolvido pela câmera ou pela galeria perde validade, e sem ela a foto sumiria do levantamento depois de algum tempo.</li>
+                        <li><strong>Metadados:</strong> a cópia é gravada <strong>sem os metadados EXIF do original</strong> — o que inclui a geolocalização que a câmera do celular costuma anotar. Só a orientação é preservada, aplicada diretamente na imagem para que a foto não saia deitada no relatório. Na prática, a cópia guardada pelo TopoWalk carrega <strong>menos</strong> informação que o arquivo original.</li>
+                        <li><strong>Para onde não vão:</strong> as fotos <strong>nunca são enviadas</strong> ao GHF Software, ao Firebase, ao Google Play nem a qualquer terceiro. Não aparecem em evento de analytics nem em relatório de falha — o que se registra é apenas que houve um anexo e quantas fotos o levantamento passou a ter, sem nenhuma imagem e sem nenhum nome de arquivo.</li>
+                        <li><strong>Quando saem do dispositivo:</strong> apenas quando o <strong>próprio usuário</strong> compartilha um relatório em PDF que as inclui — porque elas fazem parte visível do documento, que é o objetivo do recurso. O destino é escolhido pelo usuário e está fora do controle do aplicativo (mesmos termos da seção 8.2).</li>
+                        <li><strong>Como remover:</strong> cada foto pode ser removida individualmente na tela do levantamento. Apagar o levantamento apaga as fotos dele junto. Limpar os dados do aplicativo remove tudo. Em nenhum desses casos o arquivo original da galeria é tocado.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.11 Migração do TopoWalk Pro para a conta Google (a partir da versão 4.3)</h3>
+                    <p class="mb-4">Quem já usava o TopoWalk antes de o Pro existir recebeu o acesso de graça (seção 6). Essa concessão fica registrada <strong>no aparelho</strong>, e por isso não acompanharia sozinha uma troca de celular. Este recurso resolve isso: o usuário obtém um <strong>código promocional do Google Play</strong>, resgata na Play Store, e o acesso passa a pertencer à <strong>conta Google dele</strong>.</p>
+                    <p class="mb-4">É o <strong>único</strong> recurso do TopoWalk que guarda algo num servidor operado pelo GHF Software, e existe por <strong>tempo limitado</strong> — encerrada a migração, o serviço é desligado e os dados abaixo são apagados.</p>
+                    <p class="mb-4"><strong>Prazo:</strong> o pedido de código pode ser feito até <strong>31 de março de 2027</strong>. Depois dessa data o serviço é desligado em definitivo e todos os registros descritos nesta seção são apagados.</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>Quando acontece:</strong> somente quando o usuário abre a tela "Levar o Pro para sua conta" e toca em pedir o código. Quem nunca abre essa tela <strong>não estabelece nenhuma conexão</strong> com o nosso servidor: o aplicativo não abre sessão, não gera identificador e não envia nada.</li>
+                        <li><strong>O que é enviado e guardado:</strong>
+                            <ul class="list-circle pl-6 mt-1 space-y-1">
+                                <li>Um <strong>identificador do aparelho embaralhado</strong> (hash SHA-256). O identificador original <strong>não é enviado</strong> e não pode ser recuperado a partir do que guardamos.</li>
+                                <li>Um <strong>identificador de sessão anônima</strong> gerado pelo Firebase — um número aleatório, sem nome, sem e-mail e sem senha. Não é uma conta e não exige cadastro.</li>
+                                <li>A <strong>data e hora</strong> do pedido e o <strong>código promocional</strong> entregue.</li>
+                            </ul>
+                        </li>
+                        <li><strong>O que NÃO é enviado:</strong> nome, e-mail, conta Google, dados de pagamento, localização, levantamentos, fotos ou qualquer conteúdo produzido no aplicativo.</li>
+                        <li><strong>Para que serve o identificador embaralhado:</strong> os códigos são limitados pelo Google a uma quantidade fixa por trimestre. Sem uma forma de reconhecer que um mesmo aparelho já foi atendido, pedidos repetidos esgotariam o estoque e deixariam sem código quem tem direito. Ele serve <strong>só</strong> para isso: entregar um código por aparelho.</li>
+                        <li><strong>Verificação de integridade:</strong> o pedido é acompanhado de uma atestação do <strong>Google Play Integrity</strong>, que confirma ao nosso servidor que a chamada vem do aplicativo TopoWalk genuíno, instalado pela Play Store. Essa verificação é feita pelo Google e <strong>não nos revela nada sobre o usuário</strong>.</li>
+                        <li><strong>Onde ficam:</strong> Cloud Firestore e Cloud Functions, hospedados no Google Cloud, sob conta do GHF Software.</li>
+                        <li><strong>Por quanto tempo:</strong> até <strong>31 de março de 2027</strong>, data limite para pedir um código. Encerrada a campanha, os registros são exportados para conferência e apagados, e o serviço é desligado.</li>
+                        <li><strong>Como pedir a exclusão:</strong> escreva para <code>support@ghfsoftware.com</code> informando o código que recebeu. Apagamos o registro correspondente.</li>
+                    </ul>
+
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">3. Dados NÃO Coletados</h2>
                     <p class="mb-4">O TopoWalk <strong>não coleta, não armazena remotamente e não transmite</strong>:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li>Nome, e-mail ou qualquer dado de identificação pessoal</li>
+                        <li>Nome, e-mail ou qualquer dado de identificação pessoal — inclusive no serviço de migração do Pro (seção 2.11), que <strong>não pede login e não recebe nome nem e-mail</strong></li>
                         <li>Endereço IP ou dados de rede além do necessário para carregar tiles de mapa e enviar eventos de analytics e relatórios de falha</li>
                         <li>Localização em segundo plano ou histórico de localização fora do uso ativo do app</li>
                         <li>ID de publicidade (o aplicativo remove explicitamente esta permissão)</li>
                     </ul>
-                    <p class="mt-4"><strong>Única exceção:</strong> se o usuário voluntariamente nos escrever pelo botão "Enviar feedback" (seção 2.6), passamos a conhecer o endereço de e-mail que ele escolheu usar e o conteúdo que ele escreveu. Isso depende sempre de uma ação explícita do usuário e não ocorre em nenhum outro fluxo do aplicativo.</p>
+                    <p class="mb-4">Três observações de precisão:</p>
+                    <ol class="list-decimal pl-6 mb-4 space-y-2">
+                        <li><strong>Feedback por e-mail.</strong> Se o usuário voluntariamente nos escrever pelo botão "Enviar feedback" (seção 2.6), passamos a conhecer o endereço de e-mail que ele escolheu usar e o conteúdo que ele escreveu. Isso depende sempre de uma ação explícita do usuário e não ocorre em nenhum outro fluxo do aplicativo.</li>
+                        <li><strong>Migração do TopoWalk Pro (seção 2.11).</strong> Esse recurso envia ao nosso servidor um identificador embaralhado do aparelho e um identificador de sessão anônimo. Nenhum dos dois carrega nome, e-mail ou conta, e nenhum deles é usado fora dessa finalidade. É a <strong>única</strong> situação em que o aplicativo guarda algo num servidor nosso.</li>
+                        <li><strong>Identidade visual do relatório (a partir da versão 4.1).</strong> O usuário pode digitar o próprio nome e o registro profissional para que apareçam no PDF (seção 2.8). Esses dados <strong>são pessoais</strong>, mas ficam <strong>somente no aparelho dele</strong>: o GHF Software não os recebe, não os armazena e não tem como acessá-los. Eles só deixam o dispositivo dentro de um PDF que o próprio usuário decide compartilhar.</li>
+                    </ol>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Analytics — Firebase Analytics (Google)</h2>
                     <p class="mb-4">A partir da versão 3.10, o TopoWalk utiliza o <strong>Firebase Analytics</strong>, um serviço de análise de uso fornecido pelo Google LLC.</p>
@@ -330,7 +399,8 @@
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">O que é coletado e enviado ao Firebase:</h3>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li><strong>Interações no app:</strong> telas visualizadas, funcionalidades utilizadas (ex.: captura de pontos, exportação de arquivos, acesso ao histórico) e fluxo de navegação.</li>
-                        <li><strong>Interesse em formatos futuros (a partir da versão 4.0):</strong> o menu de exportação lista DXF e CSV como formatos planejados; tocar neles não gera arquivo algum, apenas registra um evento anônimo (que o formato foi visto, e, se o usuário tocar num botão de confirmação dentro da tela, que ele tem interesse nele). <strong>Nenhum contato é coletado nesse fluxo</strong> — o aplicativo não pergunta e-mail nem telefone, e não existe lista de espera.</li>
+                        <li><strong>Interesse em formatos futuros (versão 4.0):</strong> o menu de exportação lista DXF e CSV como formatos planejados; tocar neles não gera arquivo algum, apenas registra um evento anônimo (que o formato foi visto, e, se o usuário tocar num botão de confirmação dentro da tela, que ele tem interesse nele). <strong>Nenhum contato é coletado nesse fluxo</strong> — o aplicativo não pergunta e-mail nem telefone, e não existe lista de espera. Esta medição <strong>termina na versão 4.1</strong>, quando os dois formatos passam a existir de verdade.</li>
+                        <li><strong>Funil de compra (a partir da versão 4.1):</strong> eventos anônimos registrando que a tela de compra foi aberta, de qual funcionalidade ela foi aberta, que uma compra foi iniciada, e se ela foi concluída, cancelada ou falhou. <strong>Não é registrado o preço, a moeda, a forma de pagamento, nem qualquer identificador da conta Google ou do meio de pagamento</strong> — apenas o passo do fluxo. Servem para saber se a tela de compra é compreensível, não para identificar quem comprou.</li>
                         <li><strong>ID de instalação do Firebase:</strong> identificador anônimo gerado pelo SDK para agregar sessões. Não identifica pessoalmente o usuário e pode ser redefinido desinstalando e reinstalando o app.</li>
                         <li><strong>Informações do dispositivo:</strong> modelo, versão do sistema operacional e idioma — coletados automaticamente pelo SDK para segmentação de relatórios.</li>
                     </ul>
@@ -356,6 +426,7 @@
                         <li><strong>Falhas do aplicativo:</strong> tipo da exceção, stack trace e estado da thread no momento do erro.</li>
                         <li><strong>Falhas não fatais do receptor externo:</strong> motivo da desconexão, exceção original do Bluetooth, número da tentativa de reconexão e um trecho de até 16 caracteres do início do fluxo de dados do receptor — deliberadamente curto para conter apenas o cabeçalho da sentença (tipo e hora), nunca coordenadas.</li>
                         <li><strong>Contexto técnico da sessão:</strong> se o receptor externo está ativado, nome do modelo do receptor pareado, estado da conexão, qualidade do fix (ex.: <code>RTK_FIXED</code>), número de satélites e HDOP.</li>
+                        <li><strong>Falhas de compra e de leitura do logotipo (a partir da versão 4.1):</strong> o código de erro devolvido pelo Google Play quando a confirmação de uma compra não é aceita, e o stack trace de uma imagem que não pôde ser lida como logotipo. <strong>Nenhum dos dois contém o conteúdo da imagem, os dados da empresa, o preço ou qualquer identificador da conta.</strong></li>
                         <li><strong>Informações do dispositivo e ID de instalação do Firebase:</strong> coletados automaticamente pelo SDK, nos mesmos termos da seção 4.</li>
                     </ul>
 
@@ -364,6 +435,7 @@
                         <li>Coordenadas GPS, altitudes ou qualquer dado das medições do usuário</li>
                         <li>Nome, notas ou arquivos exportados dos levantamentos</li>
                         <li>Nome, e-mail ou qualquer informação pessoal inserida no app</li>
+                        <li>Logotipo, nome da empresa, responsável técnico ou registro profissional (seção 2.8)</li>
                     </ul>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Finalidade:</h3>
@@ -372,7 +444,37 @@
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Retenção e controle:</h3>
                     <p class="mb-4">Os relatórios são retidos pelo Google conforme a <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-brand-primary underline hover:text-white">Política de Privacidade do Google</a> e a <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener noreferrer" class="text-brand-primary underline hover:text-white">documentação do Crashlytics</a>.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. Compartilhamento de Dados com Terceiros</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. Compras no Aplicativo — Google Play Billing (a partir da versão 4.1)</h2>
+                    <p class="mb-4">A partir da versão 4.1, o TopoWalk oferece uma <strong>compra única e definitiva</strong> (TopoWalk Pro), processada pelo <strong>Google Play Billing</strong>, serviço do Google LLC.</p>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Quem processa o pagamento</h3>
+                    <p class="mb-4"><strong>O pagamento é processado inteiramente pelo Google.</strong> O TopoWalk <strong>nunca</strong> vê, recebe ou armazena número de cartão, dados bancários, endereço de cobrança ou qualquer informação de pagamento. Essa tela é do Google Play, não do aplicativo, e o que acontece nela é regido pela <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-brand-primary underline hover:text-white">Política de Privacidade do Google</a> e pelos Termos de Serviço do Google Play.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">O que o aplicativo envia ao Google Play</h3>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>O identificador do produto (<code>topowalk_pro</code>), para consultar o preço e abrir a tela de compra.</li>
+                        <li>Uma confirmação de que a compra foi recebida (exigida pelo Google; sem ela a compra é estornada automaticamente em três dias).</li>
+                    </ul>
+                    <p class="mb-4">O aplicativo <strong>não envia nenhum identificador de conta, de usuário ou de dispositivo criado por nós</strong> ao Google Play. O recurso que o Google oferece para associar uma compra a uma conta interna do desenvolvedor (<code>obfuscatedAccountId</code>) <strong>não é utilizado</strong>.</p>
+                    <p class="mb-4">O TopoWalk <strong>não tem contas de usuário</strong>: não há cadastro, login, senha nem perfil. O serviço de migração do Pro (seção 2.11) usa uma sessão anônima do Firebase, que é um identificador aleatório gerado pelo próprio aparelho — não é uma conta, não pede credencial e não guarda nome nem e-mail.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">O que o aplicativo recebe e guarda</h3>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>O preço já formatado</strong> na moeda do usuário, para exibir na tela. O aplicativo não sabe qual é a moeda nem o país — recebe o texto pronto do Google.</li>
+                        <li><strong>Se existe ou não uma compra ativa</strong> para o aparelho, consultado a cada abertura do aplicativo. Essa resposta é guardada localmente como um simples "sim ou não", para que o aplicativo não pisque "não comprado" enquanto consulta. <strong>Nenhum dado da conta Google é guardado.</strong></li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Por que a consulta se repete</h3>
+                    <p class="mb-4">A verificação acontece a cada sessão porque é assim que um <strong>reembolso</strong> chega ao aplicativo: se o usuário pedir a devolução do dinheiro ao Google, a compra deixa de constar e o acesso é retirado. O oposto também vale — quem reinstala o aplicativo recupera o acesso sem pagar de novo.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Acesso concedido sem compra</h3>
+                    <p class="mb-4">Usuários que já tinham o TopoWalk instalado antes do lançamento do TopoWalk Pro recebem o acesso <strong>gratuitamente e em definitivo</strong>. Essa concessão é registrada <strong>apenas no aparelho</strong>, e não envolve o Google Play, conta de usuário nem qualquer dado pessoal.</p>
+                    <p class="mb-4">Por ser registrada no aparelho, ela não acompanharia sozinha uma troca de celular. Para resolver isso, o aplicativo oferece a <strong>migração do Pro</strong> descrita na seção 2.11: o usuário obtém um código promocional, resgata na Play Store, e o acesso passa a pertencer à conta Google dele — voltando sozinho em qualquer aparelho onde ele entrar com a mesma conta.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Menores de idade</h3>
+                    <p class="mb-4">Compras no Google Play estão sujeitas aos controles parentais e às exigências de autenticação do próprio Google Play. O TopoWalk não implementa verificação de idade própria e não tem como saber a idade de quem compra.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Compartilhamento de Dados com Terceiros</h2>
                     <p class="mb-4">O TopoWalk compartilha dados com os seguintes terceiros:</p>
                     <div class="overflow-x-auto mb-4">
                         <table class="w-full text-left border-collapse">
@@ -399,14 +501,29 @@
                                     <td class="py-2 pr-4">Coordenadas dos tiles de mapa solicitados</td>
                                     <td class="py-2">Renderização do mapa</td>
                                 </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-semibold text-brand-primary">Google LLC (Google Play Billing) — a partir da versão 4.1</td>
+                                    <td class="py-2 pr-4">Identificador do produto e confirmação de compra. Nenhum identificador de conta criado por nós; nenhum dado de pagamento passa pelo aplicativo</td>
+                                    <td class="py-2">Processar a compra do TopoWalk Pro</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-semibold text-brand-primary">Google LLC (Firebase Authentication) — migração do Pro, seção 2.11</td>
+                                    <td class="py-2 pr-4">Uma sessão <strong>anônima</strong>: identificador aleatório gerado pelo aparelho. Sem nome, sem e-mail, sem senha</td>
+                                    <td class="py-2">Identificar a chamada ao nosso serviço de migração</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-semibold text-brand-primary">GHF Software (Cloud Firestore e Cloud Functions, hospedados no Google Cloud) — migração do Pro, seção 2.11</td>
+                                    <td class="py-2 pr-4">Identificador embaralhado do aparelho, identificador de sessão anônima, data e hora do pedido e o código promocional entregue</td>
+                                    <td class="py-2">Entregar um código a cada usuário e impedir que o estoque seja esgotado por pedidos repetidos</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                     <p class="mb-4">O aplicativo não integra SDKs de publicidade, redes sociais ou qualquer outro serviço externo além dos listados acima.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Armazenamento Local</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">8. Armazenamento Local</h2>
                     
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">7.1 Banco de Dados (Histórico de Medições)</h3>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.1 Banco de Dados (Histórico de Medições)</h3>
                     <p class="mb-4">Quando o usuário opta por salvar uma medição, os seguintes dados são armazenados <strong>localmente no dispositivo</strong> em um banco de dados Room (SQLite), acessível apenas pelo aplicativo:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Nome e observações informados pelo usuário</li>
@@ -414,9 +531,9 @@
                         <li>Resultados calculados (distâncias, desníveis, ângulos, área)</li>
                         <li>Data e hora da medição</li>
                     </ul>
-                    <p class="mb-4">Esses dados <strong>nunca são enviados a servidores do GHF Software</strong> e permanecem no dispositivo até que o usuário os exclua manualmente pelo aplicativo ou limpe os dados do app. Veja a seção 7.4 sobre o backup manual que o próprio TopoWalk oferece, e a seção 7.5 sobre o backup automático do sistema Android — os dois são independentes entre si.</p>
+                    <p class="mb-4">Esses dados <strong>nunca são enviados a servidores do GHF Software</strong> e permanecem no dispositivo até que o usuário os exclua manualmente pelo aplicativo ou limpe os dados do app. Veja a seção 8.4 sobre o backup manual que o próprio TopoWalk oferece, e a seção 8.5 sobre o backup automático do sistema Android — os dois são independentes entre si.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">7.2 Relatórios em PDF</h3>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.2 Relatórios em PDF</h3>
                     <p class="mb-4">Ao solicitar a geração de um relatório PDF, o aplicativo:</p>
                     <ol class="list-decimal pl-6 mb-4 space-y-2">
                         <li>Cria o arquivo PDF temporariamente no <strong>diretório de cache privado</strong> do app (<code>cacheDir</code>), acessível apenas pelo próprio aplicativo.</li>
@@ -425,20 +542,21 @@
                     </ol>
                     <p class="mb-4">O TopoWalk não tem acesso ao destino escolhido pelo usuário para o compartilhamento — essa operação é gerenciada inteiramente pelo sistema Android e pelo aplicativo receptor.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">7.3 Exportação GeoJSON, KML e GPX</h3>
-                    <p class="mb-4">O usuário pode exportar medições nos formatos GeoJSON, KML e GPX (a partir da versão 4.0). Esses arquivos são gerados localmente no cache do dispositivo e compartilhados da mesma forma que o PDF (seção 7.2). O app não tem acesso ao destino do compartilhamento.</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.3 Exportação de Arquivos</h3>
+                    <p class="mb-4">O usuário pode exportar medições em <strong>GeoJSON, KML e GPX</strong> (a partir da versão 4.0) e em <strong>DXF e CSV</strong> (a partir da versão 4.1). Esses arquivos são gerados localmente no cache do dispositivo e compartilhados da mesma forma que o PDF (seção 8.2). O app não tem acesso ao destino do compartilhamento.</p>
+                    <p class="mb-4">A exportação em CSV gera <strong>dois arquivos</strong> — um com os pontos e outro com os segmentos —, compartilhados juntos. O DXF contém, além da geometria, a latitude e a longitude do primeiro ponto do levantamento, gravadas como texto dentro do arquivo para permitir posicionar o desenho; é o mesmo dado de coordenada que os demais formatos já carregam.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">7.4 Backup e Restauração do Histórico (a partir da versão 4.0)</h3>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.4 Backup e Restauração do Histórico (a partir da versão 4.0)</h3>
                     <p class="mb-4">O TopoWalk permite que o usuário exporte manualmente <strong>todo o histórico de medições</strong> para um único arquivo, e o restaure depois — no mesmo aparelho, após reinstalação, ou em outro aparelho.</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li><strong>Como funciona:</strong> ao tocar em "Fazer backup do histórico", o app usa o seletor de arquivos do próprio Android (Storage Access Framework) para que o usuário escolha onde gravar o arquivo — Google Drive, cartão de memória, armazenamento interno ou qualquer outro local listado pelo sistema. <strong>O app grava diretamente no local escolhido pelo usuário</strong>, sem passar pelo seletor de compartilhamento entre aplicativos usado pelo PDF e pelos demais formatos (seções 7.2 e 7.3), e sem enviar o arquivo a servidores do GHF Software.</li>
-                        <li><strong>O que o arquivo contém:</strong> nome, observações, coordenadas, altitude, resultados calculados e rótulos de ponto de cada medição salva — os mesmos dados já descritos na seção 7.1, reunidos num arquivo só.</li>
+                        <li><strong>Como funciona:</strong> ao tocar em "Fazer backup do histórico", o app usa o seletor de arquivos do próprio Android (Storage Access Framework) para que o usuário escolha onde gravar o arquivo — Google Drive, cartão de memória, armazenamento interno ou qualquer outro local listado pelo sistema. <strong>O app grava diretamente no local escolhido pelo usuário</strong>, sem passar pelo seletor de compartilhamento entre aplicativos usado pelo PDF e pelos demais formatos (seções 8.2 e 8.3), e sem enviar o arquivo a servidores do GHF Software.</li>
+                        <li><strong>O que o arquivo contém:</strong> nome, observações, coordenadas, altitude, resultados calculados e rótulos de ponto de cada medição salva — os mesmos dados já descritos na seção 8.1, reunidos num arquivo só.</li>
                         <li><strong>Restaurar:</strong> ao escolher "Restaurar backup" e selecionar um arquivo (pelo mesmo seletor do sistema), as medições do arquivo são acrescentadas ao histórico do dispositivo. Nada do que já está salvo é apagado, e medições já existentes são identificadas e não duplicadas. Um arquivo gerado por uma versão mais nova do TopoWalk do que a instalada é recusado, para não corromper o banco de dados local.</li>
                         <li><strong>Controle do usuário:</strong> o GHF Software não tem acesso a esse arquivo em nenhum momento — ele existe apenas no local que o próprio usuário escolheu ao gravá-lo, sob o controle e a responsabilidade dele (incluindo a segurança de sua própria conta Google Drive, se for esse o destino escolhido).</li>
                     </ul>
-                    <p class="mb-4">Este mecanismo é independente do Backup Automático do sistema Android, descrito na seção 7.5.</p>
+                    <p class="mb-4">Este mecanismo é independente do Backup Automático do sistema Android, descrito na seção 8.5.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">7.5 Backup Automático do Sistema Android</h3>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.5 Backup Automático do Sistema Android</h3>
                     <p class="mb-4">O TopoWalk <strong>não opera nenhum serviço de backup ou sincronização em nuvem próprio</strong>. No entanto, o aplicativo não desativa o recurso de <strong>Backup automático do Android</strong> ("Backup by Google"), que é um mecanismo do próprio sistema operacional, independente do TopoWalk:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Se o usuário tiver esse recurso ativado em sua conta Google (é o padrão de fábrica na maioria dos aparelhos Android) e o aparelho satisfizer as condições definidas pelo próprio Android (conectado ao Wi-Fi, carregando e ocioso), o sistema operacional pode, periodicamente e em segundo plano, incluir os dados do TopoWalk — incluindo o banco de dados local do histórico de medições — no backup da conta Google do usuário.</li>
@@ -446,9 +564,13 @@
                         <li>Caso o usuário reinstale o TopoWalk no mesmo aparelho ou em outro aparelho conectado à mesma conta Google, o Android pode restaurar automaticamente esses dados a partir desse backup.</li>
                         <li>Usuários que não desejam que o histórico de medições seja incluído nesse backup do sistema podem desativar o "Backup do Google" para o dispositivo, ou para o TopoWalk especificamente, nas configurações do Android (Configurações → Sistema → Backup, variando conforme o fabricante e a versão do Android).</li>
                     </ul>
+                    <p class="mb-4"><strong>Atenção quanto à identidade visual do relatório (seção 2.8):</strong> o logotipo copiado e os dados da empresa ficam na área privada e nas preferências do aplicativo, e por isso também podem ser incluídos nesse backup automático do sistema — na conta Google do próprio usuário, sempre fora do alcance do GHF Software. Quem não quiser isso pode desativar o backup do sistema conforme descrito acima.</p>
                     <p class="mb-4">Esta seção descreve o comportamento padrão do Android para o gerenciamento de dados. Ela não altera nenhum outro compromisso desta política: o GHF Software continua sem operar servidores próprios de armazenamento de dados do usuário e sem ter acesso a esse conteúdo em nenhum momento.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">8. Permissões do Aplicativo</h2>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.6 Dados fora do aparelho (migração do Pro)</h3>
+                    <p class="mb-4">Todo o restante da seção 8 descreve armazenamento <strong>no próprio aparelho</strong>. A única exceção do aplicativo é o serviço de migração do Pro (seção 2.11), que guarda num servidor do GHF Software um identificador embaralhado do aparelho, um identificador de sessão anônima, a data do pedido e o código entregue — nada mais, e nada que identifique a pessoa. Os levantamentos, as fotos e os relatórios <strong>nunca</strong> saem do aparelho por esse caminho.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Permissões do Aplicativo</h2>
                     <div class="overflow-x-auto mb-4">
                         <table class="w-full text-left border-collapse">
                             <thead>
@@ -468,7 +590,7 @@
                                 </tr>
                                 <tr class="border-b border-gray-800">
                                     <td class="py-2 pr-4 font-mono text-sm text-brand-primary">INTERNET</td>
-                                    <td class="py-2">Carregar tiles de mapa do OpenStreetMap e enviar eventos ao Firebase Analytics e relatórios de falha ao Crashlytics</td>
+                                    <td class="py-2">Carregar tiles de mapa do OpenStreetMap, enviar eventos ao Firebase Analytics e relatórios de falha ao Crashlytics e, <strong>quando o usuário pede a migração do Pro</strong> (seção 2.11), falar com o nosso servidor</td>
                                 </tr>
                                 <tr class="border-b border-gray-800">
                                     <td class="py-2 pr-4 font-mono text-sm text-brand-primary">VIBRATE</td>
@@ -482,26 +604,33 @@
                                     <td class="py-2 pr-4 font-mono text-sm text-brand-primary">BLUETOOTH / BLUETOOTH_ADMIN (Android 11 e anteriores)</td>
                                     <td class="py-2">Equivalente às versões antigas do Android para a mesma conexão</td>
                                 </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">com.android.vending.BILLING (a partir da versão 4.1)</td>
+                                    <td class="py-2">Exigida pelo Google Play para oferecer a compra do TopoWalk Pro. É adicionada automaticamente pela biblioteca do Google e <strong>não dá acesso a nenhum dado do aparelho</strong></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <p class="mb-4">O aplicativo não solicita acesso à câmera, microfone, contatos ou armazenamento externo. O ID de publicidade (<code>AD_ID</code>) é explicitamente removido do app e não é coletado.</p>
+                    <p class="mb-4"><strong>A bússola usada na Locação (seção 2.7) e a escolha do logotipo (seção 2.8) não exigem permissão alguma:</strong> sensores de orientação são livres no Android, e o seletor de arquivos entrega ao aplicativo apenas o único arquivo que o usuário escolher.</p>
+                    <p class="mb-4">O aplicativo não solicita acesso ao microfone, aos contatos nem ao armazenamento externo. <strong>Também não solicita permissão de câmera</strong> — as fotos de campo (seção 2.10) entram pelo aplicativo de câmera do sistema e pelo seletor de fotos do Android, que entregam ao TopoWalk somente o arquivo escolhido pelo usuário. O ID de publicidade (<code>AD_ID</code>) é explicitamente removido do app e não é coletado.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Uso por Menores</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">10. Uso por Menores</h2>
                     <p class="mb-4">O TopoWalk não é direcionado a crianças menores de 13 anos e não coleta intencionalmente dados de menores. Por se tratar de uma ferramenta técnica de campo, o uso por menores deve ocorrer sob supervisão de um adulto responsável.</p>
+                    <p class="mb-4">A partir da versão 4.1, a compra do TopoWalk Pro é processada pelo Google Play e está sujeita aos controles parentais e às exigências de autenticação desse serviço (seção 6). O TopoWalk não realiza verificação de idade própria.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">10. Segurança</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">11. Segurança</h2>
                     <p class="mb-4">Os dados de medição do TopoWalk são processados e armazenados exclusivamente no dispositivo do usuário. A comunicação com serviços externos (Firebase Analytics e OpenStreetMap) é realizada exclusivamente via HTTPS com criptografia em trânsito. Os dados enviados ao Firebase não contêm informações pessoais identificáveis. A segurança dos dados armazenados localmente é gerenciada pelo sistema operacional Android e pelo isolamento de aplicativos (sandbox).</p>
+                    <p class="mb-4">A partir da versão 4.1, <strong>nenhum dado de pagamento transita pelo aplicativo:</strong> a compra é conduzida inteiramente pela tela do Google Play, e o TopoWalk recebe de volta apenas a informação de que existe ou não uma compra ativa (seção 6).</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">11. Alterações nesta Política</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">12. Alterações nesta Política</h2>
                     <p class="mb-4">Podemos atualizar esta Política de Privacidade periodicamente. Alterações relevantes serão comunicadas por meio de uma nova versão do aplicativo publicada na Google Play Store. A data de "Última atualização" no topo deste documento sempre refletirá a versão vigente.</p>
                     <p class="mb-4">Recomendamos que você revise esta política periodicamente.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">12. Contato</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">13. Contato</h2>
                     <p class="mb-4">Dúvidas, solicitações ou comentários sobre esta Política de Privacidade podem ser enviados para:</p>
                     <p class="mb-4">
                         <strong>GHF Software</strong><br>
-                        E-mail: <strong>support@ghfsoftware.com</strong> 
+                        E-mail: <strong>support@ghfsoftware.com</strong>
                     </p>
                     
                     <hr class="border-gray-800 my-8">
@@ -513,7 +642,7 @@
                 nav_portfolio: "Portfolio",
                 nav_contact: "Contact",
                 page_title: "Privacy Policy — TopoWalk",
-                last_updated: "Last updated: August 2026",
+                last_updated: "Last updated: September 2026",
                 intro: "This Privacy Policy describes how the <strong>TopoWalk</strong> application, developed by <strong>GHF Software</strong>, handles user information. By using TopoWalk, you agree to the terms described in this document.",
                 btn_back: "Back to GHF Software",
                 footer_apps: "Applications",
@@ -532,7 +661,8 @@
                 footer_dev2: " by experts.",
                 content: `
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">1. Who We Are</h2>
-                    <p class="mb-4">TopoWalk is an Android application developed by <strong>GHF Software</strong> for field topographic surveying purposes. We are not a data collection company and do not operate servers to store personal information.</p>
+                    <p class="mb-4">TopoWalk is an Android application developed by <strong>GHF Software</strong> for field topographic surveying purposes. We are not a data collection company.</p>
+                    <p class="mb-4">Your surveys — points, measurements, photos, and reports — <strong>remain on your device</strong> and are not sent to any of our servers. The only exception is the <strong>TopoWalk Pro migration service</strong> described in section 2.11, which exists for a limited time, holds only an identifier with no name or email, and <strong>does not touch your survey data</strong>.</p>
                     
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">2. Data Accessed and Used by the Application</h2>
                     
@@ -541,7 +671,7 @@
                         <li><strong>What is accessed:</strong> Latitude, longitude, and altitude of points marked by the user during measurement.</li>
                         <li><strong>Purpose:</strong> Exclusively to perform topographic calculations (horizontal distance, elevation difference, slope distance, slope angle, azimuth, and polygon area) and to render the map visualization.</li>
                         <li><strong>When it is accessed:</strong> Only while the application is open and in active use (foreground). The app does not access location in the background.</li>
-                        <li><strong>Retention:</strong> Location data is kept in memory during the session. If the user chooses to <strong>save the measurement</strong>, coordinates are stored locally in the device's database (see section 7.1). GHF Software does not send this data to its own servers; see section 7.4 regarding manual backup offered by TopoWalk and section 7.5 regarding automatic Android system backup, which may include this database in the user's own Google account.</li>
+                        <li><strong>Retention:</strong> Location data is kept in memory during the session. If the user chooses to <strong>save the measurement</strong>, coordinates are stored locally in the device's database (see section 8.1). GHF Software does not send this data to its own servers; see section 8.4 regarding manual backup offered by TopoWalk and section 8.5 regarding automatic Android system backup, which may include this database in the user's own Google account.</li>
                     </ul>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.2 Atmospheric Pressure Sensor (Barometer)</h3>
@@ -574,7 +704,7 @@
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li><strong>What is accessed:</strong> Optional text typed by the user to identify a captured point (e.g., "fence corner", "post 12").</li>
                         <li><strong>Purpose:</strong> Facilitate point recognition in the capture list, PDF report, and exported files.</li>
-                        <li><strong>Retention:</strong> Stored along with the measurement, under the same terms as section 7.1. Never sent to GHF Software servers nor to Firebase.</li>
+                        <li><strong>Retention:</strong> Stored along with the measurement, under the same terms as section 8.1. Never sent to GHF Software servers nor to Firebase.</li>
                     </ul>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.6 Email Feedback (optional)</h3>
@@ -585,15 +715,83 @@
                         <li><strong>What we receive:</strong> By choosing to send, the user reveals to us the email address used, along with the message content. These emails are used exclusively to respond to and fix issues with the feature, are not shared with third parties or used for marketing, and can be deleted upon request to the same address.</li>
                     </ul>
 
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.7 Orientation Sensors — Compass (from version 4.1)</h3>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>What is accessed:</strong> Reading from the device's rotation vector sensor (which Android composes from magnetometer, accelerometer, and gyroscope), to determine where the device is pointing.</li>
+                        <li><strong>Purpose:</strong> Exclusively to draw the arrow on the <strong>Stakeout</strong> screen, which guides the user to a previously surveyed point. Correction between magnetic north and geographic north is calculated on the device itself, from current position and Android's geomagnetic model.</li>
+                        <li><strong>When it is accessed:</strong> Only while the Stakeout screen is open. The sensor is turned off upon exiting.</li>
+                        <li><strong>Retention:</strong> Readings exist only in memory during screen use. <strong>Nothing is stored or transmitted.</strong> Devices without a compass simply do not display the arrow — the feature degrades to showing numeric azimuth.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.8 Report Visual Identity (from version 4.1)</h3>
+                    <p class="mb-4">This is the only part of TopoWalk where users enter information <strong>about themselves or their company</strong>. Requires careful reading.</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>What the user can provide:</strong> company name, technical manager name, professional registration (CREA, CAU, or equivalent), custom footer note, color accent, and an image file to serve as logo.</li>
+                        <li><strong>Purpose:</strong> Compose header and footer of user-generated PDF reports, ensuring documents delivered to their clients reflect their company identity rather than the application's.</li>
+                        <li><strong>How logo is obtained:</strong> via Android's native file picker (Storage Access Framework). The app <strong>does not request storage permission</strong> and <strong>cannot view any other files</strong> beyond the single file selected by the user. The image is resized and copied to the app's private area; the original file remains unchanged in its location.</li>
+                        <li><strong>Where this data resides:</strong> exclusively on the device, in local app preferences and its private file area. <strong>Never sent to GHF Software, Firebase, Google Play, or any third party.</strong> Does not appear in analytics events or crash reports.</li>
+                        <li><strong>When this data leaves the device:</strong> only when the <strong>user explicitly shares</strong> a PDF report — because it forms a visible part of the document, which is the feature's intended purpose. Sharing destination is chosen by the user and outside app control (same terms as section 8.2).</li>
+                        <li><strong>How to remove:</strong> "Customize PDF Report" screen allows deleting logo and clearing fields at any time. Clearing app data also removes everything.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.9 Imported Files — Reference Layers (from version 4.2)</h3>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>What is accessed:</strong> a single file at a time, chosen by the user in Android's native file picker (Storage Access Framework), in KML, KMZ, GeoJSON, GPX, or CSV formats. The application <strong>does not ask for storage permissions</strong> and <strong>sees no other files</strong> besides the user-selected file.</li>
+                        <li><strong>Purpose:</strong> display boundary perimeters or points as reference map layers, and enable navigating to those points via Stakeout screen. Useful when users already have KML files from environmental/property registries or client files.</li>
+                        <li><strong>What the file may contain:</strong> coordinates and point names designated by whoever created the file. This content may involve property data.</li>
+                        <li><strong>Where it stays:</strong> content is copied to the <strong>app's private directory on the device</strong> (original file remains untouched in its original location). The copy exists because permission over selected file expires over time.</li>
+                        <li><strong>Where it does NOT go:</strong> imported content is <strong>never sent</strong> to GHF Software, Firebase, Google Play, or any third party. It does not appear in analytics events or crash reports — only that an import occurred, format type, and point count are recorded, without any coordinates.</li>
+                        <li><strong>How to remove:</strong> "Imported Layers" screen allows removing each layer at any time; removing deletes internal copy and does not touch original file. Clearing app data also removes everything.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.10 Field Photos (from version 4.2)</h3>
+                    <p class="mb-4">This section describes the <strong>only app data that may contain images of people or property</strong>, and requires careful reading.</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>What the user can attach:</strong> up to 5 photos per survey, taken via camera or chosen from device gallery.</li>
+                        <li><strong>Purpose:</strong> document field conditions — survey mark, gate, erosion — alongside corresponding survey, and optionally include them in user-generated PDF report.</li>
+                        <li><strong>The app DOES NOT request camera or storage permissions.</strong> Photos taken pass through system camera app (<code>ACTION_IMAGE_CAPTURE</code>), and gallery selection passes through Android photo picker — in both cases app only receives the selected file, <strong>seeing no other photos on device</strong>.</li>
+                        <li><strong>Where they stay:</strong> app creates a <strong>scaled-down copy</strong> (max 1280 px, JPEG) in its private directory on device. Original photo remains unchanged. Copy exists because temporary URI provided by camera/gallery expires.</li>
+                        <li><strong>Metadata:</strong> copy is saved <strong>without original EXIF metadata</strong> — including GPS tags recorded by camera. Only orientation is preserved and applied to image. In practice, copy saved by TopoWalk carries <strong>less</strong> info than original.</li>
+                        <li><strong>Where they do NOT go:</strong> photos are <strong>never sent</strong> to GHF Software, Firebase, Google Play, or any third party. Not included in analytics or crash logs — only that photo was attached and photo count are recorded, without image or filename.</li>
+                        <li><strong>When they leave device:</strong> only when <strong>user shares</strong> PDF report containing them — because they form a visible part of the document, which is the feature's purpose. Destination chosen by user (same terms as section 8.2).</li>
+                        <li><strong>How to remove:</strong> photos can be individually deleted from survey screen. Deleting survey deletes photos. Clearing app data removes all. Original gallery photos are never touched.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.11 TopoWalk Pro Migration to Google Account (from version 4.3)</h3>
+                    <p class="mb-4">Users who used TopoWalk before Pro existed received free access (section 6). This concession is stored <strong>on device</strong> and would not follow a phone switch automatically. This feature solves that: users request a <strong>Google Play promo code</strong>, redeem it on Play Store, and access becomes bound to their <strong>Google account</strong>.</p>
+                    <p class="mb-4">This is the <strong>only</strong> feature of TopoWalk that stores anything on a server operated by GHF Software, and exists for a <strong>limited time</strong> — once migration ends, service is shut down and data below deleted.</p>
+                    <p class="mb-4"><strong>Deadline:</strong> promo codes can be requested until <strong>March 31, 2027</strong>. After this date, service is permanently shut down and all records described in this section deleted.</p>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>When it happens:</strong> only when user opens "Move Pro to your account" screen and taps request code. Users who never open this screen <strong>establish no connection</strong> with our server: app opens no session, generates no identifier, and sends nothing.</li>
+                        <li><strong>What is sent and stored:</strong>
+                            <ul class="list-circle pl-6 mt-1 space-y-1">
+                                <li>Hashed device identifier (SHA-256). Original ID is <strong>not sent</strong> and cannot be recovered from stored hash.</li>
+                                <li>Anonymous session ID generated by Firebase — random number, no name, no email, no password. Not an account, requires no registration.</li>
+                                <li>Date/time of request and promo code issued.</li>
+                            </ul>
+                        </li>
+                        <li><strong>What is NOT sent:</strong> name, email, Google account, payment data, location, surveys, photos, or any content created in app.</li>
+                        <li><strong>Purpose of hashed identifier:</strong> promo codes are capped by Google per quarter. Without recognizing if a device was already served, repeated requests would exhaust inventory. Used <strong>solely</strong> to issue one code per device.</li>
+                        <li><strong>Integrity verification:</strong> request includes <strong>Google Play Integrity</strong> attestation, confirming to our server that request originates from genuine TopoWalk app installed via Play Store. Done by Google, <strong>reveals nothing about user</strong>.</li>
+                        <li><strong>Storage location:</strong> Cloud Firestore & Cloud Functions, hosted on Google Cloud under GHF Software account.</li>
+                        <li><strong>Retention period:</strong> until <strong>March 31, 2027</strong> (deadline to request code). After campaign ends, records exported for audit and deleted, and service disabled.</li>
+                        <li><strong>How to request deletion:</strong> write to <code>support@ghfsoftware.com</code> stating code received. We delete corresponding record.</li>
+                    </ul>
+
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">3. Data NOT Collected</h2>
                     <p class="mb-4">TopoWalk <strong>does not collect, does not remotely store, and does not transmit</strong>:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li>Name, email, or any personally identifiable data</li>
-                        <li>IP address or network data beyond what is necessary to load map tiles and send analytics and crash report events</li>
+                        <li>Name, email, or any personally identifiable data — including in the Pro migration service (section 2.11), which <strong>requires no login and receives no name or email</strong></li>
+                        <li>IP address or network data beyond what is needed to load map tiles and send analytics events and crash reports</li>
                         <li>Background location or location history outside active app usage</li>
                         <li>Advertising ID (the app explicitly removes this permission)</li>
                     </ul>
-                    <p class="mt-4"><strong>Sole exception:</strong> if the user voluntarily writes to us via the "Send feedback" button (section 2.6), we become aware of the email address they chose to use and the content written. This always depends on an explicit action by the user and does not occur in any other app flow.</p>
+                    <p class="mb-4">Three notes for precision:</p>
+                    <ol class="list-decimal pl-6 mb-4 space-y-2">
+                        <li><strong>Email Feedback.</strong> If user voluntarily writes to us via "Send feedback" button (section 2.6), we become aware of the email address chosen and content written. Always depends on explicit user action.</li>
+                        <li><strong>TopoWalk Pro Migration (section 2.11).</strong> This feature sends a hashed device ID and an anonymous session ID to our server. Neither carries name, email, or account, and neither is used outside this purpose. It is the <strong>only</strong> scenario where app stores anything on our server.</li>
+                        <li><strong>Report Visual Identity (from version 4.1).</strong> User can type their name and professional registration to appear on PDF (section 2.8). This data <strong>is personal</strong> but stays <strong>solely on their device</strong>: GHF Software does not receive, store, or access it. Leaves device only inside PDF user chooses to share.</li>
+                    </ol>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Analytics — Firebase Analytics (Google)</h2>
                     <p class="mb-4">Starting from version 3.10, TopoWalk uses <strong>Firebase Analytics</strong>, a usage analysis service provided by Google LLC.</p>
@@ -601,40 +799,43 @@
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">What is collected and sent to Firebase:</h3>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li><strong>App interactions:</strong> screens viewed, features used (e.g., capturing points, exporting files, accessing history), and navigation flow.</li>
-                        <li><strong>Interest in future formats (from version 4.0):</strong> the export menu lists DXF and CSV as planned formats; tapping them does not generate any file, it only records an anonymous event (that the format was viewed, and, if the user taps a confirmation button on screen, that they are interested in it). <strong>No contact information is collected in this flow</strong> — the app does not ask for email or phone number, and there is no waitlist.</li>
-                        <li><strong>Firebase installation ID:</strong> anonymous identifier generated by the SDK to aggregate sessions. Does not personally identify the user and can be reset by uninstalling and reinstalling the app.</li>
-                        <li><strong>Device information:</strong> model, operating system version, and language — automatically collected by the SDK for report segmentation.</li>
+                        <li><strong>Interest in future formats (version 4.0):</strong> export menu lists DXF and CSV as planned formats; tapping them records an anonymous event. <strong>No contact collected in this flow</strong> — app does not ask for email or phone. This measurement <strong>ended in version 4.1</strong> when both formats were introduced.</li>
+                        <li><strong>Purchase funnel (from version 4.1):</strong> anonymous events recording purchase screen open, entry feature, purchase initiation, and completion/cancellation/failure. <strong>Price, currency, payment method, Google account ID are NOT recorded</strong> — only step in flow. Used to understand screen clarity, not to identify buyers.</li>
+                        <li><strong>Firebase installation ID:</strong> anonymous identifier generated by SDK to aggregate sessions. Does not personally identify user and can be reset by uninstalling and reinstalling app.</li>
+                        <li><strong>Device information:</strong> model, OS version, language — automatically collected by SDK.</li>
                     </ul>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">What is NOT collected by Firebase:</h3>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>GPS coordinates or topographic measurement data</li>
-                        <li>Name, email, or any personal information entered in the app</li>
-                        <li>Advertising ID (explicitly removed from the app)</li>
+                        <li>Name, email, or personal info entered in app</li>
+                        <li>Advertising ID (explicitly removed from app)</li>
                     </ul>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Purpose:</h3>
-                    <p class="mb-4">Data is used exclusively to understand how users interact with the app, identify most used features, and guide future improvements. Not used for advertising or personalization.</p>
+                    <p class="mb-4">Data is used exclusively to understand user interaction, identify most used features, and guide future improvements. Not used for advertising, personalization, or profiling.</p>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Retention and control:</h3>
-                    <p class="mb-4">Data is retained by Google in accordance with the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-brand-primary underline hover:text-white">Google Privacy Policy</a>. The user can clear the Firebase installation ID by uninstalling the application.</p>
+                    <p class="mb-4">Data is retained by Google in accordance with the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-brand-primary underline hover:text-white">Google Privacy Policy</a>. User can clear Firebase installation ID by uninstalling app.</p>
 
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">5. Error Reports — Firebase Crashlytics (Google)</h2>
-                    <p class="mb-4">Starting from version 3.13, TopoWalk uses <strong>Firebase Crashlytics</strong>, a Google LLC service for crash reporting. It exists to detect issues that users cannot report on their own — especially connection failures with external GNSS/RTK receivers, which occur in the field without useful error messages.</p>
+                    <p class="mb-4">Starting from version 3.13, TopoWalk uses <strong>Firebase Crashlytics</strong>, a Google LLC service for crash reporting. Detects issues users cannot report on their own — especially external GNSS/RTK receiver connection failures occurring in field without useful error messages.</p>
                     
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">What is collected and sent to Crashlytics:</h3>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li><strong>Application crashes:</strong> exception type, stack trace, and thread state at the time of error.</li>
-                        <li><strong>Non-fatal external receiver failures:</strong> disconnection reason, original Bluetooth exception, reconnection attempt count, and a snippet of up to 16 characters from the beginning of the receiver data stream — deliberately short to contain only sentence header (type and time), never coordinates.</li>
-                        <li><strong>Session technical context:</strong> whether the external receiver is enabled, paired receiver model name, connection state, fix quality (e.g. <code>RTK_FIXED</code>), satellite count, and HDOP.</li>
-                        <li><strong>Device information and Firebase installation ID:</strong> automatically collected by the SDK under the same terms as section 4.</li>
+                        <li><strong>Application crashes:</strong> exception type, stack trace, and thread state at time of error.</li>
+                        <li><strong>Non-fatal external receiver failures:</strong> disconnection reason, original Bluetooth exception, attempt count, and a snippet of up to 16 characters from start of receiver data stream — deliberately short to contain only sentence header (type and time), never coordinates.</li>
+                        <li><strong>Session technical context:</strong> whether external receiver is enabled, paired model name, connection state, fix quality (e.g. <code>RTK_FIXED</code>), satellite count, and HDOP.</li>
+                        <li><strong>Purchase and logo reading failures (from version 4.1):</strong> error code returned by Google Play when purchase confirmation is not accepted, and stack trace of an unreadable logo image. <strong>Neither contains image content, company data, price, or account ID.</strong></li>
+                        <li><strong>Device information and Firebase installation ID:</strong> automatically collected by SDK under same terms as section 4.</li>
                     </ul>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">What is NOT collected by Crashlytics:</h3>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li>GPS coordinates, altitudes, or any user measurement data</li>
+                        <li>GPS coordinates, altitudes, or survey data</li>
                         <li>Survey names, notes, or exported files</li>
-                        <li>Name, email, or any personal information entered in the app</li>
+                        <li>Name, email, or personal info entered in app</li>
+                        <li>Logo, company name, technical manager, or professional registration (section 2.8)</li>
                     </ul>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Purpose:</h3>
@@ -643,7 +844,37 @@
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Retention and control:</h3>
                     <p class="mb-4">Reports are retained by Google in accordance with the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-brand-primary underline hover:text-white">Google Privacy Policy</a> and <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener noreferrer" class="text-brand-primary underline hover:text-white">Crashlytics documentation</a>.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. Data Sharing with Third Parties</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">6. In-App Purchases — Google Play Billing (from version 4.1)</h2>
+                    <p class="mb-4">Starting from version 4.1, TopoWalk offers a <strong>one-time lifetime purchase</strong> (TopoWalk Pro), processed by <strong>Google Play Billing</strong>, a Google LLC service.</p>
+                    
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Who processes payment</h3>
+                    <p class="mb-4"><strong>Payment is processed entirely by Google.</strong> TopoWalk <strong>never</strong> sees, receives, or stores credit card numbers, bank details, billing addresses, or payment information. This screen belongs to Google Play, not the app, governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-brand-primary underline hover:text-white">Google Privacy Policy</a> and Google Play Terms of Service.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">What the app sends to Google Play</h3>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>Product ID (<code>topowalk_pro</code>) to query price and open purchase screen.</li>
+                        <li>Acknowledgment that purchase was received (required by Google; without it, purchase is automatically refunded in three days).</li>
+                    </ul>
+                    <p class="mb-4">The app <strong>sends no developer-created account, user, or device ID</strong> to Google Play. Developer obfuscated account ID features (<code>obfuscatedAccountId</code>) <strong>are not used</strong>.</p>
+                    <p class="mb-4">TopoWalk <strong>has no user accounts</strong>: no registration, login, password, or profile. Pro migration service (section 2.11) uses an anonymous Firebase session — random ID generated by device, not an account, asking for no credentials and storing no name or email.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">What the app receives and stores</h3>
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li><strong>Formatted price</strong> in user's currency to display on screen. App does not know currency or country — receives ready text from Google.</li>
+                        <li><strong>Whether an active purchase exists</strong> for device, queried on app launch. Stored locally as boolean "yes/no" so app does not flicker "unpurchased" during query. <strong>No Google account data is stored.</strong></li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Why query repeats</h3>
+                    <p class="mb-4">Verification happens every session because that is how a <strong>refund</strong> reaches the app: if user requests refund from Google, purchase status updates and access is revoked. Conversely, reinstalling app restores access without repurchasing.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Access granted without purchase</h3>
+                    <p class="mb-4">Users who had TopoWalk installed before TopoWalk Pro launch receive access <strong>for free and permanently</strong>. Concession recorded <strong>on device only</strong>, involving no Google Play, user account, or personal data.</p>
+                    <p class="mb-4">Being recorded on device, it would not follow a phone switch automatically. To solve this, section 2.11 offers <strong>Pro migration</strong>: user requests a promo code, redeems on Play Store, and access becomes bound to their Google account — returning on any device logged into the same account.</p>
+
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">Minors</h3>
+                    <p class="mb-4">Google Play purchases are subject to Google Play parental controls and authentication requirements. TopoWalk does not perform age verification.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Data Sharing with Third Parties</h2>
                     <p class="mb-4">TopoWalk shares data with the following third parties:</p>
                     <div class="overflow-x-auto mb-4">
                         <table class="w-full text-left border-collapse">
@@ -657,12 +888,12 @@
                             <tbody>
                                 <tr class="border-b border-gray-800">
                                     <td class="py-2 pr-4 font-semibold text-brand-primary">Google LLC (Firebase Analytics)</td>
-                                    <td class="py-2 pr-4">App interactions, installation ID, device information</td>
-                                    <td class="py-2">Usage Analytics</td>
+                                    <td class="py-2 pr-4">App interactions, installation ID, device info</td>
+                                    <td class="py-2">Usage analytics</td>
                                 </tr>
                                 <tr class="border-b border-gray-800">
                                     <td class="py-2 pr-4 font-semibold text-brand-primary">Google LLC (Firebase Crashlytics)</td>
-                                    <td class="py-2 pr-4">Stack traces, external receiver failures, session technical context, installation ID, device information</td>
+                                    <td class="py-2 pr-4">Stack traces, external receiver failures, session technical context, installation ID, device info</td>
                                     <td class="py-2">Failure diagnostics</td>
                                 </tr>
                                 <tr class="border-b border-gray-800">
@@ -670,14 +901,29 @@
                                     <td class="py-2 pr-4">Coordinates of requested map tiles</td>
                                     <td class="py-2">Map rendering</td>
                                 </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-semibold text-brand-primary">Google LLC (Google Play Billing) — from version 4.1</td>
+                                    <td class="py-2 pr-4">Product ID and purchase acknowledgment. No developer account ID; no payment data passes through app</td>
+                                    <td class="py-2">Process TopoWalk Pro purchase</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-semibold text-brand-primary">Google LLC (Firebase Authentication) — Pro migration, section 2.11</td>
+                                    <td class="py-2 pr-4">An <strong>anonymous</strong> session: random identifier generated by device. No name, no email, no password</td>
+                                    <td class="py-2">Identify call to migration service</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-semibold text-brand-primary">GHF Software (Cloud Firestore & Cloud Functions on Google Cloud) — Pro migration, section 2.11</td>
+                                    <td class="py-2 pr-4">Hashed device ID, anonymous session ID, date/time of request, issued promo code</td>
+                                    <td class="py-2">Deliver one code per device and prevent inventory exhaustion</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                     <p class="mb-4">The application does not integrate SDKs for advertising, social networks, or any other external service beyond those listed above.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">7. Local Storage</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">8. Local Storage</h2>
                     
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">7.1 Database (Measurement History)</h3>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.1 Database (Measurement History)</h3>
                     <p class="mb-4">When the user chooses to save a measurement, the following data is stored <strong>locally on the device</strong> in a Room (SQLite) database, accessible only by the application:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>Name and notes entered by the user</li>
@@ -685,9 +931,9 @@
                         <li>Calculated results (distances, elevation differences, angles, area)</li>
                         <li>Date and time of measurement</li>
                     </ul>
-                    <p class="mb-4">This data is <strong>never sent to GHF Software servers</strong> and remains on the device until manually deleted by the user through the app or by clearing app data. See section 7.4 regarding manual backup offered by TopoWalk, and section 7.5 regarding automatic Android system backup — the two are independent of each other.</p>
+                    <p class="mb-4">This data is <strong>never sent to GHF Software servers</strong> and remains on the device until manually deleted by the user through the app or by clearing app data. See section 8.4 regarding manual backup offered by TopoWalk, and section 8.5 regarding automatic Android system backup — the two are independent of each other.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">7.2 PDF Reports</h3>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.2 PDF Reports</h3>
                     <p class="mb-4">When requesting PDF report generation, the application:</p>
                     <ol class="list-decimal pl-6 mb-4 space-y-2">
                         <li>Creates the PDF file temporarily in the app's <strong>private cache directory</strong> (<code>cacheDir</code>), accessible only by the app itself.</li>
@@ -696,20 +942,21 @@
                     </ol>
                     <p class="mb-4">TopoWalk has no access to the destination chosen by the user for sharing — this operation is managed entirely by the Android system and the receiving application.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">7.3 GeoJSON, KML, and GPX Export</h3>
-                    <p class="mb-4">Users can export measurements in GeoJSON, KML, and GPX formats (from version 4.0). These files are generated locally in the device's cache and shared in the same way as the PDF (section 7.2). The app has no access to the sharing destination.</p>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.3 Exporting Files</h3>
+                    <p class="mb-4">Users can export measurements in <strong>GeoJSON, KML, and GPX</strong> (from version 4.0) and in <strong>DXF and CSV</strong> (from version 4.1). These files are generated locally in the device's cache and shared in the same way as the PDF (section 8.2). The app has no access to the sharing destination.</p>
+                    <p class="mb-4">CSV export generates <strong>two files</strong> — one with points and another with segments —, shared together. DXF contains, in addition to geometry, the latitude and longitude of the first survey point, recorded as text inside the file to allow positioning the drawing; it is the same coordinate data carried by other formats.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">7.4 History Backup and Restore (from version 4.0)</h3>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.4 History Backup and Restore (from version 4.0)</h3>
                     <p class="mb-4">TopoWalk allows users to manually export <strong>all measurement history</strong> into a single file and restore it later — on the same device after reinstallation, or on another device.</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li><strong>How it works:</strong> when tapping "Backup history", the app uses Android's own file picker (Storage Access Framework) so the user can choose where to save the file — Google Drive, SD card, internal storage, or any other location listed by the system. <strong>The app writes directly to the location chosen by the user</strong>, without using the inter-app share picker used for PDF and other formats (sections 7.2 and 7.3), and without sending the file to GHF Software servers.</li>
-                        <li><strong>What the file contains:</strong> name, notes, coordinates, altitude, calculated results, and point labels for each saved measurement — the same data described in section 7.1 gathered into a single file.</li>
-                        <li><strong>Restore:</strong> upon choosing "Restore backup" and selecting a file (via the same system picker), measurements from the file are added to the device history. Nothing already saved is overwritten or erased, and existing measurements are identified and not duplicated. A file generated by a newer TopoWalk version than the installed one will be rejected to prevent local database corruption.</li>
+                        <li><strong>How it works:</strong> when tapping "Backup history", the app uses Android's own file picker (Storage Access Framework) so the user can choose where to save the file — Google Drive, SD card, internal storage, or any other location listed by the system. <strong>The app writes directly to the location chosen by the user</strong>, without using the inter-app share picker used for PDF and other formats (sections 8.2 and 8.3), and without sending the file to GHF Software servers.</li>
+                        <li><strong>What the file contains:</strong> name, notes, coordinates, altitude, calculated results, and point labels for each saved measurement — the same data described in section 8.1 gathered into a single file.</li>
+                        <li><strong>Restore:</strong> upon choosing "Restore backup" and selecting a file (via the same system picker), measurements from the file are added to the device history. Nothing already saved is erased, and existing measurements are identified and not duplicated. A file generated by a newer TopoWalk version than the installed one will be rejected to prevent local database corruption.</li>
                         <li><strong>User control:</strong> GHF Software has no access to this file at any time — it exists solely in the location chosen by the user, under their control and responsibility (including the security of their own Google Drive account if that is the chosen destination).</li>
                     </ul>
-                    <p class="mb-4">This mechanism is independent of the automatic Android System Backup described in section 7.5.</p>
+                    <p class="mb-4">This mechanism is independent of the automatic Android System Backup described in section 8.5.</p>
 
-                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">7.5 Automatic Android System Backup</h3>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.5 Automatic Android System Backup</h3>
                     <p class="mb-4">TopoWalk <strong>does not operate any proprietary cloud backup or sync service</strong>. However, the application does not disable Android's <strong>Automatic Backup</strong> feature ("Backup by Google"), which is an operating system mechanism independent of TopoWalk:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li>If the user has this feature enabled on their Google account (default on most Android devices) and the device meets conditions set by Android (connected to Wi-Fi, charging, and idle), the OS may periodically in the background include TopoWalk data — including the local measurement history database — in the user's Google account backup.</li>
@@ -717,9 +964,13 @@
                         <li>Should the user reinstall TopoWalk on the same or another device connected to the same Google account, Android may automatically restore this data from that backup.</li>
                         <li>Users who do not wish measurement history to be included in this system backup can disable "Google Backup" for the device, or specifically for TopoWalk, in Android settings (Settings → System → Backup, varying by manufacturer and Android version).</li>
                     </ul>
+                    <p class="mb-4"><strong>Note regarding report visual identity (section 2.8):</strong> the copied logo and company data reside in private app storage and preferences, and therefore may also be included in this automatic system backup — in the user's own Google account, always out of reach of GHF Software. Anyone wishing to avoid this can disable system backup as described above.</p>
                     <p class="mb-4">This section describes standard Android behavior for data management. It does not alter any other commitment in this policy: GHF Software continues not to operate user data storage servers and never has access to this content.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">8. Application Permissions</h2>
+                    <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.6 Data Outside the Device (Pro Migration)</h3>
+                    <p class="mb-4">All of section 8 describes storage <strong>on the device itself</strong>. The sole exception in the application is the Pro migration service (section 2.11), which stores a hashed device ID, an anonymous session ID, request date, and issued code on a GHF Software server — nothing more, and nothing identifying a person. Surveys, photos, and reports <strong>never</strong> leave the device through this path.</p>
+
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Application Permissions</h2>
                     <div class="overflow-x-auto mb-4">
                         <table class="w-full text-left border-collapse">
                             <thead>
@@ -739,7 +990,7 @@
                                 </tr>
                                 <tr class="border-b border-gray-800">
                                     <td class="py-2 pr-4 font-mono text-sm text-brand-primary">INTERNET</td>
-                                    <td class="py-2">Load map tiles from OpenStreetMap, send events to Firebase Analytics and crash reports to Crashlytics</td>
+                                    <td class="py-2">Load OpenStreetMap map tiles, send events to Firebase Analytics and crash reports to Crashlytics, and, <strong>when the user requests Pro migration</strong> (section 2.11), communicate with our server</td>
                                 </tr>
                                 <tr class="border-b border-gray-800">
                                     <td class="py-2 pr-4 font-mono text-sm text-brand-primary">VIBRATE</td>
@@ -753,22 +1004,29 @@
                                     <td class="py-2 pr-4 font-mono text-sm text-brand-primary">BLUETOOTH / BLUETOOTH_ADMIN (Android 11 and earlier)</td>
                                     <td class="py-2">Equivalent for older Android versions for the same connection</td>
                                 </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 pr-4 font-mono text-sm text-brand-primary">com.android.vending.BILLING (from version 4.1)</td>
+                                    <td class="py-2">Required by Google Play to offer TopoWalk Pro purchase. Added automatically by Google library and <strong>grants no access to device data</strong></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <p class="mb-4">The application does not request access to camera, microphone, contacts, or external storage. The advertising ID (<code>AD_ID</code>) is explicitly removed from the app and is not collected.</p>
+                    <p class="mb-4"><strong>The compass used in Stakeout (section 2.7) and logo selection (section 2.8) require no permissions:</strong> orientation sensors are free in Android, and the file picker delivers only the single file selected by the user.</p>
+                    <p class="mb-4">The application does not request access to microphone, contacts, or external storage. <strong>Nor does it request camera permission</strong> — field photos (section 2.10) enter via system camera app and Android photo picker, which deliver to TopoWalk only the user-selected file. Advertising ID (<code>AD_ID</code>) is explicitly removed from app and not collected.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">9. Use by Minors</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">10. Use by Minors</h2>
                     <p class="mb-4">TopoWalk is not directed to children under 13 and does not intentionally collect data from minors. Being a technical field tool, use by minors should occur under supervision of a responsible adult.</p>
+                    <p class="mb-4">Starting from version 4.1, TopoWalk Pro purchase is processed by Google Play and is subject to Google Play parental controls and authentication requirements (section 6). TopoWalk does not perform age verification of its own.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">10. Security</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">11. Security</h2>
                     <p class="mb-4">TopoWalk measurement data is processed and stored exclusively on the user's device. Communication with external services (Firebase Analytics and OpenStreetMap) is performed exclusively via HTTPS with encryption in transit. Data sent to Firebase does not contain personally identifiable information. The security of locally stored data is managed by the Android operating system and app sandboxing.</p>
+                    <p class="mb-4">Starting from version 4.1, <strong>no payment data passes through the application:</strong> purchase is conducted entirely via Google Play screen, and TopoWalk receives back only information on whether an active purchase exists (section 6).</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">11. Changes to this Policy</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">12. Changes to this Policy</h2>
                     <p class="mb-4">We may update this Privacy Policy periodically. Relevant changes will be communicated via a new version of the application published on the Google Play Store. The "Last updated" date at the top of this document will always reflect the current version.</p>
                     <p class="mb-4">We recommend that you review this policy periodically.</p>
 
-                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">12. Contact</h2>
+                    <h2 class="text-2xl font-bold text-white mt-10 mb-4">13. Contact</h2>
                     <p class="mb-4">Questions, requests, or comments about this Privacy Policy can be sent to:</p>
                     <p class="mb-4">
                         <strong>GHF Software</strong><br>
