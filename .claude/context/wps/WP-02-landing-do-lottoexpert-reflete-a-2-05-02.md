@@ -2,7 +2,7 @@
 id: WP-02
 titulo: A landing do LottoExpert apresenta as funcionalidades da 2.05.02
 area: landing
-status: blocked
+status: done
 depende_de: [WP-01]
 adr: []
 spec: docs/AVALIACAO.md
@@ -85,3 +85,6 @@ landing". O site não edita a cópia à mão (diverge da origem).
 
 **Risco:** médio — copy pública de app de loteria. Se D1 = B (reescrever a seção), o WP vira L
 e é melhor quebrar: B agora só com data/links, resto no WP-10.
+
+**Verificação visual:** usuário revisou `lottoexpert.html` (cards novos e textos en) e reportou ok
+em 2026-10-12. WP `done`; vai ao ar no `/release` (WP-03).
