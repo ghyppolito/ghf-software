@@ -1,6 +1,6 @@
 # Política de Privacidade — Pole Position: Race Analytics
 
-**Última atualização:** agosto de 2026
+**Última atualização:** setembro de 2026
 
 Esta Política de Privacidade descreve como o aplicativo **Pole Position: Race Analytics** ("o App", "nós") coleta, usa, armazena e protege as informações dos usuários ("você"). Ao instalar e utilizar o App, você concorda com os termos desta política.
 
@@ -137,6 +137,7 @@ O App **não coleta, não armazena e não transmite**:
 | `WAKE_LOCK` | Impede que o processador suspenda durante sessões para garantir captura contínua |
 | `HIGH_SAMPLING_RATE_SENSORS` | Acesso a leituras do acelerômetro e giroscópio em alta frequência |
 | `ACCESS_NOTIFICATION_POLICY` | Suprimir notificações externas durante a sessão, quando o usuário ativa essa opção |
+| `POST_NOTIFICATIONS` | Exibir a notificação do serviço de telemetria, com o estado da sessão e o botão de parar a gravação (Android 13+). Não dá acesso a nenhum dado; se negada, a sessão funciona normalmente |
 | `INTERNET` | Envio de eventos anônimos ao Firebase Analytics, envio de relatórios de falha ao Firebase Crashlytics e carregamento do mapa (Google Maps) |
 
 A permissão `ACCESS_BACKGROUND_LOCATION` é utilizada **somente durante sessões de pilotagem ativas**, quando o usuário inicia explicitamente uma sessão no App. Ela garante que o serviço de telemetria continue registrando corretamente mesmo que o piloto minimize o App ou o dispositivo apague a tela durante a corrida. O App não rastreia a localização do usuário fora do contexto de uma sessão ativa.

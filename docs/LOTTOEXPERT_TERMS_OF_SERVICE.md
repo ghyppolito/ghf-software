@@ -1,6 +1,6 @@
-# Termos de Serviço — LottoExpert
+# Termos de Uso — LottoExpert
 
-**Última atualização:** 23 de Julho de 2026
+**Última atualização:** 12 de Outubro de 2026
 
 Bem-vindo ao **LottoExpert**. Ao baixar, instalar ou utilizar o aplicativo, você concorda com os termos abaixo. Se não concordar, não utilize o aplicativo.
 
@@ -8,7 +8,7 @@ Bem-vindo ao **LottoExpert**. Ao baixar, instalar ou utilizar o aplicativo, voc�
 
 ## 1. Sobre o Serviço
 
-O LottoExpert é um aplicativo de **análise estatística e matemática** para loterias brasileiras. Ele oferece geração de fechamentos e desdobramentos com garantia matemática, filtros matemáticos, backtesting histórico, conferência de bilhetes (manual e, para assinantes Premium, automática), estatísticas de frequência/atraso, acompanhamento financeiro dos próprios jogos ("Meu desempenho") e organização de bolões entre participantes.
+O LottoExpert é um aplicativo de **análise estatística e matemática** para loterias brasileiras. Ele oferece geração de fechamentos e desdobramentos com garantia matemática, filtros matemáticos, backtesting histórico, conferência de bilhetes (manual e, para assinantes Premium, automática), estatísticas de frequência/atraso, acompanhamento financeiro dos próprios jogos ("Meu desempenho"), registro do mesmo jogo em vários concursos seguidos (Teimosinha) e organização de bolões entre participantes, com prestação de contas da divisão do prêmio.
 
 O aplicativo é desenvolvido e mantido pela **GHF Software** ("desenvolvedor", "nós").
 
@@ -50,6 +50,7 @@ O LottoExpert Premium é oferecido em três planos, processados via **Google Pla
 - Você pode **cancelar a qualquer momento** em Google Play › Assinaturas. Para não ser cobrado pelo plano Anual, cancele antes do fim do período de teste grátis.
 - O cancelamento encerra a renovação futura, mas **mantém o acesso Premium** até o fim do período já pago.
 - **Reembolsos** seguem exclusivamente a política do Google Play — o desenvolvedor não processa reembolsos diretamente.
+- O acesso Premium é confirmado periodicamente junto ao Google Play. Se o aplicativo ficar **mais de 14 dias** sem conseguir confirmar a assinatura ou a compra (por exemplo, sem conexão), os recursos Premium são suspensos até a próxima confirmação bem-sucedida, que os restabelece automaticamente — nenhuma compra válida é perdida.
 - Os preços exibidos no app (incluindo estimativas de custo de apostas) podem ser atualizados remotamente sem necessidade de nova versão do aplicativo (ver Política de Privacidade, Seção 4.4).
 
 ---
@@ -68,6 +69,8 @@ Usuários Premium podem ativar, de forma **opcional e mediante consentimento exp
 
 - Ao criar um **Bolão**, você é responsável pela veracidade dos nomes de participantes e demais informações inseridas.
 - Links de convite e QR codes gerados para compartilhamento de bolões contêm os dados codificados diretamente na URL, sem passar pelos servidores do desenvolvedor. Você é responsável por controlar com quem compartilha esses links.
+- A **prestação de contas** do bolão (divisão do prêmio entre participantes) é um cálculo informativo feito no dispositivo a partir das cotas registradas pelo organizador. A divisão efetiva do prêmio é responsabilidade do organizador e dos participantes.
+- A imagem de prestação de contas é gerada no dispositivo e traz, por padrão, os nomes dos participantes. Ao compartilhá-la, o organizador é responsável por ter o consentimento dos participantes ou por desligar a exibição dos nomes antes do envio.
 - O desenvolvedor não modera, acessa nem armazena em servidores próprios o conteúdo dos bolões criados pelos usuários.
 
 ---
@@ -80,7 +83,7 @@ Usuários Premium podem ativar, de forma **opcional e mediante consentimento exp
 
 ### Licenças de Terceiros
 
-Este aplicativo utiliza as seguintes bibliotecas de código aberto, todas sob **Apache License 2.0**: Jetpack Compose, Jetpack Navigation Compose, Room, DataStore Preferences, WorkManager, Jetpack Glance (widget de tela inicial), CameraX, Hilt (Dagger), Retrofit, OkHttp, Kotlin Coroutines, ML Kit Text Recognition (Google), ZXing (geração de QR code) e Timber.
+Este aplicativo utiliza as seguintes bibliotecas de código aberto, todas sob **Apache License 2.0**: Jetpack Compose, Jetpack Navigation Compose, Room, DataStore Preferences, WorkManager, Jetpack Glance (widget de tela inicial), CameraX, Hilt (Dagger), Retrofit, OkHttp, Gson, Kotlin Coroutines, ML Kit Text Recognition (Google), ZXing (geração de QR code) e Timber.
 
 Adicionalmente, o aplicativo integra os seguintes SDKs e serviços da Google, sujeitos aos **Termos de Serviço do Google** e aos termos específicos de cada produto (não Apache License 2.0): Firebase Analytics, Firebase Crashlytics, Firebase Remote Config, Firebase App Check, Google Play Billing, Google Play In-App Review, Google Play Services (Identity Authorization API, usada na autorização do backup no Drive).
 
@@ -95,13 +98,13 @@ O tratamento de dados pessoais é regido pela nossa [Política de Privacidade](h
 ## 9. Modificações no Serviço e nos Termos
 
 - Podemos alterar, suspender ou descontinuar funcionalidades do aplicativo a qualquer momento, com aviso razoável quando aplicável.
-- Podemos atualizar estes Termos de Serviço ocasionalmente para refletir novas funcionalidades ou exigências legais. A data de "Última atualização" no topo deste documento indica quando a versão atual entrou em vigor. O uso continuado do aplicativo após uma atualização constitui aceitação dos novos termos.
+- Podemos atualizar estes Termos de Uso ocasionalmente para refletir novas funcionalidades ou exigências legais. A data de "Última atualização" no topo deste documento indica quando a versão atual entrou em vigor. O uso continuado do aplicativo após uma atualização constitui aceitação dos novos termos.
 
 ---
 
 ## 10. Rescisão
 
-- Você pode encerrar o uso do aplicativo a qualquer momento desinstalando-o, o que remove permanentemente todos os dados armazenados localmente no dispositivo.
+- Você pode encerrar o uso do aplicativo a qualquer momento desinstalando-o, o que remove permanentemente todos os dados armazenados localmente no dispositivo. Se você ativou o backup no Google Drive, a cópia permanece na sua conta Google até que você a remova (ver Política de Privacidade, Seção 4.9).
 - Assinaturas ativas continuam vigentes até seu cancelamento em Google Play › Assinaturas, mesmo após a desinstalação do aplicativo.
 
 ---
@@ -114,7 +117,7 @@ Estes Termos são regidos pelas leis da **República Federativa do Brasil**. Fic
 
 ## 12. Contato
 
-Para dúvidas sobre estes Termos de Serviço, entre em contato pelo e-mail **support@ghfsoftware.com** ou através do canal oficial de suporte na página do aplicativo na Google Play Store.
+Para dúvidas sobre estes Termos de Uso, entre em contato pelo e-mail **support@ghfsoftware.com** ou através do canal oficial de suporte na página do aplicativo na Google Play Store.
 
 ---
 
