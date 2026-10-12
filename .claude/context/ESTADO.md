@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**18 WPs** · 3 concluídos · 0 em andamento
+**18 WPs** · 4 concluídos · 0 em andamento
 
 ## Sequência recomendada
 
@@ -14,7 +14,6 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 
 | # | WP | Status | Nota |
 |---|---|---|---|
-| 1 | [WP-03 — O site no ar tem o LottoExpert 2.05.02 e as atualizações pendentes de TopoWalk e Pole Position](wps/WP-03-publicar-develop-em-master.md) | `todo` | publicar `develop → master` (Pages): 10 commits de TopoWalk/Pole Position já esperam + WP-01/02/04. Só o usuário mescla; o agente prepara e confere |
 
 **B · fundação — rede de segurança, build e fonte única, nesta ordem**
 
@@ -46,7 +45,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 |---|---|---|---|---|---|---|---|---|
 | [WP-01](wps/WP-01-politica-e-termos-do-lottoexpert-2-05-02-no-site.md) | O site publica a política de privacidade e os termos de uso do LottoExpert 2.05.02 | legal | M | alto | 🖥️ | — | ADR-001 | `done` |
 | [WP-02](wps/WP-02-landing-do-lottoexpert-reflete-a-2-05-02.md) | A landing do LottoExpert apresenta as funcionalidades da 2.05.02 | landing | M | medio | 🖥️ | WP-01 | — | `done` |
-| [WP-03](wps/WP-03-publicar-develop-em-master.md) | O site no ar tem o LottoExpert 2.05.02 e as atualizações pendentes de TopoWalk e Pole Position | infra | S | alto | 🖥️ | WP-01, WP-02, WP-04 | ADR-001 | `todo` |
+| [WP-03](wps/WP-03-publicar-develop-em-master.md) | O site no ar tem o LottoExpert 2.05.02 e as atualizações pendentes de TopoWalk e Pole Position | infra | S | alto | 🖥️ | WP-01, WP-02, WP-04 | ADR-001 | `done` |
 | [WP-04](wps/WP-04-convite-com-og-image-e-data-do-pole-position.md) | O convite de bolão compartilha com imagem e a política do Pole Position no site é a do app | legal | S | alto | 🖥️ | — | ADR-001 | `done` |
 | [WP-05](wps/WP-05-ci-no-pr.md) | Todo PR para develop roda check_site, check_plano e validação de HTML e links | infra | M | medio |  | WP-04 | — | `todo` |
 | [WP-06](wps/WP-06-brief-de-design-e-sessao-no-claude-design.md) | O sistema visual do site está decidido no Claude Design e exportado em design/handoff | design | M | baixo | 🖥️ | — | — | `todo` |

@@ -84,3 +84,5 @@ i18n, renomear "Termos de Serviço do Google". `check_site.py` e os `grep` acima
 
 **Verificação visual:** usuário revisou as duas páginas e reportou ok em 2026-10-12. WP `done`;
 vai ao ar no `/release` (WP-03).
+
+**Publicado em 2026-10-12** (PR #31 → `master`).
