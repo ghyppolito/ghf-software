@@ -2,7 +2,7 @@
 id: WP-01
 titulo: O site publica a política de privacidade e os termos de uso do LottoExpert 2.05.02
 area: legal
-status: todo
+status: doing
 depende_de: []
 adr: [ADR-001]
 spec: ""
@@ -37,10 +37,18 @@ atualizada pelo usuário". Diff medido no setup (`diff ../lotto-expert/docs/… 
 **Arquivos-alvo:**
 - `docs/LOTTOEXPERT_PRIVACY_POLICY.md`, `docs/LOTTOEXPERT_TERMS_OF_SERVICE.md` (cópia idêntica)
 - `lottoexpert-privacy.html`, `lottoexpert-terms.html` (pt e en, inclusive dicionário i18n)
-- Páginas que linkam os termos com o texto "Termos de Serviço": `lottoexpert-privacy.html` (4
-  ocorrências), `lottoexpert-terms.html` (7) — `grep -n "Termos de Serviço" *.html` no início
-  do WP para fechar a lista; `poleposition-privacy.html` e `topowalk-privacy.html` referem-se a
-  termos do Google e **não mudam**
+- Lista fechada (verificada pelo `site-arquiteto` com grep): **só os 4 arquivos acima**.
+  - `lottoexpert-terms.html`: renomear "Termos de Serviço" → "Termos de Uso" em `<title>` (l.7),
+    `<meta description>` (l.9), `<h1>` (l.137), `page_title` pt (l.240), §9 (l.350), contato
+    (l.363); en "Terms of Service" → "Terms of Use" em `page_title` (l.370), §9 (l.480), contato
+    (l.493). **Não mudam:** l.342 "Termos de Serviço do Google" e l.472 "Google Terms of Service".
+  - `lottoexpert-privacy.html`: as 4 ocorrências pt (l.312/322/361/369) e 4 en (l.581/591/630/638)
+    são termos do Google Play/Drive e **não mudam** (a origem também as mantém).
+  - Footers das 10 páginas usam o rótulo neutro "Termos - LottoExpert" / "Terms - LottoExpert"
+    (`footer_terms_lotto`) — **não mudam**; nenhuma outra página exibe "Termos de Serviço"
+    apontando para `lottoexpert-terms.html`. `README.md` já diz "Termos de Uso".
+  - `poleposition-privacy.html` e `topowalk-privacy.html` referem-se a termos do Google/Firebase
+    e **não mudam**.
 
 **Passos:**
 1. `cp` dos dois `.md` da origem; `diff -q` vazio.
@@ -58,7 +66,8 @@ atualizada pelo usuário". Diff medido no setup (`diff ../lotto-expert/docs/… 
 - `grep -c "12 de Outubro de 2026" lottoexpert-privacy.html lottoexpert-terms.html` ≥ 2 em cada;
   `grep -c "October 12, 2026"` ≥ 1 em cada; `grep -c "23 de Julho" lottoexpert-*.html` = 0.
 - `grep -n "Termos de Serviço" lottoexpert-privacy.html lottoexpert-terms.html` só retorna
-  linhas com "Google".
+  linhas com "Google"; `grep -n "Terms of Service" lottoexpert-privacy.html lottoexpert-terms.html`
+  idem; `grep -c "Termos de Uso" lottoexpert-terms.html` ≥ 5 e `grep -c "Terms of Use"` ≥ 3.
 - `grep -c "Teimosinha" lottoexpert-terms.html` ≥ 2 (pt e en); `grep -ci "prestação de contas\|settlement" lottoexpert-privacy.html` ≥ 2;
   `grep -c "14 dias\|14 days" lottoexpert-terms.html` ≥ 2; `grep -c "Gson" lottoexpert-terms.html` ≥ 2.
 - Nenhum arquivo fora de Arquivos-alvo no `git diff --stat develop...HEAD`.

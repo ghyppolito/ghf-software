@@ -1,6 +1,6 @@
 # Política de Privacidade — LottoExpert
 
-**Última atualização:** 23 de Julho de 2026
+**Última atualização:** 12 de Outubro de 2026
 
 Esta Política de Privacidade descreve como o aplicativo **LottoExpert** coleta, usa e protege suas informações. Nosso compromisso fundamental é com a **privacidade** e a segurança dos dados dos usuários.
 
@@ -29,7 +29,7 @@ O LottoExpert **não coleta, não transmite e não armazena** em servidores remo
 
 **Nota sobre valores de prêmio:** o aplicativo conta com um serviço de análise de uso (Firebase Analytics, Seção 4.7) que registra, de forma **pseudônima e por evento**, valores monetários agregados de prêmio apurado — por exemplo, o total apurado numa conferência automática ou no relatório mensal. Esses valores não vêm acompanhados de dezenas, de identificação pessoal nem do valor apostado, e servem para medir se os recursos de conferência entregam resultado. Você pode desativar essa coleta a qualquer momento em **Sobre → Notificações → Privacidade** (Seção 4.7).
 
-**Nota sobre nomes em Bolões:** Os nomes de participantes inseridos no módulo "Meus Bolões" são armazenados exclusivamente no banco de dados local do seu dispositivo e nunca são enviados para nossos servidores. Esses nomes só deixam o aparelho se e quando você optar explicitamente por compartilhar um link de convite, exportar um PDF ou ativar o backup no Google Drive (ver Seção 4.9).
+**Nota sobre nomes em Bolões:** Os nomes de participantes inseridos no módulo "Meus Bolões" são armazenados exclusivamente no banco de dados local do seu dispositivo e nunca são enviados para nossos servidores. Esses nomes só deixam o aparelho se e quando você optar explicitamente por compartilhar um link de convite, compartilhar a imagem de prestação de contas do bolão, exportar um PDF ou ativar o backup no Google Drive (ver Seções 4.8 e 4.9).
 
 **Nota sobre o Backup no Google Drive (Premium):** Caso você ative explicitamente esse recurso opcional, uma cópia dos seus jogos salvos, bolões (incluindo nomes de participantes) e preferências é enviada para uma pasta oculta e privada do **seu próprio Google Drive**, controlada por você. Mesmo nesse caso, **o desenvolvedor não coleta, não recebe e não tem acesso** a esses dados — eles permanecem sob seu controle na sua conta Google. Detalhes na Seção 4.9.
 
@@ -99,10 +99,10 @@ Para o funcionamento do app, comunicamos com os seguintes serviços externos:
 
 - **Finalidade:** Medir o uso agregado e anônimo das funcionalidades do app para melhorar a experiência do usuário, orientar o desenvolvimento e — em forma estritamente agregada, sem identificação individual — otimizar campanhas publicitárias do próprio desenvolvedor em plataformas como Google Ads e Meta Ads (Facebook/Instagram). Nenhum dado individual é compartilhado com essas plataformas; o uso é restrito a métricas agregadas de conversão (ex.: quantidade total de usuários que realizaram uma compra) para calibrar públicos de anúncios de forma estatística.
 - **Dados enviados:** Eventos de uso pseudônimos e agregados. Exemplos de eventos coletados:
-    - *Uso das funcionalidades:* `screen_view`, `generate_matrix`, `scan_ocr`, `export_pdf`, `backtest_run`, `ticket_checked`, `trial_scan_used`, `preset_saved`, `preset_regenerated`, `contests_view_opened`, `performance_viewed`, `monthly_report_opened`.
+    - *Uso das funcionalidades:* `screen_view`, `generate_matrix`, `scan_ocr`, `export_pdf`, `backtest_run`, `ticket_checked`, `trial_scan_used`, `preset_saved`, `preset_regenerated`, `contests_view_opened`, `performance_viewed`, `monthly_report_opened`, `content_shared` (apenas o tipo do conteúdo compartilhado, nunca o conteúdo), `widget_added`, `review_prompt_shown`.
     - *Bolões e loop de indicação:* `sweepstake_created`, `sweepstake_copied`, `sweepstake_shared`, `sweepstake_imported`, `sweepstake_auto_copied`, `sweepstake_checked`.
     - *Conferência e acompanhamento:* `ticket_entry_registered`, `auto_check_completed`, `manual_check_used`, `smart_alert_sent`, `monthly_report_sent`.
-    - *Monetização:* `view_paywall`, `select_premium_plan`, `purchase`.
+    - *Monetização:* `view_paywall`, `paywall_dismissed`, `select_premium_plan`, `purchase`, `premium_welcome_shown`.
     - *Ativação e onboarding:* `onboarding_started`, `onboarding_step`, `onboarding_completed`, `notification_permission_granted`, `journey_step_completed`, `journey_dismissed`, `journey_finished`, e os equivalentes `premium_journey_*`.
     - *Infraestrutura e backup:* `sync_complete`, `sync_error`, `backup_started`, `backup_completed`, `backup_failed`, `restore_completed`.
 - **Valores monetários:** Alguns eventos de conferência (`auto_check_completed`, `sweepstake_checked`, `monthly_report_sent`) incluem o **valor total de prêmio apurado** naquela operação, e os eventos de compra incluem o valor pago pela assinatura. São valores agregados por evento e vinculados apenas ao identificador pseudônimo da instalação — **sem dezenas, sem valor apostado e sem identificação pessoal**. Servem para medir se os recursos de conferência entregam resultado real ao usuário.
@@ -115,9 +115,10 @@ Para o funcionamento do app, comunicamos com os seguintes serviços externos:
 
 ### 4.8 Links de Compartilhamento e QR Code (Bolões)
 
-- **Finalidade:** Compartilhamento de dados de bolões entre usuários via link ou QR code.
+- **Finalidade:** Compartilhamento de dados de bolões entre usuários via link, QR code ou imagem de prestação de contas.
 - **Funcionamento:** O app gera um link (e opcionalmente um QR code) que contém os dados do bolão codificados via GZIP e Base64, sem passar por servidores do desenvolvedor.
 - **Privacidade:** O desenvolvedor não tem acesso aos links ou QR codes gerados. Como os dados estão contidos na própria URL, a segurança do compartilhamento depende da cautela do usuário ao enviar o link ou imagem para terceiros.
+- **Prestação de contas:** Após o sorteio, o organizador pode gerar uma imagem com o resultado do bolão e a divisão do prêmio entre os participantes. A imagem é gerada no próprio dispositivo e enviada pelo menu de compartilhamento do Android ao destino que o usuário escolher, sem passar por servidores do desenvolvedor. Os nomes dos participantes aparecem na imagem por padrão; o organizador pode desligá-los antes do envio, e nesse caso a imagem traz apenas "Participante 1", "Participante 2" e assim por diante.
 
 ### 4.9 Backup no Google Drive (Google) — Recurso Premium Opcional
 
@@ -127,7 +128,8 @@ Para o funcionamento do app, comunicamos com os seguintes serviços externos:
 - **Onde são armazenados:** Exclusivamente na pasta oculta e privada de aplicativo (`appDataFolder`) do **Google Drive do próprio usuário**. Essa pasta é isolada: só é acessível por este aplicativo, não aparece na lista normal de arquivos do Drive do usuário, e **não é visível nem acessível a outros aplicativos ou a outros usuários**.
 - **Acesso do desenvolvedor:** **Nenhum.** Os dados trafegam diretamente entre o seu dispositivo e a sua conta Google. O desenvolvedor **não recebe, não armazena e não tem qualquer acesso** ao conteúdo do backup. O aplicativo utiliza apenas o escopo `https://www.googleapis.com/auth/drive.appdata`, que **restringe o acesso unicamente à pasta de dados do próprio app** — o app não pode ler nem modificar nenhum outro arquivo do seu Drive.
 - **Backup automático:** Se ativado pelo usuário, o app pode realizar backups periódicos em segundo plano, reutilizando a autorização já concedida. O usuário pode desativar o backup automático a qualquer momento nas configurações do recurso.
-- **Como revogar e excluir:** O usuário pode revogar o acesso do app ao Drive a qualquer momento em [myaccount.google.com/connections](https://myaccount.google.com/connections) (Segurança → Acesso de terceiros). Os dados do backup podem ser excluídos gerenciando os dados de aplicativos ocultos nas configurações do Google Drive, ou desinstalando o aplicativo.
+- **Restauração:** Ao restaurar um backup num aparelho que já tem dados, os jogos e bolões existentes são preservados e os do backup que ainda não estão no aparelho são acrescentados — a restauração não sobrescreve jogos nem bolões já existentes. Se a coleta de métricas de uso (Seção 4.7) estiver desativada no backup, ela é desativada também no aparelho; a restauração nunca reativa essa coleta.
+- **Como revogar e excluir:** O usuário pode revogar o acesso do app ao Drive a qualquer momento em [myaccount.google.com/connections](https://myaccount.google.com/connections) (Segurança → Acesso de terceiros). Os dados do backup podem ser excluídos gerenciando os dados de aplicativos ocultos nas configurações do Google Drive. Desinstalar o aplicativo **não** apaga o backup: ele permanece na sua conta Google, justamente para permitir a restauração num novo aparelho ou após reinstalar o app.
 - **Política do Google:** Sujeita à [Política de Privacidade do Google](https://policies.google.com/privacy) e aos [Termos de Serviço do Google Drive](https://www.google.com/drive/terms-of-service/).
 
 ### 4.10 Notificações de Assinatura do Google Play (RTDN)
