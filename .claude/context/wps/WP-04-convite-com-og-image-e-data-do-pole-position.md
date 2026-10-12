@@ -2,7 +2,7 @@
 id: WP-04
 titulo: O convite de bolão compartilha com imagem e a política do Pole Position no site é a do app
 area: legal
-status: todo
+status: doing
 depende_de: []
 adr: [ADR-001]
 spec: ""
@@ -10,7 +10,7 @@ decisoes: [D7]
 tamanho: S
 risco: alto
 visual: true
-branch: feat/wp-04-og-do-convite-e-data-poleposition
+branch: feat/wp-04-og-do-convite-e-poleposition
 ---
 
 # WP-04 — O convite de bolão compartilha com imagem e a política do Pole Position no site é a do app
@@ -52,7 +52,10 @@ quiser imagem própria do convite — senão usar `assets/lottoexpert_app_mockup
 
 **Passos:**
 1. `og:image` do convite → `https://ghfsoftware.com/assets/lottoexpert_app_mockup.png` (ou a
-   nova); `onerror` do `:246` → `../../assets/lottoexpert.png`. `meta description` em pt.
+   nova); `og:image:width`/`og:image:height` → `1024`/`1024` (dimensão real do mockup; não declarar
+   `og:image:type`); `onerror` do `:246` → `this.onerror=null;this.src='../../assets/lottoexpert.png'`.
+   `meta description` em pt (a página é só pt; não há dicionário i18n a espelhar). Nada fora do
+   `<head>` e do `onerror` muda: ids, `<script>`, pako e a leitura de `?d=` ficam como estão (ADR-001).
 2. `site-legal`: `cp ../pole-position/pole-position-app/PRIVACY_POLICY.md docs/POLEPOSITION_PRIVACY_POLICY.md`;
    em `poleposition-privacy.html`, a linha `POST_NOTIFICATIONS` na tabela da §3 (pt e tradução en)
    e a data "setembro de 2026" / "September 2026" em todo lugar (HTML estático e dicionário i18n).
@@ -61,6 +64,9 @@ quiser imagem própria do convite — senão usar `assets/lottoexpert_app_mockup
 **Critérios de aceite:**
 - `python3 tools/check_site.py` **sem erros** (avisos de `og:image` em página legal podem ficar).
 - `grep -c logo_transp lotto-expert/sweepstake-invite/lottoexpert-invite.html` = 0.
+- Convite: `og:image:width` e `og:image:height` = `1024`; `onerror` começa com `this.onerror=null`.
+- `git diff -U0 develop -- lotto-expert/sweepstake-invite/lottoexpert-invite.html` só tem hunks no
+  `<head>` (linhas 1–20) e na linha do `<img id="lottery-icon">`.
 - `grep -c "junho de 2026\|agosto de 2026" poleposition-privacy.html` = 0;
   `grep -c "setembro de 2026" poleposition-privacy.html` ≥ 2; `grep -c "September 2026" poleposition-privacy.html` ≥ 1.
 - `diff -q ../pole-position/pole-position-app/PRIVACY_POLICY.md docs/POLEPOSITION_PRIVACY_POLICY.md` sem saída.
