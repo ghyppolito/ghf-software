@@ -9,10 +9,9 @@ e commit pelo usuário.
 
 ## 1. Onde parei
 
-WP-01 `blocked`: código e auditoria prontos (102c10e, c0dbf68); falta o usuário olhar as duas
-páginas no navegador (pt e en, 360 e 1280 px). Nada mesclado em develop: a branch do WP-01
-espera o usuário mesclar (o agente não faz merge). Próximo: WP-02 (D1 decidida: A) ou WP-04
-em paralelo.
+WP-01 `done` (verificação visual do usuário em 2026-10-12); branch `feat/wp-01-legal-lottoexpert-2-05-02`
+ainda não mesclada em develop (o agente não faz merge). WP-02 em andamento, empilhado sobre a
+branch do WP-01. WP-04 (ampliado com a política do Pole Position) depois.
 
 ## 2. Quebrado ou pela metade agora
 

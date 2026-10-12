@@ -2,7 +2,7 @@
 id: WP-01
 titulo: O site publica a política de privacidade e os termos de uso do LottoExpert 2.05.02
 area: legal
-status: blocked
+status: done
 depende_de: []
 adr: [ADR-001]
 spec: ""
@@ -81,3 +81,6 @@ Nada muda de caminho (ADR-001).
 
 **Risco:** alto — texto legal. Erro típico: traduzir só parte, esquecer a data no dicionário
 i18n, renomear "Termos de Serviço do Google". `check_site.py` e os `grep` acima são a rede.
+
+**Verificação visual:** usuário revisou as duas páginas e reportou ok em 2026-10-12. WP `done`;
+vai ao ar no `/release` (WP-03).
