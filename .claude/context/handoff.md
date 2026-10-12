@@ -9,9 +9,10 @@ e commit pelo usuário.
 
 ## 1. Onde parei
 
-Setup criado: `CLAUDE.md`, `docs/AVALIACAO.md`, 7 agentes, 8 comandos, `.claude/context/`
-(14 WPs, D1–D7, ADR-001, invariantes, achados), `tools/` (`gen_estado.py`, `check_plano.py`,
-`check_site.py`), `.gitignore`, `design/README.md`. Nenhum WP iniciado. Próximo: `/wp WP-01`.
+WP-01 `blocked`: código e auditoria prontos (102c10e, c0dbf68); falta o usuário olhar as duas
+páginas no navegador (pt e en, 360 e 1280 px). Nada mesclado em develop: a branch do WP-01
+espera o usuário mesclar (o agente não faz merge). Próximo: WP-02 (D1 decidida: A) ou WP-04
+em paralelo.
 
 ## 2. Quebrado ou pela metade agora
 

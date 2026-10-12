@@ -2,7 +2,7 @@
 id: WP-01
 titulo: O site publica a política de privacidade e os termos de uso do LottoExpert 2.05.02
 area: legal
-status: doing
+status: blocked
 depende_de: []
 adr: [ADR-001]
 spec: ""
