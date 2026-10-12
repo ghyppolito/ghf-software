@@ -2,7 +2,7 @@
 id: WP-02
 titulo: A landing do LottoExpert apresenta as funcionalidades da 2.05.02
 area: landing
-status: doing
+status: blocked
 depende_de: [WP-01]
 adr: []
 spec: docs/AVALIACAO.md

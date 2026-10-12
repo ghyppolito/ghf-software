@@ -9,9 +9,9 @@ e commit pelo usuário.
 
 ## 1. Onde parei
 
-WP-01 `done` (verificação visual do usuário em 2026-10-12); branch `feat/wp-01-legal-lottoexpert-2-05-02`
-ainda não mesclada em develop (o agente não faz merge). WP-02 em andamento, empilhado sobre a
-branch do WP-01. WP-04 (ampliado com a política do Pole Position) depois.
+WP-01 `done`; WP-02 `blocked` só pela verificação visual do usuário (código e auditoria em
+1c01b08, 7dd934f). Branches empilhadas, nada mesclado em develop: `feat/wp-01-…` ← `feat/wp-02-…`
+(mesclar na ordem). Próximo: WP-04 (convite + política do Pole Position), depois `/release`.
 
 ## 2. Quebrado ou pela metade agora
 

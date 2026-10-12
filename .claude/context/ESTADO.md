@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**18 WPs** · 1 concluídos · 1 em andamento
+**18 WPs** · 1 concluídos · 0 em andamento
 
 ## Sequência recomendada
 
@@ -14,7 +14,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 
 | # | WP | Status | Nota |
 |---|---|---|---|
-| 1 | [WP-02 — A landing do LottoExpert apresenta as funcionalidades da 2.05.02](wps/WP-02-landing-do-lottoexpert-reflete-a-2-05-02.md) | `doing` | landing do LottoExpert não cita Teimosinha nem prestação de contas do bolão; D1 decide o que destacar. Copy sob a régua de jogo responsável (`check_site.py`) |
+| 1 | [WP-02 — A landing do LottoExpert apresenta as funcionalidades da 2.05.02](wps/WP-02-landing-do-lottoexpert-reflete-a-2-05-02.md) | `blocked` | landing do LottoExpert não cita Teimosinha nem prestação de contas do bolão; D1 decide o que destacar. Copy sob a régua de jogo responsável (`check_site.py`) |
 | 2 | [WP-04 — O convite de bolão compartilha com imagem e a política do Pole Position no site é a do app](wps/WP-04-convite-com-og-image-e-data-do-pole-position.md) | `todo` | OG image do convite de bolão aponta para `logo_transp.png`, que não existe — convite sai sem imagem no WhatsApp; ampliado (2026-10-12): política do Pole Position espelhada do app (setembro/2026, `POST_NOTIFICATIONS`). S, risco alto (legal), entra na mesma publicação |
 | 3 | [WP-03 — O site no ar tem o LottoExpert 2.05.02 e as atualizações pendentes de TopoWalk e Pole Position](wps/WP-03-publicar-develop-em-master.md) | `todo` | publicar `develop → master` (Pages): 10 commits de TopoWalk/Pole Position já esperam + WP-01/02/04. Só o usuário mescla; o agente prepara e confere · ⏳ aguarda WP-02, WP-04 |
 
@@ -47,7 +47,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | WP | Título | Área | Tam | Risco | Visual | Depende de | ADR | Status |
 |---|---|---|---|---|---|---|---|---|
 | [WP-01](wps/WP-01-politica-e-termos-do-lottoexpert-2-05-02-no-site.md) | O site publica a política de privacidade e os termos de uso do LottoExpert 2.05.02 | legal | M | alto | 🖥️ | — | ADR-001 | `done` |
-| [WP-02](wps/WP-02-landing-do-lottoexpert-reflete-a-2-05-02.md) | A landing do LottoExpert apresenta as funcionalidades da 2.05.02 | landing | M | medio | 🖥️ | WP-01 | — | `doing` |
+| [WP-02](wps/WP-02-landing-do-lottoexpert-reflete-a-2-05-02.md) | A landing do LottoExpert apresenta as funcionalidades da 2.05.02 | landing | M | medio | 🖥️ | WP-01 | — | `blocked` |
 | [WP-03](wps/WP-03-publicar-develop-em-master.md) | O site no ar tem o LottoExpert 2.05.02 e as atualizações pendentes de TopoWalk e Pole Position | infra | S | alto | 🖥️ | WP-01, WP-02, WP-04 | ADR-001 | `todo` |
 | [WP-04](wps/WP-04-convite-com-og-image-e-data-do-pole-position.md) | O convite de bolão compartilha com imagem e a política do Pole Position no site é a do app | legal | S | alto | 🖥️ | — | ADR-001 | `todo` |
 | [WP-05](wps/WP-05-ci-no-pr.md) | Todo PR para develop roda check_site, check_plano e validação de HTML e links | infra | M | medio |  | WP-04 | — | `todo` |
@@ -69,3 +69,4 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 
 | WP | Bloqueado por | Desde |
 |---|---|---|
+| WP-02 | Código e auditoria prontos (1c01b08, 7dd934f). Falta só o usuário olhar `lottoexpert.html` #features no navegador (pt e en, 360 e 1280 px); aí vira `done`. Vai ao ar no /release (WP-03) | 2026-10-12 |
