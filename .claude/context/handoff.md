@@ -9,9 +9,9 @@ e commit pelo usuário.
 
 ## 1. Onde parei
 
-Trilha A publicada em 2026-10-12 (PR #30 → develop, #31 → master) e conferida no ar. WP-01, 02, 04
-`done`; WP-03 `blocked` só pelo teste do convite no WhatsApp. Próximo: trilha B (WP-05, CI no PR)
-— e as decisões D2 (stack), D3 (medição) e D4 (Claude Design), que bloqueiam o resto.
+Trilha A concluída e publicada em 2026-10-12 (PR #30 → develop, #31 → master): WP-01, 02, 03 e 04
+`done`; convite de bolão com prévia no WhatsApp confirmado pelo usuário. Próximo: trilha B
+(WP-05, CI no PR, sem decisão pendente). D2 (stack), D3 (medição) e D4 (Claude Design) bloqueiam o resto.
 
 ## 2. Quebrado ou pela metade agora
 

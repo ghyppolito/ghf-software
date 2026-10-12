@@ -2,7 +2,7 @@
 id: WP-03
 titulo: O site no ar tem o LottoExpert 2.05.02 e as atualizações pendentes de TopoWalk e Pole Position
 area: infra
-status: blocked
+status: done
 depende_de: [WP-01, WP-02, WP-04]
 adr: [ADR-001]
 spec: ""
@@ -55,3 +55,6 @@ no ar: `git log origin/master..origin/develop` vazio; 200 em `lottoexpert-privac
 LottoExpert com "12 de Outubro de 2026"; termos com `<title>` "Termos de Uso"; Pole Position com
 "setembro de 2026"; landing com Teimosinha; convite com `og:image` do mockup
 (servido como `image/png`, 555.466 bytes). Falta só o critério do WhatsApp (prévia com imagem).
+
+**WhatsApp:** usuário colou um link de convite real e a prévia saiu com imagem (2026-10-12).
+WP `done`.
