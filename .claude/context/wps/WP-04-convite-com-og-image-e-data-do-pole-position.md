@@ -2,7 +2,7 @@
 id: WP-04
 titulo: O convite de bolão compartilha com imagem e a política do Pole Position no site é a do app
 area: legal
-status: blocked
+status: done
 depende_de: []
 adr: [ADR-001]
 spec: ""
@@ -79,3 +79,7 @@ Antes do ar: `poleposition-privacy.html` em pt e en, 360 e 1280 px — data no t
 
 **Risco:** alto por ser texto legal (espelho, não redação — D7); baixo tecnicamente. Os caminhos
 do convite e da política não mudam (ADR-001).
+
+**Verificação visual:** usuário revisou `poleposition-privacy.html` e o convite e reportou ok em
+2026-10-12. WP `done`. A prévia no WhatsApp com imagem só se prova depois do `/release` (WP-03) —
+critério do WP-03; se falhar, `OG-MOCKUP-JPEG-PESADO-01`.

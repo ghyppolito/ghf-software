@@ -9,9 +9,9 @@ e commit pelo usuário.
 
 ## 1. Onde parei
 
-WP-01 e WP-02 `done`; WP-04 `blocked` só pela verificação visual do usuário. `check_site.py`
-verde (zero erros) pela primeira vez. Branches empilhadas, nada mesclado em develop:
-`feat/wp-01-…` ← `feat/wp-02-…` ← `feat/wp-04-…`. Próximo: `/release` (WP-03).
+WP-01, WP-02 e WP-04 `done` (verificação visual do usuário em 2026-10-12). `check_site.py` verde.
+Branches empilhadas, nada mesclado em develop: `feat/wp-01-…` ← `feat/wp-02-…` ← `feat/wp-04-…`.
+Próximo: `/release` (WP-03) — merge e publicação são do usuário.
 
 ## 2. Quebrado ou pela metade agora
 
