@@ -1,0 +1,64 @@
+# Estado da execução
+
+> **Gerado por `tools/gen_estado.py`.** A fonte de verdade do status é o
+> front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
+> Status: `todo` · `doing` · `blocked` · `done` · `adiado`
+
+**14 WPs** · 0 concluídos · 0 em andamento
+
+## Sequência recomendada
+
+Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reordenar é decisão do usuário (`SEQUENCIA` em `tools/gen_estado.py`).
+
+**A · LottoExpert 2.05.02 — publicar política, termos e landing antes de qualquer evolução do site**
+
+| # | WP | Status | Nota |
+|---|---|---|---|
+| 1 | [WP-01 — O site publica a política de privacidade e os termos de uso do LottoExpert 2.05.02](wps/WP-01-politica-e-termos-do-lottoexpert-2-05-02-no-site.md) | `todo` | política de privacidade e termos de uso do LottoExpert estão em 23/07/2026 no site e em 12/10/2026 no app (`../lotto-expert/docs/`, commit b5d4ca6): Teimosinha, prestação de contas, premium 14 dias, restauração, Gson, 'Termos de Uso'. Texto legal, risco alto — espelha, não redige |
+| 2 | [WP-02 — A landing do LottoExpert apresenta as funcionalidades da 2.05.02](wps/WP-02-landing-do-lottoexpert-reflete-a-2-05-02.md) | `todo` | landing do LottoExpert não cita Teimosinha nem prestação de contas do bolão; D1 decide o que destacar. Copy sob a régua de jogo responsável (`check_site.py`) · ⏳ aguarda WP-01 |
+| 3 | [WP-04 — O convite de bolão compartilha com imagem e a página do Pole Position mostra uma só data](wps/WP-04-convite-com-og-image-e-data-do-pole-position.md) | `todo` | OG image do convite de bolão aponta para `logo_transp.png`, que não existe — convite sai sem imagem no WhatsApp. S, entra na mesma publicação |
+| 4 | [WP-03 — O site no ar tem o LottoExpert 2.05.02 e as atualizações pendentes de TopoWalk e Pole Position](wps/WP-03-publicar-develop-em-master.md) | `todo` | publicar `develop → master` (Pages): 10 commits de TopoWalk/Pole Position já esperam + WP-01/02/04. Só o usuário mescla; o agente prepara e confere · ⏳ aguarda WP-01, WP-02, WP-04 |
+
+**B · fundação — rede de segurança, build e fonte única, nesta ordem**
+
+| # | WP | Status | Nota |
+|---|---|---|---|
+| 1 | [WP-05 — Todo PR para develop roda check_site, check_plano e validação de HTML e links](wps/WP-05-ci-no-pr.md) | `todo` | CI no PR: `check_site.py`, `check_plano.py`, validação de HTML e links; sem mudar o deploy. Antes do WP-07, senão a migração não tem gate · ⏳ aguarda WP-04 |
+| 2 | [WP-07 — O site tem build que preserva as URLs contratuais e publica no Pages por Actions](wps/WP-07-stack-com-build-spike.md) | `todo` | stack com build (D2, recomendada Astro): spike que prova URLs contratuais preservadas, `.well-known` e convite intactos, deploy do Pages por Actions; ADR-002. L, risco alto · ⏳ aguarda WP-05 |
+| 3 | [WP-08 — As 10 páginas usam um layout, componentes únicos e rota por idioma](wps/WP-08-layout-e-componentes-unicos.md) | `todo` | migração das 10 páginas para layout e componentes únicos (nav, footer, tema, i18n por rota `/en/`); conteúdo legal em markdown renderizado. L, depois do WP-07 · ⏳ aguarda WP-07 |
+| 4 | [WP-09 — O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência](wps/WP-09-legal-como-fonte-unica.md) | `todo` | legal como fonte única: `tools/sync_legal.py` importa do repositório do app, data no front-matter, CI acusa divergência. M, depois do WP-08 · ⏳ aguarda WP-08 |
+| 5 | [WP-14 — README e docs/ARQUITETURA.md descrevem a stack nova e como publicar](wps/WP-14-readme-e-arquitetura.md) | `todo` | README e `docs/ARQUITETURA.md` refletem a stack nova; `CLAUDE.md` seção Comandos atualizada. S, fecha a trilha B · ⏳ aguarda WP-09 |
+
+**C · evolução — design, SEO, performance e medição; WP-06 pode começar a qualquer momento (é sessão do usuário no Claude Design)**
+
+| # | WP | Status | Nota |
+|---|---|---|---|
+| 1 | [WP-06 — O sistema visual do site está decidido no Claude Design e exportado em design/handoff](wps/WP-06-brief-de-design-e-sessao-no-claude-design.md) | `todo` | brief de design (`design/BRIEF.md`) e sessão no Claude Design (D4): tokens, nav, footer, hero, card de app, seção de features, página legal; export em `design/handoff/<data>/`. Independe da stack |
+| 2 | [WP-10 — A home e as landings de app seguem o sistema visual do handoff](wps/WP-10-redesign-com-o-handoff.md) | `todo` | redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08 · ⏳ aguarda WP-06, WP-08 |
+| 3 | [WP-11 — Buscadores leem sitemap, canonical, hreflang e dados estruturados de cada página](wps/WP-11-seo-tecnico.md) | `todo` | SEO técnico: sitemap, robots, canonical, hreflang pt/en, JSON-LD (Organization, MobileApplication), OG por página. M, depois do WP-08 · ⏳ aguarda WP-08 |
+| 4 | [WP-12 — Toda página pontua 90 ou mais nas quatro categorias do Lighthouse mobile](wps/WP-12-performance.md) | `todo` | performance: fontes self-hosted, ícones SVG inline no lugar do Font Awesome, imagens WebP/AVIF com dimensões, Lighthouse ≥ 90 nas 4 categorias em todas as páginas. M, depois do WP-08 · ⏳ aguarda WP-08 |
+| 5 | [WP-13 — O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade](wps/WP-13-medicao.md) | `todo` | medição com consentimento ou sem cookie (D3: Plausible/Umami vs GA4 Consent Mode); evento de clique na Play por app. M, depois do WP-08 · ⏳ aguarda WP-08 |
+
+## Todos os WPs
+
+| WP | Título | Área | Tam | Risco | Visual | Depende de | ADR | Status |
+|---|---|---|---|---|---|---|---|---|
+| [WP-01](wps/WP-01-politica-e-termos-do-lottoexpert-2-05-02-no-site.md) | O site publica a política de privacidade e os termos de uso do LottoExpert 2.05.02 | legal | M | alto | 🖥️ | — | ADR-001 | `todo` |
+| [WP-02](wps/WP-02-landing-do-lottoexpert-reflete-a-2-05-02.md) | A landing do LottoExpert apresenta as funcionalidades da 2.05.02 | landing | M | medio | 🖥️ | WP-01 | — | `todo` |
+| [WP-03](wps/WP-03-publicar-develop-em-master.md) | O site no ar tem o LottoExpert 2.05.02 e as atualizações pendentes de TopoWalk e Pole Position | infra | S | alto | 🖥️ | WP-01, WP-02, WP-04 | ADR-001 | `todo` |
+| [WP-04](wps/WP-04-convite-com-og-image-e-data-do-pole-position.md) | O convite de bolão compartilha com imagem e a página do Pole Position mostra uma só data | landing | S | baixo | 🖥️ | — | ADR-001 | `todo` |
+| [WP-05](wps/WP-05-ci-no-pr.md) | Todo PR para develop roda check_site, check_plano e validação de HTML e links | infra | M | medio |  | WP-04 | — | `todo` |
+| [WP-06](wps/WP-06-brief-de-design-e-sessao-no-claude-design.md) | O sistema visual do site está decidido no Claude Design e exportado em design/handoff | design | M | baixo | 🖥️ | — | — | `todo` |
+| [WP-07](wps/WP-07-stack-com-build-spike.md) | O site tem build que preserva as URLs contratuais e publica no Pages por Actions | infra | L | alto | 🖥️ | WP-05 | ADR-001 | `todo` |
+| [WP-08](wps/WP-08-layout-e-componentes-unicos.md) | As 10 páginas usam um layout, componentes únicos e rota por idioma | landing | L | alto | 🖥️ | WP-07 | ADR-001 | `todo` |
+| [WP-09](wps/WP-09-legal-como-fonte-unica.md) | O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência | legal | M | medio |  | WP-08 | — | `todo` |
+| [WP-10](wps/WP-10-redesign-com-o-handoff.md) | A home e as landings de app seguem o sistema visual do handoff | design | L | medio | 🖥️ | WP-06, WP-08 | — | `todo` |
+| [WP-11](wps/WP-11-seo-tecnico.md) | Buscadores leem sitemap, canonical, hreflang e dados estruturados de cada página | seo | M | baixo |  | WP-08 | — | `todo` |
+| [WP-12](wps/WP-12-performance.md) | Toda página pontua 90 ou mais nas quatro categorias do Lighthouse mobile | seo | M | baixo | 🖥️ | WP-08 | — | `todo` |
+| [WP-13](wps/WP-13-medicao.md) | O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade | infra | M | medio | 🖥️ | WP-08 | — | `todo` |
+| [WP-14](wps/WP-14-readme-e-arquitetura.md) | README e docs/ARQUITETURA.md descrevem a stack nova e como publicar | docs | S | baixo |  | WP-09 | — | `todo` |
+
+## Bloqueios ativos
+
+| WP | Bloqueado por | Desde |
+|---|---|---|

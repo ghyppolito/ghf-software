@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 tools/check_site.py:*)",
+      "Bash(python3 tools/gen_estado.py:*)",
+      "Bash(python3 tools/check_plano.py:*)",
+      "Bash(python3 -m http.server:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(diff:*)",
+      "Read(../lotto-expert/docs/**)",
+      "Read(../topo-walk/PRIVACY_POLICY.md)",
+      "Read(../pole-position/pole-position-app/PRIVACY_POLICY.md)",
+      "Read(../eclipse-go/docs/**)"
+    ],
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git checkout master:*)",
+      "Bash(git merge:*)",
+      "Read(../**/*.jks)",
+      "Read(../**/*.keystore)",
+      "Read(../**/google-services.json)",
+      "Read(../**/local.properties)"
+    ]
+  }
+}

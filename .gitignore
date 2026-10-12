@@ -1,0 +1,12 @@
+# Ferramentas locais do Claude Code — não são do projeto
+.claude/settings.local.json
+.claude/.headroom_*
+graphify-out/
+
+# Build futuro (WP-07)
+node_modules/
+dist/
+.astro/
+
+# Relatórios locais de verificação
+.lighthouseci/

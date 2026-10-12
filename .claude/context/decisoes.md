@@ -1,0 +1,19 @@
+# Decisões de produto e de processo
+
+Aqui ficam as decisões que **não são do agente**: o que destacar, stack, medição, design,
+prioridade, quando publicar. Decisão de **arquitetura** é ADR (`/adr`, em `decisions/`); esta
+tabela é o que o `/wp` confere no pré-voo — WP que cita uma decisão em aberto **não começa**.
+
+Formato: em aberto = a pergunta, os WPs que impacta, as opções com o custo de cada uma e a
+recomendada. Decidida = `~~Dn~~ **DECIDIDO (AAAA-MM-DD): …**` — o que foi decidido, por quê, o
+que isso fecha e o que mantém aberto.
+
+| # | Decisão | Impacta | Opções |
+|---|---------|---------|--------|
+| ~~D1~~ | **DECIDIDO (2026-10-12, usuário): opção (A).** A landing do LottoExpert ganha 2 blocos — "Teimosinha" (mesmo jogo em vários concursos seguidos) e "Prestação de contas do bolão" (imagem compartilhável com a divisão por cota) — e uma linha sobre backup seguro (restauração não sobrescreve jogos nem bolões) na seção de privacidade/premium. Custo: 2 capturas do app em `assets/lottoexpert/`. Fecha (B) reescrever a seção inteira (fica para o WP-10) e (C) só data e links. Mantém aberto: a anatomia final da landing, que é do redesign (WP-10, D4) | `WP-02` | — |
+| D2 | **Stack com build.** O Tailwind pelo CDN e a duplicação nas 10 páginas pedem build. Qual? | `WP-07`, `WP-08`, `WP-09`, `WP-11`, `WP-12` | **(A) recomendada: Astro** — markdown nativo (legal vira `.md` por idioma), i18n por rota, `build.format: 'file'` preserva as URLs contratuais, zero JS por padrão, deploy oficial para o Pages. Custo: Node no repositório, curva pequena · **(B) Eleventy** — mais simples, i18n e imagens à mão · **(C) HTML + Tailwind CLI** — resolve só o CDN; duplicação e i18n continuam. Detalhe em `docs/AVALIACAO.md` §3.2 |
+| D3 | **Medição de visitas e cliques na Play.** Hoje nada é medido. Marca privacy-first | `WP-13` | **(A) recomendada: Plausible ou Umami** (sem cookie, sem banner sob LGPD; Umami self-host grátis, Plausible ~€9/mês) · **(B) GA4 com Consent Mode** — já usado nos apps, atribuição com Google Ads; exige banner de consentimento e configuração de consent mode · **(C)** não medir |
+| D4 | **Sistema visual no Claude Design.** O agente escreve o brief; o usuário faz a sessão em claude.ai/design; o export entra em `design/handoff/<data>/` e vira a referência do `site-ux`. Mesmo desenho do FORMA | `WP-06`, `WP-10` | **(A) recomendada:** sim, antes do redesign (WP-10); o brief sai no WP-06 · **(B)** o agente redesenha direto no código a partir de `docs/AVALIACAO.md` §3.3, sem sessão de design — mais rápido, menos controle visual do humano |
+| ~~D5~~ | **DECIDIDO (2026-10-12, setup): fluxo `feat → develop → master`; `master` é o deploy.** O GitHub Pages serve `master` (conferido na API do repositório). Branch do WP nasce de `develop`; PR mira `develop`; `develop → master` é `/release`, feito pelo usuário. A branch `main` tem só o commit inicial e não é usada; o usuário confirmou em 2026-10-12 que `master` é a principal (achado `BRANCH-MAIN-ORFA-01`) | git, `/release` | — |
+| ~~D6~~ | **DECIDIDO (2026-10-12, setup): backlog como WPs com front-matter (`wps/`), estado gerado (`ESTADO.md`) e consistência verificada (`check_plano.py`)** — mesmo desenho do lotto-expert e do personal-trader. `check_plano.py` é cópia adaptada (áreas e `visual` no lugar de `device`) | processo | — |
+| ~~D7~~ | **DECIDIDO (2026-10-12, setup): o texto legal nasce no repositório do app; o site é espelho.** O agente copia o `.md`, atualiza o HTML pt, traduz o en e a data — nunca redige nem reorganiza cláusula. Divergência de sentido é achado, resolvido no repositório do app. Motivo: o app exibe o texto e o onboarding o faz aceitar (lotto-expert D34); duas origens derivam. `check_site.py` confere datas; `diff -q` confere o espelho | `/legal`, `site-legal`, `WP-01`, `WP-09` | — |
