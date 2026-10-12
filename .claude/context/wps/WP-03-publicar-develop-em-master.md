@@ -2,7 +2,7 @@
 id: WP-03
 titulo: O site no ar tem o LottoExpert 2.05.02 e as atualizações pendentes de TopoWalk e Pole Position
 area: infra
-status: todo
+status: blocked
 depende_de: [WP-01, WP-02, WP-04]
 adr: [ADR-001]
 spec: ""
@@ -47,3 +47,11 @@ WhatsApp mostra imagem (WP-04).
 
 **Risco:** alto por ser o que o app em produção aponta; baixo tecnicamente (Pages publica
 estático). Erro típico: mesclar com `check_site.py` vermelho.
+
+**Publicado em 2026-10-12** (PR #30 → `develop`, PR #31 → `master`, merges do usuário). Conferido
+no ar: `git log origin/master..origin/develop` vazio; 200 em `lottoexpert-privacy.html`,
+`lottoexpert-terms.html`, `lottoexpert.html`, `poleposition-privacy.html`,
+`.well-known/assetlinks.json`, convite e `assets/lottoexpert_app_mockup.png`; privacidade do
+LottoExpert com "12 de Outubro de 2026"; termos com `<title>` "Termos de Uso"; Pole Position com
+"setembro de 2026"; landing com Teimosinha; convite com `og:image` do mockup
+(servido como `image/png`, 555.466 bytes). Falta só o critério do WhatsApp (prévia com imagem).

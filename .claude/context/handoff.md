@@ -9,9 +9,9 @@ e commit pelo usuário.
 
 ## 1. Onde parei
 
-WP-01, WP-02 e WP-04 `done` (verificação visual do usuário em 2026-10-12). `check_site.py` verde.
-Branches empilhadas, nada mesclado em develop: `feat/wp-01-…` ← `feat/wp-02-…` ← `feat/wp-04-…`.
-Próximo: `/release` (WP-03) — merge e publicação são do usuário.
+Trilha A publicada em 2026-10-12 (PR #30 → develop, #31 → master) e conferida no ar. WP-01, 02, 04
+`done`; WP-03 `blocked` só pelo teste do convite no WhatsApp. Próximo: trilha B (WP-05, CI no PR)
+— e as decisões D2 (stack), D3 (medição) e D4 (Claude Design), que bloqueiam o resto.
 
 ## 2. Quebrado ou pela metade agora
 
@@ -40,6 +40,6 @@ Nada desta sessão.
 
 ## 6. Esperando publicação
 
-`git log --oneline master..develop` = **10 commits** (TopoWalk: política e landing; Pole
-Position: política com Crashlytics e landing; EclipseGo: link da Play). **Há texto legal entre
-eles** — `WP-03` publica, junto do LottoExpert 2.05.02.
+Nada de site: `git log origin/master..origin/develop` vazio em 2026-10-12. Esta escrituração
+está na branch `docs/publicacao-trilha-a` (só `.claude/context` e `tools/gen_estado.py`, sem
+efeito no site).

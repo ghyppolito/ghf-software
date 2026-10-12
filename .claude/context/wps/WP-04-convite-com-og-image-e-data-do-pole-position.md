@@ -83,3 +83,5 @@ do convite e da política não mudam (ADR-001).
 **Verificação visual:** usuário revisou `poleposition-privacy.html` e o convite e reportou ok em
 2026-10-12. WP `done`. A prévia no WhatsApp com imagem só se prova depois do `/release` (WP-03) —
 critério do WP-03; se falhar, `OG-MOCKUP-JPEG-PESADO-01`.
+
+**Publicado em 2026-10-12** (PR #31 → `master`).

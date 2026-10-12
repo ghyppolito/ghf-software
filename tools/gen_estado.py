@@ -48,6 +48,7 @@ SEQUENCIA = [
 # Bloqueios ativos: (WP, motivo, desde). Lista escrita à mão; entrada de WP `done`
 # é filtrada, para a tabela seguir o front-matter.
 BLOQUEIOS = [
+    ("WP-03", "Publicado em 2026-10-12 e conferido no ar (curl). Falta só o usuário colar um link de convite real no WhatsApp e ver a prévia com imagem; sem imagem → `OG-MOCKUP-JPEG-PESADO-01` vira `/novo-wp`", "2026-10-12"),
 ]
 
 wps = []
