@@ -15,7 +15,7 @@ branch: feat/wp-16-legal-poleposition-6-linguas
 
 # WP-16 — A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de
 
-**Depende de:** WP-15 (rota e check N-línguas) · **Achados roteados:** `POLEPOSITION-ATRAS-01`
+**Depende de:** WP-15 (rota e check N-línguas) · **Achados roteados:** `PREVALENCIA-PT-NOS-APPS-01` (o `POLEPOSITION-ATRAS-01` foi para o WP-04, que espelha o pt antes)
 
 **Objetivo:** `/poleposition-privacy.html` (pt, URL contratual intocada), `/en/`, `/es/`,
 `/fr/`, `/it/` e `/de/poleposition-privacy.html` com o mesmo texto, a mesma data e as mesmas

@@ -22,7 +22,7 @@ SEQUENCIA = [
     ("A · LottoExpert 2.05.02 — publicar política, termos e landing antes de qualquer evolução do site", [
         ("WP-01", "política de privacidade e termos de uso do LottoExpert estão em 23/07/2026 no site e em 12/10/2026 no app (`../lotto-expert/docs/`, commit b5d4ca6): Teimosinha, prestação de contas, premium 14 dias, restauração, Gson, 'Termos de Uso'. Texto legal, risco alto — espelha, não redige"),
         ("WP-02", "landing do LottoExpert não cita Teimosinha nem prestação de contas do bolão; D1 decide o que destacar. Copy sob a régua de jogo responsável (`check_site.py`)"),
-        ("WP-04", "OG image do convite de bolão aponta para `logo_transp.png`, que não existe — convite sai sem imagem no WhatsApp. S, entra na mesma publicação"),
+        ("WP-04", "OG image do convite de bolão aponta para `logo_transp.png`, que não existe — convite sai sem imagem no WhatsApp; ampliado (2026-10-12): política do Pole Position espelhada do app (setembro/2026, `POST_NOTIFICATIONS`). S, risco alto (legal), entra na mesma publicação"),
         ("WP-03", "publicar `develop → master` (Pages): 10 commits de TopoWalk/Pole Position já esperam + WP-01/02/04. Só o usuário mescla; o agente prepara e confere"),
     ]),
     ("B · fundação — rede de segurança, build e fonte única, nesta ordem", [
@@ -37,7 +37,7 @@ SEQUENCIA = [
         ("WP-10", "redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08"),
         ("WP-11", "SEO técnico: sitemap, robots, canonical, hreflang pt/en, JSON-LD (Organization, MobileApplication), OG por página. M, depois do WP-08"),
         ("WP-15", "i18n N-línguas: mapa único página → línguas (`src/i18n/idiomas.ts`), pt na raiz e demais em `/<lang>/`, seletor só com as línguas da página, hreflang/x-default das existentes, check_site compara data, seções e tokens entre versões legais; não publica língua nova. D8, ADR-003. M, risco alto, depois do WP-11"),
-        ("WP-16", "política do Pole Position em pt/en/es/fr/it/de, traduzida do pt de origem; pré-condição: espelho pt em dia (`POLEPOSITION-ATRAS-01`) e cláusula de prevalência no app (D8 b1). Texto legal, risco alto — prova o processo na política menor"),
+        ("WP-16", "política do Pole Position em pt/en/es/fr/it/de, traduzida do pt de origem; pré-condição: cláusula de prevalência do pt no app (D8 b1, `PREVALENCIA-PT-NOS-APPS-01`); o espelho pt fica em dia no WP-04. Texto legal, risco alto — prova o processo na política menor"),
         ("WP-17", "política do TopoWalk em pt/en/es/fr/it/de/ru (5.842 palavras × 6 línguas além do pt); PR por língua. L, risco alto, depois do WP-16"),
         ("WP-18", "landings TopoWalk (7 línguas) e Pole Position (6) com copy das fichas da Play; só se D8 (a2/a3), depois do WP-10 para não traduzir duas vezes"),
         ("WP-12", "performance: fontes self-hosted, ícones SVG inline no lugar do Font Awesome, imagens WebP/AVIF com dimensões, Lighthouse ≥ 90 nas 4 categorias em todas as páginas. M, depois do WP-08"),
