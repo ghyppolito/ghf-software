@@ -37,7 +37,7 @@ contra o repositório do app, número medido. Sem evidência, é palpite.
 
 **Ler antes:** a seção exata de `docs/AVALIACAO.md`, o ADR, o arquivo de origem. Nada além disso.
 
-**Arquivos-alvo:** lista fechada. Tocar arquivo fora dela = parar e reportar.
+**Arquivos-alvo:** lista fechada. Tocar arquivo fora dela = parar e reportar. A escrituração em `.claude/context/` (status, `ESTADO.md`, achados) é sempre permitida e não entra na lista.
 
 **Passos:**
 1. …

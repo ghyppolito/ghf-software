@@ -70,7 +70,7 @@ atualizada pelo usuário". Diff medido no setup (`diff ../lotto-expert/docs/… 
   idem; `grep -c "Termos de Uso" lottoexpert-terms.html` ≥ 5 e `grep -c "Terms of Use"` ≥ 3.
 - `grep -c "Teimosinha" lottoexpert-terms.html` ≥ 2 (pt e en); `grep -ci "prestação de contas\|settlement" lottoexpert-privacy.html` ≥ 2;
   `grep -c "14 dias\|14 days" lottoexpert-terms.html` ≥ 2; `grep -c "Gson" lottoexpert-terms.html` ≥ 2.
-- Nenhum arquivo fora de Arquivos-alvo no `git diff --stat develop...HEAD`.
+- Nenhum arquivo fora de Arquivos-alvo no `git diff --stat develop...HEAD`, exceto a escrituração em `.claude/context/` (status do WP, `ESTADO.md`, achados).
 
 **Só no navegador:** `python3 -m http.server 8080`; abrir as duas páginas em 360 px e 1280 px,
 pt e en: data no topo, §4.8/§4.9 da privacidade, §1/§4/§6/§7 dos termos legíveis e sem

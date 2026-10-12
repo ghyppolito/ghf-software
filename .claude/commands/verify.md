@@ -10,7 +10,7 @@ Descubra o que o diff tocou — `git diff --name-only develop...HEAD` mais `git 
 ```bash
 python3 tools/check_site.py
 python3 tools/gen_estado.py --check && python3 tools/check_plano.py
-git diff --stat develop...HEAD        # nenhum arquivo fora dos Arquivos-alvo do WP
+git diff --stat develop...HEAD        # nenhum arquivo fora dos Arquivos-alvo do WP (escrituração em .claude/context/ é permitida)
 ```
 
 **Tocou página legal (`*-privacy.html`, `*-terms.html`, `docs/*_POLICY.md`, `docs/*_TERMS*.md`):**
