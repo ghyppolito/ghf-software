@@ -48,6 +48,7 @@ SEQUENCIA = [
 # Bloqueios ativos: (WP, motivo, desde). Lista escrita à mão; entrada de WP `done`
 # é filtrada, para a tabela seguir o front-matter.
 BLOQUEIOS = [
+    ("WP-04", "Código e auditoria prontos (9810372 + correção da auditoria). Falta o usuário olhar `poleposition-privacy.html` (pt e en, 360 e 1280 px: data setembro de 2026 e linha POST_NOTIFICATIONS) e um convite local com `?d=`; a prévia no WhatsApp só se prova depois do /release (WP-03)", "2026-10-12"),
 ]
 
 wps = []

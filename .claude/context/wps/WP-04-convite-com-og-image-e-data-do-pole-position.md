@@ -2,7 +2,7 @@
 id: WP-04
 titulo: O convite de bolão compartilha com imagem e a política do Pole Position no site é a do app
 area: legal
-status: doing
+status: blocked
 depende_de: []
 adr: [ADR-001]
 spec: ""

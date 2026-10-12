@@ -9,16 +9,14 @@ e commit pelo usuário.
 
 ## 1. Onde parei
 
-WP-01 e WP-02 `done` (verificação visual do usuário em 2026-10-12). Branches empilhadas, nada
-mesclado em develop: `feat/wp-01-…` ← `feat/wp-02-…` (mesclar nessa ordem; o agente não faz
-merge). Próximo: WP-04 (convite + política do Pole Position), depois `/release` (WP-03).
+WP-01 e WP-02 `done`; WP-04 `blocked` só pela verificação visual do usuário. `check_site.py`
+verde (zero erros) pela primeira vez. Branches empilhadas, nada mesclado em develop:
+`feat/wp-01-…` ← `feat/wp-02-…` ← `feat/wp-04-…`. Próximo: `/release` (WP-03).
 
 ## 2. Quebrado ou pela metade agora
 
-- `python3 tools/check_site.py` **falha** no estado atual do site, de propósito — são bugs
-  reais, roteados: OG do convite e `meta description` (`WP-04`), data do Pole Position
-  (`WP-04`). Até o WP-04 fechar, o `/verify` de outro WP vai mostrar esses erros; não os
-  "conserte" afrouxando a regra.
+- `python3 tools/check_site.py` verde desde o WP-04 (na branch dele; `develop` ainda falha
+  até o merge).
 - Caminhos de origem de `/legal` conferidos para os 4 apps (tabela em `.claude/commands/legal.md`).
 
 ## 3. O que só o navegador prova
