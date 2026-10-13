@@ -29,12 +29,13 @@ Quem chega quer o app certo, a política de privacidade ou o convite. Ninguém c
 
 ## 2. Os quatro produtos
 
-Cores abaixo são as que cada landing já usa como `brand.primary` (fundo `#0B1120` e superfície `#111827` iguais em todas).
+Cores abaixo são as que cada landing já usa como `brand.primary` — exceto o TopoWalk, que mantém o
+esmeralda `#10B981` como primária e usa o terracota como `accent` (fundo `#0B1120` e superfície `#111827` iguais em todas).
 O designer pode propor outra por app, mas precisa justificar a troca e garantir contraste.
 
 | App | Público | Proposta em uma linha | Cor de identidade hoje |
 |---|---|---|---|
-| **TopoWalk** | Topógrafos, agrimensores, engenheiros e técnicos de campo; produtor rural | Levantamento topográfico no celular, com GPS e barômetro: área, declividade, desnível, exporta PDF, GeoJSON, KML e GPX | Terracota `#B5541C` (400 `#D97736`, 600 `#8C3F11`) |
+| **TopoWalk** | Topógrafos, agrimensores, engenheiros e técnicos de campo; produtor rural | Levantamento topográfico no celular, com GPS e barômetro: área, declividade, desnível, exporta PDF, GeoJSON, KML e GPX | Terracota `#B5541C` como accent (400 `#D97736`, 600 `#8C3F11`, 900 `#4A2109`); primária esmeralda |
 | **LottoExpert** | Apostadores de loterias da Caixa e organizadores de bolão | Scanner de bilhetes, fechamentos, gestão de bolão e resultados oficiais | Violeta `#8B5CF6` (hover `#7C3AED`) |
 | **Pole Position** | Pilotos de kart e automobilismo amador | Telemetria e análise de sessão 100% offline, alternativa a hardwares como MyChron e Alfano | Lima `#84CC16` (hover `#65A30D`, accent `#A3E635`) |
 | **EclipseGo** | Quem quer saber se um eclipse é visível de onde está | Mostra se um eclipse solar ou lunar é visível em um local, com horários de início, pico e fim; 100% offline | Dourado `#EAB308` (hover `#CA8A04`; secundária índigo `#6366F1`) |
@@ -118,7 +119,7 @@ Pedido:
 - Uma só anatomia de landing (seção 4).
 - Página legal legível (seção 5).
 - **Tokens semânticos:** fundo, superfície, texto (primário/secundário/mudo), borda, primária, cor por app, sucesso/erro/aviso; escala tipográfica; espaçamento em múltiplos de 4 pt; raio; sombra; **foco visível**. Hoje as classes são utilitárias soltas e `brand.primary` muda por página.
-- **Contraste:** o texto cinza `text-gray-400` sobre `#0B1120`, o `terracota #B5541C` e o `violeta #8B5CF6` como texto ou botão precisam ser verificados em AA; o designer informa as razões.
+- **Contraste:** o texto cinza `text-gray-400` sobre `#0B1120`, o lima, o dourado e o violeta como texto ou botão (e o texto sobre botão colorido) precisam ser verificados em AA; o terracota `#B5541C` sobre fundo escuro provavelmente não passa e precisa de variante. O designer informa as razões.
 - **Estados:** app "em breve" vs publicado, página en incompleta, imagem ausente.
 - Muita decoração (glass, glow, gradiente, grade, flutuação) compete com o conteúdo; avalie o que fica.
 
