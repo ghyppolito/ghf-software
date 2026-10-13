@@ -26,8 +26,7 @@ SEQUENCIA = [
         ("WP-03", "publicar `develop → master` (Pages): 10 commits de TopoWalk/Pole Position já esperam + WP-01/02/04. Só o usuário mescla; o agente prepara e confere"),
     ]),
     ("B · fundação — rede de segurança, build e fonte única, nesta ordem", [
-        ("WP-05", "CI no PR: `check_site.py`, `check_plano.py`, validação de HTML e links; sem mudar o deploy. Antes do WP-07, senão a migração não tem gate"),
-        ("WP-07", "stack com build (D2, recomendada Astro): spike que prova URLs contratuais preservadas, `.well-known` e convite intactos, deploy do Pages por Actions; ADR-002. L, risco alto"),
+            ("WP-07", "stack com build (D2, recomendada Astro): spike que prova URLs contratuais preservadas, `.well-known` e convite intactos, deploy do Pages por Actions; ADR-002. L, risco alto"),
         ("WP-08", "migração das 10 páginas para layout e componentes únicos (nav, footer, tema, i18n por rota `/en/`); conteúdo legal em markdown renderizado. L, depois do WP-07"),
         ("WP-09", "legal como fonte única: `tools/sync_legal.py` importa do repositório do app, data no front-matter, CI acusa divergência. M, depois do WP-08"),
         ("WP-14", "README e `docs/ARQUITETURA.md` refletem a stack nova; `CLAUDE.md` seção Comandos atualizada. S, fecha a trilha B"),
@@ -48,7 +47,6 @@ SEQUENCIA = [
 # Bloqueios ativos: (WP, motivo, desde). Lista escrita à mão; entrada de WP `done`
 # é filtrada, para a tabela seguir o front-matter.
 BLOQUEIOS = [
-    ("WP-05", "aguarda push e PR do usuário para ver o CI verde no Actions (`gh pr checks`)", "2026-10-12"),
 ]
 
 wps = []
