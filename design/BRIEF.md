@@ -59,7 +59,7 @@ O que a home precisa fazer:
 - **Em um toque, o visitante chega ao app certo.** Os quatro apps aparecem acima ou logo na dobra do hero, não depois de "Sobre Nós".
 - Hero curto: marca em uma linha + a escolha entre os apps. Sem carrossel, sem vídeo que atrase o LCP.
 - Card de app (componente único): ícone/favicon, nome, a linha de proposta, selo de estado (publicado / em breve), um alvo principal (a landing do app) e, secundário, o link da Play.
-- Ordem dos apps: **decisão do humano** (ver seção 9). Hoje os cards aparecem na ordem Pole Position, TopoWalk, LottoExpert, EclipseGo; o do EclipseGo traz "Em breve na Google Play".
+- Ordem dos apps: **decisão do humano** (ver seção 9). Hoje os cards aparecem na ordem Pole Position, TopoWalk, LottoExpert, EclipseGo; os quatro estão publicados na Play (o estado "em breve" serve a apps futuros).
 - Depois dos apps: "Sobre" em um bloco curto, contato e privacidade. É conteúdo de apoio, não é o foco.
 - Contato: `support@ghfsoftware.com`, YouTube e Instagram (já existem no footer).
 
@@ -82,7 +82,7 @@ Específico por app, dentro do mesmo esqueleto:
 - **LottoExpert:** seção de planos/preços e tabela de comparação (Grátis, Mensal, Anual, Vitalício) como bloco opcional entre prova e privacidade. Aviso de jogo responsável visível no rodapé da landing e perto de qualquer CTA de preço. Nenhum elemento visual sugere prêmio ou sorte (trevo, moedas caindo, selo de "ganhe"): a imagem do app é de método e organização. Tem também a página do convite de bolão (`/lotto-expert/sweepstake-invite/lottoexpert-invite.html`), que deve usar o mesmo sistema.
 - **TopoWalk:** bloco "grátis x Pro" (Pro: DXF/CSV, PDF com identidade da empresa, locação).
 - **Pole Position e TopoWalk:** seletor com todas as línguas da página (6 e 7).
-- **EclipseGo:** estado "em breve" (sem URL da Play ainda) precisa de variação do hero sem botão quebrado.
+- **Estado "em breve"** (app futuro, sem URL da Play): variação do hero sem botão quebrado. Hoje os quatro apps estão publicados.
 
 ## 5. Página legal legível
 
@@ -181,5 +181,4 @@ Decisões do humano (o designer propõe, o usuário decide; nada aqui bloqueia a
 - **Acento por app:** manter as cores atuais ou redefinir; e se o verde esmeralda continua como cor da marca GHF.
 - **Prova:** quais números e avaliações podem aparecer (precisam ser reais e mantidos).
 - **Medição** (D3): o design reserva ou não um aviso de privacidade sobre ela.
-- **Quando EclipseGo deixa de ser "em breve"** (depende da publicação na Play, fora do site).
 - Se o designer não puder resolver algo, devolva como "sem referência no handoff" e o humano decide. O `site-ux` não inventa o que o handoff não cobre.
