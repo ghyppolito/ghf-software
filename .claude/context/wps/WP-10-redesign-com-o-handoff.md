@@ -15,7 +15,7 @@ branch: feat/wp-10-redesign
 
 # WP-10 — A home e as landings de app seguem o sistema visual do handoff
 
-**Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** —
+**Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** LOGO-ANO-E-FUNDO-ESCURO-01, DESIGN-RODADA-3-01
 
 **Objetivo:** tokens do handoff em `tailwind.config.mjs`; home com hierarquia por app (um
 toque até o app certo); as 4 landings com a mesma anatomia (hero + CTA → 3–5 funcionalidades

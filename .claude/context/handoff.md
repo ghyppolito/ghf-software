@@ -7,9 +7,9 @@
 
 ## 1. Onde parei
 
-WP-06 passo 1 feito (`design/BRIEF.md`, `design/README.md`), `blocked` (2026-10-13) aguardando a sessão do
-usuário no Claude Design. Branch `feat/wp-06-brief-de-design`, sem push. WP-07: PR #34 já integrado em
-`develop`; seguem `/release`, troca do Pages e checagens no ar (itens abaixo). Depois: WP-08.
+WP-06 `done` na branch `feat/wp-06-brief-de-design` (brief, handoff vigente `design/handoff/2026-10-13-rodada-2/`,
+mapa em `design/README.md`); PR para `develop` ainda não aberto, decisão do usuário. WP-07 segue `blocked`
+nos passos do usuário (seção 4). Próximo WP depois do WP-07: WP-08.
 
 ## 2. Quebrado ou pela metade agora
 
@@ -37,10 +37,8 @@ Do usuário, em ordem:
    e a checklist no domínio.
 7. Rollback: Source "Deploy from a branch" → master e `gh variable delete PAGES_VIA_ACTIONS`.
 
-WP-06, do usuário: sessão em claude.ai/design com `design/BRIEF.md`, o logo, os 4 favicons e 1 mockup por
-app (nada privado: `design/` fica público). Exportar e descompactar em `design/handoff/<AAAA-MM-DD>/` e
-avisar o agente, que faz o passo 3 (mapa em `design/README.md` e o que o export não cobre). O PR desta
-branch para `develop` pode abrir já (só o brief) ou depois, com o handoff: decisão do usuário.
+Rodada 3 do Claude Design pode ser feita a qualquer momento antes das landings TopoWalk, Pole Position e
+EclipseGo no WP-10 (texto no achado `DESIGN-RODADA-3-01`). O PR do WP-06 para `develop` é decisão do usuário.
 
 ## 5. Decisões fora de `decisoes.md` e ADR
 
