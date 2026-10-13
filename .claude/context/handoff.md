@@ -7,10 +7,9 @@
 
 ## 1. Onde parei
 
-WP-07 implementado e auditado, `blocked` (2026-10-13): o que falta é do usuário. Build Astro copia a
-raiz para `dist/`, `check_site.py --raiz dist` verde, deploy por Actions pronto e travado atrás da
-variável `PAGES_VIA_ACTIONS`. Lighthouse sem regressão (tabela no WP). Ainda em modo branch, o Jekyll
-segue publicando. Depois do WP-07 `done`: WP-08.
+WP-06 passo 1 feito (`design/BRIEF.md`, `design/README.md`), `blocked` (2026-10-13) aguardando a sessão do
+usuário no Claude Design. Branch `feat/wp-06-brief-de-design`, sem push. WP-07: PR #34 já integrado em
+`develop`; seguem `/release`, troca do Pages e checagens no ar (itens abaixo). Depois: WP-08.
 
 ## 2. Quebrado ou pela metade agora
 
@@ -26,7 +25,7 @@ link de bolão real no Android abre o app (App Links), HTTPS imposto.
 ## 4. Próxima ação
 
 Do usuário, em ordem:
-1. PR `feat/wp-07-stack-com-build → develop` (o agente abre se pedir), CI verde, merge.
+1. (feito) PR #34 do WP-07 integrado em `develop`.
 2. Checklist local (seção 3).
 3. `/release` (develop → master). Ainda em modo branch: o run "pages build and deployment" do Jekyll
    tem de sair verde com o `exclude` novo; o `Deploy` só builda (job deploy pulado).
@@ -37,6 +36,11 @@ Do usuário, em ordem:
    (200), `curl -s https://ghfsoftware.com/lottoexpert-privacy.html | grep -c "Última atualização"` (>= 1)
    e a checklist no domínio.
 7. Rollback: Source "Deploy from a branch" → master e `gh variable delete PAGES_VIA_ACTIONS`.
+
+WP-06, do usuário: sessão em claude.ai/design com `design/BRIEF.md`, o logo, os 4 favicons e 1 mockup por
+app (nada privado: `design/` fica público). Exportar e descompactar em `design/handoff/<AAAA-MM-DD>/` e
+avisar o agente, que faz o passo 3 (mapa em `design/README.md` e o que o export não cobre). O PR desta
+branch para `develop` pode abrir já (só o brief) ou depois, com o handoff: decisão do usuário.
 
 ## 5. Decisões fora de `decisoes.md` e ADR
 

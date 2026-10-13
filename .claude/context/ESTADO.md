@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**18 WPs** · 5 concluídos · 1 em andamento
+**18 WPs** · 5 concluídos · 0 em andamento
 
 ## Sequência recomendada
 
@@ -28,7 +28,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 
 | # | WP | Status | Nota |
 |---|---|---|---|
-| 1 | [WP-06 — O sistema visual do site está decidido no Claude Design e exportado em design/handoff](wps/WP-06-brief-de-design-e-sessao-no-claude-design.md) | `doing` | brief de design (`design/BRIEF.md`) e sessão no Claude Design (D4): tokens, nav, footer, hero, card de app, seção de features, página legal; export em `design/handoff/<data>/`. Independe da stack |
+| 1 | [WP-06 — O sistema visual do site está decidido no Claude Design e exportado em design/handoff](wps/WP-06-brief-de-design-e-sessao-no-claude-design.md) | `blocked` | brief de design (`design/BRIEF.md`) e sessão no Claude Design (D4): tokens, nav, footer, hero, card de app, seção de features, página legal; export em `design/handoff/<data>/`. Independe da stack |
 | 2 | [WP-10 — A home e as landings de app seguem o sistema visual do handoff](wps/WP-10-redesign-com-o-handoff.md) | `todo` | redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08 · ⏳ aguarda WP-06, WP-08 |
 | 3 | [WP-11 — Buscadores leem sitemap, canonical, hreflang e dados estruturados de cada página](wps/WP-11-seo-tecnico.md) | `todo` | SEO técnico: sitemap, robots, canonical, hreflang pt/en, JSON-LD (Organization, MobileApplication), OG por página. M, depois do WP-08 · ⏳ aguarda WP-08 |
 | 4 | [WP-15 — Cada página declara em que línguas existe e o site roteia, anuncia e verifica só essas](wps/WP-15-i18n-n-linguas.md) | `todo` | i18n N-línguas: mapa único página → línguas (`src/i18n/idiomas.ts`), pt na raiz e demais em `/<lang>/`, seletor só com as línguas da página, hreflang/x-default das existentes, check_site compara data, seções e tokens entre versões legais; não publica língua nova. D8, ADR-003. M, risco alto, depois do WP-11 · ⏳ aguarda WP-08, WP-09, WP-11 |
@@ -47,7 +47,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-03](wps/WP-03-publicar-develop-em-master.md) | O site no ar tem o LottoExpert 2.05.02 e as atualizações pendentes de TopoWalk e Pole Position | infra | S | alto | 🖥️ | WP-01, WP-02, WP-04 | ADR-001 | `done` |
 | [WP-04](wps/WP-04-convite-com-og-image-e-data-do-pole-position.md) | O convite de bolão compartilha com imagem e a política do Pole Position no site é a do app | legal | S | alto | 🖥️ | — | ADR-001 | `done` |
 | [WP-05](wps/WP-05-ci-no-pr.md) | Todo PR para develop roda check_site, check_plano e validação de HTML e links | infra | M | medio |  | WP-04 | — | `done` |
-| [WP-06](wps/WP-06-brief-de-design-e-sessao-no-claude-design.md) | O sistema visual do site está decidido no Claude Design e exportado em design/handoff | design | M | baixo | 🖥️ | — | — | `doing` |
+| [WP-06](wps/WP-06-brief-de-design-e-sessao-no-claude-design.md) | O sistema visual do site está decidido no Claude Design e exportado em design/handoff | design | M | baixo | 🖥️ | — | — | `blocked` |
 | [WP-07](wps/WP-07-stack-com-build-spike.md) | O site tem build que preserva as URLs contratuais e publica no Pages por Actions | infra | L | alto | 🖥️ | WP-05 | ADR-001, ADR-002 | `blocked` |
 | [WP-08](wps/WP-08-layout-e-componentes-unicos.md) | As 10 páginas usam um layout, componentes únicos e rota por idioma | landing | L | alto | 🖥️ | WP-07 | ADR-001 | `todo` |
 | [WP-09](wps/WP-09-legal-como-fonte-unica.md) | O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência | legal | M | medio |  | WP-08 | — | `todo` |
@@ -66,3 +66,4 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | WP | Bloqueado por | Desde |
 |---|---|---|
 | WP-07 | implementado e auditado; falta o usuário: CI no PR, /release, trocar o Pages para Actions + variável PAGES_VIA_ACTIONS, curls e checklist de navegador | 2026-10-13 |
+| WP-06 | aguarda a sessão do usuário no Claude Design e o export em design/handoff/<data>/ | 2026-10-13 |

@@ -2,7 +2,7 @@
 id: WP-06
 titulo: O sistema visual do site está decidido no Claude Design e exportado em design/handoff
 area: design
-status: doing
+status: blocked
 depende_de: []
 adr: []
 spec: docs/AVALIACAO.md
@@ -50,3 +50,14 @@ mesmo caminho (brief → Claude Design → handoff → `forma-ux` audita).
 passos 1 e 2 (motivo em `BLOQUEIOS`).
 
 **Risco:** baixo. O custo é a sessão do usuário; sem ela, D4 (B) — redesign direto no código.
+
+## Estado em 2026-10-13
+
+- Passo 1 feito: `design/BRIEF.md` (9 seções `## `, critério >= 7 coberto), escrito pelo `site-ux` com as
+  restrições do `site-arquiteto`; `design/README.md` com as regras (export congelado, handoff prevalece,
+  texto do export é placeholder, `design/` é público no modo branch) e "Handoff vigente: nenhum ainda".
+- Verificação: `check_site.py` na raiz e com `--raiz dist` verdes, `design/` fora de `dist`. Nenhuma página
+  tocada; auditoria `site-qa`/`seo-perf`/`site-ux` dispensada (só markdown em `design/` e `.claude/context`).
+- Critérios 2 e 3 abertos: dependem do export em `design/handoff/<data>/` (passo 2, do usuário) e do mapa
+  do passo 3. `visual: true` fecha só depois que o usuário reportar o que viu.
+- Achado `DESIGN-PUBLICO-JEKYLL-01` roteado ao WP-07.
