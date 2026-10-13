@@ -18,17 +18,19 @@ on:
     branches: [develop, master]
 
 # Cancela execução anterior do mesmo PR quando chega push novo — não gasta Actions numa versão
-# obsoleta do diff. Nunca cancela em push: lá a execução é o registro da branch.
+# obsoleta do diff. Push tem grupo por commit: lá a execução é o registro da branch, e um grupo
+# por ref descartaria o push que ficou na fila.
 concurrency:
-  group: pr-${{ github.ref }}
+  group: pr-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
 
 jobs:
+  # `name:` igual ao id: é o nome que `gh pr checks` e a proteção de branch mostram.
   plano:
-    name: Backlog consistente
+    name: plano
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -40,7 +42,7 @@ jobs:
           python3 tools/check_plano.py
 
   site:
-    name: Páginas, HTML e links
+    name: site
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -52,7 +54,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          # html-validate 11.16.2 exige Node ^22.22.0.
+          node-version: '22.22'
 
       - name: Validação de HTML
         # Versão fixa e sem package.json (o projeto Node nasce no WP-07). Regras em
@@ -78,5 +81,9 @@ jobs:
 
       - name: Links internos
         # `--offline`: só links locais (rede externa daria falso vermelho). Sem `docs/*.md` — os
-        # READMEs copiados dos apps têm links relativos do repositório do app.
-        run: lychee --offline --no-progress --root-dir "$GITHUB_WORKSPACE" '*.html' 'lotto-expert/sweepstake-invite/*.html'
+        # READMEs copiados dos apps têm links relativos do repositório do app. Padrão que não casa
+        # nada o lychee só avisa e sai verde — o `ls` falha antes se uma pasta sumir.
+        run: |
+          set -euo pipefail
+          ls *.html lotto-expert/sweepstake-invite/*.html > /dev/null
+          lychee --offline --no-progress --root-dir "$GITHUB_WORKSPACE" '*.html' 'lotto-expert/sweepstake-invite/*.html'

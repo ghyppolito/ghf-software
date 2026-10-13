@@ -117,7 +117,7 @@ python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regener
 python3 -m http.server 8080                                   # servir local para inspeção (Claude in Chrome ou usuário)
 diff ../lotto-expert/docs/PRIVACY_POLICY.md docs/LOTTOEXPERT_PRIVACY_POLICY.md   # o site está atrás do app?
 npx --yes html-validate@11.16.2 '*.html' 'lotto-expert/sweepstake-invite/*.html'  # HTML (regras em .htmlvalidate.json)
-lychee --offline --no-progress --root-dir "$PWD" '*.html' 'lotto-expert/sweepstake-invite/*.html'  # links internos
+lychee --offline --no-progress --root-dir "$PWD" '*.html' 'lotto-expert/sweepstake-invite/*.html'  # links internos (binário 0.24.2 do release lycheeverse/lychee)
 ```
 
 `.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`: `check_site.py`,
