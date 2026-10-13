@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>@font-face{font-family:Inter;src:url(fonts/InterVariable.woff2) format("woff2");font-weight:100 900;font-display:swap}body{margin:0;background:#0B1120}a{color:#F3F4F6}a:hover{color:#F3F4F6}</style></helmet>
+<div style="--bg:#0B1120;--sf:#111827;--rs:#1A2335;--bd:#243046;--bd2:#5E6B85;--tx:#F3F4F6;--tx2:#C3C9D3;--mu:#97A0B0;--br:#3CC8D0;--ft:#0E1524;--r:12px;--rb:999px;--rc:8px;--sh:0 12px 32px rgba(0,0,0,.45);--acc:#A78BFA;container-type:inline-size;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,sans-serif">
+  <dc-import name="Site Nav" mobile="{{ navMobile }}" app="lotto" langs="2" hint-size="100%,64px"></dc-import>
+  <main>
+    <section style="max-width:1216px;margin:0 auto;padding:clamp(28px,6cqi,80px) clamp(16px,2.6cqi,32px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:clamp(28px,5cqi,64px);align-items:center">
+      <div style="display:flex;flex-direction:column;gap:clamp(14px,1.8cqi,22px)">
+        <span style="font-size:14px;font-weight:600;color:var(--acc)">LottoExpert · Loterias da Caixa</span>
+        <h1 style="margin:0;font-size:clamp(30px,4.4cqi,54px);line-height:1.1;font-weight:700;letter-spacing:-0.025em;text-wrap:balance">Fechamentos, conferência e bolão, calculados no seu aparelho.</h1>
+        <p style="margin:0;font-size:clamp(16px,1.5cqi,19px);line-height:1.55;color:var(--tx2);max-width:54ch;text-wrap:pretty">Gere fechamentos com o custo à vista, confira bilhetes pela câmera e organize bolões com prestação de contas. Os resultados oficiais chegam sincronizados; seus jogos não saem do celular.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start;margin-top:6px">
+          <a href="#" style="min-height:52px;padding:0 28px;border-radius:var(--rb);background:var(--acc);color:var(--bg);font-weight:700;font-size:16px;display:flex;align-items:center;text-decoration:none" style-hover="background:color-mix(in oklab, var(--acc) 80%, white);color:var(--bg)" style-active="background:color-mix(in oklab, var(--acc) 82%, black)" style-focus="outline:2px solid var(--br);outline-offset:3px">Baixar na Google Play</a>
+          <span style="font-size:13px;color:var(--tx2)">Grátis, com planos Premium opcionais · Android · +18</span>
+        </div>
+      </div>
+      <figure style="margin:0;border-radius:20px;overflow:hidden;border:1px solid var(--bd);aspect-ratio:1/1;max-height:560px;background:var(--sf)">
+        <img src="assets/lottoexpert_app_mockup.png" alt="Celular com a tela de estatísticas do LottoExpert: frequência de cada dezena da Lotofácil em barras horizontais." style="width:100%;height:100%;object-fit:cover;display:block">
+      </figure>
+    </section>
+
+    <section id="funcionalidades" style="max-width:1216px;margin:0 auto;padding:clamp(40px,6cqi,80px) clamp(16px,2.6cqi,32px);display:flex;flex-direction:column;gap:clamp(32px,5cqi,64px);border-top:1px solid var(--bd)">
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:640px">
+        <h2 style="margin:0;font-size:clamp(26px,3cqi,36px);line-height:1.2;font-weight:700;letter-spacing:-0.015em">Funcionalidades</h2>
+        <p style="margin:0;font-size:16px;line-height:26px;color:var(--tx2)">O que a maioria usa na primeira semana. O restante está em “Ver todas”.</p>
+      </div>
+      <sc-for list="{{ features }}" as="f" hint-placeholder-count="4">
+        <article style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(20px,4cqi,56px);align-items:center">
+          <div style="order:{{ f.order }};display:flex;justify-content:center">
+            <figure style="margin:0;width:min(100%,250px);aspect-ratio:9/19;border-radius:28px;border:1px solid var(--bd2);background:repeating-linear-gradient(135deg, var(--rs) 0 7px, var(--sf) 7px 14px);display:flex;align-items:flex-end;padding:14px;box-sizing:border-box">
+              <figcaption style="font:12px/16px ui-monospace,Menlo,monospace;color:var(--tx2)">screenshot: {{ f.shot }}</figcaption>
+            </figure>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;max-width:520px">
+            <span style="align-self:flex-start;min-height:24px;padding:0 10px;border-radius:var(--rc);border:1px solid {{ f.tagEdge }};color:{{ f.tagColor }};font-size:12px;font-weight:600;display:flex;align-items:center">{{ f.tag }}</span>
+            <h3 style="margin:0;font-size:clamp(20px,2.2cqi,26px);line-height:1.25;font-weight:700">{{ f.t }}</h3>
+            <p style="margin:0;font-size:16px;line-height:26px;color:var(--tx2);text-wrap:pretty">{{ f.d }}</p>
+          </div>
+        </article>
+      </sc-for>
+      <details open="{{ allOpen }}" style="border:1px solid var(--bd2);border-radius:var(--r);background:var(--sf)">
+        <summary style="min-height:56px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;font-size:16px;font-weight:600;list-style:none" style-focus="outline:2px solid var(--br);outline-offset:2px">Ver todas as funcionalidades <span style="font-size:13px;font-weight:500;color:var(--tx2)">{{ allCount }} itens</span></summary>
+        <div style="padding:4px 20px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px 32px">
+          <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <h3 style="margin:0 0 6px;font-size:13px;font-weight:600;color:var(--mu)">{{ g.t }}</h3>
+              <sc-for list="{{ g.items }}" as="i" hint-placeholder-count="3">
+                <div style="display:flex;gap:10px;align-items:baseline;padding:8px 0;border-top:1px solid var(--bd)">
+                  <span style="flex:1;font-size:14px;line-height:21px"><strong style="font-weight:600">{{ i.n }}</strong> <span style="color:var(--tx2)">{{ i.d }}</span></span>
+                  <span style="font-size:11px;font-weight:600;white-space:nowrap;color:{{ i.tagColor }}">{{ i.tag }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </details>
+    </section>
+
+    <section aria-labelledby="h-telas" style="padding:clamp(40px,6cqi,80px) 0;border-top:1px solid var(--bd)">
+      <h2 id="h-telas" style="max-width:1216px;margin:0 auto 24px;padding:0 clamp(16px,2.6cqi,32px);font-size:clamp(26px,3cqi,36px);line-height:1.2;font-weight:700;letter-spacing:-0.015em">Telas</h2>
+      <div tabindex="0" aria-label="Galeria de telas, role na horizontal" style="display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 clamp(16px,2.6cqi,32px) 12px;max-width:1280px;margin:0 auto;box-sizing:border-box" style-focus="outline:2px solid var(--br);outline-offset:-2px">
+        <figure style="margin:0;flex:none;width:280px;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px">
+          <img src="assets/lottoexpert_app_mockup.png" alt="Estatísticas: frequência das dezenas da Lotofácil, com etiquetas quente, neutra e fria." style="width:280px;height:420px;object-fit:cover;border-radius:20px;border:1px solid var(--bd)">
+          <figcaption style="font-size:14px;color:var(--tx2)">Estatísticas de frequência</figcaption>
+        </figure>
+        <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="4">
+          <figure style="margin:0;flex:none;width:200px;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px">
+            <div style="width:200px;height:420px;border-radius:20px;border:1px solid var(--bd2);background:repeating-linear-gradient(135deg, var(--rs) 0 7px, var(--sf) 7px 14px);display:flex;align-items:flex-end;padding:12px;box-sizing:border-box"><span style="font:12px/16px ui-monospace,Menlo,monospace;color:var(--tx2)">screenshot: {{ g }}</span></div>
+            <figcaption style="font-size:14px;color:var(--tx2)">{{ g }}</figcaption>
+          </figure>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-labelledby="h-prova" style="max-width:1216px;margin:0 auto;padding:clamp(40px,6cqi,80px) clamp(16px,2.6cqi,32px);border-top:1px solid var(--bd);display:flex;flex-direction:column;gap:24px">
+      <h2 id="h-prova" style="margin:0;font-size:clamp(26px,3cqi,36px);line-height:1.2;font-weight:700;letter-spacing:-0.015em">Como o app trabalha</h2>
+      <ul style="margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden">
+        <sc-for list="{{ facts }}" as="f" hint-placeholder-count="4">
+          <li style="background:var(--sf);padding:20px;display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:18px;line-height:24px;font-weight:700;color:var(--acc)">{{ f.k }}</span>
+            <span style="font-size:14px;line-height:21px;color:var(--tx2);text-wrap:pretty">{{ f.v }}</span>
+          </li>
+        </sc-for>
+      </ul>
+    </section>
+
+    <section id="planos" aria-labelledby="h-planos" style="max-width:1216px;margin:0 auto;padding:clamp(40px,6cqi,80px) clamp(16px,2.6cqi,32px);border-top:1px solid var(--bd);display:flex;flex-direction:column;gap:24px">
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:680px">
+        <h2 id="h-planos" style="margin:0;font-size:clamp(26px,3cqi,36px);line-height:1.2;font-weight:700;letter-spacing:-0.015em">Planos</h2>
+        <p style="margin:0;font-size:16px;line-height:26px;color:var(--tx2);text-wrap:pretty">Os três planos pagos liberam o mesmo Premium. A compra é feita pela Google Play, que mostra o preço final.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:12px">
+        <sc-for list="{{ plans }}" as="p" hint-placeholder-count="4">
+          <div style="background:var(--sf);border:1px solid {{ p.edge }};border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:15px;font-weight:700">{{ p.n }}</span>
+            <span style="font-size:28px;line-height:34px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.01em">{{ p.price }}<span style="font-size:14px;font-weight:500;color:var(--tx2)">{{ p.per }}</span></span>
+            <span style="font-size:14px;line-height:21px;color:var(--tx2);text-wrap:pretty">{{ p.d }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div role="note" style="display:flex;gap:12px;padding:16px;border-radius:var(--r);background:var(--rs);border:1px solid var(--bd2)">
+        <span style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--tx);flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;box-sizing:border-box">18</span>
+        <p style="margin:0;font-size:14px;line-height:22px;color:var(--tx);text-wrap:pretty"><strong style="font-weight:700">Jogo responsável.</strong> O LottoExpert organiza jogos e faz contas; não muda a probabilidade de nenhum sorteio. Proibido para menores de 18 anos. Defina um limite de gasto antes de apostar. <a href="lottoexpert-terms.html" style="color:var(--tx);text-decoration-color:var(--br);text-underline-offset:3px">Termos de uso</a></p>
+      </div>
+      <div tabindex="0" role="region" aria-label="Comparação Grátis e Premium, role na horizontal" style="overflow-x:auto;border:1px solid var(--bd);border-radius:var(--r)" style-focus="outline:2px solid var(--br);outline-offset:2px">
+        <table style="width:100%;min-width:520px;border-collapse:collapse;font-size:14px;line-height:20px">
+          <thead><tr style="background:var(--sf)">
+            <th scope="col" style="text-align:left;padding:14px 16px;font-weight:600;color:var(--tx2)">Recurso</th>
+            <th scope="col" style="text-align:left;padding:14px 16px;font-weight:700;width:28%">Grátis</th>
+            <th scope="col" style="text-align:left;padding:14px 16px;font-weight:700;width:32%;color:var(--acc)">Premium <span style="font-weight:500;color:var(--tx2)">Mensal, Anual, Vitalício</span></th>
+          </tr></thead>
+          <tbody>
+            <sc-for list="{{ compare }}" as="r" hint-placeholder-count="12">
+              <tr style="border-top:1px solid var(--bd)">
+                <th scope="row" style="text-align:left;padding:12px 16px;font-weight:500">{{ r.f }}</th>
+                <td style="padding:12px 16px;color:var(--tx2)">{{ r.free }}</td>
+                <td style="padding:12px 16px">{{ r.prem }}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-label="Privacidade" style="max-width:1216px;margin:0 auto;padding:clamp(28px,4cqi,48px) clamp(16px,2.6cqi,32px);border-top:1px solid var(--bd)">
+      <p style="margin:0;font-size:clamp(17px,1.7cqi,20px);line-height:1.55;max-width:62ch;text-wrap:pretty">Seus jogos, bolões e estratégias ficam no aparelho; o app envia só métricas de uso pseudônimas, que você pode desligar. <a href="lottoexpert-privacy.html" style="color:var(--tx);text-decoration-color:var(--br);text-underline-offset:4px;white-space:nowrap" style-focus="outline:2px solid var(--br);outline-offset:2px">Política de privacidade</a></p>
+    </section>
+
+    <section id="faq" aria-labelledby="h-faq" style="max-width:1216px;margin:0 auto;padding:clamp(40px,6cqi,80px) clamp(16px,2.6cqi,32px);border-top:1px solid var(--bd);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px 64px;align-items:start">
+      <h2 id="h-faq" style="margin:0;font-size:clamp(26px,3cqi,36px);line-height:1.2;font-weight:700;letter-spacing:-0.015em">Perguntas frequentes</h2>
+      <div style="display:flex;flex-direction:column;grid-column:span 1;min-width:0">
+        <sc-for list="{{ faq }}" as="q" hint-placeholder-count="6">
+          <details style="border-top:1px solid var(--bd)">
+            <summary style="min-height:56px;padding:14px 0;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;font-size:16px;line-height:24px;font-weight:600;list-style:none" style-focus="outline:2px solid var(--br);outline-offset:2px">{{ q.q }}<span aria-hidden="true" style="font-size:20px;color:var(--tx2);font-weight:400">+</span></summary>
+            <p style="margin:0 0 18px;font-size:15px;line-height:24px;color:var(--tx2);max-width:62ch;text-wrap:pretty">{{ q.a }}</p>
+          </details>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-labelledby="h-cta" style="max-width:1216px;margin:0 auto;padding:clamp(40px,6cqi,80px) clamp(16px,2.6cqi,32px);border-top:1px solid var(--bd);display:flex;flex-direction:column;align-items:flex-start;gap:16px">
+      <h2 id="h-cta" style="margin:0;font-size:clamp(26px,3cqi,36px);line-height:1.2;font-weight:700;letter-spacing:-0.015em">Baixe o LottoExpert</h2>
+      <a href="#" style="min-height:52px;padding:0 28px;border-radius:var(--rb);background:var(--acc);color:var(--bg);font-weight:700;font-size:16px;display:flex;align-items:center;text-decoration:none" style-hover="background:color-mix(in oklab, var(--acc) 80%, white);color:var(--bg)" style-focus="outline:2px solid var(--br);outline-offset:3px">Baixar na Google Play</a>
+      <span style="font-size:13px;color:var(--tx2)">Grátis, com planos Premium opcionais · Android · +18</span>
+    </section>
+
+    <div role="note" style="background:var(--rs);border-top:1px solid var(--bd2)">
+      <p style="max-width:1216px;margin:0 auto;padding:20px clamp(16px,2.6cqi,32px);box-sizing:border-box;font-size:14px;line-height:22px;color:var(--tx);text-wrap:pretty"><strong style="font-weight:700">Jogo responsável · +18.</strong> Loterias são jogos de azar. O app não vende apostas. Aposte só o que cabe no seu orçamento. <span style="color:var(--tx2)">(Texto provisório: a redação final vem do app.)</span></p>
+    </div>
+  </main>
+  <dc-import name="Site Footer" mobile="{{ mobile }}" hint-size="100%,320px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;w&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;360&quot;,&quot;768&quot;,&quot;1280&quot;],&quot;default&quot;:&quot;1280&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const P='Premium', G='Grátis';
+const FEATURES=[
+ {t:'Gerador de fechamentos com o custo à vista',shot:'Gerador',tag:G+' · filtros Pro no Premium',
+  d:'Escolha quantas dezenas jogar e o custo total aparece em tempo real. Defina um limite de gasto, até R$ 1.000, e o gerador produz exatamente o número de jogos que cabe nele. A chance matemática exata do conjunto fica na tela.'},
+ {t:'Conferência de bilhete pela câmera',shot:'Conferir bilhete',tag:'3 capturas grátis · ilimitado no Premium',
+  d:'Aponte para o bilhete físico: o app faz várias leituras e só aceita um jogo quando elas concordam. O reconhecimento roda no aparelho; a imagem não é salva nem enviada.'},
+ {t:'Bolão com cotas, convite e prestação de contas',shot:'Bolão',tag:'1 bolão grátis · ilimitados no Premium',
+  d:'Crie o bolão, adicione participantes e cotas, e o valor por cota sai do custo dos jogos. Convide por link ou QR code. Depois do sorteio, gere a imagem de prestação de contas para o grupo.'},
+ {t:'Meu desempenho: apostado, recebido e saldo',shot:'Meu desempenho',tag:P,
+  d:'Total apostado, valor recebido e saldo por mês, ano ou desde o início, com bolões pela sua cota. Jogos ainda não conferidos contam no apostado, nunca no recebido.'}];
+const GROUPS=[
+ {t:'Gerar jogos',items:[{n:'Desdobramento simples',d:'todas as combinações das suas dezenas, com dezenas fixas.',tag:'Grátis até 10 jogos'},{n:'Desdobramentos com cobertura provada',d:'matriz fixa com garantia matemática parcial, provada offline.',tag:P},{n:'Filtros Pro',d:'quadrantes, gap médio, ciclo de atraso.',tag:P},{n:'Estratégias salvas',d:'regenere a configuração com um toque.',tag:'1 grátis'}]},
+ {t:'Acompanhar',items:[{n:'Jogos por concurso',d:'aguardando sorteio e conferidos, lado a lado com o resultado.',tag:'Grátis até 5'},{n:'Conferência automática',d:'depois de cada sincronização, com notificação.',tag:P},{n:'Relatório mensal',d:'fechamento do mês anterior.',tag:P},{n:'Alertas',d:'limiar de acumulado, dezena monitorada, lembrete de jogo.',tag:P}]},
+ {t:'Analisar',items:[{n:'Estatísticas',d:'frequência e atraso por dezena, janela ajustável.',tag:G},{n:'Backtesting',d:'uma estratégia contra os sorteios já armazenados.',tag:P},{n:'Resultados offline',d:'histórico de concursos salvo no aparelho.',tag:G}]},
+ {t:'Organizar',items:[{n:'PDF de jogos e de bolão',d:'cards ou volante para preencher.',tag:'Marca d’água no grátis'},{n:'Backup no Google Drive',d:'na sua conta; o desenvolvedor não acessa.',tag:P},{n:'Copiar e renovar bolão',d:'para o próximo concurso, manual ou automático.',tag:P},{n:'Widget de tela inicial',d:'último resultado e próximo sorteio.',tag:G}]}];
+const COMPARE=[
+ ['Loterias','Mega-Sena e Lotofácil','As 9 loterias'],['Jogos salvos','Até 10','Ilimitado'],['Jogos acompanhados por concurso','Até 5','Ilimitado'],
+ ['Conferência das participações','Manual','Automática, com notificação'],['Conferência pela câmera','3 capturas de teste','Ilimitada'],
+ ['Desdobramento simples','Até 10 jogos','Até 150 jogos (teto técnico)'],['Desdobramentos com cobertura provada','—','Incluído'],['Filtros Pro e backtesting','—','Incluído'],
+ ['Meu desempenho e relatório mensal','Amostra desfocada','Incluído'],['Alertas inteligentes','—','Incluído'],['Backup no Google Drive','—','Incluído'],
+ ['PDF','Com marca d’água','Limpo'],['Bolões','1 ativo, até 10 participantes','Ilimitados'],['Widget e convite por link/QR','Incluído','Incluído']];
+const FAQ=[
+ {q:'Funciona sem internet?',a:'Gerar jogos, conferir bilhetes pela câmera e consultar o histórico já baixado funcionam offline. Para receber resultados novos, o app precisa de conexão.'},
+ {q:'Tem anúncios?',a:'Não. O app não exibe anúncios nem integra SDK de publicidade.'},
+ {q:'O que o Premium acrescenta?',a:'As outras sete loterias, conferência automática depois do sorteio, desdobramentos com cobertura provada, backtesting, backup no Google Drive e limites maiores para jogos, bolões e participantes. A tabela de planos lista tudo.'},
+ {q:'O app muda a probabilidade de um sorteio?',a:'Não. Ele mostra a probabilidade exata do que você escolheu, organiza jogos e confere resultados. O sorteio não depende do app.'},
+ {q:'Preciso criar conta?',a:'Não. O backup no Google Drive (Premium) usa a sua própria conta Google, e o desenvolvedor não tem acesso a ele.'},
+ {q:'Como cancelo a assinatura?',a:'Pela Google Play, em Pagamentos e assinaturas. O plano Vitalício é compra única e não renova.'}];
+class Component extends DCLogic {
+  state={vw:typeof window!=='undefined'?window.innerWidth:1280};
+  componentDidMount(){this.onR=()=>this.setState({vw:window.innerWidth});window.addEventListener('resize',this.onR);}
+  componentWillUnmount(){window.removeEventListener('resize',this.onR);}
+  renderVals(){
+    const w=Number(this.props.w??this.state.vw);
+    const tagC=t=>t===P?'#A78BFA':'#C3C9D3';
+    const features=FEATURES.map((f,i)=>({...f,order:w>=700&&i%2===1?2:0,tagColor:f.tag===P?'#A78BFA':'#C3C9D3',tagEdge:f.tag===P?'#6B5BA8':'#5E6B85'}));
+    const groups=GROUPS.map(g=>({...g,items:g.items.map(i=>({...i,tagColor:tagC(i.tag)}))}));
+    const allCount=GROUPS.reduce((n,g)=>n+g.items.length,0);
+    return {features,groups,allCount,allOpen:w>=700?true:undefined,
+      gallery:['Gerador','Conferir bilhete','Bolão','Meu desempenho'],
+      facts:[{k:'Sem anúncios',v:'Nenhum SDK de publicidade.'},{k:'Cálculo no aparelho',v:'Geração, conferência e leitura de bilhete rodam offline.'},{k:'Resultados oficiais',v:'Da Caixa, sincronizados em quatro janelas por dia.'},{k:'Sem conta',v:'Nada de cadastro, e-mail ou CPF.'}],
+      plans:[{n:'Grátis',price:'R$ 0',per:'',d:'Mega-Sena e Lotofácil, conferência manual, 1 bolão ativo.',edge:'var(--bd)'},{n:'Mensal',price:'R$ 7,90',per:' /mês',d:'Assinatura; cancele pela Google Play.',edge:'var(--bd)'},{n:'Anual',price:'R$ 34,90',per:' /ano',d:'Assinatura; equivale a R$ 2,91 por mês.',edge:'#6B5BA8'},{n:'Vitalício',price:'R$ 69,90',per:' uma vez',d:'Compra única, sem renovação.',edge:'var(--bd)'}],
+      compare:COMPARE.map(([f,free,prem])=>({f,free,prem})),faq:FAQ,
+      mobile:w<700,navMobile:w<900};
+  }
+}
+</script>
+</body>
+</html>

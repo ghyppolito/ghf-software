@@ -31,8 +31,9 @@ SEQUENCIA = [
         ("WP-09", "legal como fonte única: `tools/sync_legal.py` importa do repositório do app, data no front-matter, CI acusa divergência. M, depois do WP-08"),
         ("WP-14", "README e `docs/ARQUITETURA.md` refletem a stack nova; `CLAUDE.md` seção Comandos atualizada. S, fecha a trilha B"),
     ]),
-    ("C · evolução — design, SEO, performance e medição; WP-06 pode começar a qualquer momento (é sessão do usuário no Claude Design)", [
+    ("C · evolução — design, SEO, performance e medição; WP-06 e WP-19 podem rodar a qualquer momento (são sessões do usuário no Claude Design)", [
         ("WP-06", "brief de design (`design/BRIEF.md`) e sessão no Claude Design (D4): tokens, nav, footer, hero, card de app, seção de features, página legal; export em `design/handoff/<data>/`. Independe da stack"),
+        ("WP-19", "rodada 3 do Claude Design: landings TopoWalk, Pole Position e EclipseGo, tablet 768, card em breve, troca de idioma na legal, defeitos da rodada 2. S, sessão do usuário; em paralelo à trilha B, antes do WP-10"),
         ("WP-10", "redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08"),
         ("WP-11", "SEO técnico: sitemap, robots, canonical, hreflang pt/en, JSON-LD (Organization, MobileApplication), OG por página. M, depois do WP-08"),
         ("WP-15", "i18n N-línguas: mapa único página → línguas (`src/i18n/idiomas.ts`), pt na raiz e demais em `/<lang>/`, seletor só com as línguas da página, hreflang/x-default das existentes, check_site compara data, seções e tokens entre versões legais; não publica língua nova. D8, ADR-003. M, risco alto, depois do WP-11"),

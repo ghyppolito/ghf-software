@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>@font-face{font-family:Inter;src:url(fonts/InterVariable.woff2) format("woff2");font-weight:100 900;font-display:swap}body{margin:0;background:#F7F7F5}a{color:#0A6E75}a:hover{color:#07565C}</style></helmet>
+<div style="--bg:#0B1120;--sf:#111827;--rs:#1A2335;--bd:#243046;--bd2:#5E6B85;--tx:#F3F4F6;--tx2:#C3C9D3;--mu:#97A0B0;--br:#3CC8D0;--ft:#0E1524;--r:12px;--rb:999px;--rc:8px;--sh:0 12px 32px rgba(0,0,0,.45);--paper:#F7F7F5;--ink:#15181C;--ptx2:#4A5059;--pbd:#D9D7D1;--plink:#0A6E75;--plinkh:#07565C;container-type:inline-size;background:{{ pageBg }};color:var(--ink);font-family:Inter,system-ui,sans-serif">
+  <sc-if value="{{ screen }}" hint-placeholder-val="{{ true }}">
+    <dc-import name="Site Nav" mobile="{{ navMobile }}" app="lotto" langs="2" current="3" hint-size="100%,64px"></dc-import>
+  </sc-if>
+  <sc-if value="{{ print }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:40px 56px 0;display:flex;justify-content:space-between;font-size:11px;color:#4A5059;border-bottom:1px solid #D9D7D1;padding-bottom:10px;margin:0 0 0">
+      <span>GHF Software · LottoExpert</span><span>ghfsoftware.com/lottoexpert-privacy.html</span>
+    </div>
+  </sc-if>
+  <main style="max-width:1216px;margin:0 auto;padding:{{ pad }};display:grid;grid-template-columns:{{ cols }};gap:56px;align-items:start">
+    <sc-if value="{{ sideToc }}" hint-placeholder-val="{{ true }}">
+      <nav aria-label="Nesta página" style="position:sticky;top:24px;display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 48px);overflow:auto;padding-right:8px">
+        <span style="font-size:13px;font-weight:600;color:var(--ptx2);padding:0 10px 8px">Nesta página</span>
+        <sc-for list="{{ toc }}" as="t" hint-placeholder-count="11">
+          <a href="{{ t.href }}" onClick="{{ t.pick }}" style="min-height:36px;padding:6px 10px;box-sizing:border-box;display:flex;gap:8px;font-size:14px;line-height:20px;color:{{ t.color }};font-weight:{{ t.w }};text-decoration:none;border-radius:6px;box-shadow:{{ t.mark }}" style-hover="background:#ECEBE7;color:var(--ink)" style-focus="outline:2px solid var(--plink);outline-offset:1px">
+            <span style="min-width:20px;color:var(--ptx2);font-variant-numeric:tabular-nums">{{ t.n }}</span><span>{{ t.t }}</span>
+          </a>
+        </sc-for>
+      </nav>
+    </sc-if>
+    <article style="min-width:0;max-width:70ch">
+      <header style="display:flex;flex-direction:column;gap:16px;padding-bottom:24px;border-bottom:1px solid var(--pbd);margin-bottom:24px">
+        <span style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600"><span style="width:28px;height:28px;border-radius:7px;overflow:hidden;display:block"><img src="assets/lottoexpert_favicon_v3.png" alt="" style="width:100%;height:100%;object-fit:cover"></span>LottoExpert</span>
+        <h1 style="margin:0;font-size:clamp(30px,4cqi,44px);line-height:1.15;font-weight:700;letter-spacing:-0.02em;text-wrap:balance">{{ title }}</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+          <span style="min-height:36px;padding:0 14px;border-radius:999px;background:#ECEBE7;border:1px solid var(--pbd);display:flex;align-items:center;gap:8px;font-size:14px"><span style="color:var(--ptx2)">Última atualização</span><strong style="font-weight:700;font-variant-numeric:tabular-nums">{{ updated }}</strong></span>
+          <sc-if value="{{ screen }}" hint-placeholder-val="{{ true }}">
+            <div role="group" aria-label="Idioma do documento" style="display:flex;border:1px solid #8A8F96;border-radius:999px;padding:3px;gap:2px">
+              <button type="button" lang="pt" aria-pressed="{{ isPt }}" onClick="{{ setPt }}" style="min-height:38px;padding:0 14px;border:0;border-radius:999px;background:{{ ptBg }};color:{{ ptFg }};font:600 14px Inter,sans-serif;cursor:pointer" style-focus="outline:2px solid var(--plink);outline-offset:2px">Português</button>
+              <button type="button" lang="en" aria-pressed="{{ isEn }}" onClick="{{ setEn }}" style="min-height:38px;padding:0 14px;border:0;border-radius:999px;background:{{ enBg }};color:{{ enFg }};font:600 14px Inter,sans-serif;cursor:pointer" style-focus="outline:2px solid var(--plink);outline-offset:2px">English</button>
+            </div>
+          </sc-if>
+        </div>
+        <sc-if value="{{ switched }}" hint-placeholder-val="{{ false }}">
+          <p role="status" style="margin:0;font-size:14px;line-height:21px;color:var(--ptx2)">Abriria /en/lottoexpert-privacy.html{{ anchor }} — a mesma seção, no mesmo ponto.</p>
+        </sc-if>
+        <aside aria-label="Versão de referência" style="padding:12px 14px;border:1px dashed #8A8F96;border-radius:8px;font-size:14px;line-height:21px;color:var(--ptx2)"><strong style="color:var(--ink);font-weight:600">Lugar do aviso de prevalência.</strong> O texto (“em divergência, prevalece a versão em português”) vem do repositório do app. Aparece nas versões traduzidas; na pt pode sumir.</aside>
+      </header>
+      <sc-if value="{{ mobileToc }}" hint-placeholder-val="{{ false }}">
+        <details style="border:1px solid var(--pbd);border-radius:10px;background:#FFFFFF;margin-bottom:28px">
+          <summary style="min-height:52px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:15px;font-weight:600;list-style:none" style-focus="outline:2px solid var(--plink)">Nesta página <span style="font-weight:500;color:var(--ptx2);font-size:14px">{{ tocCount }} seções ▾</span></summary>
+          <div style="display:flex;flex-direction:column;padding:0 8px 10px">
+            <sc-for list="{{ toc }}" as="t" hint-placeholder-count="11">
+              <a href="{{ t.href }}" style="min-height:44px;padding:10px 8px;box-sizing:border-box;display:flex;gap:8px;font-size:15px;line-height:22px;color:var(--ink);text-decoration:none;border-top:1px solid #ECEBE7"><span style="min-width:22px;color:var(--ptx2)">{{ t.n }}</span>{{ t.t }}</a>
+            </sc-for>
+          </div>
+        </details>
+      </sc-if>
+      <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}"><p style="font-size:16px;color:var(--ptx2)">Carregando o texto da política…</p></sc-if>
+      {{ body }}
+    </article>
+  </main>
+  <sc-if value="{{ screen }}" hint-placeholder-val="{{ true }}">
+    <dc-import name="Site Footer" mobile="{{ mobile }}" hint-size="100%,320px"></dc-import>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;w&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;360&quot;,&quot;768&quot;,&quot;1280&quot;],&quot;default&quot;:&quot;1280&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;print&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const SRC='content/LOTTOEXPERT_PRIVACY_POLICY.md';
+const h=React.createElement;
+function slug(t){const m=t.match(/^(\d+(?:\.\d+)?)\.?\s/);return m?'secao-'+m[1].replace('.','-'):'s-'+t.toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,40);}
+function inline(s,key){
+  const parts=s.split(/(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)]+\)|\*[^*\s][^*]*\*)/g);
+  return parts.map((p,i)=>{
+    const k=key+'-'+i;
+    if(/^\*\*[^*]+\*\*$/.test(p))return h('strong',{key:k,style:{fontWeight:700}},p.slice(2,-2));
+    if(/^`[^`]+`$/.test(p))return h('code',{key:k,style:{font:'0.86em ui-monospace,Menlo,monospace',background:'#ECEBE7',padding:'1px 5px',borderRadius:4,overflowWrap:'anywhere'}},p.slice(1,-1));
+    const m=p.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if(m)return h('a',{key:k,href:m[2],style:{color:'#0A6E75',textDecoration:'underline',textUnderlineOffset:3,overflowWrap:'anywhere'}},m[1]);
+    if(/^\*[^*]+\*$/.test(p))return h('em',{key:k},p.slice(1,-1));
+    return p;
+  });
+}
+function parse(md){
+  const lines=md.split(/\r?\n/);let title='',updated='';const blocks=[];let para=[],list=null,table=null;
+  const flush=()=>{if(para.length){blocks.push({type:'p',text:para.join(' ')});para=[];}if(list){blocks.push(list);list=null;}if(table){blocks.push(table);table=null;}};
+  for(const raw of lines){
+    const line=raw.replace(/\s+$/,'');
+    if(/^# /.test(line)){title=line.slice(2);continue;}
+    const um=line.match(/^\*\*Última atualização:\*\*\s*(.+)$/);if(um){updated=um[1];continue;}
+    if(!line.trim()||/^---+$/.test(line.trim())){flush();continue;}
+    if(/^## /.test(line)){flush();const t=line.slice(3);blocks.push({type:'h2',text:t,id:slug(t)});continue;}
+    if(/^### /.test(line)){flush();const t=line.slice(4);blocks.push({type:'h3',text:t,id:slug(t)});continue;}
+    if(/^\|/.test(line)){if(para.length||list){const t=table;table=null;flush();table=t;}
+      const cells=line.replace(/^\||\|$/g,'').split('|').map(c=>c.trim());
+      if(cells.every(c=>/^:?-{2,}:?$/.test(c)))continue;
+      if(!table)table={type:'table',head:cells,rows:[]};else table.rows.push(cells);continue;}
+    const lm=line.match(/^(\s*)- (.+)$/);
+    if(lm){if(para.length){blocks.push({type:'p',text:para.join(' ')});para=[];}
+      if(!list)list={type:'ul',items:[]};
+      if(lm[1].length>=2&&list.items.length)list.items[list.items.length-1].sub.push(lm[2]);else list.items.push({text:lm[2],sub:[]});continue;}
+    if(list){blocks.push(list);list=null;}
+    para.push(line.trim());
+  }
+  flush();return {title,updated,blocks};
+}
+function render(blocks){
+  return blocks.map((b,i)=>{
+    const k='b'+i;
+    if(b.type==='h2')return h('h2',{key:k,id:b.id,style:{margin:'56px 0 16px',fontSize:26,lineHeight:'34px',fontWeight:700,letterSpacing:'-0.01em',scrollMarginTop:24,textWrap:'balance'}},b.text);
+    if(b.type==='h3')return h('h3',{key:k,id:b.id,style:{margin:'36px 0 12px',fontSize:20,lineHeight:'28px',fontWeight:600,scrollMarginTop:24}},b.text);
+    if(b.type==='p')return h('p',{key:k,style:{margin:'0 0 18px',fontSize:18,lineHeight:'30px',textWrap:'pretty'}},inline(b.text,k));
+    if(b.type==='ul')return h('ul',{key:k,style:{margin:'0 0 20px',paddingLeft:24,fontSize:18,lineHeight:'30px'}},b.items.map((it,j)=>h('li',{key:j,style:{margin:'0 0 8px',paddingLeft:4}},inline(it.text,k+j),it.sub.length?h('ul',{style:{margin:'8px 0 0',paddingLeft:22,fontSize:17,lineHeight:'28px'}},it.sub.map((s,n)=>h('li',{key:n,style:{margin:'0 0 6px'}},inline(s,k+j+'s'+n)))):null)));
+    if(b.type==='table')return h('div',{key:k,tabIndex:0,role:'region','aria-label':'Tabela, role na horizontal',style:{overflowX:'auto',margin:'4px 0 28px',border:'1px solid #D9D7D1',borderRadius:8,background:'#FFFFFF'}},
+      h('table',{style:{borderCollapse:'collapse',width:'100%',minWidth:560,fontSize:15,lineHeight:'23px'}},
+        h('thead',null,h('tr',{style:{background:'#ECEBE7'}},b.head.map((c,j)=>h('th',{key:j,scope:'col',style:{textAlign:'left',padding:'10px 14px',fontWeight:600}},inline(c,k+'h'+j))))),
+        h('tbody',null,b.rows.map((r,j)=>h('tr',{key:j,style:{borderTop:'1px solid #D9D7D1'}},r.map((c,n)=>h('td',{key:n,style:{padding:'10px 14px',verticalAlign:'top'}},inline(c,k+j+'c'+n))))))));
+    return null;
+  });
+}
+class Component extends DCLogic {
+  state={doc:null,lang:'pt',anchor:'',active:'secao-1',vw:typeof window!=='undefined'?window.innerWidth:1280};
+  componentDidMount(){
+    fetch(SRC).then(r=>r.text()).then(t=>this.setState({doc:parse(t)})).catch(()=>this.setState({doc:{title:'Política de Privacidade — LottoExpert',updated:'—',blocks:[{type:'p',text:'Não foi possível carregar o texto.'}]}}));
+    this.onR=()=>this.setState({vw:window.innerWidth});window.addEventListener('resize',this.onR);
+  }
+  componentWillUnmount(){window.removeEventListener('resize',this.onR);}
+  renderVals(){
+    const w=Number(this.props.w??this.state.vw);const print=this.props.print===true||this.props.print==='true';
+    const d=this.state.doc;const blocks=d?d.blocks:[];
+    const toc=blocks.filter(b=>b.type==='h2').map(b=>{const m=b.text.match(/^(\d+)\.\s*(.+)$/);const act=b.id===this.state.active;
+      return {href:'#'+b.id,n:m?m[1]:'',t:m?m[2]:b.text,color:act?'#15181C':'#4A5059',w:act?600:400,mark:act?'inset 2px 0 0 #0A6E75':'none',pick:()=>this.setState({active:b.id})};});
+    const side=!print&&w>=1000, mob=!print&&w<1000, isEn=this.state.lang==='en';
+    const sw=(lang)=>()=>this.setState({lang,anchor:'#'+this.state.active});
+    return {title:d?d.title:'Política de Privacidade — LottoExpert',updated:d?d.updated:'…',body:render(blocks),loading:!d,toc,tocCount:toc.length,
+      screen:!print,print,sideToc:side,mobileToc:mob,cols:side?'240px minmax(0,1fr)':'minmax(0,1fr)',
+      pad:print?'28px 56px 40px':(w<700?'28px 16px 56px':'48px 32px 96px'),pageBg:print?'#FFFFFF':'var(--paper)',
+      mobile:w<700,navMobile:w<900,isPt:!isEn,isEn,ptBg:isEn?'transparent':'#15181C',ptFg:isEn?'#15181C':'#FFFFFF',enBg:isEn?'#15181C':'transparent',enFg:isEn?'#FFFFFF':'#15181C',
+      switched:isEn,anchor:this.state.anchor,setPt:sw('pt'),setEn:sw('en')};
+  }
+}
+</script>
+</body>
+</html>

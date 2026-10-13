@@ -7,10 +7,9 @@
 
 ## 1. Onde parei
 
-WP-07 implementado e auditado, `blocked` (2026-10-13): o que falta é do usuário. Build Astro copia a
-raiz para `dist/`, `check_site.py --raiz dist` verde, deploy por Actions pronto e travado atrás da
-variável `PAGES_VIA_ACTIONS`. Lighthouse sem regressão (tabela no WP). Ainda em modo branch, o Jekyll
-segue publicando. Depois do WP-07 `done`: WP-08.
+WP-06 `done` na branch `feat/wp-06-brief-de-design` (brief, handoff vigente `design/handoff/2026-10-13-rodada-2/`,
+mapa em `design/README.md`); PR para `develop` ainda não aberto, decisão do usuário. WP-07 segue `blocked`
+nos passos do usuário (seção 4). Próximo WP depois do WP-07: WP-08.
 
 ## 2. Quebrado ou pela metade agora
 
@@ -26,7 +25,7 @@ link de bolão real no Android abre o app (App Links), HTTPS imposto.
 ## 4. Próxima ação
 
 Do usuário, em ordem:
-1. PR `feat/wp-07-stack-com-build → develop` (o agente abre se pedir), CI verde, merge.
+1. (feito) PR #34 do WP-07 integrado em `develop`.
 2. Checklist local (seção 3).
 3. `/release` (develop → master). Ainda em modo branch: o run "pages build and deployment" do Jekyll
    tem de sair verde com o `exclude` novo; o `Deploy` só builda (job deploy pulado).
@@ -37,6 +36,9 @@ Do usuário, em ordem:
    (200), `curl -s https://ghfsoftware.com/lottoexpert-privacy.html | grep -c "Última atualização"` (>= 1)
    e a checklist no domínio.
 7. Rollback: Source "Deploy from a branch" → master e `gh variable delete PAGES_VIA_ACTIONS`.
+
+Rodada 3 do Claude Design pode ser feita a qualquer momento antes das landings TopoWalk, Pole Position e
+EclipseGo no WP-10 (texto no achado `DESIGN-RODADA-3-01`). O PR do WP-06 para `develop` é decisão do usuário.
 
 ## 5. Decisões fora de `decisoes.md` e ADR
 
