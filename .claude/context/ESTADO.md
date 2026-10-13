@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**18 WPs** · 5 concluídos · 0 em andamento
+**18 WPs** · 5 concluídos · 1 em andamento
 
 ## Sequência recomendada
 
@@ -19,7 +19,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 
 | # | WP | Status | Nota |
 |---|---|---|---|
-| 1 | [WP-07 — O site tem build que preserva as URLs contratuais e publica no Pages por Actions](wps/WP-07-stack-com-build-spike.md) | `todo` | stack com build (D2, recomendada Astro): spike que prova URLs contratuais preservadas, `.well-known` e convite intactos, deploy do Pages por Actions; ADR-002. L, risco alto |
+| 1 | [WP-07 — O site tem build que preserva as URLs contratuais e publica no Pages por Actions](wps/WP-07-stack-com-build-spike.md) | `doing` | stack com build (D2, recomendada Astro): spike que prova URLs contratuais preservadas, `.well-known` e convite intactos, deploy do Pages por Actions; ADR-002. L, risco alto |
 | 2 | [WP-08 — As 10 páginas usam um layout, componentes únicos e rota por idioma](wps/WP-08-layout-e-componentes-unicos.md) | `todo` | migração das 10 páginas para layout e componentes únicos (nav, footer, tema, i18n por rota `/en/`); conteúdo legal em markdown renderizado. L, depois do WP-07 · ⏳ aguarda WP-07 |
 | 3 | [WP-09 — O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência](wps/WP-09-legal-como-fonte-unica.md) | `todo` | legal como fonte única: `tools/sync_legal.py` importa do repositório do app, data no front-matter, CI acusa divergência. M, depois do WP-08 · ⏳ aguarda WP-08 |
 | 4 | [WP-14 — README e docs/ARQUITETURA.md descrevem a stack nova e como publicar](wps/WP-14-readme-e-arquitetura.md) | `todo` | README e `docs/ARQUITETURA.md` refletem a stack nova; `CLAUDE.md` seção Comandos atualizada. S, fecha a trilha B · ⏳ aguarda WP-09 |
@@ -48,7 +48,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-04](wps/WP-04-convite-com-og-image-e-data-do-pole-position.md) | O convite de bolão compartilha com imagem e a política do Pole Position no site é a do app | legal | S | alto | 🖥️ | — | ADR-001 | `done` |
 | [WP-05](wps/WP-05-ci-no-pr.md) | Todo PR para develop roda check_site, check_plano e validação de HTML e links | infra | M | medio |  | WP-04 | — | `done` |
 | [WP-06](wps/WP-06-brief-de-design-e-sessao-no-claude-design.md) | O sistema visual do site está decidido no Claude Design e exportado em design/handoff | design | M | baixo | 🖥️ | — | — | `todo` |
-| [WP-07](wps/WP-07-stack-com-build-spike.md) | O site tem build que preserva as URLs contratuais e publica no Pages por Actions | infra | L | alto | 🖥️ | WP-05 | ADR-001 | `todo` |
+| [WP-07](wps/WP-07-stack-com-build-spike.md) | O site tem build que preserva as URLs contratuais e publica no Pages por Actions | infra | L | alto | 🖥️ | WP-05 | ADR-001, ADR-002 | `doing` |
 | [WP-08](wps/WP-08-layout-e-componentes-unicos.md) | As 10 páginas usam um layout, componentes únicos e rota por idioma | landing | L | alto | 🖥️ | WP-07 | ADR-001 | `todo` |
 | [WP-09](wps/WP-09-legal-como-fonte-unica.md) | O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência | legal | M | medio |  | WP-08 | — | `todo` |
 | [WP-10](wps/WP-10-redesign-com-o-handoff.md) | A home e as landings de app seguem o sistema visual do handoff | design | L | medio | 🖥️ | WP-06, WP-08 | — | `todo` |
