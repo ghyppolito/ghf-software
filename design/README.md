@@ -10,52 +10,70 @@ Sistema visual do site — decisão do humano, no Claude Design (claude.ai/desig
 
 ## Handoff vigente
 
-**`handoff/2026-10-13/` — rodada 1 (incompleta).** Direção escolhida: **A "Navy técnico"**, com
-as trocas da seção 10 do brief (LottoExpert em violeta; ordem dos apps).
+**`handoff/2026-10-13-rodada-2/` — rodada 2.** Direção A "Navy técnico", com as decisões da
+seção 10 do brief: LottoExpert em violeta (`#A78BFA` no escuro, `#6D28D9` no papel), ordem
+LottoExpert, TopoWalk, Pole Position, EclipseGo, marca GHF em ciano, "desde 2004", Inter
+servida pelo próprio site (OFL).
 
-Cobre: tokens, estados, nav com seletor de idioma, faixa de sugestão, menu mobile e footer, nas
-três direções (A navy técnico, B grafite instrumento, C ardósia do logo — B e C ficam como
-registro do que foi descartado).
+Cobre: tokens com contraste calculado (`GHF Kit v2`), nav, footer, home, landing completa do
+LottoExpert, landing do TopoWalk (hero e Grátis × Pro), página legal com o texto real da
+política do LottoExpert (e modo impressão), 404, convite do bolão (ok, fallback, erro),
+estados de botão, link e dado.
 
-Não cobre: home, card de app completo, bloco de feature, landing completa, página legal (só os
-tokens de papel), 404, convite do bolão, tablet (768), foco e acento sobre o papel claro, versão
-do logo para fundo escuro. Para esses itens vale "sem referência no handoff": o `site-ux` não
-inventa — é a pauta da rodada 2.
+**Sem referência no handoff** (o `site-ux` não inventa; pauta de uma rodada 3 antes das landings
+que dependem dela): landing completa do TopoWalk (funcionalidades, telas, FAQ), landing do Pole
+Position e do EclipseGo, tablet (768) — o footer desktop fica espremido nessa largura —, card
+"em breve" completo, imagens reais dos blocos de feature e da galeria, troca de idioma da página
+legal (só simulada), logo final para fundo escuro e com "desde 2004"
+(`LOGO-ANO-E-FUNDO-ESCURO-01`), regra escrita de "destaque vs ver todas", aviso de jogo
+responsável final.
 
-Divergências do export que a seção 10 do brief corrige: acento do LottoExpert (ouro → violeta),
-ordem dos apps no footer, `uploads/BRIEF.md` antigo (EclipseGo "em breve"). Defeitos do mock:
-dropdown de 7 línguas cortado; `--border-strong` rotulado "3:1" mede ~2:1; foco ciano sobre o
-papel claro mede 1,7–1,9:1.
+Defeitos conhecidos do export (corrigir na implementação, não copiar): alvos abaixo de 44 px
+(links do footer 32 px, alternador de idioma 38 px, sumário legal 36 px); `--border-strong` mede
+2,93:1 sobre `--rs`; o ponto "Publicado" das cards é quase o verde do Pole Position; foco ausente
+no `<details>` "Ver todas" e nos links sociais do footer; "Texto provisório" visível no aviso de
+jogo responsável do LottoExpert; "chance matemática" na landing; "Como tratamos dados" no footer
+do kit não tem página. A copy do export não é fonte: frases como "Nada de cadastro, e-mail ou
+CPF" e "Nenhum SDK de publicidade" precisam de fonte no README/ASO do app antes de ir ao ar.
 
-Para abrir: sirva a pasta por HTTP (`python3 -m http.server -d "design/handoff/2026-10-13"`) e
-abra `GHF Design System.dc.html` — por `file://` o canvas não carrega (usa `fetch`).
+Para abrir: sirva a pasta por HTTP (`python3 -m http.server -d "design/handoff/2026-10-13-rodada-2"`).
+Cada página tem um prop `w` (default `1280`) que escolhe o ramo de layout; aberta direto, só
+mostra o desktop. Para ver 360 ou 768, monte um wrapper que passe `w` por `<dc-import>`.
 
-### Mapa do export 2026-10-13
+### Mapa do export 2026-10-13-rodada-2
 
-- `GHF Design System.dc.html` — canvas com as 3 direções lado a lado; importa o `GHF Kit.dc.html`.
-- `GHF Kit.dc.html` — o componente. Tokens em `THEMES` (A, B, C) e `APPS` no `<script>` do fim do
-  arquivo; contrastes calculados ao vivo.
-- `support.js` — runtime do canvas, não é parte do site.
-- `assets/` — logo e favicons usados; `uploads/` — o que foi enviado (inclui uma versão antiga do brief).
-- `github.md` — nota de sincronização gerada pelo Claude Design.
+- `GHF Kit v2.dc.html` — tokens (cor, tipo, espaço, raio, sombra, foco), contrastes calculados
+  ao vivo, estados semânticos, papel, estados de componente, proposta de logo, nav, footer.
+  `GHF Kit.dc.html` e `GHF Design System.dc.html` são da rodada 1.
+- `Site Nav.dc.html`, `Site Footer.dc.html` — componentes importados pelas páginas.
+- `fonts/InterVariable.woff2` — Inter variável (SIL OFL 1.1, "The Inter Project Authors"),
+  latin-ext, cirílico e `tnum`. Na implementação, acompanhar do `OFL.txt` e avaliar subset.
+- `content/LOTTOEXPERT_PRIVACY_POLICY.md` — cópia de `docs/` usada na página legal.
+- `support.js` — runtime do canvas, carrega React/Babel do unpkg; não é parte do site.
+- `assets/`, `uploads/`, `github.md` — logo e favicons, o que foi enviado, nota de sincronização.
 
-| Componente | Onde no `GHF Kit.dc.html` | Larguras |
+| Tela | Arquivo | Larguras |
 |---|---|---|
-| Tokens (cor, tipo, espaçamento, raio, sombra, foco) | "1 · Tokens"; dados em `THEMES`/`APPS` | — |
-| Papel claro (páginas legais) | cartão "Tema claro" | — |
-| Botão primário e secundário, link (5 estados) | "2 · Estados" | — |
-| CTA da Play publicado vs em breve, selo, imagem ausente, idioma incompleto | "2 · Estados" | — |
-| Prova: fatos, nota da Play (opcional), seção ausente | "2 · Estados" | — |
-| Nav da home, seletor de 7 línguas, faixa de sugestão | "3 · Nav e seletor de idioma" | 1280, 360 |
-| Nav de landing com alternador PT/EN; menu mobile; TopoWalk em russo | "3 · Nav e seletor de idioma" | 1280, 360 |
-| Footer | "4 · Footer" | 1280, 360 |
+| Home | `Home.dc.html` | 1280, 360 |
+| Landing LottoExpert | `Landing LottoExpert.dc.html` | 1280, 360 (768 sem desenho próprio) |
+| Landing TopoWalk (parcial) | `Landing TopoWalk.dc.html` | 1280, 360 |
+| Página legal (política do LottoExpert) | `Legal LottoExpert.dc.html` | 1280, 360, impressão |
+| 404 | `404.dc.html` | 1280, 360 |
+| Convite do bolão | `Convite Bolao.dc.html` | 360, 1280 |
+| Nav, footer | `Site Nav.dc.html`, `Site Footer.dc.html` | 1280, 360 |
+| Tokens, estados | `GHF Kit v2.dc.html` | — |
+
+### Rodada 1 (histórico) — `handoff/2026-10-13/`
+
+Tokens e estados nas direções A, B e C, nav e footer. B e C ficam como registro do que foi
+descartado. Substituída pela rodada 2.
 
 ## Regras
 
 - **Cada export é congelado.** `handoff/<data>/` não se edita. Desenho novo é **pasta nova**
   (`handoff/<AAAA-MM-DD>-<tema>/`), e esta página passa a nomeá-la como vigente.
-- **Onde o handoff e o brief divergem, o handoff prevalece** — exceto as decisões da seção 10 do
-  brief, posteriores à rodada 1. `uploads/` dentro do export é a cópia que o Claude Design leu,
+- **Onde o handoff e o brief divergem, o handoff prevalece** — a seção 10 do brief foi aplicada
+  na rodada 2. `uploads/` dentro do export é a cópia que o Claude Design leu,
   não a fonte: a fonte é `BRIEF.md`.
 - **Texto do export é placeholder.** A copy vem do README/ASO de cada app; o texto legal, do
   repositório do app.
