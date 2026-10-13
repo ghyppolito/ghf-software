@@ -63,7 +63,7 @@ existindo no resultado publicado.
 - Data de "Última atualização" de uma página legal é a mesma do `.md` em `docs/` e do
   repositório do app. `check_site.py` confere.
 
-## Arquitetura (estado atual — muda no WP-07/08)
+## Arquitetura (estado atual — muda no WP-08)
 
 ```
 *.html                      uma página por arquivo; nav, footer, tailwind.config e dicionário
@@ -74,7 +74,15 @@ lotto-expert/sweepstake-invite/   página do convite de bolão (pako + Base64, l
 .well-known/assetlinks.json       App Links do LottoExpert (Jekyll inclui via _config.yml)
 tools/                      gen_estado.py · check_plano.py · check_site.py
 design/                     brief e handoff do Claude Design (WP-06)
+astro.config.mjs            Astro (ADR-002); integração copia da raiz para dist/, byte a byte, a
+                            lista fechada: 10 *.html, assets/, .well-known/, lotto-expert/, CNAME
+src/                        layouts/Base.astro (mínimo) e pages/404.astro — o resto migra no WP-08
+dist/                       saída do build (não versionada) — é o que vai ao ar
+.github/workflows/          pr.yml (checks `plano` e `site`) · deploy.yml (master → Pages por Actions)
 ```
+
+Até a troca do Pages para "GitHub Actions" (passo do usuário no WP-07), o Jekyll ainda publica a
+raiz de `master`; `_config.yml` exclui o projeto Astro. Depois, só `dist/` vai ao ar.
 
 Enquanto não há build: alteração em nav/footer/config **se replica nas 10 páginas** no mesmo
 WP, e o `check_site.py` é a única rede. Depois do WP-08, há um layout único.
@@ -113,15 +121,20 @@ política/termos do repositório do app) · `/decisao <texto>` · `/adr <texto>`
 
 ```bash
 python3 tools/check_site.py                                   # links, assets, metadados, datas legais, copy — roda sempre
+npm ci && npm run build                                       # Astro → dist/ (Node 22.22)
+python3 tools/check_site.py --raiz dist                       # o mesmo sobre o publicado; datas legais contra docs/ da raiz
 python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regenerar e verificar
 python3 -m http.server 8080                                   # servir local para inspeção (Claude in Chrome ou usuário)
 diff ../lotto-expert/docs/PRIVACY_POLICY.md docs/LOTTOEXPERT_PRIVACY_POLICY.md   # o site está atrás do app?
-npx --yes html-validate@11.16.2 '*.html' 'lotto-expert/sweepstake-invite/*.html'  # HTML (regras em .htmlvalidate.json)
-lychee --offline --no-progress --root-dir "$PWD" '*.html' 'lotto-expert/sweepstake-invite/*.html'  # links internos (binário 0.24.2 do release lycheeverse/lychee)
+npx html-validate 'dist/**/*.html'                            # HTML (versão do lockfile; regras em .htmlvalidate.json)
+lychee --offline --no-progress --root-dir "$PWD/dist" 'dist/**/*.html'  # links internos (binário 0.24.2 do release lycheeverse/lychee)
 ```
 
-`.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`: `check_site.py`,
-`gen_estado.py --check`, `check_plano.py`, html-validate e lychee (jobs `plano` e `site`). Depois do WP-07 há `npm run build` — atualize esta seção no WP.
+`.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`: job `plano`
+(`gen_estado.py --check`, `check_plano.py`) e job `site` (`check_site.py` na raiz, `npm ci`,
+`npm run build`, `check_site.py --raiz dist`, html-validate e lychee sobre `dist/`).
+`.github/workflows/deploy.yml` roda em push para `master` (e à mão): build, `check_site.py --raiz
+dist` e publicação de `dist/` no Pages — só tem efeito com o Pages em modo "GitHub Actions".
 
 ## Referência rápida
 

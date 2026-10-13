@@ -1,0 +1,38 @@
+---
+// Página de prova do build (WP-07). O Pages serve /404.html em qualquer profundidade:
+// caminhos absolutos, sem JS, pt e en lado a lado.
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Página não encontrada · GHF Software"
+  description="Página não encontrada no site da GHF Software. Page not found."
+  noindex
+>
+  <main>
+    <section>
+      <h1>Página não encontrada</h1>
+      <p><a href="/">Voltar para o início</a></p>
+    </section>
+    <section lang="en">
+      <h2>Page not found</h2>
+      <p><a href="/">Back to the home page</a></p>
+    </section>
+  </main>
+</Base>
+
+<style>
+  main {
+    max-width: 32rem;
+    margin: 0 auto;
+    padding: 6rem 1.5rem;
+    display: grid;
+    gap: 2rem;
+  }
+  section {
+    background: var(--brand-surface);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+  h1, h2 { margin: 0 0 0.75rem; font-size: 1.5rem; }
+  p { margin: 0; }
+</style>

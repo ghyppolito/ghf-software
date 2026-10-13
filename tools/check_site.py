@@ -8,7 +8,8 @@ Checa:
   1. URLs contratuais (ADR-001) existem
   2. cada página tem <html lang>, <title>, meta description e og:image
   3. href/src locais resolvem para arquivo existente; og:image em ghfsoftware.com resolve localmente
-  4. "Última atualização" da página legal (pt e en) bate com a do .md em docs/
+  4. "Última atualização" da página legal (pt e en) bate com a do .md em docs/ — lido sempre
+     da raiz do repositório, também com `--raiz dist`; .md ausente é erro
   5. copy do LottoExpert respeita jogo responsável (mesma régua do PaywallCopyComplianceTest do app)
   6. .well-known/assetlinks.json é JSON válido com o package do LottoExpert
 """
@@ -21,6 +22,11 @@ import sys
 raiz = "."
 if "--raiz" in sys.argv:
     raiz = sys.argv[sys.argv.index("--raiz") + 1]
+
+# Raiz do repositório = pasta acima de tools/, independente do cwd. As fontes legais (docs/*.md)
+# são lidas daqui mesmo com `--raiz dist`: docs/ não é publicado, e a data legal tem de ser
+# conferida contra a fonte, não contra o que foi para o ar (ADR-002 §7).
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 CONTRATUAIS = [
     ".well-known/assetlinks.json",
@@ -120,9 +126,13 @@ def pt(m):
 
 
 for pagina, md in LEGAL.items():
-    if not (os.path.exists(p(pagina)) and os.path.exists(p(md))):
+    fonte = os.path.join(REPO, md)
+    if not os.path.exists(fonte):
+        erros.append(f"{md}: fonte legal ausente no repositório — a data de {pagina} não tem com o que comparar")
         continue
-    m = re.search(r"\*\*Última atualização:\*\*\s*" + RE_PT, ler(p(md)))
+    if not os.path.exists(p(pagina)):
+        continue  # página contratual ausente já é erro no §1
+    m = re.search(r"\*\*Última atualização:\*\*\s*" + RE_PT, ler(fonte))
     if not m:
         erros.append(f"{md}: sem linha `**Última atualização:** [D de ]Mês de AAAA`")
         continue

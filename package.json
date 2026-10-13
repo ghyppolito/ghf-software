@@ -1,0 +1,19 @@
+{
+  "name": "ghf-software-site",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.22"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "7.3.8"
+  },
+  "devDependencies": {
+    "html-validate": "11.16.2"
+  }
+}

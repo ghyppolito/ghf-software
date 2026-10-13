@@ -1,0 +1,72 @@
+name: Deploy
+
+# Publica `dist/` no GitHub Pages (ADR-002 §4). Roda em push para `master` (`develop → master` é
+# deploy, D5, só pelo usuário via `/release`) e à mão por `workflow_dispatch`.
+#
+# Só publica de verdade depois que o usuário trocar Settings → Pages → Source para
+# "GitHub Actions". Antes disso o Pages segue em modo "branch master" (Jekyll na raiz) e o job
+# `deploy` falha sem tocar no site. Rollback: voltar Source para "Deploy from a branch" → `master`
+# — a raiz continua com todas as páginas até o WP-08.
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Um deploy por vez; o que está em andamento termina (não deixa o site pela metade).
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22.22'
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Build (Astro → dist/)
+        env:
+          ASTRO_TELEMETRY_DISABLED: 1
+        run: npm run build
+
+      - name: check_site.py (dist)
+        # O artefato que vai ao ar é o artefato provado: URLs contratuais (ADR-001), datas legais
+        # contra docs/*.md da raiz, copy, assetlinks.
+        run: python3 tools/check_site.py --raiz dist
+
+      - name: assetlinks.json no artefato
+        run: test -f dist/.well-known/assetlinks.json
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist
+          # Sem isto o tar exclui dotfiles e /.well-known/assetlinks.json some com o build verde.
+          include-hidden-files: true
+
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Permissões de publicação só aqui; o ambiente github-pages só aceita master e main.
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

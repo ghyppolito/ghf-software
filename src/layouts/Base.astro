@@ -1,0 +1,44 @@
+---
+// Layout mínimo (WP-07). Vira o layout único no WP-08, com nav, footer e Tailwind.
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+}
+const { title, description, noindex = false } = Astro.props;
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    {noindex && <meta name="robots" content="noindex">}
+    <link rel="icon" type="image/png" href="/assets/GHFSoftware.png">
+    <style is:global>
+      /* Tokens brand.* e fonte copiados do tailwind.config inline de index.html.
+         Inter só se já estiver instalada — nada de Google Fonts aqui. */
+      :root {
+        --brand-base: #0B1120;
+        --brand-surface: #111827;
+        --brand-primary: #10B981;
+        --brand-primary-hover: #059669;
+        --brand-secondary: #3B82F6;
+        --brand-accent: #06B6D4;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--brand-base);
+        color: #F3F4F6; /* text-gray-100 do <body> de index.html */
+        font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      }
+      a { color: var(--brand-primary); }
+      a:hover { color: var(--brand-primary-hover); }
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
