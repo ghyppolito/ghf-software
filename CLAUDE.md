@@ -116,9 +116,12 @@ python3 tools/check_site.py                                   # links, assets, m
 python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regenerar e verificar
 python3 -m http.server 8080                                   # servir local para inspeção (Claude in Chrome ou usuário)
 diff ../lotto-expert/docs/PRIVACY_POLICY.md docs/LOTTOEXPERT_PRIVACY_POLICY.md   # o site está atrás do app?
+npx --yes html-validate@11.16.2 '*.html' 'lotto-expert/sweepstake-invite/*.html'  # HTML (regras em .htmlvalidate.json)
+lychee --offline --no-progress --root-dir "$PWD" '*.html' 'lotto-expert/sweepstake-invite/*.html'  # links internos
 ```
 
-Depois do WP-05 há CI no PR; depois do WP-07 há `npm run build` — atualize esta seção no WP.
+`.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`: `check_site.py`,
+`gen_estado.py --check`, `check_plano.py`, html-validate e lychee (jobs `plano` e `site`). Depois do WP-07 há `npm run build` — atualize esta seção no WP.
 
 ## Referência rápida
 

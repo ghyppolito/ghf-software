@@ -1,0 +1,82 @@
+name: PR
+
+# Roda em **todo** PR e em push para `develop`/`master`.
+#
+# Site estático, sem build: o CI só confere. `plano` prova que o backlog está consistente;
+# `site` roda o `check_site.py` (URLs contratuais, links, assets, metadados, datas legais, copy de
+# jogo responsável), valida o HTML e confere os links internos. Nada de deploy aqui — o Pages
+# publica `master` sozinho, e `develop → master` é decisão do usuário (`/release`).
+#
+# Fluxo `feat → develop → master` (decisoes.md D5): PR do WP mira `develop`; `develop → master` é
+# publicação. Roda em PR contra as duas e em push direto nelas. Sem `paths:` no nível do
+# workflow: `paths:` impede o workflow inteiro de disparar, e um check obrigatório por nome fica
+# `pending` para sempre — trava o merge.
+on:
+  pull_request:
+    branches: [develop, master]
+  push:
+    branches: [develop, master]
+
+# Cancela execução anterior do mesmo PR quando chega push novo — não gasta Actions numa versão
+# obsoleta do diff. Nunca cancela em push: lá a execução é o registro da branch.
+concurrency:
+  group: pr-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  plano:
+    name: Backlog consistente
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: ESTADO.md em dia e plano consistente
+        # python3 do runner basta: os scripts de tools/ só usam a biblioteca padrão.
+        run: |
+          python3 tools/gen_estado.py --check
+          python3 tools/check_plano.py
+
+  site:
+    name: Páginas, HTML e links
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: check_site.py
+        # URLs contratuais (ADR-001), links e assets, metadados, datas legais e copy barrada.
+        run: python3 tools/check_site.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validação de HTML
+        # Versão fixa e sem package.json (o projeto Node nasce no WP-07). Regras em
+        # `.htmlvalidate.json`; as rebaixadas para aviso estão em achados-novos.md, destino WP-08.
+        # Padrões entre aspas: quem expande é o html-validate, não o shell.
+        run: npx --yes html-validate@11.16.2 '*.html' 'lotto-expert/sweepstake-invite/*.html'
+
+      - name: Instalar lychee
+        # Binário do release, versão e sha256 fixos — conferido antes de extrair.
+        env:
+          LYCHEE_VERSION: 0.24.2
+          LYCHEE_SHA256: 1f4e0ef7f6554a6ed33dd7ac144fb2e1bbed98598e7af973042fc5cd43951c9a
+        run: |
+          set -euo pipefail
+          ASSET=lychee-x86_64-unknown-linux-gnu.tar.gz
+          mkdir -p "$RUNNER_TEMP/lychee"
+          cd "$RUNNER_TEMP/lychee"
+          curl -sSfL -o "$ASSET" \
+            "https://github.com/lycheeverse/lychee/releases/download/lychee-v${LYCHEE_VERSION}/${ASSET}"
+          echo "${LYCHEE_SHA256}  ${ASSET}" | sha256sum -c -
+          tar -xzf "$ASSET"
+          echo "$RUNNER_TEMP/lychee/lychee-x86_64-unknown-linux-gnu" >> "$GITHUB_PATH"
+
+      - name: Links internos
+        # `--offline`: só links locais (rede externa daria falso vermelho). Sem `docs/*.md` — os
+        # READMEs copiados dos apps têm links relativos do repositório do app.
+        run: lychee --offline --no-progress --root-dir "$GITHUB_WORKSPACE" '*.html' 'lotto-expert/sweepstake-invite/*.html'

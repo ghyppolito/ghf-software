@@ -2,7 +2,7 @@
 id: WP-05
 titulo: Todo PR para develop roda check_site, check_plano e validação de HTML e links
 area: infra
-status: todo
+status: doing
 depende_de: [WP-04]
 adr: []
 spec: docs/AVALIACAO.md
