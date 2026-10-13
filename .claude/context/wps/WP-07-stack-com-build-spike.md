@@ -2,7 +2,7 @@
 id: WP-07
 titulo: O site tem build que preserva as URLs contratuais e publica no Pages por Actions
 area: infra
-status: doing
+status: blocked
 depende_de: [WP-05]
 adr: [ADR-001, ADR-002]
 spec: docs/AVALIACAO.md
@@ -89,3 +89,38 @@ contratuais. **Passa a responder 200** no modo Actions: `/404.html` (a página d
 
 **Risco:** alto — URL contratual e deploy. Mitigação: `check_site.py --raiz dist` no CI
 antes do merge, e o Pages só muda de modo depois de `dist/` provado.
+
+## Resultado local (2026-10-13)
+
+Verde: `npm ci && npm run build`; `check_site.py` (raiz) e `--raiz dist`; data legal adulterada em
+`dist/` → exit 1; página da raiz ausente em `dist/` → exit 1 (§7 nova do `check_site.py`);
+colisão com página gerada falha o build; 7 contratuais em `dist/`; `cmp` raiz × `dist` sem
+diferença (40 arquivos); html-validate `dist` 0 erros; lychee `dist` 0 erros; actionlint 0.
+
+Auditoria: `site-qa` — 1 alta (deploy concorrente com o Jekyll em modo legacy), corrigida com
+`if: vars.PAGES_VIA_ACTIONS == 'true'` no job `deploy`; médias corrigidas (§7 do `check_site.py`,
+`/release`). `site-ux` — sem alta; alvo de toque 44 px e foco visível corrigidos.
+`site-seo-perf` — sem alta.
+
+**Lighthouse mobile** (13.5.0, mediana de 3):
+
+| Medição | Perf | A11y | BP | SEO | LCP | TBT | CLS | Peso |
+|---|---|---|---|---|---|---|---|---|
+| Produção, antes | 59 | 80 | 100 | 100 | 10,85 s | 201 ms | 0 | 3,96 MB |
+| Local, raiz, antes | 62 | 80 | 100 | 100 | 16,74 s | — | — | 4,01 MB |
+| Local, `dist`, depois | 62 | 80 | 100 | 100 | 16,59 s | — | — | 4,01 MB |
+
+Sem regressão: as páginas são cópia byte a byte. O LCP local é maior que o de produção só pela
+rede simulada sobre `http.server`.
+
+**Critério do CDN:** `cdn.tailwindcss.com` segue nas 10 páginas copiadas; sai no WP-08.
+
+**Deixa de ser publicado:** `docs/`, `CLAUDE.md`, `tools/`, `design/`, `README.md`. Busca nos 4
+repositórios de app: nenhum aponta para eles (só `lottoexpert-privacy.html`, o convite e
+`logo_transp.png`, este já 404 desde antes). Falta o usuário conferir o Play Console.
+
+## Bloqueio: o que depende do usuário
+
+Descobertos até o usuário agir: CI verde no PR; `/release`; troca do Pages para "GitHub Actions"
++ `gh variable set PAGES_VIA_ACTIONS --body true` + `workflow_dispatch` do Deploy; os dois `curl`
+dos critérios; checklist de navegador (`visual: true`). Ordem e rollback em `handoff.md`.

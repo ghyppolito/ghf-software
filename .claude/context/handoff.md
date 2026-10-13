@@ -3,35 +3,47 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Fim da sessão de 2026-10-12.** Branch `feat/wp-05-ci-no-pr` (commits 025793e, 6081b1b e a escrituração).
+**Sessão de 2026-10-13.** Branch `feat/wp-07-stack-com-build`, sobre `origin/develop`; sem push.
 
 ## 1. Onde parei
 
-Trilha A publicada (WP-01 a 04 `done`). WP-05 `done`: `plano` e `site` verdes no PR #33 (run 38336459176).
-O PR #33 aguarda merge em `develop` pelo usuário. WP-07 bloqueado por D2 (stack); WP-06 quando ele quiser (D4).
+WP-07 implementado e auditado, `blocked` (2026-10-13): o que falta é do usuário. Build Astro copia a
+raiz para `dist/`, `check_site.py --raiz dist` verde, deploy por Actions pronto e travado atrás da
+variável `PAGES_VIA_ACTIONS`. Lighthouse sem regressão (tabela no WP). Ainda em modo branch, o Jekyll
+segue publicando. Depois do WP-07 `done`: WP-08.
 
 ## 2. Quebrado ou pela metade agora
 
-Nada. `check_site.py`, `gen_estado.py --check`, `check_plano.py`, html-validate (0 erros, 202 avisos)
-e lychee `--offline` saem 0.
+Nada quebrado. Pela metade: a publicação (itens 1 a 6 abaixo) e o critério dos dois `curl` no ar.
 
 ## 3. O que só o navegador prova
 
-Nada. O que falta é ver o CI verde no Actions (ver 4).
+Local (`npm ci && npm run build && python3 -m http.server 8080 -d dist`): home, `lottoexpert.html`,
+`lottoexpert-privacy.html` e `-terms` (data em pt e en), convite com `?d=` de link real, `/404.html`
+(Tab mostra contorno ciano; 360/768/1280). No ar: a mesma lista, `/qualquer/coisa` mostra o 404 novo,
+link de bolão real no Android abre o app (App Links), HTTPS imposto.
 
 ## 4. Próxima ação
 
-1. Usuário: mergear o PR #33 em `develop`. O workflow só chega à `master` na próxima `/release`.
-2. Depois: WP-06 (brief do Claude Design, D4) quando quiser; WP-07 espera D2.
-3. Opção ao usuário, sem decisão registrada: proteger `develop`/`master` exigindo os checks
-   `plano` e `site`. Se quiser, vira entrada em `decisoes.md`.
+Do usuário, em ordem:
+1. PR `feat/wp-07-stack-com-build → develop` (o agente abre se pedir), CI verde, merge.
+2. Checklist local (seção 3).
+3. `/release` (develop → master). Ainda em modo branch: o run "pages build and deployment" do Jekyll
+   tem de sair verde com o `exclude` novo; o `Deploy` só builda (job deploy pulado).
+4. Conferir o Play Console: nada aponta para `ghfsoftware.com/docs/...`.
+5. Remover `main` da política do ambiente `github-pages` (`PAGES-ENV-MAIN-01`).
+6. Trocar o Pages para "GitHub Actions", `gh variable set PAGES_VIA_ACTIONS --body true`,
+   `gh workflow run Deploy --ref master`; depois `curl -sI https://ghfsoftware.com/.well-known/assetlinks.json`
+   (200), `curl -s https://ghfsoftware.com/lottoexpert-privacy.html | grep -c "Última atualização"` (>= 1)
+   e a checklist no domínio.
+7. Rollback: Source "Deploy from a branch" → master e `gh variable delete PAGES_VIA_ACTIONS`.
 
 ## 5. Decisões fora de `decisoes.md` e ADR
 
-- `check_plano.py` é cópia do lotto-expert com `AREAS` e `visual` adaptados (D6).
-- `og:image` ausente é aviso em `check_site.py`; apontando para arquivo inexistente é erro.
-- lychee sem `--include-fragments`: âncoras de i18n/JS dão falso positivo.
+- `if: vars.PAGES_VIA_ACTIONS == 'true'` no job `deploy`: evita deploy concorrente com o Jekyll em
+  modo legacy (achado alto do `site-qa`); descrito no WP-07, passo 5.
 
 ## 6. Esperando publicação
 
-Branch do WP-05 no remoto, PR #33 aberto para `develop`. Sem efeito no site.
+Cinco commits na branch do WP-07 (6670de1 D9, e503dca D2 + ADR-002, c2e6a31, 6a2a06e, 2c6d854) mais
+a escrituração; nada no remoto. Sem efeito no site até o `/release`.
