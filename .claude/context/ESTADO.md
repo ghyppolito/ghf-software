@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**18 WPs** · 4 concluídos · 0 em andamento
+**18 WPs** · 5 concluídos · 0 em andamento
 
 ## Sequência recomendada
 
@@ -19,11 +19,10 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 
 | # | WP | Status | Nota |
 |---|---|---|---|
-| 1 | [WP-05 — Todo PR para develop roda check_site, check_plano e validação de HTML e links](wps/WP-05-ci-no-pr.md) | `todo` | CI no PR: `check_site.py`, `check_plano.py`, validação de HTML e links; sem mudar o deploy. Antes do WP-07, senão a migração não tem gate |
-| 2 | [WP-07 — O site tem build que preserva as URLs contratuais e publica no Pages por Actions](wps/WP-07-stack-com-build-spike.md) | `todo` | stack com build (D2, recomendada Astro): spike que prova URLs contratuais preservadas, `.well-known` e convite intactos, deploy do Pages por Actions; ADR-002. L, risco alto · ⏳ aguarda WP-05 |
-| 3 | [WP-08 — As 10 páginas usam um layout, componentes únicos e rota por idioma](wps/WP-08-layout-e-componentes-unicos.md) | `todo` | migração das 10 páginas para layout e componentes únicos (nav, footer, tema, i18n por rota `/en/`); conteúdo legal em markdown renderizado. L, depois do WP-07 · ⏳ aguarda WP-07 |
-| 4 | [WP-09 — O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência](wps/WP-09-legal-como-fonte-unica.md) | `todo` | legal como fonte única: `tools/sync_legal.py` importa do repositório do app, data no front-matter, CI acusa divergência. M, depois do WP-08 · ⏳ aguarda WP-08 |
-| 5 | [WP-14 — README e docs/ARQUITETURA.md descrevem a stack nova e como publicar](wps/WP-14-readme-e-arquitetura.md) | `todo` | README e `docs/ARQUITETURA.md` refletem a stack nova; `CLAUDE.md` seção Comandos atualizada. S, fecha a trilha B · ⏳ aguarda WP-09 |
+| 1 | [WP-07 — O site tem build que preserva as URLs contratuais e publica no Pages por Actions](wps/WP-07-stack-com-build-spike.md) | `todo` | stack com build (D2, recomendada Astro): spike que prova URLs contratuais preservadas, `.well-known` e convite intactos, deploy do Pages por Actions; ADR-002. L, risco alto |
+| 2 | [WP-08 — As 10 páginas usam um layout, componentes únicos e rota por idioma](wps/WP-08-layout-e-componentes-unicos.md) | `todo` | migração das 10 páginas para layout e componentes únicos (nav, footer, tema, i18n por rota `/en/`); conteúdo legal em markdown renderizado. L, depois do WP-07 · ⏳ aguarda WP-07 |
+| 3 | [WP-09 — O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência](wps/WP-09-legal-como-fonte-unica.md) | `todo` | legal como fonte única: `tools/sync_legal.py` importa do repositório do app, data no front-matter, CI acusa divergência. M, depois do WP-08 · ⏳ aguarda WP-08 |
+| 4 | [WP-14 — README e docs/ARQUITETURA.md descrevem a stack nova e como publicar](wps/WP-14-readme-e-arquitetura.md) | `todo` | README e `docs/ARQUITETURA.md` refletem a stack nova; `CLAUDE.md` seção Comandos atualizada. S, fecha a trilha B · ⏳ aguarda WP-09 |
 
 **C · evolução — design, SEO, performance e medição; WP-06 pode começar a qualquer momento (é sessão do usuário no Claude Design)**
 
@@ -47,7 +46,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-02](wps/WP-02-landing-do-lottoexpert-reflete-a-2-05-02.md) | A landing do LottoExpert apresenta as funcionalidades da 2.05.02 | landing | M | medio | 🖥️ | WP-01 | — | `done` |
 | [WP-03](wps/WP-03-publicar-develop-em-master.md) | O site no ar tem o LottoExpert 2.05.02 e as atualizações pendentes de TopoWalk e Pole Position | infra | S | alto | 🖥️ | WP-01, WP-02, WP-04 | ADR-001 | `done` |
 | [WP-04](wps/WP-04-convite-com-og-image-e-data-do-pole-position.md) | O convite de bolão compartilha com imagem e a política do Pole Position no site é a do app | legal | S | alto | 🖥️ | — | ADR-001 | `done` |
-| [WP-05](wps/WP-05-ci-no-pr.md) | Todo PR para develop roda check_site, check_plano e validação de HTML e links | infra | M | medio |  | WP-04 | — | `todo` |
+| [WP-05](wps/WP-05-ci-no-pr.md) | Todo PR para develop roda check_site, check_plano e validação de HTML e links | infra | M | medio |  | WP-04 | — | `done` |
 | [WP-06](wps/WP-06-brief-de-design-e-sessao-no-claude-design.md) | O sistema visual do site está decidido no Claude Design e exportado em design/handoff | design | M | baixo | 🖥️ | — | — | `todo` |
 | [WP-07](wps/WP-07-stack-com-build-spike.md) | O site tem build que preserva as URLs contratuais e publica no Pages por Actions | infra | L | alto | 🖥️ | WP-05 | ADR-001 | `todo` |
 | [WP-08](wps/WP-08-layout-e-componentes-unicos.md) | As 10 páginas usam um layout, componentes únicos e rota por idioma | landing | L | alto | 🖥️ | WP-07 | ADR-001 | `todo` |
