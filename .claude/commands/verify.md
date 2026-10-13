@@ -1,15 +1,18 @@
 ---
-description: Roda a verificação local do site — o mesmo que o CI cobrará a partir do WP-05
+description: Roda a verificação local do site — o mesmo que o CI cobra no PR
 allowed-tools: Bash(python3:*), Bash(git:*), Bash(npm:*), Bash(npx:*), Bash(diff:*)
 ---
 
 Descubra o que o diff tocou — `git diff --name-only develop...HEAD` mais `git status --porcelain`
 — e rode na ordem, parando no primeiro erro.
 
-**Sempre:**
+**Sempre** (o mesmo que o job `site` do `pr.yml` cobra, mais o escopo):
 ```bash
 python3 tools/check_site.py
 python3 tools/gen_estado.py --check && python3 tools/check_plano.py
+npm ci && npm run build && python3 tools/check_site.py --raiz dist
+npx html-validate 'dist/**/*.html'
+lychee --offline --no-progress --root-dir "$PWD/dist" 'dist/**/*.html'   # se o binário não estiver instalado: "não verificado"
 git diff --stat develop...HEAD        # nenhum arquivo fora dos Arquivos-alvo do WP (escrituração em .claude/context/ é permitida)
 ```
 
@@ -23,14 +26,12 @@ diff -q ../lotto-expert/docs/TERMS_OF_SERVICE.md docs/LOTTOEXPERT_TERMS_OF_SERVI
 **Tocou nav, footer ou `tailwind.config` (antes do WP-08):** confira que a mudança está nas 10
 páginas — `grep -c '<trecho novo>' *.html` com 10 linhas ≠ 0.
 
-**Tocou `package.json`, `astro.config.*` ou `src/` (depois do WP-07):**
-```bash
-npm run build && python3 tools/check_site.py --raiz dist
-```
+**Tocou `package.json`, `astro.config.*` ou `src/`:** além do bloco acima, `cmp` de cada
+arquivo copiado da raiz com o seu par em `dist/` — a integração copia byte a byte até o WP-08.
 
 **Mudou algo visível:** diga o que só o navegador prova (página, viewport 360/768/1280,
 idioma pt e en) — é checklist para o usuário, não "verificado". Com o Claude in Chrome
-disponível, sirva com `python3 -m http.server 8080` e olhe; cole o que viu.
+disponível, sirva `dist/` com `python3 -m http.server 8080 -d dist` e olhe; cole o que viu.
 
 Relate o que rodou, o que **não** rodou e por quê, e o que falhou — com a saída real. Bloco
 que não rodou é "não verificado", nunca "passou".

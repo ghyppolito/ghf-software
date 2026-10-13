@@ -3,7 +3,7 @@
 .claude/.headroom_*
 graphify-out/
 
-# Build futuro (WP-07)
+# Build do Astro (WP-07)
 node_modules/
 dist/
 .astro/

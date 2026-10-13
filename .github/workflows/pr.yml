@@ -2,10 +2,12 @@ name: PR
 
 # Roda em **todo** PR e em push para `develop`/`master`.
 #
-# Site estático, sem build: o CI só confere. `plano` prova que o backlog está consistente;
-# `site` roda o `check_site.py` (URLs contratuais, links, assets, metadados, datas legais, copy de
-# jogo responsável), valida o HTML e confere os links internos. Nada de deploy aqui — o Pages
-# publica `master` sozinho, e `develop → master` é decisão do usuário (`/release`).
+# `plano` prova que o backlog está consistente. `site` roda o `check_site.py` na raiz (URLs
+# contratuais, links, assets, metadados, datas legais, copy de jogo responsável), gera o site com
+# o Astro (`npm run build` → `dist/`, ADR-002) e repete sobre `dist/` o `check_site.py`, a
+# validação de HTML e os links internos — o que é provado é o que seria publicado. Nada de deploy
+# aqui: publicar é o `deploy.yml`, em push para `master`, e `develop → master` é decisão do
+# usuário (`/release`).
 #
 # Fluxo `feat → develop → master` (decisoes.md D5): PR do WP mira `develop`; `develop → master` é
 # publicação. Roda em PR contra as duas e em push direto nelas. Sem `paths:` no nível do
@@ -34,7 +36,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: ESTADO.md em dia e plano consistente
         # python3 do runner basta: os scripts de tools/ só usam a biblioteca padrão.
         run: |
@@ -46,22 +50,38 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - name: check_site.py
+      - name: check_site.py (raiz)
         # URLs contratuais (ADR-001), links e assets, metadados, datas legais e copy barrada.
+        # A raiz ainda é a fonte das páginas até o WP-08.
         run: python3 tools/check_site.py
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          # html-validate 11.16.2 exige Node ^22.22.0.
+          # engines.node do package.json; html-validate 11.16.2 exige Node ^22.22.0.
           node-version: '22.22'
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Build (Astro → dist/)
+        env:
+          ASTRO_TELEMETRY_DISABLED: 1
+        run: npm run build
+
+      - name: check_site.py (dist)
+        # Prova o publicado; as fontes legais (docs/*.md) continuam lidas da raiz do repositório.
+        run: python3 tools/check_site.py --raiz dist
 
       - name: Validação de HTML
-        # Versão fixa e sem package.json (o projeto Node nasce no WP-07). Regras em
-        # `.htmlvalidate.json`; as rebaixadas para aviso estão em achados-novos.md, destino WP-08.
-        # Padrões entre aspas: quem expande é o html-validate, não o shell.
-        run: npx --yes html-validate@11.16.2 '*.html' 'lotto-expert/sweepstake-invite/*.html'
+        # Versão do lockfile. Regras em `.htmlvalidate.json` da raiz (vale para dist/); as
+        # rebaixadas para aviso estão em achados-novos.md, destino WP-08.
+        # Padrão entre aspas: quem expande é o html-validate, não o shell.
+        run: npx html-validate 'dist/**/*.html'
 
       - name: Instalar lychee
         # Binário do release, versão e sha256 fixos — conferido antes de extrair.
@@ -79,11 +99,11 @@ jobs:
           tar -xzf "$ASSET"
           echo "$RUNNER_TEMP/lychee/lychee-x86_64-unknown-linux-gnu" >> "$GITHUB_PATH"
 
-      - name: Links internos
-        # `--offline`: só links locais (rede externa daria falso vermelho). Sem `docs/*.md` — os
-        # READMEs copiados dos apps têm links relativos do repositório do app. Padrão que não casa
-        # nada o lychee só avisa e sai verde — o `ls` falha antes se uma pasta sumir.
+      - name: Links internos (dist)
+        # `--offline`: só links locais (rede externa daria falso vermelho). `docs/` não vai para
+        # dist/. Padrão que não casa nada o lychee só avisa e sai verde — o `ls` falha antes se o
+        # build não gerou as páginas.
         run: |
           set -euo pipefail
-          ls *.html lotto-expert/sweepstake-invite/*.html > /dev/null
-          lychee --offline --no-progress --root-dir "$GITHUB_WORKSPACE" '*.html' 'lotto-expert/sweepstake-invite/*.html'
+          ls dist/*.html dist/lotto-expert/sweepstake-invite/*.html > /dev/null
+          lychee --offline --no-progress --root-dir "$GITHUB_WORKSPACE/dist" 'dist/**/*.html'
