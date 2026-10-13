@@ -48,3 +48,4 @@ tacha data e texto.
 | 2026-10-13 | WP-07 | **`CONFIG-YML-ORFAO-01`** — `_config.yml` fica órfão depois da troca do Pages para Actions; remover quando a raiz deixar de ser publicada | Baixa | `WP-08` |
 | 2026-10-13 | WP-07 | **`ASSETS-PESO-01`** — `assets/` é PNG sem otimização; 10 arquivos acima de 300 KB (ver também `OG-MOCKUP-JPEG-PESADO-01`) | Média | `WP-12` |
 | 2026-10-13 | WP-07 | **`404-FONTE-NAV-01`** — a 404 usa fonte de sistema e não tem nav nem footer | Baixa | `WP-10` |
+| 2026-10-13 | WP-06 | **`DESIGN-PUBLICO-JEKYLL-01`** — no modo branch o Jekyll publica `design/` (o `_config.yml` não o exclui): o export do Claude Design, inclusive `uploads/`, fica em `ghfsoftware.com/design/...` e o `.dc.html` pode ser indexado. Some com a troca do Pages para Actions (o `dist/` só leva a lista do `astro.config.mjs`) | Baixa | `WP-07` |

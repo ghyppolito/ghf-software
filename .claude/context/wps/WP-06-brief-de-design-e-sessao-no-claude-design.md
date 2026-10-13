@@ -2,7 +2,7 @@
 id: WP-06
 titulo: O sistema visual do site está decidido no Claude Design e exportado em design/handoff
 area: design
-status: todo
+status: doing
 depende_de: []
 adr: []
 spec: docs/AVALIACAO.md
