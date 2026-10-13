@@ -12,6 +12,9 @@ Checa:
      da raiz do repositório, também com `--raiz dist`; .md ausente é erro
   5. copy do LottoExpert respeita jogo responsável (mesma régua do PaywallCopyComplianceTest do app)
   6. .well-known/assetlinks.json é JSON válido com o package do LottoExpert
+  7. com `--raiz` fora da raiz do repositório (ex.: `dist/`), toda `*.html` da raiz do repositório
+     e o convite do bolão existem lá — página esquecida em COPIADOS_DA_RAIZ do astro.config.mjs
+     sairia do ar com o build verde
 """
 import glob
 import json
@@ -169,6 +172,16 @@ try:
         erros.append("assetlinks.json: sem br.com.ghfsoftware.lottoexpert")
 except Exception as e:  # noqa: BLE001
     erros.append(f"assetlinks.json inválido: {e}")
+
+# ------------------------------------------------------------ 7: nada da raiz fica para trás
+# Até o WP-08 a raiz é a fonte das páginas e o build só copia uma lista fechada. Página da raiz
+# que não chega ao publicado sai do ar sem nenhum outro check perceber (os links não a citam).
+if os.path.realpath(raiz) != os.path.realpath(REPO):
+    esperadas = sorted(os.path.relpath(c, REPO) for c in glob.glob(os.path.join(REPO, "*.html")))
+    esperadas.append("lotto-expert/sweepstake-invite/lottoexpert-invite.html")
+    for rel in esperadas:
+        if not os.path.exists(p(rel)):
+            erros.append(f"página da raiz ausente em {raiz}: {rel} — falta em COPIADOS_DA_RAIZ do astro.config.mjs?")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")

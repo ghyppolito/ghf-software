@@ -37,6 +37,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: ESTADO.md em dia e plano consistente
         # python3 do runner basta: os scripts de tools/ só usam a biblioteca padrão.
         run: |
@@ -49,6 +51,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: check_site.py (raiz)
         # URLs contratuais (ADR-001), links e assets, metadados, datas legais e copy barrada.

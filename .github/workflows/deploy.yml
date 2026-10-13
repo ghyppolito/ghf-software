@@ -3,10 +3,16 @@ name: Deploy
 # Publica `dist/` no GitHub Pages (ADR-002 §4). Roda em push para `master` (`develop → master` é
 # deploy, D5, só pelo usuário via `/release`) e à mão por `workflow_dispatch`.
 #
-# Só publica de verdade depois que o usuário trocar Settings → Pages → Source para
-# "GitHub Actions". Antes disso o Pages segue em modo "branch master" (Jekyll na raiz) e o job
-# `deploy` falha sem tocar no site. Rollback: voltar Source para "Deploy from a branch" → `master`
-# — a raiz continua com todas as páginas até o WP-08.
+# O job `build` roda sempre: prova que `dist/` de `master` sai verde. O job `deploy` só roda com a
+# variável de repositório `PAGES_VIA_ACTIONS` igual a `true`; sem ela (hoje), o deploy é pulado e
+# quem publica é o Jekyll do modo "branch master" — os dois nunca publicam em paralelo.
+#
+# Ligar (passo do usuário, WP-07): Settings → Pages → Source = "GitHub Actions"; criar a variável
+# `PAGES_VIA_ACTIONS=true` (Settings → Secrets and variables → Actions → Variables, ou
+# `gh variable set PAGES_VIA_ACTIONS --body true`); disparar este workflow por `workflow_dispatch`.
+# Rollback: Source de volta para "Deploy from a branch" → `master` **e** apagar a variável
+# (`gh variable delete PAGES_VIA_ACTIONS`) ou trocá-la para `false` — a raiz continua com todas as
+# páginas até o WP-08.
 on:
   push:
     branches: [master]
@@ -27,6 +33,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -60,7 +68,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # Permissões de publicação só aqui; o ambiente github-pages só aceita master e main.
+    # Só com o Pages em modo "GitHub Actions" e a variável ligada; ausente = não publica.
+    if: vars.PAGES_VIA_ACTIONS == 'true'
+    # Permissões de publicação só aqui. O ambiente github-pages aceita master e main
+    # (achados-novos.md PAGES-ENV-MAIN-01).
     permissions:
       pages: write
       id-token: write

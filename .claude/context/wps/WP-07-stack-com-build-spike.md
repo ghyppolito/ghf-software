@@ -52,14 +52,18 @@ sai no WP-08).
    sobre `dist/`. Actions fixadas por SHA de commit, com a tag em comentário.
 5. `deploy.yml`: `push` em `master` e `workflow_dispatch`; build, `check_site.py --raiz dist`,
    `test -f dist/.well-known/assetlinks.json`, upload com `include-hidden-files: true`, deploy
-   com `environment: github-pages`; `pages: write` e `id-token: write` só no job de deploy.
+   com `environment: github-pages`; `pages: write` e `id-token: write` só no job de deploy. O job
+   de deploy só roda com a variável de repositório `PAGES_VIA_ACTIONS` = `true` (ausente = não
+   publica): enquanto o Pages está em modo branch, o Jekyll publica e o `deploy.yml` só builda.
 6. `_config.yml`: `exclude` de `src`, `node_modules`, `package*.json`, `astro.config.mjs` —
    enquanto o Pages está em modo branch, o Jekyll não pode publicar o projeto Astro.
 7. Sequência de publicação: PR para `develop` com CI verde → `/release` (ainda em modo branch;
    o run "pages build and deployment" precisa sair verde) → **usuário** troca o Pages para
-   "GitHub Actions" e dispara `deploy.yml` por `workflow_dispatch` → `curl` dos critérios e
-   checklist do navegador. Rollback: voltar o modo para "branch master" (a raiz segue intacta
-   até o WP-08, que só apaga páginas da raiz depois do modo Actions confirmado no ar).
+   "GitHub Actions", cria a variável `PAGES_VIA_ACTIONS=true` (Settings → Secrets and variables →
+   Actions → Variables, ou `gh variable set PAGES_VIA_ACTIONS --body true`) e dispara `deploy.yml`
+   por `workflow_dispatch` → `curl` dos critérios e checklist do navegador. Rollback: voltar o
+   modo para "branch master" **e** apagar a variável ou trocá-la para `false` (a raiz segue
+   intacta até o WP-08, que só apaga páginas da raiz depois do modo Actions confirmado no ar).
 8. `CLAUDE.md` e `/verify` ganham `npm run build`.
 
 **Critérios de aceite:**
@@ -76,10 +80,12 @@ sai no WP-08).
 **Só no navegador:** home, uma landing, uma página legal e o convite com `?d=` de um link real,
 em `dist/` servido local e depois no ar.
 
-**Deixa de ser publicado:** `docs/`, `CLAUDE.md`, `tools/`, `design/` — o Jekyll publica hoje
-(200); nenhum app aponta para eles (busca nos 4 repositórios). Não são URLs contratuais.
+**Deixa de ser publicado:** `docs/`, `CLAUDE.md`, `README.md`, `tools/`, `design/` — o Jekyll
+publica hoje (200); nenhum app aponta para eles (busca nos 4 repositórios). Não são URLs
+contratuais. **Passa a responder 200** no modo Actions: `/404.html` (a página de prova) e
+`/CNAME` — inofensivos.
 
-**Irreversível:** a troca do modo de publicação do Pages. Rollback descrito no passo 4.
+**Irreversível:** a troca do modo de publicação do Pages. Rollback descrito no passo 7.
 
 **Risco:** alto — URL contratual e deploy. Mitigação: `check_site.py --raiz dist` no CI
 antes do merge, e o Pages só muda de modo depois de `dist/` provado.

@@ -4,7 +4,7 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base
-  title="Página não encontrada · GHF Software"
+  title="Página não encontrada · Page not found · GHF Software"
   description="Página não encontrada no site da GHF Software. Page not found."
   noindex
 >
@@ -35,4 +35,6 @@ import Base from '../layouts/Base.astro';
   }
   h1, h2 { margin: 0 0 0.75rem; font-size: 1.5rem; }
   p { margin: 0; }
+  /* Alvo de toque de 44 px no único link de cada bloco. */
+  a { display: inline-flex; align-items: center; min-height: 44px; }
 </style>
