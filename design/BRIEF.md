@@ -174,7 +174,7 @@ Perguntas ao designer (responder no export):
 - Que elementos decorativos do site atual (glass, glow, grade, flutuação) ficam, e por quê?
 - Qual a regra de quando uma funcionalidade vai para o destaque e quando vai para "ver todas" (LottoExpert tem ~17)?
 
-Decisões do humano (o designer propõe, o usuário decide; nada aqui bloqueia a sessão):
+Decisões do humano (o designer propõe, o usuário decide) — **respondidas na seção 10**:
 - **Ordem e peso dos 4 apps na home** (por data de publicação, por público ou todos iguais mas navegáveis em um toque).
 - **Tema:** só escuro, só claro ou ambos.
 - **Fonte:** manter Inter ou trocar.
@@ -182,3 +182,25 @@ Decisões do humano (o designer propõe, o usuário decide; nada aqui bloqueia a
 - **Prova:** quais números e avaliações podem aparecer (precisam ser reais e mantidos).
 - **Medição** (D3): o design reserva ou não um aviso de privacidade sobre ela.
 - Se o designer não puder resolver algo, devolva como "sem referência no handoff" e o humano decide. O `site-ux` não inventa o que o handoff não cobre.
+
+## 10. Decisões do humano (2026-10-13, depois da rodada 1)
+
+Respondem a seção 9. Prevalecem sobre o que as seções 1–8 deixavam em aberto; o handoff
+`design/handoff/2026-10-13/` (rodada 1) é a base.
+
+- **Direção:** A "Navy técnico" do export — fundo `#0B1120`, superfície `#111827`, botão em pílula.
+- **Tema:** escuro; páginas legais em papel claro (tokens de papel da direção A).
+- **Fonte:** Inter, servida pelo próprio site (latin-ext e cirílico), algarismos tabulares em números.
+- **Marca GHF:** ciano dos nós do logo (`#3CC8D0` no export). O esmeralda `#10B981` sai do sistema.
+- **Acentos por app** (paleta do export, exceto LottoExpert):
+  - LottoExpert: **violeta**. `#A78BFA` sobre o escuro (6,9:1); `#6D28D9` sobre o papel (6,6:1). O
+    ouro da rodada 1 sai: com o trevo do ícone, reforçaria a ideia de sorte e prêmio.
+  - Pole Position `#5FD47E`, TopoWalk `#E38A57`, EclipseGo `#EE737D`, com as variantes para papel da rodada 1.
+- **Ordem dos apps**, em toda lista (home, footer, menus): LottoExpert, TopoWalk, Pole Position,
+  EclipseGo — mesmo peso visual, sem card de destaque.
+- **Prova:** sem números de downloads nem nota por enquanto; fatos verificáveis do produto. O
+  componente "nota na Google Play" fica desenhado como opcional.
+- **Ano da empresa:** **desde 2004**. O logo atual diz "since 1996" e precisa de nova versão
+  (também uma para fundo escuro) — achado `LOGO-ANO-E-FUNDO-ESCURO-01`.
+- **Ícone do LottoExpert (trevo):** o site usa o ícone oficial como está (identidade do app na
+  Play); nada além dele remete a sorte.
