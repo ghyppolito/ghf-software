@@ -3,43 +3,39 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Fim da sessão de 2026-10-12** (setup agêntico; sem mudança em página). Branch `develop`.
-Nada commitado nesta sessão — o setup inteiro está na árvore de trabalho, à espera de revisão
-e commit pelo usuário.
+**Fim da sessão de 2026-10-12.** Branch `feat/wp-05-ci-no-pr` (commits 025793e, 6081b1b e a escrituração).
 
 ## 1. Onde parei
 
-Trilha A concluída e publicada em 2026-10-12 (PR #30 → develop, #31 → master): WP-01, 02, 03 e 04
-`done`; convite de bolão com prévia no WhatsApp confirmado pelo usuário. Próximo: trilha B
-(WP-05, CI no PR, sem decisão pendente). D2 (stack), D3 (medição) e D4 (Claude Design) bloqueiam o resto.
+Trilha A publicada (WP-01 a 04 `done`). WP-05 (CI no PR) implementado e verde localmente, `blocked`
+só porque o critério "`gh pr checks` mostra `plano` e `site` verdes" precisa de push e PR do usuário.
+Depois do WP-05: WP-07 bloqueado por D2 (stack); WP-06 pode começar quando o usuário quiser (D4).
 
 ## 2. Quebrado ou pela metade agora
 
-- `python3 tools/check_site.py` verde desde o WP-04 (na branch dele; `develop` ainda falha
-  até o merge).
-- Caminhos de origem de `/legal` conferidos para os 4 apps (tabela em `.claude/commands/legal.md`).
+Nada. `check_site.py`, `gen_estado.py --check`, `check_plano.py`, html-validate (0 erros, 202 avisos)
+e lychee `--offline` saem 0.
 
 ## 3. O que só o navegador prova
 
-Nada desta sessão.
+Nada. O que falta é ver o CI verde no Actions (ver 4).
 
 ## 4. Próxima ação
 
-1. Usuário revisa e commita o setup (`git add -A && git commit`), na `develop`.
-2. `/wp WP-01` — espelhar política e termos do LottoExpert 2.05.02. Depois WP-02 (D1 decidida: A), WP-04,
-   e `/release` (WP-03).
-3. D2, D3 e D4 podem esperar a trilha A; D4 (Claude Design) pode começar em paralelo quando
-   o usuário quiser (WP-06 escreve o brief).
+1. Usuário: `git push -u origin feat/wp-05-ci-no-pr`, abrir PR para `develop`, conferir
+   `gh pr checks`, e voltar para marcar o WP-05 `done`.
+2. WP-05 não muda o site publicado: não precisa de `/release` para efeito no ar (o workflow só
+   chega à `master` na próxima release).
+3. Opção ao usuário, sem decisão registrada: proteger `develop`/`master` exigindo os checks
+   `plano` e `site`. Se quiser, vira entrada em `decisoes.md`.
+4. Em seguida: WP-06 (brief do Claude Design, D4) quando quiser; WP-07 espera D2.
 
 ## 5. Decisões fora de `decisoes.md` e ADR
 
-- O `check_plano.py` é cópia do lotto-expert com `AREAS` e `visual` adaptados — registrado em D6.
-- `og:image` ausente é **aviso**, não erro, em `check_site.py` (página legal pode não ter);
-  `og:image` apontando para arquivo inexistente é erro. Não virou invariante porque pode mudar
-  no WP-11.
+- `check_plano.py` é cópia do lotto-expert com `AREAS` e `visual` adaptados (D6).
+- `og:image` ausente é aviso em `check_site.py`; apontando para arquivo inexistente é erro.
+- lychee sem `--include-fragments`: âncoras de i18n/JS dão falso positivo.
 
 ## 6. Esperando publicação
 
-Nada de site: `git log origin/master..origin/develop` vazio em 2026-10-12. Esta escrituração
-está na branch `docs/publicacao-trilha-a` (só `.claude/context` e `tools/gen_estado.py`, sem
-efeito no site).
+Branch do WP-05 ainda não foi enviada ao remoto. Sem efeito no site.

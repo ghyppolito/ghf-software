@@ -2,7 +2,7 @@
 id: WP-05
 titulo: Todo PR para develop roda check_site, check_plano e validação de HTML e links
 area: infra
-status: doing
+status: blocked
 depende_de: [WP-04]
 adr: []
 spec: docs/AVALIACAO.md
@@ -47,3 +47,21 @@ desligada — Tailwind é inline até o WP-08); `CLAUDE.md` seção "Comandos" (
 
 **Risco:** médio — proteção de branch com CI obrigatório é decisão do usuário (registrar em
 `decisoes.md` se ele quiser).
+
+## Estado em 2026-10-12
+
+Implementado em 025793e e 6081b1b: `.github/workflows/pr.yml` (jobs `plano` e `site`; `pull_request`
+e `push` em develop/master; `contents: read`; sem deploy), `.htmlvalidate.json` (recommended,
+`no-inline-style` off, 6 regras em `warn` com achado roteado ao WP-08) e linha em CLAUDE.md § Comandos.
+
+Local, tudo exit 0: `check_site.py`, `gen_estado.py --check`, `check_plano.py`, html-validate 11.16.2
+(0 erros, 202 avisos) e lychee 0.24.2 `--offline` (0 erros). Auditoria `site-qa` e `site-seo-perf`: sem
+achado alto; médios corrigidos em 6081b1b.
+
+Critérios: o 2º (sem `deploy`/`pages`/`contents: write` como chaves; o comentário do arquivo cita as
+palavras, o critério trata de chaves) e o 3º (html-validate sem erro, achados no WP-08) estão cobertos.
+O 1º (`gh pr checks <PR>` com `plano` e `site` verdes) **não está**: exige push e PR do usuário.
+Lychee sem `--include-fragments` por decisão do arquiteto (âncoras de i18n/JS).
+
+**Para fechar:** `git push -u origin feat/wp-05-ci-no-pr`, PR para `develop`, `gh pr checks`; reportar o
+resultado aqui e marcar `done`.

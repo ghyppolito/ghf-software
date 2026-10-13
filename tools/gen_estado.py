@@ -48,6 +48,7 @@ SEQUENCIA = [
 # Bloqueios ativos: (WP, motivo, desde). Lista escrita à mão; entrada de WP `done`
 # é filtrada, para a tabela seguir o front-matter.
 BLOQUEIOS = [
+    ("WP-05", "aguarda push e PR do usuário para ver o CI verde no Actions (`gh pr checks`)", "2026-10-12"),
 ]
 
 wps = []
