@@ -1,0 +1,83 @@
+name: Deploy
+
+# Publica `dist/` no GitHub Pages (ADR-002 §4). Roda em push para `master` (`develop → master` é
+# deploy, D5, só pelo usuário via `/release`) e à mão por `workflow_dispatch`.
+#
+# O job `build` roda sempre: prova que `dist/` de `master` sai verde. O job `deploy` só roda com a
+# variável de repositório `PAGES_VIA_ACTIONS` igual a `true`; sem ela (hoje), o deploy é pulado e
+# quem publica é o Jekyll do modo "branch master" — os dois nunca publicam em paralelo.
+#
+# Ligar (passo do usuário, WP-07): Settings → Pages → Source = "GitHub Actions"; criar a variável
+# `PAGES_VIA_ACTIONS=true` (Settings → Secrets and variables → Actions → Variables, ou
+# `gh variable set PAGES_VIA_ACTIONS --body true`); disparar este workflow por `workflow_dispatch`.
+# Rollback: Source de volta para "Deploy from a branch" → `master` **e** apagar a variável
+# (`gh variable delete PAGES_VIA_ACTIONS`) ou trocá-la para `false` — a raiz continua com todas as
+# páginas até o WP-08.
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Um deploy por vez; o que está em andamento termina (não deixa o site pela metade).
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22.22'
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Build (Astro → dist/)
+        env:
+          ASTRO_TELEMETRY_DISABLED: 1
+        run: npm run build
+
+      - name: check_site.py (dist)
+        # O artefato que vai ao ar é o artefato provado: URLs contratuais (ADR-001), datas legais
+        # contra docs/*.md da raiz, copy, assetlinks.
+        run: python3 tools/check_site.py --raiz dist
+
+      - name: assetlinks.json no artefato
+        run: test -f dist/.well-known/assetlinks.json
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist
+          # Sem isto o tar exclui dotfiles e /.well-known/assetlinks.json some com o build verde.
+          include-hidden-files: true
+
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Só com o Pages em modo "GitHub Actions" e a variável ligada; ausente = não publica.
+    if: vars.PAGES_VIA_ACTIONS == 'true'
+    # Permissões de publicação só aqui. O ambiente github-pages aceita master e main
+    # (achados-novos.md PAGES-ENV-MAIN-01).
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

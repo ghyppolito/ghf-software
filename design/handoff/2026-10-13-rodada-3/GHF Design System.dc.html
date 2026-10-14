@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><style>@font-face{font-family:Inter;src:url(fonts/InterVariable.woff2) format("woff2");font-weight:100 900;font-display:swap}body{margin:0;background:#E9E8E4;font-family:Inter,system-ui,sans-serif}a{color:inherit}a:hover{color:inherit}.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font:600 13px/1.2 Inter,system-ui,sans-serif;color:#1a1a1a}.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 Inter,system-ui,sans-serif;color:rgba(0,0,0,.55)}.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}.dv-next{margin:22px 0 0;font:12px/1.5 Inter,system-ui,sans-serif;color:rgba(0,0,0,.5)}</style></helmet>
+<section class="dv-turn" id="t3">
+  <div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Rodada 3 — direção <a class="dv-oid" href="#1a">1a</a>: 4 landings num template só, tablet, alvos de toque, idioma real</span></div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,440px));gap:32px;margin:0 0 32px;font-size:13px;line-height:20px;color:#2a2a2a">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <strong>O que mudou (itens 1–8)</strong>
+      <span>1–2. Uma landing só, Landing App, com ?app=lotto|topo|pole|eclipse. Entre landings mudam só --app-acc, --app-acc-edge, --app-acc-light e content/landings.js (regra em <a class="dv-oid" href="#3a">3a</a>, seção 6). Seletor com 7, 6, 2 e 2 línguas, como cada app.</span>
+      <span>3. Tablet em 768: a nav fica com marca, idioma e Menu, e o menu abre em 2 colunas. No footer, a linha de cima tem marca e contato; embaixo vêm os 4 apps em 4 colunas.</span>
+      <span>4. Links do footer, alternador de idioma, sumário e itens de menu têm 44 px. O foco é um contorno interno de 3 px no &lt;summary&gt;, para não ser cortado. Os links sociais também têm foco.</span>
+      <span>5. Card e hero “em breve” estão em <a class="dv-oid" href="#3a">3a</a>, seção 5.</span>
+      <span>6. A regra de destaque × “ver todas” da home está em <a class="dv-oid" href="#3a">3a</a>, seção 6.</span>
+      <span>7. A política troca de idioma de verdade: carrega o outro arquivo, volta à mesma seção no mesmo ponto da tela e grava ?lang= e #seção na URL. A faixa de sugestão usa navigator.languages, não redireciona e, depois de fechada, não volta na sessão (sessionStorage). Para forçar no teste: ?suggest=de.</span>
+      <span>8. --border-strong passa a #66738D (3,30:1 sobre --raised) e entra --success #C5E86C, com ✓.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <strong>Copy</strong>
+      <span>Todo o texto de produto vem dos READMEs, só em pt. Nas outras línguas, só a interface (nav, botões, títulos de seção, rodapé) está traduzida. O resto aparece como [copy: ru · features.0.t], com um aviso no topo da página.</span>
+      <span>Ficaram como [copy: …] por falta de fonte: o preço e o grátis/pago do Pole Position e do EclipseGo, os anos cobertos pelo EclipseGo, a tagline do footer fora do pt, o aviso de prevalência e a redação final do aviso +18.</span>
+      <span>A política em inglês não existe no projeto. O arquivo esperado é content/LOTTOEXPERT_PRIVACY_POLICY.en.md. Até lá, o EN mostra as mesmas seções com âncoras idênticas e texto [copy: …].</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <strong>Como ver</strong>
+      <span>Cada quadro é a página real, num iframe com rolagem própria, que só carrega ao chegar perto da área visível.</span>
+      <span>As páginas abertas sozinhas reagem à largura da janela.</span>
+      <span>Arquivos: Landing App, Home, Legal LottoExpert, Site Nav, Site Footer, GHF Kit v3, content/landings.js e content/i18n.js.</span>
+      <span>A rodada 2 continua abaixo, como registro.</span>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:48px;align-items:flex-start">
+    <div class="dv-opt" id="3a"><div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>Sistema A, rodada 3: tokens alterados, card e hero “em breve”, regras escritas</div><div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:nowrap"><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">1360 · GHF Kit v3 (role até “Rodada 3”, logo antes do Footer)</span><iframe src="GHF%20Kit%20v3.dc.html" loading="lazy" title="GHF Kit v3 (role até “Rodada 3”, logo antes do Footer)" style="width:1360px;height:1400px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div></div></div>
+    <div class="dv-opt" id="3b"><div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>TopoWalk completo · russo a 360 · 7 línguas</div><div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:nowrap"><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">360 · ru</span><iframe src="Landing%20App.dc.html?app=topo&lang=ru" loading="lazy" title="ru" style="width:360px;height:800px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">768 · pt · tablet</span><iframe src="Landing%20App.dc.html?app=topo&lang=pt" loading="lazy" title="pt · tablet" style="width:768px;height:1000px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">1280 · pt</span><iframe src="Landing%20App.dc.html?app=topo&lang=pt" loading="lazy" title="pt" style="width:1280px;height:860px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div></div></div>
+    <div class="dv-opt" id="3c"><div class="dv-olabel"><a class="dv-oid" href="#3c">3c</a>Pole Position · 6 línguas · faixa de sugestão aplicada (?suggest=de)</div><div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:nowrap"><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">360 · pt + faixa em alemão</span><iframe src="Landing%20App.dc.html?app=pole&lang=pt&suggest=de" loading="lazy" title="pt + faixa em alemão" style="width:360px;height:800px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">1280 · pt</span><iframe src="Landing%20App.dc.html?app=pole&lang=pt" loading="lazy" title="pt" style="width:1280px;height:860px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div></div></div>
+    <div class="dv-opt" id="3d"><div class="dv-olabel"><a class="dv-oid" href="#3d">3d</a>EclipseGo · pt/en</div><div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:nowrap"><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">360 · pt</span><iframe src="Landing%20App.dc.html?app=eclipse&lang=pt" loading="lazy" title="pt" style="width:360px;height:800px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">1280 · en: interface traduzida, copy pendente</span><iframe src="Landing%20App.dc.html?app=eclipse&lang=en" loading="lazy" title="en: interface traduzida, copy pendente" style="width:1280px;height:860px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div></div></div>
+    <div class="dv-opt" id="3e"><div class="dv-olabel"><a class="dv-oid" href="#3e">3e</a>LottoExpert no mesmo template (prova de que só mudam --app-* e conteúdo)</div><div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:nowrap"><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">768 · tablet</span><iframe src="Landing%20App.dc.html?app=lotto&lang=pt" loading="lazy" title="tablet" style="width:768px;height:1000px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">1280 · desktop</span><iframe src="Landing%20App.dc.html?app=lotto&lang=pt" loading="lazy" title="desktop" style="width:1280px;height:860px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div></div></div>
+    <div class="dv-opt" id="3f"><div class="dv-olabel"><a class="dv-oid" href="#3f">3f</a>Tablet 768: home, página legal, footer</div><div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:nowrap"><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">768 · home</span><iframe src="Home.dc.html" loading="lazy" title="home" style="width:768px;height:1024px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">768 · legal · sumário recolhível</span><iframe src="Legal%20LottoExpert.dc.html" loading="lazy" title="legal · sumário recolhível" style="width:768px;height:1024px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">768 · footer</span><iframe src="Home.dc.html#contato" loading="lazy" title="footer" style="width:768px;height:560px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div></div></div>
+    <div class="dv-opt" id="3g"><div class="dv-olabel"><a class="dv-oid" href="#3g">3g</a>Página legal: troca de idioma real (use o alternador ou a nav, a posição se mantém)</div><div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:nowrap"><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">1280 · abre na seção 4</span><iframe src="Legal%20LottoExpert.dc.html?lang=pt#secao-4" loading="lazy" title="abre na seção 4" style="width:1280px;height:800px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">1280 · footer 1280</span><iframe src="Home.dc.html#contato" loading="lazy" title="footer 1280" style="width:1280px;height:420px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div><div style="display:flex;flex-direction:column;gap:6px"><span style="font:11px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55)">360 · footer 360</span><iframe src="Home.dc.html#contato" loading="lazy" title="footer 360" style="width:360px;height:800px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#0B1120;display:block;flex:none"></iframe></div></div></div>
+  </div>
+</section>
+<section class="dv-turn" id="t2">
+  <div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Rodada 2 — direção <a class="dv-oid" href="#1a">1a</a> Navy técnico: sistema corrigido e telas</span></div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,440px));gap:32px;margin:0 0 32px;font-size:13px;line-height:20px;color:#2a2a2a">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <strong>Ajustes 1–8</strong>
+      <span>1. LottoExpert em violeta: #A78BFA no escuro, #6D28D9 no papel.</span>
+      <span>2. A ordem LottoExpert, TopoWalk, Pole Position, EclipseGo vale em toda lista, com o mesmo peso.</span>
+      <span>3. No papel entra --paper-link #0A6E75 para link e foco, e #07565C no hover. O ciano não aparece no papel.</span>
+      <span>4. --border-strong passou a #5E6B85: 3,4:1.</span>
+      <span>5. Estado se distingue pela forma: caixa tingida + glifo + palavra. A cor de app nunca entra numa mensagem.</span>
+      <span>6. O seletor de 7 línguas aparece inteiro.</span>
+      <span>7. Os quatro apps estão publicados. “Em breve” virou só um estado de componente.</span>
+      <span>8. O lockup “desde 2004” para fundo escuro está em <a class="dv-oid" href="#2a">2a</a>.</span>
+      <span>Inter vem de fonts/InterVariable.woff2, servida pelo site. Ícones são caracteres e CSS, sem CDN.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <strong>Destaque ou “ver todas”?</strong>
+      <span>Uma funcionalidade vai para destaque quando cumpre as quatro condições:</span>
+      <span>a) é o motivo de instalar ou de pagar (gerar, conferir, bolão, acompanhar);</span>
+      <span>b) a pessoa usa na primeira semana;</span>
+      <span>c) existe screenshot real dela;</span>
+      <span>d) cabe em uma frase sem jargão.</span>
+      <span>O limite é 4. O resto vai para “ver todas”, agrupado por tarefa e com a etiqueta Grátis/Premium. Recursos técnicos, limites e configurações (widget, backup, filtros, backtesting) ficam sempre na lista.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <strong>O que não coube</strong>
+      <span>Screenshots reais do LottoExpert: só existe o mockup. As funcionalidades e a galeria usam o estado “imagem ausente”.</span>
+      <span>Textos em inglês. O EN aparece só no seletor e no estado de troca.</span>
+      <span>Landings inteiras de TopoWalk, Pole Position e EclipseGo. Do TopoWalk só entram o hero e o bloco grátis × Pro.</span>
+      <span>Termos de uso e política nas 6–7 línguas.</span>
+      <span>Impressão: o quadro mostra o resultado; a regra @media print fica com o site-dev.</span>
+      <span>Aviso de jogo responsável e aviso de prevalência: o lugar está reservado e o texto é provisório.</span>
+      <span>Logo final em SVG: sem referência no handoff.</span>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:40px;align-items:flex-start">
+    <div class="dv-opt" id="2a"><div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Sistema A corrigido: tokens, estados, logo, nav, footer</div><div class="dv-card" style="flex:none;max-width:none;width:1360px"><dc-import name="GHF Kit v2" dir="A" hint-size="1360px,4600px"></dc-import></div></div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:24px">
+<div class="dv-opt" id="2b"><div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>Home</div><a href="Home.dc.html" style="display:flex;flex-direction:column;gap:6px;width:420px;padding:20px 22px;background:#0B1120;color:#F3F4F6;border-radius:10px;text-decoration:none;font:600 17px Inter,sans-serif">Home ↗<span style="font:400 13px/20px Inter,sans-serif;color:#C3C9D3">Fluida: redimensione a janela para 360, 768 e 1280. A Tweak "w" fixa a largura.</span></a></div>
+<div class="dv-opt" id="2c"><div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>Landing LottoExpert</div><a href="Landing LottoExpert.dc.html" style="display:flex;flex-direction:column;gap:6px;width:420px;padding:20px 22px;background:#0B1120;color:#F3F4F6;border-radius:10px;text-decoration:none;font:600 17px Inter,sans-serif">Landing LottoExpert ↗<span style="font:400 13px/20px Inter,sans-serif;color:#C3C9D3">Anatomia completa da seção 4 do brief.</span></a></div>
+<div class="dv-opt" id="2d"><div class="dv-olabel"><a class="dv-oid" href="#2d">2d</a>TopoWalk: hero + grátis × Pro</div><a href="Landing TopoWalk.dc.html" style="display:flex;flex-direction:column;gap:6px;width:420px;padding:20px 22px;background:#0B1120;color:#F3F4F6;border-radius:10px;text-decoration:none;font:600 17px Inter,sans-serif">Landing TopoWalk ↗<span style="font:400 13px/20px Inter,sans-serif;color:#C3C9D3">O mesmo esqueleto, só com o acento trocado.</span></a></div>
+<div class="dv-opt" id="2e"><div class="dv-olabel"><a class="dv-oid" href="#2e">2e</a>Política de privacidade LottoExpert</div><a href="Legal LottoExpert.dc.html" style="display:flex;flex-direction:column;gap:6px;width:420px;padding:20px 22px;background:#0B1120;color:#F3F4F6;border-radius:10px;text-decoration:none;font:600 17px Inter,sans-serif">Legal LottoExpert ↗<span style="font:400 13px/20px Inter,sans-serif;color:#C3C9D3">Texto real. Tweak "print" mostra a versão de impressão.</span></a></div>
+<div class="dv-opt" id="2f"><div class="dv-olabel"><a class="dv-oid" href="#2f">2f</a>404</div><a href="404.dc.html" style="display:flex;flex-direction:column;gap:6px;width:420px;padding:20px 22px;background:#0B1120;color:#F3F4F6;border-radius:10px;text-decoration:none;font:600 17px Inter,sans-serif">404 ↗<span style="font:400 13px/20px Inter,sans-serif;color:#C3C9D3"></span></a></div>
+<div class="dv-opt" id="2g"><div class="dv-olabel"><a class="dv-oid" href="#2g">2g</a>Convite de bolão</div><a href="Convite Bolao.dc.html" style="display:flex;flex-direction:column;gap:6px;width:420px;padding:20px 22px;background:#0B1120;color:#F3F4F6;border-radius:10px;text-decoration:none;font:600 17px Inter,sans-serif">Convite Bolao ↗<span style="font:400 13px/20px Inter,sans-serif;color:#C3C9D3">Tweak "state": ok, fallback e error.</span></a></div>
+</div>
+<p style="margin:0;font:12px/1.5 Inter,sans-serif;color:rgba(0,0,0,.55)">Antes, as telas vinham embutidas em todas as larguras, e a página ficou pesada demais para abrir. Agora cada tela abre em aba própria.</p>
+</div>
+  <p class="dv-next">Próximo: “landings completas dos outros três” · “versão em inglês da <a class="dv-oid" href="#2c">2c</a>” · “troca os placeholders por screenshots reais”</p>
+</section>
+<section class="dv-turn" id="t1">
+  <div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Tokens, estados, nav e footer — 3 direções</span></div>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,520px));gap:32px;margin:0 0 32px;font-size:13px;line-height:20px;color:#2a2a2a">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <strong style="font-size:13px">Premissas</strong>
+      <span>Escopo: tokens, estados, nav com seletor e footer. Home e landing vêm na próxima rodada, já na direção escolhida.</span>
+      <span>Site escuro; páginas legais em claro (tokens “papel” abaixo). Inter mantida: cobre latin-ext e cirílico. No mock vem do Google Fonts; na implementação, servida pelo site.</span>
+      <span>Marca GHF = neutro + teal do logo. Esmeralda sai. Acentos redefinidos a partir dos favicons, com o mesmo set nas 3 direções. O contraste é calculado ao vivo em cada cartão.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <strong style="font-size:13px">Para você decidir</strong>
+      <span>O favicon do LottoExpert é um trevo, e o brief proíbe trevo na imagem do app. Mantive o arquivo porque é preservado, mas o conflito precisa de decisão.</span>
+      <span>O logo diz “since 1996”; o brief diz “desde 2004”.</span>
+      <span>O cinza do logo tem ~2:1 sobre fundo escuro. No mock, clareei o símbolo com filtro. Falta uma versão clara do logo (sem referência no handoff).</span>
+      <span>Ouro, terracota e vermelho: três acentos quentes, separados por matiz. Numa página só aparece um.</span>
+    </div>
+  </div>
+  <div class="dv-opts">
+    <div class="dv-opt" id="1a"><div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Navy técnico — evolução do atual</div><a href="GHF Kit.dc.html" style="display:flex;flex-direction:column;gap:6px;width:360px;padding:20px 22px;background:#0B1120;color:#F3F4F6;border-radius:10px;text-decoration:none;font:600 17px Inter,sans-serif">GHF Kit — direção A ↗<span style="font:400 13px/20px Inter,sans-serif;color:#C3C9D3">Abre o kit da rodada 1; troque a direção pela Tweak "dir".</span></a></div><div class="dv-opt" id="1b"><div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Grafite instrumento — neutro, raio 4, caixa alta</div><a href="GHF Kit.dc.html" style="display:flex;flex-direction:column;gap:6px;width:360px;padding:20px 22px;background:#0B1120;color:#F3F4F6;border-radius:10px;text-decoration:none;font:600 17px Inter,sans-serif">GHF Kit — direção B ↗<span style="font:400 13px/20px Inter,sans-serif;color:#C3C9D3">Abre o kit da rodada 1; troque a direção pela Tweak "dir".</span></a></div><div class="dv-opt" id="1c"><div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Ardósia do logo — mais claro, raios generosos</div><a href="GHF Kit.dc.html" style="display:flex;flex-direction:column;gap:6px;width:360px;padding:20px 22px;background:#0B1120;color:#F3F4F6;border-radius:10px;text-decoration:none;font:600 17px Inter,sans-serif">GHF Kit — direção C ↗<span style="font:400 13px/20px Inter,sans-serif;color:#C3C9D3">Abre o kit da rodada 1; troque a direção pela Tweak "dir".</span></a></div>
+  </div>
+  <p class="dv-next">Próximo: “segue com <a class="dv-oid" href="#1b">1b</a> e faz home + landing LottoExpert” · “fundo de <a class="dv-oid" href="#1c">1c</a> com raios de <a class="dv-oid" href="#1b">1b</a>” · “troca o acento do EclipseGo”</p>
+</section>
+</x-dc>
+</body>
+</html>

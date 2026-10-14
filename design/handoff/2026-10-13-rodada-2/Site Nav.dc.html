@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="position:relative;z-index:20;font-family:Inter,system-ui,sans-serif;color:var(--tx)">
+<sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+  <div style="height:68px;display:flex;align-items:center;gap:20px;padding:0 32px;border-bottom:1px solid var(--bd);background:var(--bg)">
+    <a href="index.html" aria-label="GHF Software, início" style="display:flex;align-items:center;gap:10px;color:var(--tx);text-decoration:none;min-height:44px;border-radius:var(--rc)" style-focus="outline:2px solid var(--br);outline-offset:2px">
+      <span style="display:block;width:64px;height:27px;overflow:hidden;position:relative;flex:none"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:150px;left:-42px;top:-21px;filter:brightness(1.9)"></span>
+      <sc-if value="{{ noApp }}" hint-placeholder-val="{{ true }}"><span style="font-weight:700;font-size:17px;letter-spacing:-0.01em">GHF Software</span></sc-if>
+    </a>
+    <sc-if value="{{ hasApp }}" hint-placeholder-val="{{ false }}">
+      <span style="width:1px;height:24px;background:var(--bd2)"></span>
+      <a href="#" style="display:flex;align-items:center;gap:10px;color:var(--tx);text-decoration:none;min-height:44px">
+        <span style="width:28px;height:28px;border-radius:var(--rc);overflow:hidden;display:block;flex:none"><img src="{{ a.fav }}" alt="" style="width:100%;height:100%;object-fit:cover;transform:scale(1.06)"></span>
+        <span style="font-weight:700;font-size:17px">{{ a.name }}</span>
+      </a>
+    </sc-if>
+    <nav aria-label="Principal" style="display:flex;gap:2px;margin-left:auto;flex-wrap:wrap">
+      <sc-for list="{{ links }}" as="l" hint-placeholder-count="4">
+        <a href="{{ l.href }}" aria-current="{{ l.cur }}" style="min-height:44px;padding:0 13px;display:flex;align-items:center;color:{{ l.color }};text-decoration:none;font-size:15px;font-weight:500;box-shadow:{{ l.mark }};border-radius:var(--rc) var(--rc) 0 0" style-hover="color:var(--tx);background:var(--rs)" style-focus="outline:2px solid var(--br);outline-offset:2px">{{ l.t }}</a>
+      </sc-for>
+    </nav>
+    <sc-if value="{{ two }}" hint-placeholder-val="{{ true }}">
+      <div role="group" aria-label="Idioma" style="display:flex;border:1px solid var(--bd2);border-radius:var(--rb);padding:3px;gap:2px">
+        <sc-for list="{{ langList }}" as="g" hint-placeholder-count="2">
+          <button type="button" lang="{{ g.code }}" aria-pressed="{{ g.sel }}" onClick="{{ g.pick }}" style="min-height:38px;min-width:48px;padding:0 12px;border:0;border-radius:var(--rb);background:{{ g.bg }};color:var(--tx);font:600 14px Inter,sans-serif;cursor:pointer" style-focus="outline:2px solid var(--br)">{{ g.CODE }}</button>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ many }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative">
+        <button type="button" aria-haspopup="listbox" aria-expanded="{{ langOpen }}" onClick="{{ toggleLang }}" style="min-height:44px;padding:0 14px;border-radius:var(--rb);border:1px solid var(--bd2);background:transparent;color:var(--tx);font:500 15px Inter,sans-serif;display:flex;align-items:center;gap:10px;cursor:pointer" style-hover="background:var(--rs)" style-focus="outline:2px solid var(--br);outline-offset:2px">
+          <span style="font-size:12px;font-weight:700;color:var(--mu)">{{ cur.CODE }}</span>{{ cur.name }}
+          <span style="width:7px;height:7px;border-right:1.5px solid var(--tx2);border-bottom:1.5px solid var(--tx2);transform:translateY(-2px) rotate(45deg)"></span>
+        </button>
+        <sc-if value="{{ langOpen }}" hint-placeholder-val="{{ false }}">
+          <ul role="listbox" style="position:absolute;right:0;top:52px;width:240px;margin:0;padding:6px;list-style:none;background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);box-shadow:var(--sh)">
+            <sc-for list="{{ langList }}" as="g" hint-placeholder-count="7">
+              <li role="option" lang="{{ g.code }}" aria-selected="{{ g.sel }}" onClick="{{ g.pick }}" style="min-height:44px;padding:0 12px;border-radius:var(--rc);display:flex;align-items:center;gap:12px;cursor:pointer;background:{{ g.bg }}" style-hover="background:var(--rs)">
+                <span style="width:28px;font-size:12px;font-weight:700;color:var(--mu)">{{ g.CODE }}</span><span style="flex:1;font-size:15px">{{ g.name }}</span>
+              </li>
+            </sc-for>
+          </ul>
+        </sc-if>
+      </div>
+    </sc-if>
+  </div>
+</sc-if>
+<sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+  <div style="height:60px;display:flex;align-items:center;padding:0 8px 0 16px;border-bottom:1px solid var(--bd);gap:10px;background:var(--bg)">
+    <sc-if value="{{ noApp }}" hint-placeholder-val="{{ true }}">
+      <a href="index.html" style="display:flex;align-items:center;gap:8px;flex:1;color:var(--tx);text-decoration:none;min-height:44px">
+        <span style="display:block;width:52px;height:22px;overflow:hidden;position:relative;flex:none"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:122px;left:-34px;top:-17px;filter:brightness(1.9)"></span>
+        <span style="font-weight:700;font-size:16px">GHF Software</span>
+      </a>
+    </sc-if>
+    <sc-if value="{{ hasApp }}" hint-placeholder-val="{{ false }}">
+      <a href="#" style="display:flex;align-items:center;gap:10px;flex:1;color:var(--tx);text-decoration:none;min-height:44px">
+        <span style="width:28px;height:28px;border-radius:var(--rc);overflow:hidden;display:block;flex:none"><img src="{{ a.fav }}" alt="" style="width:100%;height:100%;object-fit:cover;transform:scale(1.06)"></span>
+        <span style="font-weight:700;font-size:16px">{{ a.name }}</span>
+      </a>
+    </sc-if>
+    <button type="button" aria-expanded="{{ menuOpen }}" onClick="{{ toggleMenu }}" style="min-height:44px;padding:0 12px;display:flex;align-items:center;gap:10px;border-radius:var(--rb);border:1px solid var(--bd2);background:{{ menuBg }};color:var(--tx);font:600 14px Inter,sans-serif;cursor:pointer" style-focus="outline:2px solid var(--br);outline-offset:2px">{{ menuLabel }}
+      <span style="display:flex;flex-direction:column;gap:3px"><span style="width:14px;height:1.5px;background:var(--tx)"></span><span style="width:14px;height:1.5px;background:var(--tx)"></span><span style="width:14px;height:1.5px;background:var(--tx)"></span></span>
+    </button>
+  </div>
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:0;right:0;top:60px;background:var(--sf);border-bottom:1px solid var(--bd2);padding:8px 8px 16px;display:flex;flex-direction:column;gap:2px;box-shadow:var(--sh)">
+      <sc-for list="{{ mLinks }}" as="l" hint-placeholder-count="4">
+        <a href="{{ l.href }}" onClick="{{ closeMenu }}" style="min-height:52px;padding:6px 12px;box-sizing:border-box;display:flex;align-items:center;font-size:18px;line-height:24px;font-weight:600;border-radius:var(--rc);color:var(--tx);text-decoration:none;box-shadow:{{ l.mmark }}" style-focus="outline:2px solid var(--br)">{{ l.t }}</a>
+      </sc-for>
+      <div style="height:1px;background:var(--bd);margin:8px 12px"></div>
+      <span style="padding:6px 12px 4px;font-size:13px;font-weight:600;color:var(--mu)">Idioma</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+        <sc-for list="{{ langList }}" as="g" hint-placeholder-count="2">
+          <button type="button" lang="{{ g.code }}" aria-pressed="{{ g.sel }}" onClick="{{ g.pick }}" style="min-height:44px;padding:0 12px;display:flex;align-items:center;gap:10px;border-radius:var(--rc);border:0;font:400 15px Inter,sans-serif;color:var(--tx);background:{{ g.bg }};cursor:pointer;text-align:left" style-focus="outline:2px solid var(--br)">
+            <span style="width:16px;height:16px;border-radius:50%;border:1.5px solid {{ g.ring }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex:none"><span style="width:8px;height:8px;border-radius:50%;background:{{ g.dot }}"></span></span>{{ g.name }}
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:120},&quot;mobile&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;app&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;lotto&quot;,&quot;topo&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;langs&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;2&quot;,&quot;7&quot;],&quot;default&quot;:&quot;2&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;lang&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;pt&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;current&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:0,&quot;tsType&quot;:&quot;number&quot;},&quot;open&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const APPS={
+ lotto:{name:'LottoExpert',fav:'assets/lottoexpert_favicon_v3.png',acc:'#A78BFA',links:[['Funcionalidades','#funcionalidades'],['Planos','#planos'],['FAQ','#faq'],['Privacidade','lottoexpert-privacy.html']]},
+ topo:{name:'TopoWalk',fav:'assets/topo-walk.png',acc:'#E38A57',links:[['Funcionalidades','#funcionalidades'],['Grátis e Pro','#pro'],['FAQ','#faq'],['Privacidade','topowalk-privacy.html']]}};
+const L7=[['pt','Português'],['en','English'],['es','Español'],['fr','Français'],['it','Italiano'],['de','Deutsch'],['ru','Русский']];
+class Component extends DCLogic {
+  state={menuOpen:null,langOpen:false,lang:null};
+  renderVals(){
+    const p=this.props; const mobile=p.mobile===true||p.mobile==='true';
+    const a=APPS[p.app]||null; const n=Number(p.langs||(a&&p.app==='topo'?7:2));
+    const lang=this.state.lang||p.lang||'pt';
+    const menuOpen=this.state.menuOpen??(p.open===true||p.open==='true');
+    const curIdx=Number(p.current??0);
+    const base=a?a.links:[['Apps','#apps'],['Sobre','#sobre'],['Contato','#contato']];
+    const acc=a?a.acc:'#3CC8D0';
+    const links=base.map(([t,href],i)=>({t,href,cur:i===curIdx&&!!a?'true':undefined,color:i===curIdx&&a?'var(--tx)':'var(--tx2)',mark:i===curIdx&&a?'inset 0 -2px 0 '+acc:'none',mmark:i===curIdx&&a?'inset 3px 0 0 '+acc:'none'}));
+    const mLinks=a?[...links,{t:'Todos os apps GHF',href:'index.html#apps',mmark:'none'}]:links;
+    const langList=L7.slice(0,n).map(([code,name])=>{const sel=code===lang;return {code,CODE:code.toUpperCase(),name,sel,bg:sel?'var(--rs)':'transparent',ring:sel?'var(--br)':'var(--bd2)',dot:sel?'var(--br)':'transparent',pick:()=>this.setState({lang:code,langOpen:false})};});
+    const cur=langList.find(g=>g.sel)||langList[0];
+    return {desktop:!mobile,mobile,a:a||{},hasApp:!!a,noApp:!a,links,mLinks,langList,cur,two:n<=3,many:n>3,
+      langOpen:this.state.langOpen,menuOpen,menuBg:menuOpen?'var(--rs)':'transparent',menuLabel:menuOpen?'Fechar':'Menu',
+      toggleLang:()=>this.setState(s=>({langOpen:!s.langOpen})),
+      toggleMenu:()=>this.setState({menuOpen:!menuOpen}),closeMenu:()=>this.setState({menuOpen:false})};
+  }
+}
+</script>
+</body>
+</html>

@@ -26,14 +26,14 @@ SEQUENCIA = [
         ("WP-03", "publicar `develop → master` (Pages): 10 commits de TopoWalk/Pole Position já esperam + WP-01/02/04. Só o usuário mescla; o agente prepara e confere"),
     ]),
     ("B · fundação — rede de segurança, build e fonte única, nesta ordem", [
-        ("WP-05", "CI no PR: `check_site.py`, `check_plano.py`, validação de HTML e links; sem mudar o deploy. Antes do WP-07, senão a migração não tem gate"),
-        ("WP-07", "stack com build (D2, recomendada Astro): spike que prova URLs contratuais preservadas, `.well-known` e convite intactos, deploy do Pages por Actions; ADR-002. L, risco alto"),
+            ("WP-07", "stack com build (D2, recomendada Astro): spike que prova URLs contratuais preservadas, `.well-known` e convite intactos, deploy do Pages por Actions; ADR-002. L, risco alto"),
         ("WP-08", "migração das 10 páginas para layout e componentes únicos (nav, footer, tema, i18n por rota `/en/`); conteúdo legal em markdown renderizado. L, depois do WP-07"),
         ("WP-09", "legal como fonte única: `tools/sync_legal.py` importa do repositório do app, data no front-matter, CI acusa divergência. M, depois do WP-08"),
         ("WP-14", "README e `docs/ARQUITETURA.md` refletem a stack nova; `CLAUDE.md` seção Comandos atualizada. S, fecha a trilha B"),
     ]),
-    ("C · evolução — design, SEO, performance e medição; WP-06 pode começar a qualquer momento (é sessão do usuário no Claude Design)", [
+    ("C · evolução — design, SEO, performance e medição; WP-06 e WP-19 podem rodar a qualquer momento (são sessões do usuário no Claude Design)", [
         ("WP-06", "brief de design (`design/BRIEF.md`) e sessão no Claude Design (D4): tokens, nav, footer, hero, card de app, seção de features, página legal; export em `design/handoff/<data>/`. Independe da stack"),
+        ("WP-19", "export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true)"),
         ("WP-10", "redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08"),
         ("WP-11", "SEO técnico: sitemap, robots, canonical, hreflang pt/en, JSON-LD (Organization, MobileApplication), OG por página. M, depois do WP-08"),
         ("WP-15", "i18n N-línguas: mapa único página → línguas (`src/i18n/idiomas.ts`), pt na raiz e demais em `/<lang>/`, seletor só com as línguas da página, hreflang/x-default das existentes, check_site compara data, seções e tokens entre versões legais; não publica língua nova. D8, ADR-003. M, risco alto, depois do WP-11"),
@@ -48,6 +48,8 @@ SEQUENCIA = [
 # Bloqueios ativos: (WP, motivo, desde). Lista escrita à mão; entrada de WP `done`
 # é filtrada, para a tabela seguir o front-matter.
 BLOQUEIOS = [
+    ("WP-07", "implementado e auditado; falta o usuário: CI no PR, /release, trocar o Pages para Actions + variável PAGES_VIA_ACTIONS, curls e checklist de navegador", "2026-10-13"),
+    ("WP-19", "export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true)", "2026-10-13"),
 ]
 
 wps = []

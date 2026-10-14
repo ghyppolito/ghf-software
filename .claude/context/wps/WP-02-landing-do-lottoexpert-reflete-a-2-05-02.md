@@ -88,3 +88,5 @@ e é melhor quebrar: B agora só com data/links, resto no WP-10.
 
 **Verificação visual:** usuário revisou `lottoexpert.html` (cards novos e textos en) e reportou ok
 em 2026-10-12. WP `done`; vai ao ar no `/release` (WP-03).
+
+**Publicado em 2026-10-12** (PR #31 → `master`).

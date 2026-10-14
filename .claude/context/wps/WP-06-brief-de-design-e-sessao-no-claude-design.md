@@ -2,7 +2,7 @@
 id: WP-06
 titulo: O sistema visual do site está decidido no Claude Design e exportado em design/handoff
 area: design
-status: todo
+status: done
 depende_de: []
 adr: []
 spec: docs/AVALIACAO.md
@@ -15,7 +15,7 @@ branch: feat/wp-06-brief-de-design
 
 # WP-06 — O sistema visual do site está decidido no Claude Design e exportado em design/handoff
 
-**Depende de:** — (pode rodar em paralelo à trilha B) · **Achados roteados:** —
+**Depende de:** — (pode rodar em paralelo à trilha B) · **Achados roteados:** DESIGN-PUBLICO-JEKYLL-01 (WP-07), LOGO-ANO-E-FUNDO-ESCURO-01 e DESIGN-RODADA-3-01 (WP-10)
 
 **Objetivo:** existe `design/BRIEF.md` escrito pelo agente e `design/handoff/<data>/` com o
 export da sessão do usuário no Claude Design: tokens (cor semântica, tipografia, espaçamento,
@@ -50,3 +50,25 @@ mesmo caminho (brief → Claude Design → handoff → `forma-ux` audita).
 passos 1 e 2 (motivo em `BLOQUEIOS`).
 
 **Risco:** baixo. O custo é a sessão do usuário; sem ela, D4 (B) — redesign direto no código.
+
+## Estado em 2026-10-13 (fechado)
+
+- Passo 1 feito: `design/BRIEF.md` (9 seções `## `, critério >= 7 coberto), escrito pelo `site-ux` com as
+  restrições do `site-arquiteto`; `design/README.md` com as regras (export congelado, handoff prevalece,
+  texto do export é placeholder, `design/` é público no modo branch) e "Handoff vigente: nenhum ainda".
+- Verificação: `check_site.py` na raiz e com `--raiz dist` verdes, `design/` fora de `dist`. Nenhuma página
+  tocada; auditoria `site-qa`/`seo-perf`/`site-ux` dispensada (só markdown em `design/` e `.claude/context`).
+- Critérios 2 e 3 abertos: dependem do export em `design/handoff/<data>/` (passo 2, do usuário) e do mapa
+  do passo 3. `visual: true` fecha só depois que o usuário reportar o que viu.
+- Achado `DESIGN-PUBLICO-JEKYLL-01` roteado ao WP-07.
+- Passos 2 e 3 feitos. Sessão no Claude Design feita pelo usuário em duas rodadas: rodada 1 em
+  `design/handoff/2026-10-13/` (histórico, commit 7c52237) e rodada 2 em `design/handoff/2026-10-13-rodada-2/`
+  (vigente, commit b75892d: tokens `GHF Kit v2`, nav, footer, hero, card de app, página legal, landing
+  LottoExpert, 404, convite). `site-ux` auditou cada rodada (rodada 2: "sim, com ressalvas").
+- Critérios: (1) `grep -c "^## " design/BRIEF.md` = 10 (a §10 registra as decisões do usuário: direção A,
+  tema escuro com legal em papel, Inter, marca ciano, LottoExpert violeta, ordem dos apps, prova sem
+  números, desde 2004, trevo só como ícone); (2) o handoff vigente tem os componentes exigidos;
+  (3) `design/README.md` nomeia o vigente e lista o que falta.
+- Resíduos roteados ao WP-10: `LOGO-ANO-E-FUNDO-ESCURO-01` e `DESIGN-RODADA-3-01`.
+- O item visual (a sessão no Claude Design) foi feito e visto pelo usuário.
+- Publicado em: — (branch `feat/wp-06-brief-de-design`; PR para `develop` ainda não aberto, decisão do usuário).

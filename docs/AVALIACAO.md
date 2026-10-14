@@ -65,6 +65,8 @@ as funcionalidades novas, corrigir a OG do convite e publicar `develop → maste
 - **i18n por rota** embutido (`/` e `/en/`), com `hreflang` gerado.
 - **Preserva URLs**: `build.format: 'file'` mantém `/lottoexpert-privacy.html` como está, e
   `public/` carrega `.well-known/` e o convite intactos. Isso é o que torna a migração segura.
+  *(Revisto no ADR-002, 2026-10-12: `build.format: 'preserve'`, e as páginas atuais são
+  copiadas da raiz para `dist/` por integração até o WP-08, em vez de irem para `public/`.)*
 - Tailwind como plugin com purge, imagens otimizadas (`<Image>`), sitemap por integração.
 - Deploy por GitHub Actions para o Pages (action oficial), com build + `check_site.py` +
   Lighthouse CI no PR.

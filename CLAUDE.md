@@ -4,8 +4,9 @@ Site estático da GHF Software: landing corporativa, uma landing por app (TopoWa
 Pole Position, EclipseGo), políticas de privacidade, termos de uso e a página do convite de bolão
 do LottoExpert. **Em produção**, servido pelo GitHub Pages a partir da branch `master`.
 
-Hoje é HTML puro com Tailwind via CDN, sem build, sem teste e sem CI. A evolução dessa stack é
-o backlog (ver `docs/AVALIACAO.md`). Este arquivo é curto de propósito — leia inteiro. O detalhe
+Hoje as páginas são HTML puro com Tailwind via CDN, na raiz; um build Astro (WP-07) as copia
+para `dist/`, e o CI do PR (`check_site.py`, html-validate, lychee) prova raiz e `dist/`. A
+evolução dessa stack é o backlog (ver `docs/AVALIACAO.md`). Este arquivo é curto de propósito — leia inteiro. O detalhe
 está em `.claude/context/` e é lido **sob demanda**:
 
 | Arquivo | O que tem |
@@ -63,7 +64,7 @@ existindo no resultado publicado.
 - Data de "Última atualização" de uma página legal é a mesma do `.md` em `docs/` e do
   repositório do app. `check_site.py` confere.
 
-## Arquitetura (estado atual — muda no WP-07/08)
+## Arquitetura (estado atual — muda no WP-08)
 
 ```
 *.html                      uma página por arquivo; nav, footer, tailwind.config e dicionário
@@ -71,13 +72,22 @@ existindo no resultado publicado.
 assets/                     imagens, favicons, mockups (PNG, sem otimização)
 docs/*.md                   cópia markdown das políticas/termos e README de cada app
 lotto-expert/sweepstake-invite/   página do convite de bolão (pako + Base64, lê o link)
-.well-known/assetlinks.json       App Links do LottoExpert (Jekyll inclui via _config.yml)
+.well-known/assetlinks.json       App Links do LottoExpert (no modo branch, Jekyll inclui via _config.yml)
 tools/                      gen_estado.py · check_plano.py · check_site.py
 design/                     brief e handoff do Claude Design (WP-06)
+astro.config.mjs            Astro (ADR-002); integração copia da raiz para dist/, byte a byte, a
+                            lista fechada: 10 *.html, assets/, .well-known/, lotto-expert/, CNAME
+src/                        layouts/Base.astro (mínimo) e pages/404.astro — o resto migra no WP-08
+dist/                       saída do build (não versionada) — é o que vai ao ar
+.github/workflows/          pr.yml (checks `plano` e `site`) · deploy.yml (master → Pages por Actions)
 ```
 
-Enquanto não há build: alteração em nav/footer/config **se replica nas 10 páginas** no mesmo
-WP, e o `check_site.py` é a única rede. Depois do WP-08, há um layout único.
+Até a troca do Pages para "GitHub Actions" (passo do usuário no WP-07), o Jekyll ainda publica a
+raiz de `master`; `_config.yml` exclui o projeto Astro. Depois, só `dist/` vai ao ar.
+
+Até o WP-08 o build só copia as páginas da raiz: alteração em nav/footer/config **se replica nas
+10 páginas** no mesmo WP, e a rede é o `check_site.py` (raiz e `dist/`). Depois do WP-08, há um
+layout único.
 
 ---
 
@@ -113,12 +123,20 @@ política/termos do repositório do app) · `/decisao <texto>` · `/adr <texto>`
 
 ```bash
 python3 tools/check_site.py                                   # links, assets, metadados, datas legais, copy — roda sempre
+npm ci && npm run build                                       # Astro → dist/ (Node 22.22)
+python3 tools/check_site.py --raiz dist                       # o mesmo sobre o publicado; datas legais contra docs/ da raiz
 python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regenerar e verificar
-python3 -m http.server 8080                                   # servir local para inspeção (Claude in Chrome ou usuário)
+python3 -m http.server 8080 -d dist                           # servir dist/ para inspeção (Claude in Chrome ou usuário)
 diff ../lotto-expert/docs/PRIVACY_POLICY.md docs/LOTTOEXPERT_PRIVACY_POLICY.md   # o site está atrás do app?
+npx html-validate 'dist/**/*.html'                            # HTML (versão do lockfile; regras em .htmlvalidate.json)
+lychee --offline --no-progress --root-dir "$PWD/dist" 'dist/**/*.html'  # links internos (binário 0.24.2 do release lycheeverse/lychee)
 ```
 
-Depois do WP-05 há CI no PR; depois do WP-07 há `npm run build` — atualize esta seção no WP.
+`.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`: job `plano`
+(`gen_estado.py --check`, `check_plano.py`) e job `site` (`check_site.py` na raiz, `npm ci`,
+`npm run build`, `check_site.py --raiz dist`, html-validate e lychee sobre `dist/`).
+`.github/workflows/deploy.yml` roda em push para `master` (e à mão): build, `check_site.py --raiz
+dist` e publicação de `dist/` no Pages — só tem efeito com o Pages em modo "GitHub Actions".
 
 ## Referência rápida
 
