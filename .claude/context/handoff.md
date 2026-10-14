@@ -3,66 +3,73 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-10-13.** Branch `docs/handoff-2026-10-13`, sobre `origin/develop`; sem push.
+**Sessão de 2026-10-14.** Escrito na branch `docs/publicacao-wp-07` (de `origin/develop`, sem push; vai a `develop`
+por PR). A branch `feat/wp-08-f1-infra-e-home` tem outra versão deste arquivo: **no conflito, vale esta.**
 
 ## 1. Onde parei
 
-WP-08 (`doing`) fatia 1 pronta na sub-branch `feat/wp-08-f1-infra-e-home`; PR rascunho #37 é a integração: não fazer merge até o WP-07 estar no ar. Usuário testando o convite do bolão, que parece escuro para ele: o código é só tema claro (sem `prefers-color-scheme` nem `color-scheme`), hipótese é escurecimento forçado do navegador (Samsung Internet / Chrome auto-dark); ele pediu para NÃO criar WP ainda. WP-19 em outra branch local (`feat/wp-19-rodada-3-claude-design`, 4 commits sem push), aguardando checklist.
+- **WP-07 `done`, publicado em 2026-10-14.** PR #39 (`develop → master`, merge 075469f); Pages em "GitHub Actions"
+  (`build_type: workflow`), `PAGES_VIA_ACTIONS=true`, Deploy `success`. Provas e checklist de navegador (inclusive o
+  bolão com link real: Android abre o app) estão no corpo do WP-07.
+- **Relógio da R1 do WP-08 começa em 2026-10-14.** Pela regra do usuário, a R1 só sai depois de alguns dias sem
+  incidente com o WP-07 no ar, com convite real testado (feito hoje) e a tag `pre-wp-08` em `master` antes.
+- **WP-08** `doing`, integração `feat/wp-08-layout-unico` (PR rascunho #37, "NÃO FAZER MERGE" — o aviso do WP-07 já
+  não vale; segue rascunho até a R1). Fatia 1 (home em `/` e `/en/`) **integrada** em `feat/wp-08-layout-unico`
+  (merge `--no-ff` pelo usuário em 2026-10-14), junto com `origin/develop`.
+- **WP-19** `blocked`: falta o checklist de navegador da rodada 3 (seção 3). Já está publicado (`design/` não vai ao ar).
 
 ## 2. Quebrado ou pela metade agora
 
-Nada quebrado. Pela metade:
-- Publicação: `origin/develop` está 27 commits à frente de `origin/master` (WP-03 escrituração, WP-05,
-  D9, WP-07, WP-06, WP-19). Nenhum texto legal nem caminho contratual entre eles. Urgência baixa por
-  conteúdo, média por deploy (o WP-07 só se prova no ar).
-- WP-05: CI e proteção de branch (D9: `plano` e `site` obrigatórios em `develop` e `master`, strict off,
-  admin pode ignorar, aplicada via `gh api` em 2026-10-12). O repositório é público, então Actions não
-  consome a cota do plano free; o usuário decidiu manter o CI.
-- Branch local `feat/wp-06-brief-de-design` já integrada: pode apagar. `feat/wp-07-stack-com-build` idem.
+Nada quebrado no ar. Pela metade:
+- **WP-08 fatia 1 integrada, checklist da home não feito.** O agente não tem permissão de `git merge`: cada fatia
+  volta à integração pelo usuário (`git merge --no-ff feat/wp-08-fN-<slug>`), e a integração recebe `develop` por
+  `git merge origin/develop` (conflito de escrituração: mantém as linhas dos dois lados e regenera `ESTADO.md`).
+- Tag `pre-wp-08` em `master`: ainda não criada (só antes da R1).
+- `CONFIG-YML-ORFAO-01`: `_config.yml` já não é lido; sai no WP-08.
+- Branches locais antigas (`feat/wp-01…02…04…05`, `docs/publicacao-trilha-a`, `feature/invite-bolao`, `main`): podem
+  sair, se integradas. Conferir com `git branch`.
 
 ## 3. O que só o navegador prova (usuário ainda não viu)
 
-WP-07 inteiro. Local (`npm ci && npm run build && python3 -m http.server 8080 -d dist`): home,
-`lottoexpert.html`, `lottoexpert-privacy.html` e `-terms` (pt e en), convite com `?d=` de link real,
-`/404.html` (Tab mostra contorno ciano; 360/768/1280). Depois, no ar: a mesma lista, `/qualquer/coisa`
-mostra o 404 novo, link de bolão real no Android abre o app (App Links), HTTPS imposto.
-As telas do handoff de design o usuário já viu no Claude Design (não é critério de página no ar).
+- **WP-19, rodada 3:** `python3 -m http.server 8080 -d design/handoff/2026-10-13-rodada-3`. `Landing App.dc.html?app=topo&lang=ru`
+  a 360; `?app=topo`, `?app=pole`, `?app=eclipse` a 1280; `Home.dc.html`, `Landing App.dc.html` e `Legal LottoExpert.dc.html`
+  a 768; troca pt/en na legal (en é stub); `?app=pole&suggest=de` (a faixa fecha e não volta na sessão); Tab com foco
+  em "Ver todas" e nos sociais do footer; selo "Publicado" distinto do verde do Pole. Escrever o que viu no WP-19.
+- **WP-08 fatia 1 (home):** `/`, `/en/` e `/404.html`, a 360 e 1280, no Chrome e no Safari (checklist no WP-08). Não feito.
+- **Convite do bolão em tema escuro** (nota `CONVITE-TEMA-ESCURO-01`, sem WP): o código é só tema claro; hipótese de
+  escurecimento forçado do navegador (Samsung Internet / Chrome auto-dark). Opções: `color-scheme: only light` ou tema
+  escuro desenhado (recomendado; exige Claude Design). Convite é URL contratual.
 
 ## 4. Próxima ação
 
-Do usuário, em ordem (recomendado: `/release` e a troca do Pages na mesma sessão, para encurtar a
-janela em que o Jekyll publica `design/`, ~19 MB, e `docs/`):
-1. Checklist local (seção 3).
-2. `/release` (develop → master). Ainda em modo branch o run "pages build and deployment" do Jekyll tem
-   de sair verde com o `exclude` novo; o `Deploy` só builda (job deploy pulado).
-3. Remover `main` da política do ambiente `github-pages` (`PAGES-ENV-MAIN-01`).
-4. Conferir o Play Console: nenhum link para `ghfsoftware.com/docs/...`.
-5. Trocar o Pages para "GitHub Actions", `gh variable set PAGES_VIA_ACTIONS --body true`,
-   `gh workflow run Deploy --ref master`; depois `curl -sI https://ghfsoftware.com/.well-known/assetlinks.json`
-   (200), `curl -s https://ghfsoftware.com/lottoexpert-privacy.html | grep -c "Última atualização"` (>= 1)
-   e a checklist no domínio.
-6. Rollback: Source "Deploy from a branch" → master e `gh variable delete PAGES_VIA_ACTIONS`.
+**Do usuário:**
+1. Fazer o checklist da home (seção 3); depois, fatia 2 (landing LottoExpert, com `HOME-EN-SEM-LANG-01`).
+2. Checklist do WP-19; escrever o resultado no WP.
+3. Decidir D11 (`--success`) e D12 (limiares de destaque), ambas só para o WP-10.
+4. Acompanhar o site no ar nos próximos dias; sem incidente, autorizar a R1 do WP-08.
 
-**Copy pendente do usuário antes do WP-10** (não está em `decisoes.md`: é texto de produto, decidido
-junto da implementação):
-- "chance matemática" → "probabilidade exata".
-- Texto final do aviso de jogo responsável (o export traz "Texto provisório").
-- Confirmar "Nada de cadastro, e-mail ou CPF" e "Nenhum SDK de publicidade".
+**Do agente:** fatia 2 do WP-08 (landing LottoExpert), incluindo `HOME-EN-SEM-LANG-01` (gravar `ghf_lang` ao abrir
+`/en/`, sem redirect). Respostas do usuário ao plano do WP-08 (R1 das fatias 1–5, R2 legais 6–8, R3 `public/` e convite 9;
+sem redirect para `/en/` até o WP-15) estão no corpo do WP-08.
 
-Rodada 3 do Claude Design (WP-19) é pré-condição das landings TopoWalk, Pole Position e EclipseGo no
-WP-10, não da home, landing LottoExpert, legal, 404 e convite.
+**Copy pendente do usuário antes do WP-10:** "chance matemática" → "probabilidade exata"; texto final do aviso de jogo
+responsável (o export traz "Texto provisório"); confirmar "Nada de cadastro, e-mail ou CPF" e "Nenhum SDK de
+publicidade". Rodada 3 é pré-condição das landings TopoWalk, Pole Position e EclipseGo no WP-10, não da home.
 
 ## 5. Decisões fora de `decisoes.md` e ADR
 
-- Ordem dos apps (LottoExpert · TopoWalk · Pole Position · EclipseGo), tema escuro com legal em papel,
-  Inter self-hosted, cores por app, prova sem números, "desde 2004", trevo só como ícone: estão em
-  `design/BRIEF.md` §10. São decisões de design dentro da D4; o brief é a fonte, sem linha nova em
-  `decisoes.md`.
-- `if: vars.PAGES_VIA_ACTIONS == 'true'` no job `deploy` (evita deploy concorrente com o Jekyll em modo
-  branch): descrito no `deploy.yml` e no WP-07, passo 5. **Não está no ADR-002** (conferido por grep).
-- O usuário não recusou nenhuma proposta nesta sessão.
+- **Exceção de dependência do WP-08 e respostas ao plano:** registradas no WP-08, são decisões de execução daquele WP.
+- **`cssTarget` no `astro.config.mjs`** (`chrome87, edge88, firefox78, safari14`): complementa o ADR-003 e não está
+  nele até a integração da fatia 1; acrescentado ao ADR-003 em 2026-10-14.
+- **D10 resolvida sem mudar `_config.yml`:** o usuário fez `/release` e troca do Pages na mesma sessão; `design/` saiu
+  do ar pela troca. Está em `decisoes.md`.
+- O usuário não recusou nenhuma proposta.
 
-## 6. Esperando publicação
+## 6. Escrituração desta sessão
 
-27 commits em `origin/develop` ainda fora de `master` (lista: `git log origin/master..origin/develop`).
-Sem texto legal nem caminho contratual entre eles. Sem efeito no site até o `/release`.
+- Publicação: `git log --oneline origin/master..origin/develop` vazio; `origin/develop..origin/master` tem só o
+  merge 075469f (#39). Nada espera publicação. Esta branch ainda não está em `develop`.
+- Resolvidos e tachados: `PAGES-ENV-MAIN-01`, `DESIGN-PUBLICO-JEKYLL-01`, `DESIGN-NAO-EXCLUIDO-JEKYLL-02`.
+- "Publicado em 2026-10-14" nos WP-05, WP-06, WP-07 e WP-19.
+- Os achados da fatia 1 (`INDEX-LOTTO-DESC-DIVERGE-01`, `HOME-*`, `ASSETS-PNG-LCP-01` etc.) estão em `achados-novos.md`
+  da integração do WP-08; chegam a `develop` com a R1.
