@@ -65,3 +65,5 @@ para `develop`, run https://github.com/ghyppolito/ghf-software/actions/runs/3833
 Lychee sem `--include-fragments` por decisão do arquiteto (âncoras de i18n/JS).
 
 Aguarda merge do PR #33 em `develop` pelo usuário.
+
+**Publicado em 2026-10-14** (PR #39 `develop → master`).

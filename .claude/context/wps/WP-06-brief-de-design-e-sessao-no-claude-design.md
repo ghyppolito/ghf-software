@@ -71,4 +71,4 @@ passos 1 e 2 (motivo em `BLOQUEIOS`).
   (3) `design/README.md` nomeia o vigente e lista o que falta.
 - Resíduos roteados ao WP-10: `LOGO-ANO-E-FUNDO-ESCURO-01` e `DESIGN-RODADA-3-01`.
 - O item visual (a sessão no Claude Design) foi feito e visto pelo usuário.
-- Publicado em: — (branch `feat/wp-06-brief-de-design`; PR para `develop` ainda não aberto, decisão do usuário).
+- **Publicado em 2026-10-14** (PR #39 `develop → master`).

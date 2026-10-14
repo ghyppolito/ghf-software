@@ -2,7 +2,7 @@
 id: WP-07
 titulo: O site tem build que preserva as URLs contratuais e publica no Pages por Actions
 area: infra
-status: blocked
+status: done
 depende_de: [WP-05]
 adr: [ADR-001, ADR-002]
 spec: docs/AVALIACAO.md
@@ -119,8 +119,25 @@ rede simulada sobre `http.server`.
 repositórios de app: nenhum aponta para eles (só `lottoexpert-privacy.html`, o convite e
 `logo_transp.png`, este já 404 desde antes). Falta o usuário conferir o Play Console.
 
-## Bloqueio: o que depende do usuário
+## Publicado em 2026-10-14
 
-Descobertos até o usuário agir: CI verde no PR; `/release`; troca do Pages para "GitHub Actions"
-+ `gh variable set PAGES_VIA_ACTIONS --body true` + `workflow_dispatch` do Deploy; os dois `curl`
-dos critérios; checklist de navegador (`visual: true`). Ordem e rollback em `handoff.md`.
+**Publicado em 2026-10-14.** PR #39 `develop → master` mesclado pelo usuário (merge 075469f). O Jekyll
+("pages build and deployment") passou verde; em seguida o usuário trocou Pages → Source para "GitHub Actions",
+removeu `main` da política do ambiente `github-pages` (só `master`, conferido via API), rodou
+`gh variable set PAGES_VIA_ACTIONS --body true` e `gh workflow run Deploy --ref master`: build e deploy `success`.
+`gh api .../pages` devolve `build_type: workflow`.
+
+Provas no ar (curl, 2026-10-14):
+- As 10 páginas, o convite e `/.well-known/assetlinks.json` respondem 200. O sha256 de `lottoexpert-privacy.html`,
+  do convite e do `assetlinks.json` é igual ao de `origin/master`; o assetlinks vem como `application/json` e é JSON válido.
+- `/qualquer/coisa` serve o 404 novo ("Página não encontrada · Page not found").
+- `/design/README.md` e `/docs/AVALIACAO.md` dão 404: o que `dist/` não leva deixou de ser publicado (resolve a D10 e os
+  achados `DESIGN-*-JEKYLL-*`, sem mudar `_config.yml`).
+- `http://` redireciona 301 para `https://`.
+
+Checklist de navegador (`visual: true`), reportado pelo usuário: antes da publicação, local — home, LottoExpert,
+política e termos pt/en, convite com link real, 404 com Tab e a 360/768/1280, tudo ok. Depois da publicação: "funcionou" —
+bolão com link real (Android abre o app; no PC aparece o card) e as páginas no ar ok.
+
+Resíduo: `CONFIG-YML-ORFAO-01` (remover `_config.yml`) roteado ao WP-08. Rollback, se preciso: Source "Deploy from a
+branch" → master e `gh variable delete PAGES_VIA_ACTIONS`.
