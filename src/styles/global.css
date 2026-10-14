@@ -1,0 +1,202 @@
+/*
+ * CSS único do site (ADR-003). Ordem de propósito: temas e o CSS próprio das páginas vêm antes
+ * do Tailwind, como na Play CDN — ela anexava o <style> gerado ao fim do <head>, depois do
+ * <style> de cada página; utilitário do Tailwind vence classe própria de mesma especificidade
+ * (ex.: `bg-brand-base` + `glass-panel` no menu móvel).
+ */
+
+/* ------------------------------------------------------------------ temas
+ * Um bloco por tema; o layout põe `data-tema` no <html>. Valores medidos nas configs inline das
+ * 10 páginas, inclusive as divergências entre landing e política do mesmo app — unificá-las é
+ * design (WP-10, D4). Cor em canais RGB (`R G B`), para o Tailwind aplicar opacidade
+ * (`bg-brand-primary/20` → `rgb(var(--brand-primary) / .2)`).
+ * Sombra ausente num tema é `0 0 #0000` (sem sombra): na página original a classe não existia.
+ */
+:root,
+[data-tema='ghf'] {
+  --brand-base: 11 17 32; /* #0B1120 */
+  --brand-surface: 17 24 39; /* #111827 */
+  --brand-primary: 16 185 129; /* #10B981 */
+  --brand-primary-hover: 5 150 105; /* #059669 */
+  --brand-secondary: 59 130 246; /* #3B82F6 */
+  --brand-accent: 6 182 212; /* #06B6D4 */
+  /* tons padrão do Tailwind; só o TopoWalk os troca */
+  --amber-400: 251 191 36;
+  --amber-500: 245 158 11;
+  --amber-600: 217 119 6;
+  --amber-900: 120 53 15;
+  --sombra-glow: 0 0 20px rgba(16, 185, 129, 0.4);
+  --sombra-glow-blue: 0 0 20px rgba(59, 130, 246, 0.4);
+  /* pilha mono padrão do Tailwind 3 */
+  --fonte-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+}
+
+/* lottoexpert.html, lottoexpert-privacy.html, lottoexpert-terms.html */
+[data-tema='lottoexpert'] {
+  --brand-primary: 139 92 246; /* #8B5CF6 */
+  --brand-primary-hover: 124 58 237; /* #7C3AED */
+  --sombra-glow: 0 0 20px rgba(139, 92, 246, 0.4);
+  --sombra-glow-blue: 0 0 #0000;
+}
+
+/* topowalk.html — primary verde, accent e escala amber terracota */
+[data-tema='topowalk'] {
+  --brand-accent: 181 84 28; /* #B5541C */
+  --amber-400: 217 119 54; /* #D97736 */
+  --amber-500: 181 84 28; /* #B5541C */
+  --amber-600: 140 63 17; /* #8C3F11 */
+  --amber-900: 74 33 9; /* #4A2109 */
+  --sombra-glow-blue: 0 0 #0000;
+}
+
+/* topowalk-privacy.html — primary terracota */
+[data-tema='topowalk-privacy'] {
+  --brand-primary: 181 84 28; /* #B5541C */
+  --brand-primary-hover: 142 64 20; /* #8E4014 */
+  --sombra-glow: 0 0 20px rgba(181, 84, 28, 0.4);
+}
+
+/* poleposition.html — accent lima, JetBrains Mono */
+[data-tema='poleposition'] {
+  --brand-primary: 132 204 22; /* #84cc16 */
+  --brand-primary-hover: 101 163 13; /* #65a30d */
+  --brand-accent: 163 230 53; /* #a3e635 */
+  --sombra-glow: 0 0 #0000;
+  --sombra-glow-blue: 0 0 #0000;
+  --fonte-mono: 'JetBrains Mono', monospace;
+}
+
+/* poleposition-privacy.html — accent ciano */
+[data-tema='poleposition-privacy'] {
+  --brand-primary: 132 204 22; /* #84cc16 */
+  --brand-primary-hover: 101 163 13; /* #65a30d */
+  --sombra-glow: 0 0 20px rgba(132, 204, 22, 0.4);
+}
+
+/* eclipsego.html */
+[data-tema='eclipsego'] {
+  --brand-primary: 234 179 8; /* #EAB308 */
+  --brand-primary-hover: 202 138 4; /* #CA8A04 */
+  --brand-secondary: 99 102 241; /* #6366F1 */
+  --brand-accent: 245 158 11; /* #F59E0B */
+  --sombra-glow: 0 0 25px rgba(234, 179, 8, 0.35);
+  --sombra-glow-blue: 0 0 #0000;
+}
+
+/* eclipsego-privacy.html — mesmas cores, sombras de outra intensidade */
+[data-tema='eclipsego-privacy'] {
+  --brand-primary: 234 179 8; /* #EAB308 */
+  --brand-primary-hover: 202 138 4; /* #CA8A04 */
+  --brand-secondary: 99 102 241; /* #6366F1 */
+  --brand-accent: 245 158 11; /* #F59E0B */
+  --sombra-glow: 0 0 20px rgba(234, 179, 8, 0.4);
+  --sombra-glow-blue: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+/* ------------------------------------------------------------------ CSS próprio
+ * Copiado do <style> de index.html (WP-08, fatia 1). As outras páginas trazem o seu na fatia
+ * em que migram; diferença entre elas vira bloco por tema, não segunda cópia.
+ */
+body {
+  background-color: #0b1120;
+  color: #f3f4f6;
+}
+
+/* Fundo em grade (hero) */
+.bg-grid-pattern {
+  background-color: #0b1120;
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Vidro */
+.glass-panel {
+  background: rgba(17, 24, 39, 0.6);
+  /* prefixado antes: na ordem inversa o minificador (lightningcss) descartava o sem prefixo */
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Texto em gradiente */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(135deg, #3b82f6, #10b981);
+}
+
+/* Flutuação sutil */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Entrada */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Revelar ao rolar — estado final */
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Nav: vidro ao rolar */
+#navbar {
+  transition: all 0.3s ease;
+}
+
+#navbar.scrolled {
+  background: rgba(11, 17, 32, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* ------------------------------------------------------------------ Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

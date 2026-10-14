@@ -1,0 +1,39 @@
+---
+// Home em inglês (/en/, en/index.html). Corpo em components/Home.astro, textos em i18n/home.ts.
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import Home from '../../components/Home.astro';
+import { home } from '../../i18n/home';
+
+const lang = 'en';
+const x = home[lang];
+---
+<Base
+  title={x.title}
+  description={x.description}
+  og={{
+    titulo: x.og_title,
+    descricao: x.og_description,
+    descricaoTwitter: x.twitter_description,
+    imagem: '/assets/GHFSoftware.png',
+    largura: 1200,
+    altura: 630,
+  }}
+  lang={lang}
+  caminho="index.html"
+  tema="ghf"
+>
+  <Nav
+    lang={lang}
+    caminho="index.html"
+    inicio="#"
+    itens={[
+      { href: '#sobre', chave: 'nav_about' },
+      { href: '#portfolio', chave: 'nav_portfolio' },
+      { href: '#contato', chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <Home lang={lang} />
+  <Footer lang={lang} inicio="#" prefixoAncora="" />
+</Base>

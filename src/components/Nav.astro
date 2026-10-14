@@ -1,0 +1,141 @@
+---
+// Nav do site (referência: index.html). Os itens são prop; o markup é um só.
+// O último item com `destaque` é o botão em pílula (Contato).
+import TrocaIdioma from './TrocaIdioma.astro';
+import { t, type ChaveUi, type Idioma } from '../i18n/ui';
+
+interface Item {
+  href: string;
+  chave: ChaveUi;
+  destaque?: boolean;
+}
+
+interface Props {
+  lang: Idioma;
+  /** caminho pt da página atual — a troca de idioma leva ao par */
+  caminho: string;
+  /** destino do logo */
+  inicio: string;
+  itens: Item[];
+}
+
+const { lang, caminho, inicio, itens } = Astro.props;
+---
+<nav
+  id="navbar"
+  class="fixed w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center transition-all duration-300"
+>
+  <a href={inicio} class="flex items-center group">
+    <img
+      src="/assets/GHFSoftware.png"
+      alt="GHF Software Logo"
+      class="h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-primary)/0.5)]"
+    >
+  </a>
+
+  <!-- Menu desktop -->
+  <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+    {
+      itens.map((item) =>
+        item.destaque ? (
+          <a
+            href={item.href}
+            class="px-5 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-brand-primary hover:text-brand-primary transition-all duration-300"
+          >
+            {t(lang, item.chave)}
+          </a>
+        ) : (
+          <a href={item.href} class="text-gray-300 hover:text-white hover:text-brand-primary transition-colors">
+            {t(lang, item.chave)}
+          </a>
+        ),
+      )
+    }
+    <TrocaIdioma
+      lang={lang}
+      caminho={caminho}
+      class="flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold tracking-wide"
+    />
+  </div>
+
+  <!-- Botões do celular -->
+  <div class="flex items-center gap-4 md:hidden">
+    <TrocaIdioma
+      lang={lang}
+      caminho={caminho}
+      class="flex items-center gap-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold text-sm"
+    />
+    <button
+      id="mobile-menu-btn"
+      type="button"
+      aria-label="Menu"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+      class="text-gray-300 hover:text-white focus:outline-none ml-2"
+    >
+      <i class="fa-solid fa-bars text-xl" aria-hidden="true"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- Menu do celular (sobreposto) -->
+<div
+  id="mobile-menu"
+  class="fixed inset-0 bg-brand-base z-40 flex flex-col justify-center items-center gap-8 text-lg font-medium glass-panel opacity-0 pointer-events-none transition-opacity duration-300"
+>
+  {
+    itens.map((item) =>
+      item.destaque ? (
+        <a
+          href={item.href}
+          class="mobile-link px-6 py-2 rounded-full bg-brand-primary text-white hover:bg-brand-primaryHover transition-colors"
+        >
+          {t(lang, item.chave)}
+        </a>
+      ) : (
+        <a href={item.href} class="mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors">
+          {t(lang, item.chave)}
+        </a>
+      ),
+    )
+  }
+</div>
+
+<script>
+  // Nav com vidro ao rolar (o mesmo comportamento de index.html).
+  const navbar = document.getElementById('navbar');
+  if (navbar) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        navbar.classList.add('scrolled');
+        navbar.classList.replace('py-5', 'py-3');
+      } else {
+        navbar.classList.remove('scrolled');
+        navbar.classList.replace('py-3', 'py-5');
+      }
+    });
+  }
+
+  // Menu do celular.
+  const botao = document.getElementById('mobile-menu-btn');
+  const icone = botao?.querySelector('i');
+  const menu = document.getElementById('mobile-menu');
+
+  function alternaMenu() {
+    if (!botao || !icone || !menu) return;
+    const abrir = menu.classList.contains('opacity-0');
+    if (abrir) {
+      menu.classList.remove('opacity-0', 'pointer-events-none');
+      menu.classList.add('opacity-100', 'pointer-events-auto');
+      icone.classList.replace('fa-bars', 'fa-xmark');
+    } else {
+      menu.classList.remove('opacity-100', 'pointer-events-auto');
+      menu.classList.add('opacity-0', 'pointer-events-none');
+      icone.classList.replace('fa-xmark', 'fa-bars');
+    }
+    botao.setAttribute('aria-expanded', String(abrir));
+  }
+
+  botao?.addEventListener('click', alternaMenu);
+  document.querySelectorAll('.mobile-link').forEach((link) => link.addEventListener('click', alternaMenu));
+</script>

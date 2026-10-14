@@ -1,0 +1,134 @@
+---
+// Footer do site (referência: index.html). `id="contato"` é o alvo do item Contato da nav.
+// Links para páginas do site passam por `rota()`: em en, apontam para o par quando ele existe.
+import { rota, t, type Idioma } from '../i18n/ui';
+
+interface Props {
+  lang: Idioma;
+  /** destino do logo */
+  inicio: string;
+  /** prefixo das âncoras da home: '' na própria home, a URL da home nas outras páginas */
+  prefixoAncora: string;
+}
+
+const { lang, inicio, prefixoAncora } = Astro.props;
+const link = 'text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm';
+const social =
+  'w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-gray-700 hover:text-white transition-all';
+
+const institucional = [
+  { href: `${prefixoAncora}#sobre`, chave: 'nav_about' },
+  { href: `${prefixoAncora}#portfolio`, chave: 'footer_port' },
+  { href: `${prefixoAncora}#contato`, chave: 'footer_cont' },
+] as const;
+
+const apps = [
+  { caminho: 'lottoexpert.html', nome: 'LottoExpert' },
+  { caminho: 'topowalk.html', nome: 'TopoWalk' },
+  { caminho: 'poleposition.html', nome: 'Pole Position' },
+  { caminho: 'eclipsego.html', nome: 'EclipseGo' },
+];
+
+const politicas = [
+  { caminho: 'lottoexpert-privacy.html', icone: 'fa-shield-halved', chave: 'footer_priv_lotto' },
+  { caminho: 'lottoexpert-terms.html', icone: 'fa-file-contract', chave: 'footer_terms_lotto' },
+  { caminho: 'poleposition-privacy.html', icone: 'fa-shield-halved', chave: 'footer_priv_pole' },
+  { caminho: 'topowalk-privacy.html', icone: 'fa-shield-halved', chave: 'footer_priv_topo' },
+  { caminho: 'eclipsego-privacy.html', icone: 'fa-shield-halved', chave: 'footer_priv_eclipse' },
+] as const;
+
+const ano = new Date().getFullYear();
+---
+<footer id="contato" class="bg-brand-base pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden">
+  <div class="container mx-auto px-6 md:px-12 relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+      <!-- Marca -->
+      <div class="md:col-span-2 lg:col-span-2">
+        <a href={inicio} class="inline-block mb-6 group">
+          <img
+            src="/assets/GHFSoftware.png"
+            alt="GHF Software Logo"
+            class="h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-primary)/0.5)]"
+          >
+        </a>
+        <p class="text-gray-400 max-w-sm mb-6">{t(lang, 'footer_desc')}</p>
+        <div class="flex items-center gap-4 text-gray-400">
+          <a href="mailto:support@ghfsoftware.com" class={social} title="Email" aria-label="Email">
+            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+          </a>
+          <a
+            href="https://www.youtube.com/channel/UCZfKMp0qRRIEu103Vb3OGJg"
+            target="_blank"
+            rel="noopener noreferrer"
+            class={social}
+            title="YouTube"
+            aria-label="YouTube"
+          >
+            <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+          </a>
+          <a
+            href="https://www.instagram.com/ghfsoftware/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class={social}
+            title="Instagram"
+            aria-label="Instagram"
+          >
+            <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Institucional -->
+      <div>
+        <h4 class="text-white font-semibold mb-6">{t(lang, 'footer_inst')}</h4>
+        <ul class="space-y-3">
+          {institucional.map((i) => <li><a href={i.href} class={link}>{t(lang, i.chave)}</a></li>)}
+        </ul>
+      </div>
+
+      <!-- Aplicativos -->
+      <div>
+        <h4 class="text-white font-semibold mb-6">{t(lang, 'footer_apps')}</h4>
+        <ul class="space-y-3">
+          {apps.map((a) => <li><a href={rota(lang, a.caminho)} class={link}>{a.nome}</a></li>)}
+        </ul>
+      </div>
+
+      <!-- Políticas -->
+      <div>
+        <h4 class="text-white font-semibold mb-6">{t(lang, 'footer_transp')}</h4>
+        <ul class="space-y-3">
+          {
+            politicas.map((p) => (
+              <li>
+                <a href={rota(lang, p.caminho)} class={`${link} flex items-center gap-2`}>
+                  <i class={`fa-solid ${p.icone} text-gray-600 text-xs`} aria-hidden="true"></i>
+                  <span>{t(lang, p.chave)}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="pt-8 border-t border-gray-800/80 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-sm text-gray-500">
+        &copy; <span id="year">{ano}</span> <span>{t(lang, 'footer_rights')}</span>
+      </p>
+      <p class="text-sm text-gray-600 flex items-center gap-2">
+        <span>{t(lang, 'footer_dev')}</span>
+        <i class="fa-solid fa-heart text-brand-primary/50 text-xs" aria-hidden="true"></i>
+        <span>{t(lang, 'footer_dev2')}</span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Ano corrente (o do build fica como texto sem JS).
+  const ano = document.getElementById('year');
+  if (ano) ano.textContent = String(new Date().getFullYear());
+</script>

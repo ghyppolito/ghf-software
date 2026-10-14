@@ -7,9 +7,7 @@
 
 ## 1. Onde parei
 
-WP-05 e WP-06 `done`, integrados em `develop` (PR #33 e #35). WP-07 `blocked` (PR #34 integrado), mas
-**nada dele está no ar**: depende de passos do usuário (seção 4). WP-19 (rodada 3 do Claude Design)
-criado, `todo`, trilha C. Próximo WP depois do WP-07: WP-08 (depende só do WP-07).
+WP-08 (`doing`) fatia 1 pronta na sub-branch `feat/wp-08-f1-infra-e-home`; PR rascunho #37 é a integração: não fazer merge até o WP-07 estar no ar. Usuário testando o convite do bolão, que parece escuro para ele: o código é só tema claro (sem `prefers-color-scheme` nem `color-scheme`), hipótese é escurecimento forçado do navegador (Samsung Internet / Chrome auto-dark); ele pediu para NÃO criar WP ainda. WP-19 em outra branch local (`feat/wp-19-rodada-3-claude-design`, 4 commits sem push), aguardando checklist.
 
 ## 2. Quebrado ou pela metade agora
 

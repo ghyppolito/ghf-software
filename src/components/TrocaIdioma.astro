@@ -1,0 +1,42 @@
+---
+// Troca de idioma: link para o par da página no outro idioma (/x.html ↔ /en/x.html). Sem
+// redirect (D8 c1). Ao clicar grava `ghf_lang`, para as páginas ainda copiadas da raiz (que
+// trocam o idioma por JS) abrirem no idioma escolhido.
+import { rota, type Idioma } from '../i18n/ui';
+
+interface Props {
+  lang: Idioma;
+  /** caminho pt da página atual */
+  caminho: string;
+  class?: string;
+}
+
+const { lang, caminho, class: classe = '' } = Astro.props;
+const outro: Idioma = lang === 'pt' ? 'en' : 'pt';
+// Nome do idioma no próprio idioma, contendo o rótulo visível (WCAG 2.5.3): o leitor de tela
+// anuncia "English" / "Português (PT)".
+const nome = outro === 'en' ? 'English' : 'Português (PT)';
+---
+<a
+  href={rota(outro, caminho)}
+  hreflang={outro === 'pt' ? 'pt-BR' : 'en'}
+  lang={outro === 'pt' ? 'pt-BR' : 'en'}
+  aria-label={nome}
+  data-troca-idioma={outro}
+  class={classe}
+>
+  <i class="fa-solid fa-globe" aria-hidden="true"></i>
+  <span>{outro.toUpperCase()}</span>
+</a>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-troca-idioma]').forEach((link) => {
+    link.addEventListener('click', () => {
+      try {
+        localStorage.setItem('ghf_lang', link.dataset.trocaIdioma ?? 'pt');
+      } catch {
+        // localStorage bloqueado: o link segue funcionando, só sem lembrar a escolha.
+      }
+    });
+  });
+</script>
