@@ -33,7 +33,7 @@ SEQUENCIA = [
     ]),
     ("C · evolução — design, SEO, performance e medição; WP-06 e WP-19 podem rodar a qualquer momento (são sessões do usuário no Claude Design)", [
         ("WP-06", "brief de design (`design/BRIEF.md`) e sessão no Claude Design (D4): tokens, nav, footer, hero, card de app, seção de features, página legal; export em `design/handoff/<data>/`. Independe da stack"),
-        ("WP-19", "export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true)"),
+     ("WP-19", "export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true)"),
         ("WP-10", "redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08"),
         ("WP-11", "SEO técnico: sitemap, robots, canonical, hreflang pt/en, JSON-LD (Organization, MobileApplication), OG por página. M, depois do WP-08"),
         ("WP-15", "i18n N-línguas: mapa único página → línguas (`src/i18n/idiomas.ts`), pt na raiz e demais em `/<lang>/`, seletor só com as línguas da página, hreflang/x-default das existentes, check_site compara data, seções e tokens entre versões legais; não publica língua nova. D8, ADR-003. M, risco alto, depois do WP-11"),
@@ -48,7 +48,6 @@ SEQUENCIA = [
 # Bloqueios ativos: (WP, motivo, desde). Lista escrita à mão; entrada de WP `done`
 # é filtrada, para a tabela seguir o front-matter.
 BLOQUEIOS = [
-    ("WP-07", "implementado e auditado; falta o usuário: CI no PR, /release, trocar o Pages para Actions + variável PAGES_VIA_ACTIONS, curls e checklist de navegador", "2026-10-13"),
     ("WP-19", "export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true)", "2026-10-13"),
 ]
 

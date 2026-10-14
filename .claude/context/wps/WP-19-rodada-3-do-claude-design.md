@@ -120,3 +120,5 @@ Checklist (`python3 -m http.server 8080 -d "design/handoff/2026-10-13-rodada-3"`
 - Troca pt/en na legal (o en é stub, esperado).
 - `Landing App.dc.html?app=pole&suggest=de`: a faixa fecha e não volta na sessão.
 - Tab mostra foco em "Ver todas" e nos sociais do footer; selo "Publicado" distinto do verde do Pole no footer.
+
+**Publicado em 2026-10-14** (PR #39 `develop → master`; o WP segue `blocked` pelo checklist de navegador da rodada 3).
