@@ -28,7 +28,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 
 | # | WP | Status | Nota |
 |---|---|---|---|
-| 1 | [WP-19 — A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2](wps/WP-19-rodada-3-do-claude-design.md) | `todo` | rodada 3 do Claude Design: landings TopoWalk, Pole Position e EclipseGo, tablet 768, card em breve, troca de idioma na legal, defeitos da rodada 2. S, sessão do usuário; em paralelo à trilha B, antes do WP-10 |
+| 1 | [WP-19 — A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2](wps/WP-19-rodada-3-do-claude-design.md) | `blocked` | export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true) |
 | 2 | [WP-10 — A home e as landings de app seguem o sistema visual do handoff](wps/WP-10-redesign-com-o-handoff.md) | `todo` | redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08 · ⏳ aguarda WP-08 |
 | 3 | [WP-11 — Buscadores leem sitemap, canonical, hreflang e dados estruturados de cada página](wps/WP-11-seo-tecnico.md) | `todo` | SEO técnico: sitemap, robots, canonical, hreflang pt/en, JSON-LD (Organization, MobileApplication), OG por página. M, depois do WP-08 · ⏳ aguarda WP-08 |
 | 4 | [WP-15 — Cada página declara em que línguas existe e o site roteia, anuncia e verifica só essas](wps/WP-15-i18n-n-linguas.md) | `todo` | i18n N-línguas: mapa único página → línguas (`src/i18n/idiomas.ts`), pt na raiz e demais em `/<lang>/`, seletor só com as línguas da página, hreflang/x-default das existentes, check_site compara data, seções e tokens entre versões legais; não publica língua nova. D8, ADR-003. M, risco alto, depois do WP-11 · ⏳ aguarda WP-08, WP-09, WP-11 |
@@ -60,10 +60,11 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-16](wps/WP-16-politica-do-poleposition-em-6-linguas.md) | A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de | legal | M | alto | 🖥️ | WP-15 | ADR-001 | `todo` |
 | [WP-17](wps/WP-17-politica-do-topowalk-em-7-linguas.md) | A política de privacidade do TopoWalk existe no site em pt, en, es, fr, it, de e ru | legal | L | alto | 🖥️ | WP-16 | ADR-001 | `todo` |
 | [WP-18](wps/WP-18-landings-topowalk-e-poleposition-nas-linguas-dos-apps.md) | As landings do TopoWalk e do Pole Position existem nas línguas que cada app fala | landing | M | medio | 🖥️ | WP-10, WP-15 | ADR-001 | `todo` |
-| [WP-19](wps/WP-19-rodada-3-do-claude-design.md) | A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2 | design | S | baixo | 🖥️ | WP-06 | — | `todo` |
+| [WP-19](wps/WP-19-rodada-3-do-claude-design.md) | A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2 | design | S | baixo | 🖥️ | WP-06 | — | `blocked` |
 
 ## Bloqueios ativos
 
 | WP | Bloqueado por | Desde |
 |---|---|---|
 | WP-07 | implementado e auditado; falta o usuário: CI no PR, /release, trocar o Pages para Actions + variável PAGES_VIA_ACTIONS, curls e checklist de navegador | 2026-10-13 |
+| WP-19 | export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true) | 2026-10-13 |

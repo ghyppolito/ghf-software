@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="{{ vars }}">
+<div style="width:1360px;box-sizing:border-box;padding:40px;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,sans-serif;display:flex;flex-direction:column;gap:56px">
+
+<header style="display:flex;flex-direction:column;gap:10px;max-width:880px">
+  <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--br)">Direção A · rodada 3</div>
+  <h2 style="margin:0;font-size:40px;line-height:48px;font-weight:700;letter-spacing:-0.02em">{{ t.name }}</h2>
+  <p style="margin:0;font-size:17px;line-height:28px;color:var(--tx2);text-wrap:pretty">{{ t.about }}</p>
+</header>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <h3 style="margin:0;font-size:24px;line-height:32px;font-weight:700">1 · Tokens</h3>
+
+  <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:16px">
+    <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Superfícies, texto e marca · contraste sobre --bg</div>
+    <div style="display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:12px">
+      <sc-for list="{{ surfaces }}" as="s" hint-placeholder-count="9">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="height:72px;border-radius:var(--rc);border:1px solid var(--bd2);background:{{ s.hex }}"></div>
+          <div style="font-size:13px;font-weight:600">{{ s.token }}</div>
+          <div style="font-size:12px;line-height:16px;color:var(--tx2)">{{ s.role }}</div>
+          <div style="font-size:12px;color:var(--mu);font-variant-numeric:tabular-nums">{{ s.hex }} · {{ s.ratio }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px">
+    <sc-for list="{{ apps }}" as="a" hint-placeholder-count="4">
+      <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column">
+        <div style="height:6px;background:{{ a.hex }}"></div>
+        <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="width:40px;height:40px;border-radius:var(--rc);overflow:hidden;flex:none;display:block;background:var(--rs)"><img src="{{ a.fav }}" alt="" style="width:100%;height:100%;object-fit:cover;transform:scale(1.06);display:block"></span>
+            <div style="display:flex;flex-direction:column">
+              <span style="font-size:17px;font-weight:700">{{ a.name }}</span>
+              <span style="font-size:12px;color:var(--mu)">--app-{{ a.id }}</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;height:44px;border-radius:var(--rc);background:{{ a.hex }};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--bg)">{{ a.hex }}</div>
+            <div style="flex:1;height:44px;border-radius:var(--rc);background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:{{ a.light }}">{{ a.light }}</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:13px;line-height:18px;font-variant-numeric:tabular-nums">
+            <span style="color:var(--tx2)">Texto sobre --bg</span><span style="font-weight:600;color:{{ a.hex }}">{{ a.rText }}</span>
+            <span style="color:var(--tx2)">--bg sobre botão</span><span style="font-weight:600">{{ a.rInk }}</span>
+            <span style="color:var(--tx2)">Variante clara s/ papel</span><span style="font-weight:600">{{ a.rLight }}</span>
+            <span style="color:var(--mu)">Antes {{ a.old }}</span><span style="color:var(--mu)">{{ a.rOld }}</span>
+          </div>
+          <p style="margin:0;font-size:13px;line-height:20px;color:var(--tx2);text-wrap:pretty">{{ a.why }}</p>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Estados semânticos</div>
+      <sc-for list="{{ semantic }}" as="s" hint-placeholder-count="4">
+        <div role="status" style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:var(--rc);background:{{ s.tint }};border:1px solid {{ s.edge }}">
+          <span style="width:20px;height:20px;border-radius:50%;border:1.5px solid {{ s.hex }};color:{{ s.hex }};flex:none;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;box-sizing:border-box;margin-top:1px">{{ s.glyph }}</span>
+          <span style="flex:1;font-size:14px;line-height:21px;color:{{ s.hex }}"><strong style="font-weight:700">{{ s.word }}:</strong> {{ s.role }}</span>
+          <span style="font-size:11px;color:var(--mu);font-variant-numeric:tabular-nums;white-space:nowrap">{{ s.token }} · {{ s.ratio }}</span>
+        </div>
+      </sc-for>
+      <p style="margin:0;font-size:13px;line-height:20px;color:var(--tx2);text-wrap:pretty">Mudei a forma, não só o matiz: estado é sempre caixa tingida escura + texto claro + glifo + palavra (“Erro:”). Acento de app é sempre cor cheia (botão, faixa, sublinhado) e nunca aparece em mensagem. Assim o vermelho do EclipseGo e o verde do Pole Position não viram erro nem sucesso.</p>
+    </div>
+    <div style="background:var(--paper);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:12px;color:var(--pink)">
+      <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--ptx2)">Tema claro · páginas legais</div>
+      <sc-for list="{{ paper }}" as="s" hint-placeholder-count="5">
+        <div style="display:flex;align-items:center;gap:12px;min-height:44px">
+          <span style="width:28px;height:28px;border-radius:var(--rc);background:{{ s.hex }};border:1px solid var(--pbd);flex:none"></span>
+          <span style="flex:1;font-size:14px"><strong style="font-weight:600">{{ s.token }}</strong> <span style="color:var(--ptx2)">{{ s.role }}</span></span>
+          <span style="font-size:12px;color:var(--ptx2);font-variant-numeric:tabular-nums">{{ s.ratio }}</span>
+        </div>
+      </sc-for>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-top:4px;font-size:15px">
+        <a href="#" style="color:var(--plink);text-decoration:underline;text-underline-offset:3px">Link</a>
+        <a href="#" style="color:var(--plinkh);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px">Hover</a>
+        <a href="#" style="color:var(--plink);text-decoration:underline;text-underline-offset:3px;outline:2px solid var(--plink);outline-offset:3px;border-radius:2px">Foco</a>
+      </div>
+      <p style="margin:0;font-size:13px;line-height:20px;color:var(--ptx2);text-wrap:pretty">Sobre o papel, o ciano da marca dá {{ brandOnPaper }} e sai de texto e foco. Entra --paper-link: link {{ paperFocus }}, foco (anel 2 px) {{ paperFocus }}, hover {{ paperHover }}. O ciano só aparece no papel como fio decorativo.</p>
+    </div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Raio, sombra, foco</div>
+      <div style="display:flex;gap:12px;align-items:flex-end">
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:56px;height:56px;background:var(--rs);border:1px solid var(--bd2);border-radius:var(--rc)"></div><span style="font-size:12px;color:var(--mu)">--r-sm {{ t.rc }}</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:56px;height:56px;background:var(--rs);border:1px solid var(--bd2);border-radius:var(--r)"></div><span style="font-size:12px;color:var(--mu)">--r-md {{ t.r }}</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:96px;height:44px;background:var(--rs);border:1px solid var(--bd2);border-radius:var(--rb)"></div><span style="font-size:12px;color:var(--mu)">--r-btn {{ t.rb }}</span></div>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center">
+        <div style="width:120px;height:64px;background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);box-shadow:var(--sh)"></div>
+        <span style="font-size:13px;line-height:20px;color:var(--tx2)">--shadow-pop: só em camadas flutuantes (menu, seletor). Sem glow.</span>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center">
+        <span style="height:44px;padding:0 18px;display:inline-flex;align-items:center;border:1px solid var(--bd2);border-radius:var(--rb);outline:2px solid var(--br);outline-offset:3px;font-size:14px;font-weight:600">Foco</span>
+        <span style="font-size:13px;line-height:20px;color:var(--tx2)">--focus: 2 px {{ t.br }}, offset 3 px, em todo interativo. {{ focusRatio }} sobre --bg.</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:16px">
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:4px">
+      <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu);margin-bottom:8px">Tipografia · Inter · 360 → 1280</div>
+      <sc-for list="{{ type }}" as="s" hint-placeholder-count="8">
+        <div style="display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;align-items:baseline;padding:10px 0;border-top:1px solid var(--bd)">
+          <div style="display:flex;flex-direction:column;gap:2px;font-variant-numeric:tabular-nums">
+            <span style="font-size:13px;font-weight:600">{{ s.name }}</span>
+            <span style="font-size:12px;color:var(--mu)">{{ s.spec }}</span>
+          </div>
+          <div style="font-size:{{ s.size }};line-height:{{ s.lh }};font-weight:{{ s.w }};letter-spacing:{{ s.ls }};text-transform:{{ s.tt }};color:{{ s.color }};text-wrap:pretty">{{ s.sample }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu);margin-bottom:6px">Espaçamento · base 4</div>
+      <sc-for list="{{ spacing }}" as="s" hint-placeholder-count="9">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="width:56px;font-size:12px;color:var(--mu);font-variant-numeric:tabular-nums">--s-{{ s.k }}</span>
+          <span style="height:12px;background:var(--br);border-radius:2px;width:{{ s.px }}"></span>
+          <span style="font-size:12px;color:var(--tx2)">{{ s.px }}</span>
+        </div>
+      </sc-for>
+      <p style="margin:8px 0 0;font-size:13px;line-height:20px;color:var(--tx2)">Alvo de toque mínimo 44 px (--s-11). Seções: 64 mobile, 96 desktop.</p>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <h3 style="margin:0;font-size:24px;line-height:32px;font-weight:700">2 · Estados</h3>
+  <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:grid;grid-template-columns:140px repeat(6,minmax(0,1fr));gap:16px 16px;align-items:center;--acc:#A78BFA">
+    <span></span>
+    <span style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Normal</span>
+    <span style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Hover</span>
+    <span style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Foco</span>
+    <span style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Ativo</span>
+    <span style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Desabilitado</span>
+    <span style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--br)">Ao vivo</span>
+
+    <span style="font-size:14px;font-weight:600">Primário<br><span style="font-weight:400;color:var(--mu);font-size:12px">acento do app</span></span>
+    <span style="min-height:48px;padding:0 20px;border-radius:var(--rb);background:var(--acc);color:var(--bg);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center">Baixar</span>
+    <span style="min-height:48px;padding:0 20px;border-radius:var(--rb);background:color-mix(in oklab, var(--acc) 80%, white);color:var(--bg);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center">Baixar</span>
+    <span style="min-height:48px;padding:0 20px;border-radius:var(--rb);background:var(--acc);color:var(--bg);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;outline:2px solid var(--br);outline-offset:3px">Baixar</span>
+    <span style="min-height:48px;padding:0 20px;border-radius:var(--rb);background:color-mix(in oklab, var(--acc) 82%, black);color:var(--bg);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center">Baixar</span>
+    <span style="min-height:48px;padding:0 20px;border-radius:var(--rb);background:var(--rs);color:var(--mu);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center">Baixar</span>
+    <button type="button" style="min-height:48px;padding:0 20px;border-radius:var(--rb);background:var(--acc);color:var(--bg);font-weight:700;font-size:15px;border:0;font-family:inherit;cursor:pointer" style-hover="background:color-mix(in oklab, var(--acc) 80%, white)" style-active="background:color-mix(in oklab, var(--acc) 82%, black)" style-focus="outline:2px solid var(--br);outline-offset:3px">Baixar</button>
+
+    <span style="font-size:14px;font-weight:600">Secundário</span>
+    <span style="min-height:48px;padding:0 20px;border-radius:var(--rb);border:1px solid var(--bd2);color:var(--tx);font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:center">Ver todas</span>
+    <span style="min-height:48px;padding:0 20px;border-radius:var(--rb);border:1px solid var(--tx2);background:var(--rs);color:var(--tx);font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:center">Ver todas</span>
+    <span style="min-height:48px;padding:0 20px;border-radius:var(--rb);border:1px solid var(--bd2);color:var(--tx);font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:center;outline:2px solid var(--br);outline-offset:3px">Ver todas</span>
+    <span style="min-height:48px;padding:0 20px;border-radius:var(--rb);border:1px solid var(--tx2);background:var(--bd);color:var(--tx);font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:center">Ver todas</span>
+    <span style="min-height:48px;padding:0 20px;border-radius:var(--rb);border:1px dashed var(--bd2);color:var(--mu);font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:center">Ver todas</span>
+    <button type="button" style="min-height:48px;padding:0 20px;border-radius:var(--rb);border:1px solid var(--bd2);background:transparent;color:var(--tx);font-weight:600;font-size:15px;font-family:inherit;cursor:pointer" style-hover="background:var(--rs);border-color:var(--tx2)" style-active="background:var(--bd)" style-focus="outline:2px solid var(--br);outline-offset:3px">Ver todas</button>
+
+    <span style="font-size:14px;font-weight:600">Link</span>
+    <span style="font-size:15px;text-decoration:underline;text-decoration-color:var(--br);text-underline-offset:4px">Política de privacidade</span>
+    <span style="font-size:15px;text-decoration:underline;text-decoration-color:var(--br);text-decoration-thickness:2px;text-underline-offset:4px">Política de privacidade</span>
+    <span style="font-size:15px;text-decoration:underline;text-decoration-color:var(--br);text-underline-offset:4px;outline:2px solid var(--br);outline-offset:3px;border-radius:2px">Política de privacidade</span>
+    <span style="font-size:15px;color:var(--br);text-decoration:underline;text-underline-offset:4px">Política de privacidade</span>
+    <span style="font-size:13px;color:var(--mu)">— links não desabilitam; somem</span>
+    <a href="#" style="font-size:15px;color:var(--tx);text-decoration:underline;text-decoration-color:var(--br);text-underline-offset:4px;border-radius:2px" style-hover="text-decoration-thickness:2px" style-active="color:var(--br)" style-focus="outline:2px solid var(--br);outline-offset:3px">Política de privacidade</a>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">CTA da Play · publicado (os 4) vs app futuro</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="align-self:flex-start;min-height:52px;padding:0 24px;border-radius:var(--rb);background:#5FD47E;color:var(--bg);font-weight:700;font-size:16px;display:flex;align-items:center">Baixar na Google Play</span>
+        <span style="font-size:13px;color:var(--tx2)">Grátis · Android 8+</span>
+      </div>
+      <div style="height:1px;background:var(--bd)"></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span role="status" style="align-self:flex-start;min-height:52px;padding:0 20px;border-radius:var(--rb);border:1px dashed #EE737D;color:var(--tx);font-weight:600;font-size:16px;display:flex;align-items:center;gap:10px"><span style="width:8px;height:8px;border-radius:50%;background:#EE737D"></span>Em breve na Google Play</span>
+        <span style="font-size:13px;line-height:20px;color:var(--tx2)">Hoje nenhum app usa este estado; fica para um app futuro. Não é botão: sem href, sem foco, sem hover. Ao lado, só o link da <a href="#" style="color:var(--tx);text-decoration-color:var(--br);text-underline-offset:3px">política de privacidade</a>.</span>
+      </div>
+    </div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Selo · imagem ausente</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span style="min-height:28px;padding:0 12px;border-radius:var(--rc);background:var(--rs);border:1px solid var(--bd2);font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:8px"><span aria-hidden="true" style="color:#C5E86C;font-weight:800">✓</span>Publicado</span>
+        <span style="min-height:28px;padding:0 12px;border-radius:var(--rc);border:1px dashed var(--bd2);font-size:13px;font-weight:600;color:var(--tx2);display:inline-flex;align-items:center;gap:8px"><span style="width:7px;height:7px;border-radius:50%;border:1.5px solid var(--tx2);box-sizing:border-box"></span>Em breve</span>
+      </div>
+      <div style="display:flex;gap:16px;align-items:stretch">
+        <div style="width:110px;aspect-ratio:9/19;border-radius:var(--r);border:1px solid var(--bd2);background:repeating-linear-gradient(135deg, var(--rs) 0 6px, var(--sf) 6px 12px);display:flex;align-items:flex-end;padding:8px;box-sizing:border-box"><span style="font:11px/14px ui-monospace,Menlo,monospace;color:var(--tx2)">imagem indisponível</span></div>
+        <p style="margin:0;font-size:13px;line-height:20px;color:var(--tx2);text-wrap:pretty">Mantém a proporção do screenshot (9:19) para não pular o layout. O alt continua no DOM; a legenda do bloco de feature fica.</p>
+      </div>
+    </div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Idioma incompleto</div>
+      <div lang="en" style="border:1px solid var(--bd2);border-radius:var(--r);padding:16px;display:flex;gap:12px;background:var(--rs)">
+        <span style="width:24px;height:24px;border-radius:var(--rc);background:#F2C14E;color:var(--bg);font-weight:800;font-size:13px;flex:none;display:flex;align-items:center;justify-content:center">!</span>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:21px">
+          <strong style="font-weight:600">Part of this page is not translated yet.</strong>
+          <span style="color:var(--tx2)">Sections without a translation appear in Portuguese.</span>
+          <a href="#" style="color:var(--tx);text-decoration-color:var(--br);text-underline-offset:3px;align-self:flex-start;min-height:28px;display:inline-flex;align-items:center">Ver em português</a>
+        </div>
+      </div>
+      <p style="margin:0;font-size:13px;line-height:20px;color:var(--tx2)">No seletor, a língua aparece com a etiqueta “parcial”. Trechos em pt recebem lang="pt".</p>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Prova · fatos verificáveis (padrão)</div>
+      <ul style="margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden">
+        <sc-for list="{{ facts }}" as="f" hint-placeholder-count="4">
+          <li style="background:var(--sf);padding:16px;display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:17px;line-height:24px;font-weight:700;color:#E38A57">{{ f.k }}</span>
+            <span style="font-size:13px;line-height:19px;color:var(--tx2)">{{ f.v }}</span>
+          </li>
+        </sc-for>
+      </ul>
+      <p style="margin:0;font-size:13px;line-height:20px;color:var(--mu)">Exemplo TopoWalk. Cada fato vem da ficha do app; nenhum número de uso.</p>
+    </div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Prova · nota na Google Play (opcional)</div>
+      <a href="#" style="display:flex;align-items:center;gap:16px;padding:16px;border:1px solid var(--bd2);border-radius:var(--r);color:var(--tx);text-decoration:none" style-hover="background:var(--rs)" style-focus="outline:2px solid var(--br);outline-offset:3px">
+        <span style="font-size:40px;line-height:44px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.02em">N,N</span>
+        <span style="display:flex;flex-direction:column;gap:4px">
+          <span aria-hidden="true" style="position:relative;font-size:18px;letter-spacing:2px;color:var(--bd2);line-height:20px">★★★★★<span style="position:absolute;left:0;top:0;width:86%;overflow:hidden;white-space:nowrap;color:#E38A57">★★★★★</span></span>
+          <span style="font-size:13px;color:var(--tx2)">NNN avaliações · ver na Play ↗</span>
+        </span>
+      </a>
+      <p style="margin:0;font-size:13px;line-height:20px;color:var(--tx2);text-wrap:pretty">Entra só quando o número existir e for atualizado no build. Valores acima são marcadores, não dados.</p>
+    </div>
+    <div style="border:1px dashed var(--bd2);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:12px;justify-content:center">
+      <div style="font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Prova · seção ausente</div>
+      <div style="font-size:15px;line-height:24px;color:var(--tx2);text-wrap:pretty">Sem fatos nem nota: a seção não é renderizada. A seguinte (privacidade) sobe; nada de espaço reservado nem “em breve”.</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font:12px/16px ui-monospace,Menlo,monospace;color:var(--mu)">
+        <span>Funcionalidades</span><span>Screenshots</span><span style="text-decoration:line-through">Prova</span><span style="color:var(--tx)">Privacidade ↑</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <h3 style="margin:0;font-size:24px;line-height:32px;font-weight:700">Logo para fundo escuro · proposta</h3>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">
+    <div style="background:var(--bg);border:1px solid var(--bd2);border-radius:var(--r);padding:32px 24px;display:flex;flex-direction:column;gap:20px;align-items:flex-start">
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="display:block;width:108px;height:45px;overflow:hidden;position:relative"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:252px;left:-71px;top:-35px;filter:brightness(1.9)"></span>
+        <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:24px;line-height:28px;font-weight:700;letter-spacing:-0.01em">GHF Software</span><span style="font-size:13px;color:var(--tx2)">Soluções de engenharia · desde 2004</span></span>
+      </div>
+      <span style="font-size:13px;line-height:20px;color:var(--tx2)">Escuro: símbolo GHF com o ardósia clareado (~#94BEDD), nós no ciano. Nome em Inter 700, sem “Innovating IoT since 1996”.</span>
+    </div>
+    <div style="background:var(--paper);border-radius:var(--r);padding:32px 24px;display:flex;flex-direction:column;gap:20px;align-items:flex-start;color:var(--pink)">
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="display:block;width:108px;height:45px;overflow:hidden;position:relative"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:252px;left:-71px;top:-35px"></span>
+        <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:24px;line-height:28px;font-weight:700;letter-spacing:-0.01em">GHF Software</span><span style="font-size:13px;color:var(--ptx2)">Soluções de engenharia · desde 2004</span></span>
+      </div>
+      <span style="font-size:13px;line-height:20px;color:var(--ptx2)">Papel e impressão: símbolo original, mesmo lockup.</span>
+    </div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;gap:16px;align-items:center">
+        <span style="display:block;width:64px;height:27px;overflow:hidden;position:relative"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:150px;left:-42px;top:-21px;filter:brightness(1.9)"></span>
+        <span style="width:32px;height:32px;border-radius:8px;background:var(--bg);border:1px solid var(--bd2);display:flex;align-items:center;justify-content:center;overflow:hidden"><span style="display:block;width:28px;height:12px;overflow:hidden;position:relative"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:65px;left:-18px;top:-9px;filter:brightness(1.9)"></span></span>
+      </div>
+      <span style="font-size:13px;line-height:20px;color:var(--tx2);text-wrap:pretty">Nav (64 px) e favicon. Aqui é só recorte + filtro do PNG atual. O arquivo final precisa ser redesenhado em SVG com duas cores fixas, pelo dono do logo. Fica marcado como LOGO-ANO-E-FUNDO-ESCURO-01, sem referência no handoff.</span>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <h3 style="margin:0;font-size:24px;line-height:32px;font-weight:700">3 · Nav e seletor de idioma</h3>
+  <p style="margin:-8px 0 0;font-size:14px;color:var(--tx2)">1280 · home, 7 línguas, faixa de sugestão. Clique no seletor e na faixa.</p>
+
+  <div style="position:relative;width:1280px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);min-height:540px;overflow:visible">
+    <sc-if value="{{ bandShown }}" hint-placeholder-val="{{ true }}">
+      <div lang="en" role="region" aria-label="Language suggestion" style="display:flex;align-items:center;gap:16px;padding:8px 16px 8px 32px;background:var(--rs);border-bottom:1px solid var(--bd)">
+        <span style="font-size:14px;color:var(--tx);flex:1">This page is also available in English.</span>
+        <button type="button" onClick="{{ switchEn }}" style="min-height:40px;padding:0 16px;border-radius:var(--rb);border:1px solid var(--bd2);background:transparent;color:var(--tx);font:600 14px Inter,sans-serif;cursor:pointer" style-hover="background:var(--sf)" style-focus="outline:2px solid var(--br);outline-offset:2px">Switch to English</button>
+        <button type="button" aria-label="Dismiss" onClick="{{ closeBand }}" style="width:44px;height:44px;border:0;background:transparent;color:var(--tx2);font-size:22px;cursor:pointer;border-radius:var(--rc)" style-hover="color:var(--tx);background:var(--sf)" style-focus="outline:2px solid var(--br)">×</button>
+      </div>
+    </sc-if>
+    <div style="height:68px;display:flex;align-items:center;gap:24px;padding:0 32px;border-bottom:1px solid var(--bd);background:var(--navbg)">
+      <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--tx);min-height:44px">
+        <span style="display:block;width:64px;height:27px;overflow:hidden;position:relative"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:150px;left:-42px;top:-21px;filter:brightness(1.9)"></span>
+        <span style="font-weight:700;font-size:17px;letter-spacing:-0.01em">GHF Software</span>
+      </a>
+      <nav aria-label="Principal" style="display:flex;gap:4px;margin-left:auto">
+        <sc-for list="{{ navLinks }}" as="l" hint-placeholder-count="3">
+          <a href="#" style="min-height:44px;padding:0 14px;display:flex;align-items:center;border-radius:var(--rc);color:var(--tx2);text-decoration:none;font-size:15px;font-weight:500" style-hover="color:var(--tx);background:var(--rs)" style-focus="outline:2px solid var(--br);outline-offset:2px">{{ l }}</a>
+        </sc-for>
+      </nav>
+      <div style="position:relative">
+        <button type="button" aria-haspopup="listbox" aria-expanded="{{ langOpen }}" onClick="{{ toggleLang }}" style="min-height:44px;padding:0 14px;border-radius:var(--rb);border:1px solid var(--bd2);background:transparent;color:var(--tx);font:500 15px Inter,sans-serif;display:flex;align-items:center;gap:10px;cursor:pointer" style-hover="background:var(--rs)" style-focus="outline:2px solid var(--br);outline-offset:2px">
+          <span style="font-size:12px;font-weight:700;color:var(--mu);letter-spacing:.04em">{{ curCode }}</span>{{ curName }}
+          <span style="width:7px;height:7px;border-right:1.5px solid var(--tx2);border-bottom:1.5px solid var(--tx2);transform:translateY(-2px) rotate(45deg)"></span>
+        </button>
+        <sc-if value="{{ langOpen }}" hint-placeholder-val="{{ true }}">
+          <ul role="listbox" style="position:absolute;right:0;top:52px;width:264px;margin:0;padding:6px;list-style:none;background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);box-shadow:var(--sh);z-index:5">
+            <sc-for list="{{ langs }}" as="g" hint-placeholder-count="7">
+              <li role="option" aria-selected="{{ g.sel }}" lang="{{ g.code }}" onClick="{{ g.pick }}" style="min-height:44px;padding:0 12px;border-radius:var(--rc);display:flex;align-items:center;gap:12px;cursor:pointer;background:{{ g.bg }}" style-hover="background:var(--rs)">
+                <span style="width:28px;font-size:12px;font-weight:700;color:var(--mu);letter-spacing:.04em">{{ g.CODE }}</span>
+                <span style="flex:1;font-size:15px">{{ g.name }}</span>
+                <sc-if value="{{ g.partial }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;font-weight:600;color:var(--tx2);border:1px solid var(--bd2);border-radius:var(--rc);padding:2px 6px">parcial</span></sc-if>
+                <sc-if value="{{ g.sel }}" hint-placeholder-val="{{ false }}"><span style="width:6px;height:11px;border-right:2px solid var(--br);border-bottom:2px solid var(--br);transform:translateY(-2px) rotate(45deg)"></span></sc-if>
+              </li>
+            </sc-for>
+          </ul>
+        </sc-if>
+      </div>
+    </div>
+    <div style="padding:32px;display:flex;gap:16px;align-items:flex-start">
+      <div style="flex:1;height:160px;border-radius:var(--r);background:repeating-linear-gradient(135deg, var(--sf) 0 8px, var(--bg) 8px 16px);display:flex;align-items:flex-end;padding:12px;box-sizing:border-box"><span style="font:12px ui-monospace,Menlo,monospace;color:var(--mu)">hero da home — próxima rodada</span></div>
+      <div style="width:340px;font-size:13px;line-height:20px;color:var(--tx2);display:flex;flex-direction:column;gap:8px">
+        <span>A troca de língua mantém a âncora (#secao) e o scroll relativo.</span>
+        <span>A faixa aparece só quando navigator.languages tem uma língua da página diferente da atual; fecha e não volta (sessionStorage). Sem redirecionar.</span>
+        <span>O texto da faixa vem na língua sugerida, com lang= próprio.</span>
+      </div>
+    </div>
+  </div>
+
+  <p style="margin:8px 0 0;font-size:14px;color:var(--tx2)">1280 · landing de app, 2 línguas (LottoExpert). O acento entra só no sublinhado ativo e na marca do app.</p>
+  <div style="width:1280px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden">
+    <div style="height:68px;display:flex;align-items:center;gap:20px;padding:0 32px;background:var(--navbg)">
+      <a href="#" aria-label="GHF Software, início" style="display:flex;align-items:center;min-height:44px"><span style="display:block;width:64px;height:27px;overflow:hidden;position:relative"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:150px;left:-42px;top:-21px;filter:brightness(1.9)"></span></a>
+      <span style="width:1px;height:24px;background:var(--bd2)"></span>
+      <a href="#" style="display:flex;align-items:center;gap:10px;color:var(--tx);text-decoration:none;min-height:44px">
+        <span style="width:28px;height:28px;border-radius:var(--rc);overflow:hidden;display:block"><img src="assets/lottoexpert_favicon_v3.png" alt="" style="width:100%;height:100%;object-fit:cover;transform:scale(1.12)"></span>
+        <span style="font-weight:700;font-size:17px">LottoExpert</span>
+      </a>
+      <nav aria-label="Seções" style="display:flex;gap:4px;margin-left:auto">
+        <a href="#" aria-current="true" style="min-height:44px;padding:0 14px;display:flex;align-items:center;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;box-shadow:inset 0 -2px 0 #E2B547">Funcionalidades</a>
+        <a href="#" style="min-height:44px;padding:0 14px;display:flex;align-items:center;color:var(--tx2);text-decoration:none;font-size:15px;font-weight:500" style-hover="color:var(--tx)">Planos</a>
+        <a href="#" style="min-height:44px;padding:0 14px;display:flex;align-items:center;color:var(--tx2);text-decoration:none;font-size:15px;font-weight:500" style-hover="color:var(--tx)">FAQ</a>
+        <a href="#" style="min-height:44px;padding:0 14px;display:flex;align-items:center;color:var(--tx2);text-decoration:none;font-size:15px;font-weight:500" style-hover="color:var(--tx)">Privacidade</a>
+      </nav>
+      <div role="group" aria-label="Idioma" style="display:flex;border:1px solid var(--bd2);border-radius:var(--rb);padding:3px;gap:2px">
+        <button type="button" onClick="{{ setTwoPt }}" aria-pressed="{{ twoPt }}" lang="pt" style="min-height:44px;min-width:48px;padding:0 12px;border:0;border-radius:var(--rb);background:{{ twoPtBg }};color:var(--tx);font:600 14px Inter,sans-serif;cursor:pointer" style-focus="outline:2px solid var(--br)">PT</button>
+        <button type="button" onClick="{{ setTwoEn }}" aria-pressed="{{ twoEn }}" lang="en" style="min-height:44px;min-width:48px;padding:0 12px;border:0;border-radius:var(--rb);background:{{ twoEnBg }};color:var(--tx);font:600 14px Inter,sans-serif;cursor:pointer" style-focus="outline:2px solid var(--br)">EN</button>
+      </div>
+    </div>
+  </div>
+  <p style="margin:0;font-size:13px;color:var(--mu)">Regra: ≤ 3 línguas → alternador direto; ≥ 4 → lista com nome nativo. Sem bandeiras. Nav sem CTA: o botão da Play é do hero.</p>
+
+  <p style="margin:16px 0 0;font-size:14px;color:var(--tx2)">360 · fechado com faixa em alemão · menu aberto (pt) · landing TopoWalk em russo (cirílico, rótulos longos)</p>
+  <div style="display:flex;gap:24px;align-items:flex-start">
+    <div style="width:360px;height:640px;background:var(--bg);border:1px solid var(--bd2);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;flex:none">
+      <div lang="de" style="display:flex;flex-direction:column;gap:8px;padding:12px 16px;background:var(--rs);border-bottom:1px solid var(--bd)">
+        <div style="display:flex;gap:8px;align-items:flex-start"><span style="font-size:14px;line-height:20px;flex:1;padding-top:4px">Diese Seite ist auch auf Deutsch verfügbar.</span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--tx2);font-size:22px;margin:-8px -8px 0 0">×</span></div>
+        <span style="align-self:flex-start;min-height:44px;padding:0 16px;border-radius:var(--rb);border:1px solid var(--bd2);font-size:14px;font-weight:600;display:flex;align-items:center">Zur deutschen Version wechseln</span>
+      </div>
+      <div style="height:60px;display:flex;align-items:center;padding:0 8px 0 16px;border-bottom:1px solid var(--bd);gap:8px">
+        <span style="display:block;width:52px;height:22px;overflow:hidden;position:relative"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:122px;left:-34px;top:-17px;filter:brightness(1.9)"></span>
+        <span style="font-weight:700;font-size:16px;flex:1">GHF Software</span>
+        <span style="min-height:44px;padding:0 12px;display:flex;align-items:center;gap:10px;border-radius:var(--rb);border:1px solid var(--bd2);font-size:14px;font-weight:600">Menu <span style="display:flex;flex-direction:column;gap:3px"><span style="width:14px;height:1.5px;background:var(--tx)"></span><span style="width:14px;height:1.5px;background:var(--tx)"></span><span style="width:14px;height:1.5px;background:var(--tx)"></span></span></span>
+      </div>
+      <div style="flex:1;margin:16px;border-radius:var(--r);background:repeating-linear-gradient(135deg, var(--sf) 0 8px, var(--bg) 8px 16px);display:flex;align-items:flex-end;padding:12px"><span style="font:12px ui-monospace,Menlo,monospace;color:var(--mu)">conteúdo da página</span></div>
+    </div>
+
+    <div style="width:360px;height:640px;background:var(--bg);border:1px solid var(--bd2);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;flex:none">
+      <div style="height:60px;display:flex;align-items:center;padding:0 8px 0 16px;border-bottom:1px solid var(--bd);gap:8px;flex:none">
+        <span style="display:block;width:52px;height:22px;overflow:hidden;position:relative"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:122px;left:-34px;top:-17px;filter:brightness(1.9)"></span>
+        <span style="font-weight:700;font-size:16px;flex:1">GHF Software</span>
+        <span style="min-height:44px;padding:0 12px;display:flex;align-items:center;gap:8px;border-radius:var(--rb);background:var(--rs);font-size:14px;font-weight:600">Fechar <span style="font-size:20px;line-height:1">×</span></span>
+      </div>
+      <div style="flex:1;overflow:hidden;padding:8px 8px 16px;display:flex;flex-direction:column;gap:4px;background:var(--sf)">
+        <sc-for list="{{ navLinks }}" as="l" hint-placeholder-count="3">
+          <span style="min-height:52px;padding:0 12px;display:flex;align-items:center;font-size:18px;font-weight:600;border-radius:var(--rc)">{{ l }}</span>
+        </sc-for>
+        <div style="height:1px;background:var(--bd);margin:8px 12px"></div>
+        <span style="padding:8px 12px 4px;font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Idioma</span>
+        <sc-for list="{{ langsPt }}" as="g" hint-placeholder-count="7">
+          <span lang="{{ g.code }}" style="min-height:44px;padding:0 12px;display:flex;align-items:center;gap:12px;border-radius:var(--rc);font-size:15px;background:{{ g.bg }}">
+            <span style="width:16px;height:16px;border-radius:50%;border:1.5px solid {{ g.ring }};box-sizing:border-box;display:flex;align-items:center;justify-content:center"><span style="width:8px;height:8px;border-radius:50%;background:{{ g.dot }}"></span></span>
+            <span style="flex:1">{{ g.name }}</span>
+            <sc-if value="{{ g.partial }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;font-weight:600;color:var(--tx2);border:1px solid var(--bd2);border-radius:var(--rc);padding:2px 6px">parcial</span></sc-if>
+          </span>
+        </sc-for>
+      </div>
+    </div>
+
+    <div lang="ru" style="width:360px;height:640px;background:var(--bg);border:1px solid var(--bd2);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;flex:none">
+      <div style="height:60px;display:flex;align-items:center;padding:0 8px 0 16px;border-bottom:1px solid var(--bd);gap:10px;flex:none">
+        <span style="width:28px;height:28px;border-radius:var(--rc);overflow:hidden;display:block;flex:none"><img src="assets/topo-walk.png" alt="" style="width:100%;height:100%;object-fit:cover;transform:scale(1.06)"></span>
+        <span style="font-weight:700;font-size:16px;flex:1">TopoWalk</span>
+        <span style="min-height:44px;padding:0 12px;display:flex;align-items:center;gap:8px;border-radius:var(--rb);background:var(--rs);font-size:14px;font-weight:600">Закрыть <span style="font-size:20px;line-height:1">×</span></span>
+      </div>
+      <div style="flex:1;overflow:hidden;padding:8px 8px 16px;display:flex;flex-direction:column;gap:4px;background:var(--sf)">
+        <sc-for list="{{ ruLinks }}" as="l" hint-placeholder-count="5">
+          <span style="min-height:52px;padding:6px 12px;box-sizing:border-box;display:flex;align-items:center;font-size:18px;line-height:24px;font-weight:600;border-radius:var(--rc);box-shadow:{{ l.mark }}">{{ l.t }}</span>
+        </sc-for>
+        <div style="height:1px;background:var(--bd);margin:8px 12px"></div>
+        <span style="padding:8px 12px 4px;font-size:var(--lfs);font-weight:600;text-transform:var(--ltt);letter-spacing:var(--lls);color:var(--mu)">Язык</span>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          <sc-for list="{{ langsRu }}" as="g" hint-placeholder-count="7">
+            <span lang="{{ g.code }}" style="min-height:44px;padding:0 12px;display:flex;align-items:center;gap:10px;border-radius:var(--rc);font-size:15px;background:{{ g.bg }}">
+              <span style="width:16px;height:16px;border-radius:50%;border:1.5px solid {{ g.ring }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex:none"><span style="width:8px;height:8px;border-radius:50%;background:{{ g.dot }}"></span></span>{{ g.name }}
+            </span>
+          </sc-for>
+        </div>
+        <span style="padding:8px 12px;font-size:12px;line-height:16px;color:var(--mu)">7 línguas em 2 colunas; nomes nativos cabem em 150 px.</span>
+      </div>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:20px;color:var(--tx2);padding-top:8px">
+      <strong style="color:var(--tx);font-size:14px">Mobile</strong>
+      <span>Botão “Menu” com rótulo, não só ícone: 44 px, cresce com a palavra (Меню, Menü).</span>
+      <span>Menu em folha cheia, links a 52 px. A língua vive dentro do menu, não na barra.</span>
+      <span>Na landing, a barra mostra o app (favicon + nome) em vez de GHF; GHF vai no footer.</span>
+      <span>Rótulos quebram em 2 linhas antes de truncar; nenhuma largura fixa para texto.</span>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <h3 style="margin:0;font-size:24px;line-height:32px;font-weight:700">Rodada 3 · tokens alterados</h3>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px">
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:14px"><span style="width:56px;height:56px;border-radius:var(--rc);background:var(--rs);border:2px solid #66738D;flex:none"></span><span style="font-size:14px;line-height:21px"><strong>--border-strong #66738D</strong><br><span style="color:var(--tx2)">3,30:1 sobre --raised · 3,72:1 sobre --surface · 3,95:1 sobre --bg. Antes, #5E6B85 dava 2,93:1 sobre --raised.</span></span></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><span style="min-height:44px;padding:0 16px;border-radius:var(--rb);border:1px solid #66738D;background:var(--rs);display:flex;align-items:center;font-size:14px;font-weight:600">Secundário sobre --raised</span><span style="min-height:44px;padding:0 16px;border-radius:var(--rb);border:1px solid #66738D;display:flex;align-items:center;font-size:14px;font-weight:600">sobre --bg</span></div>
+    </div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;gap:12px;align-items:stretch">
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px"><span style="height:44px;border-radius:var(--rc);background:#C5E86C"></span><span style="font-size:13px;font-weight:600">--success #C5E86C</span><span style="font-size:12px;color:var(--tx2)">matiz 78° · 13,6:1 s/ --bg</span></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px"><span style="height:44px;border-radius:var(--rc);background:#5FD47E"></span><span style="font-size:13px;font-weight:600">--app-pole #5FD47E</span><span style="font-size:12px;color:var(--tx2)">matiz 136°</span></div>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:13px"><span style="display:flex;align-items:center;gap:6px;color:var(--tx2)"><span aria-hidden="true" style="color:#C5E86C;font-weight:800">✓</span>Publicado</span><span style="color:var(--tx2)">58° de distância e forma diferente: o “Publicado” é um ✓ (glifo + palavra), e o Pole Position aparece só como faixa ou quadrado cheio.</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <h3 style="margin:0;font-size:24px;line-height:32px;font-weight:700">5 · App futuro: card “em breve” e hero</h3>
+  <div style="display:grid;grid-template-columns:320px minmax(0,1fr);gap:24px;align-items:start">
+    <article style="position:relative;background:var(--sf);border:1px dashed var(--bd2);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px;overflow:hidden">
+      <span style="position:absolute;left:0;top:0;right:0;height:3px;background:repeating-linear-gradient(90deg, var(--bd2) 0 8px, transparent 8px 14px)"></span>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="width:44px;height:44px;border-radius:10px;border:1px dashed var(--bd2);flex:none;display:flex;align-items:center;justify-content:center;font:10px ui-monospace,Menlo,monospace;color:var(--mu)">ícone</span>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+          <h4 style="margin:0;font-size:18px;line-height:24px;font-weight:700"><a href="#" style="color:var(--tx);text-decoration:none" style-focus="outline:2px solid var(--br);outline-offset:2px">[copy: nome do app]</a></h4>
+          <span style="font-size:12px;line-height:16px;color:var(--tx2);display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;border:1.5px solid var(--tx2);box-sizing:border-box"></span>Em breve</span>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:21px;color:var(--tx2)">[copy: linha de proposta]</p>
+      <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:6px;border-top:1px solid var(--bd)"><span style="font-size:13px;color:var(--mu)">[copy: para quem]</span><span aria-hidden="true" style="font-size:14px;font-weight:600;color:var(--tx2)">→</span></div>
+    </article>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:20px;color:var(--tx2)">
+      <strong style="color:var(--tx);font-size:14px">Diferenças do card publicado</strong>
+      <span>A borda e a faixa ficam tracejadas e neutras: o app ainda não tem acento --app-*.</span>
+      <span>O selo traz um anel vazio com “Em breve”, nunca o ✓ verde.</span>
+      <span>Não há botão “Play ↗”. O card leva à landing no estado em breve.</span>
+      <span>Altura e grade iguais às dos publicados, sem destaque extra.</span>
+    </div>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--bd2);border-radius:var(--r);padding:40px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center">
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <span style="font-size:14px;font-weight:600;color:var(--tx2)">[copy: nome · categoria]</span>
+      <h4 style="margin:0;font-size:44px;line-height:52px;font-weight:700;letter-spacing:-0.02em">[copy: título do hero]</h4>
+      <p style="margin:0;font-size:18px;line-height:28px;color:var(--tx2)">[copy: frase de apoio]</p>
+      <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;margin-top:6px">
+        <span role="status" style="min-height:52px;padding:0 22px;border-radius:var(--rb);border:1px dashed var(--bd2);color:var(--tx);font-weight:600;font-size:16px;display:flex;align-items:center;gap:10px"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;border:1.5px solid var(--tx2);box-sizing:border-box"></span>Em breve na Google Play</span>
+        <span style="font-size:13px;color:var(--tx2)">[copy: previsão, só se houver data pública]</span>
+        <div style="display:flex;gap:20px;flex-wrap:wrap">
+          <a href="#" style="min-height:44px;display:flex;align-items:center;font-size:15px;color:var(--tx);text-decoration:underline;text-decoration-color:var(--br);text-underline-offset:4px" style-focus="outline:2px solid var(--br);outline-offset:2px">Política de privacidade</a>
+          <a href="#" style="min-height:44px;display:flex;align-items:center;font-size:15px;color:var(--tx);text-decoration:underline;text-decoration-color:var(--br);text-underline-offset:4px" style-focus="outline:2px solid var(--br);outline-offset:2px">Ver os apps publicados</a>
+        </div>
+      </div>
+    </div>
+    <div style="aspect-ratio:1/1;max-height:420px;border-radius:20px;border:1px solid var(--bd2);background:repeating-linear-gradient(135deg, var(--rs) 0 8px, var(--sf) 8px 16px);display:flex;align-items:flex-end;padding:14px;box-sizing:border-box"><span style="font:12px ui-monospace,Menlo,monospace;color:var(--tx2)">[imagem ausente: hero]</span></div>
+  </div>
+  <p style="margin:0;font-size:13px;line-height:20px;color:var(--tx2);max-width:900px">O CTA vira status, sem href e sem foco. Não há captura de e-mail nem “avise-me”, porque isso exigiria servidor e consentimento. Cada seção da landing aparece só quando o conteúdo existe. Um app em breve normalmente só tem hero, privacidade e o CTA final em status.</p>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <h3 style="margin:0;font-size:24px;line-height:32px;font-weight:700">6 · Regras escritas</h3>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px">
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:22px">
+      <strong style="font-size:16px">Home: destaque × “ver todas”</strong>
+      <span><strong>Destaque</strong> é o card grande na grade “Apps”. Um app entra quando cumpre as quatro condições:</span>
+      <span>1. Está publicado na Google Play.</span>
+      <span>2. Tem landing própria, com política de privacidade.</span>
+      <span>3. Recebeu atualização nos últimos 12 meses.</span>
+      <span>4. Cabe nas 4 primeiras posições da ordem fixa: LottoExpert, TopoWalk, Pole Position, EclipseGo; depois dela, a data de publicação.</span>
+      <span>Todos os destaques têm o mesmo peso. Nenhum card é maior, e a ordem não muda por campanha.</span>
+      <span><strong>“Ver todas”</strong> é uma lista compacta (ícone, nome, selo, link). Recebe o que não entrou na grade: o 5º app em diante, os apps em breve sem vaga e os apps sem atualização há mais de 12 meses. Um app retirado da Play entra com o selo “Indisponível” e só o link da política.</span>
+      <span style="color:var(--tx2)">Hoje são 4 destaques e a lista fica vazia, então ela não é renderizada. Vale a mesma regra da prova: sem conteúdo, a seção some.</span>
+    </div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:22px">
+      <strong style="font-size:16px">Landings: o que muda entre elas</strong>
+      <span>As 4 landings usam o mesmo arquivo de template (Landing App). Entre elas mudam só duas coisas:</span>
+      <span>1. Os tokens <strong>--app-acc</strong>, <strong>--app-acc-edge</strong> e <strong>--app-acc-light</strong> (este para o papel).</span>
+      <span>2. O objeto de conteúdo em content/landings.js.</span>
+      <span>Layout, tipografia, espaçamento, nav, footer e estados são idênticos.</span>
+      <span>Seções opcionais aparecem conforme o conteúdo:</span>
+      <span style="font-variant-numeric:tabular-nums;color:var(--tx2)">LottoExpert: ver todas · telas · prova · planos (4 níveis) · aviso +18<br>TopoWalk: ver todas · prova · grátis × Pro<br>Pole Position: ver todas · telas · prova<br>EclipseGo: prova (3 destaques; não há resto para “ver todas”)</span>
+      <span><strong>Destaque × “ver todas” na landing</strong> segue a regra da rodada 2: no máximo 4 destaques.</span>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+  <h3 style="margin:0;font-size:24px;line-height:32px;font-weight:700">4 · Footer</h3>
+  <footer style="width:1280px;box-sizing:border-box;background:var(--ft);border:1px solid var(--bd);border-radius:var(--r);padding:48px 40px 28px;display:flex;flex-direction:column;gap:40px">
+    <div style="display:grid;grid-template-columns:minmax(0,1.4fr) repeat(4,minmax(0,1fr)) minmax(0,1.1fr);gap:32px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="display:flex;align-items:center;gap:10px"><span style="display:block;width:64px;height:27px;overflow:hidden;position:relative"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:150px;left:-42px;top:-21px;filter:brightness(1.9)"></span><span style="font-weight:700;font-size:17px">GHF Software</span></span>
+        <span style="font-size:14px;line-height:22px;color:var(--tx2);text-wrap:pretty">Soluções de engenharia, privacy-first. Software desde 2004.</span>
+      </div>
+      <sc-for list="{{ apps }}" as="a" hint-placeholder-count="4">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <span style="display:flex;align-items:center;gap:8px;min-height:44px;font-size:14px;font-weight:700"><span style="width:8px;height:8px;border-radius:2px;background:{{ a.hex }}"></span>{{ a.name }}</span>
+          <sc-for list="{{ a.links }}" as="k" hint-placeholder-count="2">
+            <a href="#" style="min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--tx2);text-decoration:none" style-hover="color:var(--tx);text-decoration:underline" style-focus="outline:2px solid var(--br);outline-offset:2px">{{ k }}</a>
+          </sc-for>
+        </div>
+      </sc-for>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <span style="min-height:44px;display:flex;align-items:center;font-size:14px;font-weight:700">Contato</span>
+        <a href="#" style="min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--tx);text-decoration:underline;text-decoration-color:var(--br);text-underline-offset:3px">support@ghfsoftware.com</a>
+        <a href="#" style="min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--tx2);text-decoration:none" style-hover="color:var(--tx)">YouTube ↗</a>
+        <a href="#" style="min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--tx2);text-decoration:none" style-hover="color:var(--tx)">Instagram ↗</a>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:24px;padding-top:20px;border-top:1px solid var(--bd);font-size:13px;color:var(--mu)">
+      <span>© 2026 GHF Software</span>
+      <span style="flex:1">Sem rastreadores e sem cookies. <a href="#" style="color:var(--tx2);text-underline-offset:3px">Como tratamos dados</a></span>
+      <span style="min-height:44px;padding:0 14px;border:1px solid var(--bd2);border-radius:var(--rb);display:flex;align-items:center;gap:8px;color:var(--tx);font-size:14px">Português <span style="width:6px;height:6px;border-right:1.5px solid var(--tx2);border-bottom:1.5px solid var(--tx2);transform:translateY(-2px) rotate(45deg)"></span></span>
+    </div>
+  </footer>
+
+  <div style="display:flex;gap:24px;align-items:flex-start">
+    <footer style="width:360px;box-sizing:border-box;background:var(--ft);border:1px solid var(--bd);border-radius:24px;padding:32px 20px 24px;display:flex;flex-direction:column;gap:24px;flex:none">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="display:flex;align-items:center;gap:10px"><span style="display:block;width:52px;height:22px;overflow:hidden;position:relative"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:122px;left:-34px;top:-17px;filter:brightness(1.9)"></span><span style="font-weight:700;font-size:16px">GHF Software</span></span>
+        <span style="font-size:14px;line-height:22px;color:var(--tx2)">Soluções de engenharia, privacy-first. Software desde 2004.</span>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <sc-for list="{{ apps }}" as="a" hint-placeholder-count="4">
+          <div style="display:flex;flex-direction:column;padding:12px 0;border-top:1px solid var(--bd);gap:2px">
+            <span style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;min-height:28px"><span style="width:8px;height:8px;border-radius:2px;background:{{ a.hex }}"></span>{{ a.name }}</span>
+            <div style="display:flex;flex-wrap:wrap;column-gap:20px">
+              <sc-for list="{{ a.links }}" as="k" hint-placeholder-count="2">
+                <a href="#" style="min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--tx2);text-decoration:underline;text-decoration-color:var(--bd2);text-underline-offset:3px">{{ k }}</a>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--bd);padding-top:12px">
+        <a href="#" style="min-height:44px;display:flex;align-items:center;font-size:15px;color:var(--tx);text-decoration:underline;text-decoration-color:var(--br);text-underline-offset:3px">support@ghfsoftware.com</a>
+        <div style="display:flex;gap:20px"><a href="#" style="min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--tx2);text-decoration:none">YouTube ↗</a><a href="#" style="min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--tx2);text-decoration:none">Instagram ↗</a></div>
+      </div>
+      <span style="min-height:44px;padding:0 14px;border:1px solid var(--bd2);border-radius:var(--rb);display:flex;align-items:center;justify-content:space-between;font-size:14px">Português <span style="width:6px;height:6px;border-right:1.5px solid var(--tx2);border-bottom:1.5px solid var(--tx2);transform:translateY(-2px) rotate(45deg)"></span></span>
+      <span style="font-size:12px;line-height:18px;color:var(--mu)">© 2026 GHF Software · Sem rastreadores e sem cookies.</span>
+    </footer>
+    <div style="flex:1;display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:20px;color:var(--tx2);padding-top:8px;max-width:420px">
+      <strong style="color:var(--tx);font-size:14px">Footer</strong>
+      <span>Uma coluna por app com os links legais dele: o visitante que vem da Play acha a política do app sem ler as outras.</span>
+      <span>O quadrado de cor é a única marca do app no footer; o texto fica neutro.</span>
+      <span>Redes como texto + ↗ (sem Font Awesome). Ícones SVG próprios entram se o humano quiser.</span>
+      <span>Na landing do LottoExpert, o aviso de jogo responsável fica acima deste footer, não dentro.</span>
+    </div>
+  </div>
+</section>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1360,&quot;height&quot;:4200},&quot;dir&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;],&quot;default&quot;:&quot;A&quot;,&quot;tsType&quot;:&quot;'A'|'B'|'C'&quot;}}">
+function lum(h){h=h.replace('#','');const c=[0,2,4].map(i=>parseInt(h.substr(i,2),16)/255).map(v=>v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4));return .2126*c[0]+.7152*c[1]+.0722*c[2];}
+function cr(a,b){const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);}
+function fmt(r){const g=r>=7?'AAA':r>=4.5?'AA':r>=3?'AA grande':'falha';return r.toFixed(1).replace('.',',')+' '+g;}
+
+const THEMES={
+A:{name:'Navy técnico',about:'Evolução do site atual: mantém o navy #0B1120, tira glass, glow, grade e gradiente. Raios médios, botões em pílula, rótulos em caixa normal. A mudança menos arriscada.',
+ bg:'#0B1120',sf:'#111827',rs:'#1A2335',bd:'#243046',bd2:'#66738D',tx:'#F3F4F6',tx2:'#C3C9D3',mu:'#97A0B0',br:'#3CC8D0',ft:'#0E1524',navbg:'#0B1120',
+ r:'12px',rb:'999px',rc:'8px',ltt:'none',lls:'0',lfs:'13px',sh:'0 12px 32px rgba(0,0,0,.45)',paper:'#F7F7F5'},
+B:{name:'Grafite instrumento',about:'Neutro sem azul, como um painel de medição: raio de 4 px, divisórias finas, rótulos em caixa alta espaçada, números tabulares. Combina com telemetria e topografia; o acento do app é a única cor.',
+ bg:'#0D0E10',sf:'#15171A',rs:'#1E2125',bd:'#2A2E34',bd2:'#424852',tx:'#EDEEF0',tx2:'#BFC3C9',mu:'#959AA2',br:'#3CC8D0',ft:'#111214',navbg:'#0D0E10',
+ r:'4px',rb:'4px',rc:'2px',ltt:'uppercase',lls:'.08em',lfs:'11px',sh:'0 8px 24px rgba(0,0,0,.55)',paper:'#F4F3F0'},
+C:{name:'Ardósia do logo',about:'Fundo tirado do cinza-ardósia do logo GHF, um passo mais claro que o navy. Raios generosos, superfícies que se empilham por luminância. Mais acolhedor para quem vem de loteria e astronomia.',
+ bg:'#111A21',sf:'#18232C',rs:'#22303A',bd:'#2F3F4B',bd2:'#465966',tx:'#F1F4F6',tx2:'#C3CED6',mu:'#97A7B3',br:'#4FD1D6',ft:'#0E161C',navbg:'#111A21',
+ r:'20px',rb:'14px',rc:'8px',ltt:'none',lls:'0',lfs:'13px',sh:'0 16px 40px rgba(0,0,0,.4)',paper:'#F3F5F6'}};
+
+const APPS_R1=[
+ {id:'lotto',name:'LottoExpert',fav:'assets/lottoexpert_favicon_v3.png',hex:'#E2B547',light:'#86610E',old:'#8B5CF6',links:['Página do app','Privacidade','Termos de uso'],
+  why:'Ouro do gradiente do favicon; o teal do mesmo gradiente ficou com a marca GHF. O violeta atual não passa como texto.'},
+ {id:'pole',name:'Pole Position',fav:'assets/poleposition.png',hex:'#5FD47E',light:'#2A7741',old:'#84CC16',links:['Página do app','Privacidade'],
+  why:'Verde do favicon e do cronômetro do app. O lima atual passa AA, mas não bate com o ícone.'},
+ {id:'topo',name:'TopoWalk',fav:'assets/topo-walk.png',hex:'#E38A57',light:'#A0491C',old:'#B5541C',links:['Página do app','Privacidade'],
+  why:'Terracota do brilho do favicon, clareado. O #B5541C fica só em superfície grande, nunca em texto.'},
+ {id:'eclipse',name:'EclipseGo',fav:'assets/eclipse-go-favicon.png',hex:'#EE737D',light:'#AE3646',old:'#EAB308',links:['Página do app','Privacidade'],
+  why:'Vermelho da lua de sangue do favicon. O dourado passa ao LottoExpert; vizinho do vermelho de erro.'}];
+
+const APPS=[
+ {id:'lotto',name:'LottoExpert',fav:'assets/lottoexpert_favicon_v3.png',hex:'#A78BFA',light:'#6D28D9',old:'#E2B547',links:['Página do app','Privacidade','Termos de uso'],
+  why:'Violeta, decisão da rodada 2: o ouro, junto com o trevo do ícone, reforçava a ideia de sorte. Antes = ouro da rodada 1.'},
+ {id:'topo',name:'TopoWalk',fav:'assets/topo-walk.png',hex:'#E38A57',light:'#A0491C',old:'#B5541C',links:['Página do app','Privacidade'],
+  why:'Terracota do brilho do ícone, clareado. O #B5541C fica só em superfície grande, nunca em texto.'},
+ {id:'pole',name:'Pole Position',fav:'assets/poleposition.png',hex:'#5FD47E',light:'#2A7741',old:'#84CC16',links:['Página do app','Privacidade'],
+  why:'Verde do ícone e do cronômetro do app. O lima atual passa AA, mas não bate com o ícone.'},
+ {id:'eclipse',name:'EclipseGo',fav:'assets/eclipse-go-favicon.png',hex:'#EE737D',light:'#AE3646',old:'#EAB308',links:['Página do app','Privacidade'],
+  why:'Vermelho da lua do ícone. Separado do erro pela forma (ver Estados semânticos), não só pelo matiz.'}];
+const LANGS=[['pt','Português'],['en','English'],['es','Español'],['fr','Français'],['it','Italiano'],['de','Deutsch'],['ru','Русский']];
+
+class Component extends DCLogic {
+  state={langOpen:true,lang:'pt',bandShown:true,two:'pt'};
+  renderVals(){
+    const dir=this.props.dir??'A'; const t=THEMES[dir]||THEMES.A; const bg=t.bg;
+    const ink='#15181C', ptx2='#4A5059', pbd='#D9D7D1', plink='#0A6E75', plinkH='#07565C';
+    const vars={'--bg':t.bg,'--sf':t.sf,'--rs':t.rs,'--bd':t.bd,'--bd2':t.bd2,'--tx':t.tx,'--tx2':t.tx2,'--mu':t.mu,'--br':t.br,'--ft':t.ft,'--navbg':t.navbg,
+      '--r':t.r,'--rb':t.rb,'--rc':t.rc,'--ltt':t.ltt,'--lls':t.lls,'--lfs':t.lfs,'--sh':t.sh,'--paper':t.paper,'--pink':ink,'--ptx2':ptx2,'--pbd':pbd,'--plink':plink,'--plinkh':plinkH};
+    const sw=(token,role,hex)=>({token,role,hex,ratio:fmt(cr(hex,bg))});
+    const surfaces=[sw('--bg','Fundo',t.bg),sw('--surface','Cartão, menu',t.sf),sw('--raised','Hover, faixa',t.rs),sw('--border','Divisória',t.bd),sw('--border-strong','Controle 3:1',t.bd2),
+      sw('--text','Texto',t.tx),sw('--text-2','Secundário',t.tx2),sw('--text-muted','Mudo, legenda',t.mu),sw('--brand','Teal GHF, foco',t.br)];
+    surfaces.forEach(s=>{if(s.token==='--bg')s.ratio='base';if(s.token==='--border-strong')s.ratio=fmt(cr(t.bd2,t.rs))+' s/ --raised';});
+    const apps=APPS.map(a=>({...a,rText:fmt(cr(a.hex,bg)),rInk:fmt(cr(a.hex,bg)),rLight:fmt(cr(a.light,t.paper)),rOld:fmt(cr(a.old,bg))}));
+    const semantic=[
+      {token:'--success',role:'Backup concluído.',hex:'#DDF3A8',tint:'#1E2710',edge:'#5F7A24',glyph:'✓',word:'Concluído'},
+      {token:'--warning',role:'Parte desta página não foi traduzida.',hex:'#F7DC9A',tint:'#2E240C',edge:'#7A6020',glyph:'!',word:'Atenção'},
+      {token:'--error',role:'Não foi possível carregar o convite.',hex:'#FFC2C7',tint:'#3A1219',edge:'#8A2E3A',glyph:'×',word:'Erro'},
+      {token:'--info',role:'A língua muda sem sair da seção.',hex:'#BDF1F4',tint:'#0C2A2E',edge:'#1F6A70',glyph:'i',word:'Nota'}].map(s=>({...s,ratio:fmt(cr(s.hex,s.tint))}));
+    const paper=[['--paper','fundo legal',t.paper],['--paper-ink','texto',ink],['--paper-text-2','secundário',ptx2],['--paper-border','divisória',pbd],['--paper-link','link, foco',plink],['--paper-link-hover','hover',plinkH]].map(([token,role,hex])=>({token,role,hex,ratio:token==='--paper'?'base':fmt(cr(hex,t.paper))}));
+    const L=t.ltt==='uppercase';
+    const type=[
+      {name:'Display',spec:'40/48 → 56/64 · 700',size:'56px',lh:'64px',w:700,ls:'-0.025em',tt:'none',color:t.tx,sample:'Levantamento no celular'},
+      {name:'H1',spec:'32/40 → 44/52 · 700',size:'44px',lh:'52px',w:700,ls:'-0.02em',tt:'none',color:t.tx,sample:'Política de privacidade'},
+      {name:'H2',spec:'24/32 → 32/40 · 700',size:'32px',lh:'40px',w:700,ls:'-0.015em',tt:'none',color:t.tx,sample:'Funcionalidades'},
+      {name:'H3',spec:'20/28 · 600',size:'20px',lh:'28px',w:600,ls:'0',tt:'none',color:t.tx,sample:'4.1 Dados armazenados no aparelho'},
+      {name:'Body',spec:'16/26 · 400 · legal 18/30',size:'16px',lh:'26px',w:400,ls:'0',tt:'none',color:t.tx2,sample:'Mostra se um eclipse solar ou lunar é visível de onde você está, com horários de início, pico e fim.'},
+      {name:'Small',spec:'14/22 · 400',size:'14px',lh:'22px',w:400,ls:'0',tt:'none',color:t.tx2,sample:'Compra única, sem assinatura.'},
+      {name:'Label',spec:L?'11/16 · 600 · caixa alta':'13/18 · 600',size:t.lfs,lh:'16px',w:600,ls:t.lls,tt:t.ltt,color:t.mu,sample:'Última atualização'},
+      {name:'i18n',spec:'latin-ext + cirílico',size:'16px',lh:'26px',w:500,ls:'0',tt:'none',color:t.tx,sample:'Топографическая съёмка на телефоне · Geländevermessung mit dem Smartphone · Çà œ ñ ł'}];
+    const spacing=[1,2,3,4,6,8,11,12,16,24].map(k=>({k,px:(k*4)+'px'}));
+    const facts=[{k:'Sem anúncios',v:'Nenhum SDK de publicidade.'},{k:'Núcleo gratuito',v:'Área, declividade e desnível sem pagar.'},{k:'Pro: compra única',v:'Sem assinatura.'},{k:'4 formatos',v:'PDF, GeoJSON, KML e GPX.'}];
+    const langs=LANGS.map(([code,name])=>{const sel=this.state.lang===code;return {code,CODE:code.toUpperCase(),name,sel,partial:code==='ru',bg:sel?t.rs:'transparent',pick:()=>this.setState({lang:code,langOpen:false})};});
+    const cur=LANGS.find(l=>l[0]===this.state.lang);
+    const radio=(curCode)=>LANGS.map(([code,name])=>{const s=code===curCode;return {code,name,partial:code==='ru'&&curCode!=='ru',bg:s?t.rs:'transparent',ring:s?t.br:t.bd2,dot:s?t.br:'transparent'};});
+    const topo='#E38A57';
+    const ruLinks=[{t:'Возможности',mark:'inset 3px 0 0 '+topo},{t:'Бесплатно и Pro',mark:'none'},{t:'Вопросы и ответы',mark:'none'},{t:'Политика конфиденциальности',mark:'none'},{t:'Все приложения GHF',mark:'none'}];
+    const two=this.state.two;
+    const bd2Ratio=fmt(cr(t.bd2,bg)), paperFocus=fmt(cr(plink,t.paper)), paperHover=fmt(cr(plinkH,t.paper)), brandOnPaper=fmt(cr(t.br,t.paper));
+    return {dir,t,vars,bd2Ratio,paperFocus,paperHover,brandOnPaper,surfaces,apps,semantic,paper,type,spacing,facts,langs,ruLinks,
+      focusRatio:fmt(cr(t.br,bg)),
+      navLinks:['Apps','Sobre','Contato'],
+      langsPt:radio('pt'),langsRu:radio('ru'),
+      curCode:cur[0].toUpperCase(),curName:cur[1],
+      langOpen:this.state.langOpen,bandShown:this.state.bandShown,
+      toggleLang:()=>this.setState(s=>({langOpen:!s.langOpen})),
+      closeBand:()=>this.setState({bandShown:false}),
+      switchEn:()=>this.setState({lang:'en',bandShown:false}),
+      twoPt:two==='pt',twoEn:two==='en',twoPtBg:two==='pt'?t.rs:'transparent',twoEnBg:two==='en'?t.rs:'transparent',
+      setTwoPt:()=>this.setState({two:'pt'}),setTwoEn:()=>this.setState({two:'en'})};
+  }
+}
+</script>
+</body>
+</html>

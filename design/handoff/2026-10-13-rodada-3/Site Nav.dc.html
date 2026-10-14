@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="position:relative;z-index:20;font-family:Inter,system-ui,sans-serif;color:var(--tx)">
+<sc-if value="{{ bandOn }}" hint-placeholder-val="{{ false }}">
+  <div lang="{{ sug }}" role="region" aria-label="{{ bandLabel }}" style="background:var(--rs);border-bottom:1px solid var(--bd)">
+    <div style="max-width:1216px;margin:0 auto;padding:6px 8px 6px clamp(16px,2.6vw,32px);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <span style="flex:1 1 220px;font-size:14px;line-height:20px;padding:6px 0">{{ bandText }}</span>
+      <div style="display:flex;align-items:center;gap:4px">
+        <button type="button" onClick="{{ bandGo }}" style="min-height:44px;padding:0 16px;border-radius:var(--rb);border:1px solid var(--bd2);background:transparent;color:var(--tx);font:600 14px Inter,sans-serif;cursor:pointer" style-hover="background:var(--sf)" style-focus="outline:2px solid var(--br);outline-offset:2px">{{ bandGoText }}</button>
+        <button type="button" aria-label="{{ bandClose }}" onClick="{{ bandDismiss }}" style="width:44px;height:44px;border:0;background:transparent;color:var(--tx2);font-size:22px;cursor:pointer;border-radius:var(--rc)" style-hover="color:var(--tx);background:var(--sf)" style-focus="outline:2px solid var(--br)">×</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+<div style="height:{{ barH }};display:flex;align-items:center;gap:16px;padding:0 {{ barPadR }} 0 {{ barPadL }};border-bottom:1px solid var(--bd);background:var(--bg)">
+  <a href="Home.dc.html" aria-label="GHF Software" style="display:flex;align-items:center;gap:10px;color:var(--tx);text-decoration:none;min-height:44px;border-radius:var(--rc);flex:none" style-focus="outline:2px solid var(--br);outline-offset:2px">
+    <span style="display:block;width:52px;height:22px;overflow:hidden;position:relative;flex:none"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:122px;left:-34px;top:-17px;filter:brightness(1.9)"></span>
+    <sc-if value="{{ noApp }}" hint-placeholder-val="{{ true }}"><span style="font-weight:700;font-size:16px;letter-spacing:-0.01em">GHF Software</span></sc-if>
+  </a>
+  <sc-if value="{{ hasApp }}" hint-placeholder-val="{{ false }}">
+    <span style="width:1px;height:24px;background:var(--bd2);flex:none"></span>
+    <a href="#top" style="display:flex;align-items:center;gap:10px;color:var(--tx);text-decoration:none;min-height:44px;min-width:0" style-focus="outline:2px solid var(--br);outline-offset:2px">
+      <span style="width:28px;height:28px;border-radius:var(--rc);overflow:hidden;display:block;flex:none"><img src="{{ a.fav }}" alt="" style="width:100%;height:100%;object-fit:cover;transform:scale(1.06)"></span>
+      <span style="font-weight:700;font-size:16px;white-space:nowrap">{{ a.name }}</span>
+    </a>
+  </sc-if>
+  <span style="flex:1"></span>
+  <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+    <nav aria-label="Principal" style="display:flex;gap:2px">
+      <sc-for list="{{ links }}" as="l" hint-placeholder-count="4">
+        <a href="{{ l.href }}" aria-current="{{ l.cur }}" style="min-height:44px;padding:0 12px;display:flex;align-items:center;color:{{ l.color }};text-decoration:none;font-size:15px;font-weight:500;white-space:nowrap;box-shadow:{{ l.mark }};border-radius:var(--rc) var(--rc) 0 0" style-hover="color:var(--tx);background:var(--rs)" style-focus="outline:2px solid var(--br);outline-offset:2px">{{ l.t }}</a>
+      </sc-for>
+    </nav>
+  </sc-if>
+  <sc-if value="{{ barLang }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ two }}" hint-placeholder-val="{{ true }}">
+      <div role="group" aria-label="{{ tLanguage }}" style="display:flex;border:1px solid var(--bd2);border-radius:var(--rb);padding:2px;gap:2px;flex:none">
+        <sc-for list="{{ langList }}" as="g" hint-placeholder-count="2">
+          <button type="button" lang="{{ g.code }}" aria-pressed="{{ g.sel }}" aria-label="{{ g.name }}" onClick="{{ g.pick }}" style="min-height:44px;min-width:48px;padding:0 12px;border:0;border-radius:var(--rb);background:{{ g.bg }};color:var(--tx);font:600 14px Inter,sans-serif;cursor:pointer" style-hover="background:var(--sf)" style-focus="outline:2px solid var(--br);outline-offset:1px">{{ g.CODE }}</button>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ many }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;flex:none">
+        <button type="button" aria-haspopup="true" aria-expanded="{{ langOpen }}" onClick="{{ toggleLang }}" style="min-height:44px;padding:0 14px;border-radius:var(--rb);border:1px solid var(--bd2);background:transparent;color:var(--tx);font:500 15px Inter,sans-serif;display:flex;align-items:center;gap:10px;cursor:pointer" style-hover="background:var(--rs)" style-focus="outline:2px solid var(--br);outline-offset:2px">
+          <span lang="{{ cur.code }}">{{ cur.name }}</span>
+          <span style="width:7px;height:7px;border-right:1.5px solid var(--tx2);border-bottom:1.5px solid var(--tx2);transform:translateY(-2px) rotate(45deg)"></span>
+        </button>
+        <sc-if value="{{ langOpen }}" hint-placeholder-val="{{ false }}">
+          <ul style="position:absolute;right:0;top:52px;width:220px;margin:0;padding:6px;list-style:none;background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);box-shadow:var(--sh);display:flex;flex-direction:column;gap:2px">
+            <sc-for list="{{ langList }}" as="g" hint-placeholder-count="7">
+              <li><button type="button" lang="{{ g.code }}" aria-current="{{ g.cur }}" onClick="{{ g.pick }}" style="width:100%;min-height:44px;padding:0 12px;border:0;border-radius:var(--rc);display:flex;align-items:center;gap:12px;cursor:pointer;background:{{ g.bg }};color:var(--tx);font:400 15px Inter,sans-serif;text-align:left" style-hover="background:var(--rs)" style-focus="outline:2px solid var(--br);outline-offset:-2px"><span style="flex:1">{{ g.name }}</span><span aria-hidden="true" style="width:6px;height:11px;border-right:2px solid {{ g.tick }};border-bottom:2px solid {{ g.tick }};transform:translateY(-2px) rotate(45deg)"></span></button></li>
+            </sc-for>
+          </ul>
+        </sc-if>
+      </div>
+    </sc-if>
+  </sc-if>
+  <sc-if value="{{ compact }}" hint-placeholder-val="{{ false }}">
+    <button type="button" aria-expanded="{{ menuOpen }}" onClick="{{ toggleMenu }}" style="min-height:44px;padding:0 12px;display:flex;align-items:center;gap:10px;border-radius:var(--rb);border:1px solid var(--bd2);background:{{ menuBg }};color:var(--tx);font:600 14px Inter,sans-serif;cursor:pointer;flex:none" style-focus="outline:2px solid var(--br);outline-offset:2px">{{ menuLabel }}
+      <span style="display:flex;flex-direction:column;gap:3px"><span style="width:14px;height:1.5px;background:var(--tx)"></span><span style="width:14px;height:1.5px;background:var(--tx)"></span><span style="width:14px;height:1.5px;background:var(--tx)"></span></span>
+    </button>
+  </sc-if>
+</div>
+<sc-if value="{{ sheetOn }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;left:0;right:0;top:100%;background:var(--sf);border-bottom:1px solid var(--bd2);padding:8px 8px 16px;display:flex;flex-direction:column;gap:2px;box-shadow:var(--sh)">
+    <div style="display:grid;grid-template-columns:{{ sheetCols }};gap:2px">
+      <sc-for list="{{ mLinks }}" as="l" hint-placeholder-count="4">
+        <a href="{{ l.href }}" onClick="{{ closeMenu }}" style="min-height:52px;padding:6px 12px;box-sizing:border-box;display:flex;align-items:center;font-size:18px;line-height:24px;font-weight:600;border-radius:var(--rc);color:var(--tx);text-decoration:none;box-shadow:{{ l.mmark }}" style-hover="background:var(--rs)" style-focus="outline:2px solid var(--br);outline-offset:-2px">{{ l.t }}</a>
+      </sc-for>
+    </div>
+    <sc-if value="{{ sheetLang }}" hint-placeholder-val="{{ false }}">
+      <div style="height:1px;background:var(--bd);margin:8px 12px"></div>
+      <span style="padding:6px 12px 4px;font-size:13px;font-weight:600;color:var(--mu)">{{ tLanguage }}</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+        <sc-for list="{{ langList }}" as="g" hint-placeholder-count="2">
+          <button type="button" lang="{{ g.code }}" aria-pressed="{{ g.sel }}" onClick="{{ g.pick }}" style="min-height:44px;padding:0 12px;display:flex;align-items:center;gap:10px;border-radius:var(--rc);border:0;font:400 15px Inter,sans-serif;color:var(--tx);background:{{ g.bg }};cursor:pointer;text-align:left" style-focus="outline:2px solid var(--br);outline-offset:-2px">
+            <span style="width:16px;height:16px;border-radius:50%;border:1.5px solid {{ g.ring }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex:none"><span style="width:8px;height:8px;border-radius:50%;background:{{ g.dot }}"></span></span>{{ g.name }}
+          </button>
+        </sc-for>
+      </div>
+    </sc-if>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:140},&quot;app&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;lotto&quot;,&quot;topo&quot;,&quot;pole&quot;,&quot;eclipse&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;lang&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;pt&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;current&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:-1,&quot;tsType&quot;:&quot;number&quot;},&quot;open&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onLang&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(code: string) =&gt; void&quot;}}">
+const NAMES={pt:'Português',en:'English',es:'Español',fr:'Français',it:'Italiano',de:'Deutsch',ru:'Русский'};
+const APP_LINKS={lotto:['features','plans','faq','privacy'],topo:['features','freepro','faq','privacy'],pole:['features','faq','privacy'],eclipse:['features','faq','privacy']};
+const APP_LANGS={lotto:['pt','en'],topo:['pt','en','es','fr','it','de','ru'],pole:['pt','en','es','fr','it','de'],eclipse:['pt','en']};
+const HREF={features:'#funcionalidades',plans:'#planos',freepro:'#planos',faq:'#faq',apps:'#apps',about:'#sobre',contact:'#contato'};
+const T=(l,k)=>window.GHF_T?window.GHF_T(l,k):k;
+class Component extends DCLogic {
+  state={menuOpen:null,langOpen:false,lang:null,sug:null,vw:typeof window!=='undefined'?window.innerWidth:1280};
+  langs(){const p=this.props.langs;if(Array.isArray(p))return p;if(typeof p==='string'&&p.includes(','))return p.split(',');return APP_LANGS[this.props.app]||['pt','en'];}
+  curLang(){return this.props.lang||this.state.lang||'pt';}
+  componentDidMount(){
+    this.onR=()=>this.setState({vw:window.innerWidth});window.addEventListener('resize',this.onR);
+    this.poll=setInterval(()=>{if(window.GHF_T){clearInterval(this.poll);this.forceUpdate();}},60);
+    try{
+      const forced=new URLSearchParams(location.search).get('suggest');
+      if(sessionStorage.getItem('ghf-lang-band')==='off'&&!forced)return;
+      const prefs=forced?[forced]:(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'']).map(l=>String(l).slice(0,2).toLowerCase());
+      const avail=this.langs();const sug=prefs.find(l=>avail.includes(l));
+      if(sug)this.setState({sug});
+    }catch(e){}
+  }
+  componentWillUnmount(){window.removeEventListener('resize',this.onR);clearInterval(this.poll);}
+  setLang(code){this.setState({lang:code,langOpen:false,menuOpen:false});if(typeof this.props.onLang==='function')this.props.onLang(code);}
+  renderVals(){
+    const p=this.props;const w=Number(p.w||this.state.vw);
+    const bp=w<600?'m':(w<1024?'t':'d');
+    const lang=this.curLang();const app=p.app&&APP_LINKS[p.app]?p.app:null;
+    const L=window.GHF_LANDINGS&&app?window.GHF_LANDINGS[app]:null;
+    const a=app?{name:L?L.name:p.app,fav:L?L.fav:''}:{};
+    const acc=L?L.acc:'#3CC8D0';
+    const keys=app?APP_LINKS[app]:['apps','about','contact'];
+    const curIdx=Number(p.current??-1);
+    const links=keys.map((k,i)=>{const on=i===curIdx;return {t:T(lang,k),href:k==='privacy'&&L?L.privacyHref:HREF[k],cur:on?'page':undefined,color:on?'var(--tx)':'var(--tx2)',mark:on?'inset 0 -2px 0 '+acc:'none',mmark:on?'inset 3px 0 0 '+acc:'none'};});
+    const mLinks=app?[...links,{t:T(lang,'allApps'),href:'Home.dc.html#apps',mmark:'none'}]:links;
+    const avail=this.langs();
+    const langList=avail.map(code=>{const sel=code===lang;return {code,CODE:code.toUpperCase(),name:NAMES[code]||code,sel,cur:sel?'true':undefined,bg:sel?'var(--rs)':'transparent',ring:sel?'var(--br)':'var(--bd2)',dot:sel?'var(--br)':'transparent',tick:sel?'var(--br)':'transparent',pick:()=>this.setLang(code)};});
+    const cur=langList.find(g=>g.sel)||langList[0];
+    const menuOpen=this.state.menuOpen??(p.open===true||p.open==='true');
+    const sug=this.state.sug&&this.state.sug!==lang?this.state.sug:null;
+    const dismiss=()=>{try{sessionStorage.setItem('ghf-lang-band','off');}catch(e){}this.setState({sug:null});};
+    return {desktop:bp==='d',compact:bp!=='d',barLang:bp!=='m',sheetLang:bp==='m',
+      barH:bp==='m'?'60px':'68px',barPadL:bp==='m'?'16px':'clamp(16px,2.6vw,32px)',barPadR:bp==='m'?'8px':'clamp(16px,2.6vw,32px)',
+      sheetCols:bp==='t'?'1fr 1fr':'1fr',
+      a,hasApp:!!app,noApp:!app,links,mLinks,langList,cur,two:avail.length<=3,many:avail.length>3,
+      tLanguage:T(lang,'language'),langOpen:this.state.langOpen,
+      menuOpen,sheetOn:bp!=='d'&&menuOpen,menuBg:menuOpen?'var(--rs)':'transparent',menuLabel:menuOpen?T(lang,'close'):T(lang,'menu'),
+      toggleLang:()=>this.setState(s=>({langOpen:!s.langOpen})),toggleMenu:()=>this.setState({menuOpen:!menuOpen}),closeMenu:()=>this.setState({menuOpen:false}),
+      bandOn:!!sug,sug:sug||'',bandText:sug?T(sug,'band'):'',bandGoText:sug?T(sug,'bandGo'):'',bandClose:sug?T(sug,'close'):'',bandLabel:sug?T(sug,'language'):'',
+      bandGo:()=>{const s=sug;this.setState({sug:null});try{sessionStorage.setItem('ghf-lang-band','off');}catch(e){}this.setLang(s);},bandDismiss:dismiss};
+  }
+}
+</script>
+</body>
+</html>

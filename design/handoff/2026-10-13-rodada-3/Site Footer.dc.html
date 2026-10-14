@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<footer id="contato" style="background:var(--ft);border-top:1px solid var(--bd);font-family:Inter,system-ui,sans-serif;color:var(--tx)">
+  <div style="max-width:1216px;margin:0 auto;padding:{{ pad }};box-sizing:border-box;display:flex;flex-direction:column;gap:{{ gap }}">
+    <div style="display:grid;grid-template-columns:{{ topCols }};gap:24px 32px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:12px;grid-area:{{ brandArea }}">
+        <span style="display:flex;align-items:center;gap:10px"><span style="display:block;width:52px;height:22px;overflow:hidden;position:relative;flex:none"><img src="assets/GHFSoftware.png" alt="" style="position:absolute;width:122px;left:-34px;top:-17px;filter:brightness(1.9)"></span><span style="font-weight:700;font-size:16px">GHF Software</span></span>
+        <span style="font-size:14px;line-height:22px;color:var(--tx2);text-wrap:pretty;max-width:36ch">{{ tagline }}</span>
+      </div>
+      <sc-if value="{{ appsInTop }}" hint-placeholder-val="{{ true }}">
+        <sc-for list="{{ apps }}" as="a" hint-placeholder-count="4">
+          <div style="display:flex;flex-direction:column;min-width:0">
+            <span style="display:flex;align-items:center;gap:8px;min-height:44px;font-size:14px;font-weight:700"><span style="width:8px;height:8px;border-radius:2px;background:{{ a.hex }};flex:none"></span>{{ a.name }}</span>
+            <sc-for list="{{ a.links }}" as="k" hint-placeholder-count="2">
+              <a href="{{ k.href }}" style="min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--tx2);text-decoration:none;border-radius:4px" style-hover="color:var(--tx);text-decoration:underline" style-focus="outline:2px solid var(--br);outline-offset:-2px;color:var(--tx)">{{ k.t }}</a>
+            </sc-for>
+          </div>
+        </sc-for>
+      </sc-if>
+      <div style="display:flex;flex-direction:column;grid-area:{{ contactArea }};min-width:0">
+        <span style="min-height:44px;display:flex;align-items:center;font-size:14px;font-weight:700">{{ tContact }}</span>
+        <a href="mailto:support@ghfsoftware.com" style="min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--tx);text-decoration:underline;text-decoration-color:var(--br);text-underline-offset:3px;overflow-wrap:anywhere;border-radius:4px" style-focus="outline:2px solid var(--br);outline-offset:-2px">support@ghfsoftware.com</a>
+        <div style="display:flex;flex-direction:{{ socialDir }};column-gap:24px">
+          <a href="https://www.youtube.com/channel/UCZfKMp0qRRIEu103Vb3OGJg" style="min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--tx2);text-decoration:none;border-radius:4px" style-hover="color:var(--tx);text-decoration:underline" style-focus="outline:2px solid var(--br);outline-offset:-2px;color:var(--tx)">YouTube ↗</a>
+          <a href="https://www.instagram.com/ghfsoftware/" style="min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--tx2);text-decoration:none;border-radius:4px" style-hover="color:var(--tx);text-decoration:underline" style-focus="outline:2px solid var(--br);outline-offset:-2px;color:var(--tx)">Instagram ↗</a>
+        </div>
+      </div>
+    </div>
+    <sc-if value="{{ appsBelow }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;grid-template-columns:{{ appCols }};gap:0 24px;border-top:1px solid var(--bd);padding-top:12px">
+        <sc-for list="{{ apps }}" as="a" hint-placeholder-count="4">
+          <div style="display:flex;flex-direction:column;min-width:0;padding:{{ appPad }};border-top:{{ appRule }}">
+            <span style="display:flex;align-items:center;gap:8px;min-height:44px;font-size:15px;font-weight:700"><span style="width:8px;height:8px;border-radius:2px;background:{{ a.hex }};flex:none"></span>{{ a.name }}</span>
+            <div style="display:flex;flex-direction:{{ linkDir }};flex-wrap:wrap;column-gap:20px">
+              <sc-for list="{{ a.links }}" as="k" hint-placeholder-count="2">
+                <a href="{{ k.href }}" style="min-height:44px;display:flex;align-items:center;font-size:14px;color:var(--tx2);text-decoration:underline;text-decoration-color:var(--bd2);text-underline-offset:3px;border-radius:4px" style-hover="color:var(--tx)" style-focus="outline:2px solid var(--br);outline-offset:-2px;color:var(--tx)">{{ k.t }}</a>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;padding-top:16px;border-top:1px solid var(--bd);font-size:13px;line-height:20px;color:var(--mu)">
+      <span>© 2026 GHF Software</span>
+      <span lang="{{ lang }}">{{ tNoTrack }}</span>
+    </div>
+  </div>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:360},&quot;lang&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;pt&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const APPS=[['LottoExpert','#A78BFA','Landing App.dc.html?app=lotto','Legal LottoExpert.dc.html',true],['TopoWalk','#E38A57','Landing App.dc.html?app=topo','topowalk-privacy.html'],['Pole Position','#5FD47E','Landing App.dc.html?app=pole','poleposition-privacy.html'],['EclipseGo','#EE737D','Landing App.dc.html?app=eclipse','eclipsego-privacy.html']];
+const T=(l,k)=>window.GHF_T?window.GHF_T(l,k):k;
+class Component extends DCLogic {
+  state={vw:typeof window!=='undefined'?window.innerWidth:1280};
+  componentDidMount(){this.onR=()=>this.setState({vw:window.innerWidth});window.addEventListener('resize',this.onR);this.poll=setInterval(()=>{if(window.GHF_T){clearInterval(this.poll);this.forceUpdate();}},60);}
+  componentWillUnmount(){window.removeEventListener('resize',this.onR);clearInterval(this.poll);}
+  renderVals(){
+    const w=Number(this.props.w||this.state.vw);const bp=w<600?'m':(w<1024?'t':'d');const lang=this.props.lang||'pt';
+    const apps=APPS.map(([name,hex,page,priv,terms])=>({name,hex,links:[{t:T(lang,'appPage'),href:page},{t:T(lang,'privacy'),href:priv},...(terms?[{t:T(lang,'terms'),href:'lottoexpert-terms.html'}]:[])]}));
+    const tagline=lang==='pt'?'Soluções de engenharia, privacy-first. Software desde 2004.':'[copy: '+lang+' · footer.tagline]';
+    const d=bp==='d',t=bp==='t';
+    return {apps,lang,tagline,tContact:T(lang,'contact'),tNoTrack:T(lang,'noTrack'),
+      pad:d?'56px 32px 28px':(t?'44px 32px 24px':'36px 20px 28px'),gap:d?'40px':'24px',
+      topCols:d?'minmax(0,1.3fr) repeat(4,minmax(0,1fr)) minmax(0,1.3fr)':(t?'minmax(0,1fr) minmax(0,1fr)':'minmax(0,1fr)'),
+      brandArea:'auto',contactArea:'auto',appsInTop:d,appsBelow:!d,
+      appCols:t?'repeat(4,minmax(0,1fr))':'minmax(0,1fr)',appPad:t?'0':'4px 0',appRule:t?'0':'1px solid var(--bd)',linkDir:t?'column':'row',socialDir:t||d?'column':'row'};
+  }
+}
+</script>
+</body>
+</html>
