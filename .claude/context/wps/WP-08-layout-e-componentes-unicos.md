@@ -111,6 +111,10 @@ deixa de servir essas páginas. Antes da R1, tag `pre-wp-08` em `master`; o roll
    (`CONFIG-YML-ORFAO-01`); as 6 regras do `.htmlvalidate.json` voltam a `error`;
    `TARGET-BLANK-SEM-NOOPENER-01` conferido em todo `dist/`; `CLAUDE.md` e `README.md`.
 
+### Andamento
+
+- **Fatia 1** (2026-10-14): implementada (337c58f + 7dc7834), auditada (`site-qa`, `site-seo-perf`, `site-ux` — nenhum achado alto no escopo; a regra do §4 do `check_site.py` que tinha afrouxado foi corrigida). Aguarda merge `--no-ff` na branch de integração pelo usuário (o agente não tem permissão de `git merge`) e o checklist de navegador. Achados das auditorias em `achados-novos.md`.
+
 ### `check_site.py` (fatia 1, antes da primeira página sair da raiz)
 
 - §7 deixa de derivar a lista do glob da raiz (que encolhe a cada fatia e deixaria página sumir
