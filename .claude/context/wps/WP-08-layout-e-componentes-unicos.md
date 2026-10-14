@@ -2,7 +2,7 @@
 id: WP-08
 titulo: As 10 páginas usam um layout, componentes únicos e rota por idioma
 area: landing
-status: todo
+status: doing
 depende_de: [WP-07]
 adr: [ADR-001]
 spec: docs/AVALIACAO.md
@@ -16,6 +16,11 @@ branch: feat/wp-08-layout-unico
 # WP-08 — As 10 páginas usam um layout, componentes únicos e rota por idioma
 
 **Depende de:** WP-07 · **Achados roteados:** `NAV-FOOTER-DERIVA-01`, `I18N-SEM-URL-01`
+
+**Exceção de dependência (2026-10-13, usuário):** o WP-08 começa com o WP-07 `blocked` (só falta
+o deploy, adiado para uma janela de pouco uso do bolão). A branch fica isolada: **sem merge em
+`develop` até o WP-07 estar no ar**, para o `/release` publicar a troca de stack e a migração das
+páginas separadas, cada uma com o seu rollback.
 
 **Objetivo:** nav, footer, tema e `<head>` existem uma vez (`src/layouts/`, `src/components/`);
 o conteúdo legal é um `.md` por idioma em `src/content/legal/` renderizado por um layout; o
