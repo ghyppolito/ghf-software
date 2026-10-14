@@ -1,40 +1,29 @@
 ---
-// Página de prova do build (WP-07). O Pages serve /404.html em qualquer profundidade:
-// caminhos absolutos, sem JS, pt e en lado a lado.
+// 404 do site. O Pages serve /404.html em qualquer profundidade: caminhos absolutos, pt e en
+// lado a lado (não há par por idioma), sem JS.
 import Base from '../layouts/Base.astro';
 ---
 <Base
   title="Página não encontrada · Page not found · GHF Software"
   description="Página não encontrada no site da GHF Software. Page not found."
+  lang="pt"
+  caminho="404.html"
+  tema="ghf"
+  temPar={false}
   noindex
 >
-  <main>
-    <section>
-      <h1>Página não encontrada</h1>
-      <p><a href="/">Voltar para o início</a></p>
+  <main class="max-w-lg mx-auto px-6 py-24 grid gap-8">
+    <section class="bg-brand-surface rounded-xl p-6">
+      <h1 class="text-2xl font-bold mb-3">Página não encontrada</h1>
+      <p>
+        <a href="/" class="inline-flex items-center min-h-[44px] text-brand-primary hover:text-brand-primaryHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-brand-accent">Voltar para o início</a>
+      </p>
     </section>
-    <section lang="en">
-      <h2>Page not found</h2>
-      <p><a href="/">Back to the home page</a></p>
+    <section lang="en" class="bg-brand-surface rounded-xl p-6">
+      <h2 class="text-2xl font-bold mb-3">Page not found</h2>
+      <p>
+        <a href="/en/" class="inline-flex items-center min-h-[44px] text-brand-primary hover:text-brand-primaryHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-brand-accent">Back to the home page</a>
+      </p>
     </section>
   </main>
 </Base>
-
-<style>
-  main {
-    max-width: 32rem;
-    margin: 0 auto;
-    padding: 6rem 1.5rem;
-    display: grid;
-    gap: 2rem;
-  }
-  section {
-    background: var(--brand-surface);
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-  }
-  h1, h2 { margin: 0 0 0.75rem; font-size: 1.5rem; }
-  p { margin: 0; }
-  /* Alvo de toque de 44 px no único link de cada bloco. */
-  a { display: inline-flex; align-items: center; min-height: 44px; }
-</style>

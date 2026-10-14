@@ -1,46 +1,91 @@
 ---
-// Layout mínimo (WP-07). Vira o layout único no WP-08, com nav, footer e Tailwind.
+// Layout único (WP-08). <head> de todas as páginas geradas: metadados, og:*, canonical, hreflang,
+// fontes e o CSS compilado do Tailwind (ADR-003). O tema da página vai em `data-tema` no <html>.
+import '../styles/global.css';
+import { SITE, rota, type Idioma } from '../i18n/ui';
+
+interface Og {
+  titulo?: string;
+  descricao?: string;
+  /** caminho absoluto no site, ex.: /assets/GHFSoftware.png */
+  imagem?: string;
+  largura?: number;
+  altura?: number;
+  tipo?: string;
+  /** descrição do card do X/Twitter, quando difere da do og */
+  descricaoTwitter?: string;
+}
+
 interface Props {
   title: string;
   description: string;
+  og?: Og;
+  lang: Idioma;
+  /** caminho pt da página, ex.: 'index.html', 'lottoexpert.html' */
+  caminho: string;
+  /** bloco de src/styles/global.css; 'ghf' é o da home */
+  tema: string;
+  /** a página tem par no outro idioma (hreflang recíproco) */
+  temPar?: boolean;
   noindex?: boolean;
+  classeBody?: string;
 }
-const { title, description, noindex = false } = Astro.props;
+
+const {
+  title,
+  description,
+  og = {},
+  lang,
+  caminho,
+  tema,
+  temPar = true,
+  noindex = false,
+  classeBody = 'bg-brand-base text-gray-100 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden',
+} = Astro.props;
+
+const url = (l: Idioma) => SITE + rota(l, caminho);
+const canonica = temPar ? url(lang) : `${SITE}/${caminho}`;
+const imagem = SITE + (og.imagem ?? '/assets/GHFSoftware.png');
+const ogTitulo = og.titulo ?? title;
+const ogDescricao = og.descricao ?? description;
 ---
 <!doctype html>
-<html lang="pt-BR">
+<html lang={lang === 'pt' ? 'pt-BR' : 'en'} class="scroll-smooth" data-tema={tema}>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
+    <link rel="icon" type="image/png" href="/assets/GHFSoftware.png">
     <meta name="description" content={description}>
     {noindex && <meta name="robots" content="noindex">}
-    <link rel="icon" type="image/png" href="/assets/GHFSoftware.png">
-    <style is:global>
-      /* Tokens brand.* e fonte copiados do tailwind.config inline de index.html.
-         Inter só se já estiver instalada — nada de Google Fonts aqui. */
-      :root {
-        --brand-base: #0B1120;
-        --brand-surface: #111827;
-        --brand-primary: #10B981;
-        --brand-primary-hover: #059669;
-        --brand-secondary: #3B82F6;
-        --brand-accent: #06B6D4;
-      }
-      body {
-        margin: 0;
-        min-height: 100vh; /* fallback para navegador sem dvh */
-        min-height: 100dvh;
-        background: var(--brand-base);
-        color: #F3F4F6; /* text-gray-100 do <body> de index.html */
-        font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      }
-      a { color: var(--brand-primary); }
-      a:hover { color: var(--brand-primary-hover); }
-      a:focus-visible { outline: 2px solid var(--brand-accent); outline-offset: 3px; }
-    </style>
+    <link rel="canonical" href={canonica}>
+    {temPar && <link rel="alternate" hreflang="pt-BR" href={url('pt')}>}
+    {temPar && <link rel="alternate" hreflang="en" href={url('en')}>}
+
+    <!-- Open Graph (WhatsApp, LinkedIn, Facebook) -->
+    <meta property="og:type" content={og.tipo ?? 'website'}>
+    <meta property="og:site_name" content="GHF Software">
+    <meta property="og:url" content={canonica}>
+    <meta property="og:title" content={ogTitulo}>
+    <meta property="og:description" content={ogDescricao}>
+    <meta property="og:image" content={imagem}>
+    {og.largura && <meta property="og:image:width" content={String(og.largura)}>}
+    {og.altura && <meta property="og:image:height" content={String(og.altura)}>}
+    <meta property="og:locale" content={lang === 'pt' ? 'pt_BR' : 'en_US'}>
+    {temPar && <meta property="og:locale:alternate" content={lang === 'pt' ? 'en_US' : 'pt_BR'}>}
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content={ogTitulo}>
+    <meta name="twitter:description" content={og.descricaoTwitter ?? ogDescricao}>
+    <meta name="twitter:image" content={imagem}>
+
+    <!-- Google Fonts e Font Awesome: uma vez, aqui; saem no WP-12 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   </head>
-  <body>
+  <body class={classeBody}>
     <slot />
   </body>
 </html>

@@ -67,8 +67,8 @@ existindo no resultado publicado.
 ## Arquitetura (estado atual — muda no WP-08)
 
 ```
-*.html                      uma página por arquivo; nav, footer, tailwind.config e dicionário
-                            i18n (data-i18n + JS) duplicados em cada uma — deriva conhecida
+*.html                      páginas ainda não migradas (9 no fim da fatia 1 do WP-08); nav, footer,
+                            tailwind.config e dicionário i18n (data-i18n + JS) duplicados em cada uma
 assets/                     imagens, favicons, mockups (PNG, sem otimização)
 docs/*.md                   cópia markdown das políticas/termos e README de cada app
 lotto-expert/sweepstake-invite/   página do convite de bolão (pako + Base64, lê o link)
@@ -76,8 +76,11 @@ lotto-expert/sweepstake-invite/   página do convite de bolão (pako + Base64, l
 tools/                      gen_estado.py · check_plano.py · check_site.py
 design/                     brief e handoff do Claude Design (WP-06)
 astro.config.mjs            Astro (ADR-002); integração copia da raiz para dist/, byte a byte, a
-                            lista fechada: 10 *.html, assets/, .well-known/, lotto-expert/, CNAME
-src/                        layouts/Base.astro (mínimo) e pages/404.astro — o resto migra no WP-08
+                            lista fechada: os *.html não migrados, assets/, .well-known/, lotto-expert/, CNAME
+tailwind.config.mjs         Tailwind 3.4.19 compilado pelo PostCSS (ADR-003); brand.* por variável CSS
+src/                        layouts/Base.astro (head único, og, canonical, hreflang, tema) ·
+                            components/ (Nav, Footer, TrocaIdioma, Home) · i18n/ (ui.ts, home.ts) ·
+                            styles/global.css (temas por página) · pages/ (index, en/index, 404)
 dist/                       saída do build (não versionada) — é o que vai ao ar
 .github/workflows/          pr.yml (checks `plano` e `site`) · deploy.yml (master → Pages por Actions)
 ```
@@ -85,8 +88,8 @@ dist/                       saída do build (não versionada) — é o que vai a
 Até a troca do Pages para "GitHub Actions" (passo do usuário no WP-07), o Jekyll ainda publica a
 raiz de `master`; `_config.yml` exclui o projeto Astro. Depois, só `dist/` vai ao ar.
 
-Até o WP-08 o build só copia as páginas da raiz: alteração em nav/footer/config **se replica nas
-10 páginas** no mesmo WP, e a rede é o `check_site.py` (raiz e `dist/`). Depois do WP-08, há um
+Durante o WP-08, página não migrada ainda é copiada da raiz: alteração em nav/footer/config **se
+replica no componente e nas páginas da raiz** no mesmo WP, e a rede é o `check_site.py` (raiz e `dist/`). Depois do WP-08, há um
 layout único.
 
 ---
@@ -145,6 +148,6 @@ dist` e publicação de `dist/` no Pages — só tem efeito com o Pages em modo 
 | Diagnóstico e direção | `docs/AVALIACAO.md` |
 | Texto legal de um app | repositório do app, `docs/PRIVACY_POLICY.md` / `TERMS_OF_SERVICE.md` |
 | Copy de produto | `../lotto-expert/docs/ASO_METADATA.md`, `docs/<APP>_README.md` |
-| Dicionário i18n de uma página | bloco `<script>` no fim do próprio HTML (`translations`/`data-i18n`) |
-| Cores e fonte da marca | `tailwind.config` inline em `index.html` (brand.base/surface/primary/secondary/accent, Inter) |
+| Dicionário i18n de uma página | migrada: `src/i18n/` (`ui.ts` nav/footer, `<pagina>.ts`); não migrada: bloco `<script>` no fim do HTML (`translations`/`data-i18n`) |
+| Cores e fonte da marca | `tailwind.config.mjs` (brand.base/surface/primary/secondary/accent, Inter) com os valores por tema em `src/styles/global.css` |
 | Deep link do bolão | `lotto-expert/sweepstake-invite/lottoexpert-invite.html`; formato é do app (ADR-006 lá) |
