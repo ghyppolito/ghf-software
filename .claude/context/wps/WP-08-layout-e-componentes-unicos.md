@@ -47,6 +47,12 @@ os 10 `*.html` da raiz (remoção), `docs/*_PRIVACY_POLICY.md` e `docs/*_TERMS_O
 (`git mv` para `public/`, fatia 9), `CLAUDE.md` seções "Arquitetura", "Comandos" e "Referência
 rápida", `README.md`.
 
+**Respostas do usuário (2026-10-13), todas como recomendado:** (1) a R1 só sai depois do WP-07
+no ar com um convite real testado e alguns dias sem incidente, e com a tag `pre-wp-08` em `master`
+antes; (2) publicação em três releases (R1/R2/R3); (3) sem redirect para `/en/` até o WP-15 —
+quem escolheu inglês volta a abrir a URL pt em português; (4) push da integração e PR rascunho
+para `develop` com o título de não fazer merge, só para o CI rodar.
+
 ## Como a branch é fatiada (site-arquiteto, 2026-10-13)
 
 **Uma branch de integração, fatias como sub-branches.** `feat/wp-08-layout-unico` é a
