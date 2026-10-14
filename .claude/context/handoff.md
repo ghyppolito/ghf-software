@@ -59,8 +59,8 @@ publicidade". Rodada 3 é pré-condição das landings TopoWalk, Pole Position e
 ## 5. Decisões fora de `decisoes.md` e ADR
 
 - **Exceção de dependência do WP-08 e respostas ao plano:** registradas no WP-08, são decisões de execução daquele WP.
-- **`cssTarget` no `astro.config.mjs`** (`chrome87, edge88, firefox78, safari14`): complementa o ADR-003 e não está
-  nele até a integração da fatia 1; acrescentado ao ADR-003 em 2026-10-14.
+- **`cssTarget` no `astro.config.mjs`** (`chrome87, edge88, firefox78, safari14`): acrescentado ao ADR-003 (item 4)
+  em 2026-10-14, na integração da fatia 1.
 - **D10 resolvida sem mudar `_config.yml`:** o usuário fez `/release` e troca do Pages na mesma sessão; `design/` saiu
   do ar pela troca. Está em `decisoes.md`.
 - O usuário não recusou nenhuma proposta.

@@ -34,7 +34,9 @@ O WP-08 exige "sem mudança visual intencional", provado por captura antes/depoi
 4. O minificador de CSS do Vite 8 (lightningcss) reescreve a saída — no spike,
    `backdrop-filter` saiu sem `-webkit-` mesmo com `autoprefixer`. Paridade é provada por captura
    (360/1280, `site-ux`), não suposta; regressão em navegador antigo vira achado com o navegador
-   nomeado.
+   nomeado. Na fatia 1 do WP-08, `vite.build.cssTarget` explícito em `astro.config.mjs`
+   (`chrome87, edge88, firefox78, safari14`) faz o minificador manter `-webkit-backdrop-filter`
+   ao lado de `backdrop-filter`; sem ele, o vidro do `.glass-panel` sumia em um dos motores.
 
 ## O que isto fecha
 
