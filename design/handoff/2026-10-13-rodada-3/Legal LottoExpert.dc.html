@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="content/i18n.js"></script><script src="content/landings.js"></script><style>@font-face{font-family:Inter;src:url(fonts/InterVariable.woff2) format("woff2");font-weight:100 900;font-display:swap}body{margin:0;background:#F7F7F5}a{color:#0A6E75}a:hover{color:#07565C}summary::-webkit-details-marker{display:none}</style></helmet>
+<div lang="{{ lang }}" style="--bg:#0B1120;--sf:#111827;--rs:#1A2335;--bd:#243046;--bd2:#66738D;--tx:#F3F4F6;--tx2:#C3C9D3;--mu:#97A0B0;--br:#3CC8D0;--ft:#0E1524;--r:12px;--rb:999px;--rc:8px;--sh:0 12px 32px rgba(0,0,0,.45);--paper:#F7F7F5;--ink:#15181C;--ptx2:#4A5059;--pbd:#D9D7D1;--plink:#0A6E75;--plinkh:#07565C;container-type:inline-size;background:{{ pageBg }};color:var(--ink);font-family:Inter,system-ui,sans-serif">
+  <sc-if value="{{ screen }}" hint-placeholder-val="{{ true }}">
+    <dc-import name="Site Nav" app="lotto" lang="{{ lang }}" on-lang="{{ switchLang }}" current="3" hint-size="100%,68px"></dc-import>
+  </sc-if>
+  <sc-if value="{{ print }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:40px 56px 10px;display:flex;justify-content:space-between;font-size:11px;color:#4A5059;border-bottom:1px solid #D9D7D1">
+      <span>GHF Software · LottoExpert</span><span>ghfsoftware.com/lottoexpert-privacy.html</span>
+    </div>
+  </sc-if>
+  <main style="max-width:1216px;margin:0 auto;padding:{{ pad }};box-sizing:border-box;display:grid;grid-template-columns:{{ cols }};gap:56px;align-items:start">
+    <sc-if value="{{ sideToc }}" hint-placeholder-val="{{ true }}">
+      <nav aria-label="{{ tOnThisPage }}" style="position:sticky;top:16px;display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 32px);overflow:auto;padding:2px 8px 2px 2px">
+        <span style="font-size:13px;font-weight:600;color:var(--ptx2);padding:0 10px 8px">{{ tOnThisPage }}</span>
+        <sc-for list="{{ toc }}" as="t" hint-placeholder-count="11">
+          <a href="{{ t.href }}" aria-current="{{ t.cur }}" style="min-height:44px;padding:10px;box-sizing:border-box;display:flex;gap:8px;font-size:14px;line-height:20px;color:{{ t.color }};font-weight:{{ t.w }};text-decoration:none;border-radius:6px;box-shadow:{{ t.mark }}" style-hover="background:#ECEBE7;color:var(--ink)" style-focus="outline:2px solid var(--plink);outline-offset:-2px">
+            <span style="min-width:20px;color:var(--ptx2);font-variant-numeric:tabular-nums">{{ t.n }}</span><span>{{ t.t }}</span>
+          </a>
+        </sc-for>
+      </nav>
+    </sc-if>
+    <article style="min-width:0;max-width:70ch">
+      <header style="display:flex;flex-direction:column;gap:16px;padding-bottom:24px;border-bottom:1px solid var(--pbd);margin-bottom:24px">
+        <span style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600"><span style="width:28px;height:28px;border-radius:7px;overflow:hidden;display:block"><img src="assets/lottoexpert_favicon_v3.png" alt="" style="width:100%;height:100%;object-fit:cover"></span>LottoExpert</span>
+        <h1 style="margin:0;font-size:clamp(30px,4cqi,44px);line-height:1.15;font-weight:700;letter-spacing:-0.02em;text-wrap:balance">{{ title }}</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+          <span style="min-height:36px;padding:0 14px;border-radius:999px;background:#ECEBE7;border:1px solid var(--pbd);display:flex;align-items:center;gap:8px;font-size:14px"><span style="color:var(--ptx2)">{{ tUpdated }}</span><strong style="font-weight:700;font-variant-numeric:tabular-nums">{{ updated }}</strong></span>
+          <sc-if value="{{ screen }}" hint-placeholder-val="{{ true }}">
+            <div role="group" aria-label="{{ tLanguage }}" style="display:flex;border:1px solid #8A8F96;border-radius:999px;padding:2px;gap:2px">
+              <button type="button" lang="pt" aria-pressed="{{ isPt }}" onClick="{{ setPt }}" style="min-height:44px;padding:0 16px;border:0;border-radius:999px;background:{{ ptBg }};color:{{ ptFg }};font:600 14px Inter,sans-serif;cursor:pointer" style-focus="outline:2px solid var(--plink);outline-offset:2px">Português</button>
+              <button type="button" lang="en" aria-pressed="{{ isEn }}" onClick="{{ setEn }}" style="min-height:44px;padding:0 16px;border:0;border-radius:999px;background:{{ enBg }};color:{{ enFg }};font:600 14px Inter,sans-serif;cursor:pointer" style-focus="outline:2px solid var(--plink);outline-offset:2px">English</button>
+            </div>
+          </sc-if>
+        </div>
+        <sc-if value="{{ showPrevail }}" hint-placeholder-val="{{ false }}">
+          <aside aria-label="Versão de referência" style="display:flex;gap:10px;padding:12px 14px;border:1px solid #C9A94A;background:#FBF3DC;border-radius:8px;font-size:14px;line-height:21px;color:var(--ink)">
+            <span aria-hidden="true" style="width:20px;height:20px;border-radius:50%;border:1.5px solid #6B5310;color:#6B5310;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;box-sizing:border-box;margin-top:1px">!</span>
+            <span>{{ prevailText }}</span>
+          </aside>
+        </sc-if>
+      </header>
+      <sc-if value="{{ mobileToc }}" hint-placeholder-val="{{ false }}">
+        <details style="border:1px solid var(--pbd);border-radius:10px;background:#FFFFFF;margin-bottom:28px">
+          <summary style="min-height:52px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:15px;font-weight:600;list-style:none;border-radius:10px" style-focus="outline:3px solid var(--plink);outline-offset:-3px">{{ tOnThisPage }} <span style="font-weight:500;color:var(--ptx2);font-size:14px">{{ tocCount }} {{ tSections }} ▾</span></summary>
+          <div style="display:flex;flex-direction:column;padding:0 8px 10px">
+            <sc-for list="{{ toc }}" as="t" hint-placeholder-count="11">
+              <a href="{{ t.href }}" style="min-height:44px;padding:10px 8px;box-sizing:border-box;display:flex;gap:8px;font-size:15px;line-height:22px;color:var(--ink);text-decoration:none;border-top:1px solid #ECEBE7" style-focus="outline:2px solid var(--plink);outline-offset:-2px"><span style="min-width:22px;color:var(--ptx2)">{{ t.n }}</span>{{ t.t }}</a>
+            </sc-for>
+          </div>
+        </details>
+      </sc-if>
+      <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}"><p role="status" style="font-size:16px;color:var(--ptx2)">…</p></sc-if>
+      <div ref="{{ bodyRef }}">{{ body }}</div>
+    </article>
+  </main>
+  <sc-if value="{{ screen }}" hint-placeholder-val="{{ true }}">
+    <dc-import name="Site Footer" lang="{{ lang }}" hint-size="100%,320px"></dc-import>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;print&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const SRC={pt:'content/LOTTOEXPERT_PRIVACY_POLICY.md',en:'content/LOTTOEXPERT_PRIVACY_POLICY.en.md'};
+const h=React.createElement;
+function slug(t){const m=t.match(/^(\d+(?:\.\d+)?)\.?\s/);return m?'secao-'+m[1].replace('.','-'):'s-'+t.toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,40);}
+function inline(s,key){
+  const parts=s.split(/(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)]+\)|\*[^*\s][^*]*\*)/g);
+  return parts.map((p,i)=>{const k=key+'-'+i;
+    if(/^\*\*[^*]+\*\*$/.test(p))return h('strong',{key:k,style:{fontWeight:700}},p.slice(2,-2));
+    if(/^`[^`]+`$/.test(p))return h('code',{key:k,style:{font:'0.86em ui-monospace,Menlo,monospace',background:'#ECEBE7',padding:'1px 5px',borderRadius:4,overflowWrap:'anywhere'}},p.slice(1,-1));
+    const m=p.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if(m)return h('a',{key:k,href:m[2],style:{color:'#0A6E75',textDecoration:'underline',textUnderlineOffset:3,overflowWrap:'anywhere'}},m[1]);
+    if(/^\*[^*]+\*$/.test(p))return h('em',{key:k},p.slice(1,-1));
+    return p;});
+}
+function parse(md){
+  const lines=md.split(/\r?\n/);let title='',updated='';const blocks=[];let para=[],list=null,table=null;
+  const flush=()=>{if(para.length){blocks.push({type:'p',text:para.join(' ')});para=[];}if(list){blocks.push(list);list=null;}if(table){blocks.push(table);table=null;}};
+  for(const raw of lines){const line=raw.replace(/\s+$/,'');
+    if(/^# /.test(line)){title=line.slice(2);continue;}
+    const um=line.match(/^\*\*(?:Última atualização|Last updated):\*\*\s*(.+)$/);if(um){updated=um[1];continue;}
+    if(!line.trim()||/^---+$/.test(line.trim())){flush();continue;}
+    if(/^## /.test(line)){flush();const t=line.slice(3);blocks.push({type:'h2',text:t,id:slug(t)});continue;}
+    if(/^### /.test(line)){flush();const t=line.slice(4);blocks.push({type:'h3',text:t,id:slug(t)});continue;}
+    if(/^\|/.test(line)){if(para.length||list){const t=table;table=null;flush();table=t;}
+      const cells=line.replace(/^\||\|$/g,'').split('|').map(c=>c.trim());
+      if(cells.every(c=>/^:?-{2,}:?$/.test(c)))continue;
+      if(!table)table={type:'table',head:cells,rows:[]};else table.rows.push(cells);continue;}
+    const lm=line.match(/^(\s*)- (.+)$/);
+    if(lm){if(para.length){blocks.push({type:'p',text:para.join(' ')});para=[];}
+      if(!list)list={type:'ul',items:[]};
+      if(lm[1].length>=2&&list.items.length)list.items[list.items.length-1].sub.push(lm[2]);else list.items.push({text:lm[2],sub:[]});continue;}
+    if(list){blocks.push(list);list=null;}
+    para.push(line.trim());}
+  flush();return {title,updated,blocks};
+}
+function stub(ptDoc,lang){
+  const blocks=[];ptDoc.blocks.forEach(b=>{if(b.type==='h2'){const n=(b.text.match(/^(\d+)/)||[])[1]||'';blocks.push({type:'h2',id:b.id,text:(n?n+'. ':'')+'[copy: '+lang+' · título da seção '+n+']'});blocks.push({type:'p',text:'[copy: '+lang+' · texto da seção '+n+'. A tradução da política não foi fornecida; o arquivo esperado é '+SRC[lang]+'.]'});}});
+  return {title:'[copy: '+lang+' · título da política]',updated:ptDoc.updated,blocks,stub:true};
+}
+function render(blocks){
+  return blocks.map((b,i)=>{const k='b'+i;
+    if(b.type==='h2')return h('h2',{key:k,id:b.id,'data-sec':'1',style:{margin:'56px 0 16px',fontSize:26,lineHeight:'34px',fontWeight:700,letterSpacing:'-0.01em',scrollMarginTop:24,textWrap:'balance'}},b.text);
+    if(b.type==='h3')return h('h3',{key:k,id:b.id,style:{margin:'36px 0 12px',fontSize:20,lineHeight:'28px',fontWeight:600,scrollMarginTop:24}},b.text);
+    if(b.type==='p')return h('p',{key:k,style:{margin:'0 0 18px',fontSize:18,lineHeight:'30px',textWrap:'pretty'}},inline(b.text,k));
+    if(b.type==='ul')return h('ul',{key:k,style:{margin:'0 0 20px',paddingLeft:24,fontSize:18,lineHeight:'30px'}},b.items.map((it,j)=>h('li',{key:j,style:{margin:'0 0 8px',paddingLeft:4}},inline(it.text,k+j),it.sub.length?h('ul',{style:{margin:'8px 0 0',paddingLeft:22,fontSize:17,lineHeight:'28px'}},it.sub.map((s,n)=>h('li',{key:n,style:{margin:'0 0 6px'}},inline(s,k+j+'s'+n)))):null)));
+    if(b.type==='table')return h('div',{key:k,tabIndex:0,role:'region','aria-label':'Tabela',style:{overflowX:'auto',margin:'4px 0 28px',border:'1px solid #D9D7D1',borderRadius:8,background:'#FFFFFF',outlineColor:'#0A6E75'}},
+      h('table',{style:{borderCollapse:'collapse',width:'100%',minWidth:560,fontSize:15,lineHeight:'23px'}},
+        h('thead',null,h('tr',{style:{background:'#ECEBE7'}},b.head.map((c,j)=>h('th',{key:j,scope:'col',style:{textAlign:'left',padding:'10px 14px',fontWeight:600}},inline(c,k+'h'+j))))),
+        h('tbody',null,b.rows.map((r,j)=>h('tr',{key:j,style:{borderTop:'1px solid #D9D7D1'}},r.map((c,n)=>h('td',{key:n,style:{padding:'10px 14px',verticalAlign:'top'}},inline(c,k+j+'c'+n))))))));
+    return null;});
+}
+class Component extends DCLogic {
+  constructor(p){super(p);let q={};try{q=Object.fromEntries(new URLSearchParams(location.search));}catch(e){}
+    this.state={docs:{},lang:q.lang==='en'?'en':'pt',active:null,vw:typeof window!=='undefined'?window.innerWidth:1280};
+    this.bodyRef=React.createRef();this.restore=null;}
+  componentDidMount(){
+    this.load('pt').then(()=>{if(this.state.lang!=='pt')this.load(this.state.lang);
+      const hsh=location.hash.slice(1);if(hsh)setTimeout(()=>{const el=document.getElementById(hsh);if(el)window.scrollTo(0,el.getBoundingClientRect().top+window.scrollY-24);},60);});
+    this.onR=()=>this.setState({vw:window.innerWidth});window.addEventListener('resize',this.onR);
+    this.onS=()=>{const a=this.currentSection();if(a&&a.id!==this.state.active)this.setState({active:a.id});};window.addEventListener('scroll',this.onS,{passive:true});
+    this.poll=setInterval(()=>{if(window.GHF_T){clearInterval(this.poll);this.forceUpdate();}},60);
+  }
+  componentWillUnmount(){window.removeEventListener('resize',this.onR);window.removeEventListener('scroll',this.onS);clearInterval(this.poll);}
+  load(lang){
+    if(this.state.docs[lang])return Promise.resolve();
+    return fetch(SRC[lang]).then(r=>{if(!r.ok)throw 0;return r.text();}).then(t=>parse(t)).catch(()=>lang==='pt'?{title:'Política de Privacidade — LottoExpert',updated:'—',blocks:[{type:'p',text:'Não foi possível carregar o texto.'}]}:null)
+      .then(d=>{if(!d&&this.state.docs.pt)d=stub(this.state.docs.pt,lang);if(d)this.setState(s=>({docs:{...s.docs,[lang]:d}}));});
+  }
+  currentSection(){
+    const root=this.bodyRef.current;if(!root)return null;const hs=root.querySelectorAll('[data-sec]');let cur=null;
+    for(const el of hs){const top=el.getBoundingClientRect().top;if(top<=120)cur={id:el.id,top};else break;}
+    if(!cur&&hs[0])cur={id:hs[0].id,top:hs[0].getBoundingClientRect().top};
+    return cur;
+  }
+  switchLang(code){
+    if(code===this.state.lang)return;
+    const cur=this.currentSection();this.restore=cur;
+    this.load(code).then(()=>{
+      this.setState({lang:code},()=>{
+        requestAnimationFrame(()=>{const r=this.restore;this.restore=null;
+          if(r){const el=document.getElementById(r.id);if(el)window.scrollTo(0,el.getBoundingClientRect().top+window.scrollY-r.top);}
+          try{const u=new URL(location.href);u.searchParams.set('lang',code);u.hash=r?r.id:'';history.replaceState(null,'',u.pathname+u.search+u.hash);document.documentElement.lang=code;}catch(e){}
+        });
+      });
+    });
+  }
+  renderVals(){
+    const w=Number(this.props.w||this.state.vw);const print=this.props.print===true||this.props.print==='true';
+    const lang=this.state.lang;const d=this.state.docs[lang]||this.state.docs.pt;const blocks=d?d.blocks:[];
+    const T=k=>window.GHF_T?window.GHF_T(lang,k):k;
+    const active=this.state.active||(blocks.find(b=>b.type==='h2')||{}).id;
+    const toc=blocks.filter(b=>b.type==='h2').map(b=>{const m=b.text.match(/^(\d+)\.\s*(.+)$/);const act=b.id===active;
+      return {href:'#'+b.id,n:m?m[1]:'',t:m?m[2]:b.text,cur:act?'location':undefined,color:act?'#15181C':'#4A5059',w:act?600:400,mark:act?'inset 3px 0 0 #0A6E75':'none'};});
+    const side=!print&&w>=1024,isEn=lang==='en';
+    return {lang,title:d?d.title:'',updated:d?d.updated:'…',body:render(blocks),bodyRef:this.bodyRef,loading:!d,toc,tocCount:toc.length,
+      tOnThisPage:T('onThisPage'),tUpdated:T('updated'),tSections:T('sections'),tLanguage:T('language'),
+      showPrevail:lang!=='pt',prevailText:'[copy: '+lang+' · aviso “em divergência, prevalece a versão em português”, vindo do repositório do app]',
+      screen:!print,print,sideToc:side,mobileToc:!print&&!side,cols:side?'260px minmax(0,1fr)':'minmax(0,1fr)',
+      pad:print?'28px 56px 40px':(w<600?'28px 16px 56px':'48px 32px 96px'),pageBg:print?'#FFFFFF':'var(--paper)',
+      isPt:!isEn,isEn,ptBg:isEn?'transparent':'#15181C',ptFg:isEn?'#15181C':'#FFFFFF',enBg:isEn?'#15181C':'transparent',enFg:isEn?'#FFFFFF':'#15181C',
+      setPt:()=>this.switchLang('pt'),setEn:()=>this.switchLang('en'),switchLang:(c)=>this.switchLang(c)};
+  }
+}
+</script>
+</body>
+</html>
