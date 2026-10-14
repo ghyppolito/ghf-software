@@ -3,13 +3,15 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-10-13.** Branch `docs/handoff-2026-10-13`, sobre `origin/develop`; sem push.
+**Sessão de 2026-10-13.** Handoff da sessão anterior; "Onde parei" atualizado ao fechar o WP-19 (branch `feat/wp-19-rodada-3-claude-design`, local, sem push, sobre `origin/develop`).
 
 ## 1. Onde parei
 
-WP-05 e WP-06 `done`, integrados em `develop` (PR #33 e #35). WP-07 `blocked` (PR #34 integrado), mas
-**nada dele está no ar**: depende de passos do usuário (seção 4). WP-19 (rodada 3 do Claude Design)
-criado, `todo`, trilha C. Próximo WP depois do WP-07: WP-08 (depende só do WP-07).
+WP-19: rodada 3 exportada (`design/handoff/2026-10-13-rodada-3/`) e auditada (`design/README.md`: 4 itens
+cobertos, 1, 2, 3 e 7 parciais, nenhum ausente). `blocked`, falta o **checklist de navegador** do usuário
+(`visual: true`, lista no WP). Branch local, sem push. WP-07 segue `blocked` (passos do usuário, seção 4);
+o deploy está adiado até a janela de pouco uso do bolão (o app está em atualização de versão). WP-08 pode
+andar em branch isolada, sem merge em `develop` até o WP-07 estar no ar (proposta feita, sem resposta).
 
 ## 2. Quebrado ou pela metade agora
 
@@ -31,6 +33,17 @@ mostra o 404 novo, link de bolão real no Android abre o app (App Links), HTTPS 
 As telas do handoff de design o usuário já viu no Claude Design (não é critério de página no ar).
 
 ## 4. Próxima ação
+
+**Antes de tudo, do usuário (WP-19):**
+(a) Checklist de navegador da rodada 3: `python3 -m http.server 8080 -d "design/handoff/2026-10-13-rodada-3"`;
+`Landing App.dc.html?app=topo&lang=ru` a 360; `?app=topo`, `?app=pole`, `?app=eclipse` a 1280; `Home.dc.html`,
+`Landing App.dc.html` e `Legal LottoExpert.dc.html` a 768; troca pt/en na legal (en é stub, esperado);
+`?app=pole&suggest=de`: a faixa fecha e não volta na sessão; Tab mostra foco em "Ver todas" e nos sociais
+do footer; selo "Publicado" distinto do verde do Pole no footer. Escrever o que viu no WP-19.
+(b) Decisões novas em `decisoes.md`: D10 (**`design/` no Jekyll: excluir antes do `/release`** — hoje o
+`/release` publicaria ~19 MB de `design/`, inclusive cópias do texto legal em URLs alternativas), D11
+(`--success`) e D12 (limiares de destaque vs ver todas).
+
 
 Do usuário, em ordem (recomendado: `/release` e a troca do Pages na mesma sessão, para encurtar a
 janela em que o Jekyll publica `design/`, ~19 MB, e `docs/`):

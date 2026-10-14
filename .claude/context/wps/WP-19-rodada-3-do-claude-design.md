@@ -102,3 +102,21 @@ idioma da página legal funcionando.
 **Risco:** baixo. Nenhuma página publicada muda. O custo é a sessão do usuário; o que ela não
 cobrir fica em "o que ainda falta" e as landings dependentes no WP-10 continuam sem referência.
 Copy do export não é fonte — sem origem no README/ASO, não vai ao ar.
+
+## Estado (2026-10-13)
+
+Passos 1–3 feitos: export em `design/handoff/2026-10-13-rodada-3/` (89eaaf6), auditoria do `site-ux` e
+do `site-qa` em `design/README.md` (b9a720f). Cobertura: 4 itens cobertos (4, 5, 8 e o 6, com decisão
+pendente), parciais 1, 2, 3 e 7, nenhum ausente; o que falta está em "o que ainda falta" do README.
+Critérios de comando passaram (`check_site.py` na raiz e em `dist/`, `gen_estado.py --check`,
+`check_plano.py`, build, html-validate sem erros; lychee não instalado, não verificado). O critério 1
+usa `git diff --stat develop`, mas o `develop` local fica atrás: comparar com `origin/develop`
+(`WP-19-DIFF-ORIGEM-01`). **Pendente, do usuário:** checklist de navegador (`visual: true`), que deve
+ser escrito aqui com o que ele viu antes de o WP ir a `done`.
+
+Checklist (`python3 -m http.server 8080 -d "design/handoff/2026-10-13-rodada-3"`):
+- `Landing App.dc.html?app=topo&lang=ru` a 360; `?app=topo`, `?app=pole`, `?app=eclipse` a 1280.
+- `Home.dc.html`, `Landing App.dc.html` e `Legal LottoExpert.dc.html` a 768.
+- Troca pt/en na legal (o en é stub, esperado).
+- `Landing App.dc.html?app=pole&suggest=de`: a faixa fecha e não volta na sessão.
+- Tab mostra foco em "Ver todas" e nos sociais do footer; selo "Publicado" distinto do verde do Pole no footer.
