@@ -21,7 +21,7 @@ por PR). A branch `feat/wp-08-f1-infra-e-home` tem outra versão deste arquivo: 
 ## 2. Quebrado ou pela metade agora
 
 Nada quebrado no ar. Pela metade:
-- **WP-08 fatia 1 integrada, checklist da home não feito.** O agente não tem permissão de `git merge`: cada fatia
+- **WP-08 fatia 1 integrada e conferida no navegador pelo usuário.** O agente não tem permissão de `git merge`: cada fatia
   volta à integração pelo usuário (`git merge --no-ff feat/wp-08-fN-<slug>`), e a integração recebe `develop` por
   `git merge origin/develop` (conflito de escrituração: mantém as linhas dos dois lados e regenera `ESTADO.md`).
 - Tag `pre-wp-08` em `master`: ainda não criada (só antes da R1).
@@ -35,7 +35,7 @@ Nada quebrado no ar. Pela metade:
   a 360; `?app=topo`, `?app=pole`, `?app=eclipse` a 1280; `Home.dc.html`, `Landing App.dc.html` e `Legal LottoExpert.dc.html`
   a 768; troca pt/en na legal (en é stub); `?app=pole&suggest=de` (a faixa fecha e não volta na sessão); Tab com foco
   em "Ver todas" e nos sociais do footer; selo "Publicado" distinto do verde do Pole. Escrever o que viu no WP-19.
-- **WP-08 fatia 1 (home):** `/`, `/en/` e `/404.html`, a 360 e 1280, no Chrome e no Safari (checklist no WP-08). Não feito.
+- **WP-08 fatia 1 (home):** `/`, `/en/` e `/404.html` conferidos pelo usuário em 2026-10-14 (dist/ local).
 - **Convite do bolão em tema escuro** (nota `CONVITE-TEMA-ESCURO-01`, sem WP): o código é só tema claro; hipótese de
   escurecimento forçado do navegador (Samsung Internet / Chrome auto-dark). Opções: `color-scheme: only light` ou tema
   escuro desenhado (recomendado; exige Claude Design). Convite é URL contratual.
@@ -43,7 +43,7 @@ Nada quebrado no ar. Pela metade:
 ## 4. Próxima ação
 
 **Do usuário:**
-1. Fazer o checklist da home (seção 3); depois, fatia 2 (landing LottoExpert, com `HOME-EN-SEM-LANG-01`).
+1. Fatia 2 (landing LottoExpert, com `HOME-EN-SEM-LANG-01`).
 2. Checklist do WP-19; escrever o resultado no WP.
 3. Decidir D11 (`--success`) e D12 (limiares de destaque), ambas só para o WP-10.
 4. Acompanhar o site no ar nos próximos dias; sem incidente, autorizar a R1 do WP-08.
