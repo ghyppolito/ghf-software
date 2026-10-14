@@ -110,11 +110,18 @@ NA_RAIZ_DO_REPO = os.path.realpath(raiz) == os.path.realpath(REPO)
 
 
 def fonte_gerada(rel):
-    """`index.html` → `src/pages/index.astro`; `en/` → `src/pages/en/index.astro`."""
-    rel = rel.lstrip("/")
-    if rel == "" or rel.endswith("/"):
-        rel += "index.html"
+    """`index.html` → `src/pages/index.astro`; `en/` e `en` → `src/pages/en/index.astro`.
+
+    Segmento que começa com `_` (o Astro não publica) ou `[` (rota dinâmica, não página
+    literal) não conta como fonte."""
+    rel = rel.replace(os.sep, "/").lstrip("/")
+    if rel in ("", ".") or rel.endswith("/"):
+        rel = rel.rstrip(".") + "index.html"
+    elif not rel.endswith(".html") and os.path.isdir(os.path.join(REPO, "src", "pages", rel)):
+        rel += "/index.html"  # diretório sem barra (`en`), como o servidor estático resolve
     if not rel.endswith(".html"):
+        return None
+    if any(seg.startswith(("_", "[")) for seg in rel.split("/")):
         return None
     return os.path.join(REPO, "src", "pages", rel[: -len(".html")] + ".astro")
 
@@ -177,8 +184,11 @@ for caminho in paginas:
         n_links += 1
         destino = os.path.join(raiz, alvo.lstrip("/")) if alvo.startswith("/") else os.path.join(base, alvo)
         destino = os.path.normpath(destino)
+        if os.path.isdir(destino):
+            destino = os.path.join(destino, "index.html")  # `/en/` publicado é `en/index.html`
         if not os.path.exists(destino):
-            gerada = NA_RAIZ_DO_REPO and fonte_gerada(os.path.relpath(destino, raiz))
+            sufixo = "/" if alvo.endswith("/") else ""
+            gerada = NA_RAIZ_DO_REPO and fonte_gerada(os.path.relpath(destino, raiz) + sufixo)
             if not (gerada and os.path.exists(gerada)):
                 erros.append(f"{rel}: {attr}=\"{alvo}\" não resolve")
     # og:image em onerror e afins (o convite usa fallback por JS)
@@ -205,11 +215,12 @@ def sem_tags(html):
     return re.sub(r"\s+", " ", texto)
 
 
-def texto_para_datas(html):
-    """Texto onde a data é procurada: sem tags, mais o conteúdo dos <script> (o dicionário JS
-    das páginas legais ainda copiadas traz o en lá dentro)."""
-    scripts = " ".join(re.findall(r"<script\b[^>]*>(.*?)</script>", html, flags=re.S | re.I))
-    return sem_tags(html) + " " + re.sub(r"<[^>]+>", " ", scripts)
+def datas_em(html, padrao):
+    """União das datas achadas no texto sem tags (`<strong>Última atualização:</strong> …`) e no
+    HTML cru (atributos como `<meta content="Última atualização: …">` e o dicionário JS das
+    páginas ainda copiadas). Nenhuma das duas buscas sozinha cobre tudo."""
+    achadas = re.findall(padrao, sem_tags(html)) + re.findall(padrao, html)
+    return list(dict.fromkeys(achadas))
 
 
 for pagina, md in LEGAL.items():
@@ -232,9 +243,9 @@ for pagina, md in LEGAL.items():
             if alvo != pagina and not NA_RAIZ_DO_REPO:
                 erros.append(f"{alvo}: página legal en ausente ({pagina} saiu de EN_PENDENTE)")
             continue  # pt ausente já é erro no §1; en na raiz do repositório é gerada (só em dist/)
-        texto = texto_para_datas(ler(p(alvo)))
-        datas_pt = [pt(x) for x in re.findall(r"Última atualização:\s*" + RE_PT, texto)]
-        datas_en = re.findall(r"Last updated:\s*" + RE_EN, texto)
+        html = ler(p(alvo))
+        datas_pt = list(dict.fromkeys(pt(x) for x in datas_em(html, r"Última atualização:\s*" + RE_PT)))
+        datas_en = datas_em(html, r"Last updated:\s*" + RE_EN)
         for d in datas_pt:
             if d != ref:
                 erros.append(f"{alvo}: data pt `{' de '.join(x for x in d if x)}` ≠ {md} `{ref_txt}`")
@@ -257,8 +268,10 @@ for rel in PAGINAS_LOTTO:
     texto = ler(p(rel))
     for n, linha in enumerate(texto.splitlines(), 1):
         for padrao in COPY_PROIBIDA:
-            if re.search(padrao, linha, re.I):
-                erros.append(f"{rel}:{n}: copy fere jogo responsável (`{padrao}`): {linha.strip()[:90]}")
+            for m in re.finditer(padrao, linha, re.I):
+                # Trecho em volta do match: em dist/ a página sai minificada numa linha só.
+                trecho = re.sub(r"\s+", " ", linha[max(0, m.start() - 40): m.end() + 40]).strip()
+                erros.append(f"{rel}:{n}: copy fere jogo responsável (`{padrao}`): …{trecho}…")
 
 # ------------------------------------------------------------ 6: assetlinks
 try:
@@ -326,7 +339,7 @@ for rel in COM_PAR:
 
 # ------------------------------------------------------------ 9: en aponta para en
 # Link interno de página em en/ para página que tem par en vai para o par. A troca de idioma é a
-# exceção declarada: o link leva `hreflang` para o outro idioma.
+# exceção declarada: só o link marcado `data-troca-idioma` (componente TrocaIdioma) é isento.
 for caminho in paginas:
     rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
     if not rel.startswith("en/"):
@@ -334,7 +347,7 @@ for caminho in paginas:
     base = os.path.dirname(caminho)
     for tag in re.findall(r"<a\b[^>]*>", ler(caminho), re.I):
         href = re.search(r'href="([^"#?]*)[^"]*"', tag)
-        if not href or re.search(r'hreflang="pt', tag):
+        if not href or re.search(r"\bdata-troca-idioma\b", tag):
             continue
         alvo = href.group(1)
         if alvo.startswith(SITE):

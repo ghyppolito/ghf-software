@@ -13,8 +13,9 @@ interface Props {
 
 const { lang, caminho, class: classe = '' } = Astro.props;
 const outro: Idioma = lang === 'pt' ? 'en' : 'pt';
-// Nome do idioma no próprio idioma: o leitor de tela anuncia "English" / "Português".
-const nome = outro === 'en' ? 'English' : 'Português';
+// Nome do idioma no próprio idioma, contendo o rótulo visível (WCAG 2.5.3): o leitor de tela
+// anuncia "English" / "Português (PT)".
+const nome = outro === 'en' ? 'English' : 'Português (PT)';
 ---
 <a
   href={rota(outro, caminho)}
