@@ -63,7 +63,7 @@ para provar as regras do check), `CLAUDE.md` (seções "Produto e copy" e "Arqui
    provando os contratuais.
 7. `sync_legal.py`: o marcador `en: pendente` do WP-09 vira `pendente: [en, es, …]` — toda
    língua listada para a página fica pendente quando o pt muda; `check_site.py` falha com pendente.
-8. ADR-003 (`/adr`): "pt na raiz, demais línguas em `/<lang>/`, sem redirecionamento" — cita ADR-001.
+8. ADR de i18n (`/adr`; o número é o próximo livre — o ADR-003 já é o Tailwind compilado, da branch do WP-08): "pt na raiz, demais línguas em `/<lang>/`, sem redirecionamento" — cita ADR-001.
 9. `CLAUDE.md`: "inglês é espelho completo" vira "toda língua listada para uma página é espelho
    completo; língua não listada não aparece".
 
