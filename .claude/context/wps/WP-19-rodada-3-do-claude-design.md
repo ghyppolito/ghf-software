@@ -2,7 +2,7 @@
 id: WP-19
 titulo: A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2
 area: design
-status: todo
+status: blocked
 depende_de: [WP-06]
 adr: []
 spec: docs/AVALIACAO.md
