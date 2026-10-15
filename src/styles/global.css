@@ -222,8 +222,9 @@ body {
 
 /* ------------------------------------------------------------------ CSS próprio do TopoWalk
  * Copiado do <style> de topowalk.html (WP-08, fatia 3); o resto daquele <style> (body, grade,
- * vidro, #navbar) é igual ao de index.html, acima. A animação `float` do blob do hero é a
- * mesma @keyframes de index.html, chamada com outra duração no atributo style.
+ * vidro, #navbar) é igual ao de index.html, acima. O blob do hero chamava `animation: float`
+ * no atributo style, mas a página não declarava a @keyframes: não animava. O atributo saiu —
+ * com a @keyframes da home no CSS único, o transform tiraria o blob do centro.
  */
 .text-gradient-amber {
   background-clip: text;
