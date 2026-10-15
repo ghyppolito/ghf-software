@@ -21,19 +21,22 @@ Checa:
   6. .well-known/assetlinks.json é JSON válido com o package do LottoExpert
   7. toda página de PUBLICADAS existe em `dist/` (o ramo da raiz do repositório, que aceitava
      `src/pages/<x>.astro` como prova, é legado — ver abaixo),
-     e as que não estão em EN_PENDENTE têm o par `en/<x>`. Página esquecida em COPIADOS_DA_RAIZ do
-     astro.config.mjs sairia do ar com o build verde
+     e as que não estão em EN_PENDENTE têm o par `en/<x>`
   8. hreflang: página com par en declara pt-BR e en, recíprocos, e os dois existem
   9. página em `en/` com link interno para página que tem par en aponta para o par
  10. dicionários de src/i18n/ têm as mesmas chaves em pt e en
- 11. `dist/` não é mais antigo que as fontes (src/, configs, package.json, COPIADOS_DA_RAIZ do
-     astro.config.mjs, fontes de LEGAL): sem isso, o check daria verde sobre um build velho
+ 11. `dist/` não é mais antigo que as fontes (src/, public/, configs, package.json, fontes de
+     LEGAL): sem isso, o check daria verde sobre um build velho
  12. página legal migrada (fonte em src/content/legal/), pt e en: um só `<h1`, um só rótulo de
      data do idioma da página, nenhuma aspa tipográfica que o `.md` não tenha, nenhum link
      `target="_blank"` sem `rel="noopener"`; link do corpo para o próprio site é caminho a partir
      da raiz (nunca `https://ghfsoftware.com/…`), sem `target`, e em `en/` aponta para o par; e
      `.pt.md` e `.en.md` com a mesma contagem de `## `, `### `, linhas de tabela, itens de lista,
      links, crases (`code`) e `---`
+ 13. public/ (copiado byte a byte para dist/, ADR-002 §3): primeiro nível é a lista fechada
+     PUBLIC; nenhum `.html` além do convite; todo arquivo de public/ igual byte a byte ao de dist/.
+     O Astro publica o arquivo de public/ no lugar da página gerada que colide com ele, com o build
+     verde — sem esta guarda, uma cópia velha de página contratual iria ao ar calada
 
 Modo raiz (`--raiz .`) não é mais suportado desde a fatia 6 do WP-08: uma URL contratual
 (`eclipsego-privacy.html`) só existe em `dist/`, e o §1 falharia na raiz. Os ramos que ainda o
@@ -182,17 +185,6 @@ def url_para_rel(url):
 # não é o do commit. Vale para `dist/` do repositório (padrão ou `--raiz dist`); no CI o build
 # roda depois do checkout, então dist/ é sempre o mais novo. Diretórios contam (arquivo apagado
 # muda o mtime do diretório).
-def copiados_da_raiz():
-    cfg = os.path.join(REPO, "astro.config.mjs")
-    if not os.path.exists(cfg):
-        return []
-    m = re.search(r"const COPIADOS_DA_RAIZ = \[(.*?)\];", ler(cfg), re.S)
-    if not m:
-        erros.append("astro.config.mjs: COPIADOS_DA_RAIZ não encontrado — a checagem de dist/ desatualizado não sabe o que a raiz publica")
-        return []
-    return re.findall(r"'([^']+)'", m.group(1))
-
-
 def mais_novo(rels):
     """(mtime, caminho relativo) do arquivo ou diretório mais novo entre `rels` (recursivo)."""
     melhor = (0.0, "")
@@ -215,8 +207,8 @@ if os.path.realpath(raiz) == os.path.realpath(os.path.join(REPO, "dist")):
     if not os.path.exists(gerado):
         erros.append(f"{raiz}/index.html ausente — rode `npm run build`")
     else:
-        fontes = (["src", "astro.config.mjs", "tailwind.config.mjs", "postcss.config.mjs", "package.json"]
-                  + copiados_da_raiz() + list(LEGAL.values())
+        fontes = (["src", "public", "astro.config.mjs", "tailwind.config.mjs", "postcss.config.mjs", "package.json"]
+                  + list(LEGAL.values())
                   + [md[: -len(".pt.md")] + ".en.md" for md in LEGAL.values() if md.endswith(".pt.md")])
         t, novo = mais_novo(fontes)
         if t > os.path.getmtime(gerado):
@@ -414,15 +406,15 @@ for rel in EN_PENDENTE + SEM_PAR_EN:
         erros.append(f"check_site.py: {rel} em EN_PENDENTE/SEM_PAR_EN mas fora de PUBLICADAS")
 for rel in PUBLICADAS:
     if not existe_pagina(rel):
-        onde = "na raiz nem em src/pages/" if NA_RAIZ_DO_REPO else f"em {raiz} — falta em COPIADOS_DA_RAIZ do astro.config.mjs ou em src/pages/?"
+        onde = "na raiz nem em src/pages/" if NA_RAIZ_DO_REPO else f"em {raiz} — falta em src/pages/?"
         erros.append(f"página publicada ausente {onde}: {rel}")
     en = "en/" + rel
     if rel in COM_PAR and not existe_pagina(en):
         erros.append(f"par en ausente: {en} ({rel} não está em EN_PENDENTE)")
     if rel in EN_PENDENTE and existe_pagina(en):
         erros.append(f"{en} existe, mas {rel} continua em EN_PENDENTE — tire-o da lista (e ponha em COM_PAR_EN de src/i18n/ui.ts)")
-# Página .html na raiz do repositório que não está em PUBLICADAS não vai ao ar (lista fechada do
-# astro.config.mjs): ou entra na lista, ou sai da raiz.
+# Página .html na raiz do repositório que não está em PUBLICADAS não vai ao ar (o Astro publica
+# src/pages/ e public/): ou entra na lista, ou sai da raiz.
 for c in sorted(glob.glob(os.path.join(REPO, "*.html"))):
     if os.path.basename(c) not in PUBLICADAS:
         erros.append(f"{os.path.basename(c)} na raiz do repositório e fora de PUBLICADAS")
@@ -572,6 +564,37 @@ for pagina, md in LEGAL.items():
         n = {lang: len(re.findall(padrao, texto_md[lang], re.M)) for lang in ("pt", "en")}
         if n["pt"] != n["en"]:
             erros.append(f"{base_md}.en.md: {n['en']} {nome} ≠ {n['pt']} do .pt.md — tradução com estrutura diferente")
+
+# ------------------------------------------------------------ 13: public/
+# public/ vai a dist/ byte a byte (ADR-002 §3). Ao colidir com página gerada, o Astro publica o
+# arquivo de public/ e só avisa ("Skipping src/pages/x.astro…"), com o build verde: uma cópia velha
+# de página contratual iria ao ar no lugar da gerada. (a) primeiro nível fechado; (b) nenhum .html
+# além do convite (contrato byte a byte, D13); (c) cada arquivo de public/ igual ao de dist/.
+PUBLIC = ["assets", ".well-known", "lotto-expert", "CNAME"]
+HTML_EM_PUBLIC = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
+pasta_public = os.path.join(REPO, "public")
+if not os.path.isdir(pasta_public):
+    erros.append("public/ ausente — imagens, App Links, convite e CNAME não iriam ao ar")
+else:
+    for nome in sorted(os.listdir(pasta_public)):
+        if nome not in PUBLIC:
+            erros.append(f"public/{nome}: fora da lista fechada de public/ ({', '.join(PUBLIC)}) — o check_site.py não o conhece")
+    for nome in PUBLIC:
+        if not os.path.exists(os.path.join(pasta_public, nome)):
+            erros.append(f"public/{nome}: ausente (lista fechada de public/)")
+    for pasta, _dirs, arqs in os.walk(pasta_public):
+        for nome in sorted(arqs):
+            c = os.path.join(pasta, nome)
+            rel = os.path.relpath(c, pasta_public).replace(os.sep, "/")
+            if rel.lower().endswith((".html", ".htm")) and rel not in HTML_EM_PUBLIC:
+                erros.append(f"public/{rel}: página em public/ — o Astro a publica no lugar da gerada; página nasce em src/pages/")
+            publicado = p(rel)
+            if not os.path.isfile(publicado):
+                erros.append(f"public/{rel}: ausente em {raiz}/ — rode `npm run build`")
+            else:
+                with open(c, "rb") as fa, open(publicado, "rb") as fb:
+                    if fa.read() != fb.read():
+                        erros.append(f"public/{rel}: diferente de {raiz}/{rel} — public/ vai ao ar byte a byte")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")

@@ -1,6 +1,4 @@
 // Astro (ADR-002). Saída estática em dist/, publicada pelo .github/workflows/deploy.yml.
-import { cp } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import { satteri } from '@astrojs/markdown-satteri';
 import {
@@ -11,40 +9,12 @@ import {
   omiteCabecalhoLegal,
 } from './src/markdown/legal.mjs';
 
-// O que a raiz publica sem passar pelo compilador do Astro (ADR-002 §3): copiado byte a byte para
-// dist/. Lista fechada, sem glob — arquivo novo na raiz só é publicado se entrar aqui. Colisão com
-// página gerada falha o build (errorOnExist). Durante o WP-08 as páginas não migradas vinham daqui e
-// saíram uma a uma (index.html: fatia 1; lottoexpert.html: fatia 2; topowalk.html: fatia 3;
-// poleposition.html: fatia 4; eclipsego.html: fatia 5; eclipsego-privacy.html: fatia 6;
-// topowalk-privacy.html e poleposition-privacy.html: fatia 7; lottoexpert-privacy.html e
-// lottoexpert-terms.html: fatia 8). Desde a fatia 8 nenhuma página vem da raiz: só imagens, App
-// Links, o convite do bolão (contrato byte a byte, D13) e o domínio.
-const COPIADOS_DA_RAIZ = [
-  'assets',
-  '.well-known',
-  'lotto-expert',
-  'CNAME',
-];
-
-const raizDoRepositorio = new URL('./', import.meta.url);
-
-function copiaRaiz() {
-  return {
-    name: 'ghf:copia-raiz',
-    hooks: {
-      'astro:build:done': async ({ dir, logger }) => {
-        for (const item of COPIADOS_DA_RAIZ) {
-          await cp(
-            fileURLToPath(new URL(item, raizDoRepositorio)),
-            fileURLToPath(new URL(item, dir)),
-            { recursive: true, errorOnExist: true, force: false },
-          );
-        }
-        logger.info(`${COPIADOS_DA_RAIZ.length} itens copiados da raiz para dist/`);
-      },
-    },
-  };
-}
+// public/ (ADR-002 §3): o que vai ao ar sem passar pelo compilador do Astro, copiado byte a byte
+// para dist/ — imagens (assets/), App Links (.well-known/), o convite do bolão (lotto-expert/,
+// contrato byte a byte, D13) e o domínio (CNAME). Lista fechada, sem página: o Astro, se um arquivo
+// de public/ colide com página gerada, publica o de public/ e só avisa ("Skipping…"), com o build
+// verde. A guarda é o §13 do tools/check_site.py: primeiro nível de public/ fechado, nenhum .html
+// além do convite e todo arquivo de public/ igual byte a byte ao de dist/ (WP-08, fatia 9).
 
 export default defineConfig({
   site: 'https://ghfsoftware.com',
@@ -80,5 +50,4 @@ export default defineConfig({
       cssTarget: ['chrome87', 'edge88', 'firefox78', 'safari14'],
     },
   },
-  integrations: [copiaRaiz()],
 });
