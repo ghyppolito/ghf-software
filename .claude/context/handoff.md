@@ -3,8 +3,8 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-10-14 (fim).** Escrito na branch `feat/wp-08-f4-landing-poleposition` (fatia 4 do WP-08, commit
-b6e4f5c), ainda não integrada.
+**Sessão de 2026-10-15.** Escrito na branch `feat/wp-08-f5-landing-eclipsego` (fatia 5 do WP-08, commit
+0fd8700), ainda não integrada.
 
 ## 1. Onde parei
 
@@ -12,8 +12,8 @@ b6e4f5c), ainda não integrada.
   `PAGES_VIA_ACTIONS=true`, ambiente `github-pages` só `master`). Bolão testado pelo usuário com link real.
 - **Esperando publicação** (`origin/master..origin/develop`): escrituração do WP-07 e os PRs #41 e #42 (mergeados em
   `develop`). Nenhum texto legal, nenhuma página nova. Sem urgência.
-- **WP-08** `doing`: fatias 1 a 3 integradas (a 3 em 9b3a0c5, enviada; CI do #37 verde); **fatia 4 (landing
-  Pole Position, pt e en) implementada e auditada** na branch acima; aguarda o usuário integrar e o checklist de navegador (seção 3).
+- **WP-08** `doing`: fatias 1 a 4 integradas (a 4 em ce129d7, enviada; CI do #37 verde); **fatia 5 (landing
+  EclipseGo, pt e en) implementada e auditada** na branch acima; aguarda integração e o checklist (seção 3). Com ela fecha o grupo das landings.
 - **D13 (deploy único):** nada do WP-08 vai ao ar até o backlog de evolução (WP-08..WP-19) terminar; as releases R1/R2/R3
   deixaram de existir. Antes do deploy: criar a tag `pre-modernizacao` em `master`, adicionar a tag à política do ambiente
   `github-pages` e ensaiar o rollback. Hotfix sai por `master`. `tools/contrato.sha256` roda no CI, no deploy e no `/verify`.
@@ -22,12 +22,18 @@ b6e4f5c), ainda não integrada.
 ## 2. Quebrado ou pela metade agora
 
 Nada quebrado no ar. Pela metade:
-- **Fatia 4 por integrar:** na integração, `git switch feat/wp-08-layout-unico && git merge --no-ff
-  feat/wp-08-f4-landing-poleposition -m "WP-08: fatia 4 — landing Pole Position"`. O agente não tem `git merge`.
+- **Fatia 5 por integrar:** `git switch feat/wp-08-layout-unico && git merge --no-ff
+  feat/wp-08-f5-landing-eclipsego -m "WP-08: fatia 5 — landing EclipseGo"`. O agente não tem `git merge`.
 - `CONFIG-YML-ORFAO-01`: `_config.yml` já não é lido; sai no WP-08 (fatia 9).
 
 ## 3. O que só o navegador prova (usuário ainda não viu)
 
+- **Fatia 5 do WP-08** (`npm run build && python3 -m http.server 8080 -d dist`): `/eclipsego.html` e `/en/eclipsego.html` a 360 e
+  1280: moldura do celular pulsando brilho dourado/índigo a cada 4 s; blob dourado parado e centrado; lua do selo pulsando e
+  ponto do selo da Play com ping; "Sombra & Luz no seu Bolso" com gradiente dourado→índigo; pílula Contato do menu mobile com
+  texto preto e hover dourado mais escuro; troca de idioma leva ao par; "Privacidade" abre a política pt nos dois idiomas;
+  card "100% Offline" sem ícone (herdado, `ECLIPSE-ICONE-WIFI-SLASH-01`); a 360, botões empilhados e cards em coluna única sem
+  estouro. Escrever o resultado no WP-08.
 - **Fatia 4 do WP-08** (`npm run build && python3 -m http.server 8080 -d dist`): `/poleposition.html` e `/en/poleposition.html`
   a 360 e 1280: mockups do hero sobrepostos com moldura e entalhe, hover trazendo cada um à frente; moldura 260×520 a 360
   sem estouro e 320×640 a 768; título com gradiente branco→lima; hero sem animação de entrada (como antes); pílula Contato
@@ -57,11 +63,14 @@ Nada quebrado no ar. Pela metade:
 ## 4. Próxima ação
 
 **Do usuário:**
-1. Integrar a fatia 4 (seção 2) e rodar os checklists das fatias 2, 3 e 4 (seção 3).
+1. Integrar a fatia 5 (seção 2) e rodar os checklists das fatias 2, 3, 4 e 5 (seção 3).
 2. Checklist do WP-19; escrever o resultado no WP.
 3. Decidir D11 (`--success`) e D12 (limiares de destaque), ambas só para o WP-10; D3 (medição) bloqueia o WP-13.
 
-**Do agente:** fatia 5 do WP-08 (`eclipsego.html`, última landing — fecha o grupo das landings), depois de a fatia 4 estar integrada.
+**Do agente:** **fatia 6 — piloto legal `eclipsego-privacy`** (content collection `src/content/legal/`, `LegalLayout.astro`,
+`git mv` do `.md` de `docs/`, en do dicionário JS sem retradução, `site-legal` participa; o WP marca que `pr.yml` e `/verify`
+deixam de rodar `check_site.py` na raiz). As fatias 6–8 tocam **URLs contratuais** (ADR-001) e texto legal: o `/wp` não pula
+o `site-arquiteto` nem o `site-legal`.
 
 **Copy pendente do usuário antes do WP-10:** "chance matemática" -> "probabilidade exata"; texto final do aviso de jogo
 responsável (o export traz "Texto provisório"); confirmar "Nada de cadastro, e-mail ou CPF" e "Nenhum SDK de
@@ -79,7 +88,7 @@ LottoExpert fica na home (`INDEX-LOTTO-DESC-DIVERGE-01`).
 
 ## 6. Escrituração e branches
 
-- Triagem de `achados-novos.md`: nenhuma linha em `triagem`; os achados das fatias 2, 3 e 4 têm destino (WP-10, WP-11, WP-12, `aceito`).
+- Triagem de `achados-novos.md`: nenhuma linha em `triagem`; os achados das fatias 2 a 5 têm destino (WP-10, WP-11, WP-12, `aceito`).
 - **Branches locais integradas** (`git branch --merged feat/wp-08-layout-unico`), candidatas a apagar pelo usuário:
   `docs/publicacao-wp-07`, `docs/publicacao-trilha-a`, `feat/wp-19-rodada-3-claude-design`,
   `feat/wp-08-f1-infra-e-home` (preservada pelo merge `--no-ff`; a integração ainda não está em `develop`, então vale
