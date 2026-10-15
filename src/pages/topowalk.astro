@@ -8,6 +8,8 @@ import Footer from '../components/Footer.astro';
 import TopoWalk from '../components/TopoWalk.astro';
 import { topowalk } from '../i18n/topowalk';
 import { rota } from '../i18n/ui';
+import JsonLd from '../components/JsonLd.astro';
+import { mobileApplication } from '../i18n/apps';
 
 const lang = 'pt';
 const x = topowalk[lang];
@@ -28,6 +30,7 @@ const home = rota(lang, 'index.html');
   favicon="/assets/topo-walk.png"
   classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-accent selection:text-white font-sans overflow-x-hidden"
 >
+  <JsonLd slot="jsonld" dados={mobileApplication('topowalk')} />
   <Nav
     lang={lang}
     caminho="topowalk.html"

@@ -55,7 +55,10 @@ Checa:
      `robots.txt` igual ao literal ROBOTS (nenhum `Disallow`), gerado por src/pages/robots.txt.ts;
      `sitemap.xml` (src/pages/sitemap.xml.ts) faz parse, seus `<loc>` são exatamente as URLs das
      INDEXAVEIS (sem repetir, cada uma existe em dist/) e cada `<url>` traz os mesmos três hreflang
-     da página
+     da página. JSON-LD: cada `<script type="application/ld+json">` faz `json.loads`; `Organization`
+     só nas duas home, `MobileApplication` só nas 8 landings, nenhum nas demais; chaves exatamente
+     as permitidas (sem `aggregateRating`, `review`, preço do Premium); `installUrl` com o mesmo
+     `id` do botão da Play da página; o texto do JSON-LD (já decodificado) passa pela régua do §5
 """
 import glob
 import json
@@ -139,7 +142,7 @@ PAGINAS_LOTTO = ["index.html", "lottoexpert.html", "lottoexpert-privacy.html", "
 # sempre que o check roda — além do HTML gerado em dist/ (PAGINAS_LOTTO), que o check exige.
 FONTES_LOTTO = ["src/i18n/home.ts", "src/components/Home.astro",
                 "src/i18n/lottoexpert.ts", "src/components/LottoExpert.astro",
-                "src/i18n/legal.ts",
+                "src/i18n/legal.ts", "src/i18n/apps.ts",
                 "src/content/legal/lottoexpert-privacy.pt.md", "src/content/legal/lottoexpert-privacy.en.md",
                 "src/content/legal/lottoexpert-terms.pt.md", "src/content/legal/lottoexpert-terms.en.md"]
 
@@ -866,6 +869,87 @@ else:
         faltam = sorted(set(esperadas) - set(locs))
         if faltam:
             erros.append(f"sitemap.xml: faltam páginas indexáveis: {faltam}")
+
+# JSON-LD (ADR-005 §6): o que cada página declara, com as chaves fechadas. Dados de src/i18n/apps.ts.
+JSONLD_TIPO = {"index.html": "Organization", "en/index.html": "Organization"}
+for app in ("lottoexpert.html", "topowalk.html", "poleposition.html", "eclipsego.html"):
+    JSONLD_TIPO[app] = JSONLD_TIPO["en/" + app] = "MobileApplication"
+CHAVES_JSONLD = {
+    "Organization": {"@context", "@type", "name", "url", "logo"},
+    "MobileApplication": {"@context", "@type", "name", "operatingSystem", "applicationCategory", "installUrl", "offers"},
+}
+# applicationCategory: o enum do Google para SoftwareApplication (nunca o valor cru da Play, `TOOLS`)
+CATEGORIAS = {f"{c}Application" for c in (
+    "Game", "SocialNetworking", "Travel", "Shopping", "Sports", "Lifestyle", "Business", "Design",
+    "Developer", "Driving", "Educational", "Health", "Finance", "Security", "Browser", "Communication",
+    "DesktopEnhancement", "Entertainment", "Multimedia", "Home", "Utilities", "Reference")}
+OFERTA = {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}
+RE_PLAY = re.compile(r"^https://play\.google\.com/store/apps/details\?id=([\w.]+)(?:&|$)")
+
+
+class BotoesPlay(HTMLParser):
+    """`id` de cada `<a href>` para a ficha de um app na Play."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.ids = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "a":
+            m = RE_PLAY.match(dict(attrs).get("href") or "")
+            if m:
+                self.ids.append(m.group(1))
+
+
+for rel, c in sorted(cabecas.items()):
+    objetos = []
+    for n, bruto in enumerate(c.jsonld, 1):
+        try:
+            objetos.append(json.loads(bruto))
+        except ValueError as e:
+            erros.append(f"{rel}: JSON-LD #{n} não faz parse: {e}")
+            continue
+        # §5 sobre o texto decodificado: `\u0061` não esconde "maximiza" da régua
+        texto = json.dumps(objetos[-1], ensure_ascii=False)
+        for padrao in COPY_PROIBIDA:
+            for m in re.finditer(padrao, texto, re.I):
+                erros.append(f"{rel}: JSON-LD fere jogo responsável (`{padrao}`): …{texto[max(0, m.start() - 40): m.end() + 40]}…")
+    tipos = [o.get("@type") if isinstance(o, dict) else type(o).__name__ for o in objetos]
+    esperado = [JSONLD_TIPO[rel]] if rel in JSONLD_TIPO else []
+    if len(c.jsonld) == len(objetos) and tipos != esperado:
+        erros.append(f"{rel}: JSON-LD com @type {tipos} ≠ esperado {esperado}")
+    for o in objetos:
+        if not isinstance(o, dict) or o.get("@type") not in CHAVES_JSONLD:
+            continue
+        tipo = o["@type"]
+        if set(o) != CHAVES_JSONLD[tipo]:
+            erros.append(f"{rel}: {tipo} com chaves {sorted(set(o))} ≠ {sorted(CHAVES_JSONLD[tipo])} "
+                         f"(sobrando: {sorted(set(o) - CHAVES_JSONLD[tipo])}, faltando: {sorted(CHAVES_JSONLD[tipo] - set(o))})")
+        if o.get("@context") != "https://schema.org":
+            erros.append(f"{rel}: {tipo} com @context {o.get('@context')!r} ≠ 'https://schema.org'")
+        if tipo == "Organization":
+            if o.get("url") != SITE or o.get("name") != "GHF Software":
+                erros.append(f"{rel}: Organization com name/url {o.get('name')!r}/{o.get('url')!r} ≠ 'GHF Software'/{SITE!r}")
+            logo = o.get("logo", "")
+            if not (isinstance(logo, str) and logo.startswith(SITE) and os.path.isfile(p(logo[len(SITE):]))):
+                erros.append(f"{rel}: Organization.logo {logo!r} não é URL absoluta de arquivo do site")
+            continue
+        if o.get("operatingSystem") != "Android":
+            erros.append(f"{rel}: MobileApplication.operatingSystem {o.get('operatingSystem')!r} ≠ 'Android'")
+        if o.get("applicationCategory") not in CATEGORIAS:
+            erros.append(f"{rel}: applicationCategory {o.get('applicationCategory')!r} fora do enum do Google (`UtilitiesApplication`, …)")
+        if o.get("offers") != OFERTA:
+            erros.append(f"{rel}: offers {o.get('offers')!r} ≠ {OFERTA} (só o download gratuito; preço do Premium nunca)")
+        if not isinstance(o.get("name"), str) or not o["name"].strip():
+            erros.append(f"{rel}: MobileApplication sem name")
+        m = RE_PLAY.match(o.get("installUrl") or "")
+        botoes = BotoesPlay()
+        botoes.feed(ler(p(rel)))
+        ids = set(botoes.ids)
+        if not m or o["installUrl"] != f"https://play.google.com/store/apps/details?id={m.group(1)}":
+            erros.append(f"{rel}: installUrl {o.get('installUrl')!r} não é `https://play.google.com/store/apps/details?id=<id>`")
+        elif ids != {m.group(1)}:
+            erros.append(f"{rel}: installUrl com id {m.group(1)} ≠ id do botão da Play da página {sorted(ids)}")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")

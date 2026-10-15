@@ -1,0 +1,12 @@
+---
+// Dados estruturados (WP-11, ADR-005 §6): um <script type="application/ld+json"> no <head>, pelo
+// slot `jsonld` do Base.astro. Os dados vêm de src/i18n/apps.ts. `<` vira `<`: nenhum texto
+// fecha o <script> antes da hora.
+interface Props {
+  dados: object;
+}
+
+const { dados } = Astro.props;
+const json = JSON.stringify(dados).replace(/</g, '\\u003c');
+---
+<script type="application/ld+json" set:html={json} />

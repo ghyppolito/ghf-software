@@ -5,6 +5,8 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Home from '../components/Home.astro';
 import { home } from '../i18n/home';
+import JsonLd from '../components/JsonLd.astro';
+import { organization } from '../i18n/apps';
 
 const lang = 'pt';
 const x = home[lang];
@@ -22,6 +24,7 @@ const x = home[lang];
   caminho="index.html"
   tema="ghf"
 >
+  <JsonLd slot="jsonld" dados={organization} />
   <Nav
     lang={lang}
     caminho="index.html"

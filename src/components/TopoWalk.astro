@@ -7,6 +7,7 @@
 // aqui (o Tailwind não detecta classe montada por concatenação). Ícones são decorativos (o texto
 // ao lado diz o mesmo): aria-hidden.
 import { topowalk, type ChaveTopo } from '../i18n/topowalk';
+import { apps } from '../i18n/apps';
 import type { Idioma } from '../i18n/ui';
 
 interface Props {
@@ -59,7 +60,7 @@ const passos = [1, 2, 3, 4];
                 <p class="mt-4 text-xl text-gray-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed mb-10">{x.hero_desc}</p>
 
                 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                    <a href="https://play.google.com/store/apps/details?id=br.com.ghfsoftware.topowalk&amp;hl=pt_BR" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-accent hover:bg-amber-600 text-white font-semibold rounded-lg shadow-glow-amber hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
+                    <a href={apps.topowalk.play} target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-accent hover:bg-amber-600 text-white font-semibold rounded-lg shadow-glow-amber hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
                         <i class="fa-brands fa-google-play text-xl" aria-hidden="true"></i> <span>{x.btn_play}</span>
                     </a>
                     <a href="#how" class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center">{x.btn_learn}</a>

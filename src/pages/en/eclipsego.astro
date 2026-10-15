@@ -8,6 +8,8 @@ import Footer from '../../components/Footer.astro';
 import EclipseGo from '../../components/EclipseGo.astro';
 import { eclipsego } from '../../i18n/eclipsego';
 import { rota } from '../../i18n/ui';
+import JsonLd from '../../components/JsonLd.astro';
+import { mobileApplication } from '../../i18n/apps';
 
 const lang = 'en';
 const x = eclipsego[lang];
@@ -27,6 +29,7 @@ const home = rota(lang, 'index.html');
   favicon="/assets/eclipse-go-favicon.png"
   classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden"
 >
+  <JsonLd slot="jsonld" dados={mobileApplication('eclipsego')} />
   <Nav
     lang={lang}
     caminho="eclipsego.html"
