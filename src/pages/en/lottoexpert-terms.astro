@@ -1,0 +1,57 @@
+---
+// Termos de uso do LottoExpert em inglês (/en/lottoexpert-terms.html), par da URL contratual:
+// página literal, sem rota dinâmica. Texto em src/content/legal/lottoexpert-terms.en.md; hero,
+// botão e <head> em i18n/legal.ts. Nav e footer como na página antiga: realce `primary` (violeta do
+// tema) com logo brilhando, só o e-mail entre os canais, rodapé `surface` e esta página destacada na
+// lista de políticas. O botão volta para a home da GHF e o selo leva o ícone de contrato, como na
+// página antiga.
+import { getEntry, render } from 'astro:content';
+import LegalLayout from '../../layouts/LegalLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { legal } from '../../i18n/legal';
+import { rota } from '../../i18n/ui';
+
+const lang = 'en';
+const x = legal[lang];
+const home = rota(lang, 'index.html');
+const entrada = await getEntry('legal', 'lottoexpert-terms.en');
+if (!entrada) throw new Error('src/content/legal/lottoexpert-terms.en.md ausente');
+const { Content } = await render(entrada);
+---
+<LegalLayout
+  lang={lang}
+  caminho="lottoexpert-terms.html"
+  title={x.lottoexpert_terms_title}
+  description={x.lottoexpert_terms_description}
+  titulo={x.lottoexpert_terms_h1}
+  lastUpdated={entrada.data.lastUpdated}
+  tema="lottoexpert-terms"
+  favicon="/assets/lottoexpert_favicon_v3.png"
+  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden"
+  selo="primary"
+  iconeSelo="fa-file-contract"
+  voltar={{ href: home, texto: x.voltar_home }}
+>
+  <Nav
+    slot="nav"
+    lang={lang}
+    caminho="lottoexpert-terms.html"
+    inicio={home}
+    itens={[
+      { href: `${home}#sobre`, chave: 'nav_about' },
+      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
+      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <Content />
+  <Footer
+    slot="footer"
+    lang={lang}
+    inicio={home}
+    prefixoAncora={home}
+    redes={{}}
+    politicaAtual="lottoexpert-terms.html"
+    fundo="surface"
+  />
+</LegalLayout>
