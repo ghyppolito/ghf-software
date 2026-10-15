@@ -1,3 +1,6 @@
+---
+lastUpdated: "2026-07-13"
+---
 # Política de Privacidade — EclipseGo
 
 **Última atualização:** 13 de julho de 2026
