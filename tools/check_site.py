@@ -79,7 +79,6 @@ PUBLICADAS = [
 # não tem par en (formato é do app).
 EN_PENDENTE = [
     "lottoexpert-privacy.html", "lottoexpert-terms.html",
-    "poleposition-privacy.html",
 ]
 SEM_PAR_EN = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
 COM_PAR = [x for x in PUBLICADAS if x not in EN_PENDENTE and x not in SEM_PAR_EN]
@@ -91,7 +90,7 @@ LEGAL = {
     "lottoexpert-privacy.html": "docs/LOTTOEXPERT_PRIVACY_POLICY.md",
     "lottoexpert-terms.html": "docs/LOTTOEXPERT_TERMS_OF_SERVICE.md",
     "topowalk-privacy.html": "src/content/legal/topowalk-privacy.pt.md",
-    "poleposition-privacy.html": "docs/POLEPOSITION_PRIVACY_POLICY.md",
+    "poleposition-privacy.html": "src/content/legal/poleposition-privacy.pt.md",
     "eclipsego-privacy.html": "src/content/legal/eclipsego-privacy.pt.md",
 }
 

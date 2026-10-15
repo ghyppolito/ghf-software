@@ -1,0 +1,56 @@
+---
+// Política de privacidade do Pole Position em inglês (/en/poleposition-privacy.html), par da URL contratual:
+// página literal, sem rota dinâmica. Texto em src/content/legal/poleposition-privacy.en.md; hero,
+// botão e <head> em i18n/legal.ts (o h1 sem ": Race Analytics", D-c). Nav e footer como na página
+// antiga: realce `primary` (lima; pílula do celular com texto branco, como no publicado)
+// com logo brilhando, só o e-mail entre os canais, rodapé `surface` e a política do Pole Position
+// destacada na lista de políticas. O botão volta para a home da GHF, como na página antiga.
+import { getEntry, render } from 'astro:content';
+import LegalLayout from '../../layouts/LegalLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { legal } from '../../i18n/legal';
+import { rota } from '../../i18n/ui';
+
+const lang = 'en';
+const x = legal[lang];
+const home = rota(lang, 'index.html');
+const entrada = await getEntry('legal', 'poleposition-privacy.en');
+if (!entrada) throw new Error('src/content/legal/poleposition-privacy.en.md ausente');
+const { Content } = await render(entrada);
+---
+<LegalLayout
+  lang={lang}
+  caminho="poleposition-privacy.html"
+  title={x.poleposition_privacy_title}
+  description={x.poleposition_privacy_description}
+  titulo={x.poleposition_privacy_h1}
+  lastUpdated={entrada.data.lastUpdated}
+  tema="poleposition-privacy"
+  favicon="/assets/poleposition.png"
+  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden"
+  selo="lima"
+  voltar={{ href: home, texto: x.voltar_home }}
+>
+  <Nav
+    slot="nav"
+    lang={lang}
+    caminho="poleposition-privacy.html"
+    inicio={home}
+    itens={[
+      { href: `${home}#sobre`, chave: 'nav_about' },
+      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
+      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <Content />
+  <Footer
+    slot="footer"
+    lang={lang}
+    inicio={home}
+    prefixoAncora={home}
+    redes={{}}
+    politicaAtual="poleposition-privacy.html"
+    fundo="surface"
+  />
+</LegalLayout>

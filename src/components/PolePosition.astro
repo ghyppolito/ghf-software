@@ -12,7 +12,7 @@
 // nos mockups do hero, mas não declarava a classe nem a @keyframes: nada animava. No CSS único a
 // classe da home existe; ela sai daqui para reproduzir a página antiga.
 import { poleposition, tecnologias, type ChavePole } from '../i18n/poleposition';
-import type { Idioma } from '../i18n/ui';
+import { rota, type Idioma } from '../i18n/ui';
 
 interface Props {
   lang: Idioma;
@@ -70,7 +70,7 @@ const configuracoes = [
                         <i class="fa-brands fa-google-play text-xl" aria-hidden="true"></i> <span>{x.btn_download}</span>
                     </a>
                     {/* Política é URL contratual sem par en (ADR-001): link pt nos dois idiomas. */}
-                    <a href="/poleposition-privacy.html" class="px-6 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
+                    <a href={rota(lang, 'poleposition-privacy.html')} class="px-6 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
                         <i class="fa-solid fa-shield-halved" aria-hidden="true"></i> <span>{x.btn_privacy}</span>
                     </a>
                 </div>
