@@ -20,7 +20,6 @@
 Nada quebrado no ar. Pela metade:
 - **Fatia 9 por integrar:** `git switch feat/wp-08-layout-unico && git merge --no-ff feat/wp-08-f9-public-limpeza -m "WP-08: fatia 9 — public/, sem _config.yml, html-validate estrito e noopener em todo o site"`.
   O agente não tem `git merge`. Conflito em `achados-novos.md`/`handoff.md`/`ESTADO.md`: manter as linhas dos dois lados.
-- Fatia 8 também pode estar por integrar: conferir `git branch --merged feat/wp-08-layout-unico`.
 - Servidor antigo na porta 8081 (pid 686166), deixado por uma auditoria: o usuário decide se encerra.
 
 ## 3. O que só o navegador prova (usuário ainda não reportou)
