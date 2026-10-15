@@ -2,7 +2,7 @@
 id: WP-11
 titulo: Buscadores leem sitemap, canonical, hreflang e dados estruturados de cada página
 area: seo
-status: todo
+status: doing
 depende_de: [WP-08]
 adr: []
 spec: docs/AVALIACAO.md
