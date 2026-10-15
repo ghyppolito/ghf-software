@@ -365,8 +365,131 @@ body {
   @apply pr-0;
 }
 
-.legal-corpo td:first-child {
+/* ------------------------------------------------------------------ Texto legal por tema
+ * O que muda de uma política para outra (WP-08, fatia 7). Cada bloco reproduz as classes que o
+ * dicionário JS da página antiga punha em cada tag; o que é igual nas três fica acima.
+ */
+
+/* eclipsego-privacy.html — primeira coluna sempre mono e na cor do app (era por posição) */
+[data-tema='eclipsego-privacy'] .legal-corpo td:first-child {
   @apply font-mono text-sm text-brand-primary;
+}
+
+/* topowalk-privacy.html e poleposition-privacy.html. O `---` do .md antes de cada `## ` não
+ * aparecia na página antiga (o título já separa); só o último do TopoWalk, antes da nota LGPD. */
+:is([data-tema='topowalk-privacy'], [data-tema='poleposition-privacy']) .legal-corpo hr {
+  @apply border-gray-800 my-8;
+}
+
+:is([data-tema='topowalk-privacy'], [data-tema='poleposition-privacy']) .legal-corpo hr:has(+ h2) {
+  display: none;
+}
+
+:is([data-tema='topowalk-privacy'], [data-tema='poleposition-privacy']) .legal-corpo ol {
+  @apply list-decimal pl-6 mb-4 space-y-2;
+}
+
+/* Lista aninhada: a página antiga pedia `list-circle`, que não existe no Tailwind — sem marcador. */
+:is([data-tema='topowalk-privacy'], [data-tema='poleposition-privacy']) .legal-corpo ul ul {
+  @apply list-none pl-6 mt-1 mb-0 space-y-1;
+}
+
+/* topowalk-privacy.html. O e-mail que o GFM transforma em link `mailto:` fica como o texto da
+ * página antiga (sem link estilizado): o estilo é só do link externo. */
+[data-tema='topowalk-privacy'] .legal-corpo a[href^='http'] {
+  @apply text-brand-primary underline hover:text-white;
+}
+
+/* Primeira coluna pelo dado: `**…**` (terceiros) em negrito médio, `` `…` `` (permissões) mono. */
+[data-tema='topowalk-privacy'] .legal-corpo td:first-child:has(strong) {
+  @apply font-semibold text-brand-primary;
+}
+
+[data-tema='topowalk-privacy'] .legal-corpo td:first-child:has(strong) strong {
+  font-weight: inherit;
+}
+
+[data-tema='topowalk-privacy'] .legal-corpo td:first-child:has(code) {
+  @apply font-mono text-sm text-brand-primary;
+}
+
+/* Nota final em itálico (LGPD/GDPR), sem margem embaixo. */
+[data-tema='topowalk-privacy'] .legal-corpo > p:last-child:has(> em:only-child) {
+  @apply text-sm text-gray-500 italic mb-0;
+}
+
+/* poleposition-privacy.html */
+[data-tema='poleposition-privacy'] .legal-corpo a[href^='http'] {
+  @apply text-brand-primary hover:underline;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo code {
+  @apply font-mono bg-gray-800 px-1.5 py-0.5 rounded text-gray-200 text-sm;
+}
+
+/* Tabela em cartão: borda arredondada, cabeçalho com fundo, filete fino entre linhas. */
+[data-tema='poleposition-privacy'] .legal-tabela {
+  @apply my-6 border border-gray-800 rounded-xl;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo thead tr {
+  @apply border-b border-gray-800 bg-gray-800/30;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo tbody tr {
+  @apply border-b-0 hover:bg-gray-800/10;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo tbody tr + tr {
+  @apply border-t border-gray-800/50;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo th,
+[data-tema='poleposition-privacy'] .legal-corpo td,
+[data-tema='poleposition-privacy'] .legal-corpo th:last-child,
+[data-tema='poleposition-privacy'] .legal-corpo td:last-child {
+  @apply py-4 px-5 text-sm;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo th {
+  @apply font-semibold text-white;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo td {
+  @apply text-gray-400;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo td:first-child {
+  @apply text-gray-300;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo td:first-child:has(> code:only-child) {
+  @apply font-mono;
+}
+
+/* Código dentro da tabela é texto da célula, sem a pílula. */
+[data-tema='poleposition-privacy'] .legal-corpo td code {
+  @apply bg-transparent p-0 rounded-none;
+  color: inherit;
+}
+
+/* Lista com parágrafo de continuação: o CommonMark põe `<p>` em todos os itens dela; a página
+ * antiga não tinha esse espaço. */
+[data-tema='poleposition-privacy'] .legal-corpo li > p {
+  @apply mb-0;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo li > ul + p {
+  @apply mt-2;
+}
+
+/* "Desenvolvido por …", último parágrafo, todo em negrito. */
+[data-tema='poleposition-privacy'] .legal-corpo > p:last-child:has(> strong:only-child) {
+  @apply font-semibold text-white mt-6 mb-0;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo > p:last-child:has(> strong:only-child) strong {
+  font-weight: inherit;
 }
 
 /* ------------------------------------------------------------------ Tailwind */

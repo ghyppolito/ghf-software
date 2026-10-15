@@ -29,8 +29,9 @@ Checa:
  11. `dist/` não é mais antigo que as fontes (src/, configs, package.json, COPIADOS_DA_RAIZ do
      astro.config.mjs, fontes de LEGAL): sem isso, o check daria verde sobre um build velho
  12. página legal migrada (fonte em src/content/legal/), pt e en: um só `<h1`, um só rótulo de
-     data do idioma da página, nenhuma aspa tipográfica que o `.md` não tenha; e `.pt.md` e
-     `.en.md` com a mesma contagem de `## `, `### ` e linhas de tabela
+     data do idioma da página, nenhuma aspa tipográfica que o `.md` não tenha, nenhum link
+     `target="_blank"` sem `rel="noopener"`; e `.pt.md` e `.en.md` com a mesma contagem de `## `,
+     `### `, linhas de tabela, itens de lista, links, crases (`code`) e `---`
 
 Modo raiz (`--raiz .`) não é mais suportado desde a fatia 6 do WP-08: uma URL contratual
 (`eclipsego-privacy.html`) só existe em `dist/`, e o §1 falharia na raiz. Os ramos que ainda o
@@ -528,7 +529,16 @@ for pagina, md in LEGAL.items():
             if html.count(ch) > texto_md[lang].count(ch):
                 erros.append(f"{alvo}: aspa tipográfica `{ch}` ({html.count(ch)}×) além das de {base_md}.{lang}.md "
                              f"({texto_md[lang].count(ch)}×) — smartPunctuation ligado?")
-    for nome, padrao in (("`## `", r"^## "), ("`### `", r"^### "), ("linhas de tabela `|`", r"^\|")):
+        # Link que abre outra aba sem `noopener` deixa a página aberta alcançar esta por
+        # `window.opener` (plugin linksExternosLegais de src/markdown/legal.mjs). A régua para o
+        # site inteiro é de TARGET-BLANK-SEM-NOOPENER-01 (fatia 9).
+        for tag in re.findall(r"<a\b[^>]*>", html, re.I):
+            if re.search(r'target="_blank"', tag) and not re.search(r'rel="[^"]*\bnoopener\b', tag):
+                erros.append(f"{alvo}: link com target=\"_blank\" sem rel=\"noopener\": {tag}")
+    for nome, padrao in (("`## `", r"^## "), ("`### `", r"^### "), ("linhas de tabela `|`", r"^\|"),
+                         ("itens de lista", r"^\s*([-*]|\d+\.) "), ("links `](`", r"\]\("),
+                         ("crases `` ` `` (code)", r"`"), ("`---`", r"^---$")):
+        # o `---` do front-matter conta igual nos dois lados
         n = {lang: len(re.findall(padrao, texto_md[lang], re.M)) for lang in ("pt", "en")}
         if n["pt"] != n["en"]:
             erros.append(f"{base_md}.en.md: {n['en']} {nome} ≠ {n['pt']} do .pt.md — tradução com estrutura diferente")
