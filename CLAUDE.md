@@ -128,6 +128,7 @@ política/termos do repositório do app) · `/decisao <texto>` · `/adr <texto>`
 python3 tools/check_site.py                                   # links, assets, metadados, datas legais, copy — roda sempre
 npm ci && npm run build                                       # Astro → dist/ (Node 22.22)
 python3 tools/check_site.py --raiz dist                       # o mesmo sobre o publicado; datas legais contra docs/ da raiz
+(cd dist && sha256sum --quiet -c ../tools/contrato.sha256)    # convite, assetlinks, og:image do convite e CNAME iguais ao publicado (D13)
 python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regenerar e verificar
 python3 -m http.server 8080 -d dist                           # servir dist/ para inspeção (Claude in Chrome ou usuário)
 diff ../lotto-expert/docs/PRIVACY_POLICY.md docs/LOTTOEXPERT_PRIVACY_POLICY.md   # o site está atrás do app?

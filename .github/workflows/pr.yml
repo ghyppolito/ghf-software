@@ -77,6 +77,11 @@ jobs:
         # Prova o publicado; as fontes legais (docs/*.md) continuam lidas da raiz do repositório.
         run: python3 tools/check_site.py --raiz dist
 
+      - name: Contrato do bolão byte a byte (D13)
+        # Convite, assetlinks, og:image do convite e CNAME saem iguais ao publicado. Mudar um deles é
+        # decisão do usuário: atualiza tools/contrato.sha256 no mesmo PR, com teste de link real.
+        run: cd dist && sha256sum --quiet -c ../tools/contrato.sha256
+
       - name: Validação de HTML
         # Versão do lockfile. Regras em `.htmlvalidate.json` da raiz (vale para dist/); as
         # rebaixadas para aviso estão em achados-novos.md, destino WP-08.

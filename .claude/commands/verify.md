@@ -1,6 +1,6 @@
 ---
 description: Roda a verificação local do site — o mesmo que o CI cobra no PR
-allowed-tools: Bash(python3:*), Bash(git:*), Bash(npm:*), Bash(npx:*), Bash(diff:*)
+allowed-tools: Bash(python3:*), Bash(git:*), Bash(npm:*), Bash(npx:*), Bash(diff:*), Bash(sha256sum:*)
 ---
 
 Descubra o que o diff tocou — `git diff --name-only develop...HEAD` mais `git status --porcelain`
@@ -11,6 +11,7 @@ Descubra o que o diff tocou — `git diff --name-only develop...HEAD` mais `git 
 python3 tools/check_site.py
 python3 tools/gen_estado.py --check && python3 tools/check_plano.py
 npm ci && npm run build && python3 tools/check_site.py --raiz dist
+(cd dist && sha256sum --quiet -c ../tools/contrato.sha256)   # convite, assetlinks, og:image do convite, CNAME (D13)
 npx html-validate 'dist/**/*.html'
 lychee --offline --no-progress --root-dir "$PWD/dist" 'dist/**/*.html'   # se o binário não estiver instalado: "não verificado"
 git diff --stat develop...HEAD        # nenhum arquivo fora dos Arquivos-alvo do WP (escrituração em .claude/context/ é permitida)

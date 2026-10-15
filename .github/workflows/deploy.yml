@@ -57,6 +57,10 @@ jobs:
       - name: assetlinks.json no artefato
         run: test -f dist/.well-known/assetlinks.json
 
+      - name: Contrato do bolão byte a byte (D13)
+        # O mesmo do pr.yml: divergência aqui não vai ao ar.
+        run: cd dist && sha256sum --quiet -c ../tools/contrato.sha256
+
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: dist

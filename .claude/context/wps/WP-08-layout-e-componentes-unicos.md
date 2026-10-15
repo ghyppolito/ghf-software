@@ -23,7 +23,8 @@ branch: feat/wp-08-layout-unico
 **Exceção de dependência (2026-10-13, usuário):** o WP-08 começa com o WP-07 `blocked` (só falta
 o deploy, adiado para uma janela de pouco uso do bolão). A branch fica isolada: **sem merge em
 `develop` até o WP-07 estar no ar**, para o `/release` publicar a troca de stack e a migração das
-páginas separadas, cada uma com o seu rollback.
+páginas separadas, cada uma com o seu rollback. **Superada por D13 (2026-10-14):** a integração
+só vai para `develop` com o backlog de evolução inteiro (WP-08 a WP-19), num único deploy.
 
 **Objetivo:** nav, footer, tema e `<head>` existem uma vez (`src/layouts/`, `src/components/`);
 o conteúdo legal é um `.md` por idioma em `src/content/legal/` renderizado por um layout; o
@@ -40,6 +41,7 @@ landings; 7 `tailwind.config` diferentes nas 10 páginas, com `brand.primary` pr
 
 **Arquivos-alvo:** `src/**`, `public/**`, `astro.config.mjs`, `tailwind.config.mjs`,
 `postcss.config.mjs`, `package.json`, `package-lock.json`, `tools/check_site.py`,
+`tools/contrato.sha256` e o passo que o confere em `pr.yml`/`deploy.yml` (D13),
 `.htmlvalidate.json`, `.github/workflows/pr.yml` (só o passo do `check_site.py` na raiz — nomes
 `plano` e `site` intactos, D9), `.claude/commands/verify.md`, `_config.yml` (remoção, fatia 9),
 os 10 `*.html` da raiz (remoção), `docs/*_PRIVACY_POLICY.md` e `docs/*_TERMS_OF_SERVICE.md`
@@ -49,7 +51,7 @@ rápida", `README.md`.
 
 **Respostas do usuário (2026-10-13), todas como recomendado:** (1) a R1 só sai depois do WP-07
 no ar com um convite real testado e alguns dias sem incidente, e com a tag `pre-wp-08` em `master`
-antes; (2) publicação em três releases (R1/R2/R3); (3) sem redirect para `/en/` até o WP-15 —
+antes; (2) publicação em três releases (R1/R2/R3) — **(1) e (2) superadas por D13**; (3) sem redirect para `/en/` até o WP-15 —
 quem escolheu inglês volta a abrir a URL pt em português; (4) push da integração e PR rascunho
 para `develop` com o título de não fazer merge, só para o CI rodar.
 
@@ -66,18 +68,18 @@ título começando por `[NÃO FAZER MERGE — aguarda WP-07 no ar]`. Cada push r
 sem mexer em workflow. O `develop` que andar (WP-07 ajustado no deploy, WP-19) entra na integração
 por `git merge origin/develop`, nunca rebase (preserva os merges de fatia).
 
-**Publicação em três `/release`, depois do WP-07 no ar e estável** — o merge em `develop` é por
-PR de uma branch `release/wp-08-rN` apontada para o commit de merge da última fatia do grupo:
+**Publicação: um único deploy, com o backlog de evolução inteiro (D13, 2026-10-14).** As releases
+R1/R2/R3 deixaram de existir. O WP-08 termina na integração (status `done` com as 9 fatias
+integradas e auditadas); os WP-09 a WP-19 nascem da integração e voltam a ela; o merge em
+`develop` e o `/release` acontecem uma vez, no fim. Antes desse deploy: tag `pre-modernizacao` em
+`master` (adicionada à política do ambiente `github-pages`, que hoje só aceita `master`), ensaio
+do rollback (`gh workflow run deploy.yml --ref pre-modernizacao`) e checklist completo de navegador
+sobre `dist/` local. O deploy é numa janela de pouco uso do bolão, com teste de link real gerado
+pelo app logo depois. Enquanto a integração não sobe, texto legal novo e incidente seguem por
+hotfix a partir de `master`, e voltam para cá por `git merge origin/develop`.
 
-| Release | Fatias | Toca URL contratual? | Janela |
-|---|---|---|---|
-| R1 | 1–5 (infra, home, 4 landings) | não | qualquer |
-| R2 | 6–8 (5 páginas legais) | **sim** | pouco uso do bolão; lottoexpert-privacy é linkada pelo `AboutScreen` |
-| R3 | 9 (`public/`, convite, limpeza) | **sim** (convite, assetlinks) | pouco uso do bolão; teste com link real do app no mesmo dia |
-
-A R1 apaga páginas da raiz: a partir dela, voltar o Pages ao modo "branch" (rollback do WP-07)
-deixa de servir essas páginas. Antes da R1, tag `pre-wp-08` em `master`; o rollback passa a ser
-`git revert` do merge em `master`, não troca de modo.
+O deploy único apaga páginas da raiz: a partir dele, voltar o Pages ao modo "branch" (rollback do
+WP-07) deixa de servir essas páginas; o rollback é o `workflow_dispatch` sobre a tag.
 
 ### Fatias
 
@@ -128,12 +130,14 @@ deixa de servir essas páginas. Antes da R1, tag `pre-wp-08` em `master`; o roll
 - §5: `PAGINAS_LOTTO` ganha `en/index.html`, `en/lottoexpert*.html`.
 - Página em `en/` com link interno para página que tem par en aponta para o par.
 
-### Prova byte a byte (fatias 6–9)
+### Prova byte a byte (desde 2026-10-14, D13)
 
-`sha256sum` de `dist/lotto-expert/sweepstake-invite/lottoexpert-invite.html`,
-`dist/.well-known/assetlinks.json` e `dist/CNAME` igual ao de `git show origin/master:<caminho>`
-— o convite não é migrado nem reformatado (lê `?d=`; formato é do app, invariante sem teste
-automático).
+`tools/contrato.sha256` guarda o `sha256sum` de `lotto-expert/sweepstake-invite/lottoexpert-invite.html`,
+`.well-known/assetlinks.json`, `assets/lottoexpert_app_mockup.png` (`og:image` do convite) e
+`CNAME`, tirados de `origin/master` em 2026-10-14. O `pr.yml`, o `deploy.yml` e o `/verify` rodam
+`cd dist && sha256sum --quiet -c ../tools/contrato.sha256` — o deploy falha se divergir. O convite
+não é migrado nem reformatado (lê `?d=`; formato é do app, invariante sem teste automático). Mudar
+um desses arquivos é decisão do usuário: atualiza o `.sha256` no mesmo PR e testa com link real.
 
 ## Passos (por página)
 
@@ -154,16 +158,17 @@ automático).
 - Para cada página legal: um só `.md` por idioma, `lastUpdated` no front-matter igual à do
   repositório do app (`check_site.py`); texto en renderizado igual ao en publicado hoje
   (texto normalizado, sem tags — diff vazio, saída no relato da fatia).
-- Convite, `assetlinks.json` e `CNAME`: `sha256sum` igual ao de `origin/master`.
+- Convite, `assetlinks.json`, `assets/lottoexpert_app_mockup.png` e `CNAME`: `sha256sum -c
+  tools/contrato.sha256` verde sobre `dist/` (CI e deploy).
 - `npx html-validate 'dist/**/*.html'` sem nenhum aviso das 6 regras rebaixadas no WP-05.
 - Capturas antes/depois (360 e 1280) por página, pt e en, sem diferença visual não intencional —
   relato do `site-ux`.
 
 **Só no navegador:** cada página pt e en; a troca de idioma leva ao par da mesma página; quem
 tinha `ghf_lang=en` abre a URL pt em português (D8 c1: sem redirect; a faixa de sugestão é WP-15);
-convite com link real gerado pelo app, depois da R3.
+convite com link real gerado pelo app, logo depois do deploy único (D13).
 
 **Irreversível:** páginas `.html` da raiz removidas do repositório (ficam no git); rollback por
-troca de modo do Pages deixa de existir a partir da R1. URLs não mudam.
+troca de modo do Pages deixa de existir a partir do deploy único (D13). URLs não mudam.
 
 **Risco:** alto por volume e pelas URLs; médio por página.
