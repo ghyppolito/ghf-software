@@ -1,3 +1,6 @@
+---
+lastUpdated: "2026-10"
+---
 # Política de Privacidade — Pole Position: Race Analytics
 
 **Última atualização:** outubro de 2026
@@ -233,6 +236,6 @@ Esta política pode ser atualizada periodicamente. Alterações relevantes serã
 
 ## 10. Contato
 
-Em caso de dúvidas sobre esta Política de Privacidade, entre em contato pelo repositório oficial do projeto ou pelo e-mail do desenvolvedor.
+Em caso de dúvidas sobre esta Política de Privacidade, entre em contato pelo repositório oficial do projeto ou pelo e-mail do desenvolvedor em **support@ghfsoftware.com**.
 
 **Desenvolvido por Gustavo Hyppolito**
