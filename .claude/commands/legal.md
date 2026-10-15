@@ -10,7 +10,7 @@ Este é o ritual que se repete a cada versão de app. A origem é o repositório
 
 | App | Origem | Site (md) | Site (html) |
 |---|---|---|---|
-| lottoexpert | `../lotto-expert/docs/PRIVACY_POLICY.md`, `TERMS_OF_SERVICE.md` | `docs/LOTTOEXPERT_PRIVACY_POLICY.md`, `docs/LOTTOEXPERT_TERMS_OF_SERVICE.md` | `lottoexpert-privacy.html`, `lottoexpert-terms.html` |
+| lottoexpert | `../lotto-expert/docs/PRIVACY_POLICY.md`, `TERMS_OF_SERVICE.md` | `src/content/legal/lottoexpert-privacy.pt.md` e `.en.md`, `src/content/legal/lottoexpert-terms.pt.md` e `.en.md` | `src/pages/lottoexpert-privacy.astro`, `src/pages/lottoexpert-terms.astro` e os pares em `src/pages/en/` |
 | topowalk | `../topo-walk/PRIVACY_POLICY.md` | `src/content/legal/topowalk-privacy.pt.md` e `.en.md` | `src/pages/topowalk-privacy.astro`, `src/pages/en/topowalk-privacy.astro` |
 | poleposition | `../pole-position/pole-position-app/PRIVACY_POLICY.md` | `src/content/legal/poleposition-privacy.pt.md` e `.en.md` | `src/pages/poleposition-privacy.astro`, `src/pages/en/poleposition-privacy.astro` |
 | eclipsego | `../eclipse-go/docs/PRIVACY_POLICY.md` | `src/content/legal/eclipsego-privacy.pt.md` e `.en.md` | `src/pages/eclipsego-privacy.astro`, `src/pages/en/eclipsego-privacy.astro` |

@@ -19,9 +19,9 @@ git diff --stat develop...HEAD        # nenhum arquivo fora dos Arquivos-alvo do
 **Tocou página legal (`*-privacy.html`, `*-terms.html`, `docs/*_POLICY.md`, `docs/*_TERMS*.md`,
 `src/content/legal/*.md`, `src/layouts/LegalLayout.astro`):**
 ```bash
-diff -q ../lotto-expert/docs/PRIVACY_POLICY.md docs/LOTTOEXPERT_PRIVACY_POLICY.md
-diff -q ../lotto-expert/docs/TERMS_OF_SERVICE.md docs/LOTTOEXPERT_TERMS_OF_SERVICE.md
-diff <(sed '1,/^---$/d' src/content/legal/eclipsego-privacy.pt.md) ../eclipse-go/docs/PRIVACY_POLICY.md   # migrada: sem o front-matter
+diff <(sed '1,/^---$/d' src/content/legal/lottoexpert-privacy.pt.md) ../lotto-expert/docs/PRIVACY_POLICY.md   # sem o front-matter
+diff <(sed '1,/^---$/d' src/content/legal/lottoexpert-terms.pt.md) ../lotto-expert/docs/TERMS_OF_SERVICE.md
+diff <(sed '1,/^---$/d' src/content/legal/eclipsego-privacy.pt.md) ../eclipse-go/docs/PRIVACY_POLICY.md
 ```
 (e o equivalente do app tocado). Saída vazia = espelho fiel. Diferença = o WP não terminou.
 

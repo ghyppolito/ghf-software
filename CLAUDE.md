@@ -67,23 +67,23 @@ existindo no resultado publicado.
 ## Arquitetura (estado atual — muda no WP-08)
 
 ```
-*.html                      páginas ainda não migradas (as 2 legais do LottoExpert no fim da fatia 7 do WP-08); nav, footer,
-                            tailwind.config e dicionário i18n (data-i18n + JS) duplicados em cada uma
 assets/                     imagens, favicons, mockups (PNG, sem otimização)
-docs/*.md                   cópia markdown das políticas/termos ainda não migradas e README de cada app
+docs/*.md                   README de cada app (o texto legal está em src/content/legal/)
 lotto-expert/sweepstake-invite/   página do convite de bolão (pako + Base64, lê o link)
 .well-known/assetlinks.json       App Links do LottoExpert (no modo branch, Jekyll inclui via _config.yml)
 tools/                      gen_estado.py · check_plano.py · check_site.py
 design/                     brief e handoff do Claude Design (WP-06)
 astro.config.mjs            Astro (ADR-002); integração copia da raiz para dist/, byte a byte, a
-                            lista fechada: os *.html não migrados, assets/, .well-known/, lotto-expert/, CNAME
+                            lista fechada: assets/, .well-known/, lotto-expert/, CNAME (nenhuma página
+                            vem da raiz desde a fatia 8 do WP-08)
 tailwind.config.mjs         Tailwind 3.4.19 compilado pelo PostCSS (ADR-003); brand.* por variável CSS
 src/                        layouts/ (Base.astro: head único, og, canonical, hreflang, tema;
                             LegalLayout.astro: hero e card das páginas legais) · components/ (Nav,
                             Footer, TrocaIdioma, uma por landing) · i18n/ (ui.ts, <pagina>.ts, legal.ts) ·
                             content.config.ts + content/legal/<app>-<doc>.<idioma>.md (texto legal;
                             front-matter `lastUpdated: "AAAA-MM[-DD]"`, pt = .md do app byte a byte) ·
-                            markdown/legal.mjs (plugins do Sätteri: título e data saem do corpo) ·
+                            markdown/legal.mjs (plugins do Sätteri: título e data saem do corpo,
+                            link do próprio site vira caminho a partir da raiz, /en/ no inglês) ·
                             styles/global.css (temas por página, tipografia do texto legal) ·
                             pages/ (páginas pt literais, en/ os pares, 404)
 dist/                       saída do build (não versionada) — é o que vai ao ar
@@ -93,9 +93,8 @@ dist/                       saída do build (não versionada) — é o que vai a
 Até a troca do Pages para "GitHub Actions" (passo do usuário no WP-07), o Jekyll ainda publica a
 raiz de `master`; `_config.yml` exclui o projeto Astro. Depois, só `dist/` vai ao ar.
 
-Durante o WP-08, página não migrada ainda é copiada da raiz: alteração em nav/footer/config **se
-replica no componente e nas páginas da raiz** no mesmo WP, e a rede é o `check_site.py` sobre `dist/`. Depois do WP-08, há um
-layout único.
+Desde a fatia 8 do WP-08 nenhuma página vem da raiz: nav, footer e config mudam só no componente
+(`src/components/`, `src/layouts/`), e a rede é o `check_site.py` sobre `dist/`.
 
 ---
 
@@ -132,12 +131,13 @@ política/termos do repositório do app) · `/decisao <texto>` · `/adr <texto>`
 ```bash
 npm ci && npm run build                                       # Astro → dist/ (Node 22.22)
 python3 tools/check_site.py                                   # sobre dist/ (= --raiz dist; sem dist/, pede o build): URLs contratuais,
-                                                              # links, assets, metadados, datas legais contra docs/ e src/content/legal/, copy
+                                                              # links, assets, metadados, datas legais contra src/content/legal/, copy
 (cd dist && sha256sum --quiet -c ../tools/contrato.sha256)    # convite, assetlinks, og:image do convite e CNAME iguais ao publicado (D13)
 python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regenerar e verificar
 python3 -m http.server 8080 -d dist                           # servir dist/ para inspeção (Claude in Chrome ou usuário)
-diff ../lotto-expert/docs/PRIVACY_POLICY.md docs/LOTTOEXPERT_PRIVACY_POLICY.md   # o site está atrás do app?
-diff <(sed '1,/^---$/d' src/content/legal/eclipsego-privacy.pt.md) ../eclipse-go/docs/PRIVACY_POLICY.md   # idem, página migrada (sem o front-matter)
+diff <(sed '1,/^---$/d' src/content/legal/lottoexpert-privacy.pt.md) ../lotto-expert/docs/PRIVACY_POLICY.md   # o site está atrás do app? (sem o front-matter)
+diff <(sed '1,/^---$/d' src/content/legal/lottoexpert-terms.pt.md) ../lotto-expert/docs/TERMS_OF_SERVICE.md      # idem
+diff <(sed '1,/^---$/d' src/content/legal/eclipsego-privacy.pt.md) ../eclipse-go/docs/PRIVACY_POLICY.md   # idem
 diff <(sed '1,/^---$/d' src/content/legal/topowalk-privacy.pt.md) ../topo-walk/PRIVACY_POLICY.md            # idem
 diff <(sed '1,/^---$/d' src/content/legal/poleposition-privacy.pt.md) ../pole-position/pole-position-app/PRIVACY_POLICY.md   # idem
 npx html-validate 'dist/**/*.html'                            # HTML (versão do lockfile; regras em .htmlvalidate.json)
@@ -157,6 +157,6 @@ dist` e publicação de `dist/` no Pages — só tem efeito com o Pages em modo 
 | Diagnóstico e direção | `docs/AVALIACAO.md` |
 | Texto legal de um app | repositório do app, `docs/PRIVACY_POLICY.md` / `TERMS_OF_SERVICE.md` |
 | Copy de produto | `../lotto-expert/docs/ASO_METADATA.md`, `docs/<APP>_README.md` |
-| Dicionário i18n de uma página | migrada: `src/i18n/` (`ui.ts` nav/footer, `<pagina>.ts`); não migrada: bloco `<script>` no fim do HTML (`translations`/`data-i18n`) |
+| Dicionário i18n de uma página | `src/i18n/` (`ui.ts` nav/footer, `<pagina>.ts`, `legal.ts` hero e `<head>` das legais) |
 | Cores e fonte da marca | `tailwind.config.mjs` (brand.base/surface/primary/secondary/accent, Inter) com os valores por tema em `src/styles/global.css` |
 | Deep link do bolão | `lotto-expert/sweepstake-invite/lottoexpert-invite.html`; formato é do app (ADR-006 lá) |
