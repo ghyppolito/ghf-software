@@ -1,3 +1,6 @@
+---
+lastUpdated: "2026-10-12"
+---
 # Termos de Uso — LottoExpert
 
 **Última atualização:** 12 de Outubro de 2026

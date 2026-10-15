@@ -41,10 +41,36 @@ export const envolveTabelaLegal = {
   },
 };
 
+// Host do próprio site, com ou sem `www.`, por http ou https (o `.md` do app escreve `https://ghfsoftware.com/`).
+const SITE = /^https?:\/\/(www\.)?ghfsoftware\.com\//i;
+
+/** hast: link para o próprio site (`https://ghfsoftware.com/x.html`, como o `.md` do app escreve) vira
+ *  caminho a partir da raiz (`/x.html`), na mesma aba, como a página antiga (WP-08, fatia 8: termos do
+ *  LottoExpert, §8). No `.en.md`, página `.html` aponta para o par `/en/x.html` — desde a fatia 8 toda
+ *  página `.html` do site tem par en (um par ausente quebra o link, e o §3 do `check_site.py` acusa);
+ *  asset e o convite do bolão (`lotto-expert/…`) não têm par e ficam em `/`. O `.md` não é alterado:
+ *  o `.en.md` mantém a URL do pt. Roda antes de `linksExternosLegais`. */
+export const linksInternosLegais = {
+  name: 'ghf-links-internos-legais',
+  element: {
+    filter: ['a'],
+    visit(node, ctx) {
+      if (!ehLegal(ctx)) return;
+      const href = node.properties?.href;
+      if (typeof href !== 'string' || !SITE.test(href)) return;
+      const caminho = href.replace(SITE, '');
+      const arquivo = caminho.split(/[?#]/)[0];
+      const temPar = arquivo.endsWith('.html') && !arquivo.startsWith('lotto-expert/');
+      const emIngles = ctx.fileURL.pathname.endsWith('.en.md');
+      ctx.setProperty(node, 'href', (emIngles && temPar ? '/en/' : '/') + caminho);
+    },
+  },
+};
+
 /** hast: link externo (`href` começando por `http`) abre em outra aba, com `rel="noopener noreferrer"`.
  *  O markdown não tem `target`; as páginas antigas abriam em outra aba (WP-08, fatia 7). Sem `noopener`,
- *  a página aberta alcançaria esta por `window.opener` (`POLEPOSITION-NOOPENER-01`). `mailto:` e
- *  âncoras internas ficam como estão. */
+ *  a página aberta alcançaria esta por `window.opener` (`POLEPOSITION-NOOPENER-01`). `mailto:`,
+ *  âncoras internas e o próprio site (`linksInternosLegais`) ficam como estão. */
 export const linksExternosLegais = {
   name: 'ghf-links-externos-legais',
   element: {
@@ -52,7 +78,7 @@ export const linksExternosLegais = {
     visit(node, ctx) {
       if (!ehLegal(ctx)) return;
       const href = node.properties?.href;
-      if (typeof href !== 'string' || !/^https?:/i.test(href)) return;
+      if (typeof href !== 'string' || !/^https?:/i.test(href) || SITE.test(href)) return;
       ctx.setProperty(node, 'target', '_blank');
       ctx.setProperty(node, 'rel', ['noopener', 'noreferrer']);
     },

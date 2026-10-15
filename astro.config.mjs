@@ -3,17 +3,23 @@ import { cp } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import { satteri } from '@astrojs/markdown-satteri';
-import { envolveTabelaLegal, idDosTitulosLegais, linksExternosLegais, omiteCabecalhoLegal } from './src/markdown/legal.mjs';
+import {
+  envolveTabelaLegal,
+  idDosTitulosLegais,
+  linksExternosLegais,
+  linksInternosLegais,
+  omiteCabecalhoLegal,
+} from './src/markdown/legal.mjs';
 
-// Página ainda não migrada (WP-08) tem a raiz como fonte: não passa pelo compilador do Astro
-// (ADR-002 §3), é copiada byte a byte para dist/. Lista fechada, sem glob — arquivo novo na raiz
-// só é publicado se entrar aqui. Colisão com página gerada falha o build (errorOnExist).
-// Página migrada sai daqui e da raiz no mesmo commit (index.html: fatia 1; lottoexpert.html: fatia 2;
-// topowalk.html: fatia 3; poleposition.html: fatia 4; eclipsego.html: fatia 5; eclipsego-privacy.html:
-// fatia 6; topowalk-privacy.html e poleposition-privacy.html: fatia 7).
+// O que a raiz publica sem passar pelo compilador do Astro (ADR-002 §3): copiado byte a byte para
+// dist/. Lista fechada, sem glob — arquivo novo na raiz só é publicado se entrar aqui. Colisão com
+// página gerada falha o build (errorOnExist). Durante o WP-08 as páginas não migradas vinham daqui e
+// saíram uma a uma (index.html: fatia 1; lottoexpert.html: fatia 2; topowalk.html: fatia 3;
+// poleposition.html: fatia 4; eclipsego.html: fatia 5; eclipsego-privacy.html: fatia 6;
+// topowalk-privacy.html e poleposition-privacy.html: fatia 7; lottoexpert-privacy.html e
+// lottoexpert-terms.html: fatia 8). Desde a fatia 8 nenhuma página vem da raiz: só imagens, App
+// Links, o convite do bolão (contrato byte a byte, D13) e o domínio.
 const COPIADOS_DA_RAIZ = [
-  'lottoexpert-privacy.html',
-  'lottoexpert-terms.html',
   'assets',
   '.well-known',
   'lotto-expert',
@@ -55,12 +61,14 @@ export default defineConfig({
   // - plugins (src/markdown/legal.mjs): o `# título` e a linha `**Última atualização:**` do corpo
   //   não são renderizados (o hero mostra os dois); a tabela ganha o contêiner com rolagem; os
   //   `id` dos títulos ganham o prefixo `secao-` (o slug começaria por dígito: `valid-id`); link
-  //   externo abre em outra aba com `rel="noopener noreferrer"` (fatia 7).
+  //   externo abre em outra aba com `rel="noopener noreferrer"` (fatia 7); link para o próprio site
+  //   (`https://ghfsoftware.com/x.html` no .md) vira `/x.html` — `/en/x.html` no .en.md —, na
+  //   mesma aba (fatia 8).
   markdown: {
     processor: satteri({
       features: { smartPunctuation: false, gfm: true },
       mdastPlugins: [omiteCabecalhoLegal],
-      hastPlugins: [envolveTabelaLegal, idDosTitulosLegais, linksExternosLegais],
+      hastPlugins: [envolveTabelaLegal, idDosTitulosLegais, linksInternosLegais, linksExternosLegais],
     }),
   },
   vite: {

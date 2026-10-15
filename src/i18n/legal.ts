@@ -19,6 +19,12 @@ export const legal = {
     poleposition_privacy_h1: 'Política de Privacidade — Pole Position',
     poleposition_privacy_title: 'Política de Privacidade Pole Position - GHF Software',
     poleposition_privacy_description: 'Política de Privacidade do aplicativo Pole Position: Race Analytics desenvolvido pela GHF Software.',
+    lottoexpert_privacy_h1: 'Política de Privacidade — LottoExpert',
+    lottoexpert_privacy_title: 'Política de Privacidade LottoExpert - GHF Software',
+    lottoexpert_privacy_description: 'Política de Privacidade do aplicativo LottoExpert desenvolvido pela GHF Software.',
+    lottoexpert_terms_h1: 'Termos de Uso — LottoExpert',
+    lottoexpert_terms_title: 'Termos de Uso LottoExpert - GHF Software',
+    lottoexpert_terms_description: 'Termos de Uso do aplicativo LottoExpert desenvolvido pela GHF Software.',
   },
   en: {
     selo: 'Documento Legal',
@@ -34,6 +40,12 @@ export const legal = {
     poleposition_privacy_h1: 'Privacy Policy — Pole Position',
     poleposition_privacy_title: 'Pole Position Privacy Policy - GHF Software',
     poleposition_privacy_description: 'Privacy Policy of the Pole Position: Race Analytics app developed by GHF Software.',
+    lottoexpert_privacy_h1: 'Privacy Policy — LottoExpert',
+    lottoexpert_privacy_title: 'LottoExpert Privacy Policy - GHF Software',
+    lottoexpert_privacy_description: 'Privacy Policy of the LottoExpert app developed by GHF Software.',
+    lottoexpert_terms_h1: 'Terms of Use — LottoExpert',
+    lottoexpert_terms_title: 'LottoExpert Terms of Use - GHF Software',
+    lottoexpert_terms_description: 'Terms of Use of the LottoExpert app developed by GHF Software.',
   },
 } as const satisfies Record<Idioma, Record<string, string>>;
 

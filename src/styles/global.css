@@ -33,7 +33,9 @@
 }
 
 /* lottoexpert.html, lottoexpert-privacy.html, lottoexpert-terms.html */
-[data-tema='lottoexpert'] {
+[data-tema='lottoexpert'],
+[data-tema='lottoexpert-privacy'],
+[data-tema='lottoexpert-terms'] {
   --brand-primary: 139 92 246; /* #8B5CF6 */
   --brand-primary-hover: 124 58 237; /* #7C3AED */
   --sombra-glow: 0 0 20px rgba(139, 92, 246, 0.4);
@@ -490,6 +492,96 @@ body {
 
 [data-tema='poleposition-privacy'] .legal-corpo > p:last-child:has(> strong:only-child) strong {
   font-weight: inherit;
+}
+
+/* lottoexpert-privacy.html e lottoexpert-terms.html (WP-08, fatia 8). O `---` do .md antes de
+ * cada `## ` e antes do slogan final não aparecia na página antiga. */
+:is([data-tema='lottoexpert-privacy'], [data-tema='lottoexpert-terms']) .legal-corpo hr {
+  display: none;
+}
+
+/* Link externo e link do próprio site (plugin linksInternosLegais: `/…`). O e-mail que o GFM
+ * transforma em `mailto:` fica como o texto da página antiga, sem estilo. */
+:is([data-tema='lottoexpert-privacy'], [data-tema='lottoexpert-terms']) .legal-corpo a[href^='http'],
+:is([data-tema='lottoexpert-privacy'], [data-tema='lottoexpert-terms']) .legal-corpo a[href^='/'] {
+  @apply text-brand-primary hover:underline;
+}
+
+/* Slogan final em itálico (`*LottoExpert — …*`), centralizado. */
+:is([data-tema='lottoexpert-privacy'], [data-tema='lottoexpert-terms']) .legal-corpo > p:last-child:has(> em:only-child) {
+  @apply mt-8 mb-0 text-center text-sm text-gray-500 italic;
+}
+
+/* lottoexpert-privacy.html — listas sob `###` (§4.1–4.10): a página antiga mostrava cada item como
+ * parágrafo sem marcador, `mb-2`, o último `mb-4`. O seletor do item repete o do `space-y-2` de
+ * `.legal-corpo ul` (`> :not([hidden]) ~ :not([hidden])`) para vencer a margem que ele põe. */
+[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul {
+  @apply list-none pl-0 mb-0;
+}
+
+[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul > li,
+[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul > :not([hidden]) ~ :not([hidden]) {
+  @apply mt-0 mb-2;
+}
+
+[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul > li:last-child,
+[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul > :not([hidden]) ~ li:last-child {
+  @apply mb-4;
+}
+
+/* Lista aninhada de §4.7 (eventos do Analytics): com marcador, mais junta, texto menor. */
+[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul ul {
+  @apply list-disc pl-6 mt-2 mb-2 space-y-1 text-sm;
+}
+
+/* Destaques: as 3 notas de §2 (com barra) e "Dado local" de §9.2 (sem barra). O `.md` não as
+ * distingue pela estrutura; o seletor ancora no `id` da seção (plugin idDosTitulosLegais), pt e en. */
+[data-tema='lottoexpert-privacy'] .legal-corpo [id^='secao-2-'] + p + ul + p,
+[data-tema='lottoexpert-privacy'] .legal-corpo [id^='secao-2-'] + p + ul + p + p,
+[data-tema='lottoexpert-privacy'] .legal-corpo [id^='secao-2-'] + p + ul + p + p + p {
+  @apply mb-4 text-sm bg-gray-800/50 p-4 rounded-lg border-l-4 border-brand-primary;
+}
+
+[data-tema='lottoexpert-privacy'] .legal-corpo [id^='secao-92-'] + p + ul + p + p {
+  @apply mb-4 text-sm bg-gray-800/50 p-4 rounded-lg;
+}
+
+/* Tabelas: §5 (permissões) com a 1ª coluna mono na cor do app; §9.1 (bases legais) toda em text-sm. */
+[data-tema='lottoexpert-privacy'] .legal-corpo [id^='secao-5-'] + .legal-tabela td:first-child {
+  @apply font-mono text-sm text-brand-primary;
+}
+
+[data-tema='lottoexpert-privacy'] .legal-corpo [id^='secao-91-'] + .legal-tabela td {
+  @apply text-sm;
+}
+
+/* lottoexpert-terms.html — §3: a página antiga mostrava os 3 itens como parágrafos, o último (ajuda
+ * de jogo responsável: Jogadores Anônimos, CVV 188) em destaque com barra. Ancorado no `id`. */
+[data-tema='lottoexpert-terms'] .legal-corpo [id^='secao-3-'] + ul {
+  @apply list-none pl-0 mb-0;
+}
+
+[data-tema='lottoexpert-terms'] .legal-corpo [id^='secao-3-'] + ul > li,
+[data-tema='lottoexpert-terms'] .legal-corpo [id^='secao-3-'] + ul > :not([hidden]) ~ :not([hidden]) {
+  @apply mt-0 mb-4;
+}
+
+[data-tema='lottoexpert-terms'] .legal-corpo [id^='secao-3-'] + ul > li:last-child,
+[data-tema='lottoexpert-terms'] .legal-corpo [id^='secao-3-'] + ul > :not([hidden]) ~ li:last-child {
+  @apply text-sm bg-gray-800/50 p-4 rounded-lg border-l-4 border-brand-primary;
+}
+
+/* Tabela dos planos (§4): mais respiro embaixo, plano em negrito na cor do app, valor em branco. */
+[data-tema='lottoexpert-terms'] .legal-tabela {
+  @apply mb-6;
+}
+
+[data-tema='lottoexpert-terms'] .legal-corpo td:first-child {
+  @apply font-semibold text-brand-primary;
+}
+
+[data-tema='lottoexpert-terms'] .legal-corpo td:nth-child(2) {
+  @apply text-white;
 }
 
 /* ------------------------------------------------------------------ Tailwind */

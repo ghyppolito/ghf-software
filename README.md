@@ -15,7 +15,7 @@ A **GHF Software** desenvolve aplicações mobile nativas para Android e soluç�
 | Aplicativo | Descrição | Documentação Técnica | Política de Privacidade / Termos |
 |---|---|---|---|
 | **TopoWalk** | Levantamento topográfico de campo com receptores GNSS/RTK Bluetooth, altimetria barométrica, cálculos de declividade (%), áreas de polígonos, laudos PDF e exportações SIG (GeoJSON, KML, GPX). | [TOPOWALK_README.md](docs/TOPOWALK_README.md) | [Política de Privacidade](https://ghfsoftware.com/topowalk-privacy.html) / [Markdown](src/content/legal/topowalk-privacy.pt.md) |
-| **LottoExpert** | Engenharia estatística combinatória para loterias, conferência automática de bilhetes via OCR local, bolões, dashboard financeiro e sincronização resiliente via GCP. | [LOTTOEXPERT_README.md](docs/LOTTOEXPERT_README.md) | [Política de Privacidade](lottoexpert-privacy.html) / [Termos de Uso](lottoexpert-terms.html) |
+| **LottoExpert** | Engenharia estatística combinatória para loterias, conferência automática de bilhetes via OCR local, bolões, dashboard financeiro e sincronização resiliente via GCP. | [LOTTOEXPERT_README.md](docs/LOTTOEXPERT_README.md) | [Política de Privacidade](https://ghfsoftware.com/lottoexpert-privacy.html) / [Markdown](src/content/legal/lottoexpert-privacy.pt.md) — [Termos de Uso](https://ghfsoftware.com/lottoexpert-terms.html) / [Markdown](src/content/legal/lottoexpert-terms.pt.md) |
 | **Pole Position: Race Analytics** | Telemetria esportiva para automobilismo amador e karting. Medição de força G lateral/longitudinal via acelerômetro/giroscópio, cronometragem por GPS e análise de melhor volta. | [POLEPOSITION_README.md](docs/POLEPOSITION_README.md) | [Política de Privacidade](https://ghfsoftware.com/poleposition-privacy.html) / [Markdown](src/content/legal/poleposition-privacy.pt.md) |
 | **EclipseGo** | Calculadora astronômica 100% offline para visualização e horários de eclipses solares e lunares com base na posição geográfica do usuário. | [ECLIPSE_GO_README.md](docs/ECLIPSE_GO_README.md) | [Política de Privacidade](https://ghfsoftware.com/eclipsego-privacy.html) / [Markdown](src/content/legal/eclipsego-privacy.pt.md) |
 
@@ -28,11 +28,11 @@ A **GHF Software** desenvolve aplicações mobile nativas para Android e soluç�
 ├── index.html                   # Página principal da GHF Software (Landing Page corporativa)
 ├── topowalk.html                # Landing page oficial do aplicativo TopoWalk
 ├── lottoexpert.html             # Landing page oficial do aplicativo LottoExpert
-├── lottoexpert-privacy.html     # Política de Privacidade do LottoExpert (HTML público)
-├── lottoexpert-terms.html       # Termos de Uso do LottoExpert (HTML público)
 ├── poleposition.html            # Landing page oficial do aplicativo Pole Position
 ├── eclipsego.html               # Landing page oficial do aplicativo EclipseGo
-├── src/content/legal/           # Políticas migradas para o Astro, pt e en (espelho do repositório de cada app)
+├── src/content/legal/           # Políticas e termos, pt e en (espelho do repositório de cada app)
+│   ├── lottoexpert-privacy.pt.md / .en.md     → /lottoexpert-privacy.html, /en/lottoexpert-privacy.html
+│   ├── lottoexpert-terms.pt.md / .en.md       → /lottoexpert-terms.html, /en/lottoexpert-terms.html
 │   ├── topowalk-privacy.pt.md / .en.md        → /topowalk-privacy.html, /en/topowalk-privacy.html
 │   ├── poleposition-privacy.pt.md / .en.md    → /poleposition-privacy.html, /en/poleposition-privacy.html
 │   └── eclipsego-privacy.pt.md / .en.md       → /eclipsego-privacy.html, /en/eclipsego-privacy.html
@@ -40,8 +40,6 @@ A **GHF Software** desenvolve aplicações mobile nativas para Android e soluç�
 └── docs/                        # Especificações técnicas e documentação interna dos projetos
     ├── TOPOWALK_README.md
     ├── LOTTOEXPERT_README.md
-    ├── LOTTOEXPERT_PRIVACY_POLICY.md
-    ├── LOTTOEXPERT_TERMS_OF_SERVICE.md
     ├── POLEPOSITION_README.md
     └── ECLIPSE_GO_README.md
 ```

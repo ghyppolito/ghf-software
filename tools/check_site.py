@@ -30,8 +30,10 @@ Checa:
      astro.config.mjs, fontes de LEGAL): sem isso, o check daria verde sobre um build velho
  12. página legal migrada (fonte em src/content/legal/), pt e en: um só `<h1`, um só rótulo de
      data do idioma da página, nenhuma aspa tipográfica que o `.md` não tenha, nenhum link
-     `target="_blank"` sem `rel="noopener"`; e `.pt.md` e `.en.md` com a mesma contagem de `## `,
-     `### `, linhas de tabela, itens de lista, links, crases (`code`) e `---`
+     `target="_blank"` sem `rel="noopener"`; link do corpo para o próprio site é caminho a partir
+     da raiz (nunca `https://ghfsoftware.com/…`), sem `target`, e em `en/` aponta para o par; e
+     `.pt.md` e `.en.md` com a mesma contagem de `## `, `### `, linhas de tabela, itens de lista,
+     links, crases (`code`) e `---`
 
 Modo raiz (`--raiz .`) não é mais suportado desde a fatia 6 do WP-08: uma URL contratual
 (`eclipsego-privacy.html`) só existe em `dist/`, e o §1 falharia na raiz. Os ramos que ainda o
@@ -77,9 +79,7 @@ PUBLICADAS = [
 # Páginas ainda sem `/en/`. Só encolhe: a fatia que cria `en/<x>` tira `<x>` daqui no mesmo
 # commit (espelho de COM_PAR_EN em src/i18n/ui.ts). Termina vazia no fim do WP-08. O convite
 # não tem par en (formato é do app).
-EN_PENDENTE = [
-    "lottoexpert-privacy.html", "lottoexpert-terms.html",
-]
+EN_PENDENTE = []
 SEM_PAR_EN = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
 COM_PAR = [x for x in PUBLICADAS if x not in EN_PENDENTE and x not in SEM_PAR_EN]
 
@@ -87,8 +87,8 @@ COM_PAR = [x for x in PUBLICADAS if x not in EN_PENDENTE and x not in SEM_PAR_EN
 # migrada (WP-08) aponta para o `.pt.md` de src/content/legal/, com front-matter `lastUpdated`; o
 # `.en.md` é o mesmo nome com `.en.md`. As outras seguem em docs/ até a sua fatia.
 LEGAL = {
-    "lottoexpert-privacy.html": "docs/LOTTOEXPERT_PRIVACY_POLICY.md",
-    "lottoexpert-terms.html": "docs/LOTTOEXPERT_TERMS_OF_SERVICE.md",
+    "lottoexpert-privacy.html": "src/content/legal/lottoexpert-privacy.pt.md",
+    "lottoexpert-terms.html": "src/content/legal/lottoexpert-terms.pt.md",
     "topowalk-privacy.html": "src/content/legal/topowalk-privacy.pt.md",
     "poleposition-privacy.html": "src/content/legal/poleposition-privacy.pt.md",
     "eclipsego-privacy.html": "src/content/legal/eclipsego-privacy.pt.md",
@@ -114,7 +114,10 @@ PAGINAS_LOTTO = ["index.html", "lottoexpert.html", "lottoexpert-privacy.html", "
 # Fontes das páginas do LottoExpert já geradas pelo Astro: lidas sempre, a partir da raiz do
 # repositório — na raiz não há o .html gerado, e a régua tem de valer antes do build também.
 FONTES_LOTTO = ["src/i18n/home.ts", "src/components/Home.astro",
-                "src/i18n/lottoexpert.ts", "src/components/LottoExpert.astro"]
+                "src/i18n/lottoexpert.ts", "src/components/LottoExpert.astro",
+                "src/i18n/legal.ts",
+                "src/content/legal/lottoexpert-privacy.pt.md", "src/content/legal/lottoexpert-privacy.en.md",
+                "src/content/legal/lottoexpert-terms.pt.md", "src/content/legal/lottoexpert-terms.en.md"]
 
 erros, avisos = [], []
 
@@ -161,6 +164,7 @@ def existe_pagina(rel):
 
 
 SITE = "https://ghfsoftware.com/"
+SITE_HOST = re.compile(r"^https?://(www\.)?ghfsoftware\.com/", re.I)  # host do site em link do texto legal (§12)
 
 
 def url_para_rel(url):
@@ -535,6 +539,32 @@ for pagina, md in LEGAL.items():
         for tag in re.findall(r"<a\b[^>]*>", html, re.I):
             if re.search(r'target=["\']_blank["\']', tag) and not re.search(r'rel=["\'][^"\']*\bnoopener\b', tag):
                 erros.append(f"{alvo}: link com target=\"_blank\" sem rel=\"noopener\": {tag}")
+        # Link do corpo para o próprio site (o `.md` do app escreve `https://ghfsoftware.com/x.html`):
+        # o plugin linksInternosLegais de src/markdown/legal.mjs o torna `/x.html` (`/en/x.html` no
+        # en, só para página `.html` — asset e o convite `lotto-expert/…` não têm par), na mesma aba,
+        # como a página antiga. O host vale com ou sem `www.`, por http ou https. URL absoluta sai do ar com o domínio de teste,
+        # abre outra aba e, em `en/`, leva ao pt.
+        ini = html.find('class="legal-corpo')
+        fim = html.find('<div class="max-w-4xl mx-auto mt-8 text-center">', ini)
+        corpo = html[ini:fim] if ini >= 0 and fim > ini else ""
+        if not corpo:
+            erros.append(f"{alvo}: corpo legal (`.legal-corpo`) não encontrado — a regra dos links do próprio site não tem onde olhar")
+        for tag in re.findall(r"<a\b[^>]*>", corpo, re.I):
+            href = re.search(r'href="([^"]*)"', tag)
+            if not href:
+                continue
+            h = href.group(1)
+            if SITE_HOST.match(h) or h.startswith("//"):
+                resto = SITE_HOST.sub("", h)
+                arq = resto.split("#")[0].split("?")[0]
+                par = lang == "en" and arq.endswith(".html") and not arq.startswith("lotto-expert/")
+                erros.append(f"{alvo}: link legal para o próprio site com URL absoluta ({h}) — esperado `/{'en/' if par else ''}{resto}` (plugin linksInternosLegais desligado?)")
+            elif h.startswith("/"):
+                if re.search(r"\btarget=", tag):
+                    erros.append(f"{alvo}: link legal para o próprio site com target (abre outra aba): {tag}")
+                destino = h.lstrip("/").split("#")[0].split("?")[0] or "index.html"
+                if lang == "en" and destino in COM_PAR:
+                    erros.append(f"{alvo}: link legal {h} leva ao pt; o par en é /en/{destino}")
     for nome, padrao in (("`## `", r"^## "), ("`### `", r"^### "), ("linhas de tabela `|`", r"^\|"),
                          ("itens de lista", r"^\s*([-*]|\d+\.) "), ("links `](`", r"\]\("),
                          ("crases `` ` `` (code)", r"`"), ("`---`", r"^---$")):
