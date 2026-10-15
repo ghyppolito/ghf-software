@@ -4,12 +4,12 @@ titulo: Buscadores leem sitemap, canonical, hreflang e dados estruturados de cad
 area: seo
 status: doing
 depende_de: [WP-08]
-adr: []
+adr: [ADR-005]
 spec: docs/AVALIACAO.md
-decisoes: []
+decisoes: [D16, D17, D18]
 tamanho: M
-risco: baixo
-visual: false
+risco: medio
+visual: true
 branch: feat/wp-11-seo-tecnico
 ---
 
@@ -39,16 +39,15 @@ branch: feat/wp-11-seo-tecnico
 - `check_site.py` passa a exigir `og:image` em **todas** as páginas (regra promovida de aviso a erro neste WP).
 - Validação no Rich Results Test do Google para a home e uma landing: captura no WP (usuário).
 
-**Risco:** baixo.
+**Risco:** médio (ver o veredito).
 
 ## Veredito do arquiteto (site-arquiteto, 2026-10-15)
 
 **Aprovado, com o desenho abaixo.** Os critérios originais ficam substituídos pelos desta seção.
 Nenhum caminho contratual muda e nenhuma página nova é publicada. O `robots.txt`, porém, controla
 quem lê o convite e o `assetlinks.json`, e o WP fecha o `x-default`, que o WP-15 previa. Por isso
-`site-docs` muda o front-matter para `risco: medio`, `visual: true` e `adr: [ADR-005]` (depois que
-o ADR existir) e regenera o `ESTADO.md` no mesmo commit. Não foi feito aqui para o
-`gen_estado.py --check` não ficar vermelho.
+o front-matter passou a `risco: medio`, `visual: true` e `adr: [ADR-005]` no commit do ADR,
+com o `ESTADO.md` regenerado.
 
 ### Fatos medidos (worktree de 9405cc2, Node 22.22.1, Astro 7.3.8)
 
@@ -259,3 +258,31 @@ critério passa a ser `dist/sitemap.xml`, sem índice: são 20 URLs.
     no en, porque o hreflang é `pt-BR`.
   - **(B)** pt nessas três, e en só no TopoWalk e no Pole Position.
   - Se a resposta não vier antes do commit 3, ele usa (A) e o usuário pode reverter numa linha.
+
+## Decisões D16, D17 e D18 (usuário, 2026-10-15: "pode seguir o recomendado")
+
+As três foram decididas na opção (A) e registradas em `decisoes.md`. A ADR-005 consolida o
+desenho. O que muda no veredito acima:
+
+- **D16 (A).** As imagens 1200×630 (marca para home e legais, uma por app) não são deste WP. Aqui
+  só se declara o tamanho real e o `check_site.py` barra declaração falsa. A produção vai para um
+  WP novo pelo `/novo-wp`, e não para o WP-19, cujo export da rodada 3 está congelado e auditado
+  (achado `OG-IMAGE-1200-PRODUCAO-01`, em `triagem` até o `/novo-wp`). Convite e mockup intactos (D13).
+- **D17 (A).** Fonte: o JSON-LD público da ficha de cada app na Play
+  (`play.google.com/store/apps/details?id=…&hl=en&gl=BR`), lido pelo orquestrador em 2026-10-15.
+
+  | App (`id` da Play) | Categoria na Play | `applicationCategory` no site | `offers` |
+  |---|---|---|---|
+  | `br.com.ghfsoftware.lottoexpert` | TOOLS | `UtilitiesApplication` | `{"@type":"Offer","price":"0","priceCurrency":"BRL"}` |
+  | `br.com.ghfsoftware.topowalk` | TOOLS | `UtilitiesApplication` | idem |
+  | `br.com.ghfsoftware.polepositionapp` | SPORTS | `SportsApplication` | idem |
+  | `br.com.ghfsoftware.eclipsego` | LIFESTYLE | `LifestyleApplication` | idem |
+
+  **Escolha técnica: o enum do schema.org/Google, e não o valor cru da Play.** O Google documenta
+  `applicationCategory` com os valores `*Application`. `TOOLS` é o identificador interno da Play,
+  e o Google não o reconhece no `SoftwareApplication`. O mapeamento fica numa tabela de
+  `src/i18n/apps.ts`, com a categoria da Play ao lado como comentário, para quem conferir a ficha.
+  `offers` vale para os 4 apps; preço do Premium/Pro, `aggregateRating` e `review` nunca entram.
+  Com isso, o commit 5 sai com os dois campos, e o §14 os exige.
+- **D18 (A).** O `x-default` → en nas 20 páginas com par, inclusive home, LottoExpert e EclipseGo.
+  O critério "x-default (= en)" fica como está.
