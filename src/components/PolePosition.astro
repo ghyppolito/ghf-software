@@ -69,7 +69,7 @@ const configuracoes = [
                     <a href="https://play.google.com/store/apps/details?id=br.com.ghfsoftware.polepositionapp" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-primary hover:bg-lime-400 text-black font-bold rounded-lg shadow-glow-accent hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
                         <i class="fa-brands fa-google-play text-xl" aria-hidden="true"></i> <span>{x.btn_download}</span>
                     </a>
-                    {/* Política é URL contratual sem par en (ADR-001): link pt nos dois idiomas. */}
+                    {/* Política é URL contratual (ADR-001); `rota` dá o par en em /en/. */}
                     <a href={rota(lang, 'poleposition-privacy.html')} class="px-6 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
                         <i class="fa-solid fa-shield-halved" aria-hidden="true"></i> <span>{x.btn_privacy}</span>
                     </a>

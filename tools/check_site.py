@@ -533,7 +533,7 @@ for pagina, md in LEGAL.items():
         # `window.opener` (plugin linksExternosLegais de src/markdown/legal.mjs). A régua para o
         # site inteiro é de TARGET-BLANK-SEM-NOOPENER-01 (fatia 9).
         for tag in re.findall(r"<a\b[^>]*>", html, re.I):
-            if re.search(r'target="_blank"', tag) and not re.search(r'rel="[^"]*\bnoopener\b', tag):
+            if re.search(r'target=["\']_blank["\']', tag) and not re.search(r'rel=["\'][^"\']*\bnoopener\b', tag):
                 erros.append(f"{alvo}: link com target=\"_blank\" sem rel=\"noopener\": {tag}")
     for nome, padrao in (("`## `", r"^## "), ("`### `", r"^### "), ("linhas de tabela `|`", r"^\|"),
                          ("itens de lista", r"^\s*([-*]|\d+\.) "), ("links `](`", r"\]\("),

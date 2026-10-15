@@ -67,7 +67,7 @@ existindo no resultado publicado.
 ## Arquitetura (estado atual — muda no WP-08)
 
 ```
-*.html                      páginas ainda não migradas (4 legais no fim da fatia 6 do WP-08); nav, footer,
+*.html                      páginas ainda não migradas (as 2 legais do LottoExpert no fim da fatia 7 do WP-08); nav, footer,
                             tailwind.config e dicionário i18n (data-i18n + JS) duplicados em cada uma
 assets/                     imagens, favicons, mockups (PNG, sem otimização)
 docs/*.md                   cópia markdown das políticas/termos ainda não migradas e README de cada app
