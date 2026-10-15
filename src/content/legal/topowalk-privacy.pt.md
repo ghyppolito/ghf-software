@@ -1,5 +1,6 @@
 ---
 lastUpdated: "2026-09"
+origemCommit: "7fc78706830dfde790e84e394f46878c7792a611"
 ---
 # Política de Privacidade — TopoWalk
 
