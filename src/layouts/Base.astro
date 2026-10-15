@@ -29,6 +29,10 @@ interface Props {
   temPar?: boolean;
   noindex?: boolean;
   classeBody?: string;
+  /** favicon da página (as landings de app usam o do app) */
+  favicon?: string;
+  /** grava `ghf_lang` com o idioma da página ao carregar; a 404 (bilíngue) não grava */
+  gravaIdioma?: boolean;
 }
 
 const {
@@ -40,6 +44,8 @@ const {
   tema,
   temPar = true,
   noindex = false,
+  favicon = '/assets/GHFSoftware.png',
+  gravaIdioma = true,
   classeBody = 'bg-brand-base text-gray-100 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden',
 } = Astro.props;
 
@@ -55,7 +61,7 @@ const ogDescricao = og.descricao ?? description;
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
-    <link rel="icon" type="image/png" href="/assets/GHFSoftware.png">
+    <link rel="icon" type="image/png" href={favicon}>
     <meta name="description" content={description}>
     {noindex && <meta name="robots" content="noindex">}
     <link rel="canonical" href={canonica}>
@@ -84,6 +90,19 @@ const ogDescricao = og.descricao ?? description;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    {/* Idioma da página vira a escolha lembrada (HOME-EN-SEM-LANG-01): quem chega direto em /en/
+        abre em inglês as páginas ainda copiadas da raiz, que trocam o idioma por JS a partir de
+        `ghf_lang`. Não redireciona nada (D8 c1). */}
+    {gravaIdioma && (
+      <script is:inline>
+        try {
+          localStorage.setItem('ghf_lang', document.documentElement.lang === 'en' ? 'en' : 'pt');
+        } catch (e) {
+          // localStorage bloqueado: a página funciona igual, só sem lembrar o idioma.
+        }
+      </script>
+    )}
   </head>
   <body class={classeBody}>
     <slot />

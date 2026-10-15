@@ -116,6 +116,7 @@ WP-07) deixa de servir essas páginas; o rollback é o `workflow_dispatch` sobre
 ### Andamento
 
 - **Fatia 1** (2026-10-14): implementada (337c58f + 7dc7834), auditada (`site-qa`, `site-seo-perf`, `site-ux` — nenhum achado alto no escopo; a regra do §4 do `check_site.py` que tinha afrouxado foi corrigida). Integrada pelo usuário com merge `--no-ff` (24f8bee); CI do PR #37 verde. Checklist de navegador de `/`, `/en/` e `/404.html` reportado ok pelo usuário em 2026-10-14, servindo `dist/` local. Achados das auditorias em `achados-novos.md`.
+- **Fatia 2** (2026-10-14): implementada (f99c1ac), auditada (`site-qa`, `site-seo-perf`, `site-ux` — nenhum achado alto no escopo; dois achados médios/baixos do `site-qa` no escopo corrigidos em 45d3aa9: regra §10 do `check_site.py` de paridade pt/en dos dicionários em `src/i18n/*.ts` e `aria-hidden` em 3 ícones decorativos). Lighthouse mobile antes→depois: Performance 63→64, Accessibility 85→96, BP 100, SEO 100, LCP 18,6→17,8 s, FCP 4,9→3,9 s, HTML 83 KB→45 KB. Fechou `FEATURES-ARIA-HIDDEN-01` e `HOME-EN-SEM-LANG-01` (o script grava `ghf_lang` com o idioma da página, pt também — consistente com D8 c1). **Aguarda:** integração pelo usuário (`git merge --no-ff feat/wp-08-f2-landing-lottoexpert` na integração) e checklist de navegador do usuário. Status do WP continua `doing`.
 
 ### `check_site.py` (fatia 1, antes da primeira página sair da raiz)
 
