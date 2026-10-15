@@ -220,6 +220,18 @@ body {
   animation: spin-slow 20s linear infinite;
 }
 
+/* ------------------------------------------------------------------ CSS próprio do TopoWalk
+ * Copiado do <style> de topowalk.html (WP-08, fatia 3); o resto daquele <style> (body, grade,
+ * vidro, #navbar) é igual ao de index.html, acima. A animação `float` do blob do hero é a
+ * mesma @keyframes de index.html, chamada com outra duração no atributo style.
+ */
+.text-gradient-amber {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(135deg, #b5541c, #d97736);
+}
+
 /* ------------------------------------------------------------------ Tailwind */
 @tailwind base;
 @tailwind components;

@@ -61,7 +61,7 @@ PUBLICADAS = [
 # não tem par en (formato é do app).
 EN_PENDENTE = [
     "lottoexpert-privacy.html", "lottoexpert-terms.html",
-    "topowalk.html", "topowalk-privacy.html",
+    "topowalk-privacy.html",
     "poleposition.html", "poleposition-privacy.html",
     "eclipsego.html", "eclipsego-privacy.html",
 ]

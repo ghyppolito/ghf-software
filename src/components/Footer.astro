@@ -1,7 +1,9 @@
 ---
 // Footer do site (referência: index.html). `id="contato"` é o alvo do item Contato da nav.
 // Links para páginas do site passam por `rota()`: em en, apontam para o par quando ele existe.
-// O que varia por página é prop: redes sociais do app e o app da página destacado na lista.
+// O que varia por página é prop: redes sociais do app, o app da página destacado na lista, o
+// fundo (`surface` nas landings que o usavam) e a cor de realce (`accent` no TopoWalk). Classes
+// literais por variante (o Tailwind não detecta concatenação).
 import { rota, t, type Idioma } from '../i18n/ui';
 
 interface Props {
@@ -10,10 +12,15 @@ interface Props {
   inicio: string;
   /** prefixo das âncoras da home: '' na própria home, a URL da home nas outras páginas */
   prefixoAncora: string;
-  /** canais da página (a landing de cada app aponta para os do app); padrão: os da GHF */
-  redes?: { youtube: string; instagram: string };
+  /** canais da página (a landing de cada app aponta para os do app; canal ausente não aparece);
+   *  padrão: os da GHF. O e-mail aparece sempre. */
+  redes?: { youtube?: string; instagram?: string };
   /** caminho pt da landing atual: o app aparece destacado, com chevron, na lista de aplicativos */
   appAtual?: string;
+  /** fundo do rodapé; padrão `base` */
+  fundo?: 'base' | 'surface';
+  /** cor do brilho do logo, do app destacado e do coração; padrão `primary` */
+  realce?: 'primary' | 'accent';
 }
 
 const {
@@ -25,7 +32,27 @@ const {
     instagram: 'https://www.instagram.com/ghfsoftware/',
   },
   appAtual,
+  fundo = 'base',
+  realce = 'primary',
 } = Astro.props;
+
+const CLASSES = {
+  primary: {
+    logo: 'h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-primary)/0.5)]',
+    atual: 'text-brand-primary font-semibold transition-colors text-sm flex items-center gap-1',
+    coracao: 'fa-solid fa-heart text-brand-primary/50 text-xs',
+  },
+  accent: {
+    logo: 'h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-accent)/0.5)]',
+    atual: 'text-brand-accent font-semibold transition-colors text-sm flex items-center gap-1',
+    coracao: 'fa-solid fa-heart text-brand-accent/50 text-xs',
+  },
+};
+const c = CLASSES[realce];
+const classeFooter = {
+  base: 'bg-brand-base pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden',
+  surface: 'bg-brand-surface pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden',
+}[fundo];
 const link = 'text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm';
 const social =
   'w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-gray-700 hover:text-white transition-all';
@@ -53,7 +80,7 @@ const politicas = [
 
 const ano = new Date().getFullYear();
 ---
-<footer id="contato" class="bg-brand-base pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden">
+<footer id="contato" class={classeFooter}>
   <div class="container mx-auto px-6 md:px-12 relative z-10">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
       <!-- Marca -->
@@ -62,7 +89,7 @@ const ano = new Date().getFullYear();
           <img
             src="/assets/GHFSoftware.png"
             alt="GHF Software Logo"
-            class="h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-primary)/0.5)]"
+            class={c.logo}
           >
         </a>
         <p class="text-gray-400 max-w-sm mb-6">{t(lang, 'footer_desc')}</p>
@@ -70,26 +97,30 @@ const ano = new Date().getFullYear();
           <a href="mailto:support@ghfsoftware.com" class={social} title="Email" aria-label="Email">
             <i class="fa-solid fa-envelope" aria-hidden="true"></i>
           </a>
-          <a
-            href={redes.youtube}
-            target="_blank"
-            rel="noopener noreferrer"
-            class={social}
-            title="YouTube"
-            aria-label="YouTube"
-          >
-            <i class="fa-brands fa-youtube" aria-hidden="true"></i>
-          </a>
-          <a
-            href={redes.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            class={social}
-            title="Instagram"
-            aria-label="Instagram"
-          >
-            <i class="fa-brands fa-instagram" aria-hidden="true"></i>
-          </a>
+          {redes.youtube && (
+            <a
+              href={redes.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              class={social}
+              title="YouTube"
+              aria-label="YouTube"
+            >
+              <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+            </a>
+          )}
+          {redes.instagram && (
+            <a
+              href={redes.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class={social}
+              title="Instagram"
+              aria-label="Instagram"
+            >
+              <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+            </a>
+          )}
         </div>
       </div>
 
@@ -109,7 +140,7 @@ const ano = new Date().getFullYear();
             apps.map((a) =>
               a.caminho === appAtual ? (
                 <li>
-                  <a href={rota(lang, a.caminho)} aria-current="page" class="text-brand-primary font-semibold transition-colors text-sm flex items-center gap-1">
+                  <a href={rota(lang, a.caminho)} aria-current="page" class={c.atual}>
                     <i class="fa-solid fa-chevron-right text-xs" aria-hidden="true"></i> {a.nome}
                   </a>
                 </li>
@@ -146,7 +177,7 @@ const ano = new Date().getFullYear();
       </p>
       <p class="text-sm text-gray-600 flex items-center gap-2">
         <span>{t(lang, 'footer_dev')}</span>
-        <i class="fa-solid fa-heart text-brand-primary/50 text-xs" aria-hidden="true"></i>
+        <i class={c.coracao} aria-hidden="true"></i>
         <span>{t(lang, 'footer_dev2')}</span>
       </p>
     </div>
