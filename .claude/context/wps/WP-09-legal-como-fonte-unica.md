@@ -2,7 +2,7 @@
 id: WP-09
 titulo: O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência
 area: legal
-status: doing
+status: done
 depende_de: [WP-08]
 adr: [ADR-004]
 spec: ""
@@ -326,6 +326,8 @@ Registrar com `/decisao` antes do commit 2. O WP não segue sem a D14.
 ---
 
 ## Estado (fim da implementação, 2026-10-15)
+
+**Fechamento (2026-10-15):** o usuário integrou (`git merge --no-ff feat/wp-09-sync-legal` na `feat/wp-08-layout-unico`); push e CI do #37 verde (run 38799499185: `plano` pass, `site` pass, sem mudança no `pr.yml`) — critério 7 provado. Status `done`. Integrado, não publicado: vai ao ar no deploy único (D13).
 
 **Status: `doing`, de propósito.** Falta só o critério 7 (`pr.yml` verde sem mudança no workflow), que
 só o CI prova. Depois do merge do usuário na integração (`feat/wp-08-layout-unico`) e do CI do #37

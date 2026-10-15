@@ -7,7 +7,7 @@
 
 ## 1. Onde parei
 
-- **WP-09 pronto, espera o merge do usuário** (status `doing` até o CI provar o critério 7): `git switch feat/wp-08-layout-unico && git merge --no-ff feat/wp-09-sync-legal -m "WP-09: texto legal entra pelo sync_legal.py com proveniência (ADR-004)"`. Depois o agente faz o push, acompanha o CI do #37 e marca `done`.
+- **WP-09 `done`** (2026-10-15): integrado na `feat/wp-08-layout-unico`, CI do #37 verde (run 38799499185). Não publicado (D13).
 - **Próximo: WP-10.** WP-08 `done` na integração; o PR #37 segue aberto até o deploy único (D13); nada foi publicado.
 - **`/legal poleposition`** roda agora por `sync_legal.py poleposition --ref <sha>` quando a PP-144 entrar no app.
 - **Repositórios dos apps, sem merge:** topo-walk `docs/politica-tres-observacoes` (7fc7870); eclipse-go `docs/email-suporte-politica`
@@ -33,7 +33,7 @@ Nada quebrado no ar nem pela metade. Servidor antigo na porta 8081 (pid 686166),
 2. Checklist de navegador do WP-19; escrever o resultado no WP.
 3. Decidir D11 (`--success`) e D12 (limiares de destaque), ambas só para o WP-10; D3 (medição) bloqueia o WP-13. `PP-NAV-CONTRASTE-01` aguarda decisão.
 
-**Do agente:** push, CI do #37 e `done` do WP-09 após o merge do usuário; depois `/wp` para o WP-10.
+**Do agente:** `/wp` para o WP-10 (branch a partir da integração, D13).
 
 **Copy pendente do usuário antes do WP-10:** "chance matemática" -> "probabilidade exata"; texto final do aviso de jogo
 responsável (o export traz "Texto provisório"); confirmar "Nada de cadastro, e-mail ou CPF" e "Nenhum SDK de publicidade";
