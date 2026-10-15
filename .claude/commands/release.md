@@ -11,8 +11,8 @@ em produção aponta. Por isso o merge é do usuário; o agente prepara e confer
 1. **Agente:** `git fetch` e `git log --oneline master..develop`. Liste o que vai ao ar, e
    marque o que é texto legal (urgente) e o que é landing. Se há WP `doing` cujo código está
    em `develop`, diga — vai ao ar pela metade?
-2. **Agente:** na `develop`: `python3 tools/check_site.py` e `python3 tools/check_plano.py`
-   verdes, e o publicado também — `npm ci && npm run build && python3 tools/check_site.py --raiz dist`.
+2. **Agente:** na `develop`: `npm ci && npm run build && python3 tools/check_site.py` (confere o
+   publicado, `dist/`) e `python3 tools/check_plano.py` verdes.
    Erro aqui **para** o release.
 3. **Agente:** checklist do que só o navegador prova, acumulado dos WPs que vão ao ar
    (seção "Só no navegador" de cada WP). Peça ao usuário que olhe **antes** do merge, com

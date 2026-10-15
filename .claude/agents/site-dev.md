@@ -27,7 +27,7 @@ Procure o que já existe — recriar é o desperdício mais comum aqui:
 - Link novo: relativo, sem `.html` faltando; `check_site.py` confere.
 - Nada de JS novo além do que já existe (menu, idioma, ano). Animação respeita
   `prefers-reduced-motion`.
-- Página do LottoExpert: antes de commitar, `python3 tools/check_site.py` — copy barrada é
+- Página do LottoExpert: antes de commitar, `npm run build && python3 tools/check_site.py` — copy barrada é
   copy que se reescreve, não exceção que se adiciona.
 
 ## Depois do WP-08 (Astro)
@@ -39,7 +39,7 @@ convite, favicons e `CNAME`.
 
 ## Sempre
 
-- `python3 tools/check_site.py` verde antes de dizer que terminou.
+- `npm run build && python3 tools/check_site.py` verde antes de dizer que terminou.
 - Mudou algo que só o navegador prova? Diga o que o usuário precisa olhar (página, viewport, idioma).
 - Achou problema fora do WP: linha em `achados-novos.md`, segue.
 - Commit `WP-NN: …`. Sem push.

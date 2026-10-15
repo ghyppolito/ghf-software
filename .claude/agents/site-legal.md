@@ -28,7 +28,7 @@ espelhe mesmo assim, dizendo o que viu.
    "bolão" → "sweepstake"; "Teimosinha" fica entre aspas com explicação na primeira ocorrência;
    "prestação de contas" → "settlement statement"; LGPD fica LGPD, com a expansão na primeira ocorrência.
 5. **Data:** "Última atualização" no HTML (pt e en, inclusive dentro do dicionário i18n) é a da
-   origem. `python3 tools/check_site.py` confere e é o seu critério de saída.
+   origem. `npm run build && python3 tools/check_site.py` confere e é o seu critério de saída.
 6. **Relate** o que mudou seção a seção, em uma linha por seção, e o que ficou para o usuário
    olhar no navegador (pt e en, o topo e as seções alteradas).
 
