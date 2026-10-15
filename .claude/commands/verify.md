@@ -26,6 +26,7 @@ O `check_site.py` falhar em "pt ≠ <app>@<sha>" = texto editado à mão ou boot
 terminou. Não compare com o disco do app (`diff … ../<app>/…`): o checkout do app pode estar em
 outra branch. `sync_legal --check` com "à frente/divergente" não é erro do site — é o app com
 texto ainda não espelhado (ou espelhado de branch fora da principal); decidir a ref é do usuário.
+Aviso "origem ausente" num WP legal = a comparação de texto não rodou, então **não passou**: traga o app para `..` (ou `$GHF_APPS_DIR`) e rode de novo.
 
 **Tocou `public/`:** o `check_site.py` §13 já confere a lista fechada e cada arquivo byte a byte
 contra `dist/`; arquivo de `tools/contrato.sha256` mudou = decisão do usuário (D13).

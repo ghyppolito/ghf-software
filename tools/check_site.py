@@ -294,6 +294,13 @@ def datas_em(html, padrao):
 MESES_NUM = list(MESES_PT)  # "janeiro" … "dezembro", na ordem
 
 
+def ler_md(caminho):
+    """Texto de um .md legal sem tradução de newline (open em modo texto converte CRLF em LF e
+    esconderia o front-matter em CRLF que separa(), em bytes, não reconhece)."""
+    with open(caminho, "rb") as f:
+        return f.read().decode("utf-8")
+
+
 def front_matter(md, texto):
     """(lastUpdated como (dia, mês pt, ano), corpo) de um .md de src/content/legal/; None se o
     front-matter ou o `lastUpdated: "AAAA-MM[-DD]"` faltar (erro registrado)."""
@@ -319,7 +326,7 @@ for pagina, md in LEGAL.items():
     if not os.path.exists(fonte):
         erros.append(f"{md}: fonte legal ausente no repositório — a data de {pagina} não tem com o que comparar")
         continue
-    ref_fm, texto = front_matter(md, ler(fonte))
+    ref_fm, texto = front_matter(md, ler_md(fonte))
     if ref_fm is None:
         continue
     m = re.search(r"\*\*Última atualização:\*\*\s*" + RE_PT, texto)
@@ -335,7 +342,7 @@ for pagina, md in LEGAL.items():
     if not os.path.exists(os.path.join(REPO, md_en)):
         erros.append(f"{md_en}: tradução ausente ({pagina} tem par en)")
     else:
-        ref_en, corpo_en = front_matter(md_en, ler(os.path.join(REPO, md_en)))
+        ref_en, corpo_en = front_matter(md_en, ler_md(os.path.join(REPO, md_en)))
         if ref_en is not None and ref_en != ref:
             erros.append(f"{md_en}: `lastUpdated` ({txt(ref_en)}) ≠ o do pt ({txt(ref)})")
         m_en = re.search(r"\*\*Last updated:\*\*\s*" + RE_EN, corpo_en)
@@ -385,7 +392,8 @@ for md in LEGAL.values():
         with open(os.path.join(REPO, lado), "rb") as f:
             fm, chaves, corpo_b = separa(f.read())
         if fm is None:
-            continue  # já é erro em front_matter()
+            erros.append(f"{lado}: front-matter fora do formato `---\\n…\\n---\\n` em LF — rode tools/sync_legal.py")
+            continue
         estranhas = [k for k in chaves if k not in CHAVES or fm[k] is None]
         if estranhas or len(chaves) != len(set(chaves)):
             erros.append(f"{lado}: front-matter com chave fora de {{{', '.join(CHAVES)}}}, sem aspas ou repetida: {chaves}")
@@ -426,8 +434,8 @@ for md in LEGAL.values():
             avisos.append(f"{lado}: ref padrão `{ref_padrao}` não existe em {repo}")
         elif mostra(repo_dir, sha_ref, caminho) != corpo_b:
             app = doc.rsplit("-", 1)[0]
-            avisos.append(f"{lado}: {repo}@{ref_padrao} ({sha_ref[:7]}) tem texto diferente — app avançou: "
-                          f"`python3 tools/sync_legal.py {app} --check`")
+            avisos.append(f"{lado}: {repo}@{ref_padrao} ({sha_ref[:7]}) — texto da ref padrão ≠ origemCommit — "
+                          f"`python3 tools/sync_legal.py {app} --check` diz se é atraso ou divergência")
 
 # ------------------------------------------------------------ 5: copy
 for rel, caminho in [(r, p(r)) for r in PAGINAS_LOTTO] + [(r, os.path.join(REPO, r)) for r in FONTES_LOTTO]:

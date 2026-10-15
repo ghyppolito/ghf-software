@@ -41,6 +41,7 @@ estrutura do `.pt.md` e só tem `lastUpdated`. Hero, `<title>` e description fic
 4. `/verify` — `npm run build && python3 tools/check_site.py`: com o app presente, o §4 compara o
    corpo do pt com `git show <origemCommit>` e falha enquanto houver `en: "pendente"`.
    `sync_legal.py <app> --check` tem de dizer "nada a fazer".
+   Aviso "origem ausente" aqui = a comparação de texto não rodou, então não passou.
 5. Diga ao usuário o que olhar no navegador: topo (data), seções alteradas, pt e en. A
    publicação é `/release`.
 

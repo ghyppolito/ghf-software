@@ -22,7 +22,8 @@ Uso:
   --ref        branch, tag ou sha do app (padrão: a ref de ORIGENS, D14)
   --apps-dir   pasta onde estão os repositórios dos apps (padrão: $GHF_APPS_DIR ou `..` do site)
   --check      não escreve; diz igual / atrás / à frente-divergente / origem ausente por doc
-  --forca      copia mesmo quando o origemCommit registrado não é ancestral da ref
+  --forca      copia mesmo quando o origemCommit registrado não é ancestral da ref (só esse caso;
+               sem origemCommit e corpo ≠ é sempre recusa: use `--ref` explícito)
 
 Saída: 0 = nada a fazer ou cópia feita (ou origem ausente, com aviso); 1 = `--check` achou o que
 fazer; 2 = recusa (nada foi escrito).
@@ -220,12 +221,12 @@ def planeja(doc, args):
             raise Recusa(texto + " — escolha a ref (`--ref`) ou use `--forca`")
         msgs.append(f"⚠️  {texto} — `--forca`, copiando mesmo assim")
     elif atual is not None and not registrado:
+        # Sem `--forca` aqui: sem proveniência não há ancestralidade a provar; o caminho é o
+        # bootstrap com `--ref` do commit cujo texto o site já espelha (corpo igual).
         texto = f"{doc}: sem origemCommit e corpo ≠ {repo}@{sha[:7]} — não há como saber se é atraso ou edição"
-        if not args.forca:
-            if args.check:
-                return "divergente", None, msgs + [f"⛔ {texto}"]
-            raise Recusa(texto + " — rode com `--ref` do commit que o site espelha, ou `--forca`")
-        msgs.append(f"⚠️  {texto} — `--forca`, copiando mesmo assim")
+        if args.check:
+            return "divergente", None, msgs + [f"⛔ {texto}"]
+        raise Recusa(texto + " — rode com `--ref` explícito do commit que o site espelha (o `--forca` não vale aqui)")
     if origem is None:
         raise Recusa(f"{doc}: {caminho} não existe em {repo}@{sha[:7]}")
 
@@ -239,21 +240,27 @@ def planeja(doc, args):
     return "copia", monta(novo, origem), msgs + [f"↻ {doc}: copiado de {repo}@{sha[:7]}; lastUpdated {data}; en pendente"]
 
 
-def grava(caminho, dados):
-    pasta = os.path.dirname(caminho)
-    fd, tmp = tempfile.mkstemp(dir=pasta, prefix=".sync_legal.", suffix=".tmp")
+def grava(escritas):
+    """Grava [(caminho, dados)] quase atomicamente entre arquivos: escreve e faz fsync de todos os
+    temporários primeiro; só então os `os.replace`. Falha antes dos replaces remove todos os
+    temporários e nenhum arquivo do site muda."""
+    tmps = []
     try:
-        with os.fdopen(fd, "wb") as f:
-            f.write(dados)
-        if os.path.exists(caminho):
-            os.chmod(tmp, os.stat(caminho).st_mode & 0o777)
-        else:
-            os.chmod(tmp, 0o644)
-        os.replace(tmp, caminho)
+        for caminho, dados in escritas:
+            fd, tmp = tempfile.mkstemp(dir=os.path.dirname(caminho), prefix=".sync_legal.", suffix=".tmp")
+            tmps.append(tmp)
+            with os.fdopen(fd, "wb") as f:
+                f.write(dados)
+                f.flush()
+                os.fsync(f.fileno())
+            os.chmod(tmp, os.stat(caminho).st_mode & 0o777 if os.path.exists(caminho) else 0o644)
     except BaseException:
-        if os.path.exists(tmp):
-            os.unlink(tmp)
+        for tmp in tmps:
+            if os.path.exists(tmp):
+                os.unlink(tmp)
         raise
+    for (caminho, _), tmp in zip(escritas, tmps):
+        os.replace(tmp, caminho)
 
 
 def main(argv=None):
@@ -288,14 +295,14 @@ def main(argv=None):
         print(f"❌ recusado, nada escrito: {e}")
         return 2
 
+    if not args.check:
+        grava([(alvo, dados) for _, alvo, _, dados, _ in planos if dados is not None])
     para_fazer = False
     for doc, alvo, estado, dados, msgs in planos:
         for m in msgs:
             print(m)
         if estado in ("atras", "divergente"):
             para_fazer = True
-        if dados is not None and not args.check:
-            grava(alvo, dados)
         if estado == "bootstrap" and args.check:
             para_fazer = True
         if estado == "ausente":

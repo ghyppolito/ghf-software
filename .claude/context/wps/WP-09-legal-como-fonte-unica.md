@@ -285,6 +285,7 @@ Cada uma é revertida depois de provada.
 | 11 | `origemCommit` que não é ancestral da ref | sync recusa sem `--forca` |
 | 12 | Origem falsa com CRLF e sem newline final | o sync copia igual. O teste prova que essa mutação não é perdida |
 | 13 | `lastUpdated` do pt alterado sem mudar o corpo | `check_site` §4 (já existe; não pode regredir) |
+| 14 | Front-matter em CRLF + corpo mudado / + `en: "pendente"` / sem `origemCommit` (no `.pt.md` e no `.en.md`) | `check_site` (front-matter fora do formato em LF), inclusive sem os apps |
 
 ### Ordem dos commits
 
