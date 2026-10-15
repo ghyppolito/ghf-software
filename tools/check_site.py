@@ -11,7 +11,8 @@ Checa:
   1. URLs contratuais (ADR-001) existem
   2. cada página tem <html lang>, <title>, meta description e og:image
   3. href/src locais resolvem para arquivo existente; og:image em ghfsoftware.com resolve localmente;
-     nenhum link `target="_blank"` sem `rel="noopener"`, em qualquer página de `dist/`
+     nenhum `<a>`, `<area>` ou `<form>` com `target="_blank"` sem o token `noopener` em `rel`, em
+     qualquer página de `dist/` (lido por html.parser, não por regex)
   4. "Última atualização" da página legal (pt e en) bate com a da fonte — lida sempre da raiz do
      repositório; fonte ausente é erro. A fonte é o `lastUpdated` do front-matter do `.pt.md` de
      src/content/legal/, que tem de bater com a linha do corpo do `.pt.md`, e o `lastUpdated` do
@@ -32,16 +33,19 @@ Checa:
      `.pt.md` e `.en.md` com a mesma contagem de `## `, `### `, linhas de tabela, itens de lista,
      links, crases (`code`) e `---`
  13. public/ (copiado byte a byte para dist/, ADR-002 §3): primeiro nível é a lista fechada
-     PUBLIC; nenhum `.html` além do convite; todo arquivo de public/ igual byte a byte ao de dist/.
+     PUBLIC; nenhum `.html` além do convite; nenhum symlink; todo arquivo de public/ igual byte a
+     byte ao de dist/.
      O Astro publica o arquivo de public/ no lugar da página gerada que colide com ele, com o build
      verde — sem esta guarda, uma cópia velha de página contratual iria ao ar calada; e o
-     `.htmlvalidateignore` da raiz isenta do html-validate só o convite (congelado pelo sha256, D13)
+     `.htmlvalidateignore` da raiz isenta do html-validate só o convite (congelado pelo sha256, D13),
+     e `rules` do `.htmlvalidate.json` é exatamente `{"no-inline-style": "off"}`
 """
 import glob
 import json
 import os
 import re
 import sys
+from html.parser import HTMLParser
 
 raiz = "dist"
 if "--raiz" in sys.argv:
@@ -184,8 +188,28 @@ for rel in CONTRATUAIS:
 paginas = sorted(glob.glob(p("**/*.html"), recursive=True))
 # Link que abre outra aba sem `noopener` deixa a página aberta alcançar esta por `window.opener`
 # (TARGET-BLANK-SEM-NOOPENER-01). Vale para todo `dist/`, com ou sem aspas no atributo.
-RE_BLANK = re.compile(r"""\btarget\s*=\s*["']?_blank""", re.I)
-RE_NOOPENER = re.compile(r"""\brel\s*=\s*(?:"[^"]*\bnoopener\b[^"]*"|'[^']*\bnoopener\b[^']*'|[^\s"'>]*\bnoopener\b)""", re.I)
+# Lido por html.parser (não regex): atributo é atributo — `data-rel`, `title="rel=noopener"` e `>`
+# dentro de aspas não enganam. Olha `a`, `area` e `form`; `rel` tem de ter o token `noopener`.
+TAGS_COM_TARGET = ("a", "area", "form")
+
+
+class SemNoopener(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.achados = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag not in TAGS_COM_TARGET:
+            return
+        d = {k.lower(): (v or "") for k, v in attrs}
+        if d.get("target", "").strip().lower() != "_blank":
+            return
+        if "noopener" not in d.get("rel", "").lower().split():
+            self.achados.append(self.get_starttag_text() or f"<{tag}>")
+
+    handle_startendtag = handle_starttag
+
+
 n_links = 0
 for caminho in paginas:
     html = ler(caminho)
@@ -221,9 +245,11 @@ for caminho in paginas:
     for alvo in re.findall(r"https://ghfsoftware\.com/([A-Za-z0-9_./-]+\.(?:png|jpg|webp|svg))", html):
         if not os.path.exists(p(alvo)):
             erros.append(f"{rel}: referência a https://ghfsoftware.com/{alvo}, que não existe")
-    for tag in re.findall(r"<a\b[^>]*>", html, re.I):
-        if RE_BLANK.search(tag) and not RE_NOOPENER.search(tag):
-            erros.append(f"{rel}: link com target=\"_blank\" sem rel=\"noopener\": {tag}")
+    leitor = SemNoopener()
+    leitor.feed(html)
+    leitor.close()
+    for tag in leitor.achados:
+        erros.append(f"{rel}: target=\"_blank\" sem rel=\"noopener\": {tag}")
 
 # ------------------------------------------------------------ 4: datas legais
 # Aceita "12 de Outubro de 2026" e "setembro de 2026" (sem dia). A comparação é
@@ -525,7 +551,14 @@ else:
     for nome in PUBLIC:
         if not os.path.exists(os.path.join(pasta_public, nome)):
             erros.append(f"public/{nome}: ausente (lista fechada de public/)")
-    for pasta, _dirs, arqs in os.walk(pasta_public):
+    # Symlink em public/ (arquivo ou diretório) é erro: os.walk não desce em diretório-link, mas o
+    # Astro copia o conteúdo dele para dist/ — uma página velha iria ao ar sem o check ver.
+    for pasta, dirs, arqs in os.walk(pasta_public):
+        for nome in sorted(dirs + arqs):
+            c = os.path.join(pasta, nome)
+            if os.path.islink(c):
+                rel = os.path.relpath(c, pasta_public).replace(os.sep, "/")
+                erros.append(f"public/{rel}: symlink em public/ — o Astro copia o alvo sem o check_site.py ver; use arquivo real")
         for nome in sorted(arqs):
             c = os.path.join(pasta, nome)
             rel = os.path.relpath(c, pasta_public).replace(os.sep, "/")
@@ -549,6 +582,18 @@ else:
     linhas = [x.strip() for x in ler(arq_ignore).splitlines() if x.strip() and not x.strip().startswith("#")]
     if linhas != IGNORE_HTMLVALIDATE:
         erros.append(f".htmlvalidateignore: {linhas} ≠ {IGNORE_HTMLVALIDATE} — só o convite fica fora do html-validate")
+
+# As regras do preset ficam em erro: só `no-inline-style` é desligada. Rebaixar uma regra para
+# "warn" faz o html-validate sair com código 0 e esconde o problema.
+REGRAS_HTMLVALIDATE = {"no-inline-style": "off"}
+arq_hv = os.path.join(REPO, ".htmlvalidate.json")
+try:
+    regras = json.loads(ler(arq_hv)).get("rules")
+except (OSError, ValueError) as e:
+    erros.append(f".htmlvalidate.json ilegível: {e}")
+else:
+    if regras != REGRAS_HTMLVALIDATE:
+        erros.append(f".htmlvalidate.json: rules = {regras} ≠ {REGRAS_HTMLVALIDATE} — nenhuma regra do preset é rebaixada")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")
