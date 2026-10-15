@@ -19,15 +19,23 @@ Checa:
   5. copy do LottoExpert respeita jogo responsável (mesma régua do PaywallCopyComplianceTest do app),
      no publicado (PAGINAS_LOTTO) e nas fontes Astro (FONTES_LOTTO)
   6. .well-known/assetlinks.json é JSON válido com o package do LottoExpert
-  7. toda página de PUBLICADAS existe — na raiz do repositório como `.html` (página ainda copiada)
-     ou como `src/pages/<x>.astro` (gerada); com `--raiz` fora da raiz (ex.: `dist/`), existe lá,
+  7. toda página de PUBLICADAS existe em `dist/` (o ramo da raiz do repositório, que aceitava
+     `src/pages/<x>.astro` como prova, é legado — ver abaixo),
      e as que não estão em EN_PENDENTE têm o par `en/<x>`. Página esquecida em COPIADOS_DA_RAIZ do
      astro.config.mjs sairia do ar com o build verde
   8. hreflang: página com par en declara pt-BR e en, recíprocos, e os dois existem
   9. página em `en/` com link interno para página que tem par en aponta para o par
+ 10. dicionários de src/i18n/ têm as mesmas chaves em pt e en
+ 11. `dist/` não é mais antigo que as fontes (src/, configs, package.json, COPIADOS_DA_RAIZ do
+     astro.config.mjs, fontes de LEGAL): sem isso, o check daria verde sobre um build velho
+ 12. página legal migrada (fonte em src/content/legal/), pt e en: um só `<h1`, um só rótulo de
+     data do idioma da página, nenhuma aspa tipográfica que o `.md` não tenha; e `.pt.md` e
+     `.en.md` com a mesma contagem de `## `, `### ` e linhas de tabela
 
-Na raiz do repositório, link para página gerada (`index.html`, `en/…`) resolve contra a fonte em
-`src/pages/`; o arquivo de verdade só existe em `dist/`, onde a checagem é sobre o publicado.
+Modo raiz (`--raiz .`) não é mais suportado desde a fatia 6 do WP-08: uma URL contratual
+(`eclipsego-privacy.html`) só existe em `dist/`, e o §1 falharia na raiz. Os ramos que ainda o
+tratam — `NA_RAIZ_DO_REPO`, `fonte_gerada`, `existe_pagina` (link para página gerada resolvido
+contra a fonte em `src/pages/`) — ficam até a fatia 9, que os remove.
 """
 import glob
 import json
@@ -121,6 +129,8 @@ def p(rel):
     return os.path.join(raiz, rel)
 
 
+# Legado do modo raiz (`--raiz .`), sem suporte desde a fatia 6 do WP-08 — uma URL contratual só
+# existe em dist/. NA_RAIZ_DO_REPO, fonte_gerada e existe_pagina saem na fatia 9.
 NA_RAIZ_DO_REPO = os.path.realpath(raiz) == os.path.realpath(REPO)
 
 
@@ -163,6 +173,51 @@ def url_para_rel(url):
         rel += "index.html"
     return rel
 
+
+# ------------------------------------------------------------ 11: dist/ desatualizado
+# O check confere o que o build gerou; dist/ mais velho que uma fonte é verde sobre um site que
+# não é o do commit. Vale para `dist/` do repositório (padrão ou `--raiz dist`); no CI o build
+# roda depois do checkout, então dist/ é sempre o mais novo. Diretórios contam (arquivo apagado
+# muda o mtime do diretório).
+def copiados_da_raiz():
+    cfg = os.path.join(REPO, "astro.config.mjs")
+    if not os.path.exists(cfg):
+        return []
+    m = re.search(r"const COPIADOS_DA_RAIZ = \[(.*?)\];", ler(cfg), re.S)
+    if not m:
+        erros.append("astro.config.mjs: COPIADOS_DA_RAIZ não encontrado — a checagem de dist/ desatualizado não sabe o que a raiz publica")
+        return []
+    return re.findall(r"'([^']+)'", m.group(1))
+
+
+def mais_novo(rels):
+    """(mtime, caminho relativo) do arquivo ou diretório mais novo entre `rels` (recursivo)."""
+    melhor = (0.0, "")
+    for rel in rels:
+        alvo = os.path.join(REPO, rel)
+        if not os.path.exists(alvo):
+            continue
+        andar = os.walk(alvo) if os.path.isdir(alvo) else [(os.path.dirname(alvo), [], [os.path.basename(alvo)])]
+        if os.path.isdir(alvo):
+            melhor = max(melhor, (os.path.getmtime(alvo), rel))
+        for pasta, dirs, arqs in andar:
+            for nome in dirs + arqs:
+                c = os.path.join(pasta, nome)
+                melhor = max(melhor, (os.path.getmtime(c), os.path.relpath(c, REPO)))
+    return melhor
+
+
+if os.path.realpath(raiz) == os.path.realpath(os.path.join(REPO, "dist")):
+    gerado = p("index.html")
+    if not os.path.exists(gerado):
+        erros.append(f"{raiz}/index.html ausente — rode `npm run build`")
+    else:
+        fontes = (["src", "astro.config.mjs", "tailwind.config.mjs", "postcss.config.mjs", "package.json"]
+                  + copiados_da_raiz() + list(LEGAL.values())
+                  + [md[: -len(".pt.md")] + ".en.md" for md in LEGAL.values() if md.endswith(".pt.md")])
+        t, novo = mais_novo(fontes)
+        if t > os.path.getmtime(gerado):
+            erros.append(f"dist/ mais antigo que as fontes ({novo}) — rode `npm run build`")
 
 # ------------------------------------------------------------ 1: contratuais
 for rel in CONTRATUAIS:
@@ -444,6 +499,39 @@ for ts in sorted(glob.glob(os.path.join(REPO, "src/i18n/*.ts"))):
     for lang, outro in (("pt", "en"), ("en", "pt")):
         for falta in sorted(chaves[lang] - chaves[outro]):
             erros.append(f"{nome}: chave `{falta}` existe em {lang} e falta em {outro}")
+
+# ------------------------------------------------------------ 12: página legal migrada
+# O que o plugin omiteCabecalhoLegal e o `smartPunctuation: false` do astro.config.mjs garantem,
+# provado no publicado: título e data aparecem uma vez (no hero), as aspas são as do .md do app; e
+# o .en.md tem a mesma estrutura do .pt.md (seção ou tabela perdida na tradução).
+TIPOGRAFICAS = "“”‘’"
+ROTULO = {"pt": "Última atualização", "en": "Last updated"}
+for pagina, md in LEGAL.items():
+    if not md.startswith("src/content/legal/"):
+        continue
+    base_md = md[: -len(".pt.md")]
+    fontes_md = {lang: os.path.join(REPO, f"{base_md}.{lang}.md") for lang in ("pt", "en")}
+    if not all(os.path.exists(f) for f in fontes_md.values()):
+        continue  # ausência já é erro no §4
+    texto_md = {lang: ler(f) for lang, f in fontes_md.items()}
+    for alvo, lang in ((pagina, "pt"), ("en/" + pagina, "en")):
+        if not os.path.exists(p(alvo)):
+            continue  # ausência já é erro no §1/§4/§7
+        html = ler(p(alvo))
+        n_h1 = len(re.findall(r"<h1\b", html, re.I))
+        if n_h1 != 1:
+            erros.append(f"{alvo}: {n_h1} `<h1` (esperado 1 — o `# título` do .md não pode sair no corpo)")
+        n_rot = sem_tags(html).count(ROTULO[lang])
+        if n_rot != 1:
+            erros.append(f"{alvo}: {n_rot} rótulo(s) `{ROTULO[lang]}` no texto (esperado 1 — a linha de data do .md não pode sair no corpo)")
+        for ch in TIPOGRAFICAS:
+            if html.count(ch) > texto_md[lang].count(ch):
+                erros.append(f"{alvo}: aspa tipográfica `{ch}` ({html.count(ch)}×) além das de {base_md}.{lang}.md "
+                             f"({texto_md[lang].count(ch)}×) — smartPunctuation ligado?")
+    for nome, padrao in (("`## `", r"^## "), ("`### `", r"^### "), ("linhas de tabela `|`", r"^\|")):
+        n = {lang: len(re.findall(padrao, texto_md[lang], re.M)) for lang in ("pt", "en")}
+        if n["pt"] != n["en"]:
+            erros.append(f"{base_md}.en.md: {n['en']} {nome} ≠ {n['pt']} do .pt.md — tradução com estrutura diferente")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")
