@@ -3,33 +3,32 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-10-15 (fim).** Escrito na branch `feat/wp-08-f8-legal-lottoexpert` (fatia 8 do WP-08), ainda não integrada.
+**Sessão de 2026-10-15 (fim).** Escrito na branch `feat/wp-08-f9-public-limpeza` (fatia 9 do WP-08), ainda não integrada.
 
 ## 1. Onde parei
 
-- **Integração** `feat/wp-08-layout-unico` em 6cff4e6: fatias 1 a 7 mais `origin/develop`, CI verde; #37 fica aberto até o
-  deploy único (D13).
-- **Fatia 8 pronta** na branch `feat/wp-08-f8-legal-lottoexpert` (1d7d6ba a a917ccb + escrituração), aguarda o usuário
-  (seção 2). Política e termos do LottoExpert migrados; raiz sem `*.html`. WP-08 segue `doing`; D-a, D-b, D-c resolvidas no WP-08.
-- **D13 em vigor:** deploy único depois de WP-08..WP-19. Antes: tag `pre-modernizacao` em `master`, a tag na política do ambiente
-  `github-pages` e ensaio do rollback. `tools/contrato.sha256` roda no CI, no deploy e no `/verify`.
-- **Repositórios dos apps, sem merge:** topo-walk `docs/politica-tres-observacoes` (7fc7870); eclipse-go
-  `docs/email-suporte-politica` (7f349a2, 4668019; `ECLIPSE-ORIGEM-NAO-MESCLADA-01`, `ECLIPSE-DATA-APOS-EMAIL-01`); pole-position:
-  e-mail no commit 00968f5 da `item/PP-144-segunda-sessao-mesma-pista` (outra sessão do usuário); `/legal poleposition` quando a
-  PP-144 entrar na main do app (`PP-POLITICA-BRANCH-APP-01`). A branch vazia `docs/politica-email-contato` do pole-position-app
-  pode ser apagada. Texto do app PP a decidir lá: 2.1 "o pedido de localização precisa venha junto"; "descrita acima" aponta para a 2.4.
-- **WP-19** `blocked`: falta o checklist de navegador da rodada 3 (seção 3).
+- **Fatia 9 (a última) do WP-08 pronta** na branch `feat/wp-08-f9-public-limpeza` (7c4faf9 a b6818b7 + escrituração), `/verify` verde,
+  auditoria sem alto nem médio. Espera o merge do usuário (seção 2); depois o agente faz o push e acompanha o CI do #37.
+- **WP-08 segue `doing`:** falta o checklist de navegador das fatias 2 a 9 escrito no WP (seção 3), com a troca pt para en e en para pt
+  numa landing e numa página legal. O próximo WP da sequência vem depois do `done` do WP-08.
+- **D13 em vigor:** deploy único depois de WP-08..WP-19; antes, tag `pre-modernizacao` em `master` e ensaio do rollback.
+- **Repositórios dos apps, sem merge:** topo-walk `docs/politica-tres-observacoes` (7fc7870); eclipse-go `docs/email-suporte-politica`
+  (7f349a2, 4668019); pole-position `item/PP-144-segunda-sessao-mesma-pista` (00968f5). **WP-19** `blocked` (checklist da rodada 3).
 
 ## 2. Quebrado ou pela metade agora
 
 Nada quebrado no ar. Pela metade:
-- **Fatia 8 por integrar:** `git switch feat/wp-08-layout-unico && git merge --no-ff feat/wp-08-f8-legal-lottoexpert -m "WP-08: fatia 8 — política e termos do LottoExpert; fim das páginas copiadas"`.
+- **Fatia 9 por integrar:** `git switch feat/wp-08-layout-unico && git merge --no-ff feat/wp-08-f9-public-limpeza -m "WP-08: fatia 9 — public/, sem _config.yml, html-validate estrito e noopener em todo o site"`.
   O agente não tem `git merge`. Conflito em `achados-novos.md`/`handoff.md`/`ESTADO.md`: manter as linhas dos dois lados.
-- `CONFIG-YML-ORFAO-01`: `_config.yml` já não é lido; sai no WP-08 (fatia 9).
+- Fatia 8 também pode estar por integrar: conferir `git branch --merged feat/wp-08-layout-unico`.
 - Servidor antigo na porta 8081 (pid 686166), deixado por uma auditoria: o usuário decide se encerra.
 
 ## 3. O que só o navegador prova (usuário ainda não reportou)
 
+- **Fatia 9 do WP-08** (`npm run build && python3 -m http.server 8080 -d dist`): nada deve ter mudado. Home, uma landing e uma legal,
+  pt e en, a 360 e 1280, iguais ao que já viu; imagens e favicons carregam (`assets/` agora vem de `public/`); **troca de idioma
+  pt para en e en para pt numa landing (ex. `/topowalk.html`) e numa página legal (ex. `/lottoexpert-privacy.html`)** leva ao par; nenhuma
+  chave `ghf_lang` no Application > Local Storage. Escrever o resultado no WP-08.
 - **Fatia 8 do WP-08** (`npm run build && python3 -m http.server 8080 -d dist`): `/lottoexpert-privacy.html`, `/lottoexpert-terms.html`
   e as `/en/` a 360, 768 e 1280: política com §2 em destaque de barra violeta e §9.2 sem barra; §4.1 a 4.10 sem marcador; §4.7
   aninhada com bolinha; §5 1ª coluna mono violeta, §9.1 com texto menor; termos §3 em três blocos, o último em destaque com
@@ -85,13 +84,11 @@ Nada quebrado no ar. Pela metade:
 ## 4. Próxima ação
 
 **Do usuário:**
-1. Integrar a fatia 8 (seção 2); levar as branches dos apps (seção 1) para a main de cada um.
-2. Checklists de navegador das fatias 2 a 8 e do WP-19; escrever o resultado nos WPs.
+1. Integrar a fatia 9 (seção 2); levar as branches dos apps (seção 1) para a main de cada um.
+2. Checklists de navegador das fatias 2 a 9 e do WP-19; escrever o resultado nos WPs (fecha o WP-08).
 3. Decidir D11 (`--success`) e D12 (limiares de destaque), ambas só para o WP-10; D3 (medição) bloqueia o WP-13.
 
-**Do agente:** push e CI após o merge; **fatia 9**: `public/`, `copiaRaiz` fora, `_config.yml`, as 6 regras do html-validate a `error`,
-`TARGET-BLANK-SEM-NOOPENER-01`, docs restantes e os achados de limpeza (`GHF-LANG-SEM-CONSUMIDOR-01`, `CHECK-SITE-RAMOS-DOCS-01`,
-`FONTES-LOTTO-SEM-DIST-01`). Mexe em `assets/`/`.well-known/`/convite: contrato byte a byte e `site-arquiteto` obrigatórios.
+**Do agente:** push e CI do #37 após o merge; depois do `done` do WP-08, propor o próximo da sequência (`/wp`).
 
 **Copy pendente do usuário antes do WP-10:** "chance matemática" -> "probabilidade exata"; texto final do aviso de jogo
 responsável (o export traz "Texto provisório"); confirmar "Nada de cadastro, e-mail ou CPF" e "Nenhum SDK de publicidade";
@@ -107,7 +104,7 @@ home (`INDEX-LOTTO-DESC-DIVERGE-01`).
 
 ## 6. Escrituração e branches
 
-- Triagem de `achados-novos.md`: nenhuma linha em `triagem`; os achados das fatias 6 a 8 têm destino (`WP-08`, `WP-09`, `WP-10`, `WP-11`, `nota`).
+- Triagem de `achados-novos.md`: nenhuma linha em `triagem`; os achados das fatias 6 a 9 têm destino (`WP-08`, `WP-09`, `WP-10`, `WP-11`, `nota`).
 - **Branches locais já integradas**, candidatas a apagar pelo usuário: `feat/wp-08-f2…`, `f3…`, `f4…`, `f5…`, `feat/wp-08-f6-legal-eclipsego`, `feat/wp-08-f7-legal-topowalk-poleposition` e, depois do merge, `feat/wp-08-f8-legal-lottoexpert` (fatias integradas;
   `f1-infra-e-home` idem, com a ressalva de que a integração ainda não está em `develop`), `docs/publicacao-wp-07`,
   `docs/publicacao-trilha-a`, `feat/wp-19-rodada-3-claude-design`, `feat/wp-01-legal-lottoexpert-2-05-02`,
