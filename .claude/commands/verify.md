@@ -8,7 +8,6 @@ Descubra o que o diff tocou — `git diff --name-only develop...HEAD` mais `git 
 
 **Sempre** (o mesmo que o job `site` do `pr.yml` cobra, mais o escopo):
 ```bash
-python3 tools/check_site.py
 python3 tools/gen_estado.py --check && python3 tools/check_plano.py
 npm ci && npm run build && python3 tools/check_site.py --raiz dist
 (cd dist && sha256sum --quiet -c ../tools/contrato.sha256)   # convite, assetlinks, og:image do convite, CNAME (D13)
@@ -17,10 +16,12 @@ lychee --offline --no-progress --root-dir "$PWD/dist" 'dist/**/*.html'   # se o 
 git diff --stat develop...HEAD        # nenhum arquivo fora dos Arquivos-alvo do WP (escrituração em .claude/context/ é permitida)
 ```
 
-**Tocou página legal (`*-privacy.html`, `*-terms.html`, `docs/*_POLICY.md`, `docs/*_TERMS*.md`):**
+**Tocou página legal (`*-privacy.html`, `*-terms.html`, `docs/*_POLICY.md`, `docs/*_TERMS*.md`,
+`src/content/legal/*.md`, `src/layouts/LegalLayout.astro`):**
 ```bash
 diff -q ../lotto-expert/docs/PRIVACY_POLICY.md docs/LOTTOEXPERT_PRIVACY_POLICY.md
 diff -q ../lotto-expert/docs/TERMS_OF_SERVICE.md docs/LOTTOEXPERT_TERMS_OF_SERVICE.md
+diff <(sed '1,/^---$/d' src/content/legal/eclipsego-privacy.pt.md) ../eclipse-go/docs/PRIVACY_POLICY.md   # migrada: sem o front-matter
 ```
 (e o equivalente do app tocado). Saída vazia = espelho fiel. Diferença = o WP não terminou.
 

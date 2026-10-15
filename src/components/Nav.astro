@@ -6,6 +6,9 @@
 // pílula do celular (o lima do Pole Position é claro demais para texto branco).
 // `primary-texto-preto` é o `primary` com texto preto e hover `primaryHover` na pílula do celular
 // (o dourado do EclipseGo). As classes ficam literais (o Tailwind não detecta concatenação).
+// `brilhoLogo={false}`: logo sem a sombra luminosa no hover. A política do EclipseGo escrevia a classe
+// com espaços dentro dos colchetes (`rgba(234, 179, 8, 0.5)`), que o Tailwind não reconhece: o
+// logo só crescia, sem brilho — e continua assim.
 import TrocaIdioma from './TrocaIdioma.astro';
 import { t, type ChaveUi, type Idioma } from '../i18n/ui';
 
@@ -24,9 +27,11 @@ interface Props {
   itens: Item[];
   /** cor de hover e do botão do menu do celular; padrão `primary` */
   realce?: 'primary' | 'primary-claro' | 'primary-texto-preto' | 'accent';
+  /** brilho (sombra luminosa) no logo ao passar o mouse; padrão `true` */
+  brilhoLogo?: boolean;
 }
 
-const { lang, caminho, inicio, itens, realce = 'primary' } = Astro.props;
+const { lang, caminho, inicio, itens, realce = 'primary', brilhoLogo = true } = Astro.props;
 
 const CLASSES = {
   primary: {
@@ -67,6 +72,9 @@ const CLASSES = {
   },
 };
 const c = CLASSES[realce];
+const classeLogo = brilhoLogo
+  ? c.logo
+  : 'h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105';
 ---
 <nav
   id="navbar"
@@ -76,7 +84,7 @@ const c = CLASSES[realce];
     <img
       src="/assets/GHFSoftware.png"
       alt="GHF Software Logo"
-      class={c.logo}
+      class={classeLogo}
     >
   </a>
 

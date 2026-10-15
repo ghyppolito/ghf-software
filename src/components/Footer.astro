@@ -3,8 +3,10 @@
 // Links para páginas do site passam por `rota()`: em en, apontam para o par quando ele existe.
 // O que varia por página é prop: redes sociais do app, o app da página destacado na lista, o
 // fundo (`surface` nas landings que o usavam; `surface-sem-borda` no Pole Position, que não tinha o
-// filete do topo) e a cor de realce (`accent` no TopoWalk). Classes
-// literais por variante (o Tailwind não detecta concatenação).
+// filete do topo), a cor de realce (`accent` no TopoWalk), a política da página destacada
+// (`politicaAtual`, nas páginas legais) e o brilho do logo (`brilhoLogo={false}` na política do
+// EclipseGo, cuja classe de sombra do logo tinha espaços e não valia). Classes literais por variante
+// (o Tailwind não detecta concatenação).
 import { rota, t, type Idioma } from '../i18n/ui';
 
 interface Props {
@@ -22,6 +24,10 @@ interface Props {
   fundo?: 'base' | 'surface' | 'surface-sem-borda';
   /** cor do brilho do logo, do app destacado e do coração; padrão `primary` */
   realce?: 'primary' | 'accent';
+  /** caminho pt da página legal atual: a política aparece destacada na lista de políticas */
+  politicaAtual?: string;
+  /** brilho (sombra luminosa) no logo ao passar o mouse; padrão `true` */
+  brilhoLogo?: boolean;
 }
 
 const {
@@ -35,6 +41,8 @@ const {
   appAtual,
   fundo = 'base',
   realce = 'primary',
+  politicaAtual,
+  brilhoLogo = true,
 } = Astro.props;
 
 const CLASSES = {
@@ -50,6 +58,9 @@ const CLASSES = {
   },
 };
 const c = CLASSES[realce];
+const classeLogo = brilhoLogo
+  ? c.logo
+  : 'h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105';
 const classeFooter = {
   base: 'bg-brand-base pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden',
   surface: 'bg-brand-surface pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden',
@@ -91,7 +102,7 @@ const ano = new Date().getFullYear();
           <img
             src="/assets/GHFSoftware.png"
             alt="GHF Software Logo"
-            class={c.logo}
+            class={classeLogo}
           >
         </a>
         <p class="text-gray-400 max-w-sm mb-6">{t(lang, 'footer_desc')}</p>
@@ -183,14 +194,27 @@ const ano = new Date().getFullYear();
         <h4 class="text-white font-semibold mb-6">{t(lang, 'footer_transp')}</h4>
         <ul class="space-y-3">
           {
-            politicas.map((p) => (
-              <li>
-                <a href={rota(lang, p.caminho)} class={`${link} flex items-center gap-2`}>
-                  <i class={`fa-solid ${p.icone} text-gray-600 text-xs`} aria-hidden="true"></i>
-                  <span>{t(lang, p.chave)}</span>
-                </a>
-              </li>
-            ))
+            politicas.map((p) =>
+              p.caminho === politicaAtual ? (
+                <li>
+                  <a
+                    href={rota(lang, p.caminho)}
+                    aria-current="page"
+                    class="text-brand-primary hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"
+                  >
+                    <i class={`fa-solid ${p.icone} text-brand-primary text-xs`} aria-hidden="true"></i>
+                    <span>{t(lang, p.chave)}</span>
+                  </a>
+                </li>
+              ) : (
+                <li>
+                  <a href={rota(lang, p.caminho)} class={`${link} flex items-center gap-2`}>
+                    <i class={`fa-solid ${p.icone} text-gray-600 text-xs`} aria-hidden="true"></i>
+                    <span>{t(lang, p.chave)}</span>
+                  </a>
+                </li>
+              ),
+            )
           }
         </ul>
       </div>

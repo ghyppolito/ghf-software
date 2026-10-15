@@ -1,0 +1,58 @@
+---
+// Política de privacidade do EclipseGo em português (/eclipsego-privacy.html) — URL contratual (ADR-001):
+// página literal, sem rota dinâmica. Texto em src/content/legal/eclipsego-privacy.pt.md; hero,
+// botão e <head> em i18n/legal.ts. Nav e footer como na página antiga: dourado com texto preto na
+// pílula do celular, logo sem brilho (a classe antiga não valia), só o e-mail entre os canais,
+// rodapé `surface` e a política do EclipseGo destacada na lista de políticas.
+import { getEntry, render } from 'astro:content';
+import LegalLayout from '../layouts/LegalLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { legal } from '../i18n/legal';
+import { rota } from '../i18n/ui';
+
+const lang = 'pt';
+const x = legal[lang];
+const home = rota(lang, 'index.html');
+const entrada = await getEntry('legal', 'eclipsego-privacy.pt');
+if (!entrada) throw new Error('src/content/legal/eclipsego-privacy.pt.md ausente');
+const { Content } = await render(entrada);
+---
+<LegalLayout
+  lang={lang}
+  caminho="eclipsego-privacy.html"
+  title={x.eclipsego_privacy_title}
+  description={x.eclipsego_privacy_description}
+  titulo={x.eclipsego_privacy_h1}
+  lastUpdated={entrada.data.lastUpdated}
+  tema="eclipsego-privacy"
+  favicon="/assets/eclipse-go-favicon.png"
+  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden"
+  selo="amarelo"
+  voltar={{ href: rota(lang, 'eclipsego.html'), texto: x.voltar_app }}
+>
+  <Nav
+    slot="nav"
+    lang={lang}
+    caminho="eclipsego-privacy.html"
+    inicio={home}
+    realce="primary-texto-preto"
+    brilhoLogo={false}
+    itens={[
+      { href: `${home}#sobre`, chave: 'nav_about' },
+      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
+      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <Content />
+  <Footer
+    slot="footer"
+    lang={lang}
+    inicio={home}
+    prefixoAncora={home}
+    redes={{}}
+    politicaAtual="eclipsego-privacy.html"
+    fundo="surface"
+    brilhoLogo={false}
+  />
+</LegalLayout>
