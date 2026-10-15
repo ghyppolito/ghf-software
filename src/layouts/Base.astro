@@ -1,16 +1,40 @@
 ---
 // Layout único (WP-08). <head> de todas as páginas geradas: metadados, og:*, canonical, hreflang,
 // fontes e o CSS compilado do Tailwind (ADR-003). O tema da página vai em `data-tema` no <html>.
+// SEO (WP-11, ADR-005): canonical = og:url = a própria URL; hreflang pt-BR, en e x-default (→ en,
+// D8/D18) nas páginas com par; og:image:width/height lidos do cabeçalho do arquivo em public/
+// (nunca declarados à mão — D16: as imagens 1200×630 são outro WP); JSON-LD pelo slot `jsonld`.
+import { readFileSync } from 'node:fs';
 import '../styles/global.css';
 import { SITE, rota, type Idioma } from '../i18n/ui';
+
+/** Largura e altura de um PNG ou JPEG, lidas do cabeçalho; undefined se o formato for outro. */
+function dimensoes(arquivo: string): { largura: number; altura: number } | undefined {
+  const b = readFileSync(arquivo);
+  if (b.length >= 24 && b.readUInt32BE(0) === 0x89504e47 && b.toString('latin1', 12, 16) === 'IHDR') {
+    return { largura: b.readUInt32BE(16), altura: b.readUInt32BE(20) };
+  }
+  if (b[0] === 0xff && b[1] === 0xd8) {
+    let i = 2;
+    while (i + 9 < b.length) {
+      if (b[i] !== 0xff) return undefined;
+      const marcador = b[i + 1];
+      if (marcador === 0xff) { i += 1; continue; }
+      // SOF0..SOF15, exceto DHT (C4), JPG (C8) e DAC (CC): altura e largura do quadro
+      if (marcador >= 0xc0 && marcador <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marcador)) {
+        return { altura: b.readUInt16BE(i + 5), largura: b.readUInt16BE(i + 7) };
+      }
+      i += 2 + b.readUInt16BE(i + 2);
+    }
+  }
+  return undefined;
+}
 
 interface Og {
   titulo?: string;
   descricao?: string;
   /** caminho absoluto no site, ex.: /assets/GHFSoftware.png */
   imagem?: string;
-  largura?: number;
-  altura?: number;
   tipo?: string;
   /** descrição do card do X/Twitter, quando difere da do og */
   descricaoTwitter?: string;
@@ -52,7 +76,9 @@ const {
 
 const url = (l: Idioma) => SITE + rota(l, caminho);
 const canonica = temPar ? url(lang) : `${SITE}/${caminho}`;
-const imagem = SITE + (og.imagem ?? '/assets/GHFSoftware.png');
+const caminhoImagem = og.imagem ?? '/assets/GHFSoftware.png';
+const imagem = SITE + caminhoImagem;
+const tamanho = dimensoes(`public${caminhoImagem}`);
 const ogTitulo = og.titulo ?? title;
 const ogDescricao = og.descricao ?? description;
 const familias = ['Inter:wght@300;400;500;600;700;800', ...fontesExtras].map((f) => `family=${f}`).join('&');
@@ -70,6 +96,7 @@ const googleFonts = `https://fonts.googleapis.com/css2?${familias}&display=swap`
     <link rel="canonical" href={canonica}>
     {temPar && <link rel="alternate" hreflang="pt-BR" href={url('pt')}>}
     {temPar && <link rel="alternate" hreflang="en" href={url('en')}>}
+    {temPar && <link rel="alternate" hreflang="x-default" href={url('en')}>}
 
     <!-- Open Graph (WhatsApp, LinkedIn, Facebook) -->
     <meta property="og:type" content={og.tipo ?? 'website'}>
@@ -78,8 +105,8 @@ const googleFonts = `https://fonts.googleapis.com/css2?${familias}&display=swap`
     <meta property="og:title" content={ogTitulo}>
     <meta property="og:description" content={ogDescricao}>
     <meta property="og:image" content={imagem}>
-    {og.largura && <meta property="og:image:width" content={String(og.largura)}>}
-    {og.altura && <meta property="og:image:height" content={String(og.altura)}>}
+    {tamanho && <meta property="og:image:width" content={String(tamanho.largura)}>}
+    {tamanho && <meta property="og:image:height" content={String(tamanho.altura)}>}
     <meta property="og:locale" content={lang === 'pt' ? 'pt_BR' : 'en_US'}>
     {temPar && <meta property="og:locale:alternate" content={lang === 'pt' ? 'en_US' : 'pt_BR'}>}
     <!-- Twitter/X Card -->
@@ -87,6 +114,7 @@ const googleFonts = `https://fonts.googleapis.com/css2?${familias}&display=swap`
     <meta name="twitter:title" content={ogTitulo}>
     <meta name="twitter:description" content={og.descricaoTwitter ?? ogDescricao}>
     <meta name="twitter:image" content={imagem}>
+    <slot name="jsonld" />
 
     <!-- Google Fonts e Font Awesome: uma vez, aqui; saem no WP-12 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

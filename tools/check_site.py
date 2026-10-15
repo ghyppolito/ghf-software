@@ -9,7 +9,7 @@ erro.
 
 Checa:
   1. URLs contratuais (ADR-001) existem
-  2. cada página tem <html lang>, <title>, meta description e og:image
+  2. cada página tem <html lang>, <title>, meta description e og:image (sem og:image é erro desde o WP-11)
   3. href/src locais resolvem para arquivo existente; og:image em ghfsoftware.com resolve localmente;
      nenhum `<a>`, `<area>` ou `<form>` com `target="_blank"` sem o token `noopener` em `rel`, em
      qualquer página de `dist/` (lido por html.parser, não por regex)
@@ -46,6 +46,12 @@ Checa:
      verde — sem esta guarda, uma cópia velha de página contratual iria ao ar calada; e o
      `.htmlvalidateignore` da raiz isenta do html-validate só o convite (congelado pelo sha256, D13),
      e `rules` do `.htmlvalidate.json` é exatamente `{"no-inline-style": "off"}`
+ 14. SEO técnico (WP-11, ADR-005). Toda página de `dist/` está em INDEXAVEIS (as 20 com par),
+     NOINDEX (a 404) ou CONGELADAS (o convite, o mesmo `.html` de tools/contrato.sha256, isento de
+     tudo aqui). Fora de CONGELADAS: um só canonical, igual ao og:url e à URL da própria página
+     (`/x.html`, `/`, `/en/`); hreflang pt-BR, en e x-default (= en), recíprocos, só nas
+     INDEXAVEIS; `noindex` só e sempre nas NOINDEX; og:* e twitter:* completos; og:image:width e
+     height juntos e iguais ao tamanho real do arquivo (cabeçalho PNG/JPEG lido aqui)
 """
 import glob
 import json
@@ -237,7 +243,7 @@ for caminho in paginas:
         erros.append(f"{rel}: sem meta description")
     m = re.search(r'property="og:image"\s+content="([^"]+)"', html)
     if not m:
-        avisos.append(f"{rel}: sem og:image (landing deve ter; página legal pode não ter)")
+        erros.append(f"{rel}: sem og:image (toda página tem, inclusive legal e 404 — WP-11)")
     else:
         og = m.group(1)
         if og.startswith("https://ghfsoftware.com/"):
@@ -676,6 +682,135 @@ except (OSError, ValueError) as e:
 else:
     if regras != REGRAS_HTMLVALIDATE:
         erros.append(f".htmlvalidate.json: rules = {regras} ≠ {REGRAS_HTMLVALIDATE} — nenhuma regra do preset é rebaixada")
+
+# ------------------------------------------------------------ 14: SEO técnico
+# ADR-005. Canonical, og:url, <loc> do sitemap e href de hreflang são a mesma string: SITE + o
+# caminho literal (`/x.html`, `/`, `/en/`). O convite fica fora de toda regra de SEO: é congelado
+# byte a byte (D13), e a lista é a mesma do tools/contrato.sha256 (conferida abaixo).
+CONGELADAS = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
+INDEXAVEIS = COM_PAR + ["en/" + x for x in COM_PAR]
+NOINDEX = ["404.html"]
+OG_OBRIGATORIAS = ["og:type", "og:site_name", "og:url", "og:title", "og:description", "og:image",
+                   "og:locale", "twitter:card", "twitter:title", "twitter:description", "twitter:image"]
+
+arq_contrato = os.path.join(REPO, "tools", "contrato.sha256")
+html_contrato = sorted(linha.split()[-1] for linha in ler(arq_contrato).splitlines()
+                       if linha.strip() and linha.split()[-1].endswith(".html")) if os.path.exists(arq_contrato) else []
+if html_contrato != sorted(CONGELADAS):
+    erros.append(f"check_site.py: CONGELADAS {CONGELADAS} ≠ páginas de tools/contrato.sha256 {html_contrato}")
+
+
+def url_canonica(rel):
+    """URL pública de um arquivo de dist/: `index.html` vira a pasta (`/`, `/en/`)."""
+    return SITE + (rel[: -len("index.html")] if rel.endswith("index.html") else rel)
+
+
+class Cabeca(HTMLParser):
+    """Lê canonical, hreflang, meta (property/name) e o texto de cada `<script type=application/ld+json>`."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.canonicas, self.alternates, self.meta, self.jsonld = [], [], {}, []
+        self._ld = None
+
+    def handle_starttag(self, tag, attrs):
+        d = {k.lower(): (v or "") for k, v in attrs}
+        if tag == "link":
+            rels = d.get("rel", "").lower().split()
+            if "canonical" in rels:
+                self.canonicas.append(d.get("href", ""))
+            if "alternate" in rels and "hreflang" in d:
+                self.alternates.append((d["hreflang"], d.get("href", "")))
+        elif tag == "meta":
+            chave = d.get("property") or d.get("name")
+            if chave:
+                self.meta.setdefault(chave.lower(), []).append(d.get("content", ""))
+        elif tag == "script" and d.get("type", "").lower() == "application/ld+json":
+            self._ld = []
+
+    handle_startendtag = handle_starttag
+
+    def handle_data(self, data):
+        if self._ld is not None:
+            self._ld.append(data)
+
+    def handle_endtag(self, tag):
+        if tag == "script" and self._ld is not None:
+            self.jsonld.append("".join(self._ld))
+            self._ld = None
+
+
+def dimensoes(caminho):
+    """(largura, altura) de um PNG ou JPEG pelo cabeçalho; None se o formato for outro."""
+    with open(caminho, "rb") as f:
+        b = f.read()
+    if b[:8] == b"\x89PNG\r\n\x1a\n" and b[12:16] == b"IHDR":
+        return int.from_bytes(b[16:20], "big"), int.from_bytes(b[20:24], "big")
+    if b[:2] == b"\xff\xd8":
+        i = 2
+        while i + 9 < len(b):
+            if b[i] != 0xFF:
+                return None
+            marcador = b[i + 1]
+            if marcador == 0xFF:
+                i += 1
+                continue
+            if 0xC0 <= marcador <= 0xCF and marcador not in (0xC4, 0xC8, 0xCC):
+                return int.from_bytes(b[i + 7:i + 9], "big"), int.from_bytes(b[i + 5:i + 7], "big")
+            i += 2 + int.from_bytes(b[i + 2:i + 4], "big")
+    return None
+
+
+cabecas = {}
+for caminho in paginas:
+    rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
+    if rel in CONGELADAS:
+        continue
+    if rel not in INDEXAVEIS and rel not in NOINDEX:
+        erros.append(f"{rel}: página fora de INDEXAVEIS, NOINDEX e CONGELADAS do §14 — classifique-a")
+        continue
+    c = Cabeca()
+    c.feed(ler(caminho))
+    c.close()
+    cabecas[rel] = c
+    propria = url_canonica(rel)
+    if len(c.canonicas) != 1:
+        erros.append(f"{rel}: {len(c.canonicas)} <link rel=\"canonical\"> (esperado 1)")
+    elif c.canonicas[0] != propria:
+        erros.append(f"{rel}: canonical {c.canonicas[0]} ≠ a URL da própria página {propria}")
+    og_url = c.meta.get("og:url", [])
+    if og_url and og_url != c.canonicas[:1]:
+        erros.append(f"{rel}: og:url {og_url} ≠ canonical {c.canonicas[:1]}")
+    for chave in OG_OBRIGATORIAS:
+        if len(c.meta.get(chave, [])) != 1 or not c.meta[chave][0].strip():
+            erros.append(f"{rel}: {chave} ausente, vazio ou repetido ({len(c.meta.get(chave, []))}×)")
+    # hreflang: só nas INDEXAVEIS, exatamente pt-BR, en e x-default (= en, D8/D18), recíprocos (o par
+    # declara os mesmos três endereços, porque os dois apontam para as mesmas URLs esperadas).
+    alt = dict(c.alternates)
+    if rel in INDEXAVEIS:
+        pt_rel = rel[len("en/"):] if rel.startswith("en/") else rel
+        esperado = {"pt-BR": url_canonica(pt_rel), "en": url_canonica("en/" + pt_rel), "x-default": url_canonica("en/" + pt_rel)}
+        if len(c.alternates) != len(alt) or alt != esperado:
+            erros.append(f"{rel}: hreflang {sorted(c.alternates)} ≠ esperado {sorted(esperado.items())} (x-default = en)")
+    elif c.alternates:
+        erros.append(f"{rel}: hreflang {c.alternates} numa página sem par (só as INDEXAVEIS declaram)")
+    # indexação: `noindex` só e sempre nas NOINDEX
+    tem_noindex = any("noindex" in v.lower() for k in ("robots", "googlebot") for v in c.meta.get(k, []))
+    if rel in NOINDEX and not tem_noindex:
+        erros.append(f"{rel}: sem <meta name=\"robots\" content=\"noindex\"> (está em NOINDEX)")
+    if rel not in NOINDEX and tem_noindex:
+        erros.append(f"{rel}: noindex numa página indexável — some do Google")
+    # og:image: largura e altura declaradas juntas e iguais às do arquivo (D16)
+    larg, alt_img = c.meta.get("og:image:width", []), c.meta.get("og:image:height", [])
+    imagem = (c.meta.get("og:image") or [""])[0]
+    if bool(larg) != bool(alt_img) or len(larg) > 1 or len(alt_img) > 1:
+        erros.append(f"{rel}: og:image:width {larg} e og:image:height {alt_img} — os dois juntos, uma vez, ou nenhum")
+    elif larg and imagem.startswith(SITE) and os.path.isfile(p(imagem[len(SITE):])):
+        real = dimensoes(p(imagem[len(SITE):]))
+        if real is None:
+            erros.append(f"{rel}: og:image {imagem} não é PNG nem JPEG legível — não dá para conferir width/height")
+        elif (larg[0], alt_img[0]) != (str(real[0]), str(real[1])):
+            erros.append(f"{rel}: og:image:width×height {larg[0]}×{alt_img[0]} ≠ tamanho real de {imagem} ({real[0]}×{real[1]})")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")
