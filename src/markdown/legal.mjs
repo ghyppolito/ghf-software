@@ -41,6 +41,24 @@ export const envolveTabelaLegal = {
   },
 };
 
+/** hast: link externo (`href` começando por `http`) abre em outra aba, com `rel="noopener noreferrer"`.
+ *  O markdown não tem `target`; as páginas antigas abriam em outra aba (WP-08, fatia 7). Sem `noopener`,
+ *  a página aberta alcançaria esta por `window.opener` (`POLEPOSITION-NOOPENER-01`). `mailto:` e
+ *  âncoras internas ficam como estão. */
+export const linksExternosLegais = {
+  name: 'ghf-links-externos-legais',
+  element: {
+    filter: ['a'],
+    visit(node, ctx) {
+      if (!ehLegal(ctx)) return;
+      const href = node.properties?.href;
+      if (typeof href !== 'string' || !/^https?:/i.test(href)) return;
+      ctx.setProperty(node, 'target', '_blank');
+      ctx.setProperty(node, 'rel', ['noopener', 'noreferrer']);
+    },
+  },
+};
+
 /** hast: `id` dos títulos com prefixo `secao-`. O slug do Astro começaria por dígito
  *  (`1-resumo`), e o html-validate (`valid-id`) exige letra; o `id` serve de âncora (`#secao-1-resumo`).
  *  Roda antes do plugin de ids do Astro, que mantém um `id` já posto. */

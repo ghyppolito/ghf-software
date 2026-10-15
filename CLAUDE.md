@@ -5,7 +5,7 @@ Pole Position, EclipseGo), políticas de privacidade, termos de uso e a página 
 do LottoExpert. **Em produção**, servido pelo GitHub Pages a partir da branch `master`.
 
 Hoje as páginas são HTML puro com Tailwind via CDN, na raiz; um build Astro (WP-07) as copia
-para `dist/`, e o CI do PR (`check_site.py`, html-validate, lychee) prova raiz e `dist/`. A
+para `dist/`, e o CI do PR (`check_site.py`, html-validate, lychee) prova `dist/`. A
 evolução dessa stack é o backlog (ver `docs/AVALIACAO.md`). Este arquivo é curto de propósito — leia inteiro. O detalhe
 está em `.claude/context/` e é lido **sob demanda**:
 
@@ -67,7 +67,7 @@ existindo no resultado publicado.
 ## Arquitetura (estado atual — muda no WP-08)
 
 ```
-*.html                      páginas ainda não migradas (4 legais no fim da fatia 6 do WP-08); nav, footer,
+*.html                      páginas ainda não migradas (as 2 legais do LottoExpert no fim da fatia 7 do WP-08); nav, footer,
                             tailwind.config e dicionário i18n (data-i18n + JS) duplicados em cada uma
 assets/                     imagens, favicons, mockups (PNG, sem otimização)
 docs/*.md                   cópia markdown das políticas/termos ainda não migradas e README de cada app
@@ -138,6 +138,8 @@ python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regener
 python3 -m http.server 8080 -d dist                           # servir dist/ para inspeção (Claude in Chrome ou usuário)
 diff ../lotto-expert/docs/PRIVACY_POLICY.md docs/LOTTOEXPERT_PRIVACY_POLICY.md   # o site está atrás do app?
 diff <(sed '1,/^---$/d' src/content/legal/eclipsego-privacy.pt.md) ../eclipse-go/docs/PRIVACY_POLICY.md   # idem, página migrada (sem o front-matter)
+diff <(sed '1,/^---$/d' src/content/legal/topowalk-privacy.pt.md) ../topo-walk/PRIVACY_POLICY.md            # idem
+diff <(sed '1,/^---$/d' src/content/legal/poleposition-privacy.pt.md) ../pole-position/pole-position-app/PRIVACY_POLICY.md   # idem
 npx html-validate 'dist/**/*.html'                            # HTML (versão do lockfile; regras em .htmlvalidate.json)
 lychee --offline --no-progress --root-dir "$PWD/dist" 'dist/**/*.html'  # links internos (binário 0.24.2 do release lycheeverse/lychee)
 ```

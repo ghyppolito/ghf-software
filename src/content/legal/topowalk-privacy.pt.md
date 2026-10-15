@@ -1,3 +1,6 @@
+---
+lastUpdated: "2026-09"
+---
 # Política de Privacidade — TopoWalk
 
 **Última atualização:** setembro de 2026
@@ -151,7 +154,7 @@ O TopoWalk **não coleta, não armazena remotamente e não transmite**:
 - Localização em segundo plano ou histórico de localização fora do uso ativo do app
 - ID de publicidade (o aplicativo remove explicitamente esta permissão)
 
-Duas observações de precisão:
+Três observações de precisão:
 
 1. **Feedback por e-mail.** Se o usuário voluntariamente nos escrever pelo botão "Enviar feedback" (seção 2.6), passamos a conhecer o endereço de e-mail que ele escolheu usar e o conteúdo que ele escreveu. Isso depende sempre de uma ação explícita do usuário e não ocorre em nenhum outro fluxo do aplicativo.
 2. **Migração do TopoWalk Pro (seção 2.11).** Esse recurso envia ao nosso servidor um identificador embaralhado do aparelho e um identificador de sessão anônimo. Nenhum dos dois carrega nome, e-mail ou conta, e nenhum deles é usado fora dessa finalidade. É a **única** situação em que o aplicativo guarda algo num servidor nosso.
@@ -380,7 +383,7 @@ Recomendamos que você revise esta política periodicamente.
 
 Dúvidas, solicitações ou comentários sobre esta Política de Privacidade podem ser enviados para:
 
-**GHF Software**
+**GHF Software**\
 E-mail: **support@ghfsoftware.com**
 
 ---

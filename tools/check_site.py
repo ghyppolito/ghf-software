@@ -29,8 +29,9 @@ Checa:
  11. `dist/` não é mais antigo que as fontes (src/, configs, package.json, COPIADOS_DA_RAIZ do
      astro.config.mjs, fontes de LEGAL): sem isso, o check daria verde sobre um build velho
  12. página legal migrada (fonte em src/content/legal/), pt e en: um só `<h1`, um só rótulo de
-     data do idioma da página, nenhuma aspa tipográfica que o `.md` não tenha; e `.pt.md` e
-     `.en.md` com a mesma contagem de `## `, `### ` e linhas de tabela
+     data do idioma da página, nenhuma aspa tipográfica que o `.md` não tenha, nenhum link
+     `target="_blank"` sem `rel="noopener"`; e `.pt.md` e `.en.md` com a mesma contagem de `## `,
+     `### `, linhas de tabela, itens de lista, links, crases (`code`) e `---`
 
 Modo raiz (`--raiz .`) não é mais suportado desde a fatia 6 do WP-08: uma URL contratual
 (`eclipsego-privacy.html`) só existe em `dist/`, e o §1 falharia na raiz. Os ramos que ainda o
@@ -78,8 +79,6 @@ PUBLICADAS = [
 # não tem par en (formato é do app).
 EN_PENDENTE = [
     "lottoexpert-privacy.html", "lottoexpert-terms.html",
-    "topowalk-privacy.html",
-    "poleposition-privacy.html",
 ]
 SEM_PAR_EN = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
 COM_PAR = [x for x in PUBLICADAS if x not in EN_PENDENTE and x not in SEM_PAR_EN]
@@ -90,8 +89,8 @@ COM_PAR = [x for x in PUBLICADAS if x not in EN_PENDENTE and x not in SEM_PAR_EN
 LEGAL = {
     "lottoexpert-privacy.html": "docs/LOTTOEXPERT_PRIVACY_POLICY.md",
     "lottoexpert-terms.html": "docs/LOTTOEXPERT_TERMS_OF_SERVICE.md",
-    "topowalk-privacy.html": "docs/TOPOWALK_PRIVACY_POLICY.md",
-    "poleposition-privacy.html": "docs/POLEPOSITION_PRIVACY_POLICY.md",
+    "topowalk-privacy.html": "src/content/legal/topowalk-privacy.pt.md",
+    "poleposition-privacy.html": "src/content/legal/poleposition-privacy.pt.md",
     "eclipsego-privacy.html": "src/content/legal/eclipsego-privacy.pt.md",
 }
 
@@ -521,14 +520,25 @@ for pagina, md in LEGAL.items():
         n_h1 = len(re.findall(r"<h1\b", html, re.I))
         if n_h1 != 1:
             erros.append(f"{alvo}: {n_h1} `<h1` (esperado 1 — o `# título` do .md não pode sair no corpo)")
-        n_rot = sem_tags(html).count(ROTULO[lang])
+        # o rótulo com dois-pontos: o texto pode citar a data pelo nome (TopoWalk, seção 12: `A data
+        # de "Última atualização" no topo…`)
+        n_rot = sem_tags(html).count(ROTULO[lang] + ":")
         if n_rot != 1:
-            erros.append(f"{alvo}: {n_rot} rótulo(s) `{ROTULO[lang]}` no texto (esperado 1 — a linha de data do .md não pode sair no corpo)")
+            erros.append(f"{alvo}: {n_rot} rótulo(s) `{ROTULO[lang]}:` no texto (esperado 1 — a linha de data do .md não pode sair no corpo)")
         for ch in TIPOGRAFICAS:
             if html.count(ch) > texto_md[lang].count(ch):
                 erros.append(f"{alvo}: aspa tipográfica `{ch}` ({html.count(ch)}×) além das de {base_md}.{lang}.md "
                              f"({texto_md[lang].count(ch)}×) — smartPunctuation ligado?")
-    for nome, padrao in (("`## `", r"^## "), ("`### `", r"^### "), ("linhas de tabela `|`", r"^\|")):
+        # Link que abre outra aba sem `noopener` deixa a página aberta alcançar esta por
+        # `window.opener` (plugin linksExternosLegais de src/markdown/legal.mjs). A régua para o
+        # site inteiro é de TARGET-BLANK-SEM-NOOPENER-01 (fatia 9).
+        for tag in re.findall(r"<a\b[^>]*>", html, re.I):
+            if re.search(r'target=["\']_blank["\']', tag) and not re.search(r'rel=["\'][^"\']*\bnoopener\b', tag):
+                erros.append(f"{alvo}: link com target=\"_blank\" sem rel=\"noopener\": {tag}")
+    for nome, padrao in (("`## `", r"^## "), ("`### `", r"^### "), ("linhas de tabela `|`", r"^\|"),
+                         ("itens de lista", r"^\s*([-*]|\d+\.) "), ("links `](`", r"\]\("),
+                         ("crases `` ` `` (code)", r"`"), ("`---`", r"^---$")):
+        # o `---` do front-matter conta igual nos dois lados
         n = {lang: len(re.findall(padrao, texto_md[lang], re.M)) for lang in ("pt", "en")}
         if n["pt"] != n["en"]:
             erros.append(f"{base_md}.en.md: {n['en']} {nome} ≠ {n['pt']} do .pt.md — tradução com estrutura diferente")

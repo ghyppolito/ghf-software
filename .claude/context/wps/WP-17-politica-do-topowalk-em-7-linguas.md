@@ -25,7 +25,7 @@ espelhando `../topo-walk/PRIVACY_POLICY.md`; o mapa de `idiomas.ts` lista as 7.
 (`../topo-walk/app/src/main/res/values/strings.xml:5`); a ficha da Play nas 7 línguas está em
 `../topo-walk/docs/store_listing_texts.md:64–406`. Origem só em pt: 5.842 palavras, 13 `##`,
 31 `###` (`../topo-walk/PRIVACY_POLICY.md:9–379`). Hoje o espelho está em dia:
-`diff -q ../topo-walk/PRIVACY_POLICY.md docs/TOPOWALK_PRIVACY_POLICY.md` vazio (2026-10-12).
+`diff <(sed '1,/^---$/d' src/content/legal/topowalk-privacy.pt.md) ../topo-walk/PRIVACY_POLICY.md` vazio (2026-10-12).
 Tamanho L pelo volume (~29 mil palavras traduzidas); se passar de uma sessão, PR por língua —
 cada PR só entra no mapa de `idiomas.ts` a língua que está completa.
 
@@ -33,14 +33,14 @@ cada PR só entra no mapa de `idiomas.ts` a língua que está completa.
 de revisão do WP-16 (o que o usuário corrigiu vira regra aqui); `../topo-walk/PRIVACY_POLICY.md` inteiro.
 
 **Arquivos-alvo:** `src/content/legal/topowalk.{pt,en,es,fr,it,de,ru}.md`,
-`docs/TOPOWALK_PRIVACY_POLICY.md`, `src/i18n/idiomas.ts` (só a entrada `topowalk-privacy`).
+`src/content/legal/topowalk-privacy.pt.md`, `src/i18n/idiomas.ts` (só a entrada `topowalk-privacy`).
 Fora do site, antes: cláusula de prevalência no `PRIVACY_POLICY.md` do TopoWalk, se D8 (b1).
 
 **Passos:** os do WP-16, com ru a mais. ru: nomes de SDK e de produto em latim, sem transliterar
 (`Firebase`, `Google Play`, `TopoWalk Pro`, `topowalk_pro`).
 
 **Critérios de aceite:**
-- `diff -q ../topo-walk/PRIVACY_POLICY.md docs/TOPOWALK_PRIVACY_POLICY.md` vazio.
+- `diff <(sed '1,/^---$/d' src/content/legal/topowalk-privacy.pt.md) ../topo-walk/PRIVACY_POLICY.md` vazio.
 - `python3 tools/check_site.py --raiz dist` verde — mesma data nas 7, 13 `##` e 31 `###` em
   todas, `` `topowalk_pro` `` e cada permissão com a mesma contagem do pt, `Firebase Analytics`,
   `Firebase Crashlytics`, `Google Play Billing` presentes em todas.

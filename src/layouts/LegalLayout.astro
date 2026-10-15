@@ -25,7 +25,7 @@ interface Props {
   favicon?: string;
   classeBody?: string;
   /** cor do selo "Documento Legal" do hero (classes literais por variante) */
-  selo: 'amarelo';
+  selo: 'amarelo' | 'terracota' | 'lima';
   /** botão abaixo do card */
   voltar: { href: string; texto: string };
 }
@@ -37,6 +37,10 @@ const x = legal[lang];
 const CLASSES_SELO = {
   // eclipsego-privacy.html
   amarelo: 'inline-block mb-4 px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-900/20 text-sm text-yellow-400 font-semibold',
+  // topowalk-privacy.html (primary terracota do tema)
+  terracota: 'inline-block mb-4 px-4 py-1.5 rounded-full border border-brand-primary/30 bg-brand-primary/20 text-sm text-brand-primary font-semibold',
+  // poleposition-privacy.html
+  lima: 'inline-block mb-4 px-4 py-1.5 rounded-full border border-lime-500/20 bg-lime-900/10 text-sm text-lime-400 font-medium',
 };
 ---
 <Base

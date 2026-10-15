@@ -1,0 +1,55 @@
+---
+// Política de privacidade do TopoWalk em inglês (/en/topowalk-privacy.html), par da URL contratual:
+// página literal, sem rota dinâmica. Texto em src/content/legal/topowalk-privacy.en.md; hero,
+// botão e <head> em i18n/legal.ts. Nav e footer como na página antiga: realce `primary` (terracota do tema)
+// com logo brilhando, só o e-mail entre os canais, rodapé `surface` e a política do TopoWalk
+// destacada na lista de políticas. O botão volta para a home da GHF, como na página antiga.
+import { getEntry, render } from 'astro:content';
+import LegalLayout from '../../layouts/LegalLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { legal } from '../../i18n/legal';
+import { rota } from '../../i18n/ui';
+
+const lang = 'en';
+const x = legal[lang];
+const home = rota(lang, 'index.html');
+const entrada = await getEntry('legal', 'topowalk-privacy.en');
+if (!entrada) throw new Error('src/content/legal/topowalk-privacy.en.md ausente');
+const { Content } = await render(entrada);
+---
+<LegalLayout
+  lang={lang}
+  caminho="topowalk-privacy.html"
+  title={x.topowalk_privacy_title}
+  description={x.topowalk_privacy_description}
+  titulo={x.topowalk_privacy_h1}
+  lastUpdated={entrada.data.lastUpdated}
+  tema="topowalk-privacy"
+  favicon="/assets/topo-walk.png"
+  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden"
+  selo="terracota"
+  voltar={{ href: home, texto: x.voltar_home }}
+>
+  <Nav
+    slot="nav"
+    lang={lang}
+    caminho="topowalk-privacy.html"
+    inicio={home}
+    itens={[
+      { href: `${home}#sobre`, chave: 'nav_about' },
+      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
+      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <Content />
+  <Footer
+    slot="footer"
+    lang={lang}
+    inicio={home}
+    prefixoAncora={home}
+    redes={{}}
+    politicaAtual="topowalk-privacy.html"
+    fundo="surface"
+  />
+</LegalLayout>
