@@ -139,7 +139,7 @@
                 Política de Privacidade — Pole Position
             </h1>
             <p class="text-gray-500 text-lg" data-i18n="last_updated">
-                Última atualização: setembro de 2026
+                Última atualização: outubro de 2026
             </p>
         </div>
     </div>
@@ -242,7 +242,7 @@
                 nav_portfolio: "Portfólio",
                 nav_contact: "Contato",
                 page_title: "Política de Privacidade — Pole Position",
-                last_updated: "Última atualização: setembro de 2026",
+                last_updated: "Última atualização: outubro de 2026",
                 intro: "Esta Política de Privacidade descreve como o aplicativo <strong>Pole Position: Race Analytics</strong> (\"o App\", \"nós\") coleta, usa, armazena e protege as informações dos usuários (\"você\"). Ao instalar e utilizar o App, você concorda com os termos desta política.",
                 btn_back: "Voltar para a GHF Software",
                 footer_apps: "Aplicativos",
@@ -336,6 +336,7 @@
                         <li>Centralizar o mapa na posição atual durante a configuração de circuitos.</li>
                         <li>Registrar o <strong>traçado da melhor volta</strong> (sequência de coordenadas GPS amostradas durante a sessão), quando o usuário ativa esse recurso para uma pista (ver seção 2.5).</li>
                     </ul>
+                    <p class="mb-4">No Android 12 ou superior, o sistema exige que o pedido de localização precisa venha junto com o de <strong>localização aproximada</strong> (<code class="font-mono bg-gray-800 px-1.5 py-0.5 rounded text-gray-200 text-sm">ACCESS_COARSE_LOCATION</code>), e oferece ao usuário escolher entre as duas. O App só cronometra com a localização precisa: se apenas a aproximada for concedida, a cronometragem não funciona e o App pede novamente a precisa. A permissão de localização aproximada não é usada para nenhuma outra finalidade e não se confunde com a localização aproximada (país) que o Firebase Analytics deriva do endereço IP, descrita acima.</p>
                     <p class="mb-4">A localização é utilizada <strong>exclusivamente dentro do dispositivo</strong>. Nenhuma coordenada GPS é transmitida para servidores externos, terceiros ou qualquer serviço de nuvem.</p>
                     
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.2 Dados de Sensores de Movimento</h3>
@@ -359,9 +360,20 @@
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.4 Dados de Uso Coletados Automaticamente (Firebase Analytics)</h3>
                     <p class="mb-4">O App integra o <strong>Firebase Analytics</strong> (Google LLC) para coleta anônima de métricas de uso. Os dados coletados incluem:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li><strong>Eventos de comportamento no app:</strong> fluxos percorridos (onboarding, criação de circuito, início e encerramento de sessão, análise de sessão), ações de configuração (alteração de tema, orientação, modo de localização, TTS) e ações no histórico.</li>
-                        <li><strong>Propriedades agregadas do usuário:</strong> modo de tema, modo TTS ativo, modo de localização, quantidade total de circuitos criados.</li>
+                        <li><strong>Eventos de comportamento no app:</strong> fluxos percorridos (onboarding, criação de circuito, início e encerramento de sessão, análise de sessão), ações de configuração (alteração de tema, orientação, TTS) e ações no histórico. Sessão e circuito aparecem só por identificadores numéricos internos — o número sequencial do registro no banco local, que não identifica o usuário —, sem nome nem localização. Três marcos de ativação são enviados uma única vez por instalação, sem nenhum parâmetro: primeiro circuito criado, primeira e segunda sessão com volta gravada.</li>
+                        <li><strong>Sinais técnicos da cronometragem:</strong> contagem de quantas passagens pela linha foram descartadas pelas guardas do cronômetro, por motivo de categoria fechada, enviada ao fim da sessão. Não inclui localização, circuito nem tempo.</li>
+                        <li><strong>Sinais técnicos da sessão</strong>, só com valores numéricos e de categoria fechada:
+                            <ul class="list-circle pl-6 mt-1 space-y-1">
+                                <li>encerramento da sessão: contagem de voltas, <strong>duração total da sessão</strong> (do início ao encerramento) e se o encerramento foi automático;</li>
+                                <li>sessão descartada sem registro salvo: motivo, contagem de voltas e duração total da sessão;</li>
+                                <li>encerramento do serviço de telemetria pelo sistema: contagem de voltas, duração total da sessão e quando foi detectado;</li>
+                                <li>perda de sinal de GPS: <strong>duração sem sinal de GPS</strong>, número da volta e se o sinal voltou.</li>
+                            </ul>
+                            <p class="mt-2">São durações da sessão inteira ou do intervalo sem sinal, nunca tempo de volta ou de setor; na pista aberta encerrada automaticamente ao fim do percurso, a duração total da sessão soma o percurso e o tempo antes da largada, e não é o tempo do percurso. Os sinais de falha vão também ao Crashlytics (ver seção 2.6).</p>
+                        </li>
+                        <li><strong>Propriedades agregadas do usuário:</strong> modo de tema, modo TTS ativo, quantidade total de circuitos criados e estágio de ativação (nenhum, circuito criado, uma ou duas sessões com volta gravada).</li>
                         <li><strong>Dados técnicos do dispositivo:</strong> coletados automaticamente pelo Firebase, incluindo modelo do dispositivo, versão do Android, idioma do sistema e país de origem (derivado do IP, não armazenado como dado bruto).</li>
+                        <li><strong>Origem da instalação:</strong> o Firebase lê da Google Play Store de onde veio a instalação (por exemplo, o link ou a campanha da página do App na loja). É uma informação de canal de aquisição, enviada junto com os demais dados de uso e associada, como eles, ao identificador de instância do Firebase. Não inclui o ID de publicidade.</li>
                     </ul>
                     <p class="mb-4"><strong>O que NÃO é coletado via analytics:</strong></p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
@@ -370,7 +382,7 @@
                         <li>Nomes de circuitos, notas ou qualquer conteúdo inserido pelo usuário.</li>
                         <li>Dados que permitam identificar o usuário individualmente (nome, e-mail, CPF etc.).</li>
                     </ul>
-                    <p class="mb-4">Esses dados são usados exclusivamente para entender quais funcionalidades são utilizadas e melhorar o App em versões futuras. Não há venda ou compartilhamento dessas informações para fins publicitários.</p>
+                    <p class="mb-4">Esses dados são usados exclusivamente para entender quais funcionalidades são utilizadas e melhorar o App em versões futuras. Não há venda ou compartilhamento dessas informações para fins publicitários. O App <strong>não usa o ID de publicidade</strong> do Android nem as APIs de anúncios e de atribuição de anúncios do Privacy Sandbox, e a coleta do ID de publicidade pelo Firebase Analytics está desligada.</p>
                     
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.5 Traçado da Volta (GPS) — Recurso Opcional</h3>
                     <p class="mb-4">O App oferece um recurso de <strong>análise de traçado</strong> que registra a sequência de coordenadas GPS da melhor volta de cada sessão para gerar gráficos de velocidade, força G e o contorno do circuito. Sobre esse recurso:</p>
@@ -385,7 +397,7 @@
                     <p class="mb-4">O App integra o <strong>Firebase Crashlytics</strong> (Google LLC) para identificar falhas e problemas de funcionamento. São enviados:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li><strong>Registros de falha (crashes) e erros não fatais</strong>, incluindo a pilha de execução (stack trace) do código do App.</li>
-                        <li><strong>Modos de falha ambientais registrados pelo App</strong>, sem os quais problemas que não geram crash ficariam invisíveis: perda de sinal de GPS durante uma sessão, encerramento do serviço de telemetria pelo sistema operacional (típico de otimizações agressivas de bateria) e sessão iniciada que não gerou registro salvo. Junto com cada ocorrência vão apenas valores de categoria fechada e numéricos — duração sem sinal, número da volta, contagem de voltas, motivo do descarte.</li>
+                        <li><strong>Modos de falha ambientais registrados pelo App</strong>, sem os quais problemas que não geram crash ficariam invisíveis: perda de sinal de GPS durante uma sessão, encerramento do serviço de telemetria pelo sistema operacional (típico de otimizações agressivas de bateria) e sessão iniciada que não gerou registro salvo. Junto com cada ocorrência vão apenas valores de categoria fechada e numéricos — <strong>duração total da sessão</strong> (do início ao encerramento), <strong>duração sem sinal de GPS</strong>, número da volta, contagem de voltas, motivo do descarte e se o sinal de GPS voltou.</li>
                         <li><strong>Dados técnicos do dispositivo e do estado do App</strong> coletados automaticamente pelo Crashlytics: modelo, versão do Android, memória e armazenamento disponíveis, e um identificador de instalação gerado pelo próprio Crashlytics.</li>
                     </ul>
                     <p class="mb-4"><strong>O que NÃO é enviado ao Crashlytics:</strong></p>
@@ -421,8 +433,8 @@
                                     <td class="py-4 px-5 text-sm text-gray-400">Detecção precisa de cruzamento de linha e velocidade GPS</td>
                                 </tr>
                                 <tr class="hover:bg-gray-800/10">
-                                    <td class="py-4 px-5 text-sm text-gray-300 font-mono">ACCESS_BACKGROUND_LOCATION</td>
-                                    <td class="py-4 px-5 text-sm text-gray-400">Manutenção do serviço de telemetria durante sessão ativa com tela desligada</td>
+                                    <td class="py-4 px-5 text-sm text-gray-300 font-mono">ACCESS_COARSE_LOCATION</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Exigida pelo Android, junto da localização precisa, para pedir a permissão (Android 12+). Uso apenas no dispositivo; não habilita a cronometragem sozinha</td>
                                 </tr>
                                 <tr class="hover:bg-gray-800/10">
                                     <td class="py-4 px-5 text-sm text-gray-300 font-mono">FOREGROUND_SERVICE</td>
@@ -452,10 +464,18 @@
                                     <td class="py-4 px-5 text-sm text-gray-300 font-mono">INTERNET</td>
                                     <td class="py-4 px-5 text-sm text-gray-400">Envio de eventos anônimos ao Firebase Analytics, envio de relatórios de falha ao Firebase Crashlytics e carregamento do mapa (Google Maps)</td>
                                 </tr>
+                                <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300 font-mono">ACCESS_NETWORK_STATE</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Verificar se há conexão de rede antes de enviar eventos ao Firebase e de carregar o mapa</td>
+                                </tr>
+                                <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300 font-mono">BIND_GET_INSTALL_REFERRER_SERVICE</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Ler da Google Play Store a origem da instalação (link ou campanha), enviada ao Firebase Analytics junto com os dados de uso. Não é um identificador e não dá acesso a dado do usuário</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <p class="mb-4">A permissão <code class="font-mono bg-gray-800 px-1 py-0.5 rounded text-gray-200 text-sm">ACCESS_BACKGROUND_LOCATION</code> é utilizada <strong>somente durante sessões de pilotagem ativas</strong>, quando o usuário inicia explicitamente uma sessão no App. Ela garante que o serviço de telemetria continue registrando corretamente mesmo que o piloto minimize o App ou o dispositivo apague a tela durante a corrida. O App não rastreia a localização do usuário fora do contexto de uma sessão ativa.</p>
+                    <p class="mb-4">O App <strong>não</strong> usa localização em segundo plano (<code class="font-mono bg-gray-800 px-1 py-0.5 rounded text-gray-200 text-sm">ACCESS_BACKGROUND_LOCATION</code>). Durante uma sessão de pilotagem iniciada pelo usuário, o serviço de telemetria roda em primeiro plano, com notificação visível e botão para parar a gravação; por isso continua registrando com a tela apagada ou o App minimizado. Fora de uma sessão ativa, o App só acessa a localização com a tela de configuração de circuito aberta.</p>
                     
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Armazenamento e Segurança</h2>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
@@ -518,7 +538,7 @@
                 nav_portfolio: "Portfolio",
                 nav_contact: "Contact",
                 page_title: "Privacy Policy — Pole Position",
-                last_updated: "Last updated: September 2026",
+                last_updated: "Last updated: October 2026",
                 intro: "This Privacy Policy describes how the <strong>Pole Position: Race Analytics</strong> application (\"the App\", \"we\", \"us\") collects, uses, stores, and protects user information (\"you\"). By installing and using the App, you agree to the terms of this policy.",
                 btn_back: "Back to GHF Software",
                 footer_apps: "Applications",
@@ -612,6 +632,7 @@
                         <li>Center the map on your current position during track configuration.</li>
                         <li>Record the <strong>best lap trace</strong> (sequence of GPS coordinates sampled during the session), when the user enables this feature for a track (see section 2.5).</li>
                     </ul>
+                    <p class="mb-4">On Android 12 or higher, the system requires the precise location request to come together with the <strong>approximate location</strong> request (<code class="font-mono bg-gray-800 px-1.5 py-0.5 rounded text-gray-200 text-sm">ACCESS_COARSE_LOCATION</code>), and lets the user choose between the two. The App only times laps with precise location: if only approximate location is granted, timing does not work and the App asks for precise location again. The approximate location permission is not used for any other purpose and is not to be confused with the approximate location (country) that Firebase Analytics derives from the IP address, described above.</p>
                     <p class="mb-4">Location data is used <strong>exclusively inside the device</strong>. No GPS coordinates are ever transmitted to external servers, third parties, or any cloud services.</p>
                     
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.2 Motion Sensor Data</h3>
@@ -635,9 +656,20 @@
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.4 Automatically Collected Usage Data (Firebase Analytics)</h3>
                     <p class="mb-4">The App integrates <strong>Firebase Analytics</strong> (Google LLC) for anonymous usage metrics collection. Collected data includes:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
-                        <li><strong>App behavior events:</strong> user flows (onboarding, track creation, starting and ending sessions, session analysis), configuration actions (theme changes, screen orientation, location mode, TTS) and history actions.</li>
-                        <li><strong>Aggregated user properties:</strong> theme mode, active TTS mode, location mode, total tracks created.</li>
+                        <li><strong>App behavior events:</strong> user flows (onboarding, track creation, starting and ending sessions, session analysis), configuration actions (theme changes, screen orientation, TTS) and history actions. Sessions and tracks appear only as internal numeric identifiers — the sequential number of the record in the local database, which does not identify the user —, with no name or location. Three activation milestones are sent only once per installation, with no parameters: first track created, first and second session with a recorded lap.</li>
+                        <li><strong>Timing technical signals:</strong> a count of how many line crossings were discarded by the lap timer's guards, by closed-category reason, sent at the end of the session. It does not include location, track, or time.</li>
+                        <li><strong>Session technical signals</strong>, with numeric and closed-category values only:
+                            <ul class="list-circle pl-6 mt-1 space-y-1">
+                                <li>session end: lap count, <strong>total session duration</strong> (from start to end) and whether the session was ended automatically;</li>
+                                <li>session discarded with no saved record: reason, lap count and total session duration;</li>
+                                <li>telemetry service terminated by the system: lap count, total session duration and when it was detected;</li>
+                                <li>GPS signal loss: <strong>duration without GPS signal</strong>, lap number and whether the signal came back.</li>
+                            </ul>
+                            <p class="mt-2">These are durations of the whole session or of the interval without signal, never lap or sector times; on an open track ended automatically at the end of the run, the total session duration adds up the run and the time before the start, and is not the run time. The failure signals are also sent to Crashlytics (see section 2.6).</p>
+                        </li>
+                        <li><strong>Aggregated user properties:</strong> theme mode, active TTS mode, total tracks created and activation stage (none, track created, one or two sessions with a recorded lap).</li>
                         <li><strong>Technical device data:</strong> automatically collected by Firebase, including device model, Android version, system language, and country of origin (derived from IP, not stored as raw data).</li>
+                        <li><strong>Install source:</strong> Firebase reads from the Google Play Store where the installation came from (for example, the link or the campaign of the App's store page). It is acquisition-channel information, sent along with the other usage data and associated, like them, with the Firebase instance identifier. It does not include the advertising ID.</li>
                     </ul>
                     <p class="mb-4"><strong>What is NOT collected via analytics:</strong></p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
@@ -646,7 +678,7 @@
                         <li>Track names, session notes, or any user-entered content.</li>
                         <li>Data that allows individual identification of the user (name, email, ID, etc.).</li>
                     </ul>
-                    <p class="mb-4">This data is used exclusively to understand which features are used and improve the App in future versions. There is no selling or sharing of this information for advertising purposes.</p>
+                    <p class="mb-4">This data is used exclusively to understand which features are used and improve the App in future versions. There is no selling or sharing of this information for advertising purposes. The App <strong>does not use the Android advertising ID</strong> or the Privacy Sandbox advertising and ad attribution APIs, and advertising ID collection by Firebase Analytics is disabled.</p>
                     
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">2.5 Lap Trace (GPS) — Optional Feature</h3>
                     <p class="mb-4">The App offers a <strong>trace analysis</strong> feature that records the sequence of GPS coordinates of the best lap of each session to generate speed, G-force graphs, and the track outline. Regarding this feature:</p>
@@ -661,7 +693,7 @@
                     <p class="mb-4">The App integrates <strong>Firebase Crashlytics</strong> (Google LLC) to identify crashes and operational issues. The following are sent:</p>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
                         <li><strong>Crash reports and non-fatal errors</strong>, including stack traces of the App's code.</li>
-                        <li><strong>Environmental failure modes tracked by the App</strong>, without which issues that do not trigger a crash would remain invisible: loss of GPS signal during a session, OS termination of the telemetry service (typical of aggressive battery optimizations), and started sessions that produced no saved record. Accompanied only by closed-category and numeric values — signal-loss duration, lap number, lap count, discard reason.</li>
+                        <li><strong>Environmental failure modes tracked by the App</strong>, without which issues that do not trigger a crash would remain invisible: loss of GPS signal during a session, OS termination of the telemetry service (typical of aggressive battery optimizations), and started sessions that produced no saved record. Accompanied only by closed-category and numeric values — <strong>total session duration</strong> (from start to end), <strong>duration without GPS signal</strong>, lap number, lap count, discard reason and whether the GPS signal came back.</li>
                         <li><strong>Technical device data and App state</strong> automatically collected by Crashlytics: model, Android version, available memory and storage, and an installation ID generated by Crashlytics itself.</li>
                     </ul>
                     <p class="mb-4"><strong>What is NOT sent to Crashlytics:</strong></p>
@@ -697,8 +729,8 @@
                                     <td class="py-4 px-5 text-sm text-gray-400">Precise line crossing detection and GPS speed calculations</td>
                                 </tr>
                                 <tr class="hover:bg-gray-800/10">
-                                    <td class="py-4 px-5 text-sm text-gray-300 font-mono">ACCESS_BACKGROUND_LOCATION</td>
-                                    <td class="py-4 px-5 text-sm text-gray-400">Maintains telemetry tracking during active sessions when the screen is turned off</td>
+                                    <td class="py-4 px-5 text-sm text-gray-300 font-mono">ACCESS_COARSE_LOCATION</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Required by Android, together with precise location, to request the permission (Android 12+). Used only on the device; does not enable timing on its own</td>
                                 </tr>
                                 <tr class="hover:bg-gray-800/10">
                                     <td class="py-4 px-5 text-sm text-gray-300 font-mono">FOREGROUND_SERVICE</td>
@@ -728,10 +760,18 @@
                                     <td class="py-4 px-5 text-sm text-gray-300 font-mono">INTERNET</td>
                                     <td class="py-4 px-5 text-sm text-gray-400">Sends anonymous events to Firebase Analytics, sends crash reports to Firebase Crashlytics, and fetches map layers from Google Maps API</td>
                                 </tr>
+                                <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300 font-mono">ACCESS_NETWORK_STATE</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Check for a network connection before sending events to Firebase and loading the map</td>
+                                </tr>
+                                <tr class="hover:bg-gray-800/10">
+                                    <td class="py-4 px-5 text-sm text-gray-300 font-mono">BIND_GET_INSTALL_REFERRER_SERVICE</td>
+                                    <td class="py-4 px-5 text-sm text-gray-400">Read from the Google Play Store the install source (link or campaign), sent to Firebase Analytics along with the usage data. It is not an identifier and does not grant access to any user data</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <p class="mb-4">The <code class="font-mono bg-gray-800 px-1 py-0.5 rounded text-gray-200 text-sm">ACCESS_BACKGROUND_LOCATION</code> permission is used <strong>only during active racing sessions</strong>, when the user explicitly starts a tracking session. It guarantees that the telemetry service continues recording accurately even if the driver minimizes the App or the screen turns off during the race. The App does not track user location outside an active session.</p>
+                    <p class="mb-4">The App does <strong>not</strong> use background location (<code class="font-mono bg-gray-800 px-1 py-0.5 rounded text-gray-200 text-sm">ACCESS_BACKGROUND_LOCATION</code>). During a racing session started by the user, the telemetry service runs in the foreground, with a visible notification and a button to stop recording; that is why it keeps recording with the screen off or the App minimized. Outside an active session, the App only accesses location while the track configuration screen is open.</p>
                     
                     <h2 class="text-2xl font-bold text-white mt-10 mb-4">4. Storage and Security</h2>
                     <ul class="list-disc pl-6 mb-4 space-y-2">
