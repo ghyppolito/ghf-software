@@ -34,8 +34,8 @@ Procure o que já existe — recriar é o desperdício mais comum aqui:
 
 Layout em `src/layouts/`, componentes em `src/components/`, conteúdo em `src/content/`
 (markdown legal por idioma), rotas em `src/pages/` e `src/pages/en/`. URL contratual fica
-como arquivo `.html` (`build.format: 'file'`). Nada em `public/` além de `.well-known/`,
-convite, favicons e `CNAME`.
+como arquivo `.html` (`build.format: 'preserve'`). Nada em `public/` além de `assets/`,
+`.well-known/`, `lotto-expert/` (convite) e `CNAME` — `check_site.py` §13 confere.
 
 ## Sempre
 

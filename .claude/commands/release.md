@@ -6,7 +6,7 @@ description: Publica o site — prepara e confere o PR develop → master (Pages
 em produção aponta. Por isso o merge é do usuário; o agente prepara e confere.
 
 **Limites do agente:** nunca faz merge em `master`, nunca faz push sem pedido, nunca altera
-`CNAME` ou `_config.yml` aqui.
+`public/CNAME` aqui.
 
 1. **Agente:** `git fetch` e `git log --oneline master..develop`. Liste o que vai ao ar, e
    marque o que é texto legal (urgente) e o que é landing. Se há WP `doing` cujo código está
@@ -19,11 +19,8 @@ em produção aponta. Por isso o merge é do usuário; o agente prepara e confer
    `python3 -m http.server 8080 -d dist` na `develop` (depois do build).
 4. **Usuário:** relata o checklist. Sem o relato, o ritual **não** está concluído.
 5. **Usuário:** `gh pr create --base master --head develop` (ou merge direto, como preferir) e
-   merge. Quem publica depende da variável de repositório `PAGES_VIA_ACTIONS`: enquanto não
-   estiver ligada (Pages em modo "branch master"), o Jekyll publica a raiz — run "pages build
-   and deployment" — e o workflow `Deploy` só builda (job `deploy` pulado). Com
-   `PAGES_VIA_ACTIONS=true` (Pages em modo "GitHub Actions"), o `deploy.yml` publica `dist/`.
-   Confira que o run de quem publica saiu verde.
+   merge. O workflow `Deploy` (`deploy.yml`) builda e publica `dist/` (Pages em modo "GitHub
+   Actions", `PAGES_VIA_ACTIONS=true` desde o WP-07). Confira que o run saiu verde.
 6. **Agente, depois do merge:** confira no ar — `curl -sI https://ghfsoftware.com/<página>`
    com 200 e, para texto legal, `curl -s https://ghfsoftware.com/lottoexpert-privacy.html | grep -o "Última atualização: [^<]*"`
    com a data nova. Registre "Publicado em AAAA-MM-DD" nos WPs e atualize o `handoff.md` §6.

@@ -78,6 +78,8 @@ para provar as regras do check), `CLAUDE.md` (seções "Produto e copy" e "Arqui
 - `grep -rn "location.replace\|location.href *=" src/` vazio (sem redirect automático).
 - `grep -c 'hreflang' dist/topowalk-privacy.html` = nº de línguas da página + 1 (`x-default`).
 
+**Herdado do WP-08 (fatia 9):** a gravação de `ghf_lang` no `localStorage` foi removida por não ter leitor (`GHF-LANG-SEM-CONSUMIDOR-01`, privacy-first). A escolha de idioma (D8 c1) nasce aqui, gravação e leitor juntos. `data-troca-idioma` em `TrocaIdioma.astro` também ficou sem consumidor: usar ou remover (`TROCA-IDIOMA-ATRIBUTO-SEM-CONSUMIDOR-01`).
+
 **Só no navegador:** com uma página de teste local mapeada para `['pt','en','es']` (não
 publicada): 360 e 1280, seletor mostra 3 línguas e troca preservando a página; navegador em
 `es` vê a faixa de sugestão na URL pt e **continua na URL pt**; página com `['pt']` sem

@@ -2,49 +2,50 @@
 """Rede de segurança do site — roda no /verify e no CI do PR.
 
 Só biblioteca padrão, de propósito. Confere o site publicado: `dist/`, saída do `npm run build`
-(ADR-002). Sem `--raiz`, usa `dist/` e falha pedindo o build se ele não existir. Desde a fatia 6
-do WP-08 a raiz do repositório não é mais verificada: uma URL contratual
-(`eclipsego-privacy.html`) só existe em `dist/`. As fontes (src/, docs/) são lidas sempre da raiz
-do repositório. Falha com código 1 se encontrar erro.
+(ADR-002). Sem `--raiz`, usa `dist/` e falha pedindo o build se ele não existir. A raiz do
+repositório não é verificada como site: nenhuma página vem dela (desde a fatia 8 do WP-08). As
+fontes (src/, public/) são lidas sempre da raiz do repositório. Falha com código 1 se encontrar
+erro.
 
 Checa:
   1. URLs contratuais (ADR-001) existem
   2. cada página tem <html lang>, <title>, meta description e og:image
-  3. href/src locais resolvem para arquivo existente; og:image em ghfsoftware.com resolve localmente
+  3. href/src locais resolvem para arquivo existente; og:image em ghfsoftware.com resolve localmente;
+     nenhum `<a>`, `<area>` ou `<form>` com `target="_blank"` sem o token `noopener` em `rel`, em
+     qualquer página de `dist/` (lido por html.parser, não por regex)
   4. "Última atualização" da página legal (pt e en) bate com a da fonte — lida sempre da raiz do
-     repositório; fonte ausente é erro. Fonte em docs/ (páginas ainda copiadas): a linha
-     `**Última atualização:**`. Fonte em src/content/legal/ (páginas migradas): o `lastUpdated`
-     do front-matter do `.pt.md`, que tem de bater com a linha do corpo do `.pt.md`, e o
-     `lastUpdated` do `.en.md` (e a linha `**Last updated:**` dele) com o do pt
+     repositório; fonte ausente é erro. A fonte é o `lastUpdated` do front-matter do `.pt.md` de
+     src/content/legal/, que tem de bater com a linha do corpo do `.pt.md`, e o `lastUpdated` do
+     `.en.md` (e a linha `**Last updated:**` dele) com o do pt
   5. copy do LottoExpert respeita jogo responsável (mesma régua do PaywallCopyComplianceTest do app),
      no publicado (PAGINAS_LOTTO) e nas fontes Astro (FONTES_LOTTO)
   6. .well-known/assetlinks.json é JSON válido com o package do LottoExpert
-  7. toda página de PUBLICADAS existe em `dist/` (o ramo da raiz do repositório, que aceitava
-     `src/pages/<x>.astro` como prova, é legado — ver abaixo),
-     e as que não estão em EN_PENDENTE têm o par `en/<x>`. Página esquecida em COPIADOS_DA_RAIZ do
-     astro.config.mjs sairia do ar com o build verde
+  7. toda página de PUBLICADAS existe em `dist/`, e as que não estão em EN_PENDENTE têm o par
+     `en/<x>`; nenhum `.html` na raiz do repositório (não vai ao ar)
   8. hreflang: página com par en declara pt-BR e en, recíprocos, e os dois existem
   9. página em `en/` com link interno para página que tem par en aponta para o par
  10. dicionários de src/i18n/ têm as mesmas chaves em pt e en
- 11. `dist/` não é mais antigo que as fontes (src/, configs, package.json, COPIADOS_DA_RAIZ do
-     astro.config.mjs, fontes de LEGAL): sem isso, o check daria verde sobre um build velho
- 12. página legal migrada (fonte em src/content/legal/), pt e en: um só `<h1`, um só rótulo de
-     data do idioma da página, nenhuma aspa tipográfica que o `.md` não tenha, nenhum link
-     `target="_blank"` sem `rel="noopener"`; link do corpo para o próprio site é caminho a partir
+ 11. `dist/` não é mais antigo que as fontes (src/, public/, configs, package.json, fontes de
+     LEGAL): sem isso, o check daria verde sobre um build velho
+ 12. página legal, pt e en: um só `<h1`, um só rótulo de data do idioma da página, nenhuma aspa
+     tipográfica que o `.md` não tenha; link do corpo para o próprio site é caminho a partir
      da raiz (nunca `https://ghfsoftware.com/…`), sem `target`, e em `en/` aponta para o par; e
      `.pt.md` e `.en.md` com a mesma contagem de `## `, `### `, linhas de tabela, itens de lista,
      links, crases (`code`) e `---`
-
-Modo raiz (`--raiz .`) não é mais suportado desde a fatia 6 do WP-08: uma URL contratual
-(`eclipsego-privacy.html`) só existe em `dist/`, e o §1 falharia na raiz. Os ramos que ainda o
-tratam — `NA_RAIZ_DO_REPO`, `fonte_gerada`, `existe_pagina` (link para página gerada resolvido
-contra a fonte em `src/pages/`) — ficam até a fatia 9, que os remove.
+ 13. public/ (copiado byte a byte para dist/, ADR-002 §3): primeiro nível é a lista fechada
+     PUBLIC; nenhum `.html` além do convite; nenhum symlink; todo arquivo de public/ igual byte a
+     byte ao de dist/.
+     O Astro publica o arquivo de public/ no lugar da página gerada que colide com ele, com o build
+     verde — sem esta guarda, uma cópia velha de página contratual iria ao ar calada; e o
+     `.htmlvalidateignore` da raiz isenta do html-validate só o convite (congelado pelo sha256, D13),
+     e `rules` do `.htmlvalidate.json` é exatamente `{"no-inline-style": "off"}`
 """
 import glob
 import json
 import os
 import re
 import sys
+from html.parser import HTMLParser
 
 raiz = "dist"
 if "--raiz" in sys.argv:
@@ -53,8 +54,8 @@ if not os.path.isdir(raiz):
     print(f"❌ {raiz}/ não existe — rode `npm run build` (o check confere o site gerado, não a raiz)")
     sys.exit(1)
 
-# Raiz do repositório = pasta acima de tools/, independente do cwd. As fontes legais (docs/*.md,
-# src/content/legal/*.md) são lidas daqui: não são publicadas, e a data legal tem de ser
+# Raiz do repositório = pasta acima de tools/, independente do cwd. As fontes legais
+# (src/content/legal/*.md) são lidas daqui: não são publicadas, e a data legal tem de ser
 # conferida contra a fonte, não contra o que foi para o ar (ADR-002 §7).
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -83,9 +84,8 @@ EN_PENDENTE = []
 SEM_PAR_EN = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
 COM_PAR = [x for x in PUBLICADAS if x not in EN_PENDENTE and x not in SEM_PAR_EN]
 
-# página legal → markdown de origem no site. A origem da origem é o repositório do app. Página
-# migrada (WP-08) aponta para o `.pt.md` de src/content/legal/, com front-matter `lastUpdated`; o
-# `.en.md` é o mesmo nome com `.en.md`. As outras seguem em docs/ até a sua fatia.
+# página legal → markdown de origem no site (`.pt.md` de src/content/legal/, com front-matter
+# `lastUpdated`; o `.en.md` é o mesmo nome com `.en.md`). A origem da origem é o repositório do app.
 LEGAL = {
     "lottoexpert-privacy.html": "src/content/legal/lottoexpert-privacy.pt.md",
     "lottoexpert-terms.html": "src/content/legal/lottoexpert-terms.pt.md",
@@ -111,8 +111,8 @@ COPY_PROIBIDA = [
 PAGINAS_LOTTO = ["index.html", "lottoexpert.html", "lottoexpert-privacy.html", "lottoexpert-terms.html",
                  "lotto-expert/sweepstake-invite/lottoexpert-invite.html",
                  "en/index.html", "en/lottoexpert.html", "en/lottoexpert-privacy.html", "en/lottoexpert-terms.html"]
-# Fontes das páginas do LottoExpert já geradas pelo Astro: lidas sempre, a partir da raiz do
-# repositório — na raiz não há o .html gerado, e a régua tem de valer antes do build também.
+# Fontes das páginas do LottoExpert (src/): a régua roda sobre elas, lidas da raiz do repositório,
+# sempre que o check roda — além do HTML gerado em dist/ (PAGINAS_LOTTO), que o check exige.
 FONTES_LOTTO = ["src/i18n/home.ts", "src/components/Home.astro",
                 "src/i18n/lottoexpert.ts", "src/components/LottoExpert.astro",
                 "src/i18n/legal.ts",
@@ -129,38 +129,6 @@ def ler(caminho):
 
 def p(rel):
     return os.path.join(raiz, rel)
-
-
-# Legado do modo raiz (`--raiz .`), sem suporte desde a fatia 6 do WP-08 — uma URL contratual só
-# existe em dist/. NA_RAIZ_DO_REPO, fonte_gerada e existe_pagina saem na fatia 9.
-NA_RAIZ_DO_REPO = os.path.realpath(raiz) == os.path.realpath(REPO)
-
-
-def fonte_gerada(rel):
-    """`index.html` → `src/pages/index.astro`; `en/` e `en` → `src/pages/en/index.astro`.
-
-    Segmento que começa com `_` (o Astro não publica) ou `[` (rota dinâmica, não página
-    literal) não conta como fonte."""
-    rel = rel.replace(os.sep, "/").lstrip("/")
-    if rel in ("", ".") or rel.endswith("/"):
-        rel = rel.rstrip(".") + "index.html"
-    elif not rel.endswith(".html") and os.path.isdir(os.path.join(REPO, "src", "pages", rel)):
-        rel += "/index.html"  # diretório sem barra (`en`), como o servidor estático resolve
-    if not rel.endswith(".html"):
-        return None
-    if any(seg.startswith(("_", "[")) for seg in rel.split("/")):
-        return None
-    return os.path.join(REPO, "src", "pages", rel[: -len(".html")] + ".astro")
-
-
-def existe_pagina(rel):
-    """Na raiz do repositório, página gerada conta pela fonte; fora dela, só o arquivo."""
-    if os.path.exists(p(rel)):
-        return True
-    if NA_RAIZ_DO_REPO:
-        f = fonte_gerada(rel)
-        return bool(f and os.path.exists(f))
-    return False
 
 
 SITE = "https://ghfsoftware.com/"
@@ -182,17 +150,6 @@ def url_para_rel(url):
 # não é o do commit. Vale para `dist/` do repositório (padrão ou `--raiz dist`); no CI o build
 # roda depois do checkout, então dist/ é sempre o mais novo. Diretórios contam (arquivo apagado
 # muda o mtime do diretório).
-def copiados_da_raiz():
-    cfg = os.path.join(REPO, "astro.config.mjs")
-    if not os.path.exists(cfg):
-        return []
-    m = re.search(r"const COPIADOS_DA_RAIZ = \[(.*?)\];", ler(cfg), re.S)
-    if not m:
-        erros.append("astro.config.mjs: COPIADOS_DA_RAIZ não encontrado — a checagem de dist/ desatualizado não sabe o que a raiz publica")
-        return []
-    return re.findall(r"'([^']+)'", m.group(1))
-
-
 def mais_novo(rels):
     """(mtime, caminho relativo) do arquivo ou diretório mais novo entre `rels` (recursivo)."""
     melhor = (0.0, "")
@@ -215,8 +172,8 @@ if os.path.realpath(raiz) == os.path.realpath(os.path.join(REPO, "dist")):
     if not os.path.exists(gerado):
         erros.append(f"{raiz}/index.html ausente — rode `npm run build`")
     else:
-        fontes = (["src", "astro.config.mjs", "tailwind.config.mjs", "postcss.config.mjs", "package.json"]
-                  + copiados_da_raiz() + list(LEGAL.values())
+        fontes = (["src", "public", "astro.config.mjs", "tailwind.config.mjs", "postcss.config.mjs", "package.json"]
+                  + list(LEGAL.values())
                   + [md[: -len(".pt.md")] + ".en.md" for md in LEGAL.values() if md.endswith(".pt.md")])
         t, novo = mais_novo(fontes)
         if t > os.path.getmtime(gerado):
@@ -228,8 +185,31 @@ for rel in CONTRATUAIS:
         erros.append(f"URL contratual ausente (ADR-001): /{rel}")
 
 # ------------------------------------------------------------ 2 e 3: páginas
-paginas = sorted(glob.glob(p("*.html")) + glob.glob(p("lotto-expert/**/*.html"), recursive=True)
-                 + glob.glob(p("en/**/*.html"), recursive=True))
+paginas = sorted(glob.glob(p("**/*.html"), recursive=True))
+# Link que abre outra aba sem `noopener` deixa a página aberta alcançar esta por `window.opener`
+# (TARGET-BLANK-SEM-NOOPENER-01). Vale para todo `dist/`, com ou sem aspas no atributo.
+# Lido por html.parser (não regex): atributo é atributo — `data-rel`, `title="rel=noopener"` e `>`
+# dentro de aspas não enganam. Olha `a`, `area` e `form`; `rel` tem de ter o token `noopener`.
+TAGS_COM_TARGET = ("a", "area", "form")
+
+
+class SemNoopener(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.achados = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag not in TAGS_COM_TARGET:
+            return
+        d = {k.lower(): (v or "") for k, v in attrs}
+        if d.get("target", "").strip().lower() != "_blank":
+            return
+        if "noopener" not in d.get("rel", "").lower().split():
+            self.achados.append(self.get_starttag_text() or f"<{tag}>")
+
+    handle_startendtag = handle_starttag
+
+
 n_links = 0
 for caminho in paginas:
     html = ler(caminho)
@@ -260,14 +240,16 @@ for caminho in paginas:
         if os.path.isdir(destino):
             destino = os.path.join(destino, "index.html")  # `/en/` publicado é `en/index.html`
         if not os.path.exists(destino):
-            sufixo = "/" if alvo.endswith("/") else ""
-            gerada = NA_RAIZ_DO_REPO and fonte_gerada(os.path.relpath(destino, raiz) + sufixo)
-            if not (gerada and os.path.exists(gerada)):
-                erros.append(f"{rel}: {attr}=\"{alvo}\" não resolve")
+            erros.append(f"{rel}: {attr}=\"{alvo}\" não resolve")
     # og:image em onerror e afins (o convite usa fallback por JS)
     for alvo in re.findall(r"https://ghfsoftware\.com/([A-Za-z0-9_./-]+\.(?:png|jpg|webp|svg))", html):
         if not os.path.exists(p(alvo)):
             erros.append(f"{rel}: referência a https://ghfsoftware.com/{alvo}, que não existe")
+    leitor = SemNoopener()
+    leitor.feed(html)
+    leitor.close()
+    for tag in leitor.achados:
+        erros.append(f"{rel}: target=\"_blank\" sem rel=\"noopener\": {tag}")
 
 # ------------------------------------------------------------ 4: datas legais
 # Aceita "12 de Outubro de 2026" e "setembro de 2026" (sem dia). A comparação é
@@ -290,8 +272,8 @@ def sem_tags(html):
 
 def datas_em(html, padrao):
     """União das datas achadas no texto sem tags (`<strong>Última atualização:</strong> …`) e no
-    HTML cru (atributos como `<meta content="Última atualização: …">` e o dicionário JS das
-    páginas ainda copiadas). Nenhuma das duas buscas sozinha cobre tudo."""
+    HTML cru (atributos como `<meta content="Última atualização: …">`). Nenhuma das duas buscas
+    sozinha cobre tudo."""
     achadas = re.findall(padrao, sem_tags(html)) + re.findall(padrao, html)
     return list(dict.fromkeys(achadas))
 
@@ -324,45 +306,38 @@ for pagina, md in LEGAL.items():
     if not os.path.exists(fonte):
         erros.append(f"{md}: fonte legal ausente no repositório — a data de {pagina} não tem com o que comparar")
         continue
-    texto = ler(fonte)
-    colecao = md.startswith("src/content/legal/")
-    if colecao:
-        ref_fm, texto = front_matter(md, texto)
-        if ref_fm is None:
-            continue
+    ref_fm, texto = front_matter(md, ler(fonte))
+    if ref_fm is None:
+        continue
     m = re.search(r"\*\*Última atualização:\*\*\s*" + RE_PT, texto)
     if not m:
         erros.append(f"{md}: sem linha `**Última atualização:** [D de ]Mês de AAAA`")
         continue
     ref = pt(m.groups())
     ref = (str(int(ref[0])) if ref[0] else "", ref[1], ref[2])
-    if colecao:
-        if ref != ref_fm:
-            erros.append(f"{md}: front-matter `lastUpdated` ({txt(ref_fm)}) ≠ linha `**Última atualização:**` do corpo ({txt(ref)})")
-            continue
-        md_en = md[: -len(".pt.md")] + ".en.md"
-        if not os.path.exists(os.path.join(REPO, md_en)):
-            erros.append(f"{md_en}: tradução ausente ({pagina} tem par en)")
-        else:
-            ref_en, corpo_en = front_matter(md_en, ler(os.path.join(REPO, md_en)))
-            if ref_en is not None and ref_en != ref:
-                erros.append(f"{md_en}: `lastUpdated` ({txt(ref_en)}) ≠ o do pt ({txt(ref)})")
-            m_en = re.search(r"\*\*Last updated:\*\*\s*" + RE_EN, corpo_en)
-            if not m_en:
-                erros.append(f"{md_en}: sem linha `**Last updated:** Mês [D,] AAAA`")
-            elif (str(int(m_en[2])) if m_en[2] else "", MESES.get(m_en[1].lower(), "?"), m_en[3]) != \
-                    (ref[0], MESES.get(ref[1], "?"), ref[2]):
-                erros.append(f"{md_en}: linha `**Last updated:**` ({m_en[1]} {m_en[2] or ''} {m_en[3]}) ≠ {txt(ref)}")
+    if ref != ref_fm:
+        erros.append(f"{md}: front-matter `lastUpdated` ({txt(ref_fm)}) ≠ linha `**Última atualização:**` do corpo ({txt(ref)})")
+        continue
+    md_en = md[: -len(".pt.md")] + ".en.md"
+    if not os.path.exists(os.path.join(REPO, md_en)):
+        erros.append(f"{md_en}: tradução ausente ({pagina} tem par en)")
+    else:
+        ref_en, corpo_en = front_matter(md_en, ler(os.path.join(REPO, md_en)))
+        if ref_en is not None and ref_en != ref:
+            erros.append(f"{md_en}: `lastUpdated` ({txt(ref_en)}) ≠ o do pt ({txt(ref)})")
+        m_en = re.search(r"\*\*Last updated:\*\*\s*" + RE_EN, corpo_en)
+        if not m_en:
+            erros.append(f"{md_en}: sem linha `**Last updated:** Mês [D,] AAAA`")
+        elif (str(int(m_en[2])) if m_en[2] else "", MESES.get(m_en[1].lower(), "?"), m_en[3]) != \
+                (ref[0], MESES.get(ref[1], "?"), ref[2]):
+            erros.append(f"{md_en}: linha `**Last updated:**` ({m_en[1]} {m_en[2] or ''} {m_en[3]}) ≠ {txt(ref)}")
     ref_txt = " de ".join(x for x in ref if x)
-    # (página, idioma que ela tem de ter): a pt, e o par en quando existe (ou deveria existir).
-    alvos = [(pagina, "pt")]
-    if pagina not in EN_PENDENTE or os.path.exists(p("en/" + pagina)):
-        alvos.append(("en/" + pagina, "en"))
-    for alvo, idioma in alvos:
+    # (página, idioma que ela tem de ter): a pt e o par en.
+    for alvo, idioma in ((pagina, "pt"), ("en/" + pagina, "en")):
         if not os.path.exists(p(alvo)):
-            if alvo != pagina and not NA_RAIZ_DO_REPO:
-                erros.append(f"{alvo}: página legal en ausente ({pagina} saiu de EN_PENDENTE)")
-            continue  # pt ausente já é erro no §1; en na raiz do repositório é gerada (só em dist/)
+            if alvo != pagina:
+                erros.append(f"{alvo}: página legal en ausente")
+            continue  # pt ausente já é erro no §1
         html = ler(p(alvo))
         datas_pt = list(dict.fromkeys(pt(x) for x in datas_em(html, r"Última atualização:\s*" + RE_PT)))
         datas_pt = [(str(int(d)) if d else "", mo, a) for d, mo, a in datas_pt]
@@ -374,14 +349,11 @@ for pagina, md in LEGAL.items():
         for mo, d, a in datas_en:
             if (d or "", MESES.get(mo.lower(), "?"), a) != (ref[0], MESES.get(ref[1], "?"), ref[2]):
                 erros.append(f"{alvo}: data en `{mo} {d + ', ' if d else ''}{a}` ≠ {md} `{ref_txt}`")
-        # A data do idioma da página é obrigatória; a do outro idioma só existe nas páginas
-        # ainda copiadas (dicionário JS) — lá a ausência continua aviso.
+        # A data do idioma da página é obrigatória.
         if idioma == "pt" and not datas_pt:
             erros.append(f"{alvo}: nenhuma `Última atualização:` encontrada")
         if idioma == "en" and not datas_en:
             erros.append(f"{alvo}: nenhuma `Last updated:` encontrada")
-        if idioma == "pt" and not datas_en and pagina in EN_PENDENTE:
-            avisos.append(f"{alvo}: nenhuma `Last updated:` encontrada no HTML")
 
 # ------------------------------------------------------------ 5: copy
 for rel, caminho in [(r, p(r)) for r in PAGINAS_LOTTO] + [(r, os.path.join(REPO, r)) for r in FONTES_LOTTO]:
@@ -413,24 +385,21 @@ for rel in EN_PENDENTE + SEM_PAR_EN:
     if rel not in PUBLICADAS:
         erros.append(f"check_site.py: {rel} em EN_PENDENTE/SEM_PAR_EN mas fora de PUBLICADAS")
 for rel in PUBLICADAS:
-    if not existe_pagina(rel):
-        onde = "na raiz nem em src/pages/" if NA_RAIZ_DO_REPO else f"em {raiz} — falta em COPIADOS_DA_RAIZ do astro.config.mjs ou em src/pages/?"
-        erros.append(f"página publicada ausente {onde}: {rel}")
+    if not os.path.exists(p(rel)):
+        erros.append(f"página publicada ausente em {raiz} — falta em src/pages/?: {rel}")
     en = "en/" + rel
-    if rel in COM_PAR and not existe_pagina(en):
+    if rel in COM_PAR and not os.path.exists(p(en)):
         erros.append(f"par en ausente: {en} ({rel} não está em EN_PENDENTE)")
-    if rel in EN_PENDENTE and existe_pagina(en):
+    if rel in EN_PENDENTE and os.path.exists(p(en)):
         erros.append(f"{en} existe, mas {rel} continua em EN_PENDENTE — tire-o da lista (e ponha em COM_PAR_EN de src/i18n/ui.ts)")
-# Página .html na raiz do repositório que não está em PUBLICADAS não vai ao ar (lista fechada do
-# astro.config.mjs): ou entra na lista, ou sai da raiz.
+# Página .html na raiz do repositório não vai ao ar (o Astro publica src/pages/ e public/): página
+# nasce em src/pages/.
 for c in sorted(glob.glob(os.path.join(REPO, "*.html"))):
-    if os.path.basename(c) not in PUBLICADAS:
-        erros.append(f"{os.path.basename(c)} na raiz do repositório e fora de PUBLICADAS")
+    erros.append(f"{os.path.basename(c)} na raiz do repositório — não vai ao ar; página nasce em src/pages/")
 
 # ------------------------------------------------------------ 8: hreflang
 # Página com par en declara os dois idiomas, com os mesmos dois endereços nas duas pontas, e os
-# dois existem. Só sobre arquivos presentes: na raiz do repositório, a página gerada é provada
-# em dist/.
+# dois existem (a ausência de um dos lados já é erro no §7).
 RE_ALT = re.compile(r"<link\b[^>]*>", re.I)
 
 
@@ -458,7 +427,7 @@ for rel in COM_PAR:
             destino = url_para_rel(alt[lang])
             if destino != esperado:
                 erros.append(f"{lado}: hreflang {lang} aponta para {alt[lang]}, esperado o de {esperado}")
-            elif not existe_pagina(destino):
+            elif not os.path.exists(p(destino)):
                 erros.append(f"{lado}: hreflang {lang} aponta para {alt[lang]}, que não existe")
 
 # ------------------------------------------------------------ 9: en aponta para en
@@ -503,15 +472,13 @@ for ts in sorted(glob.glob(os.path.join(REPO, "src/i18n/*.ts"))):
         for falta in sorted(chaves[lang] - chaves[outro]):
             erros.append(f"{nome}: chave `{falta}` existe em {lang} e falta em {outro}")
 
-# ------------------------------------------------------------ 12: página legal migrada
+# ------------------------------------------------------------ 12: página legal
 # O que o plugin omiteCabecalhoLegal e o `smartPunctuation: false` do astro.config.mjs garantem,
 # provado no publicado: título e data aparecem uma vez (no hero), as aspas são as do .md do app; e
 # o .en.md tem a mesma estrutura do .pt.md (seção ou tabela perdida na tradução).
 TIPOGRAFICAS = "“”‘’"
 ROTULO = {"pt": "Última atualização", "en": "Last updated"}
 for pagina, md in LEGAL.items():
-    if not md.startswith("src/content/legal/"):
-        continue
     base_md = md[: -len(".pt.md")]
     fontes_md = {lang: os.path.join(REPO, f"{base_md}.{lang}.md") for lang in ("pt", "en")}
     if not all(os.path.exists(f) for f in fontes_md.values()):
@@ -533,12 +500,6 @@ for pagina, md in LEGAL.items():
             if html.count(ch) > texto_md[lang].count(ch):
                 erros.append(f"{alvo}: aspa tipográfica `{ch}` ({html.count(ch)}×) além das de {base_md}.{lang}.md "
                              f"({texto_md[lang].count(ch)}×) — smartPunctuation ligado?")
-        # Link que abre outra aba sem `noopener` deixa a página aberta alcançar esta por
-        # `window.opener` (plugin linksExternosLegais de src/markdown/legal.mjs). A régua para o
-        # site inteiro é de TARGET-BLANK-SEM-NOOPENER-01 (fatia 9).
-        for tag in re.findall(r"<a\b[^>]*>", html, re.I):
-            if re.search(r'target=["\']_blank["\']', tag) and not re.search(r'rel=["\'][^"\']*\bnoopener\b', tag):
-                erros.append(f"{alvo}: link com target=\"_blank\" sem rel=\"noopener\": {tag}")
         # Link do corpo para o próprio site (o `.md` do app escreve `https://ghfsoftware.com/x.html`):
         # o plugin linksInternosLegais de src/markdown/legal.mjs o torna `/x.html` (`/en/x.html` no
         # en, só para página `.html` — asset e o convite `lotto-expert/…` não têm par), na mesma aba,
@@ -572,6 +533,67 @@ for pagina, md in LEGAL.items():
         n = {lang: len(re.findall(padrao, texto_md[lang], re.M)) for lang in ("pt", "en")}
         if n["pt"] != n["en"]:
             erros.append(f"{base_md}.en.md: {n['en']} {nome} ≠ {n['pt']} do .pt.md — tradução com estrutura diferente")
+
+# ------------------------------------------------------------ 13: public/
+# public/ vai a dist/ byte a byte (ADR-002 §3). Ao colidir com página gerada, o Astro publica o
+# arquivo de public/ e só avisa ("Skipping src/pages/x.astro…"), com o build verde: uma cópia velha
+# de página contratual iria ao ar no lugar da gerada. (a) primeiro nível fechado; (b) nenhum .html
+# além do convite (contrato byte a byte, D13); (c) cada arquivo de public/ igual ao de dist/.
+PUBLIC = ["assets", ".well-known", "lotto-expert", "CNAME"]
+HTML_EM_PUBLIC = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
+pasta_public = os.path.join(REPO, "public")
+if not os.path.isdir(pasta_public):
+    erros.append("public/ ausente — imagens, App Links, convite e CNAME não iriam ao ar")
+else:
+    for nome in sorted(os.listdir(pasta_public)):
+        if nome not in PUBLIC:
+            erros.append(f"public/{nome}: fora da lista fechada de public/ ({', '.join(PUBLIC)}) — o check_site.py não o conhece")
+    for nome in PUBLIC:
+        if not os.path.exists(os.path.join(pasta_public, nome)):
+            erros.append(f"public/{nome}: ausente (lista fechada de public/)")
+    # Symlink em public/ (arquivo ou diretório) é erro: os.walk não desce em diretório-link, mas o
+    # Astro copia o conteúdo dele para dist/ — uma página velha iria ao ar sem o check ver.
+    for pasta, dirs, arqs in os.walk(pasta_public):
+        for nome in sorted(dirs + arqs):
+            c = os.path.join(pasta, nome)
+            if os.path.islink(c):
+                rel = os.path.relpath(c, pasta_public).replace(os.sep, "/")
+                erros.append(f"public/{rel}: symlink em public/ — o Astro copia o alvo sem o check_site.py ver; use arquivo real")
+        for nome in sorted(arqs):
+            c = os.path.join(pasta, nome)
+            rel = os.path.relpath(c, pasta_public).replace(os.sep, "/")
+            if rel.lower().endswith((".html", ".htm")) and rel not in HTML_EM_PUBLIC:
+                erros.append(f"public/{rel}: página em public/ — o Astro a publica no lugar da gerada; página nasce em src/pages/")
+            publicado = p(rel)
+            if not os.path.isfile(publicado):
+                erros.append(f"public/{rel}: ausente em {raiz}/ — rode `npm run build`")
+            else:
+                with open(c, "rb") as fa, open(publicado, "rb") as fb:
+                    if fa.read() != fb.read():
+                        erros.append(f"public/{rel}: diferente de {raiz}/{rel} — public/ vai ao ar byte a byte")
+# (d) o html-validate roda sobre dist/ com as regras do preset `recommended` em erro; só o convite,
+# congelado pelo sha256 (D13), fica de fora. Glob mais largo esconderia página do validador. Quando
+# o convite mudar (novo tools/contrato.sha256), ele sai do ignore no mesmo PR.
+IGNORE_HTMLVALIDATE = ["dist/lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
+arq_ignore = os.path.join(REPO, ".htmlvalidateignore")
+if not os.path.exists(arq_ignore):
+    erros.append(".htmlvalidateignore ausente — o convite (2 espaços no fim de linha, congelado) reprova o html-validate")
+else:
+    linhas = [x.strip() for x in ler(arq_ignore).splitlines() if x.strip() and not x.strip().startswith("#")]
+    if linhas != IGNORE_HTMLVALIDATE:
+        erros.append(f".htmlvalidateignore: {linhas} ≠ {IGNORE_HTMLVALIDATE} — só o convite fica fora do html-validate")
+
+# As regras do preset ficam em erro: só `no-inline-style` é desligada. Rebaixar uma regra para
+# "warn" faz o html-validate sair com código 0 e esconde o problema.
+REGRAS_HTMLVALIDATE = {"no-inline-style": "off"}
+arq_hv = os.path.join(REPO, ".htmlvalidate.json")
+try:
+    regras = json.loads(ler(arq_hv)).get("rules")
+except (OSError, ValueError) as e:
+    erros.append(f".htmlvalidate.json ilegível: {e}")
+else:
+    if regras != REGRAS_HTMLVALIDATE:
+        erros.append(f".htmlvalidate.json: rules = {regras} ≠ {REGRAS_HTMLVALIDATE} — nenhuma regra do preset é rebaixada")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")
