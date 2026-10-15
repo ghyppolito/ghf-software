@@ -63,7 +63,7 @@ EN_PENDENTE = [
     "lottoexpert-privacy.html", "lottoexpert-terms.html",
     "topowalk-privacy.html",
     "poleposition-privacy.html",
-    "eclipsego.html", "eclipsego-privacy.html",
+    "eclipsego-privacy.html",
 ]
 SEM_PAR_EN = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
 COM_PAR = [x for x in PUBLICADAS if x not in EN_PENDENTE and x not in SEM_PAR_EN]

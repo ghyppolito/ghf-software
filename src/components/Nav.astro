@@ -3,8 +3,9 @@
 // O último item com `destaque` é o botão em pílula (Contato).
 // `realce` é a cor de hover/destaque: `primary` em quase todas; o TopoWalk usava `accent`
 // (terracota) com primary verde. `primary-claro` é o `primary` com texto preto e hover lime-400 na
-// pílula do celular (o lima do Pole Position é claro demais para texto branco). As classes ficam
-// literais (o Tailwind não detecta concatenação).
+// pílula do celular (o lima do Pole Position é claro demais para texto branco).
+// `primary-texto-preto` é o `primary` com texto preto e hover `primaryHover` na pílula do celular
+// (o dourado do EclipseGo). As classes ficam literais (o Tailwind não detecta concatenação).
 import TrocaIdioma from './TrocaIdioma.astro';
 import { t, type ChaveUi, type Idioma } from '../i18n/ui';
 
@@ -22,7 +23,7 @@ interface Props {
   inicio: string;
   itens: Item[];
   /** cor de hover e do botão do menu do celular; padrão `primary` */
-  realce?: 'primary' | 'primary-claro' | 'accent';
+  realce?: 'primary' | 'primary-claro' | 'primary-texto-preto' | 'accent';
 }
 
 const { lang, caminho, inicio, itens, realce = 'primary' } = Astro.props;
@@ -44,6 +45,15 @@ const CLASSES = {
     trocaDesktop: 'flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold tracking-wide',
     trocaCelular: 'flex items-center gap-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold text-sm',
     pilulaCelular: 'mobile-link px-6 py-2 rounded-full bg-brand-primary text-black font-bold hover:bg-lime-400 transition-colors',
+    linkCelular: 'mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors',
+  },
+  'primary-texto-preto': {
+    logo: 'h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-primary)/0.5)]',
+    pilula: 'px-5 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-brand-primary hover:text-brand-primary transition-all duration-300',
+    link: 'text-gray-300 hover:text-white hover:text-brand-primary transition-colors',
+    trocaDesktop: 'flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold tracking-wide',
+    trocaCelular: 'flex items-center gap-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold text-sm',
+    pilulaCelular: 'mobile-link px-6 py-2 rounded-full bg-brand-primary text-black font-bold hover:bg-brand-primaryHover transition-colors',
     linkCelular: 'mobile-link text-gray-300 hover:text-brand-primary font-semibold transition-colors',
   },
   accent: {
