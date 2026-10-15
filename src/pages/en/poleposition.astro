@@ -1,0 +1,61 @@
+---
+// Landing do Pole Position em inglês (/en/poleposition.html). Corpo em components/PolePosition.astro, textos
+// em i18n/poleposition.ts. Links da página para a home vão à home do mesmo idioma. O lima do
+// Pole Position é claro: a pílula do menu do celular usa texto preto (Nav `realce="primary-claro"`).
+// JetBrains Mono entra só nesta página (`fontesExtras`), na mesma requisição da Inter.
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import PolePosition from '../../components/PolePosition.astro';
+import { poleposition } from '../../i18n/poleposition';
+import { rota } from '../../i18n/ui';
+
+const lang = 'en';
+const x = poleposition[lang];
+const home = rota(lang, 'index.html');
+---
+<Base
+  title={x.title}
+  description={x.description}
+  og={{
+    titulo: x.og_title,
+    descricao: x.og_description,
+    descricaoTwitter: x.twitter_description,
+    imagem: '/assets/poleposition_real_mockup.png',
+    largura: 1200,
+    altura: 630,
+  }}
+  lang={lang}
+  caminho="poleposition.html"
+  tema="poleposition"
+  favicon="/assets/poleposition.png"
+  fontesExtras={['JetBrains+Mono:wght@700']}
+  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden"
+>
+  <Nav
+    lang={lang}
+    caminho="poleposition.html"
+    inicio={home}
+    realce="primary-claro"
+    itens={[
+      { href: `${home}#sobre`, chave: 'nav_about' },
+      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
+      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <PolePosition lang={lang} />
+  {/* Canais do app, na ordem da página antiga. O rodapé dela não tinha o filete do topo. */}
+  <Footer
+    lang={lang}
+    inicio={home}
+    prefixoAncora={home}
+    redes={{
+      youtube: 'https://www.youtube.com/channel/UCo7b8Mshb_6atZt-L5Gng1A',
+      instagram: 'https://www.instagram.com/pole.position.laptimer/',
+      tiktok: 'https://www.tiktok.com/@pole.position.gps',
+      facebook: 'https://www.facebook.com/poleposition.laptimer?locale=pt_BR',
+    }}
+    appAtual="poleposition.html"
+    fundo="surface-sem-borda"
+  />
+</Base>
