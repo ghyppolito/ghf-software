@@ -28,7 +28,7 @@ palavras) — prova o processo.
 nas 6 línguas está em `docs/aso_plan.md` §4. A origem legal só existe em pt
 (`../pole-position/pole-position-app/PRIVACY_POLICY.md`, 10 seções `##` numeradas + "Resumo de
 Segurança dos Dados", 14 `###`). **O site está atrás da origem hoje:**
-`diff ../pole-position/pole-position-app/PRIVACY_POLICY.md docs/POLEPOSITION_PRIVACY_POLICY.md`
+`diff <(sed '1,/^---$/d' src/content/legal/poleposition-privacy.pt.md) ../pole-position/pole-position-app/PRIVACY_POLICY.md`
 → data "setembro de 2026" vs "agosto de 2026" e a linha `POST_NOTIFICATIONS` (`:140`) ausente no
 site. Traduzir de uma cópia atrasada propaga o atraso para 6 línguas.
 
@@ -37,12 +37,12 @@ site. Traduzir de uma cópia atrasada propaga o atraso para 6 línguas.
 do `.md` por língua e regras do check).
 
 **Arquivos-alvo:** `src/content/legal/poleposition.{pt,en,es,fr,it,de}.md`,
-`docs/POLEPOSITION_PRIVACY_POLICY.md`, `src/i18n/idiomas.ts` (só a entrada `poleposition-privacy`).
+`src/content/legal/poleposition-privacy.pt.md`, `src/i18n/idiomas.ts` (só a entrada `poleposition-privacy`).
 Fora do site, **antes** deste WP e feito pelo usuário (ou por WP no repositório do app):
 cláusula de prevalência do pt no `PRIVACY_POLICY.md` do app, se D8 (b1).
 
 **Passos:**
-1. Pré-condição: `diff -q` entre a origem e `docs/POLEPOSITION_PRIVACY_POLICY.md` vazio
+1. Pré-condição: `diff` (sem o front-matter) entre a origem e `src/content/legal/poleposition-privacy.pt.md` vazio
    (`python3 tools/sync_legal.py poleposition`). Se a cláusula de prevalência (D8 b1) ainda não
    está na origem, **parar** — o agente não a redige aqui.
 2. en: conferir o en existente contra o pt atualizado (D7).
@@ -53,7 +53,7 @@ cláusula de prevalência do pt no `PRIVACY_POLICY.md` do app, se D8 (b1).
 5. `site-legal` confere; usuário revisa es/fr/it (e de, se puder) — o relato entra no WP.
 
 **Critérios de aceite:**
-- `diff -q ../pole-position/pole-position-app/PRIVACY_POLICY.md docs/POLEPOSITION_PRIVACY_POLICY.md` vazio.
+- `diff <(sed '1,/^---$/d' src/content/legal/poleposition-privacy.pt.md) ../pole-position/pole-position-app/PRIVACY_POLICY.md` vazio.
 - `python3 tools/check_site.py --raiz dist` verde — inclui as regras do WP-15: mesma data nas 6,
   mesmo número de `##` (11) e `###` (14) em todas, cada `` `PERMISSÃO` `` da origem com a mesma
   contagem em cada língua, `Firebase Analytics`/`Firebase Crashlytics` presentes em todas.

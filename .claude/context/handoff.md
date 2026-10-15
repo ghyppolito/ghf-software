@@ -3,36 +3,38 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-10-15 (fim).** Escrito na branch `feat/wp-08-f6-legal-eclipsego` (fatia 6 do WP-08), ainda não integrada.
+**Sessão de 2026-10-15 (fim).** Escrito na branch `feat/wp-08-f7-legal-topowalk-poleposition` (fatia 7 do WP-08), ainda não integrada.
 
 ## 1. Onde parei
 
-- **Integração** `feat/wp-08-layout-unico` em 51a0e2b: fatias 1 a 5 integradas e enviadas; CI do PR rascunho #37 verde; #37
+- **Integração** `feat/wp-08-layout-unico` em 9fbf360: fatias 1 a 6 mais `origin/develop` (hotfix do Pole Position), enviada; #37
   fica aberto até o deploy único (D13).
-- **Fatia 6 pronta** na branch `feat/wp-08-f6-legal-eclipsego` (3f26665, fb5fa66, 372b097 + a escrituração), aguarda o usuário
-  (seção 2). WP-08 segue `doing`.
+- **Fatia 7 pronta** na branch `feat/wp-08-f7-legal-topowalk-poleposition` (af2a823 a b40ba32 + escrituração), aguarda o usuário
+  (seção 2). WP-08 segue `doing`. Decisões D-a a D-d resolvidas no WP-08.
 - **D13 em vigor:** deploy único depois de WP-08..WP-19. Antes: tag `pre-modernizacao` em `master`, a tag na política do ambiente
   `github-pages` e ensaio do rollback. `tools/contrato.sha256` roda no CI, no deploy e no `/verify`.
-- **Hotfix do Pole Position:** #43 em `master` e no ar (2026-10-15, conferido: "outubro de 2026", tabela nova, convite 200);
-  #44 leva a `develop`, merge do usuário pendente (conferir). Depois, a integração recebe `git merge origin/develop`
-  **antes** da fatia 7 (`HOTFIX-LEGAL-POS-MIGRACAO-01`): a fatia 7 parte do `.md` atualizado. Observações sobre o texto do app
-  Pole Position (decisão do usuário, no app): 2.1 "o pedido de localização precisa venha junto" (falta palavra?);
-  "descrita acima" aponta para trecho que está abaixo (2.4).
-- **eclipse-go:** branch `docs/email-suporte-politica` (7f349a2 política, 4668019 `EclipseGoContent.md`) sem push nem merge;
-  `docs/PRIVACY_POLICY.md` não está na `main` do app (`ECLIPSE-ORIGEM-NAO-MESCLADA-01`); a data da política não mudou com a
-  troca de e-mail (`ECLIPSE-DATA-APOS-EMAIL-01`).
+- **Repositórios dos apps, sem merge:** topo-walk `docs/politica-tres-observacoes` (7fc7870); eclipse-go
+  `docs/email-suporte-politica` (7f349a2, 4668019; `ECLIPSE-ORIGEM-NAO-MESCLADA-01`, `ECLIPSE-DATA-APOS-EMAIL-01`); pole-position:
+  e-mail no commit 00968f5 da `item/PP-144-segunda-sessao-mesma-pista` (outra sessão do usuário); `/legal poleposition` quando a
+  PP-144 entrar na main do app (`PP-POLITICA-BRANCH-APP-01`). A branch vazia `docs/politica-email-contato` do pole-position-app
+  pode ser apagada. Texto do app PP a decidir lá: 2.1 "o pedido de localização precisa venha junto"; "descrita acima" aponta para a 2.4.
 - **WP-19** `blocked`: falta o checklist de navegador da rodada 3 (seção 3).
 
 ## 2. Quebrado ou pela metade agora
 
 Nada quebrado no ar. Pela metade:
-- **Fatia 6 por integrar:** `git switch feat/wp-08-layout-unico && git merge --no-ff feat/wp-08-f6-legal-eclipsego -m "WP-08: fatia 6 — piloto legal eclipsego-privacy"`.
+- **Fatia 7 por integrar:** `git switch feat/wp-08-layout-unico && git merge --no-ff feat/wp-08-f7-legal-topowalk-poleposition -m "WP-08: fatia 7 — políticas do TopoWalk e do Pole Position"`.
   O agente não tem `git merge`. Conflito em `achados-novos.md`/`handoff.md`/`ESTADO.md`: manter as linhas dos dois lados.
-- `check_site.py` sem argumento agora confere `dist/` (exige `npm run build` antes); instruções antigas que o chamam sem build:
-  `CHECK-SEM-BUILD-INSTRUCOES-01`.
 - `CONFIG-YML-ORFAO-01`: `_config.yml` já não é lido; sai no WP-08 (fatia 9).
 
 ## 3. O que só o navegador prova (usuário ainda não reportou)
+
+- **Fatia 7 do WP-08** (`npm run build && python3 -m http.server 8080 -d dist`): `/topowalk-privacy.html`, `/en/topowalk-privacy.html`,
+  `/poleposition-privacy.html` e `/en/poleposition-privacy.html` a 360, 768 e 1280: tabelas do Pole Position em cartão e rolagem a
+  360; lista aninhada da 2.4 do PP sem marcador e "São durações…" com respiro; "Desenvolvido por" branco semibold; TW com um só
+  filete antes da nota LGPD em itálico pequeno; 1ª coluna das tabelas do TW terracota semibold / mono; quebra depois de
+  "GHF Software"; links externos em nova aba; selos terracota/lima; Contato no menu mobile; troca pt↔en; "Voltar para a GHF
+  Software" leva a `/` ou `/en/`; rodapé en com `/en/…-privacy.html`. Escrever o resultado no WP-08.
 
 - **Fatia 6 do WP-08** (`npm run build && python3 -m http.server 8080 -d dist`): `/eclipsego-privacy.html` e
   `/en/eclipsego-privacy.html` a 360, 768 e 1280: hero (selo, h1 e data uma vez; selo em pt também no en, conhecido), intro com
@@ -76,13 +78,11 @@ Nada quebrado no ar. Pela metade:
 ## 4. Próxima ação
 
 **Do usuário:**
-1. Integrar a fatia 6 (seção 2); mergear o #44; levar `docs/email-suporte-politica` para a `main` do eclipse-go.
-2. Checklists de navegador das fatias 2 a 6 e do WP-19; escrever o resultado nos WPs.
+1. Integrar a fatia 7 (seção 2); levar as branches dos apps (seção 1) para a main de cada um.
+2. Checklists de navegador das fatias 2 a 7 e do WP-19; escrever o resultado nos WPs.
 3. Decidir D11 (`--success`) e D12 (limiares de destaque), ambas só para o WP-10; D3 (medição) bloqueia o WP-13.
 
-**Do agente:** `git merge origin/develop` na integração (após o #44); **fatia 7** (`topowalk-privacy` e `poleposition-privacy`,
-mesmo molde da 6; `/wp` com arquiteto e `site-legal`; fecha `POLEPOSITION-NOOPENER-01`; atenção a `CHECK-SEM-BUILD-INSTRUCOES-01`
-e `DOCS-ECLIPSE-MOVIDO-01`); depois a 8 (LottoExpert política e termos) e a 9 (`public/` e limpeza). As fatias 7 e 8 tocam
+**Do agente:** push e CI após o merge; **fatia 8** (LottoExpert política e termos) e **fatia 9** (`public/` e limpeza). A 8 toca
 **URLs contratuais** (ADR-001) e texto legal: o `/wp` não pula o `site-arquiteto` nem o `site-legal`.
 
 **Copy pendente do usuário antes do WP-10:** "chance matemática" -> "probabilidade exata"; texto final do aviso de jogo
@@ -99,8 +99,8 @@ home (`INDEX-LOTTO-DESC-DIVERGE-01`).
 
 ## 6. Escrituração e branches
 
-- Triagem de `achados-novos.md`: nenhuma linha em `triagem`; os achados da fatia 6 têm destino (`WP-08`, `WP-09`, `WP-10`, `WP-11`, `nota`).
-- **Branches locais já integradas**, candidatas a apagar pelo usuário: `feat/wp-08-f2…`, `f3…`, `f4…`, `f5…` (fatias integradas;
+- Triagem de `achados-novos.md`: nenhuma linha em `triagem`; os achados das fatias 6 e 7 têm destino (`WP-08`, `WP-09`, `WP-10`, `WP-11`, `nota`).
+- **Branches locais já integradas**, candidatas a apagar pelo usuário: `feat/wp-08-f2…`, `f3…`, `f4…`, `f5…`, `feat/wp-08-f6-legal-eclipsego` (fatias integradas;
   `f1-infra-e-home` idem, com a ressalva de que a integração ainda não está em `develop`), `docs/publicacao-wp-07`,
   `docs/publicacao-trilha-a`, `feat/wp-19-rodada-3-claude-design`, `feat/wp-01-legal-lottoexpert-2-05-02`,
   `feat/wp-02-landing-lottoexpert-2-05-02`, `feat/wp-04-og-do-convite-e-poleposition`, `feature/invite-bolao`, `main` (órfã,
