@@ -1,5 +1,6 @@
 ---
 lastUpdated: "2026-10-12"
+origemCommit: "ffce885d76b0ad9844b0854feb3f665be0e2ccc8"
 ---
 # Política de Privacidade — LottoExpert
 

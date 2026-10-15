@@ -1,5 +1,6 @@
 ---
 lastUpdated: "2026-10"
+origemCommit: "00968f5aae7efb3614f7061ec4feed7b1dde9932"
 ---
 # Política de Privacidade — Pole Position: Race Analytics
 

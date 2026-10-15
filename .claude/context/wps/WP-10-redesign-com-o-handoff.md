@@ -42,6 +42,10 @@ as landings prontas.
 - Contraste AA em todo texto (relato do `site-ux` com os pares cor/fundo medidos).
 - `check_site.py` verde; Lighthouse Accessibility ≥ 95 em todas as páginas.
 
+**Nota do WP-09 (2026-10-15, `LOTTO-EN-ESPELHO-AUSENTE-01`):** a página legal do redesign consome
+`src/content/legal/` (pt copiado do commit do app por `tools/sync_legal.py`, en traduzido; ADR-004),
+não o stub legal do export do Claude Design — o export não é origem de texto legal (D7).
+
 **Só no navegador:** todas as páginas, 360/768/1280, pt e en, contra o handoff.
 
 **Risco:** médio — visual. Sem handoff (WP-06 não feito), D4 (B) muda o WP: a referência passa

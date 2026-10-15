@@ -19,11 +19,14 @@ git diff --stat develop...HEAD        # nenhum arquivo fora dos Arquivos-alvo do
 **Tocou página legal (`src/content/legal/*.md`, `src/layouts/LegalLayout.astro`,
 `src/pages/**/*-privacy.astro`, `src/pages/**/*-terms.astro`):**
 ```bash
-diff <(sed '1,/^---$/d' src/content/legal/lottoexpert-privacy.pt.md) ../lotto-expert/docs/PRIVACY_POLICY.md   # sem o front-matter
-diff <(sed '1,/^---$/d' src/content/legal/lottoexpert-terms.pt.md) ../lotto-expert/docs/TERMS_OF_SERVICE.md
-diff <(sed '1,/^---$/d' src/content/legal/eclipsego-privacy.pt.md) ../eclipse-go/docs/PRIVACY_POLICY.md
+python3 tools/check_site.py          # §4: com o app presente, o corpo do .pt.md = git show origemCommit:<caminho> (ADR-004)
+python3 tools/sync_legal.py --todos --check   # informativo: o app avançou além do origemCommit? (D14)
 ```
-(e o equivalente do app tocado). Saída vazia = espelho fiel. Diferença = o WP não terminou.
+O `check_site.py` falhar em "pt ≠ <app>@<sha>" = texto editado à mão ou bootstrap errado: o WP não
+terminou. Não compare com o disco do app (`diff … ../<app>/…`): o checkout do app pode estar em
+outra branch. `sync_legal --check` com "à frente/divergente" não é erro do site — é o app com
+texto ainda não espelhado (ou espelhado de branch fora da principal); decidir a ref é do usuário.
+Aviso "origem ausente" num WP legal = a comparação de texto não rodou, então **não passou**: traga o app para `..` (ou `$GHF_APPS_DIR`) e rode de novo.
 
 **Tocou `public/`:** o `check_site.py` §13 já confere a lista fechada e cada arquivo byte a byte
 contra `dist/`; arquivo de `tools/contrato.sha256` mudou = decisão do usuário (D13).

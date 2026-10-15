@@ -16,7 +16,14 @@ Checa:
   4. "Última atualização" da página legal (pt e en) bate com a da fonte — lida sempre da raiz do
      repositório; fonte ausente é erro. A fonte é o `lastUpdated` do front-matter do `.pt.md` de
      src/content/legal/, que tem de bater com a linha do corpo do `.pt.md`, e o `lastUpdated` do
-     `.en.md` (e a linha `**Last updated:**` dele) com o do pt
+     `.en.md` (e a linha `**Last updated:**` dele) com o do pt. Proveniência (ADR-004): front-matter
+     só com `lastUpdated`, `origemCommit` e `en`; o `.pt.md` tem `origemCommit` de 40 hex e não tem
+     `en: "pendente"` (en atrás do pt); o `.en.md` não tem nem um nem outro; `ORIGENS` de
+     tools/sync_legal.py cobre exatamente LEGAL. Com o repositório do app presente
+     (`$GHF_APPS_DIR` ou `--apps-dir`, padrão `..`): corpo do `.pt.md` igual byte a byte a
+     `git show <origemCommit>:<caminho>` (erro), commit inexistente no app (erro), commit fora de
+     remoto (aviso), ref padrão com texto diferente (aviso). Sem o repositório (o CI, D15): um aviso
+     por repositório, sem erro
   5. copy do LottoExpert respeita jogo responsável (mesma régua do PaywallCopyComplianceTest do app),
      no publicado (PAGINAS_LOTTO) e nas fontes Astro (FONTES_LOTTO)
   6. .well-known/assetlinks.json é JSON válido com o package do LottoExpert
@@ -47,9 +54,15 @@ import re
 import sys
 from html.parser import HTMLParser
 
+sys.dont_write_bytecode = True  # importar sync_legal não deixa tools/__pycache__ no repositório
+from sync_legal import ORIGENS, RE_SHA, CHAVES, apps_dir_padrao, repo_presente, resolve, mostra, em_remoto, separa  # noqa: E402
+
 raiz = "dist"
 if "--raiz" in sys.argv:
     raiz = sys.argv[sys.argv.index("--raiz") + 1]
+APPS_DIR = apps_dir_padrao()
+if "--apps-dir" in sys.argv:
+    APPS_DIR = sys.argv[sys.argv.index("--apps-dir") + 1]
 if not os.path.isdir(raiz):
     print(f"❌ {raiz}/ não existe — rode `npm run build` (o check confere o site gerado, não a raiz)")
     sys.exit(1)
@@ -281,6 +294,13 @@ def datas_em(html, padrao):
 MESES_NUM = list(MESES_PT)  # "janeiro" … "dezembro", na ordem
 
 
+def ler_md(caminho):
+    """Texto de um .md legal sem tradução de newline (open em modo texto converte CRLF em LF e
+    esconderia o front-matter em CRLF que separa(), em bytes, não reconhece)."""
+    with open(caminho, "rb") as f:
+        return f.read().decode("utf-8")
+
+
 def front_matter(md, texto):
     """(lastUpdated como (dia, mês pt, ano), corpo) de um .md de src/content/legal/; None se o
     front-matter ou o `lastUpdated: "AAAA-MM[-DD]"` faltar (erro registrado)."""
@@ -306,7 +326,7 @@ for pagina, md in LEGAL.items():
     if not os.path.exists(fonte):
         erros.append(f"{md}: fonte legal ausente no repositório — a data de {pagina} não tem com o que comparar")
         continue
-    ref_fm, texto = front_matter(md, ler(fonte))
+    ref_fm, texto = front_matter(md, ler_md(fonte))
     if ref_fm is None:
         continue
     m = re.search(r"\*\*Última atualização:\*\*\s*" + RE_PT, texto)
@@ -322,7 +342,7 @@ for pagina, md in LEGAL.items():
     if not os.path.exists(os.path.join(REPO, md_en)):
         erros.append(f"{md_en}: tradução ausente ({pagina} tem par en)")
     else:
-        ref_en, corpo_en = front_matter(md_en, ler(os.path.join(REPO, md_en)))
+        ref_en, corpo_en = front_matter(md_en, ler_md(os.path.join(REPO, md_en)))
         if ref_en is not None and ref_en != ref:
             erros.append(f"{md_en}: `lastUpdated` ({txt(ref_en)}) ≠ o do pt ({txt(ref)})")
         m_en = re.search(r"\*\*Last updated:\*\*\s*" + RE_EN, corpo_en)
@@ -354,6 +374,68 @@ for pagina, md in LEGAL.items():
             erros.append(f"{alvo}: nenhuma `Última atualização:` encontrada")
         if idioma == "en" and not datas_en:
             erros.append(f"{alvo}: nenhuma `Last updated:` encontrada")
+
+# Proveniência (ADR-004). Sempre (inclusive no CI): formato do front-matter, origemCommit no pt,
+# `en: "pendente"` como erro, nada disso no en, ORIGENS = LEGAL. Com o repositório do app presente:
+# o corpo do pt é o `git show` do commit registrado, byte a byte (lido em binário: CRLF, BOM e
+# newline final contam).
+docs_legal = {os.path.basename(md)[: -len(".pt.md")] for md in LEGAL.values()}
+if set(ORIGENS) != docs_legal:
+    erros.append(f"ORIGENS de tools/sync_legal.py ≠ LEGAL do check_site.py: só em ORIGENS "
+                 f"{sorted(set(ORIGENS) - docs_legal)}, só em LEGAL {sorted(docs_legal - set(ORIGENS))}")
+ausentes = set()
+for md in LEGAL.values():
+    doc = os.path.basename(md)[: -len(".pt.md")]
+    for lado in (md, md[: -len(".pt.md")] + ".en.md"):
+        if not os.path.exists(os.path.join(REPO, lado)):
+            continue  # ausência já é erro acima
+        with open(os.path.join(REPO, lado), "rb") as f:
+            fm, chaves, corpo_b = separa(f.read())
+        if fm is None:
+            erros.append(f"{lado}: front-matter fora do formato `---\\n…\\n---\\n` em LF — rode tools/sync_legal.py")
+            continue
+        estranhas = [k for k in chaves if k not in CHAVES or fm[k] is None]
+        if estranhas or len(chaves) != len(set(chaves)):
+            erros.append(f"{lado}: front-matter com chave fora de {{{', '.join(CHAVES)}}}, sem aspas ou repetida: {chaves}")
+        if lado.endswith(".en.md"):
+            for k in ("origemCommit", "en"):
+                if k in fm:
+                    erros.append(f"{lado}: `{k}` no .en.md — proveniência e marcador ficam só no .pt.md (ADR-004)")
+            continue
+        if "en" in fm:
+            if fm["en"] == "pendente":
+                erros.append(f"{lado}: `en: \"pendente\"` — en atrás do pt — traduzir e tirar o marcador")
+            else:
+                erros.append(f"{lado}: `en: {fm['en']!r}` — o único valor é \"pendente\" (e só enquanto o en está atrás)")
+        sha = fm.get("origemCommit")
+        if not sha or not RE_SHA.match(sha):
+            erros.append(f"{lado}: front-matter sem `origemCommit: \"<sha de 40 hex minúsculos>\"` — rode tools/sync_legal.py")
+            continue
+        if doc not in ORIGENS:
+            continue  # já é erro (ORIGENS ≠ LEGAL)
+        repo, caminho, ref_padrao = ORIGENS[doc]
+        repo_dir = os.path.join(APPS_DIR, repo)
+        if not repo_presente(APPS_DIR, repo):
+            if repo not in ausentes:
+                ausentes.add(repo)
+                avisos.append(f"{repo}: origem ausente ({repo_dir}) — comparação de texto pulada")
+            continue
+        if resolve(repo_dir, sha) is None:
+            erros.append(f"{lado}: origemCommit {sha[:7]} não existe em {repo} — `git fetch` no app ou origemCommit inventado")
+            continue
+        origem = mostra(repo_dir, sha, caminho)
+        if origem != corpo_b:
+            erros.append(f"{lado}: pt ≠ {repo}@{sha[:7]}:{caminho} — texto editado à mão? rode sync_legal")
+            continue
+        if not em_remoto(repo_dir, sha):
+            avisos.append(f"{lado}: origemCommit {sha[:7]} não está em nenhum remoto de {repo} — texto publicado de commit que só existe na sua máquina")
+        sha_ref = resolve(repo_dir, ref_padrao)
+        if sha_ref is None:
+            avisos.append(f"{lado}: ref padrão `{ref_padrao}` não existe em {repo}")
+        elif mostra(repo_dir, sha_ref, caminho) != corpo_b:
+            app = doc.rsplit("-", 1)[0]
+            avisos.append(f"{lado}: {repo}@{ref_padrao} ({sha_ref[:7]}) — texto da ref padrão ≠ origemCommit — "
+                          f"`python3 tools/sync_legal.py {app} --check` diz se é atraso ou divergência")
 
 # ------------------------------------------------------------ 5: copy
 for rel, caminho in [(r, p(r)) for r in PAGINAS_LOTTO] + [(r, os.path.join(REPO, r)) for r in FONTES_LOTTO]:

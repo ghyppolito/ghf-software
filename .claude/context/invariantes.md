@@ -17,7 +17,7 @@ Cada regra aponta a guarda que a prova.
 
 | Regra | Por quê | Guarda |
 |---|---|---|
-| Texto legal é espelho do repositório do app; data igual em `.md`, HTML pt e HTML en | Duas origens derivam; o app faz o usuário aceitar o texto (D7) | `check_site.py` §4; `diff -q` no `/verify` |
+| Texto legal é espelho do repositório do app; data igual em `.md`, HTML pt e HTML en | Duas origens derivam; o app faz o usuário aceitar o texto (D7) | `tools/sync_legal.py` é o único que escreve o corpo do `.pt.md`, de um commit do app (`origemCommit`, ADR-004); `check_site.py` §4: corpo = `git show <origemCommit>` com o app presente, `origemCommit` e `en: "pendente"` (erro) sempre; `sync_legal.py <app> --check` no `/legal` |
 | Copy do LottoExpert não promete chance, maximização nem prêmio | Política da Play para app de loteria e jogo responsável — mesma régua do `PaywallCopyComplianceTest` do app | `check_site.py` §5 (`COPY_PROIBIDA`, só cresce) |
 | Toda string visível existe em pt **e** en | Inglês parcial é pior que nenhum: parece quebrado | `site-qa` AUDITAR; sem guarda automática até o WP-08 |
 | `og:image` aponta para arquivo que existe no repositório | Link compartilhado sem imagem — e o convite do bolão é canal viral | `check_site.py` §3 |

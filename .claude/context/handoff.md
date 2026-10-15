@@ -7,11 +7,11 @@
 
 ## 1. Onde parei
 
-- **WP-08 `done` na integração** (`feat/wp-08-layout-unico`): as 9 fatias integradas, CI do #37 verde, checklist de navegador reportado pelo usuário ("estao ok", 2026-10-15). O PR #37 segue aberto até o deploy único (D13); nada foi publicado.
-- **Próximo: WP-09** (`sync_legal.py`), que o agente começa por `/wp`. Nada o bloqueia: depende só do WP-08 e de D7 (resolvida).
-- **D13 em vigor:** deploy único depois de WP-08..WP-19; antes, tag `pre-modernizacao` em `master` e ensaio do rollback.
+- **WP-09 pronto, espera o merge do usuário** (status `doing` até o CI provar o critério 7): `git switch feat/wp-08-layout-unico && git merge --no-ff feat/wp-09-sync-legal -m "WP-09: texto legal entra pelo sync_legal.py com proveniência (ADR-004)"`. Depois o agente faz o push, acompanha o CI do #37 e marca `done`.
+- **Próximo: WP-10.** WP-08 `done` na integração; o PR #37 segue aberto até o deploy único (D13); nada foi publicado.
+- **`/legal poleposition`** roda agora por `sync_legal.py poleposition --ref <sha>` quando a PP-144 entrar no app.
 - **Repositórios dos apps, sem merge:** topo-walk `docs/politica-tres-observacoes` (7fc7870); eclipse-go `docs/email-suporte-politica`
-  (7f349a2, 4668019); pole-position `item/PP-144-segunda-sessao-mesma-pista` (00968f5); `/legal poleposition` quando a PP-144 entrar no app. **WP-19** `blocked` (checklist da rodada 3).
+  (7f349a2, 4668019); pole-position `item/PP-144-segunda-sessao-mesma-pista` (00968f5). Os 5 avisos do `check_site` somem quando entrarem. **WP-19** `blocked` (checklist da rodada 3).
 
 ## 2. Quebrado ou pela metade agora
 
@@ -33,7 +33,7 @@ Nada quebrado no ar nem pela metade. Servidor antigo na porta 8081 (pid 686166),
 2. Checklist de navegador do WP-19; escrever o resultado no WP.
 3. Decidir D11 (`--success`) e D12 (limiares de destaque), ambas só para o WP-10; D3 (medição) bloqueia o WP-13. `PP-NAV-CONTRASTE-01` aguarda decisão.
 
-**Do agente:** `/wp` para abrir o WP-09.
+**Do agente:** push, CI do #37 e `done` do WP-09 após o merge do usuário; depois `/wp` para o WP-10.
 
 **Copy pendente do usuário antes do WP-10:** "chance matemática" -> "probabilidade exata"; texto final do aviso de jogo
 responsável (o export traz "Texto provisório"); confirmar "Nada de cadastro, e-mail ou CPF" e "Nenhum SDK de publicidade";
@@ -49,7 +49,7 @@ home (`INDEX-LOTTO-DESC-DIVERGE-01`).
 
 ## 6. Escrituração e branches
 
-- Triagem de `achados-novos.md`: nenhuma linha em `triagem`; nenhum achado aberto aponta mais para o `WP-08` (`HOTFIX-LEGAL-POS-MIGRACAO-01` foi para o `WP-09`, `404-SEM-OG-CANONICAL-01` está resolvido).
+- Triagem de `achados-novos.md`: nenhuma linha em `triagem`; os três achados do WP-09 e `VERIFY-DIFF-LEGAL-WORKTREE-01` estão `resolvido`.
 - **Branches locais já integradas**, candidatas a apagar pelo usuário: `feat/wp-08-f2…`, `f3…`, `f4…`, `f5…`, `feat/wp-08-f6-legal-eclipsego`, `feat/wp-08-f7-legal-topowalk-poleposition` `feat/wp-08-f8-legal-lottoexpert` e `feat/wp-08-f9-public-limpeza` (fatias integradas;
   `f1-infra-e-home` idem, com a ressalva de que a integração ainda não está em `develop`), `docs/publicacao-wp-07`,
   `docs/publicacao-trilha-a`, `feat/wp-19-rodada-3-claude-design`, `feat/wp-01-legal-lottoexpert-2-05-02`,
