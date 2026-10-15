@@ -7,13 +7,12 @@ import { defineConfig } from 'astro/config';
 // (ADR-002 §3), é copiada byte a byte para dist/. Lista fechada, sem glob — arquivo novo na raiz
 // só é publicado se entrar aqui. Colisão com página gerada falha o build (errorOnExist).
 // Página migrada sai daqui e da raiz no mesmo commit (index.html: fatia 1; lottoexpert.html: fatia 2;
-// topowalk.html: fatia 3; poleposition.html: fatia 4).
+// topowalk.html: fatia 3; poleposition.html: fatia 4; eclipsego.html: fatia 5).
 const COPIADOS_DA_RAIZ = [
   'lottoexpert-privacy.html',
   'lottoexpert-terms.html',
   'topowalk-privacy.html',
   'poleposition-privacy.html',
-  'eclipsego.html',
   'eclipsego-privacy.html',
   'assets',
   '.well-known',
