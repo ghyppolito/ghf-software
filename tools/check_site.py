@@ -50,14 +50,16 @@ Checa:
      NOINDEX (a 404) ou CONGELADAS (o convite, o mesmo `.html` de tools/contrato.sha256, isento das
      regras e sem canonical, hreflang, JSON-LD nem meta robots). Fora de CONGELADAS: um só canonical, igual ao og:url e à URL da própria página
      (`/x.html`, `/`, `/en/`); hreflang pt-BR, en e x-default (= en), recíprocos, só nas
-     INDEXAVEIS; `noindex` só e sempre nas NOINDEX; og:* e twitter:* completos; og:image:width e
+     INDEXAVEIS; `noindex` (ou `none`) só e sempre nas NOINDEX; og:* e twitter:* completos; og:image
+     é arquivo do site (nunca externo) e twitter:image é igual a ele; og:image:width e
      height juntos e iguais ao tamanho real do arquivo (cabeçalho PNG/JPEG lido aqui).
      `robots.txt` igual ao literal ROBOTS (nenhum `Disallow`), gerado por src/pages/robots.txt.ts;
      `sitemap.xml` (src/pages/sitemap.xml.ts) faz parse, seus `<loc>` são exatamente as URLs das
      INDEXAVEIS (sem repetir, cada uma existe em dist/) e cada `<url>` traz os mesmos três hreflang
      da página. JSON-LD: cada `<script type="application/ld+json">` faz `json.loads`; `Organization`
      só nas duas home, `MobileApplication` só nas 8 landings, nenhum nas demais; chaves exatamente
-     as permitidas (sem `aggregateRating`, `review`, preço do Premium); `installUrl` com o mesmo
+     as permitidas (sem `aggregateRating`, `review`, preço do Premium); `name` e
+     `applicationCategory` os da landing (APP_DA_PAGINA, D17); `installUrl` com o mesmo
      `id` do botão da Play da página; o texto do JSON-LD (já decodificado) passa pela régua do §5
 """
 import glob
@@ -812,7 +814,8 @@ for caminho in paginas:
     elif c.alternates:
         erros.append(f"{rel}: hreflang {c.alternates} numa página sem par (só as INDEXAVEIS declaram)")
     # indexação: `noindex` só e sempre nas NOINDEX
-    tem_noindex = any("noindex" in v.lower() for k in ("robots", "googlebot") for v in c.meta.get(k, []))
+    # `none` = `noindex, nofollow` para o Google: conta como noindex
+    tem_noindex = any(re.search(r"\b(noindex|none)\b", v, re.I) for k in ("robots", "googlebot") for v in c.meta.get(k, []))
     if rel in NOINDEX and not tem_noindex:
         erros.append(f"{rel}: sem <meta name=\"robots\" content=\"noindex\"> (está em NOINDEX)")
     if rel not in NOINDEX and tem_noindex:
@@ -820,6 +823,11 @@ for caminho in paginas:
     # og:image: largura e altura declaradas juntas e iguais às do arquivo (D16)
     larg, alt_img = c.meta.get("og:image:width", []), c.meta.get("og:image:height", [])
     imagem = (c.meta.get("og:image") or [""])[0]
+    if imagem and not (imagem.startswith(SITE) and os.path.isfile(p(imagem[len(SITE):]))):
+        erros.append(f"{rel}: og:image {imagem} não é URL absoluta de arquivo do site ({SITE}…)")
+    tw_imagem = c.meta.get("twitter:image", [])
+    if tw_imagem and tw_imagem[:1] != [imagem]:
+        erros.append(f"{rel}: twitter:image {tw_imagem} ≠ og:image {imagem!r}")
     if bool(larg) != bool(alt_img) or len(larg) > 1 or len(alt_img) > 1:
         erros.append(f"{rel}: og:image:width {larg} e og:image:height {alt_img} — os dois juntos, uma vez, ou nenhum")
     elif larg and imagem.startswith(SITE) and os.path.isfile(p(imagem[len(SITE):])):
@@ -893,6 +901,16 @@ CATEGORIAS = {f"{c}Application" for c in (
     "Developer", "Driving", "Educational", "Health", "Finance", "Security", "Browser", "Communication",
     "DesktopEnhancement", "Entertainment", "Multimedia", "Home", "Utilities", "Reference")}
 OFERTA = {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}
+# app de cada landing (D17): name e applicationCategory esperados — espelho de src/i18n/apps.ts,
+# declarado aqui para que um dado trocado lá (ou uma landing lendo a chave errada) não passe
+APP_DA_PAGINA = {}
+for pagina, nome, categoria in (
+    ("lottoexpert.html", "LottoExpert", "UtilitiesApplication"),
+    ("topowalk.html", "TopoWalk", "UtilitiesApplication"),
+    ("poleposition.html", "Pole Position", "SportsApplication"),
+    ("eclipsego.html", "EclipseGo", "LifestyleApplication"),
+):
+    APP_DA_PAGINA[pagina] = APP_DA_PAGINA["en/" + pagina] = (nome, categoria)
 RE_PLAY = re.compile(r"^https://play\.google\.com/store/apps/details\?id=([\w.]+)(?:&|$)")
 
 
@@ -951,6 +969,9 @@ for rel, c in sorted(cabecas.items()):
             erros.append(f"{rel}: offers {o.get('offers')!r} ≠ {OFERTA} (só o download gratuito; preço do Premium nunca)")
         if not isinstance(o.get("name"), str) or not o["name"].strip():
             erros.append(f"{rel}: MobileApplication sem name")
+        if rel in APP_DA_PAGINA and (o.get("name"), o.get("applicationCategory")) != APP_DA_PAGINA[rel]:
+            erros.append(f"{rel}: MobileApplication name/applicationCategory {o.get('name')!r}/{o.get('applicationCategory')!r} "
+                         f"≠ {APP_DA_PAGINA[rel][0]!r}/{APP_DA_PAGINA[rel][1]!r} (D17)")
         m = RE_PLAY.match(o.get("installUrl") or "")
         botoes = BotoesPlay()
         botoes.feed(ler(p(rel)))

@@ -5,6 +5,7 @@
 // D8/D18) nas páginas com par; og:image:width/height lidos do cabeçalho do arquivo em public/
 // (nunca declarados à mão — D16: as imagens 1200×630 são outro WP); JSON-LD pelo slot `jsonld`.
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import '../styles/global.css';
 import { SITE, rota, type Idioma } from '../i18n/ui';
 
@@ -77,8 +78,14 @@ const {
 const url = (l: Idioma) => SITE + rota(l, caminho);
 const canonica = temPar ? url(lang) : `${SITE}/${caminho}`;
 const caminhoImagem = og.imagem ?? '/assets/GHFSoftware.png';
+if (!caminhoImagem.startsWith('/')) {
+  throw new Error(`og.imagem deve ser caminho do site, ex.: /assets/x.png (recebido: ${caminhoImagem})`);
+}
 const imagem = SITE + caminhoImagem;
-const tamanho = dimensoes(`public${caminhoImagem}`);
+// Premissa: o build roda na raiz do repositório (npm run build), e a imagem publicada em
+// /assets/x.png é o arquivo public/assets/x.png, copiado byte a byte para dist/ (ADR-002 §3).
+// O '.' antes do caminho impede que o '/' inicial faça o path.resolve voltar à raiz do disco.
+const tamanho = dimensoes(path.resolve(process.cwd(), 'public', '.' + caminhoImagem));
 const ogTitulo = og.titulo ?? title;
 const ogDescricao = og.descricao ?? description;
 const familias = ['Inter:wght@300;400;500;600;700;800', ...fontesExtras].map((f) => `family=${f}`).join('&');

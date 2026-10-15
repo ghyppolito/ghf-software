@@ -117,8 +117,8 @@ critério passa a ser `dist/sitemap.xml`, sem índice: são 20 URLs.
 
 ### JSON-LD (`src/components/JsonLd.astro`)
 
-- **Saída.** Um `<script type="application/ld+json">` com `JSON.stringify`, trocando `<` por
-  `<`. Os dados ficam num só módulo, `src/i18n/apps.ts` (novo), e o botão "Google Play" da
+- **Saída.** Um `<script type="application/ld+json">` com `JSON.stringify`, trocando todo `<`
+  pela sequência de escape `\u003c` (barra invertida, u, 003c). Os dados ficam num só módulo, `src/i18n/apps.ts` (novo), e o botão "Google Play" da
   landing e da home passa a ler o link de lá. Assim o JSON-LD e o botão não têm como divergir.
 - **`Organization` (home pt e en):** só `@context`, `@type`, `name` ("GHF Software"),
   `url` (`https://ghfsoftware.com/`) e `logo` (`/assets/GHFSoftware.png`, absoluto).
