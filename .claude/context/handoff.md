@@ -3,8 +3,8 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-10-14 (fim).** Escrito na branch `feat/wp-08-f2-landing-lottoexpert` (fatia 2 do WP-08, commits
-f99c1ac e 45d3aa9), ainda não integrada.
+**Sessão de 2026-10-14 (fim).** Escrito na branch `feat/wp-08-f3-landing-topowalk` (fatia 3 do WP-08, commits
+04be113 e 8111fe3), ainda não integrada.
 
 ## 1. Onde parei
 
@@ -12,8 +12,8 @@ f99c1ac e 45d3aa9), ainda não integrada.
   `PAGES_VIA_ACTIONS=true`, ambiente `github-pages` só `master`). Bolão testado pelo usuário com link real.
 - **Esperando publicação** (`origin/master..origin/develop`): escrituração do WP-07 e os PRs #41 e #42 (mergeados em
   `develop`). Nenhum texto legal, nenhuma página nova. Sem urgência.
-- **WP-08** `doing`: fatia 1 integrada e conferida no navegador; **fatia 2 (landing LottoExpert, pt e en) implementada e
-  auditada** na branch acima; aguarda integração e checklist de navegador (seção 3).
+- **WP-08** `doing`: fatias 1 e 2 integradas (a 2 em dc42410, enviada; CI do #37 verde); **fatia 3 (landing
+  TopoWalk, pt e en) implementada e auditada** na branch acima; aguarda o usuário integrar e o checklist de navegador (seção 3).
 - **D13 (deploy único):** nada do WP-08 vai ao ar até o backlog de evolução (WP-08..WP-19) terminar; as releases R1/R2/R3
   deixaram de existir. Antes do deploy: criar a tag `pre-modernizacao` em `master`, adicionar a tag à política do ambiente
   `github-pages` e ensaiar o rollback. Hotfix sai por `master`. `tools/contrato.sha256` roda no CI, no deploy e no `/verify`.
@@ -22,14 +22,19 @@ f99c1ac e 45d3aa9), ainda não integrada.
 ## 2. Quebrado ou pela metade agora
 
 Nada quebrado no ar. Pela metade:
-- **Integração em conflito:** `feat/wp-08-layout-unico` (PR rascunho #37) conflita com `develop` em `achados-novos.md`.
-  O usuário roda `git merge origin/develop` na integração (manter as linhas dos dois lados, regenerar `ESTADO.md`) e depois
-  `git merge --no-ff feat/wp-08-f2-landing-lottoexpert`. O agente não tem `git merge`; conclui com `git commit`.
+- **Fatia 3 por integrar:** na integração, `git switch feat/wp-08-layout-unico && git merge --no-ff
+  feat/wp-08-f3-landing-topowalk -m "WP-08: fatia 3 — landing TopoWalk"`. O agente não tem `git merge`.
 - `CONFIG-YML-ORFAO-01`: `_config.yml` já não é lido; sai no WP-08 (fatia 9).
 
 ## 3. O que só o navegador prova (usuário ainda não viu)
 
-- **Fatia 2 do WP-08:** `npm run build && python3 -m http.server 8080 -d dist`. `/lottoexpert.html` e `/en/lottoexpert.html`
+- **Fatia 3 do WP-08** (`npm run build && python3 -m http.server 8080 -d dist`): `/topowalk.html` e `/en/topowalk.html` a 360 e
+  1280: brilho terracota do hero centrado e parado atrás do conteúdo (como na página antiga); nav com hover terracota,
+  pílula Contato e pílula terracota no menu mobile; glow terracota do logo na nav e no rodapé; rodapé em `surface`, TopoWalk
+  destacado em terracota com chevron, coração terracota, só o ícone de e-mail; título do hero com "Suas Mãos"/"Your Hands" em
+  gradiente âmbar e quebra de linha no desktop; 8 cards, banner Pro e 4 passos; troca de idioma leva ao par; na home `/en/`,
+  os links do TopoWalk levam a `/en/topowalk.html`. Escrever o resultado no WP-08.
+- **Fatia 2 do WP-08** (ainda não reportada): `npm run build && python3 -m http.server 8080 -d dist`. `/lottoexpert.html` e `/en/lottoexpert.html`
   a 360 e a 1280: hero (gradiente violeta, mockup), 17 cards, cubo girando, hover colorido das 9 loterias, 3 planos com
   "Anual ⭐", tabela de 19 linhas a 360, footer com LottoExpert destacado e favicon; menu mobile; EN/PT leva ao par.
   `ghf_lang`: abrir `/en/lottoexpert.html` direto e depois `/topowalk.html` -> abre em en; abrir `/lottoexpert.html` -> volta
@@ -44,11 +49,11 @@ Nada quebrado no ar. Pela metade:
 ## 4. Próxima ação
 
 **Do usuário:**
-1. Integrar a fatia 2 (seção 2) e rodar o checklist da seção 3.
+1. Integrar a fatia 3 (seção 2) e rodar os checklists das fatias 2 e 3 (seção 3).
 2. Checklist do WP-19; escrever o resultado no WP.
 3. Decidir D11 (`--success`) e D12 (limiares de destaque), ambas só para o WP-10; D3 (medição) bloqueia o WP-13.
 
-**Do agente:** fatia 3 do WP-08 (`topowalk.html`), depois de a fatia 2 estar integrada.
+**Do agente:** fatia 4 do WP-08 (`poleposition.html`, JetBrains Mono por prop só nesta página), depois de a fatia 3 estar integrada.
 
 **Copy pendente do usuário antes do WP-10:** "chance matemática" -> "probabilidade exata"; texto final do aviso de jogo
 responsável (o export traz "Texto provisório"); confirmar "Nada de cadastro, e-mail ou CPF" e "Nenhum SDK de
@@ -66,7 +71,7 @@ LottoExpert fica na home (`INDEX-LOTTO-DESC-DIVERGE-01`).
 
 ## 6. Escrituração e branches
 
-- Triagem de `achados-novos.md`: nenhuma linha em `triagem`; os achados da fatia 2 têm destino (WP-10, WP-11, WP-12, `aceito`).
+- Triagem de `achados-novos.md`: nenhuma linha em `triagem`; os achados das fatias 2 e 3 têm destino (WP-10, WP-11, WP-12, `aceito`).
 - **Branches locais integradas** (`git branch --merged feat/wp-08-layout-unico`), candidatas a apagar pelo usuário:
   `docs/publicacao-wp-07`, `docs/publicacao-trilha-a`, `feat/wp-19-rodada-3-claude-design`,
   `feat/wp-08-f1-infra-e-home` (preservada pelo merge `--no-ff`; a integração ainda não está em `develop`, então vale

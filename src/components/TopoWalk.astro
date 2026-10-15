@@ -1,0 +1,157 @@
+---
+// Corpo da landing do TopoWalk (hero, funcionalidades, banner Pro, como funciona), comum a
+// /topowalk.html e /en/topowalk.html. Markup transportado de topowalk.html (WP-08, fatia 3),
+// textos em src/i18n/topowalk.ts. Nav e footer ficam nas páginas.
+//
+// Cards, itens do Pro e passos são listas: um markup só por bloco. As classes ficam literais
+// aqui (o Tailwind não detecta classe montada por concatenação). Ícones são decorativos (o texto
+// ao lado diz o mesmo): aria-hidden.
+import { topowalk, type ChaveTopo } from '../i18n/topowalk';
+import type { Idioma } from '../i18n/ui';
+
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
+const x = topowalk[lang];
+const txt = (chave: string) => x[chave as ChaveTopo];
+
+// Ícone de cada card de #features, na ordem da página antiga.
+const funcionalidades = [
+  { n: 1, icone: 'fa-solid fa-satellite-dish' },
+  { n: 2, icone: 'fa-solid fa-vector-square' },
+  { n: 3, icone: 'fa-solid fa-layer-group' },
+  { n: 4, icone: 'fa-solid fa-location-crosshairs' },
+  { n: 5, icone: 'fa-solid fa-camera font-bold' },
+  { n: 6, icone: 'fa-solid fa-file-pdf' },
+  { n: 7, icone: 'fa-solid fa-file-code' },
+  { n: 8, icone: 'fa-solid fa-gift' },
+];
+
+const pro = [
+  { n: 1, icone: 'fa-solid fa-compass' },
+  { n: 2, icone: 'fa-solid fa-scissors' },
+  { n: 3, icone: 'fa-solid fa-id-card' },
+  { n: 4, icone: 'fa-solid fa-drafting-compass' },
+];
+
+const passos = [1, 2, 3, 4];
+---
+<!-- Hero Section -->
+<header class="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden bg-grid-pattern">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0B1120_100%)] z-0"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-base/80 to-brand-base z-0"></div>
+
+    <!-- Abstract gradient blob -->
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-accent rounded-full mix-blend-screen filter blur-[150px] opacity-10"></div>
+
+    <div class="container mx-auto px-6 md:px-12 relative z-10">
+        <div class="flex flex-col lg:flex-row items-center gap-16">
+            <!-- Text Content -->
+            <div class="w-full lg:w-1/2 text-center lg:text-left">
+                <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-900/20 backdrop-blur-sm text-sm text-amber-400 font-medium">
+                    <i class="fa-solid fa-mountain mr-2" aria-hidden="true"></i> <span>{x.hero_badge}</span>
+                </div>
+
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6 text-white" set:html={x.hero_titleHtml}></h1>
+
+                <p class="mt-4 text-xl text-gray-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed mb-10">{x.hero_desc}</p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                    <a href="https://play.google.com/store/apps/details?id=br.com.ghfsoftware.topowalk&amp;hl=pt_BR" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-accent hover:bg-amber-600 text-white font-semibold rounded-lg shadow-glow-amber hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
+                        <i class="fa-brands fa-google-play text-xl" aria-hidden="true"></i> <span>{x.btn_play}</span>
+                    </a>
+                    <a href="#how" class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center">{x.btn_learn}</a>
+                </div>
+            </div>
+
+            <!-- Visual Content -->
+            <div class="w-full lg:w-1/2 flex justify-center">
+                <div class="relative w-72 h-[600px] border-[8px] border-gray-900 rounded-[3rem] shadow-2xl overflow-hidden glass-panel flex flex-col items-center justify-center bg-gradient-to-b from-gray-900/80 to-black/80">
+                    <div class="absolute top-0 w-1/2 h-6 bg-gray-900 mx-auto rounded-b-3xl z-10"></div>
+                    <img src="/assets/topo-walk.png" alt="TopoWalk Logo" class="w-32 h-32 object-contain drop-shadow-[0_0_30px_rgba(181,84,28,0.5)]">
+                    <div class="absolute bottom-8 left-0 right-0 text-center">
+                        <div class="w-20 h-2 bg-gray-800 rounded-full mx-auto"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Features Grid -->
+<section class="py-24 bg-brand-surface relative z-10 border-t border-gray-800/50">
+    <div class="container mx-auto px-6 md:px-12">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <div class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-accent/10 text-brand-accent text-sm font-semibold tracking-wide uppercase border border-brand-accent/20">{x.features_badge}</div>
+            <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white">{x.features_title}</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {
+                funcionalidades.map((f) => (
+                    <div class="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                        <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-xl mb-5 group-hover:scale-110 transition-transform">
+                            <i class={f.icone} aria-hidden="true"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">{txt(`feat${f.n}_title`)}</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">{txt(`feat${f.n}_desc`)}</p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<!-- TopoWalk Pro Spotlight Banner -->
+<section class="py-20 bg-brand-base relative z-10 border-t border-gray-800/50">
+    <div class="container mx-auto px-6 md:px-12">
+        <div class="glass-panel p-8 md:p-12 rounded-3xl border border-amber-500/30 relative overflow-hidden bg-gradient-to-r from-amber-950/40 via-brand-surface to-brand-base">
+            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-brand-accent/10 rounded-full filter blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-3xl mb-10">
+                <div class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-accent/20 text-amber-400 text-sm font-semibold tracking-wide uppercase border border-amber-500/30">{x.pro_badge}</div>
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-3">{x.pro_title}</h2>
+                <p class="text-amber-400/90 text-lg font-medium">{x.pro_subtitle}</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {
+                    pro.map((item) => (
+                        <div class="p-5 rounded-xl bg-brand-base/60 border border-gray-800">
+                            <div class="text-brand-accent text-lg font-bold mb-2 flex items-center gap-2">
+                                <i class={item.icone} aria-hidden="true"></i> <span>{txt(`pro${item.n}_title`)}</span>
+                            </div>
+                            <p class="text-gray-400 text-sm">{txt(`pro${item.n}_desc`)}</p>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How it Works -->
+<section id="how" class="py-24 bg-brand-surface relative z-10 border-t border-gray-800/50">
+    <div class="container mx-auto px-6 md:px-12">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <div class="inline-block mb-3 px-3 py-1 rounded-full bg-gray-800 text-gray-300 text-sm font-semibold tracking-wide uppercase border border-gray-700">{x.how_badge}</div>
+            <h2 class="text-3xl md:text-5xl font-bold text-white">{x.how_title}</h2>
+        </div>
+
+        <div class="max-w-4xl mx-auto">
+            <div class="relative border-l border-brand-accent/50 ml-6 md:ml-10 space-y-12">
+                {
+                    passos.map((n) => (
+                        <div class="relative pl-10 md:pl-16">
+                            <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-brand-accent flex items-center justify-center text-brand-accent font-bold text-lg">{n}</div>
+                            <h3 class="text-2xl font-bold text-white mb-3">{txt(`how${n}_title`)}</h3>
+                            <p class="text-gray-400 text-lg leading-relaxed">{txt(`how${n}_desc`)}</p>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+</section>

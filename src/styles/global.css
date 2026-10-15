@@ -220,6 +220,19 @@ body {
   animation: spin-slow 20s linear infinite;
 }
 
+/* ------------------------------------------------------------------ CSS próprio do TopoWalk
+ * Copiado do <style> de topowalk.html (WP-08, fatia 3); o resto daquele <style> (body, grade,
+ * vidro, #navbar) é igual ao de index.html, acima. O blob do hero chamava `animation: float`
+ * no atributo style, mas a página não declarava a @keyframes: não animava. O atributo saiu —
+ * com a @keyframes da home no CSS único, o transform tiraria o blob do centro.
+ */
+.text-gradient-amber {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(135deg, #b5541c, #d97736);
+}
+
 /* ------------------------------------------------------------------ Tailwind */
 @tailwind base;
 @tailwind components;

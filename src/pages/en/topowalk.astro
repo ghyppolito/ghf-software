@@ -1,0 +1,55 @@
+---
+// Landing do TopoWalk em inglês (/en/topowalk.html). Corpo em components/TopoWalk.astro, textos em
+// i18n/topowalk.ts. Links da página para a home vão à home do mesmo idioma. O TopoWalk usa
+// `accent` (terracota) onde as outras páginas usam `primary`: nav e footer recebem `realce`.
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import TopoWalk from '../../components/TopoWalk.astro';
+import { topowalk } from '../../i18n/topowalk';
+import { rota } from '../../i18n/ui';
+
+const lang = 'en';
+const x = topowalk[lang];
+const home = rota(lang, 'index.html');
+---
+<Base
+  title={x.title}
+  description={x.description}
+  og={{
+    titulo: x.og_title,
+    descricao: x.og_description,
+    descricaoTwitter: x.twitter_description,
+    imagem: '/assets/topowalk_screenshot.png',
+    largura: 1200,
+    altura: 630,
+  }}
+  lang={lang}
+  caminho="topowalk.html"
+  tema="topowalk"
+  favicon="/assets/topo-walk.png"
+  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-accent selection:text-white font-sans overflow-x-hidden"
+>
+  <Nav
+    lang={lang}
+    caminho="topowalk.html"
+    inicio={home}
+    realce="accent"
+    itens={[
+      { href: `${home}#sobre`, chave: 'nav_about' },
+      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
+      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <TopoWalk lang={lang} />
+  {/* A página antiga só tinha o e-mail entre os canais (sem YouTube nem Instagram do app). */}
+  <Footer
+    lang={lang}
+    inicio={home}
+    prefixoAncora={home}
+    redes={{}}
+    appAtual="topowalk.html"
+    fundo="surface"
+    realce="accent"
+  />
+</Base>

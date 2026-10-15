@@ -6,11 +6,11 @@ import { defineConfig } from 'astro/config';
 // Página ainda não migrada (WP-08) tem a raiz como fonte: não passa pelo compilador do Astro
 // (ADR-002 §3), é copiada byte a byte para dist/. Lista fechada, sem glob — arquivo novo na raiz
 // só é publicado se entrar aqui. Colisão com página gerada falha o build (errorOnExist).
-// Página migrada sai daqui e da raiz no mesmo commit (index.html: fatia 1; lottoexpert.html: fatia 2).
+// Página migrada sai daqui e da raiz no mesmo commit (index.html: fatia 1; lottoexpert.html: fatia 2;
+// topowalk.html: fatia 3).
 const COPIADOS_DA_RAIZ = [
   'lottoexpert-privacy.html',
   'lottoexpert-terms.html',
-  'topowalk.html',
   'topowalk-privacy.html',
   'poleposition.html',
   'poleposition-privacy.html',
