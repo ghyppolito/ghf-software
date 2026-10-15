@@ -10,7 +10,8 @@ Checa:
   3. href/src locais resolvem para arquivo existente; og:image em ghfsoftware.com resolve localmente
   4. "Última atualização" da página legal (pt e en) bate com a do .md em docs/ — lido sempre
      da raiz do repositório, também com `--raiz dist`; .md ausente é erro
-  5. copy do LottoExpert respeita jogo responsável (mesma régua do PaywallCopyComplianceTest do app)
+  5. copy do LottoExpert respeita jogo responsável (mesma régua do PaywallCopyComplianceTest do app),
+     no publicado (PAGINAS_LOTTO) e nas fontes Astro (FONTES_LOTTO)
   6. .well-known/assetlinks.json é JSON válido com o package do LottoExpert
   7. toda página de PUBLICADAS existe — na raiz do repositório como `.html` (página ainda copiada)
      ou como `src/pages/<x>.astro` (gerada); com `--raiz` fora da raiz (ex.: `dist/`), existe lá,
@@ -59,7 +60,7 @@ PUBLICADAS = [
 # commit (espelho de COM_PAR_EN em src/i18n/ui.ts). Termina vazia no fim do WP-08. O convite
 # não tem par en (formato é do app).
 EN_PENDENTE = [
-    "lottoexpert.html", "lottoexpert-privacy.html", "lottoexpert-terms.html",
+    "lottoexpert-privacy.html", "lottoexpert-terms.html",
     "topowalk.html", "topowalk-privacy.html",
     "poleposition.html", "poleposition-privacy.html",
     "eclipsego.html", "eclipsego-privacy.html",
@@ -93,6 +94,10 @@ COPY_PROIBIDA = [
 PAGINAS_LOTTO = ["index.html", "lottoexpert.html", "lottoexpert-privacy.html", "lottoexpert-terms.html",
                  "lotto-expert/sweepstake-invite/lottoexpert-invite.html",
                  "en/index.html", "en/lottoexpert.html", "en/lottoexpert-privacy.html", "en/lottoexpert-terms.html"]
+# Fontes das páginas do LottoExpert já geradas pelo Astro: lidas sempre, a partir da raiz do
+# repositório — na raiz não há o .html gerado, e a régua tem de valer antes do build também.
+FONTES_LOTTO = ["src/i18n/home.ts", "src/components/Home.astro",
+                "src/i18n/lottoexpert.ts", "src/components/LottoExpert.astro"]
 
 erros, avisos = [], []
 
@@ -262,10 +267,12 @@ for pagina, md in LEGAL.items():
             avisos.append(f"{alvo}: nenhuma `Last updated:` encontrada no HTML")
 
 # ------------------------------------------------------------ 5: copy
-for rel in PAGINAS_LOTTO:
-    if not os.path.exists(p(rel)):
+for rel, caminho in [(r, p(r)) for r in PAGINAS_LOTTO] + [(r, os.path.join(REPO, r)) for r in FONTES_LOTTO]:
+    if not os.path.exists(caminho):
+        if rel in FONTES_LOTTO:
+            erros.append(f"{rel}: fonte do LottoExpert em FONTES_LOTTO ausente — atualize a lista")
         continue
-    texto = ler(p(rel))
+    texto = ler(caminho)
     for n, linha in enumerate(texto.splitlines(), 1):
         for padrao in COPY_PROIBIDA:
             for m in re.finditer(padrao, linha, re.I):

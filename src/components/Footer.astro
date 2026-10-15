@@ -1,6 +1,7 @@
 ---
 // Footer do site (referência: index.html). `id="contato"` é o alvo do item Contato da nav.
 // Links para páginas do site passam por `rota()`: em en, apontam para o par quando ele existe.
+// O que varia por página é prop: redes sociais do app e o app da página destacado na lista.
 import { rota, t, type Idioma } from '../i18n/ui';
 
 interface Props {
@@ -9,9 +10,22 @@ interface Props {
   inicio: string;
   /** prefixo das âncoras da home: '' na própria home, a URL da home nas outras páginas */
   prefixoAncora: string;
+  /** canais da página (a landing de cada app aponta para os do app); padrão: os da GHF */
+  redes?: { youtube: string; instagram: string };
+  /** caminho pt da landing atual: o app aparece destacado, com chevron, na lista de aplicativos */
+  appAtual?: string;
 }
 
-const { lang, inicio, prefixoAncora } = Astro.props;
+const {
+  lang,
+  inicio,
+  prefixoAncora,
+  redes = {
+    youtube: 'https://www.youtube.com/channel/UCZfKMp0qRRIEu103Vb3OGJg',
+    instagram: 'https://www.instagram.com/ghfsoftware/',
+  },
+  appAtual,
+} = Astro.props;
 const link = 'text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm';
 const social =
   'w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-gray-700 hover:text-white transition-all';
@@ -57,7 +71,7 @@ const ano = new Date().getFullYear();
             <i class="fa-solid fa-envelope" aria-hidden="true"></i>
           </a>
           <a
-            href="https://www.youtube.com/channel/UCZfKMp0qRRIEu103Vb3OGJg"
+            href={redes.youtube}
             target="_blank"
             rel="noopener noreferrer"
             class={social}
@@ -67,7 +81,7 @@ const ano = new Date().getFullYear();
             <i class="fa-brands fa-youtube" aria-hidden="true"></i>
           </a>
           <a
-            href="https://www.instagram.com/ghfsoftware/"
+            href={redes.instagram}
             target="_blank"
             rel="noopener noreferrer"
             class={social}
@@ -91,7 +105,19 @@ const ano = new Date().getFullYear();
       <div>
         <h4 class="text-white font-semibold mb-6">{t(lang, 'footer_apps')}</h4>
         <ul class="space-y-3">
-          {apps.map((a) => <li><a href={rota(lang, a.caminho)} class={link}>{a.nome}</a></li>)}
+          {
+            apps.map((a) =>
+              a.caminho === appAtual ? (
+                <li>
+                  <a href={rota(lang, a.caminho)} aria-current="page" class="text-brand-primary font-semibold transition-colors text-sm flex items-center gap-1">
+                    <i class="fa-solid fa-chevron-right text-xs" aria-hidden="true"></i> {a.nome}
+                  </a>
+                </li>
+              ) : (
+                <li><a href={rota(lang, a.caminho)} class={link}>{a.nome}</a></li>
+              ),
+            )
+          }
         </ul>
       </div>
 

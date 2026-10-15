@@ -1,0 +1,52 @@
+---
+// Landing do LottoExpert em português (/lottoexpert.html). Corpo em components/LottoExpert.astro, textos em
+// i18n/lottoexpert.ts. Links da página para a home vão à home do mesmo idioma.
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import LottoExpert from '../components/LottoExpert.astro';
+import { lottoexpert } from '../i18n/lottoexpert';
+import { rota } from '../i18n/ui';
+
+const lang = 'pt';
+const x = lottoexpert[lang];
+const home = rota(lang, 'index.html');
+---
+<Base
+  title={x.title}
+  description={x.description}
+  og={{
+    titulo: x.og_title,
+    descricao: x.og_description,
+    descricaoTwitter: x.twitter_description,
+    imagem: '/assets/lottoexpert_app_mockup.png',
+    largura: 1200,
+    altura: 630,
+  }}
+  lang={lang}
+  caminho="lottoexpert.html"
+  tema="lottoexpert"
+  favicon="/assets/lottoexpert_favicon_v3.png"
+>
+  <Nav
+    lang={lang}
+    caminho="lottoexpert.html"
+    inicio={home}
+    itens={[
+      { href: `${home}#sobre`, chave: 'nav_about' },
+      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
+      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <LottoExpert lang={lang} />
+  <Footer
+    lang={lang}
+    inicio={home}
+    prefixoAncora={home}
+    redes={{
+      youtube: 'https://www.youtube.com/channel/UC0CgG5V33UB-7zhyfMatUGg',
+      instagram: 'https://www.instagram.com/lotto_expert/',
+    }}
+    appAtual="lottoexpert.html"
+  />
+</Base>

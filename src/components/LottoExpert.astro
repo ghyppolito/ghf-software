@@ -1,0 +1,272 @@
+---
+// Corpo da landing do LottoExpert (hero, funcionalidades, loterias, planos), comum a
+// /lottoexpert.html e /en/lottoexpert.html. Markup transportado de lottoexpert.html (WP-08,
+// fatia 2), textos em src/i18n/lottoexpert.ts. Nav e footer ficam nas páginas.
+//
+// Cards, loterias e linhas da tabela são listas: um markup só por bloco. As classes ficam
+// literais aqui (o Tailwind não detecta classe montada por concatenação).
+import { lottoexpert, type ChaveLotto } from '../i18n/lottoexpert';
+import type { Idioma } from '../i18n/ui';
+
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
+const x = lottoexpert[lang];
+
+// Ordem da página antiga (os cards 16 e 17 entraram no WP-02 entre os antigos).
+const funcionalidades: { n: number; fundo: string; icone: string }[] = [
+  { n: 1, fundo: 'fa-solid fa-microchip', icone: 'fa-solid fa-gears' },
+  { n: 2, fundo: 'fa-solid fa-shield-halved', icone: 'fa-solid fa-award' },
+  { n: 3, fundo: 'fa-solid fa-chart-pie', icone: 'fa-solid fa-wallet' },
+  { n: 4, fundo: 'fa-solid fa-list-check', icone: 'fa-solid fa-square-check' },
+  { n: 16, fundo: 'fa-solid fa-clone', icone: 'fa-solid fa-calendar-check' },
+  { n: 5, fundo: 'fa-solid fa-camera-retro', icone: 'fa-solid fa-eye' },
+  { n: 6, fundo: 'fa-solid fa-arrows-rotate', icone: 'fa-solid fa-bookmark' },
+  { n: 7, fundo: 'fa-solid fa-bell-concierge', icone: 'fa-solid fa-bell' },
+  { n: 8, fundo: 'fa-solid fa-users-viewfinder', icone: 'fa-solid fa-people-group' },
+  { n: 17, fundo: 'fa-solid fa-receipt', icone: 'fa-solid fa-share-from-square' },
+  { n: 9, fundo: 'fa-solid fa-qrcode', icone: 'fa-solid fa-share-nodes' },
+  { n: 10, fundo: 'fa-solid fa-chart-line', icone: 'fa-solid fa-history' },
+  { n: 11, fundo: 'fa-solid fa-cloud', icone: 'fa-solid fa-sync' },
+  { n: 12, fundo: 'fa-brands fa-google-drive', icone: 'fa-solid fa-cloud-arrow-up' },
+  { n: 13, fundo: 'fa-solid fa-table-cells-large', icone: 'fa-solid fa-border-all' },
+  { n: 14, fundo: 'fa-solid fa-file-pdf', icone: 'fa-solid fa-file-export' },
+  { n: 15, fundo: 'fa-solid fa-shield-virus', icone: 'fa-solid fa-vault' },
+];
+const titulo = (n: number) => x[`feat${n}_title` as ChaveLotto];
+const descricao = (n: number) => x[`feat${n}_desc` as ChaveLotto];
+
+// Cor oficial de cada loteria no hover (classe literal por item).
+const loterias: { nome: string; img: string; alt: string; chave: ChaveLotto; hover: string }[] = [
+  { nome: 'Mega-Sena', img: 'MegaSena', alt: 'Logo da Mega-Sena', chave: 'lot_mega_details', hover: 'hover:border-[#209853]/60 hover:shadow-[0_0_15px_rgba(32,152,83,0.2)]' },
+  { nome: 'Lotofácil', img: 'Lotofacil', alt: 'Logo da Lotofácil', chave: 'lot_lotofacil_details', hover: 'hover:border-[#930053]/60 hover:shadow-[0_0_15px_rgba(147,0,83,0.2)]' },
+  { nome: 'Quina', img: 'Quina', alt: 'Logo da Quina', chave: 'lot_quina_details', hover: 'hover:border-[#262f85]/60 hover:shadow-[0_0_15px_rgba(38,47,133,0.2)]' },
+  { nome: 'Lotomania', img: 'Lotomania', alt: 'Logo da Lotomania', chave: 'lot_lotomania_details', hover: 'hover:border-[#f26c22]/60 hover:shadow-[0_0_15px_rgba(242,108,34,0.2)]' },
+  { nome: 'Timemania', img: 'Timemania', alt: 'Logo da Timemania', chave: 'lot_timemania_details', hover: 'hover:border-[#a0c917]/60 hover:shadow-[0_0_15px_rgba(160,201,23,0.2)]' },
+  { nome: 'Dia de Sorte', img: 'DiaDeSorte', alt: 'Logo do Dia de Sorte', chave: 'lot_diadesorte_details', hover: 'hover:border-[#dcb810]/60 hover:shadow-[0_0_15px_rgba(220,184,16,0.2)]' },
+  { nome: 'Dupla Sena', img: 'DuplaSena', alt: 'Logo da Dupla Sena', chave: 'lot_duplasena_details', hover: 'hover:border-[#930922]/60 hover:shadow-[0_0_15px_rgba(147,9,34,0.2)]' },
+  { nome: '+Milionária', img: 'MaisMilionaria', alt: 'Logo da +Milionária', chave: 'lot_mais_milionaria_details', hover: 'hover:border-[#1e295d]/60 hover:shadow-[0_0_15px_rgba(30,41,93,0.2)]' },
+  { nome: 'Super Sete', img: 'SuperSete', alt: 'Logo do Super Sete', chave: 'lot_supersete_details', hover: 'hover:border-[#00adba]/60 hover:shadow-[0_0_15px_rgba(0,173,186,0.2)]' },
+];
+
+// Linha da tabela: 'sim' = check verde, 'nao' = travessão, ou a chave do texto da célula.
+type Celula = 'sim' | 'nao' | ChaveLotto;
+const linhas: { chave: ChaveLotto; free: Celula; premium: Celula }[] = [
+  { chave: 'price_feat1', free: 'sim', premium: 'sim' },
+  { chave: 'price_feat2', free: 'nao', premium: 'sim' },
+  { chave: 'price_feat_garantidos', free: 'nao', premium: 'sim' },
+  { chave: 'price_feat3', free: 'price_val_free_ocr', premium: 'price_val_premium_ocr' },
+  { chave: 'price_feat_conferencia', free: 'price_val_free_conf', premium: 'price_val_premium_conf' },
+  { chave: 'price_feat_desempenho', free: 'price_val_free_desempenho', premium: 'price_val_premium_desempenho' },
+  { chave: 'price_feat_presets', free: 'price_val_free_preset', premium: 'price_val_premium_preset' },
+  { chave: 'price_feat_alertas', free: 'nao', premium: 'sim' },
+  { chave: 'price_feat4', free: 'nao', premium: 'sim' },
+  { chave: 'price_feat5', free: 'nao', premium: 'sim' },
+  { chave: 'price_feat6', free: 'price_val_free_jogos', premium: 'price_val_premium_jogos' },
+  { chave: 'price_feat_concurso', free: 'price_val_free_concurso', premium: 'price_val_premium_concurso' },
+  { chave: 'price_feat7', free: 'nao', premium: 'sim' },
+  { chave: 'price_feat8', free: 'price_val_free_bolao', premium: 'price_val_premium_bolao' },
+  { chave: 'price_feat9', free: 'price_val_free_part', premium: 'price_val_premium_part' },
+  { chave: 'price_feat10', free: 'sim', premium: 'sim' },
+  { chave: 'price_feat11', free: 'nao', premium: 'sim' },
+  { chave: 'price_feat12', free: 'nao', premium: 'sim' },
+  { chave: 'price_feat13', free: 'sim', premium: 'sim' },
+];
+---
+<!-- Hero Section -->
+<header class="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden bg-grid-pattern border-b border-gray-800">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,transparent_0%,#0B1120_100%)] z-0"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-brand-base via-transparent to-brand-base z-0"></div>
+
+    <div class="container mx-auto px-6 md:px-12 relative z-10">
+        <div class="flex flex-col lg:flex-row items-center gap-16">
+            <div class="w-full lg:w-1/2">
+                <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-brand-primary/30 bg-brand-primary/20 backdrop-blur-sm text-sm text-brand-primary font-semibold tracking-wide uppercase">
+                    <i class="fa-solid fa-calculator mr-2"></i> <span>{x.hero_badge}</span>
+                </div>
+
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6" set:html={x.hero_titleHtml}></h1>
+
+                <p class="mt-4 text-xl text-gray-400 leading-relaxed mb-10">{x.hero_desc}</p>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="https://play.google.com/store/apps/details?id=br.com.ghfsoftware.lottoexpert" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-primary hover:bg-brand-primaryHover text-white font-semibold rounded-lg shadow-glow hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-google-play"></i> <span>{x.btn_play}</span>
+                    </a>
+                    <a href="#features" class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center">{x.btn_learn}</a>
+                </div>
+            </div>
+
+            <div class="w-full lg:w-1/2 flex justify-center lg:justify-end">
+                <div class="relative w-full max-w-lg group">
+                    <div class="absolute -inset-4 bg-brand-primary/20 rounded-[2.5rem] blur-2xl group-hover:bg-brand-primary/30 transition-all duration-500"></div>
+                    <img src="/assets/lottoexpert_app_mockup.png" alt={x.hero_img_alt} class="relative w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(139,92,246,0.3)] hover:scale-[1.02] transition-transform duration-500">
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Features Grid -->
+<section id="features" class="py-24 bg-brand-surface relative z-10 border-b border-gray-800">
+    <div class="container mx-auto px-6 md:px-12">
+        <div class="text-center max-w-3xl mx-auto mb-20">
+            <div class="inline-block mb-3 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-sm font-semibold tracking-wide uppercase border border-brand-primary/20">{x.features_badge}</div>
+            <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white">{x.features_title}</h2>
+            <p class="text-gray-400 text-lg">{x.features_subtitle}</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {
+                funcionalidades.map((f) => (
+                    <div class="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <i class={`${f.fundo} text-8xl text-brand-primary`} aria-hidden="true"></i>
+                        </div>
+                        <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
+                            <i class={`${f.icone} text-2xl text-brand-primary`} aria-hidden="true"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">{titulo(f.n)}</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">{descricao(f.n)}</p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Support Section -->
+<section class="py-24 bg-brand-base border-b border-gray-800 overflow-hidden">
+    <div class="container mx-auto px-6 md:px-12">
+        <div class="flex flex-col lg:flex-row items-center gap-16">
+            <div class="w-full lg:w-1/2">
+                <h2 class="text-4xl font-bold text-white mb-8">{x.lotteries_title}</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
+                    {
+                        loterias.map((l) => (
+                            <div class={`p-4 rounded-xl border border-gray-800 bg-brand-surface/50 flex flex-col items-center gap-2 ${l.hover} transition-all duration-300 group text-center`}>
+                                <img src={`/assets/lottoexpert/${l.img}.png`} alt={`${l.alt} — loteria suportada pelo LottoExpert`} class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
+                                <span class="text-xs md:text-sm font-semibold text-white">{l.nome}</span>
+                                <span class="text-[9px] md:text-[10px] text-gray-400 font-medium">{x[l.chave]}</span>
+                            </div>
+                        ))
+                    }
+                </div>
+                <p class="mt-8 text-gray-400 text-sm">{x.lotteries_desc}</p>
+            </div>
+            <div class="w-full lg:w-1/2 relative">
+                <div class="aspect-square rounded-3xl bg-gradient-to-br from-brand-primary/10 to-brand-primary/5 border border-brand-primary/10 flex items-center justify-center overflow-hidden">
+                    <div class="absolute inset-0 bg-tech-grid opacity-20"></div>
+                    <i class="fa-solid fa-cube text-[200px] text-brand-primary/10 animate-spin-slow"></i>
+                    <div class="relative z-10 glass-panel p-10 rounded-2xl shadow-2xl border-brand-primary/20 max-w-sm">
+                        <div class="flex items-center gap-4 mb-6">
+                            <img src="/assets/lottoexpert.png" alt="LottoExpert Logo" class="w-12 h-12 rounded-full object-contain shadow-lg border border-brand-primary/30">
+                            <div class="text-white font-bold">LottoExpert Engine</div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
+                                <div class="h-full w-2/3 bg-brand-primary animate-pulse"></div>
+                            </div>
+                            <div class="h-2 w-3/4 bg-gray-800 rounded-full overflow-hidden">
+                                <div class="h-full w-1/2 bg-brand-primary animate-pulse delay-75"></div>
+                            </div>
+                            <div class="h-2 w-1/2 bg-gray-800 rounded-full overflow-hidden">
+                                <div class="h-full w-4/5 bg-brand-primary animate-pulse delay-150"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Table -->
+<section class="py-24 bg-brand-surface relative z-10">
+    <div class="container mx-auto px-6 md:px-12">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-4xl font-bold text-white mb-4">{x.pricing_title}</h2>
+            <p class="text-gray-400 text-lg">{x.pricing_subtitle}</p>
+        </div>
+
+        <!-- Plan Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-20">
+            <!-- Monthly Plan -->
+            <div class="glass-panel p-8 rounded-3xl flex flex-col justify-between hover:border-brand-primary/30 transition-all duration-300 relative">
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-2">{x.plan_monthly_title}</h3>
+                    <div class="text-3xl font-extrabold text-white mb-4" set:html={x.plan_monthly_priceHtml}></div>
+                    <p class="text-sm text-gray-400 mb-6">{x.plan_monthly_desc}</p>
+                </div>
+                <div class="text-center text-xs text-gray-500 font-medium pt-4 border-t border-gray-800/50">{x.plan_purchase_in_app}</div>
+            </div>
+
+            <!-- Annual Plan (Recommended) -->
+            <div class="glass-panel p-8 rounded-3xl flex flex-col justify-between border-2 border-brand-primary shadow-glow hover:border-brand-primary/80 transition-all duration-300 relative overflow-hidden transform md:-translate-y-2">
+                <div class="absolute top-0 right-0 bg-brand-primary text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl uppercase tracking-wider">{x.plan_badge_popular}</div>
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                        <span>{x.plan_annual_title}</span>
+                    </h3>
+                    <div class="text-3xl font-extrabold text-white mb-4" set:html={x.plan_annual_priceHtml}></div>
+                    <p class="text-sm text-gray-300 mb-6 font-medium">{x.plan_annual_desc}</p>
+                </div>
+                <div class="text-center text-xs text-brand-primary font-semibold pt-4 border-t border-brand-primary/20">{x.plan_purchase_in_app}</div>
+            </div>
+
+            <!-- Lifetime Plan -->
+            <div class="glass-panel p-8 rounded-3xl flex flex-col justify-between hover:border-brand-primary/30 transition-all duration-300 relative">
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-2">{x.plan_lifetime_title}</h3>
+                    <div class="text-3xl font-extrabold text-white mb-4" set:html={x.plan_lifetime_priceHtml}></div>
+                    <p class="text-sm text-gray-400 mb-6">{x.plan_lifetime_desc}</p>
+                </div>
+                <div class="text-center text-xs text-gray-500 font-medium pt-4 border-t border-gray-800/50">{x.plan_purchase_in_app}</div>
+            </div>
+        </div>
+
+        <!-- Comparison Table Header -->
+        <div class="text-center mb-10">
+            <h3 class="text-2xl font-bold text-white mb-2">{x.table_title}</h3>
+            <p class="text-sm text-gray-400">{x.table_subtitle}</p>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="max-w-4xl mx-auto glass-panel rounded-3xl overflow-hidden shadow-2xl">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-800/30 border-b border-gray-700">
+                        <th class="p-6 text-white font-bold md:text-xl">{x.pricing_th_features}</th>
+                        <th class="p-6 text-center text-gray-400 font-bold uppercase text-xs tracking-widest">{x.pricing_th_free}</th>
+                        <th class="p-6 text-center text-brand-primary font-bold uppercase text-xs tracking-widest">{x.pricing_th_premium}</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-300">
+                    {
+                        linhas.map((r) => (
+                            <tr class="border-b border-gray-800 hover:bg-gray-800/20 transition-colors">
+                                <td class="p-6 font-medium text-sm md:text-base">{x[r.chave]}</td>
+                                {r.free === 'sim' ? (
+                                    <td class="p-6 text-center text-green-500"><i class="fa-solid fa-circle-check"></i></td>
+                                ) : r.free === 'nao' ? (
+                                    <td class="p-6 text-center text-gray-600">—</td>
+                                ) : (
+                                    <td class="p-6 text-center text-gray-400 font-semibold text-xs">{x[r.free]}</td>
+                                )}
+                                {r.premium === 'sim' ? (
+                                    <td class="p-6 text-center text-green-500"><i class="fa-solid fa-circle-check"></i></td>
+                                ) : r.premium === 'nao' ? (
+                                    <td class="p-6 text-center text-gray-600">—</td>
+                                ) : (
+                                    <td class="p-6 text-center text-green-500 font-semibold text-xs">{x[r.premium]}</td>
+                                )}
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
