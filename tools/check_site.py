@@ -51,13 +51,18 @@ Checa:
      tudo aqui). Fora de CONGELADAS: um só canonical, igual ao og:url e à URL da própria página
      (`/x.html`, `/`, `/en/`); hreflang pt-BR, en e x-default (= en), recíprocos, só nas
      INDEXAVEIS; `noindex` só e sempre nas NOINDEX; og:* e twitter:* completos; og:image:width e
-     height juntos e iguais ao tamanho real do arquivo (cabeçalho PNG/JPEG lido aqui)
+     height juntos e iguais ao tamanho real do arquivo (cabeçalho PNG/JPEG lido aqui).
+     `robots.txt` igual ao literal ROBOTS (nenhum `Disallow`), gerado por src/pages/robots.txt.ts;
+     `sitemap.xml` (src/pages/sitemap.xml.ts) faz parse, seus `<loc>` são exatamente as URLs das
+     INDEXAVEIS (sem repetir, cada uma existe em dist/) e cada `<url>` traz os mesmos três hreflang
+     da página
 """
 import glob
 import json
 import os
 import re
 import sys
+import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 
 sys.dont_write_bytecode = True  # importar sync_legal não deixa tools/__pycache__ no repositório
@@ -811,6 +816,56 @@ for caminho in paginas:
             erros.append(f"{rel}: og:image {imagem} não é PNG nem JPEG legível — não dá para conferir width/height")
         elif (larg[0], alt_img[0]) != (str(real[0]), str(real[1])):
             erros.append(f"{rel}: og:image:width×height {larg[0]}×{alt_img[0]} ≠ tamanho real de {imagem} ({real[0]}×{real[1]})")
+
+# robots.txt e sitemap.xml: endpoints do Astro (ADR-005 §1), nunca public/ (§13 já barra).
+ROBOTS = "User-agent: *\nAllow: /\n\nSitemap: https://ghfsoftware.com/sitemap.xml\n"
+for fonte in ("src/pages/robots.txt.ts", "src/pages/sitemap.xml.ts"):
+    if not os.path.isfile(os.path.join(REPO, fonte)):
+        erros.append(f"{fonte}: ausente — robots.txt e sitemap.xml saem de endpoint do Astro (ADR-005)")
+if not os.path.isfile(p("robots.txt")):
+    erros.append(f"{raiz}/robots.txt ausente")
+else:
+    robots = ler(p("robots.txt"))
+    for n, linha in enumerate(robots.splitlines(), 1):
+        if re.match(r"\s*disallow\s*:", linha, re.I):
+            erros.append(f"robots.txt:{n}: `{linha.strip()}` — nenhum Disallow (convite, assetlinks e og são lidos por robô)")
+    if robots != ROBOTS:
+        erros.append(f"robots.txt ≠ o literal do ADR-005 §4: {robots!r}")
+NS_SM = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+NS_XHTML = "{http://www.w3.org/1999/xhtml}"
+if not os.path.isfile(p("sitemap.xml")):
+    erros.append(f"{raiz}/sitemap.xml ausente")
+else:
+    try:
+        urlset = ET.parse(p("sitemap.xml")).getroot()
+    except ET.ParseError as e:
+        erros.append(f"sitemap.xml não faz parse: {e}")
+        urlset = None
+    if urlset is not None and urlset.tag != NS_SM + "urlset":
+        erros.append(f"sitemap.xml: raiz {urlset.tag} ≠ {NS_SM}urlset")
+    elif urlset is not None:
+        esperadas = {url_canonica(r): r for r in INDEXAVEIS}
+        locs = []
+        for u in urlset.findall(NS_SM + "url"):
+            loc = (u.findtext(NS_SM + "loc") or "").strip()
+            locs.append(loc)
+            rel = esperadas.get(loc)
+            if rel is None:
+                erros.append(f"sitemap.xml: <loc>{loc}</loc> não é a URL canônica de nenhuma página indexável "
+                             f"(convite, 404, URL sem .html ou /en sem barra?)")
+                continue
+            if not os.path.isfile(p(rel)):
+                erros.append(f"sitemap.xml: <loc>{loc}</loc> não existe em {raiz}/ ({rel})")
+            alts = sorted((x.get("hreflang"), x.get("href")) for x in u.findall(NS_XHTML + "link"))
+            pagina = sorted(cabecas[rel].alternates) if rel in cabecas else None
+            if pagina is not None and alts != pagina:
+                erros.append(f"sitemap.xml: hreflang de {loc} {alts} ≠ o da página {pagina}")
+        repetidas = sorted({x for x in locs if locs.count(x) > 1})
+        if repetidas:
+            erros.append(f"sitemap.xml: <loc> repetido: {repetidas}")
+        faltam = sorted(set(esperadas) - set(locs))
+        if faltam:
+            erros.append(f"sitemap.xml: faltam páginas indexáveis: {faltam}")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")
