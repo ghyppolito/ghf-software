@@ -80,7 +80,7 @@ PUBLICADAS = [
 # commit (espelho de COM_PAR_EN em src/i18n/ui.ts). Termina vazia no fim do WP-08. O convite
 # não tem par en (formato é do app).
 EN_PENDENTE = [
-    "lottoexpert-privacy.html", "lottoexpert-terms.html",
+    "lottoexpert-terms.html",
 ]
 SEM_PAR_EN = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
 COM_PAR = [x for x in PUBLICADAS if x not in EN_PENDENTE and x not in SEM_PAR_EN]
@@ -89,7 +89,7 @@ COM_PAR = [x for x in PUBLICADAS if x not in EN_PENDENTE and x not in SEM_PAR_EN
 # migrada (WP-08) aponta para o `.pt.md` de src/content/legal/, com front-matter `lastUpdated`; o
 # `.en.md` é o mesmo nome com `.en.md`. As outras seguem em docs/ até a sua fatia.
 LEGAL = {
-    "lottoexpert-privacy.html": "docs/LOTTOEXPERT_PRIVACY_POLICY.md",
+    "lottoexpert-privacy.html": "src/content/legal/lottoexpert-privacy.pt.md",
     "lottoexpert-terms.html": "docs/LOTTOEXPERT_TERMS_OF_SERVICE.md",
     "topowalk-privacy.html": "src/content/legal/topowalk-privacy.pt.md",
     "poleposition-privacy.html": "src/content/legal/poleposition-privacy.pt.md",
