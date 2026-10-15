@@ -2,7 +2,7 @@
 id: WP-09
 titulo: O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência
 area: legal
-status: todo
+status: doing
 depende_de: [WP-08]
 adr: []
 spec: ""
