@@ -322,3 +322,43 @@ Registrar com `/decisao` antes do commit 2. O WP não segue sem a D14.
 - (B) Sim. O `pr.yml` faz checkout dos 4 apps no `origemCommit`, com uma deploy key ou um token
   por repositório. Prova a cópia em todo PR, mas põe credencial no CI e exige um WP próprio, com
   plano de reversão (item 4 do guarda: mudança de CI).
+
+---
+
+## Estado (fim da implementação, 2026-10-15)
+
+**Status: `doing`, de propósito.** Falta só o critério 7 (`pr.yml` verde sem mudança no workflow), que
+só o CI prova. Depois do merge do usuário na integração (`feat/wp-08-layout-unico`) e do CI do #37
+verde, o agente marca `done` e escreve "Publicado" só quando `master` tiver o commit (D13: deploy único).
+
+**Decisões:** D14 = A (ref padrão é a branch principal do app) e D15 = A (o CI não compara com o app),
+ambas em 2026-10-15 ("pode seguir o recomendado"). ADR-004.
+
+**Commits:** f14b1f4 início · d44e042 veredito · bd4bc76 ADR-004 e D14/D15 · 8b17b09 `sync_legal.py` ·
+49b497c schema · 5c0b13c bootstrap do `origemCommit` (TopoWalk 7fc7870, EclipseGo 4668019, Pole Position
+00968f5, LottoExpert ffce885, que é a master atual do app; o veredito citava 363cb9f, de corpo idêntico
+e ancestral) · 7e3e5fc `check_site` §4 · 6ee0b6d `/legal` e `site-legal` · 6e1ca1c achados · 41c77cf
+`/verify` usa o §4 em vez do `diff` com o disco do app · c4d4c28 correções da auditoria.
+
+**Provas:**
+- `git diff` de `src/content/legal/` contra a integração: só as 5 linhas `+origemCommit` nos `.pt.md`;
+  `.en.md` e texto legal intactos. `dist/` idêntico ao da integração (`diff -r`, site-qa).
+- `/verify` verde no HEAD: build, `check_site.py` (22 páginas, 5 avisos esperados), contrato,
+  html-validate e plano.
+- 14 mutações da tabela, mais as das correções, falham como deviam; cada uma foi revertida.
+- Critérios 1 a 6 e 8 provados. O 7 espera o CI.
+
+**Avisos esperados (5):** o `origemCommit` de TopoWalk e EclipseGo não está em nenhum remoto; a ref
+padrão difere em TopoWalk, Pole Position e EclipseGo (D14). Somem quando o usuário levar as branches dos
+apps para a principal de cada um.
+
+**Auditoria:** `site-qa` achou 1 alto (front-matter em CRLF desligava a proveniência, inclusive no CI),
+1 médio (aviso "origem ausente" não contava como verificação não rodada) e 3 baixos (`--forca` liberava
+demais, `--todos` não era atômico, mensagem "app avançou"); todos corrigidos em c4d4c28 e provados por
+mutação. `site-seo-perf` não foi invocado (o HTML não muda); `site-ux` não se aplica (`visual: false`).
+
+**Incidente:** um `sync_legal --todos --ref HEAD` que sobrou num comando escreveu
+`poleposition-privacy.pt.md` no repositório principal. Foi restaurado antes de qualquer commit, sem dano.
+
+**Nota para o WP-10:** a página legal do redesign consome `src/content/legal/`, não o stub do export
+(`LOTTO-EN-ESPELHO-AUSENTE-01`).
