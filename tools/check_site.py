@@ -79,7 +79,6 @@ PUBLICADAS = [
 # não tem par en (formato é do app).
 EN_PENDENTE = [
     "lottoexpert-privacy.html", "lottoexpert-terms.html",
-    "topowalk-privacy.html",
     "poleposition-privacy.html",
 ]
 SEM_PAR_EN = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
@@ -91,7 +90,7 @@ COM_PAR = [x for x in PUBLICADAS if x not in EN_PENDENTE and x not in SEM_PAR_EN
 LEGAL = {
     "lottoexpert-privacy.html": "docs/LOTTOEXPERT_PRIVACY_POLICY.md",
     "lottoexpert-terms.html": "docs/LOTTOEXPERT_TERMS_OF_SERVICE.md",
-    "topowalk-privacy.html": "docs/TOPOWALK_PRIVACY_POLICY.md",
+    "topowalk-privacy.html": "src/content/legal/topowalk-privacy.pt.md",
     "poleposition-privacy.html": "docs/POLEPOSITION_PRIVACY_POLICY.md",
     "eclipsego-privacy.html": "src/content/legal/eclipsego-privacy.pt.md",
 }
@@ -522,9 +521,11 @@ for pagina, md in LEGAL.items():
         n_h1 = len(re.findall(r"<h1\b", html, re.I))
         if n_h1 != 1:
             erros.append(f"{alvo}: {n_h1} `<h1` (esperado 1 — o `# título` do .md não pode sair no corpo)")
-        n_rot = sem_tags(html).count(ROTULO[lang])
+        # o rótulo com dois-pontos: o texto pode citar a data pelo nome (TopoWalk, seção 12: `A data
+        # de "Última atualização" no topo…`)
+        n_rot = sem_tags(html).count(ROTULO[lang] + ":")
         if n_rot != 1:
-            erros.append(f"{alvo}: {n_rot} rótulo(s) `{ROTULO[lang]}` no texto (esperado 1 — a linha de data do .md não pode sair no corpo)")
+            erros.append(f"{alvo}: {n_rot} rótulo(s) `{ROTULO[lang]}:` no texto (esperado 1 — a linha de data do .md não pode sair no corpo)")
         for ch in TIPOGRAFICAS:
             if html.count(ch) > texto_md[lang].count(ch):
                 erros.append(f"{alvo}: aspa tipográfica `{ch}` ({html.count(ch)}×) além das de {base_md}.{lang}.md "
