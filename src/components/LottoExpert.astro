@@ -84,7 +84,7 @@ const linhas: { chave: ChaveLotto; free: Celula; premium: Celula }[] = [
         <div class="flex flex-col lg:flex-row items-center gap-16">
             <div class="w-full lg:w-1/2">
                 <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-brand-primary/30 bg-brand-primary/20 backdrop-blur-sm text-sm text-brand-primary font-semibold tracking-wide uppercase">
-                    <i class="fa-solid fa-calculator mr-2"></i> <span>{x.hero_badge}</span>
+                    <i class="fa-solid fa-calculator mr-2" aria-hidden="true"></i> <span>{x.hero_badge}</span>
                 </div>
 
                 <h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6" set:html={x.hero_titleHtml}></h1>
@@ -93,7 +93,7 @@ const linhas: { chave: ChaveLotto; free: Celula; premium: Celula }[] = [
 
                 <div class="flex flex-col sm:flex-row gap-4">
                     <a href="https://play.google.com/store/apps/details?id=br.com.ghfsoftware.lottoexpert" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-primary hover:bg-brand-primaryHover text-white font-semibold rounded-lg shadow-glow hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
-                        <i class="fa-brands fa-google-play"></i> <span>{x.btn_play}</span>
+                        <i class="fa-brands fa-google-play" aria-hidden="true"></i> <span>{x.btn_play}</span>
                     </a>
                     <a href="#features" class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center">{x.btn_learn}</a>
                 </div>
@@ -159,7 +159,7 @@ const linhas: { chave: ChaveLotto; free: Celula; premium: Celula }[] = [
             <div class="w-full lg:w-1/2 relative">
                 <div class="aspect-square rounded-3xl bg-gradient-to-br from-brand-primary/10 to-brand-primary/5 border border-brand-primary/10 flex items-center justify-center overflow-hidden">
                     <div class="absolute inset-0 bg-tech-grid opacity-20"></div>
-                    <i class="fa-solid fa-cube text-[200px] text-brand-primary/10 animate-spin-slow"></i>
+                    <i class="fa-solid fa-cube text-[200px] text-brand-primary/10 animate-spin-slow" aria-hidden="true"></i>
                     <div class="relative z-10 glass-panel p-10 rounded-2xl shadow-2xl border-brand-primary/20 max-w-sm">
                         <div class="flex items-center gap-4 mb-6">
                             <img src="/assets/lottoexpert.png" alt="LottoExpert Logo" class="w-12 h-12 rounded-full object-contain shadow-lg border border-brand-primary/30">

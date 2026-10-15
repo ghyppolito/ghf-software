@@ -370,6 +370,22 @@ for caminho in paginas:
         if destino in COM_PAR:
             erros.append(f"{rel}: href=\"{href.group(1)}\" leva ao pt; o par en é /en/{destino}")
 
+# ------------------------------------------------------------ 10: dicionários pt = en
+# O `satisfies` dos dicionários em src/i18n/ aceita en com chaves a menos e o build não roda
+# checagem de tipos: chave só em pt sairia vazia em /en/ sem erro. Lido do repositório, como §5.
+for ts in sorted(glob.glob(os.path.join(REPO, "src/i18n/*.ts"))):
+    blocos = re.findall(r"^  (pt|en): \{\n(.*?)^  \}", ler(ts), re.S | re.M)
+    chaves = {lang: set(re.findall(r"^    (\w+):", corpo, re.M)) for lang, corpo in blocos}
+    if not chaves:
+        continue
+    nome = os.path.relpath(ts, REPO)
+    if set(chaves) != {"pt", "en"}:
+        erros.append(f"{nome}: dicionário sem bloco pt e en no formato esperado")
+        continue
+    for lang, outro in (("pt", "en"), ("en", "pt")):
+        for falta in sorted(chaves[lang] - chaves[outro]):
+            erros.append(f"{nome}: chave `{falta}` existe em {lang} e falta em {outro}")
+
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")
 for a in avisos:
