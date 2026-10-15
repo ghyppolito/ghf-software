@@ -164,6 +164,7 @@ def existe_pagina(rel):
 
 
 SITE = "https://ghfsoftware.com/"
+SITE_HOST = re.compile(r"^https?://(www\.)?ghfsoftware\.com/", re.I)  # host do site em link do texto legal (§12)
 
 
 def url_para_rel(url):
@@ -540,7 +541,8 @@ for pagina, md in LEGAL.items():
                 erros.append(f"{alvo}: link com target=\"_blank\" sem rel=\"noopener\": {tag}")
         # Link do corpo para o próprio site (o `.md` do app escreve `https://ghfsoftware.com/x.html`):
         # o plugin linksInternosLegais de src/markdown/legal.mjs o torna `/x.html` (`/en/x.html` no
-        # en), na mesma aba, como a página antiga. URL absoluta sai do ar com o domínio de teste,
+        # en, só para página `.html` — asset e o convite `lotto-expert/…` não têm par), na mesma aba,
+        # como a página antiga. O host vale com ou sem `www.`, por http ou https. URL absoluta sai do ar com o domínio de teste,
         # abre outra aba e, em `en/`, leva ao pt.
         ini = html.find('class="legal-corpo')
         fim = html.find('<div class="max-w-4xl mx-auto mt-8 text-center">', ini)
@@ -552,8 +554,11 @@ for pagina, md in LEGAL.items():
             if not href:
                 continue
             h = href.group(1)
-            if h.startswith(SITE) or h.startswith("//"):
-                erros.append(f"{alvo}: link legal para o próprio site com URL absoluta ({h}) — esperado `/{'en/' if lang == 'en' else ''}{h.split('ghfsoftware.com/')[-1]}` (plugin linksInternosLegais desligado?)")
+            if SITE_HOST.match(h) or h.startswith("//"):
+                resto = SITE_HOST.sub("", h)
+                arq = resto.split("#")[0].split("?")[0]
+                par = lang == "en" and arq.endswith(".html") and not arq.startswith("lotto-expert/")
+                erros.append(f"{alvo}: link legal para o próprio site com URL absoluta ({h}) — esperado `/{'en/' if par else ''}{resto}` (plugin linksInternosLegais desligado?)")
             elif h.startswith("/"):
                 if re.search(r"\btarget=", tag):
                     erros.append(f"{alvo}: link legal para o próprio site com target (abre outra aba): {tag}")

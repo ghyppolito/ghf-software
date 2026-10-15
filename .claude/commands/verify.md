@@ -16,8 +16,8 @@ lychee --offline --no-progress --root-dir "$PWD/dist" 'dist/**/*.html'   # se o 
 git diff --stat develop...HEAD        # nenhum arquivo fora dos Arquivos-alvo do WP (escrituração em .claude/context/ é permitida)
 ```
 
-**Tocou página legal (`*-privacy.html`, `*-terms.html`, `docs/*_POLICY.md`, `docs/*_TERMS*.md`,
-`src/content/legal/*.md`, `src/layouts/LegalLayout.astro`):**
+**Tocou página legal (`src/content/legal/*.md`, `src/layouts/LegalLayout.astro`,
+`src/pages/**/*-privacy.astro`, `src/pages/**/*-terms.astro`):**
 ```bash
 diff <(sed '1,/^---$/d' src/content/legal/lottoexpert-privacy.pt.md) ../lotto-expert/docs/PRIVACY_POLICY.md   # sem o front-matter
 diff <(sed '1,/^---$/d' src/content/legal/lottoexpert-terms.pt.md) ../lotto-expert/docs/TERMS_OF_SERVICE.md

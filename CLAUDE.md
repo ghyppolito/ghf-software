@@ -4,8 +4,8 @@ Site estático da GHF Software: landing corporativa, uma landing por app (TopoWa
 Pole Position, EclipseGo), políticas de privacidade, termos de uso e a página do convite de bolão
 do LottoExpert. **Em produção**, servido pelo GitHub Pages a partir da branch `master`.
 
-Hoje as páginas são HTML puro com Tailwind via CDN, na raiz; um build Astro (WP-07) as copia
-para `dist/`, e o CI do PR (`check_site.py`, html-validate, lychee) prova `dist/`. A
+As páginas são geradas pelo Astro a partir de `src/` (Tailwind compilado) em `dist/`, e o CI do
+PR (`check_site.py`, html-validate, lychee) prova `dist/`. A
 evolução dessa stack é o backlog (ver `docs/AVALIACAO.md`). Este arquivo é curto de propósito — leia inteiro. O detalhe
 está em `.claude/context/` e é lido **sob demanda**:
 
@@ -61,8 +61,8 @@ existindo no resultado publicado.
   consentimento; D3 decide a medição).
 - Português é o idioma primário; inglês é espelho completo, nunca parcial. Texto de interface
   e comentários em português.
-- Data de "Última atualização" de uma página legal é a mesma do `.md` em `docs/` e do
-  repositório do app. `check_site.py` confere.
+- Data de "Última atualização" de uma página legal é o `lastUpdated` do `.pt.md` em
+  `src/content/legal/`, igual à linha do corpo e ao repositório do app. `check_site.py` confere.
 
 ## Arquitetura (estado atual — muda no WP-08)
 
