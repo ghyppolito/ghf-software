@@ -286,3 +286,29 @@ desenho. O que muda no veredito acima:
   Com isso, o commit 5 sai com os dois campos, e o §14 os exige.
 - **D18 (A).** O `x-default` → en nas 20 páginas com par, inclusive home, LottoExpert e EclipseGo.
   O critério "x-default (= en)" fica como está.
+
+## Estado (fim da implementação, 2026-10-15)
+
+**Status: `doing`, de propósito.** Falta o relato do usuário nos dois validadores (`visual: true`). Depois do merge dele na
+integração (`feat/wp-08-layout-unico`) e do CI do #37 verde, o agente marca `done`. "Publicado" só com o deploy único (D13).
+
+**Commits:** 9405cc2 início · 6838d10 veredito · 3b9b3d4 ADR-005, D16/D17/D18 · f6188d1 §14, x-default, dimensões de og ·
+97fb75d `robots.txt` e `sitemap.xml` · 8a41c21 `apps.ts`, JSON-LD, botões da Play · a88e881 docs · 262d330 §14 barra SEO no
+convite · 547c29c correções da auditoria.
+
+**Provas de máquina (547c29c):** `/verify` verde. `<body>` das 21 páginas idêntico ao build de 3b9b3d4, botões da Play byte
+a byte iguais, convite intacto. 14 mutações do veredito e 6 das correções falham como deviam. lychee só no CI.
+
+**Auditoria.** `site-qa`: 0 alto, 1 médio (`content="none"`) e 6 baixos, todos corrigidos em 547c29c. `site-seo-perf`: 0
+bloqueante; sitemap e hreflang recíprocos nas 20 páginas; HTML +0,9 %. `site-ux` não invocado (nada visível mudou).
+
+**Achados roteados:** imagens (`OG-IMAGE-1200-PRODUCAO-01`, `TWITTER-CARD-IMAGEM-QUADRADA-01`, `OG-IMAGE-ALT-TYPE-01`,
+`ORG-LOGO-NAO-QUADRADO-01`) para o WP-20; copy (`*-EN-META-01`, `HOME-TITLE-LONGO-01`, `TITLE-HIFEN-TRAVESSAO-01`) para o WP-21.
+
+**Falta, do usuário (`visual: true`), já possível sem o site no ar:** colar o HTML na aba "Código" de cada ferramenta.
+1. Rich Results Test com `dist/index.html`: `Organization` detectado, 0 erro.
+2. Schema Markup Validator (validator.schema.org) com `dist/lottoexpert.html`: `MobileApplication`, 0 erro e 0 aviso.
+(`python3 -m http.server` não é necessário. Escreva o resultado aqui.)
+
+**Movido para o checklist do deploy único (D13), `handoff.md` §3, e não prende o `done`:** Search Console (sitemap enviado e
+lido) e preview no WhatsApp de um convite real e de uma landing, sobre o site no ar.

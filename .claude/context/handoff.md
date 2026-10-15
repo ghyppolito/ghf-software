@@ -7,11 +7,10 @@
 
 ## 1. Onde parei
 
-- **WP-09 `done`** (2026-10-15): integrado na `feat/wp-08-layout-unico`, CI do #37 verde (run 38799499185). Não publicado (D13).
-- **Próximo: WP-10.** WP-08 `done` na integração; o PR #37 segue aberto até o deploy único (D13); nada foi publicado.
-- **`/legal poleposition`** roda agora por `sync_legal.py poleposition --ref <sha>` quando a PP-144 entrar no app.
-- **Repositórios dos apps, sem merge:** topo-walk `docs/politica-tres-observacoes` (7fc7870); eclipse-go `docs/email-suporte-politica`
-  (7f349a2, 4668019); pole-position `item/PP-144-segunda-sessao-mesma-pista` (00968f5). Os 5 avisos do `check_site` somem quando entrarem. **WP-19** `blocked` (checklist da rodada 3).
+- **WP-11 pronto, `doing`** na `feat/wp-11-seo-tecnico` (547c29c), aguardando o merge do usuário:
+  `git switch feat/wp-08-layout-unico && git merge --no-ff feat/wp-11-seo-tecnico -m "WP-11: sitemap, robots, canonical/hreflang e JSON-LD (ADR-005)"`.
+- Depois: o agente faz o push, acompanha o CI do #37 e marca `done`. O usuário roda os 2 validadores (WP-11, "Estado").
+- **Próximos:** WP-20 (imagens 1200×630, sessão no Claude Design) e WP-21 (copy da ficha da Play), ambos antes do deploy único (D13); depois WP-10.
 
 ## 2. Quebrado ou pela metade agora
 
@@ -25,6 +24,9 @@ Nada quebrado no ar nem pela metade. Servidor antigo na porta 8081 (pid 686166),
   em "Ver todas" e nos sociais do footer; selo "Publicado" distinto do verde do Pole. Escrever o que viu no WP-19.
 - **Convite em tema escuro** (`CONVITE-TEMA-ESCURO-01`, nota, sem WP): código só tema claro; hipótese de escurecimento
   forçado do navegador; o usuário testou e não pediu WP. Convite é URL contratual.
+
+**Checklist do deploy único (D13), vindo do WP-11:** Search Console com o `sitemap.xml` enviado e lido; preview no WhatsApp
+de um convite real gerado pelo app e de uma landing, sobre o site no ar.
 
 ## 4. Próxima ação
 

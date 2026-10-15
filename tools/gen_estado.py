@@ -36,6 +36,8 @@ SEQUENCIA = [
         ("WP-19", "export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true)"),
         ("WP-10", "redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08"),
         ("WP-11", "SEO técnico: sitemap, robots, canonical, hreflang pt/en, JSON-LD (Organization, MobileApplication), OG por página. M, depois do WP-08"),
+        ("WP-20", "imagens de compartilhamento 1200×630 (D16 A): marca para home e legais, uma por app; sessão do usuário no Claude Design, depois `twitter:card` e `og:image:alt`. M, `visual`, antes do deploy único (D13)"),
+        ("WP-21", "title e description de compartilhamento vêm da ficha da Play, em pt e en (copy de produto, passa pelo usuário). M, antes do deploy único (D13)"),
         ("WP-15", "i18n N-línguas: mapa único página → línguas (`src/i18n/idiomas.ts`), pt na raiz e demais em `/<lang>/`, seletor só com as línguas da página, hreflang/x-default das existentes, check_site compara data, seções e tokens entre versões legais; não publica língua nova. D8, ADR-003. M, risco alto, depois do WP-11"),
         ("WP-16", "política do Pole Position em pt/en/es/fr/it/de, traduzida do pt de origem; pré-condição: cláusula de prevalência do pt no app (D8 b1, `PREVALENCIA-PT-NOS-APPS-01`); o espelho pt fica em dia no WP-04. Texto legal, risco alto — prova o processo na política menor"),
         ("WP-17", "política do TopoWalk em pt/en/es/fr/it/de/ru (5.842 palavras × 6 línguas além do pt); PR por língua. L, risco alto, depois do WP-16"),
