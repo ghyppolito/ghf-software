@@ -2,10 +2,10 @@
 
 Site estático da GHF Software: landing corporativa, uma landing por app (TopoWalk, LottoExpert,
 Pole Position, EclipseGo), políticas de privacidade, termos de uso e a página do convite de bolão
-do LottoExpert. **Em produção**, servido pelo GitHub Pages a partir da branch `master`.
+do LottoExpert. **Em produção**, servido pelo GitHub Pages (por Actions) a partir da branch `master`.
 
-As páginas são geradas pelo Astro a partir de `src/` (Tailwind compilado) em `dist/`, e o CI do
-PR (`check_site.py`, html-validate, lychee) prova `dist/`. A
+As páginas são geradas pelo Astro a partir de `src/` (Tailwind compilado) em `dist/`, com `public/`
+copiado byte a byte; o CI do PR (`check_site.py`, html-validate, lychee) prova `dist/`. A
 evolução dessa stack é o backlog (ver `docs/AVALIACAO.md`). Este arquivo é curto de propósito — leia inteiro. O detalhe
 está em `.claude/context/` e é lido **sob demanda**:
 
@@ -64,18 +64,19 @@ existindo no resultado publicado.
 - Data de "Última atualização" de uma página legal é o `lastUpdated` do `.pt.md` em
   `src/content/legal/`, igual à linha do corpo e ao repositório do app. `check_site.py` confere.
 
-## Arquitetura (estado atual — muda no WP-08)
+## Arquitetura
 
 ```
-assets/                     imagens, favicons, mockups (PNG, sem otimização)
+public/                     copiado byte a byte para dist/ pelo Astro (ADR-002 §3); lista fechada,
+                            sem página — check_site.py §13 prova:
+  assets/                     imagens, favicons, mockups (PNG, sem otimização)
+  lotto-expert/sweepstake-invite/   página do convite de bolão (pako + Base64, lê o link)
+  .well-known/assetlinks.json       App Links do LottoExpert
+  CNAME                       domínio do Pages
 docs/*.md                   README de cada app (o texto legal está em src/content/legal/)
-lotto-expert/sweepstake-invite/   página do convite de bolão (pako + Base64, lê o link)
-.well-known/assetlinks.json       App Links do LottoExpert (no modo branch, Jekyll inclui via _config.yml)
 tools/                      gen_estado.py · check_plano.py · check_site.py
 design/                     brief e handoff do Claude Design (WP-06)
-astro.config.mjs            Astro (ADR-002); integração copia da raiz para dist/, byte a byte, a
-                            lista fechada: assets/, .well-known/, lotto-expert/, CNAME (nenhuma página
-                            vem da raiz desde a fatia 8 do WP-08)
+astro.config.mjs            Astro (ADR-002): build.format 'preserve', Sätteri com os plugins legais
 tailwind.config.mjs         Tailwind 3.4.19 compilado pelo PostCSS (ADR-003); brand.* por variável CSS
 src/                        layouts/ (Base.astro: head único, og, canonical, hreflang, tema;
                             LegalLayout.astro: hero e card das páginas legais) · components/ (Nav,
@@ -89,9 +90,6 @@ src/                        layouts/ (Base.astro: head único, og, canonical, hr
 dist/                       saída do build (não versionada) — é o que vai ao ar
 .github/workflows/          pr.yml (checks `plano` e `site`) · deploy.yml (master → Pages por Actions)
 ```
-
-Até a troca do Pages para "GitHub Actions" (passo do usuário no WP-07), o Jekyll ainda publica a
-raiz de `master`; `_config.yml` exclui o projeto Astro. Depois, só `dist/` vai ao ar.
 
 Desde a fatia 8 do WP-08 nenhuma página vem da raiz: nav, footer e config mudam só no componente
 (`src/components/`, `src/layouts/`), e a rede é o `check_site.py` sobre `dist/`.
@@ -159,4 +157,4 @@ dist` e publicação de `dist/` no Pages — só tem efeito com o Pages em modo 
 | Copy de produto | `../lotto-expert/docs/ASO_METADATA.md`, `docs/<APP>_README.md` |
 | Dicionário i18n de uma página | `src/i18n/` (`ui.ts` nav/footer, `<pagina>.ts`, `legal.ts` hero e `<head>` das legais) |
 | Cores e fonte da marca | `tailwind.config.mjs` (brand.base/surface/primary/secondary/accent, Inter) com os valores por tema em `src/styles/global.css` |
-| Deep link do bolão | `lotto-expert/sweepstake-invite/lottoexpert-invite.html`; formato é do app (ADR-006 lá) |
+| Deep link do bolão | `public/lotto-expert/sweepstake-invite/lottoexpert-invite.html`; formato é do app (ADR-006 lá) |

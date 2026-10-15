@@ -25,7 +25,7 @@ URL que o Android App Links deixa de validar e link de convite que o WhatsApp ab
    `tailwind.config` são copiados. WP que muda um deles lista as 10 páginas em Arquivos-alvo ou
    diz por que não.
 4. **Deploy e branch.** `master` é o que o Pages serve (D5). Nada que mude o deploy (Actions,
-   `_config.yml`, `CNAME`) entra sem WP próprio com plano de reversão.
+   `CNAME`) entra sem WP próprio com plano de reversão.
 5. **i18n.** Hoje pt/en no mesmo HTML por JS; depois do WP-08, rota por idioma. Conteúdo novo
    nasce nos dois idiomas no mesmo WP — inglês parcial é reprovado.
 6. **Jogo responsável e privacidade.** Página do LottoExpert passa pelo `check_site.py`;

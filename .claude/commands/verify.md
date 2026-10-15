@@ -25,11 +25,8 @@ diff <(sed '1,/^---$/d' src/content/legal/eclipsego-privacy.pt.md) ../eclipse-go
 ```
 (e o equivalente do app tocado). Saída vazia = espelho fiel. Diferença = o WP não terminou.
 
-**Tocou nav, footer ou `tailwind.config` (antes do WP-08):** confira que a mudança está nas 10
-páginas — `grep -c '<trecho novo>' *.html` com 10 linhas ≠ 0.
-
-**Tocou `package.json`, `astro.config.*` ou `src/`:** além do bloco acima, `cmp` de cada
-arquivo copiado da raiz com o seu par em `dist/` — a integração copia byte a byte até o WP-08.
+**Tocou `public/`:** o `check_site.py` §13 já confere a lista fechada e cada arquivo byte a byte
+contra `dist/`; arquivo de `tools/contrato.sha256` mudou = decisão do usuário (D13).
 
 **Mudou algo visível:** diga o que só o navegador prova (página, viewport 360/768/1280,
 idioma pt e en) — é checklist para o usuário, não "verificado". Com o Claude in Chrome
@@ -42,4 +39,4 @@ que não rodou é "não verificado", nunca "passou".
 regrediu ou a regra estava errada, e essas duas coisas se resolvem de formas opostas. Diga qual
 das duas antes de mexer. A lista `COPY_PROIBIDA` só cresce.
 
-Nunca faça merge em `master`, push, nem altere `CNAME`/`_config.yml` sem WP que o peça.
+Nunca faça merge em `master`, push, nem altere `public/CNAME` sem WP que o peça.

@@ -25,18 +25,19 @@ A **GHF Software** desenvolve aplicações mobile nativas para Android e soluç�
 
 ```
 .
-├── index.html                   # Página principal da GHF Software (Landing Page corporativa)
-├── topowalk.html                # Landing page oficial do aplicativo TopoWalk
-├── lottoexpert.html             # Landing page oficial do aplicativo LottoExpert
-├── poleposition.html            # Landing page oficial do aplicativo Pole Position
-├── eclipsego.html               # Landing page oficial do aplicativo EclipseGo
+├── src/pages/                   # Páginas (Astro): landing corporativa, uma landing por app, as legais e a 404;
+│                                #   en/ com os pares em inglês → dist/x.html, dist/en/x.html
 ├── src/content/legal/           # Políticas e termos, pt e en (espelho do repositório de cada app)
 │   ├── lottoexpert-privacy.pt.md / .en.md     → /lottoexpert-privacy.html, /en/lottoexpert-privacy.html
 │   ├── lottoexpert-terms.pt.md / .en.md       → /lottoexpert-terms.html, /en/lottoexpert-terms.html
 │   ├── topowalk-privacy.pt.md / .en.md        → /topowalk-privacy.html, /en/topowalk-privacy.html
 │   ├── poleposition-privacy.pt.md / .en.md    → /poleposition-privacy.html, /en/poleposition-privacy.html
 │   └── eclipsego-privacy.pt.md / .en.md       → /eclipsego-privacy.html, /en/eclipsego-privacy.html
-├── assets/                      # Imagens, logotipos, favicons e assets visuais das páginas
+├── public/                      # Publicado byte a byte em dist/, sem passar pelo Astro (lista fechada)
+│   ├── assets/                  # Imagens, logotipos, favicons e assets visuais das páginas
+│   ├── .well-known/             # assetlinks.json (App Links do LottoExpert)
+│   ├── lotto-expert/            # Convite do bolão (/lotto-expert/sweepstake-invite/lottoexpert-invite.html)
+│   └── CNAME                    # Domínio do GitHub Pages
 └── docs/                        # Especificações técnicas e documentação interna dos projetos
     ├── TOPOWALK_README.md
     ├── LOTTOEXPERT_README.md

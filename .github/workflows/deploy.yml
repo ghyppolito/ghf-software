@@ -4,15 +4,12 @@ name: Deploy
 # deploy, D5, só pelo usuário via `/release`) e à mão por `workflow_dispatch`.
 #
 # O job `build` roda sempre: prova que `dist/` de `master` sai verde. O job `deploy` só roda com a
-# variável de repositório `PAGES_VIA_ACTIONS` igual a `true`; sem ela (hoje), o deploy é pulado e
-# quem publica é o Jekyll do modo "branch master" — os dois nunca publicam em paralelo.
+# variável de repositório `PAGES_VIA_ACTIONS` igual a `true` — ligada desde o WP-07, com o Pages em
+# modo "GitHub Actions" (Settings → Pages → Source); desligada, nada é publicado.
 #
-# Ligar (passo do usuário, WP-07): Settings → Pages → Source = "GitHub Actions"; criar a variável
-# `PAGES_VIA_ACTIONS=true` (Settings → Secrets and variables → Actions → Variables, ou
-# `gh variable set PAGES_VIA_ACTIONS --body true`); disparar este workflow por `workflow_dispatch`.
-# Rollback: Source de volta para "Deploy from a branch" → `master` **e** apagar a variável
-# (`gh variable delete PAGES_VIA_ACTIONS`) ou trocá-la para `false` — a raiz continua com todas as
-# páginas até o WP-08.
+# A raiz do repositório não é um site publicável: as páginas saem de `src/` e `public/` só pelo
+# build. Rollback é por tag (D13): reconstruir e publicar a árvore da tag `pre-modernizacao` (o
+# `deploy.yml` daquela árvore), não trocar o modo do Pages.
 on:
   push:
     branches: [master]
@@ -51,7 +48,7 @@ jobs:
 
       - name: check_site.py (dist)
         # O artefato que vai ao ar é o artefato provado: URLs contratuais (ADR-001), datas legais
-        # contra docs/*.md da raiz, copy, assetlinks.
+        # contra src/content/legal/, copy, assetlinks, public/ byte a byte.
         run: python3 tools/check_site.py --raiz dist
 
       - name: assetlinks.json no artefato
