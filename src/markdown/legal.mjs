@@ -41,10 +41,32 @@ export const envolveTabelaLegal = {
   },
 };
 
+const SITE = 'https://ghfsoftware.com/';
+
+/** hast: link para o próprio site (`https://ghfsoftware.com/x.html`, como o `.md` do app escreve) vira
+ *  caminho a partir da raiz (`/x.html`), na mesma aba, como a página antiga (WP-08, fatia 8: termos do
+ *  LottoExpert, §8). No `.en.md` aponta para o par `/en/x.html` — desde a fatia 8 toda página do site
+ *  tem par en (um par ausente quebra o link, e o §3 do `check_site.py` acusa). O `.md` não é alterado:
+ *  o `.en.md` mantém a URL do pt. Roda antes de `linksExternosLegais`. */
+export const linksInternosLegais = {
+  name: 'ghf-links-internos-legais',
+  element: {
+    filter: ['a'],
+    visit(node, ctx) {
+      if (!ehLegal(ctx)) return;
+      const href = node.properties?.href;
+      if (typeof href !== 'string' || !href.startsWith(SITE)) return;
+      const caminho = href.slice(SITE.length);
+      const emIngles = ctx.fileURL.pathname.endsWith('.en.md');
+      ctx.setProperty(node, 'href', (emIngles ? '/en/' : '/') + caminho);
+    },
+  },
+};
+
 /** hast: link externo (`href` começando por `http`) abre em outra aba, com `rel="noopener noreferrer"`.
  *  O markdown não tem `target`; as páginas antigas abriam em outra aba (WP-08, fatia 7). Sem `noopener`,
- *  a página aberta alcançaria esta por `window.opener` (`POLEPOSITION-NOOPENER-01`). `mailto:` e
- *  âncoras internas ficam como estão. */
+ *  a página aberta alcançaria esta por `window.opener` (`POLEPOSITION-NOOPENER-01`). `mailto:`,
+ *  âncoras internas e o próprio site (`linksInternosLegais`) ficam como estão. */
 export const linksExternosLegais = {
   name: 'ghf-links-externos-legais',
   element: {
@@ -52,7 +74,7 @@ export const linksExternosLegais = {
     visit(node, ctx) {
       if (!ehLegal(ctx)) return;
       const href = node.properties?.href;
-      if (typeof href !== 'string' || !/^https?:/i.test(href)) return;
+      if (typeof href !== 'string' || !/^https?:/i.test(href) || href.startsWith(SITE)) return;
       ctx.setProperty(node, 'target', '_blank');
       ctx.setProperty(node, 'rel', ['noopener', 'noreferrer']);
     },

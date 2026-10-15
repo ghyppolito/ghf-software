@@ -3,7 +3,13 @@ import { cp } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import { satteri } from '@astrojs/markdown-satteri';
-import { envolveTabelaLegal, idDosTitulosLegais, linksExternosLegais, omiteCabecalhoLegal } from './src/markdown/legal.mjs';
+import {
+  envolveTabelaLegal,
+  idDosTitulosLegais,
+  linksExternosLegais,
+  linksInternosLegais,
+  omiteCabecalhoLegal,
+} from './src/markdown/legal.mjs';
 
 // Página ainda não migrada (WP-08) tem a raiz como fonte: não passa pelo compilador do Astro
 // (ADR-002 §3), é copiada byte a byte para dist/. Lista fechada, sem glob — arquivo novo na raiz
@@ -55,12 +61,14 @@ export default defineConfig({
   // - plugins (src/markdown/legal.mjs): o `# título` e a linha `**Última atualização:**` do corpo
   //   não são renderizados (o hero mostra os dois); a tabela ganha o contêiner com rolagem; os
   //   `id` dos títulos ganham o prefixo `secao-` (o slug começaria por dígito: `valid-id`); link
-  //   externo abre em outra aba com `rel="noopener noreferrer"` (fatia 7).
+  //   externo abre em outra aba com `rel="noopener noreferrer"` (fatia 7); link para o próprio site
+  //   (`https://ghfsoftware.com/x.html` no .md) vira `/x.html` — `/en/x.html` no .en.md —, na
+  //   mesma aba (fatia 8).
   markdown: {
     processor: satteri({
       features: { smartPunctuation: false, gfm: true },
       mdastPlugins: [omiteCabecalhoLegal],
-      hastPlugins: [envolveTabelaLegal, idDosTitulosLegais, linksExternosLegais],
+      hastPlugins: [envolveTabelaLegal, idDosTitulosLegais, linksInternosLegais, linksExternosLegais],
     }),
   },
   vite: {
