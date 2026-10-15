@@ -36,7 +36,8 @@ Checa:
  13. public/ (copiado byte a byte para dist/, ADR-002 §3): primeiro nível é a lista fechada
      PUBLIC; nenhum `.html` além do convite; todo arquivo de public/ igual byte a byte ao de dist/.
      O Astro publica o arquivo de public/ no lugar da página gerada que colide com ele, com o build
-     verde — sem esta guarda, uma cópia velha de página contratual iria ao ar calada
+     verde — sem esta guarda, uma cópia velha de página contratual iria ao ar calada; e o
+     `.htmlvalidateignore` da raiz isenta do html-validate só o convite (congelado pelo sha256, D13)
 
 Modo raiz (`--raiz .`) não é mais suportado desde a fatia 6 do WP-08: uma URL contratual
 (`eclipsego-privacy.html`) só existe em `dist/`, e o §1 falharia na raiz. Os ramos que ainda o
@@ -595,6 +596,17 @@ else:
                 with open(c, "rb") as fa, open(publicado, "rb") as fb:
                     if fa.read() != fb.read():
                         erros.append(f"public/{rel}: diferente de {raiz}/{rel} — public/ vai ao ar byte a byte")
+# (d) o html-validate roda sobre dist/ com as regras do preset `recommended` em erro; só o convite,
+# congelado pelo sha256 (D13), fica de fora. Glob mais largo esconderia página do validador. Quando
+# o convite mudar (novo tools/contrato.sha256), ele sai do ignore no mesmo PR.
+IGNORE_HTMLVALIDATE = ["dist/lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
+arq_ignore = os.path.join(REPO, ".htmlvalidateignore")
+if not os.path.exists(arq_ignore):
+    erros.append(".htmlvalidateignore ausente — o convite (2 espaços no fim de linha, congelado) reprova o html-validate")
+else:
+    linhas = [x.strip() for x in ler(arq_ignore).splitlines() if x.strip() and not x.strip().startswith("#")]
+    if linhas != IGNORE_HTMLVALIDATE:
+        erros.append(f".htmlvalidateignore: {linhas} ≠ {IGNORE_HTMLVALIDATE} — só o convite fica fora do html-validate")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")
