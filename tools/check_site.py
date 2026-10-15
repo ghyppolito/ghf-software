@@ -62,7 +62,7 @@ PUBLICADAS = [
 EN_PENDENTE = [
     "lottoexpert-privacy.html", "lottoexpert-terms.html",
     "topowalk-privacy.html",
-    "poleposition.html", "poleposition-privacy.html",
+    "poleposition-privacy.html",
     "eclipsego.html", "eclipsego-privacy.html",
 ]
 SEM_PAR_EN = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]

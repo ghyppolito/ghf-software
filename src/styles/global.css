@@ -233,6 +233,55 @@ body {
   background-image: linear-gradient(135deg, #b5541c, #d97736);
 }
 
+/* ------------------------------------------------------------------ CSS próprio do Pole Position
+ * Copiado do <style> de poleposition.html (WP-08, fatia 4); body, grade, vidro e #navbar são
+ * iguais aos de index.html, acima. O `.text-gradient` dela era branco → lima: bloco por tema.
+ * A página não declarava `animate-fade-in-up` (nem a @keyframes) e o hero não animava; o
+ * componente não usa a classe.
+ */
+[data-tema='poleposition'] .text-gradient {
+  background-image: linear-gradient(135deg, white, #84cc16);
+}
+
+/* Moldura de celular dos mockups do hero */
+.mockup-frame {
+  position: relative;
+  width: 260px;
+  height: 520px;
+  border-radius: 36px;
+  background: #000;
+  border: 8px solid #222;
+  box-shadow:
+    inset 0 0 0 4px #111,
+    0 25px 60px -15px rgba(132, 204, 22, 0.4);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+}
+
+@media (min-width: 768px) {
+  .mockup-frame {
+    width: 320px;
+    height: 640px;
+    border-radius: 40px;
+    border-width: 10px;
+  }
+}
+
+.mockup-frame::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 150px;
+  height: 25px;
+  background: #222;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  z-index: 20;
+}
+
 /* ------------------------------------------------------------------ Tailwind */
 @tailwind base;
 @tailwind components;

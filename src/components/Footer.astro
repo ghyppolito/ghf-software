@@ -2,7 +2,8 @@
 // Footer do site (referência: index.html). `id="contato"` é o alvo do item Contato da nav.
 // Links para páginas do site passam por `rota()`: em en, apontam para o par quando ele existe.
 // O que varia por página é prop: redes sociais do app, o app da página destacado na lista, o
-// fundo (`surface` nas landings que o usavam) e a cor de realce (`accent` no TopoWalk). Classes
+// fundo (`surface` nas landings que o usavam; `surface-sem-borda` no Pole Position, que não tinha o
+// filete do topo) e a cor de realce (`accent` no TopoWalk). Classes
 // literais por variante (o Tailwind não detecta concatenação).
 import { rota, t, type Idioma } from '../i18n/ui';
 
@@ -14,11 +15,11 @@ interface Props {
   prefixoAncora: string;
   /** canais da página (a landing de cada app aponta para os do app; canal ausente não aparece);
    *  padrão: os da GHF. O e-mail aparece sempre. */
-  redes?: { youtube?: string; instagram?: string };
+  redes?: { youtube?: string; instagram?: string; tiktok?: string; facebook?: string };
   /** caminho pt da landing atual: o app aparece destacado, com chevron, na lista de aplicativos */
   appAtual?: string;
   /** fundo do rodapé; padrão `base` */
-  fundo?: 'base' | 'surface';
+  fundo?: 'base' | 'surface' | 'surface-sem-borda';
   /** cor do brilho do logo, do app destacado e do coração; padrão `primary` */
   realce?: 'primary' | 'accent';
 }
@@ -52,6 +53,7 @@ const c = CLASSES[realce];
 const classeFooter = {
   base: 'bg-brand-base pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden',
   surface: 'bg-brand-surface pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden',
+  'surface-sem-borda': 'bg-brand-surface pt-16 pb-8 relative z-10 overflow-hidden',
 }[fundo];
 const link = 'text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm';
 const social =
@@ -119,6 +121,30 @@ const ano = new Date().getFullYear();
               aria-label="Instagram"
             >
               <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+            </a>
+          )}
+          {redes.tiktok && (
+            <a
+              href={redes.tiktok}
+              target="_blank"
+              rel="noopener noreferrer"
+              class={social}
+              title="TikTok"
+              aria-label="TikTok"
+            >
+              <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+            </a>
+          )}
+          {redes.facebook && (
+            <a
+              href={redes.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              class={social}
+              title="Facebook"
+              aria-label="Facebook"
+            >
+              <i class="fa-brands fa-facebook" aria-hidden="true"></i>
             </a>
           )}
         </div>

@@ -33,6 +33,9 @@ interface Props {
   favicon?: string;
   /** grava `ghf_lang` com o idioma da página ao carregar; a 404 (bilíngue) não grava */
   gravaIdioma?: boolean;
+  /** famílias do Google Fonts além da Inter, no formato do parâmetro `family=` (ex.:
+   *  'JetBrains+Mono:wght@700', só no Pole Position); entram na mesma requisição da Inter */
+  fontesExtras?: string[];
 }
 
 const {
@@ -46,6 +49,7 @@ const {
   noindex = false,
   favicon = '/assets/GHFSoftware.png',
   gravaIdioma = true,
+  fontesExtras = [],
   classeBody = 'bg-brand-base text-gray-100 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden',
 } = Astro.props;
 
@@ -54,6 +58,8 @@ const canonica = temPar ? url(lang) : `${SITE}/${caminho}`;
 const imagem = SITE + (og.imagem ?? '/assets/GHFSoftware.png');
 const ogTitulo = og.titulo ?? title;
 const ogDescricao = og.descricao ?? description;
+const familias = ['Inter:wght@300;400;500;600;700;800', ...fontesExtras].map((f) => `family=${f}`).join('&');
+const googleFonts = `https://fonts.googleapis.com/css2?${familias}&display=swap`;
 ---
 <!doctype html>
 <html lang={lang === 'pt' ? 'pt-BR' : 'en'} class="scroll-smooth" data-tema={tema}>
@@ -88,7 +94,11 @@ const ogDescricao = og.descricao ?? description;
     <!-- Google Fonts e Font Awesome: uma vez, aqui; saem no WP-12 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    {/* Sem fonte extra, o literal de sempre (o atributo dinâmico sai com `&amp;`: mesmo URL,
+        bytes diferentes nas páginas já migradas). */}
+    {fontesExtras.length === 0
+      ? <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+      : <link href={googleFonts} rel="stylesheet">}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     {/* Idioma da página vira a escolha lembrada (HOME-EN-SEM-LANG-01): quem chega direto em /en/
