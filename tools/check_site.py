@@ -47,8 +47,8 @@ Checa:
      `.htmlvalidateignore` da raiz isenta do html-validate só o convite (congelado pelo sha256, D13),
      e `rules` do `.htmlvalidate.json` é exatamente `{"no-inline-style": "off"}`
  14. SEO técnico (WP-11, ADR-005). Toda página de `dist/` está em INDEXAVEIS (as 20 com par),
-     NOINDEX (a 404) ou CONGELADAS (o convite, o mesmo `.html` de tools/contrato.sha256, isento de
-     tudo aqui). Fora de CONGELADAS: um só canonical, igual ao og:url e à URL da própria página
+     NOINDEX (a 404) ou CONGELADAS (o convite, o mesmo `.html` de tools/contrato.sha256, isento das
+     regras e sem canonical, hreflang, JSON-LD nem meta robots). Fora de CONGELADAS: um só canonical, igual ao og:url e à URL da própria página
      (`/x.html`, `/`, `/en/`); hreflang pt-BR, en e x-default (= en), recíprocos, só nas
      INDEXAVEIS; `noindex` só e sempre nas NOINDEX; og:* e twitter:* completos; og:image:width e
      height juntos e iguais ao tamanho real do arquivo (cabeçalho PNG/JPEG lido aqui).
@@ -773,6 +773,15 @@ cabecas = {}
 for caminho in paginas:
     rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
     if rel in CONGELADAS:
+        # isenta das regras, mas sem marcação de SEO (ADR-005 §5): canonical, hreflang, JSON-LD ou
+        # noindex no convite seriam edição do arquivo congelado — o sha256 também pega, o check diz o quê
+        c = Cabeca()
+        c.feed(ler(caminho))
+        c.close()
+        marcas = ((["canonical"] if c.canonicas else []) + (["hreflang"] if c.alternates else [])
+                  + (["JSON-LD"] if c.jsonld else []) + (["meta robots"] if c.meta.get("robots") else []))
+        if marcas:
+            erros.append(f"{rel}: {', '.join(marcas)} na página congelada — o convite fica fora de toda regra de SEO (D13)")
         continue
     if rel not in INDEXAVEIS and rel not in NOINDEX:
         erros.append(f"{rel}: página fora de INDEXAVEIS, NOINDEX e CONGELADAS do §14 — classifique-a")
