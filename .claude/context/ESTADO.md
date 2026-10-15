@@ -48,7 +48,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-06](wps/WP-06-brief-de-design-e-sessao-no-claude-design.md) | O sistema visual do site está decidido no Claude Design e exportado em design/handoff | design | M | baixo | 🖥️ | — | — | `done` |
 | [WP-07](wps/WP-07-stack-com-build-spike.md) | O site tem build que preserva as URLs contratuais e publica no Pages por Actions | infra | L | alto | 🖥️ | WP-05 | ADR-001, ADR-002 | `done` |
 | [WP-08](wps/WP-08-layout-e-componentes-unicos.md) | As 10 páginas usam um layout, componentes únicos e rota por idioma | landing | L | alto | 🖥️ | WP-07 | ADR-001, ADR-002, ADR-003 | `done` |
-| [WP-09](wps/WP-09-legal-como-fonte-unica.md) | O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência | legal | M | medio |  | WP-08 | — | `doing` |
+| [WP-09](wps/WP-09-legal-como-fonte-unica.md) | O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência | legal | M | alto |  | WP-08 | ADR-004 | `doing` |
 | [WP-10](wps/WP-10-redesign-com-o-handoff.md) | A home e as landings de app seguem o sistema visual do handoff | design | L | medio | 🖥️ | WP-06, WP-08 | — | `todo` |
 | [WP-11](wps/WP-11-seo-tecnico.md) | Buscadores leem sitemap, canonical, hreflang e dados estruturados de cada página | seo | M | baixo |  | WP-08 | — | `todo` |
 | [WP-12](wps/WP-12-performance.md) | Toda página pontua 90 ou mais nas quatro categorias do Lighthouse mobile | seo | M | baixo | 🖥️ | WP-08 | — | `todo` |

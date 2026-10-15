@@ -4,11 +4,11 @@ titulo: O texto legal entra no site por um comando que copia do repositório do 
 area: legal
 status: doing
 depende_de: [WP-08]
-adr: []
+adr: [ADR-004]
 spec: ""
-decisoes: [D7]
+decisoes: [D7, D14, D15]
 tamanho: M
-risco: medio
+risco: alto
 visual: false
 branch: feat/wp-09-sync-legal
 ---
