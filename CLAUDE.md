@@ -67,10 +67,10 @@ existindo no resultado publicado.
 ## Arquitetura (estado atual — muda no WP-08)
 
 ```
-*.html                      páginas ainda não migradas (9 no fim da fatia 1 do WP-08); nav, footer,
+*.html                      páginas ainda não migradas (4 legais no fim da fatia 6 do WP-08); nav, footer,
                             tailwind.config e dicionário i18n (data-i18n + JS) duplicados em cada uma
 assets/                     imagens, favicons, mockups (PNG, sem otimização)
-docs/*.md                   cópia markdown das políticas/termos e README de cada app
+docs/*.md                   cópia markdown das políticas/termos ainda não migradas e README de cada app
 lotto-expert/sweepstake-invite/   página do convite de bolão (pako + Base64, lê o link)
 .well-known/assetlinks.json       App Links do LottoExpert (no modo branch, Jekyll inclui via _config.yml)
 tools/                      gen_estado.py · check_plano.py · check_site.py
@@ -78,9 +78,14 @@ design/                     brief e handoff do Claude Design (WP-06)
 astro.config.mjs            Astro (ADR-002); integração copia da raiz para dist/, byte a byte, a
                             lista fechada: os *.html não migrados, assets/, .well-known/, lotto-expert/, CNAME
 tailwind.config.mjs         Tailwind 3.4.19 compilado pelo PostCSS (ADR-003); brand.* por variável CSS
-src/                        layouts/Base.astro (head único, og, canonical, hreflang, tema) ·
-                            components/ (Nav, Footer, TrocaIdioma, Home) · i18n/ (ui.ts, home.ts) ·
-                            styles/global.css (temas por página) · pages/ (index, en/index, 404)
+src/                        layouts/ (Base.astro: head único, og, canonical, hreflang, tema;
+                            LegalLayout.astro: hero e card das páginas legais) · components/ (Nav,
+                            Footer, TrocaIdioma, uma por landing) · i18n/ (ui.ts, <pagina>.ts, legal.ts) ·
+                            content.config.ts + content/legal/<app>-<doc>.<idioma>.md (texto legal;
+                            front-matter `lastUpdated: "AAAA-MM[-DD]"`, pt = .md do app byte a byte) ·
+                            markdown/legal.mjs (plugins do Sätteri: título e data saem do corpo) ·
+                            styles/global.css (temas por página, tipografia do texto legal) ·
+                            pages/ (páginas pt literais, en/ os pares, 404)
 dist/                       saída do build (não versionada) — é o que vai ao ar
 .github/workflows/          pr.yml (checks `plano` e `site`) · deploy.yml (master → Pages por Actions)
 ```
@@ -89,7 +94,7 @@ Até a troca do Pages para "GitHub Actions" (passo do usuário no WP-07), o Jeky
 raiz de `master`; `_config.yml` exclui o projeto Astro. Depois, só `dist/` vai ao ar.
 
 Durante o WP-08, página não migrada ainda é copiada da raiz: alteração em nav/footer/config **se
-replica no componente e nas páginas da raiz** no mesmo WP, e a rede é o `check_site.py` (raiz e `dist/`). Depois do WP-08, há um
+replica no componente e nas páginas da raiz** no mesmo WP, e a rede é o `check_site.py` sobre `dist/`. Depois do WP-08, há um
 layout único.
 
 ---
@@ -125,20 +130,21 @@ política/termos do repositório do app) · `/decisao <texto>` · `/adr <texto>`
 ## Comandos
 
 ```bash
-python3 tools/check_site.py                                   # links, assets, metadados, datas legais, copy — roda sempre
 npm ci && npm run build                                       # Astro → dist/ (Node 22.22)
-python3 tools/check_site.py --raiz dist                       # o mesmo sobre o publicado; datas legais contra docs/ da raiz
+python3 tools/check_site.py                                   # sobre dist/ (= --raiz dist; sem dist/, pede o build): URLs contratuais,
+                                                              # links, assets, metadados, datas legais contra docs/ e src/content/legal/, copy
 (cd dist && sha256sum --quiet -c ../tools/contrato.sha256)    # convite, assetlinks, og:image do convite e CNAME iguais ao publicado (D13)
 python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regenerar e verificar
 python3 -m http.server 8080 -d dist                           # servir dist/ para inspeção (Claude in Chrome ou usuário)
 diff ../lotto-expert/docs/PRIVACY_POLICY.md docs/LOTTOEXPERT_PRIVACY_POLICY.md   # o site está atrás do app?
+diff <(sed '1,/^---$/d' src/content/legal/eclipsego-privacy.pt.md) ../eclipse-go/docs/PRIVACY_POLICY.md   # idem, página migrada (sem o front-matter)
 npx html-validate 'dist/**/*.html'                            # HTML (versão do lockfile; regras em .htmlvalidate.json)
 lychee --offline --no-progress --root-dir "$PWD/dist" 'dist/**/*.html'  # links internos (binário 0.24.2 do release lycheeverse/lychee)
 ```
 
 `.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`: job `plano`
-(`gen_estado.py --check`, `check_plano.py`) e job `site` (`check_site.py` na raiz, `npm ci`,
-`npm run build`, `check_site.py --raiz dist`, html-validate e lychee sobre `dist/`).
+(`gen_estado.py --check`, `check_plano.py`) e job `site` (`npm ci`, `npm run build`,
+`check_site.py --raiz dist`, contrato byte a byte, html-validate e lychee sobre `dist/`).
 `.github/workflows/deploy.yml` roda em push para `master` (e à mão): build, `check_site.py --raiz
 dist` e publicação de `dist/` no Pages — só tem efeito com o Pages em modo "GitHub Actions".
 

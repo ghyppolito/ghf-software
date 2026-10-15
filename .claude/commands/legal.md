@@ -13,7 +13,7 @@ Este é o ritual que se repete a cada versão de app. A origem é o repositório
 | lottoexpert | `../lotto-expert/docs/PRIVACY_POLICY.md`, `TERMS_OF_SERVICE.md` | `docs/LOTTOEXPERT_PRIVACY_POLICY.md`, `docs/LOTTOEXPERT_TERMS_OF_SERVICE.md` | `lottoexpert-privacy.html`, `lottoexpert-terms.html` |
 | topowalk | `../topo-walk/PRIVACY_POLICY.md` | `docs/TOPOWALK_PRIVACY_POLICY.md` | `topowalk-privacy.html` |
 | poleposition | `../pole-position/pole-position-app/PRIVACY_POLICY.md` | `docs/POLEPOSITION_PRIVACY_POLICY.md` | `poleposition-privacy.html` |
-| eclipsego | `../eclipse-go/docs/PRIVACY_POLICY.md` | `docs/ECLIPSE_GO_PRIVACY_POLICY.md` | `eclipsego-privacy.html` |
+| eclipsego | `../eclipse-go/docs/PRIVACY_POLICY.md` | `src/content/legal/eclipsego-privacy.pt.md` e `.en.md` (front-matter `lastUpdated`; espelho: `diff <(sed '1,/^---$/d' src/content/legal/eclipsego-privacy.pt.md) ../eclipse-go/docs/PRIVACY_POLICY.md`) | `src/pages/eclipsego-privacy.astro`, `src/pages/en/eclipsego-privacy.astro` |
 
 (Caminhos conferidos em 2026-10-12. Se um não existir, procure por `**Última atualização` no repositório do app e corrija a tabela.)
 

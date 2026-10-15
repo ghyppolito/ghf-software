@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
-"""Rede de segurança do site — roda no /verify e, a partir do WP-05, no CI do PR.
+"""Rede de segurança do site — roda no /verify e no CI do PR.
 
-Só biblioteca padrão, de propósito: funciona hoje (sem build) e depois do WP-07
-(apontando para `dist/` com `--raiz dist`). Falha com código 1 se encontrar erro.
+Só biblioteca padrão, de propósito. Confere o site publicado: `dist/`, saída do `npm run build`
+(ADR-002). Sem `--raiz`, usa `dist/` e falha pedindo o build se ele não existir. Desde a fatia 6
+do WP-08 a raiz do repositório não é mais verificada: uma URL contratual
+(`eclipsego-privacy.html`) só existe em `dist/`. As fontes (src/, docs/) são lidas sempre da raiz
+do repositório. Falha com código 1 se encontrar erro.
 
 Checa:
   1. URLs contratuais (ADR-001) existem
   2. cada página tem <html lang>, <title>, meta description e og:image
   3. href/src locais resolvem para arquivo existente; og:image em ghfsoftware.com resolve localmente
-  4. "Última atualização" da página legal (pt e en) bate com a do .md em docs/ — lido sempre
-     da raiz do repositório, também com `--raiz dist`; .md ausente é erro
+  4. "Última atualização" da página legal (pt e en) bate com a da fonte — lida sempre da raiz do
+     repositório; fonte ausente é erro. Fonte em docs/ (páginas ainda copiadas): a linha
+     `**Última atualização:**`. Fonte em src/content/legal/ (páginas migradas): o `lastUpdated`
+     do front-matter do `.pt.md`, que tem de bater com a linha do corpo do `.pt.md`, e o
+     `lastUpdated` do `.en.md` (e a linha `**Last updated:**` dele) com o do pt
   5. copy do LottoExpert respeita jogo responsável (mesma régua do PaywallCopyComplianceTest do app),
      no publicado (PAGINAS_LOTTO) e nas fontes Astro (FONTES_LOTTO)
   6. .well-known/assetlinks.json é JSON válido com o package do LottoExpert
@@ -29,12 +35,15 @@ import os
 import re
 import sys
 
-raiz = "."
+raiz = "dist"
 if "--raiz" in sys.argv:
     raiz = sys.argv[sys.argv.index("--raiz") + 1]
+if not os.path.isdir(raiz):
+    print(f"❌ {raiz}/ não existe — rode `npm run build` (o check confere o site gerado, não a raiz)")
+    sys.exit(1)
 
-# Raiz do repositório = pasta acima de tools/, independente do cwd. As fontes legais (docs/*.md)
-# são lidas daqui mesmo com `--raiz dist`: docs/ não é publicado, e a data legal tem de ser
+# Raiz do repositório = pasta acima de tools/, independente do cwd. As fontes legais (docs/*.md,
+# src/content/legal/*.md) são lidas daqui: não são publicadas, e a data legal tem de ser
 # conferida contra a fonte, não contra o que foi para o ar (ADR-002 §7).
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -63,18 +72,19 @@ EN_PENDENTE = [
     "lottoexpert-privacy.html", "lottoexpert-terms.html",
     "topowalk-privacy.html",
     "poleposition-privacy.html",
-    "eclipsego-privacy.html",
 ]
 SEM_PAR_EN = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
 COM_PAR = [x for x in PUBLICADAS if x not in EN_PENDENTE and x not in SEM_PAR_EN]
 
-# página legal → markdown de origem no site. A origem da origem é o repositório do app.
+# página legal → markdown de origem no site. A origem da origem é o repositório do app. Página
+# migrada (WP-08) aponta para o `.pt.md` de src/content/legal/, com front-matter `lastUpdated`; o
+# `.en.md` é o mesmo nome com `.en.md`. As outras seguem em docs/ até a sua fatia.
 LEGAL = {
     "lottoexpert-privacy.html": "docs/LOTTOEXPERT_PRIVACY_POLICY.md",
     "lottoexpert-terms.html": "docs/LOTTOEXPERT_TERMS_OF_SERVICE.md",
     "topowalk-privacy.html": "docs/TOPOWALK_PRIVACY_POLICY.md",
     "poleposition-privacy.html": "docs/POLEPOSITION_PRIVACY_POLICY.md",
-    "eclipsego-privacy.html": "docs/ECLIPSE_GO_PRIVACY_POLICY.md",
+    "eclipsego-privacy.html": "src/content/legal/eclipsego-privacy.pt.md",
 }
 
 MESES_PT = {"janeiro": "January", "fevereiro": "February", "março": "March", "abril": "April",
@@ -228,16 +238,63 @@ def datas_em(html, padrao):
     return list(dict.fromkeys(achadas))
 
 
+MESES_NUM = list(MESES_PT)  # "janeiro" … "dezembro", na ordem
+
+
+def front_matter(md, texto):
+    """(lastUpdated como (dia, mês pt, ano), corpo) de um .md de src/content/legal/; None se o
+    front-matter ou o `lastUpdated: "AAAA-MM[-DD]"` faltar (erro registrado)."""
+    m = re.match(r"---\n(.*?)\n---\n", texto, re.S)
+    if not m:
+        erros.append(f"{md}: sem front-matter (`---` / `lastUpdated: \"AAAA-MM-DD\"` / `---`) no topo")
+        return None, texto
+    corpo = texto[m.end():]
+    lu = re.search(r'^lastUpdated:\s*"(\d{4})-(\d{2})(?:-(\d{2}))?"\s*$', m.group(1), re.M)
+    if not lu or not 1 <= int(lu.group(2)) <= 12:
+        erros.append(f"{md}: front-matter sem `lastUpdated: \"AAAA-MM\"` ou `\"AAAA-MM-DD\"` válido")
+        return None, corpo
+    ano, mes, dia = lu.groups()
+    return (str(int(dia)) if dia else "", MESES_NUM[int(mes) - 1], ano), corpo
+
+
+def txt(d):
+    return " de ".join(x for x in d if x)
+
+
 for pagina, md in LEGAL.items():
     fonte = os.path.join(REPO, md)
     if not os.path.exists(fonte):
         erros.append(f"{md}: fonte legal ausente no repositório — a data de {pagina} não tem com o que comparar")
         continue
-    m = re.search(r"\*\*Última atualização:\*\*\s*" + RE_PT, ler(fonte))
+    texto = ler(fonte)
+    colecao = md.startswith("src/content/legal/")
+    if colecao:
+        ref_fm, texto = front_matter(md, texto)
+        if ref_fm is None:
+            continue
+    m = re.search(r"\*\*Última atualização:\*\*\s*" + RE_PT, texto)
     if not m:
         erros.append(f"{md}: sem linha `**Última atualização:** [D de ]Mês de AAAA`")
         continue
     ref = pt(m.groups())
+    ref = (str(int(ref[0])) if ref[0] else "", ref[1], ref[2])
+    if colecao:
+        if ref != ref_fm:
+            erros.append(f"{md}: front-matter `lastUpdated` ({txt(ref_fm)}) ≠ linha `**Última atualização:**` do corpo ({txt(ref)})")
+            continue
+        md_en = md[: -len(".pt.md")] + ".en.md"
+        if not os.path.exists(os.path.join(REPO, md_en)):
+            erros.append(f"{md_en}: tradução ausente ({pagina} tem par en)")
+        else:
+            ref_en, corpo_en = front_matter(md_en, ler(os.path.join(REPO, md_en)))
+            if ref_en is not None and ref_en != ref:
+                erros.append(f"{md_en}: `lastUpdated` ({txt(ref_en)}) ≠ o do pt ({txt(ref)})")
+            m_en = re.search(r"\*\*Last updated:\*\*\s*" + RE_EN, corpo_en)
+            if not m_en:
+                erros.append(f"{md_en}: sem linha `**Last updated:** Mês [D,] AAAA`")
+            elif (str(int(m_en[2])) if m_en[2] else "", MESES.get(m_en[1].lower(), "?"), m_en[3]) != \
+                    (ref[0], MESES.get(ref[1], "?"), ref[2]):
+                erros.append(f"{md_en}: linha `**Last updated:**` ({m_en[1]} {m_en[2] or ''} {m_en[3]}) ≠ {txt(ref)}")
     ref_txt = " de ".join(x for x in ref if x)
     # (página, idioma que ela tem de ter): a pt, e o par en quando existe (ou deveria existir).
     alvos = [(pagina, "pt")]
@@ -250,7 +307,9 @@ for pagina, md in LEGAL.items():
             continue  # pt ausente já é erro no §1; en na raiz do repositório é gerada (só em dist/)
         html = ler(p(alvo))
         datas_pt = list(dict.fromkeys(pt(x) for x in datas_em(html, r"Última atualização:\s*" + RE_PT)))
+        datas_pt = [(str(int(d)) if d else "", mo, a) for d, mo, a in datas_pt]
         datas_en = datas_em(html, r"Last updated:\s*" + RE_EN)
+        datas_en = [(mo, str(int(d)) if d else "", a) for mo, d, a in datas_en]
         for d in datas_pt:
             if d != ref:
                 erros.append(f"{alvo}: data pt `{' de '.join(x for x in d if x)}` ≠ {md} `{ref_txt}`")

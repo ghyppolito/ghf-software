@@ -56,7 +56,8 @@ export function t(lang: Idioma, chave: ChaveUi): string {
 
 // Páginas que já têm par em /en/. Cresce a cada fatia do WP-08; espelha (ao contrário)
 // EN_PENDENTE de tools/check_site.py — página aqui sai de lá no mesmo commit.
-export const COM_PAR_EN = new Set<string>(['index.html', 'lottoexpert.html', 'topowalk.html', 'poleposition.html', 'eclipsego.html']);
+export const COM_PAR_EN = new Set<string>(['index.html', 'lottoexpert.html', 'topowalk.html', 'poleposition.html', 'eclipsego.html',
+  'eclipsego-privacy.html']);
 
 // Caminho público de uma página do site no idioma pedido. `index.html` vira a raiz (`/`,
 // `/en/`), como o og:url que a home já declarava. Página sem par en continua em pt.
