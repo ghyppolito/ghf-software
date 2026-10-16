@@ -41,6 +41,8 @@ Astro, AGENTES-PRE-ASTRO-01).
 
 ## Registro
 
+Integrado em `feat/wp-08-layout-unico` (8da7714) em 2026-10-16; CI do #37 verde (run 38946009217: plano, site, lighthouse).
+
 Publicado em: ainda não (D13: sobe com a modernização inteira).
 
 Commits: 35650b3 (início; `AGENTES-PRE-ASTRO-01` entrou no escopo), 05d3f08 (`docs/ARQUITETURA.md` novo, `CLAUDE.md` 12909 → 9540 B com "Arquitetura" apontando para o ARQUITETURA e "Comandos" com os 3 jobs, README com estrutura/como rodar/como publicar, `__pycache__/` no `.gitignore`, agentes sem stack pré-Astro), dda4340 (auditoria do site-qa: 0 alta, 1 média, 5 baixas, todas corrigidas: regra "nenhum .html na raiz" via `check_site.py` §7, front-matter legal, `regras_i18n` chamadas pelo `check_site`, `design/`, pré-requisito do rollback da D13, README sobre a origem do texto legal).
