@@ -69,7 +69,8 @@ existindo no resultado publicado.
 ```
 public/                     copiado byte a byte para dist/ pelo Astro (ADR-002 §3); lista fechada,
                             sem página — check_site.py §13 prova:
-  assets/                     imagens, favicons, mockups (PNG, sem otimização)
+  assets/                     só URL fixa: og:image, favicons do convite, convite (PNG, sem otimização);
+                              imagem exibida na página sai de src/assets/img/ (ADR-006)
   lotto-expert/sweepstake-invite/   página do convite de bolão (pako + Base64, lê o link)
   .well-known/assetlinks.json       App Links do LottoExpert
   CNAME                       domínio do Pages
@@ -78,7 +79,9 @@ tools/                      gen_estado.py · check_plano.py · check_site.py
 design/                     brief e handoff do Claude Design (WP-06)
 astro.config.mjs            Astro (ADR-002): build.format 'preserve', Sätteri com os plugins legais
 tailwind.config.mjs         Tailwind 3.4.19 compilado pelo PostCSS (ADR-003); brand.* por variável CSS
-src/                        layouts/ (Base.astro: head único, og com width/height lidos do arquivo,
+src/                        assets/img/ (imagens exibidas, pelo astro:assets: WebP, width/height, lazy) ·
+                            icons/fa + components/Icon.astro (SVG inline, sem Font Awesome por CDN) ·
+                            layouts/ (Base.astro: head único, Inter local pela API fonts, og com width/height lidos do arquivo,
                             canonical, hreflang pt-BR/en/x-default→en, slot jsonld, tema;
                             LegalLayout.astro: hero e card das páginas legais) · components/ (Nav,
                             Footer, TrocaIdioma, JsonLd, uma por landing) · i18n/ (ui.ts, <pagina>.ts,
@@ -141,11 +144,13 @@ python3 tools/sync_legal.py --todos --check                    # o site está at
 python3 tools/sync_legal.py <app> [--ref REF]                 # copia o pt de um commit do app (ADR-004; nunca o en); só pelo /legal
 npx html-validate 'dist/**/*.html'                            # HTML (versão do lockfile; regras em .htmlvalidate.json)
 lychee --offline --no-progress --root-dir "$PWD/dist" 'dist/**/*.html'  # links internos (binário 0.24.2 do release lycheeverse/lychee)
+python3 tools/lighthouse.py                                   # orçamento de bytes e Lighthouse mobile (3 runs, 9 páginas); serve dist/, precisa de Chrome
 ```
 
 `.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`: job `plano`
-(`gen_estado.py --check`, `check_plano.py`) e job `site` (`npm ci`, `npm run build`,
-`check_site.py --raiz dist`, contrato byte a byte, html-validate e lychee sobre `dist/`).
+(`gen_estado.py --check`, `check_plano.py`), job `site` (`npm ci`, `npm run build`,
+`check_site.py --raiz dist`, contrato byte a byte, html-validate e lychee sobre `dist/`) e job
+`lighthouse` (`tools/lighthouse.py` contra `tools/orcamento-lighthouse.json`).
 `.github/workflows/deploy.yml` roda em push para `master` (e à mão): build, `check_site.py --raiz
 dist` e publicação de `dist/` no Pages — só tem efeito com o Pages em modo "GitHub Actions".
 

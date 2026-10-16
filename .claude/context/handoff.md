@@ -3,60 +3,58 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-10-15 (fim).** Fechamento do WP-08, na branch `feat/wp-08-layout-unico`.
+**Sessão de 2026-10-16.** WP-12 (performance), branch `feat/wp-12-performance`, commits 399ce20..0830d4d.
 
 ## 1. Onde parei
 
-- **WP-21 `done`** (2026-10-16): integrado na `feat/wp-08-layout-unico` (b610f69), CI do #37 verde (run 38843978944).
-  WP-11 `done` (2026-10-15). Nada publicado (D13).
-- **Próximos:** WP-20 (imagens 1200×630, sessão no Claude Design) ou WP-10.
+- **WP-12 `doing`**: implementação, tabela antes/depois (perf 98–99 nas 20 indexáveis, LCP 1,8–2,3 s, CLS 0),
+  job `lighthouse` em `pr.yml` e auditoria (`site-qa`, `site-seo-perf`, `site-ux`) concluídos e corrigidos. Detalhe no WP.
+- Não é `done` por três coisas do usuário (seção 4). Nada publicado (D13).
+- WP-21 e WP-11 `done`. Próximos depois do WP-12: WP-20 (sessão no Claude Design) ou WP-10.
 
 ## 2. Quebrado ou pela metade agora
 
-Nada quebrado no ar nem pela metade. Servidor antigo na porta 8081 (pid 686166), deixado por uma auditoria: o usuário decide se encerra.
+Nada quebrado. Servidores `http.server` locais desta sessão nas portas 8094, 8095 e 8096 podem estar de pé; o usuário
+decide se encerra. Capturas antes/depois em
+`/tmp/claude-1000/-home-gustavo-hyppolito-GIT-codes-ghf-software/2a605719-7521-4725-bb47-f7ee945cd31f/scratchpad/capturas-wp12/`
+são anteriores à correção da caixa dos ícones (0830d4d): nas "depois" os ícones aparecem 4–8 px menores, já corrigido.
 
 ## 3. O que só o navegador prova (usuário ainda não reportou)
 
+- **WP-12** (`npm run build && python3 -m http.server 8080 -d dist`): menu do celular hambúrguer↔X a 360; nitidez 2× da logo e
+  dos mockups; favicon a 48 px; ícones lado a lado com o antes; dica (tooltip) nos logos de tecnologia; card offline do
+  EclipseGo sem ícone. Escrever o resultado no WP.
 - **WP-19, rodada 3:** `python3 -m http.server 8080 -d design/handoff/2026-10-13-rodada-3`. `Landing App.dc.html?app=topo&lang=ru`
   a 360; `?app=topo`, `?app=pole`, `?app=eclipse` a 1280; `Home.dc.html`, `Landing App.dc.html` e `Legal LottoExpert.dc.html`
   a 768; troca pt/en na legal (en é stub); `?app=pole&suggest=de` (a faixa fecha e não volta na sessão); Tab com foco
   em "Ver todas" e nos sociais do footer; selo "Publicado" distinto do verde do Pole. Escrever o que viu no WP-19.
-- **Convite em tema escuro** (`CONVITE-TEMA-ESCURO-01`, nota, sem WP): código só tema claro; hipótese de escurecimento
-  forçado do navegador; o usuário testou e não pediu WP. Convite é URL contratual.
+- **Convite em tema escuro** (`CONVITE-TEMA-ESCURO-01`, nota, sem WP): convite é URL contratual; o usuário testou e não pediu WP.
 
-**Checklist do deploy único (D13), vindo do WP-11:** Search Console com o `sitemap.xml` enviado e lido; preview no WhatsApp
-de um convite real gerado pelo app e de uma landing, sobre o site no ar. Vindo do WP-21: card do WhatsApp/LinkedIn com título
-em travessão e descrição curta em `/`, `/en/`, `/lottoexpert.html` e `/en/topowalk.html`.
+**Checklist do deploy único (D13), vindo do WP-11 e do WP-21:** Search Console com o `sitemap.xml` enviado e lido; preview no
+WhatsApp de um convite real gerado pelo app e de uma landing, sobre o site no ar; card do WhatsApp/LinkedIn com título em
+travessão e descrição curta em `/`, `/en/`, `/lottoexpert.html` e `/en/topowalk.html`.
 
 ## 4. Próxima ação
 
 **Do usuário:**
-1. Levar as branches dos apps (seção 1) para a main de cada um (topo-walk e eclipse-go; o Pole Position com o `/legal poleposition` depois).
-2. Checklist de navegador do WP-19; escrever o resultado no WP.
-3. Decidir D11 (`--success`) e D12 (limiares de destaque), ambas só para o WP-10; D3 (medição) bloqueia o WP-13. `PP-NAV-CONTRASTE-01` aguarda decisão.
-
-4. Nos apps (D19, mantém a decisão aberta): registrar o en do LottoExpert (título e curta) no `ASO_METADATA.md` e criar a ficha do EclipseGo.
-
-**Do agente:** o WP-20 quando as imagens existirem ou o WP-10 (branch a partir da integração, D13).
+1. WP-12: dar push; conferir o job `lighthouse` verde no PR e provocar o vermelho numa branch descartável (CI); decidir se
+   `lighthouse` vira check obrigatório na proteção de branch; rodar o checklist de navegador da seção 3.
+2. Levar as branches dos apps para a main de cada um (topo-walk e eclipse-go; o Pole Position com o `/legal poleposition` depois).
+3. Checklist de navegador do WP-19.
+4. Decidir D11 (`--success`) e D12 (limiares de destaque), só para o WP-10; D3 (medição) bloqueia o WP-13. `PP-NAV-CONTRASTE-01` aguarda decisão.
+5. Nos apps (D19): registrar o en do LottoExpert no `ASO_METADATA.md` e criar a ficha do EclipseGo.
 
 **Copy pendente do usuário antes do WP-10:** "chance matemática" -> "probabilidade exata"; texto final do aviso de jogo
 responsável (o export traz "Texto provisório"); confirmar "Nada de cadastro, e-mail ou CPF" e "Nenhum SDK de publicidade";
-selo "Vantagem Competitiva" da LottoExpert (`LOTTO-COPY-VANTAGEM-01`). Decidir também qual descrição do LottoExpert fica na
-home (`INDEX-LOTTO-DESC-DIVERGE-01`).
+selo "Vantagem Competitiva" da LottoExpert (`LOTTO-COPY-VANTAGEM-01`); qual descrição do LottoExpert fica na home
+(`INDEX-LOTTO-DESC-DIVERGE-01`).
 
-## 5. Decisões fora de `decisoes.md` e ADR
+## 5. Escrituração e branches
 
-- **Opção (A) do texto do EclipseGo** (site segue o `.md` do app) e **check da raiz fora do CI** (veredito do arquiteto): no WP-08.
-- **`lastUpdated` string `AAAA-MM[-DD]`** para as fatias 7 e 8: no WP-08 e em `WP09-NOME-ARQUIVO-01`.
-- **Fatiamento em 9 fatias e deploy único (D13):** plano do arquiteto, no WP-08; D13 em `decisoes.md`.
-- Decisões abertas em `decisoes.md`: D3, D11, D12. D10 resolvida.
-
-## 6. Escrituração e branches
-
-- Triagem de `achados-novos.md`: nenhuma linha em `triagem`; os três achados do WP-09 e `VERIFY-DIFF-LEGAL-WORKTREE-01` estão `resolvido`.
-- **Branches locais já integradas**, candidatas a apagar pelo usuário: `feat/wp-08-f2…`, `f3…`, `f4…`, `f5…`, `feat/wp-08-f6-legal-eclipsego`, `feat/wp-08-f7-legal-topowalk-poleposition` `feat/wp-08-f8-legal-lottoexpert` e `feat/wp-08-f9-public-limpeza` (fatias integradas;
-  `f1-infra-e-home` idem, com a ressalva de que a integração ainda não está em `develop`), `docs/publicacao-wp-07`,
-  `docs/publicacao-trilha-a`, `feat/wp-19-rodada-3-claude-design`, `feat/wp-01-legal-lottoexpert-2-05-02`,
-  `feat/wp-02-landing-lottoexpert-2-05-02`, `feat/wp-04-og-do-convite-e-poleposition`, `feature/invite-bolao`, `main` (órfã,
-  `BRANCH-MAIN-ORFA-01`) e as `docs/…`/`hotfix/…` do Pole Position já mescladas (conferir com `git branch --merged`).
+- Triagem: `INVITE-PAKO-CDNJS-01` fica em `triagem` de propósito (convite congelado por D13); destino previsto: `/novo-wp`
+  depois do deploy único. `CONVITE-FORA-DO-WP-12-01` vira `resolvido` no fechamento do WP-12.
+- **Branches locais já integradas**, candidatas a apagar pelo usuário: `feat/wp-08-f1…` a `f9…` (conferir com
+  `git branch --merged`), `docs/publicacao-wp-07`, `docs/publicacao-trilha-a`, `feat/wp-19-rodada-3-claude-design`,
+  `feat/wp-01-legal-lottoexpert-2-05-02`, `feat/wp-02-landing-lottoexpert-2-05-02`, `feat/wp-04-og-do-convite-e-poleposition`,
+  `feature/invite-bolao`, `main` (órfã, `BRANCH-MAIN-ORFA-01`) e as `docs/…`/`hotfix/…` do Pole Position já mescladas.
   `feat/wp-05-ci-no-pr` não aparece como integrada: conferir antes. Nada foi apagado.
