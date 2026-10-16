@@ -31,14 +31,12 @@ function dimensoes(arquivo: string): { largura: number; altura: number } | undef
   return undefined;
 }
 
+// Título e descrição do cartão de compartilhamento (og:* e twitter:*) são o `title` e a
+// `description` da página, sem texto próprio: uma fonte só por página (WP-21).
 interface Og {
-  titulo?: string;
-  descricao?: string;
   /** caminho absoluto no site, ex.: /assets/GHFSoftware.png */
   imagem?: string;
   tipo?: string;
-  /** descrição do card do X/Twitter, quando difere da do og */
-  descricaoTwitter?: string;
 }
 
 interface Props {
@@ -86,8 +84,6 @@ const imagem = SITE + caminhoImagem;
 // /assets/x.png é o arquivo public/assets/x.png, copiado byte a byte para dist/ (ADR-002 §3).
 // O '.' antes do caminho impede que o '/' inicial faça o path.resolve voltar à raiz do disco.
 const tamanho = dimensoes(path.resolve(process.cwd(), 'public', '.' + caminhoImagem));
-const ogTitulo = og.titulo ?? title;
-const ogDescricao = og.descricao ?? description;
 const familias = ['Inter:wght@300;400;500;600;700;800', ...fontesExtras].map((f) => `family=${f}`).join('&');
 const googleFonts = `https://fonts.googleapis.com/css2?${familias}&display=swap`;
 ---
@@ -109,8 +105,8 @@ const googleFonts = `https://fonts.googleapis.com/css2?${familias}&display=swap`
     <meta property="og:type" content={og.tipo ?? 'website'}>
     <meta property="og:site_name" content="GHF Software">
     <meta property="og:url" content={canonica}>
-    <meta property="og:title" content={ogTitulo}>
-    <meta property="og:description" content={ogDescricao}>
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
     <meta property="og:image" content={imagem}>
     {tamanho && <meta property="og:image:width" content={String(tamanho.largura)}>}
     {tamanho && <meta property="og:image:height" content={String(tamanho.altura)}>}
@@ -118,8 +114,8 @@ const googleFonts = `https://fonts.googleapis.com/css2?${familias}&display=swap`
     {temPar && <meta property="og:locale:alternate" content={lang === 'pt' ? 'en_US' : 'pt_BR'}>}
     <!-- Twitter/X Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content={ogTitulo}>
-    <meta name="twitter:description" content={og.descricaoTwitter ?? ogDescricao}>
+    <meta name="twitter:title" content={title}>
+    <meta name="twitter:description" content={description}>
     <meta name="twitter:image" content={imagem}>
     <slot name="jsonld" />
 

@@ -19,10 +19,6 @@ export const lottoexpert = {
   pt: {
     title: 'LottoExpert - GHF Software',
     description: 'LottoExpert - O motor matemático definitivo para desdobramentos de loterias.',
-    og_title: 'LottoExpert — Motor Matemático para Loterias',
-    og_description:
-      'Fechamentos combinatórios, OCR de bilhetes e backtesting offline para Mega-Sena, Lotofácil e mais.',
-    twitter_description: 'Fechamentos combinatórios, OCR de bilhetes e backtesting offline.',
     hero_badge: 'Engenharia Estatística para Loterias',
     hero_titleHtml: 'Jogue de forma<br class="hidden md:block"> <span class="text-gradient-purple">Inteligente</span>',
     hero_desc:
@@ -153,10 +149,6 @@ export const lottoexpert = {
     title: 'LottoExpert - GHF Software',
     description:
       'LottoExpert is a statistical engineering solution for Brazilian Caixa Lotteries. Designed with a strict focus on local processing and privacy, it handles wheel generation, ticket scanning (OCR), and result checking entirely on your device, syncing results via secure custom GCP infrastructure.',
-    og_title: 'LottoExpert — Statistical Engineering For Lotteries',
-    og_description:
-      'LottoExpert is a statistical engineering solution for Brazilian Caixa Lotteries. Designed with a strict focus on local processing and privacy, it handles wheel generation, ticket scanning (OCR), and result checking entirely on your device, syncing results via secure custom GCP infrastructure.',
-    twitter_description: 'Everything you need to manage your bets with scientific rigor.',
     hero_badge: 'Statistical Engineering For Lotteries',
     hero_titleHtml: 'Play Extremely<br class="hidden md:block"> <span class="text-gradient-purple">Smart</span>',
     hero_desc:

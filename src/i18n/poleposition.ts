@@ -18,10 +18,6 @@ export const poleposition = {
     title: 'Pole Position: Race Telemetry & Analytics - GHF Software',
     description:
       'Telemetria Automotiva profissional e offline direto no seu dispositivo Android. Desenvolvido para kart e trackdays com GPS 10Hz e intersecção vetorial.',
-    og_title: 'Pole Position — Telemetria para Kart e Automobilismo',
-    og_description:
-      'GPS 10Hz, Força G e parciais com detecção vetorial. Telemetria profissional 100% offline no seu Android.',
-    twitter_description: 'GPS 10Hz, Força G e detecção vetorial de linha. 100% offline.',
 
     hero_badge: 'Telemetria Automotiva Profissional',
     hero_title_1: 'Pole Position',
@@ -147,11 +143,6 @@ export const poleposition = {
   en: {
     title: 'Pole Position: Race Telemetry & Analytics - GHF Software',
     description:
-      'Pole Position transforms your smartphone into a complete offline telemetry system for karting and trackdays. Featuring high-frequency GPS support, vector gate intersection, and integrated TTS audio.',
-    og_title: 'Pole Position — Professional Motorsports Telemetry',
-    og_description:
-      'Pole Position transforms your smartphone into a complete offline telemetry system for karting and trackdays. Featuring high-frequency GPS support, vector gate intersection, and integrated TTS audio.',
-    twitter_description:
       'Pole Position transforms your smartphone into a complete offline telemetry system for karting and trackdays. Featuring high-frequency GPS support, vector gate intersection, and integrated TTS audio.',
 
     hero_badge: 'Professional Motorsports Telemetry',

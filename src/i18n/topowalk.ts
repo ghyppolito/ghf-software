@@ -16,11 +16,6 @@ export const topowalk = {
     title: 'TopoWalk - Levantamento Topográfico de Bolso e RTK',
     description:
       'TopoWalk transforma seu Android em uma ferramenta topográfica avançada de campo. Receptores GNSS/RTK externos, áreas de exclusão e área líquida, importação KML/GeoJSON, locação, laudos PDF e exportação em DXF, CSV, GeoJSON, KML e GPX. GHF Software.',
-    og_title: 'TopoWalk — Topografia de Campo no Bolso & RTK',
-    og_description:
-      'Receptores GNSS/RTK Bluetooth, áreas de exclusão (área líquida), locação de pontos, laudos PDF com logo e exportação em DXF, CSV, GeoJSON, KML e GPX. Topografia profissional no Android.',
-    twitter_description:
-      'Receptores GNSS/RTK Bluetooth, áreas de exclusão (área líquida), laudos PDF com logo e exportação DXF, CSV, GeoJSON, KML e GPX. Topografia profissional no Android.',
     hero_badge: 'Levantamento Topográfico de Bolso & RTK',
     hero_titleHtml:
       'Precisão Profissional<br class="hidden md:block"> nas <span class="text-gradient-amber">Suas Mãos</span>',
@@ -83,11 +78,6 @@ export const topowalk = {
   en: {
     title: 'TopoWalk - Pocket Topographic Survey & RTK',
     description:
-      'TopoWalk turns your smartphone into an advanced fieldwork surveying tool. Supports external Bluetooth GNSS/RTK receivers, barometric altimetry, exclusion zones & net area, KML/GeoJSON import, point stakeout, field photos, and exports to PDF, DXF, CSV, GeoJSON, KML, and GPX.',
-    og_title: 'TopoWalk — Pocket Topographic Survey & RTK',
-    og_description:
-      'TopoWalk turns your smartphone into an advanced fieldwork surveying tool. Supports external Bluetooth GNSS/RTK receivers, barometric altimetry, exclusion zones & net area, KML/GeoJSON import, point stakeout, field photos, and exports to PDF, DXF, CSV, GeoJSON, KML, and GPX.',
-    twitter_description:
       'TopoWalk turns your smartphone into an advanced fieldwork surveying tool. Supports external Bluetooth GNSS/RTK receivers, barometric altimetry, exclusion zones & net area, KML/GeoJSON import, point stakeout, field photos, and exports to PDF, DXF, CSV, GeoJSON, KML, and GPX.',
     hero_badge: 'Pocket Topographic Survey & RTK',
     hero_titleHtml:

@@ -18,9 +18,6 @@ export const eclipsego = {
     title: 'EclipseGo - Previsão de Eclipses Offline - GHF Software',
     description:
       'EclipseGo calcula a visibilidade de eclipses solares e lunares de qualquer ponto do planeta de forma 100% offline. Desenvolvido pela GHF Software.',
-    og_title: 'EclipseGo — Previsão de Eclipses Offline',
-    og_description:
-      'Circunstâncias locais, visibilidade e linha do tempo de eclipses solares e lunares. 100% offline.',
 
     hero_badge: 'Previsão de Eclipses Offline',
     hero_title_1: 'EclipseGo',
@@ -72,9 +69,6 @@ export const eclipsego = {
   en: {
     title: 'EclipseGo - Offline Eclipse Prediction - GHF Software',
     description:
-      'Know exactly if a solar or lunar eclipse is visible from your location. A fully offline application that calculates local start, peak, and end times without making any network calls.',
-    og_title: 'EclipseGo — Offline Eclipse Prediction',
-    og_description:
       'Know exactly if a solar or lunar eclipse is visible from your location. A fully offline application that calculates local start, peak, and end times without making any network calls.',
 
     hero_badge: 'Offline Eclipse Prediction',
