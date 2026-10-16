@@ -52,7 +52,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-12](wps/WP-12-performance.md) | Toda página pontua 90 ou mais nas quatro categorias do Lighthouse mobile | seo | L | medio | 🖥️ | WP-08 | ADR-006 | `done` |
 | [WP-13](wps/WP-13-medicao.md) | O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade | infra | M | medio | 🖥️ | WP-08 | — | `todo` |
 | [WP-14](wps/WP-14-readme-e-arquitetura.md) | README e docs/ARQUITETURA.md descrevem a stack nova e como publicar | docs | S | baixo |  | WP-09 | — | `todo` |
-| [WP-15](wps/WP-15-i18n-n-linguas.md) | Cada página declara em que línguas existe e o site roteia, anuncia e verifica só essas | infra | M | alto | 🖥️ | WP-08, WP-09, WP-11 | ADR-001 | `doing` |
+| [WP-15](wps/WP-15-i18n-n-linguas.md) | Cada página declara em que línguas existe e o site roteia, anuncia e verifica só essas | infra | L | alto | 🖥️ | WP-08, WP-09, WP-11 | ADR-001, ADR-002, ADR-004, ADR-005, ADR-007 | `doing` |
 | [WP-16](wps/WP-16-politica-do-poleposition-em-6-linguas.md) | A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de | legal | M | alto | 🖥️ | WP-15 | ADR-001 | `todo` |
 | [WP-17](wps/WP-17-politica-do-topowalk-em-7-linguas.md) | A política de privacidade do TopoWalk existe no site em pt, en, es, fr, it, de e ru | legal | L | alto | 🖥️ | WP-16 | ADR-001 | `todo` |
 | [WP-18](wps/WP-18-landings-topowalk-e-poleposition-nas-linguas-dos-apps.md) | As landings do TopoWalk e do Pole Position existem nas línguas que cada app fala | landing | M | medio | 🖥️ | WP-10, WP-15 | ADR-001 | `todo` |

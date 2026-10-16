@@ -19,7 +19,7 @@ branch: feat/wp-16-legal-poleposition-6-linguas
 
 **Objetivo:** `/poleposition-privacy.html` (pt, URL contratual intocada), `/en/`, `/es/`,
 `/fr/`, `/it/` e `/de/poleposition-privacy.html` com o mesmo texto, a mesma data e as mesmas
-seções, espelhando o `PRIVACY_POLICY.md` do repositório do app; o mapa de `idiomas.ts` passa a
+seções, espelhando o `PRIVACY_POLICY.md` do repositório do app; o mapa de `idiomas.json` passa a
 listar as 6 línguas para esta página. Vem antes do TopoWalk por ser 2,5× menor (2.352 vs 5.842
 palavras) — prova o processo.
 
@@ -37,7 +37,7 @@ site. Traduzir de uma cópia atrasada propaga o atraso para 6 línguas.
 do `.md` por língua e regras do check).
 
 **Arquivos-alvo:** `src/content/legal/poleposition.{pt,en,es,fr,it,de}.md`,
-`src/content/legal/poleposition-privacy.pt.md`, `src/i18n/idiomas.ts` (só a entrada `poleposition-privacy`).
+`src/content/legal/poleposition-privacy.pt.md`, `src/i18n/idiomas.json` (só a entrada `poleposition-privacy`).
 Fora do site, **antes** deste WP e feito pelo usuário (ou por WP no repositório do app):
 cláusula de prevalência do pt no `PRIVACY_POLICY.md` do app, se D8 (b1).
 
@@ -49,7 +49,7 @@ cláusula de prevalência do pt no `PRIVACY_POLICY.md` do app, se D8 (b1).
 3. es, fr, it, de: traduzir do **pt** (não do en), cláusula por cláusula, sem reorganizar;
    nomes próprios, SDKs, permissões e e-mail literais; tabela do "Resumo de Segurança dos Dados"
    com os rótulos que a Play usa naquela língua.
-4. `lastUpdated` igual em todas; mapa de `idiomas.ts` com as 6.
+4. `lastUpdated` igual em todas; mapa de `idiomas.json` com as 6.
 5. `site-legal` confere; usuário revisa es/fr/it (e de, se puder) — o relato entra no WP.
 
 **Critérios de aceite:**
