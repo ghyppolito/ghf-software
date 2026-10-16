@@ -2,7 +2,7 @@
 id: WP-22
 titulo: Acessibilidade e i18n sem redesign (a11y AA, foco, `<main>`, headings, reduced-motion, contraste fora da paleta, rótulos pt na /en/)
 area: landing
-status: todo
+status: doing
 depende_de: [WP-12, WP-15]
 adr: [ADR-003, ADR-007]
 spec: docs/AVALIACAO.md
