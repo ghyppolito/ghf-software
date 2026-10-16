@@ -2,7 +2,7 @@
 id: WP-15
 titulo: Cada página declara em que línguas existe e o site roteia, anuncia e verifica só essas
 area: infra
-status: todo
+status: doing
 depende_de: [WP-08, WP-09, WP-11]
 adr: [ADR-001]
 spec: docs/AVALIACAO.md
@@ -16,7 +16,7 @@ branch: feat/wp-15-i18n-n-linguas
 # WP-15 — Cada página declara em que línguas existe e o site roteia, anuncia e verifica só essas
 
 **Depende de:** WP-08 (rota `/en/`), WP-09 (front-matter legal e `sync_legal.py`), WP-11
-(`Seo.astro` com `hreflang` pt/en) · **Achados roteados:** —
+(`Seo.astro` com `hreflang` pt/en) · **Achados roteados:** HOME-HREFLANG-XDEFAULT-01, LEGAL-SLUG-ACENTO-01, TROCA-IDIOMA-ATRIBUTO-SEM-CONSUMIDOR-01
 
 **Objetivo:** uma configuração única (`src/i18n/idiomas.ts`) diz, por página, quais línguas
 existem; o roteamento, o seletor de idioma, o `hreflang`/`x-default` e o `check_site.py` leem
