@@ -47,6 +47,8 @@ nas línguas novas), `public/assets/{topowalk,poleposition}/**` (capturas locali
 - Nenhuma página em `dist/{es,fr,it,de,ru}/` além das listadas (sem home, LottoExpert, EclipseGo).
 - Lista no WP: cada frase sem origem na ficha da Play, com a língua.
 
+**Do WP-15:** as landings entram em `PAGINAS` só nas línguas listadas; a faixa de sugestão não aparece em página sem a língua do navegador, e o `check_site.py` §9 já barra `hreflang` para língua inexistente.
+
 **Só no navegador:** as 11 versões novas em 360/768/1280: textos sem estouro (de e ru são
 mais longos), seletor, link da Play abre na língua. O usuário reporta.
 

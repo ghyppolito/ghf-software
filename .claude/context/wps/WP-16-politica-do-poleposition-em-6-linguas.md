@@ -62,6 +62,8 @@ cláusula de prevalência do pt no `PRIVACY_POLICY.md` do app, se D8 (b1).
 - `grep -c 'hreflang' dist/poleposition-privacy.html` = 7.
 - Nenhum `pendente` no front-matter dos 6 `.md`.
 
+**Do WP-15 (ADR-007):** a faixa de sugestão traz um `<template lang>` por língua da página; ao publicar as línguas novas, reavaliar se o template por língua escala (6 línguas na política) ou se a faixa passa a ler o texto de `ui.ts`. O seletor com 3+ línguas só existe a partir daqui: o visual dele (e dele com a faixa) entra neste checklist, não no do WP-15.
+
 **Só no navegador:** as 6 versões em 360 e 1280: título, data no topo, sumário com 11 entradas,
 tabela do resumo legível (sem estouro horizontal em 360), seletor com as 6 línguas e troca
 preservando a página. Navegador em `de`: abre a URL pt, vê a faixa (se D8 c1) e fica no pt. O

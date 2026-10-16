@@ -50,6 +50,8 @@ Fora do site, antes: cláusula de prevalência no `PRIVACY_POLICY.md` do TopoWal
 - `grep -c "[А-Яа-я]" dist/ru/topowalk-privacy.html` > 0 e `grep -c "[А-Яа-я]"` nas outras 6 = 0
   (cirílico só no ru; pega cópia trocada).
 
+**Do WP-15:** `PAGINAS` em `idiomas.ts` e o `tools/test_regras_i18n.py` (passo `unittest` do CI) já cobrem a página nova; acrescentar a política do TopoWalk lá, com o fixture de `tools/fixtures/i18n/`, e conferir o seletor com 7 línguas (checklist de 3+ línguas é do WP-16).
+
 **Só no navegador:** as 7 versões em 360 e 1280: data, sumário com 13 entradas, tabelas e
 blocos de permissão legíveis, cirílico renderizado com a fonte da marca (Inter tem cirílico —
 conferir que não cai em fallback), seletor com as 7. O usuário reporta e registra o que revisou.
