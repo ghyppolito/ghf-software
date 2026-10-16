@@ -2,7 +2,7 @@
 id: WP-21
 titulo: Title e description de compartilhamento vêm da ficha da Play
 area: landing
-status: doing
+status: done
 depende_de: [WP-11]
 adr: []
 spec: docs/AVALIACAO.md
@@ -179,6 +179,10 @@ objeto `og`) · `tools/check_site.py` (§14 e docstring). Fora: convite, `public
    Achados roteados fecham no `site-docs`.
 
 ## Estado (2026-10-16)
+
+**Fechamento (2026-10-16):** o usuário integrou (`git merge --no-ff feat/wp-21-copy-de-compartilhamento` na
+`feat/wp-08-layout-unico`, b610f69); push e CI do #37 verde (run 38843978944: `plano` pass, `site` pass, com o lychee).
+`visual: false`. Status `done`. Integrado, não publicado: vai ao ar no deploy único (D13).
 
 **Implementado e auditado; `doing` até o usuário integrar na `feat/wp-08-layout-unico` e o CI do #37 ficar verde** (mesmo padrão do WP-11/WP-09). Não publicado (D13).
 

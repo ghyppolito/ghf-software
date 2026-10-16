@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**21 WPs** · 10 concluídos · 1 em andamento
+**21 WPs** · 11 concluídos · 0 em andamento
 
 ## Sequência recomendada
 
@@ -28,13 +28,12 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | 1 | [WP-19 — A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2](wps/WP-19-rodada-3-do-claude-design.md) | `blocked` | export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true) |
 | 2 | [WP-10 — A home e as landings de app seguem o sistema visual do handoff](wps/WP-10-redesign-com-o-handoff.md) | `todo` | redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08 |
 | 3 | [WP-20 — Imagens de compartilhamento 1200×630 por página e twitter:card coerente](wps/WP-20-imagens-de-compartilhamento-1200x630.md) | `todo` | imagens de compartilhamento 1200×630 (D16 A): marca para home e legais, uma por app; sessão do usuário no Claude Design, depois `twitter:card` e `og:image:alt`. M, `visual`, antes do deploy único (D13) |
-| 4 | [WP-21 — Title e description de compartilhamento vêm da ficha da Play](wps/WP-21-copy-de-compartilhamento-da-ficha-da-play.md) | `doing` | title e description de compartilhamento vêm da ficha da Play, em pt e en (copy de produto, passa pelo usuário). M, antes do deploy único (D13) |
-| 5 | [WP-15 — Cada página declara em que línguas existe e o site roteia, anuncia e verifica só essas](wps/WP-15-i18n-n-linguas.md) | `todo` | i18n N-línguas: mapa único página → línguas (`src/i18n/idiomas.ts`), pt na raiz e demais em `/<lang>/`, seletor só com as línguas da página, hreflang/x-default das existentes, check_site compara data, seções e tokens entre versões legais; não publica língua nova. D8, ADR-003. M, risco alto, depois do WP-11 |
-| 6 | [WP-16 — A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de](wps/WP-16-politica-do-poleposition-em-6-linguas.md) | `todo` | política do Pole Position em pt/en/es/fr/it/de, traduzida do pt de origem; pré-condição: cláusula de prevalência do pt no app (D8 b1, `PREVALENCIA-PT-NOS-APPS-01`); o espelho pt fica em dia no WP-04. Texto legal, risco alto — prova o processo na política menor · ⏳ aguarda WP-15 |
-| 7 | [WP-17 — A política de privacidade do TopoWalk existe no site em pt, en, es, fr, it, de e ru](wps/WP-17-politica-do-topowalk-em-7-linguas.md) | `todo` | política do TopoWalk em pt/en/es/fr/it/de/ru (5.842 palavras × 6 línguas além do pt); PR por língua. L, risco alto, depois do WP-16 · ⏳ aguarda WP-16 |
-| 8 | [WP-18 — As landings do TopoWalk e do Pole Position existem nas línguas que cada app fala](wps/WP-18-landings-topowalk-e-poleposition-nas-linguas-dos-apps.md) | `todo` | landings TopoWalk (7 línguas) e Pole Position (6) com copy das fichas da Play; só se D8 (a2/a3), depois do WP-10 para não traduzir duas vezes · ⏳ aguarda WP-10, WP-15 |
-| 9 | [WP-12 — Toda página pontua 90 ou mais nas quatro categorias do Lighthouse mobile](wps/WP-12-performance.md) | `todo` | performance: fontes self-hosted, ícones SVG inline no lugar do Font Awesome, imagens WebP/AVIF com dimensões, Lighthouse ≥ 90 nas 4 categorias em todas as páginas. M, depois do WP-08 |
-| 10 | [WP-13 — O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade](wps/WP-13-medicao.md) | `todo` | medição com consentimento ou sem cookie (D3: Plausible/Umami vs GA4 Consent Mode); evento de clique na Play por app. M, depois do WP-08 |
+| 4 | [WP-15 — Cada página declara em que línguas existe e o site roteia, anuncia e verifica só essas](wps/WP-15-i18n-n-linguas.md) | `todo` | i18n N-línguas: mapa único página → línguas (`src/i18n/idiomas.ts`), pt na raiz e demais em `/<lang>/`, seletor só com as línguas da página, hreflang/x-default das existentes, check_site compara data, seções e tokens entre versões legais; não publica língua nova. D8, ADR-003. M, risco alto, depois do WP-11 |
+| 5 | [WP-16 — A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de](wps/WP-16-politica-do-poleposition-em-6-linguas.md) | `todo` | política do Pole Position em pt/en/es/fr/it/de, traduzida do pt de origem; pré-condição: cláusula de prevalência do pt no app (D8 b1, `PREVALENCIA-PT-NOS-APPS-01`); o espelho pt fica em dia no WP-04. Texto legal, risco alto — prova o processo na política menor · ⏳ aguarda WP-15 |
+| 6 | [WP-17 — A política de privacidade do TopoWalk existe no site em pt, en, es, fr, it, de e ru](wps/WP-17-politica-do-topowalk-em-7-linguas.md) | `todo` | política do TopoWalk em pt/en/es/fr/it/de/ru (5.842 palavras × 6 línguas além do pt); PR por língua. L, risco alto, depois do WP-16 · ⏳ aguarda WP-16 |
+| 7 | [WP-18 — As landings do TopoWalk e do Pole Position existem nas línguas que cada app fala](wps/WP-18-landings-topowalk-e-poleposition-nas-linguas-dos-apps.md) | `todo` | landings TopoWalk (7 línguas) e Pole Position (6) com copy das fichas da Play; só se D8 (a2/a3), depois do WP-10 para não traduzir duas vezes · ⏳ aguarda WP-10, WP-15 |
+| 8 | [WP-12 — Toda página pontua 90 ou mais nas quatro categorias do Lighthouse mobile](wps/WP-12-performance.md) | `todo` | performance: fontes self-hosted, ícones SVG inline no lugar do Font Awesome, imagens WebP/AVIF com dimensões, Lighthouse ≥ 90 nas 4 categorias em todas as páginas. M, depois do WP-08 |
+| 9 | [WP-13 — O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade](wps/WP-13-medicao.md) | `todo` | medição com consentimento ou sem cookie (D3: Plausible/Umami vs GA4 Consent Mode); evento de clique na Play por app. M, depois do WP-08 |
 
 ## Todos os WPs
 
@@ -60,7 +59,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-18](wps/WP-18-landings-topowalk-e-poleposition-nas-linguas-dos-apps.md) | As landings do TopoWalk e do Pole Position existem nas línguas que cada app fala | landing | M | medio | 🖥️ | WP-10, WP-15 | ADR-001 | `todo` |
 | [WP-19](wps/WP-19-rodada-3-do-claude-design.md) | A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2 | design | S | baixo | 🖥️ | WP-06 | — | `blocked` |
 | [WP-20](wps/WP-20-imagens-de-compartilhamento-1200x630.md) | Imagens de compartilhamento 1200×630 por página e twitter:card coerente | design | M | baixo | 🖥️ | WP-11 | ADR-005 | `todo` |
-| [WP-21](wps/WP-21-copy-de-compartilhamento-da-ficha-da-play.md) | Title e description de compartilhamento vêm da ficha da Play | landing | M | baixo |  | WP-11 | — | `doing` |
+| [WP-21](wps/WP-21-copy-de-compartilhamento-da-ficha-da-play.md) | Title e description de compartilhamento vêm da ficha da Play | landing | M | baixo |  | WP-11 | — | `done` |
 
 ## Bloqueios ativos
 

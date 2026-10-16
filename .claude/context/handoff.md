@@ -7,10 +7,8 @@
 
 ## 1. Onde parei
 
-- **WP-21 pronto, aguardando o merge do usuário** (`doing`; 5dc205f na `feat/wp-21-copy-de-compartilhamento`): check_site, contrato,
-  html-validate e planos verdes; auditoria sem alto nem médio; lychee fica para o CI. Os 7 achados roteados estão `resolvido`.
-- **Merge (usuário):** `git switch feat/wp-08-layout-unico && git merge --no-ff feat/wp-21-copy-de-compartilhamento -m "WP-21: title e description de compartilhamento vêm da ficha da Play (D19)"`;
-  depois o agente faz push, espera o CI do #37 e marca `done`. WP-11 `done` (2026-10-15), não publicado (D13).
+- **WP-21 `done`** (2026-10-16): integrado na `feat/wp-08-layout-unico` (b610f69), CI do #37 verde (run 38843978944).
+  WP-11 `done` (2026-10-15). Nada publicado (D13).
 - **Próximos:** WP-20 (imagens 1200×630, sessão no Claude Design) ou WP-10.
 
 ## 2. Quebrado ou pela metade agora
@@ -39,7 +37,7 @@ em travessão e descrição curta em `/`, `/en/`, `/lottoexpert.html` e `/en/top
 
 4. Nos apps (D19, mantém a decisão aberta): registrar o en do LottoExpert (título e curta) no `ASO_METADATA.md` e criar a ficha do EclipseGo.
 
-**Do agente:** após o merge do WP-21, push, CI do #37 e `done`; depois o WP-20 quando as imagens existirem ou o WP-10 (branch a partir da integração, D13).
+**Do agente:** o WP-20 quando as imagens existirem ou o WP-10 (branch a partir da integração, D13).
 
 **Copy pendente do usuário antes do WP-10:** "chance matemática" -> "probabilidade exata"; texto final do aviso de jogo
 responsável (o export traz "Texto provisório"); confirmar "Nada de cadastro, e-mail ou CPF" e "Nenhum SDK de publicidade";
