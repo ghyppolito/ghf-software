@@ -807,3 +807,7 @@ Um commit, `WP-15: correções da auditoria (…)`, só nos Arquivos-alvo do ver
   rodapé.
 - Seletor com 3 línguas, só em página de teste local: no Safari, clicar numa língua da lista
   navega, sem fechar o painel antes.
+
+**CI (2026-10-16):** `b0ee3df` entrou na `feat/wp-08-layout-unico` por fast-forward. O run 38920589727
+do #37 deu verde em `plano`, `site` (`check_site` consistente, unittest com 8 testes OK, lychee) e
+`lighthouse` (orçamento cumprido). Falta o checklist de navegador do usuário.
