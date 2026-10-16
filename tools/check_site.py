@@ -1192,7 +1192,7 @@ for rel in sorted(arquivos_dist):
 # (CONGELADAS, D13). Landmark, ordem de títulos, nome acessível que contém o rótulo visível (WCAG
 # 2.5.3, como o `label-content-name-mismatch` do axe) e link para loja/rede social forçado em pt
 # numa página de outra língua.
-RE_LINK_PT = re.compile(r"[?&](?:amp;)?(hl|locale)=pt_BR\b")
+RE_LINK_PT = re.compile(r"[?&](?:amp;)?(hl|locale)=pt(?:[_-]BR)?\b", re.I)
 
 
 def palavras_axe(texto):
@@ -1250,6 +1250,9 @@ class Estrutura(HTMLParser):
                 a[2] += data
 
     def handle_endtag(self, tag):
+        # fecha-tag sem par (um </p> que o HTML fechou implícito) não esvazia a pilha
+        if tag not in (aberto for aberto, _ in self.pilha):
+            return
         while self.pilha:
             aberto, _ = self.pilha.pop()
             if self.abertos and self.abertos[-1][3] == len(self.pilha) + 1:
@@ -1266,7 +1269,7 @@ for caminho in paginas:
     e = Estrutura()
     e.feed(html)
     # (a) um <main> por página: o Lighthouse `landmark-one-main`; dois seria componente com <main>
-    # dentro de página que já o tem
+    # dentro de página que já o tem. Conta só a tag: o site não usa `role="main"`
     if e.mains != 1:
         erros.append(f"{rel}: {e.mains} <main> — toda página tem exatamente um (WP-22)")
     # (b) título sem pular nível na descida (Lighthouse `heading-order`); subir pode pular
