@@ -392,4 +392,4 @@ cumprido. Falta o vermelho provocado no CI.
 **Fechamento (2026-10-16): `done`.** Os critérios de aceite estão cumpridos, e o job `lighthouse` deu
 verde no PR. O vermelho provocado ficou só na prova local (seção "Job `lighthouse`"), sem PR
 descartável no CI: é o mesmo script, e o run do #37 mostrou que o runner mede igual ao local.
-Ainda é decisão do usuário tornar o `lighthouse` check obrigatório na proteção de branch.
+O `lighthouse` é check obrigatório em `develop` desde 2026-10-16 e entra em `master` no deploy único (D22).
