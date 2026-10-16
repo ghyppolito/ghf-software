@@ -328,6 +328,24 @@ body {
   animation: corona-pulse 4s ease-in-out infinite;
 }
 
+/* ------------------------------------------------------------------ Movimento reduzido
+ * Com "reduzir movimento" no sistema, toda animação e transição termina na hora (WP-22): flutuar,
+ * girar, pulsar, quicar e o brilho da coroa param, e as entradas (`fade-in-*`) pulam para o estado
+ * final. Não é `animation: none`: as entradas partem de `opacity: 0` (no atributo style) e o elemento
+ * sumiria. O atraso vai a zero pelo mesmo motivo (o hero esperaria até 0,4 s invisível). As
+ * animações em loop terminam no quadro inicial (float e spin-slow voltam a 0), sem deslocar o blob. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* ------------------------------------------------------------------ Texto legal
  * Corpo das páginas legais (src/layouts/LegalLayout.astro), renderizado do markdown de
  * src/content/legal/. Repete as classes que o dicionário JS antigo punha em cada tag (WP-08,
