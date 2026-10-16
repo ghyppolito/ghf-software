@@ -590,3 +590,8 @@ copiar endereço. (O handoff usa `<button>`, `:16`, porque o protótipo não nav
   grupo segmentado com `aria-pressed`. Destino: decisão do usuário/Claude Design.
 - `LINK-FALLBACK-IDIOMA-SEM-SINAL-01`: D23 (A) leva a página em outra língua sem sinal visual.
   Destino: decisão do usuário, só se virar problema real (nasce com WP-16).
+
+**Usuário (2026-10-16):** aceitou as três propostas sem referência no handoff:
+- faixa de sugestão fixa embaixo, inserida depois do `load`;
+- link único com 2 línguas e lista de nomes nativos a partir de 3;
+- link de fallback da D23 sem sinal visual, só com `hreflang` e `lang`.
