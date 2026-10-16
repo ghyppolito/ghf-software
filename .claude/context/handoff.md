@@ -7,8 +7,8 @@
 
 ## 1. Onde parei
 
-- **WP-14 `done`** na `feat/wp-14-readme-e-arquitetura` (2026-10-16), sem push; nada publicado (D13). Auditoria do site-qa corrigida.
-- **Próximo passo:** o usuário roda `! git checkout feat/wp-08-layout-unico && git merge --ff-only feat/wp-14-readme-e-arquitetura`; depois o agente faz push da integração e acompanha o CI do #37.
+- **WP-14 `done`** (2026-10-16), integrado na `feat/wp-08-layout-unico` e CI do #37 verde (run 38946009217); nada publicado (D13). Auditoria do site-qa corrigida.
+- **Próximo passo:** apagar a `feat/wp-14-readme-e-arquitetura` se o usuário pedir; nenhum WP desbloqueado sem decisão do usuário (ver abaixo).
 - **Próximos WPs:** WP-16 (depende de `PREVALENCIA-PT-NOS-APPS-01`); WP-10 (checklist do WP-19, D11, D12 e copy); WP-20 (sessão do usuário no Claude Design); WP-13 (D3). Pendências do usuário seguem as da seção 3.
 
 ## 2. Quebrado ou pela metade agora
@@ -28,7 +28,7 @@ real e de uma landing, com o site no ar; card do WhatsApp/LinkedIn com título e
 
 ## 4. Próxima ação
 
-**Do agente:** `/wp` sem número propõe o próximo (WP-14 é o desbloqueado e pequeno).
+**Do agente:** `/wp` sem número propõe o próximo; os restantes esperam decisão ou insumo do usuário.
 
 **Do usuário:**
 1. Se quiser, apagar a `feat/wp-15-i18n-n-linguas` (já integrada).
