@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**21 WPs** · 13 concluídos · 0 em andamento
+**21 WPs** · 13 concluídos · 1 em andamento
 
 ## Sequência recomendada
 
@@ -19,7 +19,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 
 | # | WP | Status | Nota |
 |---|---|---|---|
-| 1 | [WP-14 — README e docs/ARQUITETURA.md descrevem a stack nova e como publicar](wps/WP-14-readme-e-arquitetura.md) | `todo` | README e `docs/ARQUITETURA.md` refletem a stack nova; `CLAUDE.md` seção Comandos atualizada. S, fecha a trilha B |
+| 1 | [WP-14 — README e docs/ARQUITETURA.md descrevem a stack nova e como publicar](wps/WP-14-readme-e-arquitetura.md) | `doing` | README e `docs/ARQUITETURA.md` refletem a stack nova; `CLAUDE.md` seção Comandos atualizada. S, fecha a trilha B |
 
 **C · evolução — design, SEO, performance e medição; WP-06 e WP-19 podem rodar a qualquer momento (são sessões do usuário no Claude Design)**
 
@@ -50,7 +50,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-11](wps/WP-11-seo-tecnico.md) | Buscadores leem sitemap, canonical, hreflang e dados estruturados de cada página | seo | M | medio | 🖥️ | WP-08 | ADR-005 | `done` |
 | [WP-12](wps/WP-12-performance.md) | Toda página pontua 90 ou mais nas quatro categorias do Lighthouse mobile | seo | L | medio | 🖥️ | WP-08 | ADR-006 | `done` |
 | [WP-13](wps/WP-13-medicao.md) | O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade | infra | M | medio | 🖥️ | WP-08 | — | `todo` |
-| [WP-14](wps/WP-14-readme-e-arquitetura.md) | README e docs/ARQUITETURA.md descrevem a stack nova e como publicar | docs | S | baixo |  | WP-09 | — | `todo` |
+| [WP-14](wps/WP-14-readme-e-arquitetura.md) | README e docs/ARQUITETURA.md descrevem a stack nova e como publicar | docs | S | baixo |  | WP-09 | — | `doing` |
 | [WP-15](wps/WP-15-i18n-n-linguas.md) | Cada página declara em que línguas existe e o site roteia, anuncia e verifica só essas | infra | L | alto | 🖥️ | WP-08, WP-09, WP-11 | ADR-001, ADR-002, ADR-004, ADR-005, ADR-007 | `done` |
 | [WP-16](wps/WP-16-politica-do-poleposition-em-6-linguas.md) | A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de | legal | M | alto | 🖥️ | WP-15 | ADR-001 | `todo` |
 | [WP-17](wps/WP-17-politica-do-topowalk-em-7-linguas.md) | A política de privacidade do TopoWalk existe no site em pt, en, es, fr, it, de e ru | legal | L | alto | 🖥️ | WP-16 | ADR-001 | `todo` |
