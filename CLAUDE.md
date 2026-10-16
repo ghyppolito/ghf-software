@@ -103,8 +103,8 @@ política/termos do repositório do app) · `/decisao <texto>` · `/adr <texto>`
   de loja, compartilhamento no WhatsApp) vira checklist para o usuário; `visual: true` no WP.
 - Commit `WP-NN: …`. Sem merge, push ou PR sem o usuário pedir.
 - **Fluxo git `feat → develop → master`** (D5). Branch do WP nasce de `develop`; PR mira
-  `develop`. `develop → master` **é deploy** — só pelo usuário, via `/release`. `main` é
-  órfã (só o commit inicial) e não é usada.
+  `develop`. `develop → master` **é deploy** — só pelo usuário, via `/release`. Não há
+  `main` (era órfã; apagada em 2026-10-16).
 
 ## Comandos
 
