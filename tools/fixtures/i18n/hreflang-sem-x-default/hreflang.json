@@ -1,0 +1,53 @@
+{
+  "index.html": [],
+  "app-privacy.html": [
+    [
+      "pt-BR",
+      "https://ghfsoftware.com/app-privacy.html"
+    ],
+    [
+      "en",
+      "https://ghfsoftware.com/en/app-privacy.html"
+    ],
+    [
+      "es",
+      "https://ghfsoftware.com/es/app-privacy.html"
+    ],
+    [
+      "x-default",
+      "https://ghfsoftware.com/en/app-privacy.html"
+    ]
+  ],
+  "en/app-privacy.html": [
+    [
+      "pt-BR",
+      "https://ghfsoftware.com/app-privacy.html"
+    ],
+    [
+      "en",
+      "https://ghfsoftware.com/en/app-privacy.html"
+    ],
+    [
+      "es",
+      "https://ghfsoftware.com/es/app-privacy.html"
+    ],
+    [
+      "x-default",
+      "https://ghfsoftware.com/en/app-privacy.html"
+    ]
+  ],
+  "es/app-privacy.html": [
+    [
+      "pt-BR",
+      "https://ghfsoftware.com/app-privacy.html"
+    ],
+    [
+      "en",
+      "https://ghfsoftware.com/en/app-privacy.html"
+    ],
+    [
+      "es",
+      "https://ghfsoftware.com/es/app-privacy.html"
+    ]
+  ]
+}

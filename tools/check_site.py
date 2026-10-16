@@ -13,13 +13,14 @@ Checa:
   3. href/src locais resolvem para arquivo existente; og:image em ghfsoftware.com resolve localmente;
      nenhum `<a>`, `<area>` ou `<form>` com `target="_blank"` sem o token `noopener` em `rel`, em
      qualquer página de `dist/` (lido por html.parser, não por regex)
-  4. "Última atualização" da página legal (pt e en) bate com a da fonte — lida sempre da raiz do
-     repositório; fonte ausente é erro. A fonte é o `lastUpdated` do front-matter do `.pt.md` de
-     src/content/legal/, que tem de bater com a linha do corpo do `.pt.md`, e o `lastUpdated` do
-     `.en.md` (e a linha `**Last updated:**` dele) com o do pt. Proveniência (ADR-004): front-matter
-     só com `lastUpdated`, `origemCommit` e `en`; o `.pt.md` tem `origemCommit` de 40 hex e não tem
-     `en: "pendente"` (en atrás do pt); o `.en.md` não tem nem um nem outro; `ORIGENS` de
-     tools/sync_legal.py cobre exatamente LEGAL. Com o repositório do app presente
+  4. data da página legal, em cada língua dela no mapa (src/i18n/idiomas.json, ADR-007), bate com
+     a da fonte — lida sempre da raiz do repositório; fonte ausente é erro. A fonte é o
+     `lastUpdated` do front-matter do `.pt.md` de src/content/legal/, que tem de bater com a linha
+     do corpo do `.pt.md`; cada tradução `.<código>.md` tem o mesmo `lastUpdated` (regra i) e a
+     linha `**<rótulo da língua>**` com a mesma data (mês pelo nome da língua no mapa).
+     Proveniência (ADR-004): front-matter só com `lastUpdated`, `origemCommit` e `pendente`; o
+     `.pt.md` tem `origemCommit` de 40 hex e não tem `pendente` (tradução atrás do pt); a tradução
+     não tem nem um nem outro (regra vii); `ORIGENS` de tools/sync_legal.py cobre exatamente LEGAL. Com o repositório do app presente
      (`$GHF_APPS_DIR` ou `--apps-dir`, padrão `..`): corpo do `.pt.md` igual byte a byte a
      `git show <origemCommit>:<caminho>` (erro), commit inexistente no app (erro), commit fora de
      remoto (aviso), ref padrão com texto diferente (aviso). Sem o repositório (o CI, D15): um aviso
@@ -27,18 +28,26 @@ Checa:
   5. copy do LottoExpert respeita jogo responsável (mesma régua do PaywallCopyComplianceTest do app),
      no publicado (PAGINAS_LOTTO) e nas fontes Astro (FONTES_LOTTO)
   6. .well-known/assetlinks.json é JSON válido com o package do LottoExpert
-  7. toda página de PUBLICADAS existe em `dist/`, e as que não estão em EN_PENDENTE têm o par
-     `en/<x>`; nenhum `.html` na raiz do repositório (não vai ao ar)
-  8. hreflang: página com par en declara pt-BR e en, recíprocos, e os dois existem
-  9. página em `en/` com link interno para página que tem par en aponta para o par
- 10. dicionários de src/i18n/ têm as mesmas chaves em pt e en
+  7. toda página de PUBLICADAS existe em `dist/`; as chaves de `paginas` do mapa mais o convite são
+     PUBLICADAS (regra xii); toda língua do mapa gerou a página (regra v); nada em `<código>/` para
+     língua fora do mapa da página, e nunca `pt/` (regra vi); nenhum `.html` na raiz do
+     repositório (não vai ao ar)
+  8. hreflang (no laço do §14): um por língua da página no mapa mais `x-default` (en se houver,
+     senão pt), recíprocos; página com uma língua só, ou fora do mapa, sem hreflang (regra viii);
+     og:locale da língua da página e um og:locale:alternate por outra língua dela (regra ix)
+  9. página em `<código>/` com link interno para página que tem essa língua aponta para ela; o
+     link marcado `data-troca-idioma` é a exceção
+ 10. dicionários de src/i18n/ com as mesmas chaves em todos os blocos de língua, cada bloco de
+     língua do mapa, e ui.ts com um bloco por língua do mapa (regra xi)
  11. `dist/` não é mais antigo que as fontes (src/, public/, configs, package.json, fontes de
      LEGAL): sem isso, o check daria verde sobre um build velho
- 12. página legal, pt e en: um só `<h1`, um só rótulo de data do idioma da página, nenhuma aspa
-     tipográfica que o `.md` não tenha; link do corpo para o próprio site é caminho a partir
-     da raiz (nunca `https://ghfsoftware.com/…`), sem `target`, e em `en/` aponta para o par; e
-     `.pt.md` e `.en.md` com a mesma contagem de `## `, `### `, linhas de tabela, itens de lista,
-     links, crases (`code`) e `---`
+ 12. página legal, em cada língua do mapa: um só `<h1`, um só rótulo de data da língua da página,
+     nenhuma aspa tipográfica que o `.md` não tenha; link do corpo para o próprio site é caminho a
+     partir da raiz (nunca `https://ghfsoftware.com/…`), sem `target`, e em `<código>/` aponta para
+     a página na língua quando ela existe; e cada tradução com a mesma contagem de `## `, `### `,
+     linhas de tabela, itens de lista, links, crases (`code`) e `---` do `.pt.md`, a mesma
+     sequência de níveis `##`/`###` (regra ii), cada `` `token` `` do pt o mesmo número de vezes
+     (regra iii) e os SDKs de regras_i18n.SDKS que o pt cita (regra iv)
  13. public/ (copiado byte a byte para dist/, ADR-002 §3): primeiro nível é a lista fechada
      PUBLIC; nenhum `.html` além do convite; nenhum symlink; todo arquivo de public/ igual byte a
      byte ao de dist/.
@@ -46,11 +55,10 @@ Checa:
      verde — sem esta guarda, uma cópia velha de página contratual iria ao ar calada; e o
      `.htmlvalidateignore` da raiz isenta do html-validate só o convite (congelado pelo sha256, D13),
      e `rules` do `.htmlvalidate.json` é exatamente `{"no-inline-style": "off"}`
- 14. SEO técnico (WP-11, ADR-005). Toda página de `dist/` está em INDEXAVEIS (as 20 com par),
+ 14. SEO técnico (WP-11, ADR-005). Toda página de `dist/` está em INDEXAVEIS (as do mapa, em cada língua),
      NOINDEX (a 404) ou CONGELADAS (o convite, o mesmo `.html` de tools/contrato.sha256, isento das
      regras e sem canonical, hreflang, JSON-LD nem meta robots). Fora de CONGELADAS: um só canonical, igual ao og:url e à URL da própria página
-     (`/x.html`, `/`, `/en/`); hreflang pt-BR, en e x-default (= en), recíprocos, só nas
-     INDEXAVEIS; `noindex` (ou `none`) só e sempre nas NOINDEX; og:* e twitter:* completos; og:image
+     (`/x.html`, `/`, `/en/`); hreflang como no §8; `noindex` (ou `none`) só e sempre nas NOINDEX; og:* e twitter:* completos; og:image
      é arquivo do site (nunca externo) e twitter:image é igual a ele; og:image:width e
      height juntos e iguais ao tamanho real do arquivo (cabeçalho PNG/JPEG lido aqui).
      `robots.txt` igual ao literal ROBOTS (nenhum `Disallow`), gerado por src/pages/robots.txt.ts;
@@ -65,7 +73,7 @@ Checa:
      máximo TITLE_MAX caracteres e description com no máximo DESCRIPTION_MAX; og:title =
      twitter:title = `<title>` e og:description = twitter:description = description (uma fonte só
      por página); nas INDEXAVEIS, o `<title>` sem ` - ` e com a marca unida por ` — ` (termina em
-     ` — GHF Software` ou começa com `GHF Software — `); o par en com `<title>` e description
+     ` — GHF Software` ou começa com `GHF Software — `); cada tradução com `<title>` e description
      diferentes dos do pt. O convite (CONGELADAS) fica isento.
  15. Desempenho (WP-12, ADR-006), em toda página de `dist/` fora de CONGELADAS (o convite, D13):
      (a) fonte servida pelo site — nenhuma menção a `fonts.googleapis`/`fonts.gstatic`, e um
@@ -78,6 +86,12 @@ Checa:
          `<source>` (src ou srcset, absoluto ou relativo à página) nem ícone (`rel` com `icon`)
          apontando para `assets/` da raiz (a cópia de public/ é para URL fixa: og:image, JSON-LD
          e convite); no máximo um `fetchpriority="high"` por página, nunca junto de `loading="lazy"`
+ 16. sem redirecionamento (ADR-007 §1, regra x): nenhum `location.replace`/`location.assign`/
+     `location.href =`/`location =` nem `<meta http-equiv="refresh">` em `.html` ou `.js` de
+     `dist/`, fora do convite (CONGELADAS)
+
+As regras de i18n (i)–(viii), (xi) e (xii) são funções puras de tools/regras_i18n.py, provadas por
+tools/test_regras_i18n.py sobre tools/fixtures/i18n/.
 """
 import glob
 import json
@@ -90,6 +104,7 @@ from html.parser import HTMLParser
 
 sys.dont_write_bytecode = True  # importar sync_legal não deixa tools/__pycache__ no repositório
 from sync_legal import ORIGENS, RE_SHA, CHAVES, apps_dir_padrao, repo_presente, resolve, mostra, em_remoto, separa  # noqa: E402
+import regras_i18n as i18n  # noqa: E402
 
 raiz = "dist"
 if "--raiz" in sys.argv:
@@ -124,12 +139,30 @@ PUBLICADAS = [
     "lotto-expert/sweepstake-invite/lottoexpert-invite.html",
 ]
 
-# Páginas ainda sem `/en/`. Só encolhe: a fatia que cria `en/<x>` tira `<x>` daqui no mesmo
-# commit (espelho de COM_PAR_EN em src/i18n/ui.ts). Termina vazia no fim do WP-08. O convite
-# não tem par en (formato é do app).
-EN_PENDENTE = []
-SEM_PAR_EN = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
-COM_PAR = [x for x in PUBLICADAS if x not in EN_PENDENTE and x not in SEM_PAR_EN]
+# Línguas de cada página: src/i18n/idiomas.json (ADR-007 §2), o mesmo mapa que o build lê. O
+# convite fica fora (formato é do app, uma língua só, congelado). PUBLICADAS não é derivada do mapa:
+# é a guarda de que apagar uma linha do JSON não tira a página do ar calada (regra xii, §7).
+FORA_DO_MAPA = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
+try:
+    MAPA = i18n.carrega_mapa(os.path.join(REPO, "src", "i18n", "idiomas.json"))
+except (OSError, ValueError) as e:
+    print(f"❌ src/i18n/idiomas.json ilegível ({e}) — sem o mapa de línguas o check não sabe o que conferir")
+    sys.exit(1)
+erros_mapa = i18n.valida_mapa(MAPA)
+if erros_mapa:
+    print("❌ " + "\n❌ ".join(erros_mapa))
+    sys.exit(1)
+IDIOMAS = MAPA["idiomas"]
+LINGUAS = MAPA["paginas"]  # caminho pt → línguas, a primeira é pt
+
+
+def linguas_de(pagina):
+    return LINGUAS.get(pagina, ["pt"])
+
+
+def traducoes(pagina):
+    return [l for l in linguas_de(pagina) if l != "pt"]
+
 
 # página legal → markdown de origem no site (`.pt.md` de src/content/legal/, com front-matter
 # `lastUpdated`; o `.en.md` é o mesmo nome com `.en.md`). A origem da origem é o repositório do app.
@@ -155,16 +188,16 @@ COPY_PROIBIDA = [
     r"increase\w*\s+(your\s+)?(odds|chances)",
     r"guarantee\w*\s+(a\s+|your\s+)?(prize|win)",
 ]
-PAGINAS_LOTTO = ["index.html", "lottoexpert.html", "lottoexpert-privacy.html", "lottoexpert-terms.html",
-                 "lotto-expert/sweepstake-invite/lottoexpert-invite.html",
-                 "en/index.html", "en/lottoexpert.html", "en/lottoexpert-privacy.html", "en/lottoexpert-terms.html"]
+PAGINAS_LOTTO = ["index.html", "lottoexpert.html", "lottoexpert-privacy.html", "lottoexpert-terms.html"]
+PAGINAS_LOTTO = ([i18n.arquivo(l, x) for x in PAGINAS_LOTTO for l in linguas_de(x)]
+                 + ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"])
 # Fontes das páginas do LottoExpert (src/): a régua roda sobre elas, lidas da raiz do repositório,
 # sempre que o check roda — além do HTML gerado em dist/ (PAGINAS_LOTTO), que o check exige.
 FONTES_LOTTO = ["src/i18n/home.ts", "src/components/Home.astro",
                 "src/i18n/lottoexpert.ts", "src/components/LottoExpert.astro",
-                "src/i18n/legal.ts", "src/i18n/apps.ts",
-                "src/content/legal/lottoexpert-privacy.pt.md", "src/content/legal/lottoexpert-privacy.en.md",
-                "src/content/legal/lottoexpert-terms.pt.md", "src/content/legal/lottoexpert-terms.en.md"]
+                "src/i18n/legal.ts", "src/i18n/apps.ts"]
+FONTES_LOTTO += [f"src/content/legal/{doc}.{l}.md" for doc in ("lottoexpert-privacy", "lottoexpert-terms")
+                 for l in linguas_de(doc + ".html")]
 
 erros, avisos = [], []
 
@@ -221,7 +254,7 @@ if os.path.realpath(raiz) == os.path.realpath(os.path.join(REPO, "dist")):
     else:
         fontes = (["src", "public", "astro.config.mjs", "tailwind.config.mjs", "postcss.config.mjs", "package.json"]
                   + list(LEGAL.values())
-                  + [md[: -len(".pt.md")] + ".en.md" for md in LEGAL.values() if md.endswith(".pt.md")])
+                  + [md[: -len(".pt.md")] + f".{l}.md" for pg, md in LEGAL.items() for l in traducoes(pg)])
         t, novo = mais_novo(fontes)
         if t > os.path.getmtime(gerado):
             erros.append(f"dist/ mais antigo que as fontes ({novo}) — rode `npm run build`")
@@ -372,45 +405,41 @@ for pagina, md in LEGAL.items():
     if ref != ref_fm:
         erros.append(f"{md}: front-matter `lastUpdated` ({txt(ref_fm)}) ≠ linha `**Última atualização:**` do corpo ({txt(ref)})")
         continue
-    md_en = md[: -len(".pt.md")] + ".en.md"
-    if not os.path.exists(os.path.join(REPO, md_en)):
-        erros.append(f"{md_en}: tradução ausente ({pagina} tem par en)")
-    else:
-        ref_en, corpo_en = front_matter(md_en, ler_md(os.path.join(REPO, md_en)))
-        if ref_en is not None and ref_en != ref:
-            erros.append(f"{md_en}: `lastUpdated` ({txt(ref_en)}) ≠ o do pt ({txt(ref)})")
-        m_en = re.search(r"\*\*Last updated:\*\*\s*" + RE_EN, corpo_en)
-        if not m_en:
-            erros.append(f"{md_en}: sem linha `**Last updated:** Mês [D,] AAAA`")
-        elif (str(int(m_en[2])) if m_en[2] else "", MESES.get(m_en[1].lower(), "?"), m_en[3]) != \
-                (ref[0], MESES.get(ref[1], "?"), ref[2]):
-            erros.append(f"{md_en}: linha `**Last updated:**` ({m_en[1]} {m_en[2] or ''} {m_en[3]}) ≠ {txt(ref)}")
+    ano_ref, mes_ref = ref[2], MESES_NUM.index(ref[1]) + 1
+    # Traduções (regra i e linha de data no rótulo da língua, mês pelo nome do mapa)
+    for lang in traducoes(pagina):
+        md_l = md[: -len(".pt.md")] + f".{lang}.md"
+        if not os.path.exists(os.path.join(REPO, md_l)):
+            erros.append(f"{md_l}: tradução ausente ({pagina} tem `{lang}` no mapa)")
+            continue
+        _, corpo_l = front_matter(md_l, ler_md(os.path.join(REPO, md_l)))
+        rotulo = IDIOMAS[lang]["rotuloData"]
+        frags = i18n.fragmentos_data(corpo_l, f"**{rotulo}**")
+        if not frags:
+            erros.append(f"{md_l}: sem linha `**{rotulo}** <data>`")
+        for frag in frags:
+            if not i18n.confere_data(frag, IDIOMAS[lang]["meses"], ano_ref, mes_ref, ref[0]):
+                erros.append(f"{md_l}: linha `**{rotulo}**` ({frag.strip()}) ≠ {txt(ref)}")
     ref_txt = " de ".join(x for x in ref if x)
-    # (página, idioma que ela tem de ter): a pt e o par en.
-    for alvo, idioma in ((pagina, "pt"), ("en/" + pagina, "en")):
+    # Cada página da língua do mapa: a data de toda língua que aparecer bate; a da página é obrigatória.
+    for lang in linguas_de(pagina):
+        alvo = i18n.arquivo(lang, pagina)
         if not os.path.exists(p(alvo)):
-            if alvo != pagina:
-                erros.append(f"{alvo}: página legal en ausente")
-            continue  # pt ausente já é erro no §1
+            continue  # ausência já é erro no §1 (pt) ou no §7 (regra v)
         html = ler(p(alvo))
-        datas_pt = list(dict.fromkeys(pt(x) for x in datas_em(html, r"Última atualização:\s*" + RE_PT)))
-        datas_pt = [(str(int(d)) if d else "", mo, a) for d, mo, a in datas_pt]
-        datas_en = datas_em(html, r"Last updated:\s*" + RE_EN)
-        datas_en = [(mo, str(int(d)) if d else "", a) for mo, d, a in datas_en]
-        for d in datas_pt:
-            if d != ref:
-                erros.append(f"{alvo}: data pt `{' de '.join(x for x in d if x)}` ≠ {md} `{ref_txt}`")
-        for mo, d, a in datas_en:
-            if (d or "", MESES.get(mo.lower(), "?"), a) != (ref[0], MESES.get(ref[1], "?"), ref[2]):
-                erros.append(f"{alvo}: data en `{mo} {d + ', ' if d else ''}{a}` ≠ {md} `{ref_txt}`")
-        # A data do idioma da página é obrigatória.
-        if idioma == "pt" and not datas_pt:
-            erros.append(f"{alvo}: nenhuma `Última atualização:` encontrada")
-        if idioma == "en" and not datas_en:
-            erros.append(f"{alvo}: nenhuma `Last updated:` encontrada")
+        for outra, dados in IDIOMAS.items():
+            # texto sem tags e HTML cru (atributo `content="…"`); trecho com marcação é descartado
+            frags = list(dict.fromkeys(i18n.fragmentos_data(sem_tags(html), dados["rotuloData"])
+                                       + i18n.fragmentos_data(html, dados["rotuloData"])))
+            for frag in frags:
+                if not i18n.confere_data(frag, dados["meses"], ano_ref, mes_ref, ref[0]):
+                    erros.append(f"{alvo}: data {outra} `{frag.strip()}` ≠ {md} `{ref_txt}`")
+            if outra == lang and not frags:
+                erros.append(f"{alvo}: nenhuma `{dados['rotuloData']}` encontrada")
 
 # Proveniência (ADR-004). Sempre (inclusive no CI): formato do front-matter, origemCommit no pt,
-# `en: "pendente"` como erro, nada disso no en, ORIGENS = LEGAL. Com o repositório do app presente:
+# `pendente` como erro e nada disso na tradução (regra vii), a mesma data em todas (regra i),
+# ORIGENS = LEGAL. Com o repositório do app presente:
 # o corpo do pt é o `git show` do commit registrado, byte a byte (lido em binário: CRLF, BOM e
 # newline final contam).
 docs_legal = {os.path.basename(md)[: -len(".pt.md")] for md in LEGAL.values()}
@@ -420,7 +449,10 @@ if set(ORIGENS) != docs_legal:
 ausentes = set()
 for md in LEGAL.values():
     doc = os.path.basename(md)[: -len(".pt.md")]
-    for lado in (md, md[: -len(".pt.md")] + ".en.md"):
+    pagina = os.path.basename(md)[: -len(".pt.md")] + ".html"
+    fms = {}
+    for lang in linguas_de(pagina):
+        lado = md[: -len(".pt.md")] + f".{lang}.md"
         if not os.path.exists(os.path.join(REPO, lado)):
             continue  # ausência já é erro acima
         with open(os.path.join(REPO, lado), "rb") as f:
@@ -428,19 +460,12 @@ for md in LEGAL.values():
         if fm is None:
             erros.append(f"{lado}: front-matter fora do formato `---\\n…\\n---\\n` em LF — rode tools/sync_legal.py")
             continue
+        fms[lang] = fm
         estranhas = [k for k in chaves if k not in CHAVES or fm[k] is None]
         if estranhas or len(chaves) != len(set(chaves)):
             erros.append(f"{lado}: front-matter com chave fora de {{{', '.join(CHAVES)}}}, sem aspas ou repetida: {chaves}")
-        if lado.endswith(".en.md"):
-            for k in ("origemCommit", "en"):
-                if k in fm:
-                    erros.append(f"{lado}: `{k}` no .en.md — proveniência e marcador ficam só no .pt.md (ADR-004)")
+        if lang != "pt":
             continue
-        if "en" in fm:
-            if fm["en"] == "pendente":
-                erros.append(f"{lado}: `en: \"pendente\"` — en atrás do pt — traduzir e tirar o marcador")
-            else:
-                erros.append(f"{lado}: `en: {fm['en']!r}` — o único valor é \"pendente\" (e só enquanto o en está atrás)")
         sha = fm.get("origemCommit")
         if not sha or not RE_SHA.match(sha):
             erros.append(f"{lado}: front-matter sem `origemCommit: \"<sha de 40 hex minúsculos>\"` — rode tools/sync_legal.py")
@@ -470,6 +495,9 @@ for md in LEGAL.values():
             app = doc.rsplit("-", 1)[0]
             avisos.append(f"{lado}: {repo}@{ref_padrao} ({sha_ref[:7]}) — texto da ref padrão ≠ origemCommit — "
                           f"`python3 tools/sync_legal.py {app} --check` diz se é atraso ou divergência")
+    if "pt" in fms:
+        erros.extend(i18n.regra_datas(doc, {l: fm.get("lastUpdated") for l, fm in fms.items()}))
+        erros.extend(i18n.regra_front_matter(doc, fms))
 
 # ------------------------------------------------------------ 5: copy
 for rel, caminho in [(r, p(r)) for r in PAGINAS_LOTTO] + [(r, os.path.join(REPO, r)) for r in FONTES_LOTTO]:
@@ -495,63 +523,34 @@ except Exception as e:  # noqa: BLE001
     erros.append(f"assetlinks.json inválido: {e}")
 
 # ------------------------------------------------------------ 7: nada fica para trás
-# Lista fixa (PUBLICADAS), não o glob da raiz: a raiz encolhe a cada fatia do WP-08, e página que
-# não chega ao publicado sai do ar sem nenhum outro check perceber (os links não a citam).
-for rel in EN_PENDENTE + SEM_PAR_EN:
-    if rel not in PUBLICADAS:
-        erros.append(f"check_site.py: {rel} em EN_PENDENTE/SEM_PAR_EN mas fora de PUBLICADAS")
+# Lista fixa (PUBLICADAS), não o glob da raiz nem o mapa: página que não chega ao publicado sai do
+# ar sem nenhum outro check perceber (os links não a citam). O mapa tem de bater com ela (regra
+# xii); toda língua do mapa gerou a página (v); nenhuma pasta de língua fora do mapa, nem `pt/` (vi).
+erros.extend(i18n.regra_guarda(MAPA, PUBLICADAS, FORA_DO_MAPA))
 for rel in PUBLICADAS:
     if not os.path.exists(p(rel)):
         erros.append(f"página publicada ausente em {raiz} — falta em src/pages/?: {rel}")
-    en = "en/" + rel
-    if rel in COM_PAR and not os.path.exists(p(en)):
-        erros.append(f"par en ausente: {en} ({rel} não está em EN_PENDENTE)")
-    if rel in EN_PENDENTE and os.path.exists(p(en)):
-        erros.append(f"{en} existe, mas {rel} continua em EN_PENDENTE — tire-o da lista (e ponha em COM_PAR_EN de src/i18n/ui.ts)")
+arquivos_dist = set()
+for pasta, _, arqs in os.walk(raiz):
+    for nome in arqs:
+        arquivos_dist.add(os.path.relpath(os.path.join(pasta, nome), raiz).replace(os.sep, "/"))
+erros.extend(i18n.regra_arquivos_gerados(MAPA, arquivos_dist))
+erros.extend(i18n.regra_linguas_fora_do_mapa(MAPA, arquivos_dist))
 # Página .html na raiz do repositório não vai ao ar (o Astro publica src/pages/ e public/): página
 # nasce em src/pages/.
 for c in sorted(glob.glob(os.path.join(REPO, "*.html"))):
     erros.append(f"{os.path.basename(c)} na raiz do repositório — não vai ao ar; página nasce em src/pages/")
 
 # ------------------------------------------------------------ 8: hreflang
-# Página com par en declara os dois idiomas, com os mesmos dois endereços nas duas pontas, e os
-# dois existem (a ausência de um dos lados já é erro no §7).
-RE_ALT = re.compile(r"<link\b[^>]*>", re.I)
+# Regras viii e ix: rodam no laço do §14, que já lê o <head> de cada página.
 
-
-def hreflangs(html):
-    out = {}
-    for tag in RE_ALT.findall(html):
-        if not re.search(r'rel="alternate"', tag):
-            continue
-        lang = re.search(r'hreflang="([^"]+)"', tag)
-        href = re.search(r'href="([^"]+)"', tag)
-        if lang and href:
-            out[lang.group(1)] = href.group(1)
-    return out
-
-
-for rel in COM_PAR:
-    for lado in (rel, "en/" + rel):
-        if not os.path.exists(p(lado)):
-            continue
-        alt = hreflangs(ler(p(lado)))
-        for lang, esperado in (("pt-BR", rel), ("en", "en/" + rel)):
-            if lang not in alt:
-                erros.append(f"{lado}: sem <link rel=\"alternate\" hreflang=\"{lang}\">")
-                continue
-            destino = url_para_rel(alt[lang])
-            if destino != esperado:
-                erros.append(f"{lado}: hreflang {lang} aponta para {alt[lang]}, esperado o de {esperado}")
-            elif not os.path.exists(p(destino)):
-                erros.append(f"{lado}: hreflang {lang} aponta para {alt[lang]}, que não existe")
-
-# ------------------------------------------------------------ 9: en aponta para en
-# Link interno de página em en/ para página que tem par en vai para o par. A troca de idioma é a
-# exceção declarada: só o link marcado `data-troca-idioma` (componente TrocaIdioma) é isento.
+# ------------------------------------------------------------ 9: a língua aponta para a língua
+# Link interno de página em `<código>/` para página que existe nessa língua vai para ela. A troca de
+# idioma é a exceção declarada: só o link marcado `data-troca-idioma` (componente TrocaIdioma) é isento.
 for caminho in paginas:
     rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
-    if not rel.startswith("en/"):
+    lang_pag, _ = i18n.pagina_de(rel)
+    if lang_pag == "pt":
         continue
     base = os.path.dirname(caminho)
     for tag in re.findall(r"<a\b[^>]*>", ler(caminho), re.I):
@@ -569,38 +568,29 @@ for caminho in paginas:
             destino = "index.html"
         elif alvo.endswith("/"):
             destino += "/index.html"
-        if destino in COM_PAR:
-            erros.append(f"{rel}: href=\"{href.group(1)}\" leva ao pt; o par en é /en/{destino}")
+        if lang_pag in LINGUAS.get(destino, []):
+            erros.append(f"{rel}: href=\"{href.group(1)}\" leva ao pt; a página em {lang_pag} é /{lang_pag}/{destino}")
 
-# ------------------------------------------------------------ 10: dicionários pt = en
-# O `satisfies` dos dicionários em src/i18n/ aceita en com chaves a menos e o build não roda
-# checagem de tipos: chave só em pt sairia vazia em /en/ sem erro. Lido do repositório, como §5.
+# ------------------------------------------------------------ 10: dicionários
+# O `satisfies` dos dicionários em src/i18n/ aceita bloco com chaves a menos e o build não roda
+# checagem de tipos: chave só em pt sairia vazia na tradução sem erro. Lido do repositório, como §5.
 for ts in sorted(glob.glob(os.path.join(REPO, "src/i18n/*.ts"))):
-    blocos = re.findall(r"^  (pt|en): \{\n(.*?)^  \}", ler(ts), re.S | re.M)
-    chaves = {lang: set(re.findall(r"^    (\w+):", corpo, re.M)) for lang, corpo in blocos}
-    if not chaves:
-        continue
     nome = os.path.relpath(ts, REPO)
-    if set(chaves) != {"pt", "en"}:
-        erros.append(f"{nome}: dicionário sem bloco pt e en no formato esperado")
-        continue
-    for lang, outro in (("pt", "en"), ("en", "pt")):
-        for falta in sorted(chaves[lang] - chaves[outro]):
-            erros.append(f"{nome}: chave `{falta}` existe em {lang} e falta em {outro}")
+    erros.extend(i18n.regra_dicionario(nome, ler(ts), MAPA, eh_ui=os.path.basename(ts) == "ui.ts"))
 
 # ------------------------------------------------------------ 12: página legal
 # O que o plugin omiteCabecalhoLegal e o `smartPunctuation: false` do astro.config.mjs garantem,
 # provado no publicado: título e data aparecem uma vez (no hero), as aspas são as do .md do app; e
-# o .en.md tem a mesma estrutura do .pt.md (seção ou tabela perdida na tradução).
+# cada tradução tem a mesma estrutura do .pt.md (seção, tabela, token ou SDK perdido na tradução).
 TIPOGRAFICAS = "“”‘’"
-ROTULO = {"pt": "Última atualização", "en": "Last updated"}
 for pagina, md in LEGAL.items():
     base_md = md[: -len(".pt.md")]
-    fontes_md = {lang: os.path.join(REPO, f"{base_md}.{lang}.md") for lang in ("pt", "en")}
+    fontes_md = {lang: os.path.join(REPO, f"{base_md}.{lang}.md") for lang in linguas_de(pagina)}
     if not all(os.path.exists(f) for f in fontes_md.values()):
         continue  # ausência já é erro no §4
     texto_md = {lang: ler(f) for lang, f in fontes_md.items()}
-    for alvo, lang in ((pagina, "pt"), ("en/" + pagina, "en")):
+    for lang in linguas_de(pagina):
+        alvo = i18n.arquivo(lang, pagina)
         if not os.path.exists(p(alvo)):
             continue  # ausência já é erro no §1/§4/§7
         html = ler(p(alvo))
@@ -609,9 +599,10 @@ for pagina, md in LEGAL.items():
             erros.append(f"{alvo}: {n_h1} `<h1` (esperado 1 — o `# título` do .md não pode sair no corpo)")
         # o rótulo com dois-pontos: o texto pode citar a data pelo nome (TopoWalk, seção 12: `A data
         # de "Última atualização" no topo…`)
-        n_rot = sem_tags(html).count(ROTULO[lang] + ":")
+        rotulo = IDIOMAS[lang]["rotuloData"]
+        n_rot = sem_tags(html).count(rotulo)
         if n_rot != 1:
-            erros.append(f"{alvo}: {n_rot} rótulo(s) `{ROTULO[lang]}:` no texto (esperado 1 — a linha de data do .md não pode sair no corpo)")
+            erros.append(f"{alvo}: {n_rot} rótulo(s) `{rotulo}` no texto (esperado 1 — a linha de data do .md não pode sair no corpo)")
         for ch in TIPOGRAFICAS:
             if html.count(ch) > texto_md[lang].count(ch):
                 erros.append(f"{alvo}: aspa tipográfica `{ch}` ({html.count(ch)}×) além das de {base_md}.{lang}.md "
@@ -620,7 +611,7 @@ for pagina, md in LEGAL.items():
         # o plugin linksInternosLegais de src/markdown/legal.mjs o torna `/x.html` (`/en/x.html` no
         # en, só para página `.html` — asset e o convite `lotto-expert/…` não têm par), na mesma aba,
         # como a página antiga. O host vale com ou sem `www.`, por http ou https. URL absoluta sai do ar com o domínio de teste,
-        # abre outra aba e, em `en/`, leva ao pt.
+        # abre outra aba e, em `<código>/`, leva ao pt.
         ini = html.find('class="legal-corpo')
         fim = html.find('<div class="max-w-4xl mx-auto mt-8 text-center">', ini)
         corpo = html[ini:fim] if ini >= 0 and fim > ini else ""
@@ -634,21 +625,26 @@ for pagina, md in LEGAL.items():
             if SITE_HOST.match(h) or h.startswith("//"):
                 resto = SITE_HOST.sub("", h)
                 arq = resto.split("#")[0].split("?")[0]
-                par = lang == "en" and arq.endswith(".html") and not arq.startswith("lotto-expert/")
-                erros.append(f"{alvo}: link legal para o próprio site com URL absoluta ({h}) — esperado `/{'en/' if par else ''}{resto}` (plugin linksInternosLegais desligado?)")
+                par = lang != "pt" and lang in LINGUAS.get(arq, [])
+                erros.append(f"{alvo}: link legal para o próprio site com URL absoluta ({h}) — esperado `/{lang + '/' if par else ''}{resto}` (plugin linksInternosLegais desligado?)")
             elif h.startswith("/"):
                 if re.search(r"\btarget=", tag):
                     erros.append(f"{alvo}: link legal para o próprio site com target (abre outra aba): {tag}")
                 destino = h.lstrip("/").split("#")[0].split("?")[0] or "index.html"
-                if lang == "en" and destino in COM_PAR:
-                    erros.append(f"{alvo}: link legal {h} leva ao pt; o par en é /en/{destino}")
+                if lang != "pt" and lang in LINGUAS.get(destino, []):
+                    erros.append(f"{alvo}: link legal {h} leva ao pt; a página em {lang} é /{lang}/{destino}")
     for nome, padrao in (("`## `", r"^## "), ("`### `", r"^### "), ("linhas de tabela `|`", r"^\|"),
                          ("itens de lista", r"^\s*([-*]|\d+\.) "), ("links `](`", r"\]\("),
                          ("crases `` ` `` (code)", r"`"), ("`---`", r"^---$")):
         # o `---` do front-matter conta igual nos dois lados
-        n = {lang: len(re.findall(padrao, texto_md[lang], re.M)) for lang in ("pt", "en")}
-        if n["pt"] != n["en"]:
-            erros.append(f"{base_md}.en.md: {n['en']} {nome} ≠ {n['pt']} do .pt.md — tradução com estrutura diferente")
+        n = {lang: len(re.findall(padrao, texto, re.M)) for lang, texto in texto_md.items()}
+        for lang in traducoes(pagina):
+            if n[lang] != n["pt"]:
+                erros.append(f"{base_md}.{lang}.md: {n[lang]} {nome} ≠ {n['pt']} do .pt.md — tradução com estrutura diferente")
+    doc = os.path.basename(base_md)
+    erros.extend(i18n.regra_titulos(doc, texto_md))
+    erros.extend(i18n.regra_tokens(doc, texto_md))
+    erros.extend(i18n.regra_sdks(doc, texto_md))
 
 # ------------------------------------------------------------ 13: public/
 # public/ vai a dist/ byte a byte (ADR-002 §3). Ao colidir com página gerada, o Astro publica o
@@ -716,7 +712,7 @@ else:
 # caminho literal (`/x.html`, `/`, `/en/`). O convite fica fora de toda regra de SEO: é congelado
 # byte a byte (D13), e a lista é a mesma do tools/contrato.sha256 (conferida abaixo).
 CONGELADAS = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
-INDEXAVEIS = COM_PAR + ["en/" + x for x in COM_PAR]
+INDEXAVEIS = [i18n.arquivo(l, x) for x, linguas in LINGUAS.items() for l in linguas]
 NOINDEX = ["404.html"]
 # Cabe no resultado de busca sem corte (title) e no snippet (description) — WP-21
 TITLE_MAX = 60
@@ -869,16 +865,17 @@ for caminho in paginas:
             erros.append(f"{rel}: og:description {c.meta.get('og:description')} ≠ description {descricao!r}")
     if c.meta.get("twitter:description") != c.meta.get("og:description"):
         erros.append(f"{rel}: twitter:description {c.meta.get('twitter:description')} ≠ og:description {c.meta.get('og:description')}")
-    # hreflang: só nas INDEXAVEIS, exatamente pt-BR, en e x-default (= en, D8/D18), recíprocos (o par
-    # declara os mesmos três endereços, porque os dois apontam para as mesmas URLs esperadas).
-    alt = dict(c.alternates)
-    if rel in INDEXAVEIS:
-        pt_rel = rel[len("en/"):] if rel.startswith("en/") else rel
-        esperado = {"pt-BR": url_canonica(pt_rel), "en": url_canonica("en/" + pt_rel), "x-default": url_canonica("en/" + pt_rel)}
-        if len(c.alternates) != len(alt) or alt != esperado:
-            erros.append(f"{rel}: hreflang {sorted(c.alternates)} ≠ esperado {sorted(esperado.items())} (x-default = en)")
-    elif c.alternates:
-        erros.append(f"{rel}: hreflang {c.alternates} numa página sem par (só as INDEXAVEIS declaram)")
+    # §8. hreflang (regra viii): um por língua da página no mapa e x-default (en se houver, senão pt,
+    # D8/D18), recíprocos — cada língua declara os mesmos endereços, porque todas apontam para as
+    # URLs que o mapa dá. Página com uma língua só, ou fora do mapa (a 404), não declara.
+    erros.extend(i18n.regra_hreflang(MAPA, rel, c.alternates, SITE))
+    # og:locale da língua e um og:locale:alternate por outra língua da página (regra ix)
+    lang_pag, pt_rel = i18n.pagina_de(rel)
+    esperado_alt = sorted(IDIOMAS[l]["ogLocale"] for l in linguas_de(pt_rel) if l != lang_pag)
+    if c.meta.get("og:locale", [None])[:1] != [IDIOMAS[lang_pag]["ogLocale"]]:
+        erros.append(f"{rel}: og:locale {c.meta.get('og:locale')} ≠ {IDIOMAS[lang_pag]['ogLocale']!r} (regra ix)")
+    if sorted(c.meta.get("og:locale:alternate", [])) != esperado_alt:
+        erros.append(f"{rel}: og:locale:alternate {c.meta.get('og:locale:alternate', [])} ≠ {esperado_alt} (regra ix)")
     # indexação: `noindex` só e sempre nas NOINDEX
     # `none` = `noindex, nofollow` para o Google: conta como noindex
     tem_noindex = any(re.search(r"\b(noindex|none)\b", v, re.I) for k in ("robots", "googlebot") for v in c.meta.get(k, []))
@@ -903,19 +900,21 @@ for caminho in paginas:
         elif (larg[0], alt_img[0]) != (str(real[0]), str(real[1])):
             erros.append(f"{rel}: og:image:width×height {larg[0]}×{alt_img[0]} ≠ tamanho real de {imagem} ({real[0]}×{real[1]})")
 
-# par en com o mesmo <title> ou a mesma description do pt: texto herdado, não traduzido (WP-21);
+# tradução com o mesmo <title> ou a mesma description do pt: texto herdado, não traduzido (WP-21);
 # compara sem caixa e com espaços normalizados, para um espaço a mais não valer como tradução
 def _norm(textos):
     return [" ".join(t.split()).casefold() for t in textos]
 
-for pt_rel in COM_PAR:
-    a, b = cabecas.get(pt_rel), cabecas.get("en/" + pt_rel)
-    if a is None or b is None:
-        continue
-    if a.titulos and _norm(a.titulos) == _norm(b.titulos):
-        erros.append(f"en/{pt_rel}: <title> igual ao do pt {a.titulos[0]!r}")
-    if a.meta.get("description") and _norm(a.meta["description"]) == _norm(b.meta.get("description", [])):
-        erros.append(f"en/{pt_rel}: description igual à do pt {a.meta['description'][0]!r}")
+for pt_rel in LINGUAS:
+    for lang in traducoes(pt_rel):
+        tr = i18n.arquivo(lang, pt_rel)
+        a, b = cabecas.get(pt_rel), cabecas.get(tr)
+        if a is None or b is None:
+            continue
+        if a.titulos and _norm(a.titulos) == _norm(b.titulos):
+            erros.append(f"{tr}: <title> igual ao do pt {a.titulos[0]!r}")
+        if a.meta.get("description") and _norm(a.meta["description"]) == _norm(b.meta.get("description", [])):
+            erros.append(f"{tr}: description igual à do pt {a.meta['description'][0]!r}")
 
 # robots.txt e sitemap.xml: endpoints do Astro (ADR-005 §1), nunca public/ (§13 já barra).
 ROBOTS = "User-agent: *\nAllow: /\n\nSitemap: https://ghfsoftware.com/sitemap.xml\n"
@@ -968,9 +967,10 @@ else:
             erros.append(f"sitemap.xml: faltam páginas indexáveis: {faltam}")
 
 # JSON-LD (ADR-005 §6): o que cada página declara, com as chaves fechadas. Dados de src/i18n/apps.ts.
-JSONLD_TIPO = {"index.html": "Organization", "en/index.html": "Organization"}
+JSONLD_TIPO = {i18n.arquivo(l, "index.html"): "Organization" for l in linguas_de("index.html")}
 for app in ("lottoexpert.html", "topowalk.html", "poleposition.html", "eclipsego.html"):
-    JSONLD_TIPO[app] = JSONLD_TIPO["en/" + app] = "MobileApplication"
+    for l in linguas_de(app):
+        JSONLD_TIPO[i18n.arquivo(l, app)] = "MobileApplication"
 CHAVES_JSONLD = {
     "Organization": {"@context", "@type", "name", "url", "logo"},
     "MobileApplication": {"@context", "@type", "name", "operatingSystem", "applicationCategory", "installUrl", "offers"},
@@ -990,7 +990,8 @@ for pagina, nome, categoria in (
     ("poleposition.html", "Pole Position", "SportsApplication"),
     ("eclipsego.html", "EclipseGo", "LifestyleApplication"),
 ):
-    APP_DA_PAGINA[pagina] = APP_DA_PAGINA["en/" + pagina] = (nome, categoria)
+    for l in linguas_de(pagina):
+        APP_DA_PAGINA[i18n.arquivo(l, pagina)] = (nome, categoria)
 RE_PLAY = re.compile(r"^https://play\.google\.com/store/apps/details\?id=([\w.]+)(?:&|$)")
 
 
@@ -1172,6 +1173,16 @@ for caminho in paginas:
         erros.append(f"{rel}: {r.prioridade_alta} elementos com fetchpriority=\"high\" — no máximo um, o LCP medido (ADR-006 §1)")
     if r.alta_lazy:
         erros.append(f"{rel}: fetchpriority=\"high\" junto de loading=\"lazy\" — o LCP não pode esperar o lazy (ADR-006 §1)")
+
+# ------------------------------------------------------------ 16: sem redirecionamento
+# ADR-007 §1, regra x: a língua nunca muda sozinha — nem por script, nem por <meta refresh>. O
+# convite (CONGELADAS) fica fora: é congelado byte a byte (D13).
+RE_REDIRECT = re.compile(r"location\.(?:replace|assign)\s*\(|location(?:\.href)?\s*=(?!=)|http-equiv=[\"']?refresh", re.I)
+for rel in sorted(arquivos_dist):
+    if rel in CONGELADAS or not rel.endswith((".html", ".js")):
+        continue
+    for m in RE_REDIRECT.finditer(ler(p(rel))):
+        erros.append(f"{rel}: `{m.group(0)}` — nada redireciona no site; a sugestão de língua é um link (ADR-007 §1/§7)")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")

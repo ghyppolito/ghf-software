@@ -22,8 +22,9 @@ iguais).
 | eclipsego | `src/content/legal/eclipsego-privacy.{pt,en}.md` | `src/pages/eclipsego-privacy.astro`, `src/pages/en/eclipsego-privacy.astro` |
 
 O `.pt.md` é o corpo do `.md` do app no commit `origemCommit`, byte a byte, com o front-matter
-`lastUpdated` / `origemCommit` / (`en: "pendente"` enquanto o en está atrás); o `.en.md` segue a
-estrutura do `.pt.md` e só tem `lastUpdated`. Hero, `<title>` e description ficam em
+`lastUpdated` / `origemCommit` / (`pendente: ["en", …]` enquanto alguma tradução está atrás — as
+línguas da página em `src/i18n/idiomas.json` menos o pt, ADR-007 §8); cada tradução
+`.<código>.md` segue a estrutura do `.pt.md` e só tem `lastUpdated`. Hero, `<title>` e description ficam em
 `src/i18n/legal.ts`. O HTML é gerado; não há HTML legal a editar.
 
 1. **Há WP?** Texto legal é `risco: alto` e entra sempre por WP (`/novo-wp` se não houver).
@@ -36,10 +37,11 @@ estrutura do `.pt.md` e só tem `lastUpdated`. Hero, `<title>` e description fic
    - **origem ausente**: o repositório do app não está em `..` (ou `$GHF_APPS_DIR`); diga e pare.
    - Aviso "hotfix legal em master não integrado": siga a seção abaixo antes.
 3. `python3 tools/sync_legal.py <app> [--ref …]` — copia o pt, grava `lastUpdated`,
-   `origemCommit` e `en: "pendente"`, e imprime a ref, o sha e as seções `##` alteradas. Invoque
-   `site-legal` **só para o en**, com essa saída e o `git diff` do `.pt.md`.
+   `origemCommit` e `pendente: [<línguas da página menos o pt>]`, e imprime a ref, o sha e as
+   seções `##` alteradas. Invoque `site-legal` **só para as traduções** (uma língua por vez), com
+   essa saída e o `git diff` do `.pt.md`.
 4. `/verify` — `npm run build && python3 tools/check_site.py`: com o app presente, o §4 compara o
-   corpo do pt com `git show <origemCommit>` e falha enquanto houver `en: "pendente"`.
+   corpo do pt com `git show <origemCommit>` e falha enquanto houver `pendente`.
    `sync_legal.py <app> --check` tem de dizer "nada a fazer".
    Aviso "origem ausente" aqui = a comparação de texto não rodou, então não passou.
 5. Diga ao usuário o que olhar no navegador: topo (data), seções alteradas, pt e en. A

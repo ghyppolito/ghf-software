@@ -303,3 +303,33 @@ Linha de base: `npm run build` em `fb68942` (veredito), copiado para o scratchpa
 ```
 (vazio)
 ```
+
+### Commit 2 — `check_site` e `sync_legal` leem o mapa
+`python3 -m unittest -v tools/test_regras_i18n.py`:
+
+```
+test_cada_caso_falha_pela_sua_regra (tools.test_regras_i18n.RegrasI18n.test_cada_caso_falha_pela_sua_regra) ... 
+  [data-divergente] app-privacy.es.md: `lastUpdated` '2026-09-30' ≠ o do pt '2026-10-12' (regra i)
+  [guarda] idiomas.json: app.html está em PUBLICADAS e falta em `paginas` (regra xii)
+  [h3-fora-de-ordem] app-privacy.es.md: sequência de títulos `##`/`###` diverge do pt no título 3 (4 títulos, pt tem 4) — a âncora por posição sairia trocada (regra ii)
+  [hreflang-sem-x-default] es/app-privacy.html: hreflang [('en', 'https://ghfsoftware.com/en/app-privacy.html'), ('es', 'https://ghfsoftware.com/es/app-privacy.html'), ('pt-BR', 'https://ghfsoftware.com/app-privacy.html')] ≠ esperado [('en', 'https://ghfsoftware.com/en/app-privacy.html'), ('es', 'https://ghfsoftware.com/es/app-privacy.html'), ('pt-BR', 'https://ghfsoftware.com/app-privacy.html'), ('x-default', 'https://ghfsoftware.com/en/app-privacy.html')] (x-default = en se houver, senão pt; regra viii)
+  [lingua-sem-arquivo] es/app-privacy.html: ausente — app-privacy.html tem `es` no mapa (regra v)
+  [linha-de-data-errada] app-privacy.es.md: linha de data ['12 de septiembre de 2026'] ≠ 2026-10-12
+  [origem-na-traducao] app-privacy.en.md: `origemCommit` na tradução — proveniência e marcador ficam só no .pt.md (regra vii)
+  [pendente] app-privacy.pt.md: `pendente: ['es']` — tradução atrás do pt; traduzir e tirar cada língua da lista (regra vii)
+  [pt-na-pasta] pt/app-privacy.html: `pt/` não existe — o pt fica na raiz (ADR-007 §1, regra vi)
+  [ru-fora-do-mapa] ru/app-privacy.html: `ru` fora do mapa de app-privacy.html — página sem a língua não é gerada (regra vi)
+  [sdk-ausente] app-privacy.es.md: sem `Firebase Analytics`, que o pt cita (regra iv)
+  [token-ausente] app-privacy.en.md: `POST_NOTIFICATIONS` 0× ≠ 1× no pt (regra iii)
+  [ui-sem-bloco] ui.ts: sem bloco `es` — toda língua de idiomas.json tem o seu em ui.ts (regra xi)ok
+test_correto_passa (tools.test_regras_i18n.RegrasI18n.test_correto_passa) ... ok
+test_data_em_qualquer_lingua (tools.test_regras_i18n.RegrasI18n.test_data_em_qualquer_lingua) ... ok
+test_hreflang_sem_en_aponta_para_pt (tools.test_regras_i18n.RegrasI18n.test_hreflang_sem_en_aponta_para_pt) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.011s
+
+OK
+```
+
+`diff -r <base> dist`: vazio (o commit não muda o gerado). `check_site.py` verde; provado à mão sobre o real (revertido): `pendente` no `.pt.md`, `lastUpdated` divergente, `dist/ru/` e `dist/pt/`, `location.replace` em `dist/en/`, token, SDK, linha de data e `###` a menos no en — cada um reprovou pela sua regra.

@@ -8,11 +8,13 @@ de um **commit** do app (`git show <sha>:<caminho>`, nunca o disco) para
     ---
     lastUpdated: "AAAA-MM[-DD]"
     origemCommit: "<sha de 40>"
-    en: "pendente"
+    pendente: ["en", …]
     ---
 
-Nunca abre nem escreve `.en.md`: a tradução é do `site-legal`, que tira a linha `en: "pendente"`
-depois. O `check_site.py` importa `ORIGENS` daqui e confere o corpo contra `origemCommit`.
+`pendente` lista as línguas da página no mapa `src/i18n/idiomas.json` menos o pt (ADR-007 §8);
+página só em pt não ganha a chave. Nunca abre nem escreve `.<código>.md`: a tradução é do
+`site-legal`, que tira cada língua da lista quando a atualiza e apaga a chave quando ela esvazia. O
+`check_site.py` importa `ORIGENS` daqui e confere o corpo contra `origemCommit`.
 
 Uso:
     python3 tools/sync_legal.py <app>|--todos [--doc privacy|terms] [--ref REF]
@@ -29,6 +31,7 @@ Saída: 0 = nada a fazer ou cópia feita (ou origem ausente, com aviso); 1 = `--
 fazer; 2 = recusa (nada foi escrito).
 """
 import argparse
+import json
 import os
 import re
 import subprocess
@@ -49,7 +52,8 @@ ORIGENS = {
     "eclipsego-privacy": ("eclipse-go", "docs/PRIVACY_POLICY.md", "main"),
 }
 
-CHAVES = ("lastUpdated", "origemCommit", "en")
+CHAVES = ("lastUpdated", "origemCommit", "pendente")
+MAPA = os.path.join(REPO, "src", "i18n", "idiomas.json")
 RE_SHA = re.compile(r"^[0-9a-f]{40}$")
 MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto",
          "setembro", "outubro", "novembro", "dezembro"]
@@ -99,18 +103,23 @@ def em_remoto(repo_dir, sha):
 
 
 def separa(dados):
-    """(front-matter como dict ordenado, lista de chaves, corpo em bytes) de um `.pt.md`/`.en.md`.
-    None no front-matter se o arquivo não começa com `---\\n … \\n---\\n`. Chave fora do formato
-    `chave: "valor"` vira chave com valor None (quem chama recusa)."""
+    """(front-matter como dict ordenado, lista de chaves, corpo em bytes) de um `.<código>.md`.
+    None no front-matter se o arquivo não começa com `---\\n … \\n---\\n`. Valor é `"texto"` ou
+    lista `["a", "b"]` (vira list); chave fora desses formatos vira chave com valor None (quem
+    chama recusa)."""
     m = re.match(rb"---\n(.*?)\n---\n", dados, re.S)
     if not m:
         return None, [], dados
     fm, chaves = {}, []
     for linha in m.group(1).decode("utf-8").split("\n"):
         kv = re.match(r'^([^:\s]+):\s*"([^"]*)"\s*$', linha)
+        lista = re.match(r'^([^:\s]+):\s*\[\s*("[^"]*"(?:\s*,\s*"[^"]*")*)?\s*\]\s*$', linha)
         if kv:
             fm[kv.group(1)] = kv.group(2)
             chaves.append(kv.group(1))
+        elif lista:
+            fm[lista.group(1)] = re.findall(r'"([^"]*)"', lista.group(2) or "")
+            chaves.append(lista.group(1))
         else:
             chave = linha.split(":", 1)[0].strip() or linha
             fm[chave] = None
@@ -118,9 +127,25 @@ def separa(dados):
     return fm, chaves, dados[m.end():]
 
 
+def valor(v):
+    """Valor do front-matter em YAML: `"texto"` ou `["a", "b"]`."""
+    return "[" + ", ".join(f'"{x}"' for x in v) + "]" if isinstance(v, list) else f'"{v}"'
+
+
 def monta(fm, corpo):
-    linhas = ["---"] + [f'{k}: "{fm[k]}"' for k in CHAVES if fm.get(k) is not None] + ["---", ""]
+    linhas = ["---"] + [f"{k}: {valor(fm[k])}" for k in CHAVES if fm.get(k) is not None] + ["---", ""]
     return "\n".join(linhas).encode("utf-8") + corpo
+
+
+def pendentes(doc):
+    """Línguas da página do doc no mapa (src/i18n/idiomas.json), menos o pt: as traduções que ficam
+    atrás quando o pt muda (ADR-007 §8)."""
+    with open(MAPA, encoding="utf-8") as f:
+        paginas = json.load(f)["paginas"]
+    pagina = f"{doc}.html"
+    if pagina not in paginas:
+        raise Recusa(f"{doc}: {pagina} fora de `paginas` de src/i18n/idiomas.json")
+    return [l for l in paginas[pagina] if l != "pt"]
 
 
 def data_da_origem(corpo):
@@ -236,8 +261,12 @@ def planeja(doc, args):
         msgs.append(f"⚠️  {doc}: texto mudou sem data nova ({data}) — achado para o repositório do app")
     if args.check:
         return "atras", None, msgs + [f"↻ {doc}: atrás — {repo}@{sha[:7]} tem texto novo ({data})"]
-    novo = {"lastUpdated": data, "origemCommit": sha, "en": "pendente"}
-    return "copia", monta(novo, origem), msgs + [f"↻ {doc}: copiado de {repo}@{sha[:7]}; lastUpdated {data}; en pendente"]
+    novo = {"lastUpdated": data, "origemCommit": sha}
+    linguas = pendentes(doc)
+    if linguas:
+        novo["pendente"] = linguas
+    marcador = f"; pendente: {', '.join(linguas)}" if linguas else ""
+    return "copia", monta(novo, origem), msgs + [f"↻ {doc}: copiado de {repo}@{sha[:7]}; lastUpdated {data}{marcador}"]
 
 
 def grava(escritas):
