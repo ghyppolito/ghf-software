@@ -60,7 +60,13 @@ Checa:
      só nas duas home, `MobileApplication` só nas 8 landings, nenhum nas demais; chaves exatamente
      as permitidas (sem `aggregateRating`, `review`, preço do Premium); `name` e
      `applicationCategory` os da landing (APP_DA_PAGINA, D17); `installUrl` com o mesmo
-     `id` do botão da Play da página; o texto do JSON-LD (já decodificado) passa pela régua do §5
+     `id` do botão da Play da página; o texto do JSON-LD (já decodificado) passa pela régua do §5.
+     Título e descrição (WP-21): `<title>` (uma vez, lido com as entidades decodificadas) com no
+     máximo TITLE_MAX caracteres e description com no máximo DESCRIPTION_MAX; og:title =
+     twitter:title = `<title>` e og:description = twitter:description = description (uma fonte só
+     por página); nas INDEXAVEIS, o `<title>` sem ` - ` e com a marca unida por ` — ` (termina em
+     ` — GHF Software` ou começa com `GHF Software — `); o par en com `<title>` e description
+     diferentes dos do pt. O convite (CONGELADAS) fica isento.
 """
 import glob
 import json
@@ -700,6 +706,10 @@ else:
 CONGELADAS = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
 INDEXAVEIS = COM_PAR + ["en/" + x for x in COM_PAR]
 NOINDEX = ["404.html"]
+# Cabe no resultado de busca sem corte (title) e no snippet (description) — WP-21
+TITLE_MAX = 60
+DESCRIPTION_MAX = 160
+MARCA = "GHF Software"
 OG_OBRIGATORIAS = ["og:type", "og:site_name", "og:url", "og:title", "og:description", "og:image",
                    "og:locale", "twitter:card", "twitter:title", "twitter:description", "twitter:image"]
 
@@ -716,12 +726,14 @@ def url_canonica(rel):
 
 
 class Cabeca(HTMLParser):
-    """Lê canonical, hreflang, meta (property/name) e o texto de cada `<script type=application/ld+json>`."""
+    """Lê canonical, hreflang, meta (property/name), o texto de cada `<title>` e o de cada
+    `<script type=application/ld+json>`."""
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.canonicas, self.alternates, self.meta, self.jsonld = [], [], {}, []
+        self.canonicas, self.alternates, self.meta, self.jsonld, self.titulos = [], [], {}, [], []
         self._ld = None
+        self._titulo = None
 
     def handle_starttag(self, tag, attrs):
         d = {k.lower(): (v or "") for k, v in attrs}
@@ -737,17 +749,24 @@ class Cabeca(HTMLParser):
                 self.meta.setdefault(chave.lower(), []).append(d.get("content", ""))
         elif tag == "script" and d.get("type", "").lower() == "application/ld+json":
             self._ld = []
+        elif tag == "title":
+            self._titulo = []
 
     handle_startendtag = handle_starttag
 
     def handle_data(self, data):
         if self._ld is not None:
             self._ld.append(data)
+        if self._titulo is not None:
+            self._titulo.append(data)
 
     def handle_endtag(self, tag):
         if tag == "script" and self._ld is not None:
             self.jsonld.append("".join(self._ld))
             self._ld = None
+        elif tag == "title" and self._titulo is not None:
+            self.titulos.append("".join(self._titulo))
+            self._titulo = None
 
 
 def dimensoes(caminho):
@@ -803,6 +822,31 @@ for caminho in paginas:
     for chave in OG_OBRIGATORIAS:
         if len(c.meta.get(chave, [])) != 1 or not c.meta[chave][0].strip():
             erros.append(f"{rel}: {chave} ausente, vazio ou repetido ({len(c.meta.get(chave, []))}×)")
+    # título e descrição (WP-21): o cartão de compartilhamento repete o <title> e a description, sem
+    # texto próprio; os dois cabem na SERP; nas INDEXAVEIS, a marca vem unida por travessão, o do h1
+    titulo = c.titulos[0] if len(c.titulos) == 1 else None
+    descricao = (c.meta.get("description") or [None])[0]
+    if titulo is None:
+        erros.append(f"{rel}: {len(c.titulos)} <title> (esperado 1)")
+    else:
+        if len(titulo) > TITLE_MAX:
+            erros.append(f"{rel}: <title> com {len(titulo)} caracteres (máximo {TITLE_MAX}): {titulo!r}")
+        if c.meta.get("og:title", [None])[0] != titulo:
+            erros.append(f"{rel}: og:title {c.meta.get('og:title')} ≠ <title> {titulo!r}")
+        if rel in INDEXAVEIS:
+            if " - " in titulo:
+                erros.append(f"{rel}: <title> com ' - ' — o separador é ' — ', o do h1: {titulo!r}")
+            if not (titulo.endswith(" — " + MARCA) or titulo.startswith(MARCA + " — ")):
+                erros.append(f"{rel}: <title> sem a marca unida por travessão ('… — {MARCA}' ou '{MARCA} — …'): {titulo!r}")
+    if c.meta.get("twitter:title") != c.meta.get("og:title"):
+        erros.append(f"{rel}: twitter:title {c.meta.get('twitter:title')} ≠ og:title {c.meta.get('og:title')}")
+    if descricao is not None:
+        if len(descricao) > DESCRIPTION_MAX:
+            erros.append(f"{rel}: description com {len(descricao)} caracteres (máximo {DESCRIPTION_MAX}): {descricao!r}")
+        if c.meta.get("og:description", [None])[0] != descricao:
+            erros.append(f"{rel}: og:description {c.meta.get('og:description')} ≠ description {descricao!r}")
+    if c.meta.get("twitter:description") != c.meta.get("og:description"):
+        erros.append(f"{rel}: twitter:description {c.meta.get('twitter:description')} ≠ og:description {c.meta.get('og:description')}")
     # hreflang: só nas INDEXAVEIS, exatamente pt-BR, en e x-default (= en, D8/D18), recíprocos (o par
     # declara os mesmos três endereços, porque os dois apontam para as mesmas URLs esperadas).
     alt = dict(c.alternates)
@@ -836,6 +880,16 @@ for caminho in paginas:
             erros.append(f"{rel}: og:image {imagem} não é PNG nem JPEG legível — não dá para conferir width/height")
         elif (larg[0], alt_img[0]) != (str(real[0]), str(real[1])):
             erros.append(f"{rel}: og:image:width×height {larg[0]}×{alt_img[0]} ≠ tamanho real de {imagem} ({real[0]}×{real[1]})")
+
+# par en com o mesmo <title> ou a mesma description do pt: texto herdado, não traduzido (WP-21)
+for pt_rel in COM_PAR:
+    a, b = cabecas.get(pt_rel), cabecas.get("en/" + pt_rel)
+    if a is None or b is None:
+        continue
+    if a.titulos and a.titulos == b.titulos:
+        erros.append(f"en/{pt_rel}: <title> igual ao do pt {a.titulos[0]!r}")
+    if a.meta.get("description") and a.meta.get("description") == b.meta.get("description"):
+        erros.append(f"en/{pt_rel}: description igual à do pt {a.meta['description'][0]!r}")
 
 # robots.txt e sitemap.xml: endpoints do Astro (ADR-005 §1), nunca public/ (§13 já barra).
 ROBOTS = "User-agent: *\nAllow: /\n\nSitemap: https://ghfsoftware.com/sitemap.xml\n"
