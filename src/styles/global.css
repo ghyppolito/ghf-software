@@ -354,6 +354,15 @@ body {
   @apply list-disc pl-6 mb-4 space-y-2;
 }
 
+/* URL e identificador longos em `code` (ex.: o endpoint do googleapis) e em link (ex.:
+ * jogadoresanonimos.com.br no destaque de §3 dos termos) quebram dentro do bloco: sem isso a página
+ * rola na horizontal a 360 px (WP-22). `word-break` é a reserva de quem não tem `anywhere`. */
+.legal-corpo code,
+.legal-corpo a {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
 /* Contêiner da tabela (plugin envolveTabelaLegal) */
 .legal-tabela {
   @apply overflow-x-auto mb-4;
