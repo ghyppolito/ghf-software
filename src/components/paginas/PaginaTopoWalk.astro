@@ -1,17 +1,21 @@
 ---
-// Landing do TopoWalk em inglês (/en/topowalk.html). Corpo em components/TopoWalk.astro, textos em
+// Landing do TopoWalk (/topowalk.html e /<código>/topowalk.html), a página inteira com a prop `lang`. Corpo em components/TopoWalk.astro, textos em
 // i18n/topowalk.ts. Links da página para a home vão à home do mesmo idioma. O TopoWalk usa
 // `accent` (terracota) onde as outras páginas usam `primary`: nav e footer recebem `realce`.
 import Base from '../../layouts/Base.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
-import TopoWalk from '../../components/TopoWalk.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
+import TopoWalk from '../TopoWalk.astro';
 import { topowalk } from '../../i18n/topowalk';
-import { rota } from '../../i18n/idiomas';
-import JsonLd from '../../components/JsonLd.astro';
+import { rota, type Idioma } from '../../i18n/idiomas';
+import JsonLd from '../JsonLd.astro';
 import { mobileApplication } from '../../i18n/apps';
 
-const lang = 'en';
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
 const x = topowalk[lang];
 const home = rota(lang, 'index.html');
 ---

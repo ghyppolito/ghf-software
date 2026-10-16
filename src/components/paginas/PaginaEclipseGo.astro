@@ -1,17 +1,21 @@
 ---
-// Landing do EclipseGo em inglês (/en/eclipsego.html). Corpo em components/EclipseGo.astro, textos em
+// Landing do EclipseGo (/eclipsego.html e /<código>/eclipsego.html), a página inteira com a prop `lang`. Corpo em components/EclipseGo.astro, textos em
 // i18n/eclipsego.ts. Links da página para a home vão à home do mesmo idioma. O dourado do EclipseGo
 // é claro: a pílula do menu do celular usa texto preto (Nav `realce="primary-texto-preto"`).
 import Base from '../../layouts/Base.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
-import EclipseGo from '../../components/EclipseGo.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
+import EclipseGo from '../EclipseGo.astro';
 import { eclipsego } from '../../i18n/eclipsego';
-import { rota } from '../../i18n/idiomas';
-import JsonLd from '../../components/JsonLd.astro';
+import { rota, type Idioma } from '../../i18n/idiomas';
+import JsonLd from '../JsonLd.astro';
 import { mobileApplication } from '../../i18n/apps';
 
-const lang = 'en';
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
 const x = eclipsego[lang];
 const home = rota(lang, 'index.html');
 ---

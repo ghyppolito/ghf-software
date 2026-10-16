@@ -1,22 +1,27 @@
 ---
-// Termos de uso do LottoExpert em inglês (/en/lottoexpert-terms.html), par da URL contratual:
-// página literal, sem rota dinâmica. Texto em src/content/legal/lottoexpert-terms.en.md; hero,
+// Termos de uso do LottoExpert (/lottoexpert-terms.html, URL contratual de ADR-001, e /<código>/lottoexpert-terms.html): a página
+// inteira, com a prop `lang`; as cascas ficam em src/pages/ (ADR-007 §3). Texto em
+// src/content/legal/lottoexpert-terms.<código>.md; hero,
 // botão e <head> em i18n/legal.ts. Nav e footer como na página antiga: realce `primary` (violeta do
 // tema) com logo brilhando, só o e-mail entre os canais, rodapé `surface` e esta página destacada na
 // lista de políticas. O botão volta para a home da GHF e o selo leva o ícone de contrato, como na
 // página antiga.
 import { getEntry, render } from 'astro:content';
 import LegalLayout from '../../layouts/LegalLayout.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
 import { legal } from '../../i18n/legal';
-import { rota } from '../../i18n/idiomas';
+import { rota, type Idioma } from '../../i18n/idiomas';
 
-const lang = 'en';
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
 const x = legal[lang];
 const home = rota(lang, 'index.html');
-const entrada = await getEntry('legal', 'lottoexpert-terms.en');
-if (!entrada) throw new Error('src/content/legal/lottoexpert-terms.en.md ausente');
+const entrada = await getEntry('legal', `lottoexpert-terms.${lang}`);
+if (!entrada) throw new Error(`src/content/legal/lottoexpert-terms.${lang}.md ausente`);
 const { Content } = await render(entrada);
 ---
 <LegalLayout

@@ -333,3 +333,18 @@ OK
 ```
 
 `diff -r <base> dist`: vazio (o commit não muda o gerado). `check_site.py` verde; provado à mão sobre o real (revertido): `pendente` no `.pt.md`, `lastUpdated` divergente, `dist/ru/` e `dist/pt/`, `location.replace` em `dist/en/`, token, SDK, linha de data e `###` a menos no en — cada um reprovou pela sua regra.
+
+### Commit 3 — `[lang]/` no lugar de `en/`
+Medição (ADR-007 §3): `src/pages/[lang]/index.astro` com `lang=en` e `build.format: 'preserve'`
+gera `dist/en/index.html`; `dist/en.html` não existe; `dist/pt` não existe.
+
+`diff -r <base> dist` (saída inteira) e lista de arquivos:
+
+```
+(vazio)
+$ diff <(cd base && find . -type f | sort) <(cd dist && find . -type f | sort)
+(vazio)
+```
+
+Os 7 caminhos de ADR-001 com `test -f`: ok. `grep -o '<link rel="alternate" hreflang=' dist/topowalk-privacy.html | wc -l` = 3;
+`grep -o 'hreflang=' … | wc -l` = 5 (igual à base). `grep -rnE "location\.(replace|assign)|location\.href *=|http-equiv=\"refresh\"" src/ dist/ --exclude-dir=lotto-expert`: vazio.

@@ -65,3 +65,11 @@ export function rota(lang: Idioma, caminho: string): string {
   const prefixo = destino === 'pt' ? '/' : `/${destino}/`;
   return caminho === 'index.html' ? prefixo : prefixo + caminho;
 }
+
+/** `getStaticPaths()` de `src/pages/[lang]/<x>.astro`: uma rota por língua da página, menos o pt
+ *  (que é a página literal na raiz). */
+export function rotasDeLingua(caminho: string): { params: { lang: Idioma } }[] {
+  return linguasDe(caminho)
+    .filter((l) => l !== 'pt')
+    .map((lang) => ({ params: { lang } }));
+}

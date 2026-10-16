@@ -1,14 +1,20 @@
 ---
-// Home em inglês (/en/, en/index.html). Corpo em components/Home.astro, textos em i18n/home.ts.
+// Home (/ e /<código>/), a página inteira com a prop `lang`; as cascas ficam em src/pages/
+// (ADR-007 §3). Corpo em components/Home.astro, textos em i18n/home.ts.
 import Base from '../../layouts/Base.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
-import Home from '../../components/Home.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
+import Home from '../Home.astro';
 import { home } from '../../i18n/home';
-import JsonLd from '../../components/JsonLd.astro';
+import JsonLd from '../JsonLd.astro';
 import { organization } from '../../i18n/apps';
+import type { Idioma } from '../../i18n/idiomas';
 
-const lang = 'en';
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
 const x = home[lang];
 ---
 <Base

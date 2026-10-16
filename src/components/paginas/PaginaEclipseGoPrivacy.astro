@@ -1,21 +1,26 @@
 ---
-// Política de privacidade do EclipseGo em inglês (/en/eclipsego-privacy.html), par da URL contratual:
-// página literal, sem rota dinâmica. Texto em src/content/legal/eclipsego-privacy.en.md; hero,
+// Política de privacidade do EclipseGo (/eclipsego-privacy.html, URL contratual de ADR-001, e /<código>/eclipsego-privacy.html): a página
+// inteira, com a prop `lang`; as cascas ficam em src/pages/ (ADR-007 §3). Texto em
+// src/content/legal/eclipsego-privacy.<código>.md; hero,
 // botão e <head> em i18n/legal.ts. Nav e footer como na página antiga: dourado com texto preto na
 // pílula do celular, logo sem brilho (a classe antiga não valia), só o e-mail entre os canais,
 // rodapé `surface` e a política do EclipseGo destacada na lista de políticas.
 import { getEntry, render } from 'astro:content';
 import LegalLayout from '../../layouts/LegalLayout.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
 import { legal } from '../../i18n/legal';
-import { rota } from '../../i18n/idiomas';
+import { rota, type Idioma } from '../../i18n/idiomas';
 
-const lang = 'en';
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
 const x = legal[lang];
 const home = rota(lang, 'index.html');
-const entrada = await getEntry('legal', 'eclipsego-privacy.en');
-if (!entrada) throw new Error('src/content/legal/eclipsego-privacy.en.md ausente');
+const entrada = await getEntry('legal', `eclipsego-privacy.${lang}`);
+if (!entrada) throw new Error(`src/content/legal/eclipsego-privacy.${lang}.md ausente`);
 const { Content } = await render(entrada);
 ---
 <LegalLayout

@@ -1,17 +1,21 @@
 ---
-// Landing do Pole Position em inglês (/en/poleposition.html). Corpo em components/PolePosition.astro, textos
+// Landing do Pole Position (/poleposition.html e /<código>/poleposition.html), a página inteira com a prop `lang`. Corpo em components/PolePosition.astro, textos
 // em i18n/poleposition.ts. Links da página para a home vão à home do mesmo idioma. O lima do
 // Pole Position é claro: a pílula do menu do celular usa texto preto (Nav `realce="primary-claro"`).
 import Base from '../../layouts/Base.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
-import PolePosition from '../../components/PolePosition.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
+import PolePosition from '../PolePosition.astro';
 import { poleposition } from '../../i18n/poleposition';
-import { rota } from '../../i18n/idiomas';
-import JsonLd from '../../components/JsonLd.astro';
+import { rota, type Idioma } from '../../i18n/idiomas';
+import JsonLd from '../JsonLd.astro';
 import { mobileApplication } from '../../i18n/apps';
 
-const lang = 'en';
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
 const x = poleposition[lang];
 const home = rota(lang, 'index.html');
 ---

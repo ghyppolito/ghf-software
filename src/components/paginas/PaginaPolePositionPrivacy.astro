@@ -1,22 +1,27 @@
 ---
-// Política de privacidade do Pole Position em inglês (/en/poleposition-privacy.html), par da URL contratual:
-// página literal, sem rota dinâmica. Texto em src/content/legal/poleposition-privacy.en.md; hero,
+// Política de privacidade do Pole Position (/poleposition-privacy.html, URL contratual de ADR-001, e /<código>/poleposition-privacy.html): a página
+// inteira, com a prop `lang`; as cascas ficam em src/pages/ (ADR-007 §3). Texto em
+// src/content/legal/poleposition-privacy.<código>.md; hero,
 // botão e <head> em i18n/legal.ts (o h1 sem ": Race Analytics", D-c). Nav e footer como na página
 // antiga: realce `primary` (lima; pílula do celular com texto branco, como no publicado)
 // com logo brilhando, só o e-mail entre os canais, rodapé `surface` e a política do Pole Position
 // destacada na lista de políticas. O botão volta para a home da GHF, como na página antiga.
 import { getEntry, render } from 'astro:content';
 import LegalLayout from '../../layouts/LegalLayout.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
 import { legal } from '../../i18n/legal';
-import { rota } from '../../i18n/idiomas';
+import { rota, type Idioma } from '../../i18n/idiomas';
 
-const lang = 'en';
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
 const x = legal[lang];
 const home = rota(lang, 'index.html');
-const entrada = await getEntry('legal', 'poleposition-privacy.en');
-if (!entrada) throw new Error('src/content/legal/poleposition-privacy.en.md ausente');
+const entrada = await getEntry('legal', `poleposition-privacy.${lang}`);
+if (!entrada) throw new Error(`src/content/legal/poleposition-privacy.${lang}.md ausente`);
 const { Content } = await render(entrada);
 ---
 <LegalLayout

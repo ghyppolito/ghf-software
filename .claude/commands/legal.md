@@ -16,10 +16,10 @@ iguais).
 
 | App | Site (markdown) | Rota (Astro) |
 |---|---|---|
-| lottoexpert | `src/content/legal/lottoexpert-privacy.{pt,en}.md`, `lottoexpert-terms.{pt,en}.md` | `src/pages/lottoexpert-privacy.astro`, `src/pages/lottoexpert-terms.astro` e os pares em `src/pages/en/` |
-| topowalk | `src/content/legal/topowalk-privacy.{pt,en}.md` | `src/pages/topowalk-privacy.astro`, `src/pages/en/topowalk-privacy.astro` |
-| poleposition | `src/content/legal/poleposition-privacy.{pt,en}.md` | `src/pages/poleposition-privacy.astro`, `src/pages/en/poleposition-privacy.astro` |
-| eclipsego | `src/content/legal/eclipsego-privacy.{pt,en}.md` | `src/pages/eclipsego-privacy.astro`, `src/pages/en/eclipsego-privacy.astro` |
+| lottoexpert | `src/content/legal/lottoexpert-privacy.{pt,en}.md`, `lottoexpert-terms.{pt,en}.md` | `src/components/paginas/PaginaLottoExpertPrivacy.astro`, `PaginaLottoExpertTerms.astro` (cascas em `src/pages/` e `src/pages/[lang]/`) |
+| topowalk | `src/content/legal/topowalk-privacy.{pt,en}.md` | `src/components/paginas/PaginaTopoWalkPrivacy.astro` (cascas em `src/pages/` e `src/pages/[lang]/`) |
+| poleposition | `src/content/legal/poleposition-privacy.{pt,en}.md` | `src/components/paginas/PaginaPolePositionPrivacy.astro` (cascas em `src/pages/` e `src/pages/[lang]/`) |
+| eclipsego | `src/content/legal/eclipsego-privacy.{pt,en}.md` | `src/components/paginas/PaginaEclipseGoPrivacy.astro` (cascas em `src/pages/` e `src/pages/[lang]/`) |
 
 O `.pt.md` é o corpo do `.md` do app no commit `origemCommit`, byte a byte, com o front-matter
 `lastUpdated` / `origemCommit` / (`pendente: ["en", …]` enquanto alguma tradução está atrás — as
