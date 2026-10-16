@@ -2,7 +2,7 @@
 id: WP-21
 titulo: Title e description de compartilhamento vêm da ficha da Play
 area: landing
-status: todo
+status: doing
 depende_de: [WP-11]
 adr: []
 spec: docs/AVALIACAO.md
