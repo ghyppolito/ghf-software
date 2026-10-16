@@ -1,0 +1,127 @@
+---
+// Faixa de sugestão de idioma (WP-15, D8 c1, ADR-007 §7; desenho: especificação do site-ux no WP-15,
+// copy `band`/`bandGo`/`close`/`language` do handoff `content/i18n.js`). Quando a língua preferida
+// do visitante — a escolha gravada em `localStorage.ghf_lang` ou, sem ela, a primeira de
+// `navigator.languages` que a página tem — difere da língua da página, mostra uma faixa com um link
+// para a mesma página nessa língua. **Nunca navega sozinha**: o botão é um `<a href>` comum.
+//
+// - O texto vai no HTML, um `<template lang>` por outra língua da página, na língua sugerida: nada
+//   é buscado na rede, e sem JS nada aparece.
+// - Duas chaves de armazenamento, nenhuma com identificador, nada sai do navegador, sem cookie:
+//   `localStorage.ghf_lang` (só o código; gravado só no clique de um link de idioma — seletor ou
+//   faixa —, lido só aqui) e `sessionStorage.ghf_faixa_idioma = "off"` (fechada nesta sessão).
+// - `position: fixed` embaixo, inserida depois do `load`, entrando por opacidade: não mexe no fluxo
+//   (CLS 0) e não disputa o LCP. Sem transição com `prefers-reduced-motion`.
+// - `<section aria-label>` (landmark `region`, como o handoff), sem `aria-live`: não interrompe o
+//   leitor de tela, que chega nela na ordem do DOM, no fim do `<body>`.
+// - Página com uma língua só: nada (nem template, nem script).
+import { caminhoPublico, hreflang, linguasDe, type Idioma } from '../i18n/idiomas';
+import { t } from '../i18n/ui';
+import Icon from './Icon.astro';
+
+interface Props {
+  lang: Idioma;
+  /** caminho pt da página atual */
+  caminho: string;
+}
+
+const { lang, caminho } = Astro.props;
+const linguas = linguasDe(caminho);
+const outras = linguas.filter((l) => l !== lang);
+const foco = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
+---
+{
+  linguas.length >= 2 && (
+    <>
+      {outras.map((l) => (
+        <template data-faixa-idioma={l} data-lingua-pagina={lang} lang={hreflang(l)}>
+          <section
+            aria-label={t(l, 'idioma')}
+            lang={hreflang(l)}
+            class="fixed z-30 inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] md:inset-x-auto md:left-4 md:bottom-[calc(1rem+env(safe-area-inset-bottom))] md:max-w-[560px] flex flex-wrap items-center gap-x-3 gap-y-2 p-3 pl-4 bg-brand-surface border border-gray-600 rounded-xl shadow-xl opacity-0 translate-y-2 transition duration-200 ease-out motion-reduce:transition-none"
+          >
+            <p class="flex-[1_1_220px] text-sm text-gray-200">{t(l, 'faixa_idioma')}</p>
+            <div class="flex items-center gap-2">
+              <a
+                href={caminhoPublico(l, caminho)}
+                data-troca-idioma={l}
+                class={`inline-flex items-center min-h-11 px-4 rounded-full border border-gray-500 text-sm font-semibold text-white whitespace-normal hover:bg-white/10 ${foco}`}
+              >
+                {t(l, 'faixa_ir')}
+              </a>
+              <button
+                type="button"
+                aria-label={t(l, 'fechar')}
+                data-faixa-fechar
+                class={`inline-flex items-center justify-center w-11 h-11 rounded-full text-gray-300 hover:text-white hover:bg-white/10 ${foco}`}
+              >
+                <Icon nome="xmark" />
+              </button>
+            </div>
+          </section>
+        </template>
+      ))}
+      <script>
+        const ESCOLHA = 'ghf_lang';
+        const FECHADA = 'ghf_faixa_idioma';
+        // Modo privado ou armazenamento bloqueado: a faixa age como sem preferência gravada.
+        function le(area: () => Storage, chave: string): string | null {
+          try {
+            return area().getItem(chave);
+          } catch {
+            return null;
+          }
+        }
+        function grava(area: () => Storage, chave: string, valor: string) {
+          try {
+            area().setItem(chave, valor);
+          } catch {
+            /* sem armazenamento: a escolha vale só até sair da página */
+          }
+        }
+
+        // A escolha é gravada só no clique de um link de idioma (seletor ou faixa), e a navegação é
+        // a do próprio link.
+        document.addEventListener('click', (e) => {
+          const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[data-troca-idioma]');
+          if (a?.dataset.trocaIdioma) grava(() => localStorage, ESCOLHA, a.dataset.trocaIdioma);
+        });
+
+        function mostra() {
+          const modelos = [...document.querySelectorAll<HTMLTemplateElement>('template[data-faixa-idioma]')];
+          if (!modelos.length || le(() => sessionStorage, FECHADA) === 'off') return;
+          const pagina = modelos[0].dataset.linguaPagina;
+          const linguas = [pagina, ...modelos.map((m) => m.dataset.faixaIdioma)];
+          let preferida = le(() => localStorage, ESCOLHA);
+          if (!preferida || !linguas.includes(preferida)) {
+            const nav = navigator.languages?.length ? navigator.languages : [navigator.language];
+            preferida = nav.map((x) => (x || '').slice(0, 2).toLowerCase()).find((x) => linguas.includes(x)) ?? null;
+          }
+          if (!preferida || preferida === pagina) return;
+          const modelo = modelos.find((m) => m.dataset.faixaIdioma === preferida);
+          const faixa = modelo?.content.firstElementChild?.cloneNode(true) as HTMLElement | undefined;
+          if (!faixa) return;
+          document.body.append(faixa);
+          // dois quadros: o primeiro pinta com opacidade 0, o segundo dispara a transição
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              faixa.classList.remove('opacity-0', 'translate-y-2');
+              faixa.classList.add('opacity-100', 'translate-y-0');
+            }),
+          );
+          const fecha = () => {
+            grava(() => sessionStorage, FECHADA, 'off');
+            faixa.remove();
+          };
+          faixa.querySelector('[data-faixa-fechar]')?.addEventListener('click', fecha);
+          faixa.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') fecha();
+          });
+        }
+
+        if (document.readyState === 'complete') mostra();
+        else window.addEventListener('load', mostra, { once: true });
+      </script>
+    </>
+  )
+}

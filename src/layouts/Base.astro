@@ -12,6 +12,7 @@ import type { ImageMetadata } from 'astro';
 import '../styles/global.css';
 import { SITE } from '../i18n/ui';
 import { IDIOMAS, hreflang, linguasDe, rota, type Idioma } from '../i18n/idiomas';
+import SugestaoIdioma from '../components/SugestaoIdioma.astro';
 
 /** Largura e altura de um PNG ou JPEG, lidas do cabeçalho; undefined se o formato for outro. */
 function dimensoes(arquivo: string): { largura: number; altura: number } | undefined {
@@ -135,5 +136,7 @@ const iconeAba = await getImage({ src: origemFavicon.default, width: 48, format:
   </head>
   <body class={classeBody}>
     <slot />
+    {/* No fim do <body>: a faixa não é o primeiro ponto de Tab (WP-15, ADR-007 §7). */}
+    <SugestaoIdioma lang={lang} caminho={caminho} />
   </body>
 </html>

@@ -1,6 +1,8 @@
 // Textos de nav e footer, um bloco por língua de src/i18n/idiomas.json — transportados do dicionário
-// JS de index.html (WP-08, fatia 1); `idioma` (rótulo da lista do seletor) vem do handoff
-// `content/i18n.js` (WP-15). Toda chave nova entra em todas as línguas no mesmo commit.
+// JS de index.html (WP-08, fatia 1). `idioma`, `faixa_idioma`, `faixa_ir` e `fechar` (seletor e
+// faixa de sugestão, WP-15) são `language`/`band`/`bandGo`/`close` do handoff `content/i18n.js`,
+// sempre na língua do bloco: a faixa fala a língua que sugere. Toda chave nova entra em todas as
+// línguas no mesmo commit.
 // `Idioma` vem do mapa (idiomas.ts); fica reexportado aqui para os dicionários de src/i18n/.
 import type { Idioma } from './idiomas';
 
@@ -29,6 +31,9 @@ export const ui = {
     footer_dev: 'Desenvolvido com',
     footer_dev2: 'por especialistas.',
     idioma: 'Idioma',
+    faixa_idioma: 'Esta página também está disponível em português.',
+    faixa_ir: 'Ver em português',
+    fechar: 'Fechar',
   },
   en: {
     nav_about: 'About Us',
@@ -50,6 +55,9 @@ export const ui = {
     footer_dev: 'Developed with',
     footer_dev2: 'by experts.',
     idioma: 'Language',
+    faixa_idioma: 'This page is also available in English.',
+    faixa_ir: 'Switch to English',
+    fechar: 'Close',
   },
 } as const;
 

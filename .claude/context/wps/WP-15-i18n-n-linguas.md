@@ -431,6 +431,53 @@ Os `id`s do pt e do en são iguais nas 5 políticas (`grep -o 'id="secao-[^"]*"'
 repetição. Nenhum link interno para `#secao-…` em `dist/` (nada a atualizar). Verificação completa
 verde (a mesma lista do commit 4).
 
+### Commit 6 — `SugestaoIdioma`
+`SugestaoIdioma.astro` montada pelo `Base.astro` no fim do `<body>` (depois do footer). Um
+`<template data-faixa-idioma lang>` por outra língua da página, com `<section aria-label>` (landmark
+`region`; o html-validate recusa `role="region"` em `<div>`), texto `band`, link `bandGo` e ✕
+`close` do handoff, na língua sugerida. Script: preferência = `localStorage.ghf_lang` se está na
+página, senão a primeira de `navigator.languages` que a página tem; faixa só se ≠ língua da página e
+`sessionStorage.ghf_faixa_idioma ≠ "off"`; inserida no `load`, entra por `opacity`/`translate-y` em
+200 ms (`motion-reduce:transition-none`); ✕ e Esc gravam `"off"` e removem. `ghf_lang` é gravado só
+no clique de um `a[data-troca-idioma]` (seletor ou faixa), sem `preventDefault`: a navegação é a do
+`<a href>`. Storage em `try/catch`. Chaves novas em `ui.ts` (pt/en): `faixa_idioma`, `faixa_ir`,
+`fechar` (`idioma` veio no commit 4). 404 e página de uma língua: nada.
+
+O link da faixa leva `data-troca-idioma` (isento no §9) e `lang` pelo `<section lang>`, mas **não**
+`hreflang`: o critério "total de `hreflang=` em `topowalk-privacy.html` = 5" continua valendo (medido: 5).
+
+`diff -r <base> dist` (CSS normalizado, `id="secao-…"` do commit 5 neutralizados): lista de arquivos
+idêntica; 20 páginas mudam, e as 20 ficam iguais à base depois de tirar o `<template>` (1 por página)
+e o `<script>` da faixa. O CSS ganha as classes da faixa (`inset-x-3`, `bottom-[calc(…env(safe-area-inset-bottom))]`,
+`md:left-4`, `md:max-w-[560px]`, `translate-y-*`, `transition`, `duration-200`, `motion-reduce:transition-none`…).
+
+Prova no Chromium headless (`--dump-dom` depois do `load`): com o navegador em en-US, a faixa é
+inserida em `/lottoexpert-privacy.html` e não em `/en/`; em pt-BR, o contrário.
+
+Lighthouse local, 1 run, navegador em en-US como no CI (`LANG=en_US.UTF-8`; a faixa aparece nas
+páginas pt medidas):
+
+```
+/                            perf  98 · a11y  95 · bp 100 · seo 100 · LCP 2.33 s · CLS 0.000 · 294 KB (img 116 KB)
+/lottoexpert.html            perf  95 · a11y  96 · bp 100 · seo 100 · LCP 2.25 s · CLS 0.000 · 254 KB (img 45 KB)
+/topowalk.html               perf  99 · a11y  96 · bp 100 · seo 100 · LCP 2.03 s · CLS 0.000 · 177 KB (img 18 KB)
+/poleposition.html           perf  99 · a11y  94 · bp 100 · seo 100 · LCP 2.10 s · CLS 0.000 · 218 KB (img 38 KB)
+/eclipsego.html              perf  99 · a11y  94 · bp 100 · seo 100 · LCP 1.95 s · CLS 0.000 · 173 KB (img 22 KB)
+/lottoexpert-privacy.html    perf  99 · a11y  90 · bp 100 · seo 100 · LCP 1.95 s · CLS 0.000 · 179 KB (img 9 KB)
+/lottoexpert-terms.html      perf  99 · a11y  90 · bp 100 · seo 100 · LCP 1.80 s · CLS 0.000 · 158 KB (img 9 KB)
+/eclipsego-privacy.html      perf  99 · a11y  94 · bp 100 · seo 100 · LCP 1.80 s · CLS 0.000 · 151 KB (img 9 KB)
+/404.html                    perf 100 · a11y 100 · bp 100 · seo  66 · LCP 1.50 s · CLS 0.000 · 111 KB (img 0 KB)
+
+✅ orçamento cumprido
+```
+
+Elemento LCP: o logo do nav em `/`, um `<p>` do corpo em `/lottoexpert-privacy.html` — não a faixa.
+O a11y 90 das legais é o da base: mesmas auditorias reprovadas antes e depois (`color-contrast` e
+`link-in-text-block` nos links externos do corpo, `heading-order` no `<h4>` do footer); a faixa não
+acrescenta nenhuma.
+
+Verificação completa verde (§16 inclusive). `grep -rnE "location\.(replace|assign)|location\.href *=|http-equiv=\"refresh\"" src/ dist/ --exclude-dir=lotto-expert`: vazio.
+
 ## Especificação do site-ux (2026-10-16)
 
 Modo DESENHAR, para os commits 4 (`SeletorIdioma`) e 6 (`SugestaoIdioma`). D23 = (A): link para
