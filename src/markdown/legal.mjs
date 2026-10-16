@@ -29,14 +29,30 @@ export const omiteCabecalhoLegal = {
   },
 };
 
-/** hast: envolve a tabela num contêiner com rolagem horizontal (o `overflow-x-auto mb-4` da página antiga). */
+/** hast: envolve a tabela num contêiner com rolagem horizontal (o `overflow-x-auto mb-4` da página antiga).
+ *  O contêiner é focável e nomeado (WP-22, `TABELA-ROLAVEL-FOCO-01`): `tabindex="0"` para quem usa só o
+ *  teclado rolar a parte cortada com as setas; `<section>` (região nativa, sem `role` explícito —
+ *  html-validate `prefer-native-element`) com `aria-labelledby` no `id` do último título antes da
+ *  tabela, o mesmo `secao-N-M` de `idDosTitulosLegais`, contado aqui pela mesma regra (este plugin
+ *  roda antes daquele). Tabela antes de qualquer título fica sem `aria-labelledby`: um `aria-label`
+ *  seria texto novo. */
 export const envolveTabelaLegal = {
   name: 'ghf-envolve-tabela-legal',
   element: {
-    filter: ['table'],
+    filter: ['table', 'h2', 'h3', 'h4', 'h5', 'h6'],
     visit(node, ctx) {
       if (!ehLegal(ctx)) return;
-      ctx.wrapNode(node, { type: 'element', tagName: 'div', properties: { className: ['legal-tabela'] }, children: [] });
+      if (node.tagName !== 'table') {
+        const nivel = Number(node.tagName[1]) - 2;
+        const contagem = (ctx.data.ghfTitulosTabela ??= []);
+        contagem[nivel] = (contagem[nivel] ?? 0) + 1;
+        contagem.length = nivel + 1;
+        ctx.data.ghfUltimoTitulo = `secao-${Array.from(contagem, (n) => n ?? 0).join('-')}`;
+        return;
+      }
+      const properties = { className: ['legal-tabela'], tabIndex: 0 };
+      if (ctx.data.ghfUltimoTitulo) properties.ariaLabelledBy = ctx.data.ghfUltimoTitulo;
+      ctx.wrapNode(node, { type: 'element', tagName: 'section', properties, children: [] });
     },
   },
 };

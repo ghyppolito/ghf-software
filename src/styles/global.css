@@ -363,9 +363,32 @@ body {
   overflow-wrap: anywhere;
 }
 
-/* Contêiner da tabela (plugin envolveTabelaLegal) */
+/* Link do corpo legal sublinhado em todos os temas, `mailto:` incluso: só a cor o distinguia do texto
+ * (WCAG 1.4.1, WP-22). A cor continua nas regras de tema abaixo. */
+.legal-corpo a {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.legal-corpo a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.legal-corpo a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Contêiner da tabela (plugin envolveTabelaLegal): focável, para rolar com as setas (WP-22). */
 .legal-tabela {
   @apply overflow-x-auto mb-4;
+}
+
+.legal-tabela:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
 .legal-corpo table {
