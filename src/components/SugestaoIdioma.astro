@@ -14,6 +14,13 @@
 //   (CLS 0) e não disputa o LCP. Sem transição com `prefers-reduced-motion`.
 // - `<section aria-label>` (landmark `region`, como o handoff), sem `aria-live`: não interrompe o
 //   leitor de tela, que chega nela na ordem do DOM, no fim do `<body>`.
+// - Abaixo de md, uma linha só (texto + botão + ✕, ~62 px): o texto corta com reticências e o
+//   botão e o ✕ nunca encolhem; assim a faixa não cobre o CTA da Play da home a 360x568
+//   (especificação do site-ux: "reduzir a faixa em < md a uma linha"). O texto inteiro segue no DOM
+//   para o leitor de tela. De md para cima, texto e botões quebram como no handoff (`flex-wrap`).
+// - Fechar (✕ ou Esc) com o foco dentro da faixa leva o foco ao último elemento focável visível
+//   antes dela no DOM (a faixa é o fim do <body>: na prática, o último link do rodapé) — o foco não
+//   cai no <body>. Com o foco fora, ele não se move.
 // - Página com uma língua só: nada (nem template, nem script).
 import { caminhoPublico, hreflang, linguasDe, type Idioma } from '../i18n/idiomas';
 import { t } from '../i18n/ui';
@@ -38,14 +45,14 @@ const foco = 'focus-visible:outline focus-visible:outline-2 focus-visible:outlin
           <section
             aria-label={t(l, 'idioma')}
             lang={hreflang(l)}
-            class="fixed z-30 inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] md:inset-x-auto md:left-4 md:bottom-[calc(1rem+env(safe-area-inset-bottom))] md:max-w-[560px] flex flex-wrap items-center gap-x-3 gap-y-2 p-3 pl-4 bg-brand-surface border border-gray-600 rounded-xl shadow-xl opacity-0 translate-y-2 transition duration-200 ease-out motion-reduce:transition-none"
+            class="fixed z-30 inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] md:inset-x-auto md:left-4 md:bottom-[calc(1rem+env(safe-area-inset-bottom))] md:max-w-[560px] flex flex-nowrap md:flex-wrap items-center gap-x-2 md:gap-x-3 gap-y-2 p-2 pl-3 md:p-3 md:pl-4 bg-brand-surface border border-gray-600 rounded-xl shadow-xl opacity-0 translate-y-2 transition duration-200 ease-out motion-reduce:transition-none"
           >
-            <p class="flex-[1_1_220px] text-sm text-gray-200">{t(l, 'faixa_idioma')}</p>
-            <div class="flex items-center gap-2">
+            <p class="min-w-0 flex-1 truncate md:flex-[1_1_220px] md:overflow-visible md:whitespace-normal text-sm text-gray-200">{t(l, 'faixa_idioma')}</p>
+            <div class="shrink-0 flex items-center gap-1 md:gap-2">
               <a
                 href={caminhoPublico(l, caminho)}
                 data-troca-idioma={l}
-                class={`inline-flex items-center min-h-11 px-4 rounded-full border border-gray-500 text-sm font-semibold text-white whitespace-normal hover:bg-white/10 ${foco}`}
+                class={`inline-flex items-center min-h-11 px-3 md:px-4 rounded-full border border-gray-500 text-sm font-semibold text-white whitespace-nowrap md:whitespace-normal hover:bg-white/10 ${foco}`}
               >
                 {t(l, 'faixa_ir')}
               </a>
@@ -87,6 +94,19 @@ const foco = 'focus-visible:outline focus-visible:outline-2 focus-visible:outlin
           if (a?.dataset.trocaIdioma) grava(() => localStorage, ESCOLHA, a.dataset.trocaIdioma);
         });
 
+        // Último elemento focável e visível antes de `el` no DOM: para onde o foco vai ao fechar.
+        const FOCAVEIS =
+          'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])';
+        function anterior(el: Element): HTMLElement | null {
+          const antes = [...document.querySelectorAll<HTMLElement>(FOCAVEIS)].filter(
+            (x) =>
+              !el.contains(x) &&
+              el.compareDocumentPosition(x) & Node.DOCUMENT_POSITION_PRECEDING &&
+              x.getClientRects().length > 0,
+          );
+          return antes[antes.length - 1] ?? null;
+        }
+
         function mostra() {
           const modelos = [...document.querySelectorAll<HTMLTemplateElement>('template[data-faixa-idioma]')];
           if (!modelos.length || le(() => sessionStorage, FECHADA) === 'off') return;
@@ -111,6 +131,7 @@ const foco = 'focus-visible:outline focus-visible:outline-2 focus-visible:outlin
           );
           const fecha = () => {
             grava(() => sessionStorage, FECHADA, 'off');
+            if (faixa.contains(document.activeElement)) anterior(faixa)?.focus();
             faixa.remove();
           };
           faixa.querySelector('[data-faixa-fechar]')?.addEventListener('click', fecha);

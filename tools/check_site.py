@@ -37,7 +37,8 @@ Checa:
      og:locale da língua da página e um og:locale:alternate por outra língua dela (regra ix)
   9. link interno de toda página vai à página de destino na língua da página; se o destino não a
      tem, en, senão pt (D23), com `hreflang` e `lang` do destino; o link marcado
-     `data-troca-idioma` (SeletorIdioma) é a exceção
+     `data-troca-idioma="X"` (seletor e faixa) leva à mesma página na língua X, com `hreflang`/
+     `lang` de X quando os tem
  10. dicionários de src/i18n/ com as mesmas chaves em todos os blocos de língua, cada bloco de
      língua do mapa, e ui.ts com um bloco por língua do mapa (regra xi)
  11. `dist/` não é mais antigo que as fontes (src/, public/, configs, package.json, fontes de
@@ -88,11 +89,12 @@ Checa:
          apontando para `assets/` da raiz (a cópia de public/ é para URL fixa: og:image, JSON-LD
          e convite); no máximo um `fetchpriority="high"` por página, nunca junto de `loading="lazy"`
  16. sem redirecionamento (ADR-007 §1, regra x): nenhum `location.replace`/`location.assign`/
-     `location.href =`/`location =` nem `<meta http-equiv="refresh">` em `.html` ou `.js` de
-     `dist/`, fora do convite (CONGELADAS)
+     `location[.href|.pathname|.search|.hash] =`/`location[`/`navigation.navigate(` nem
+     `<meta http-equiv="refresh">` em `.html` ou `.js` de `dist/`, fora do convite (CONGELADAS)
 
-As regras de i18n (i)–(viii), (xi) e (xii) são funções puras de tools/regras_i18n.py, provadas por
-tools/test_regras_i18n.py sobre tools/fixtures/i18n/.
+As regras de i18n (i)–(viii), (x)–(xii), a linha de data e o link `data-troca-idioma` são funções
+puras de tools/regras_i18n.py, provadas por tools/test_regras_i18n.py (casos de
+tools/fixtures/i18n/ e casos em linha).
 """
 import glob
 import json
@@ -414,13 +416,8 @@ for pagina, md in LEGAL.items():
             erros.append(f"{md_l}: tradução ausente ({pagina} tem `{lang}` no mapa)")
             continue
         _, corpo_l = front_matter(md_l, ler_md(os.path.join(REPO, md_l)))
-        rotulo = IDIOMAS[lang]["rotuloData"]
-        frags = i18n.fragmentos_data(corpo_l, f"**{rotulo}**")
-        if not frags:
-            erros.append(f"{md_l}: sem linha `**{rotulo}** <data>`")
-        for frag in frags:
-            if not i18n.confere_data(frag, IDIOMAS[lang]["meses"], ano_ref, mes_ref, ref[0]):
-                erros.append(f"{md_l}: linha `**{rotulo}**` ({frag.strip()}) ≠ {txt(ref)}")
+        erros.extend(i18n.regra_linha_data(md_l, corpo_l, IDIOMAS[lang]["rotuloData"], IDIOMAS[lang]["meses"],
+                                           ano_ref, mes_ref, ref[0]))
     ref_txt = " de ".join(x for x in ref if x)
     # Cada página da língua do mapa: a data de toda língua que aparecer bate; a da página é obrigatória.
     for lang in linguas_de(pagina):
@@ -548,7 +545,7 @@ for c in sorted(glob.glob(os.path.join(REPO, "*.html"))):
 # ------------------------------------------------------------ 9: a língua aponta para a língua
 # Link interno de qualquer página vai à página de destino na língua dela; se o destino não existe
 # nessa língua, en, senão pt (D23), com `hreflang`/`lang` do destino (regras_i18n.regra_link). O
-# seletor de idioma é a exceção declarada: só o link marcado `data-troca-idioma` é isento.
+# link marcado `data-troca-idioma="X"` (seletor e faixa) tem a regra dele: a mesma página em X.
 for caminho in paginas:
     rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
     base = os.path.dirname(caminho)
@@ -1175,12 +1172,13 @@ for caminho in paginas:
 # ------------------------------------------------------------ 16: sem redirecionamento
 # ADR-007 §1, regra x: a língua nunca muda sozinha — nem por script, nem por <meta refresh>. O
 # convite (CONGELADAS) fica fora: é congelado byte a byte (D13).
-RE_REDIRECT = re.compile(r"location\.(?:replace|assign)\s*\(|location(?:\.href)?\s*=(?!=)|http-equiv=[\"']?refresh", re.I)
+# A expressão (com fronteira de palavra: `geolocation=` passa) é regras_i18n.RE_REDIRECT, provada
+# forma a forma em tools/test_regras_i18n.py.
 for rel in sorted(arquivos_dist):
     if rel in CONGELADAS or not rel.endswith((".html", ".js")):
         continue
-    for m in RE_REDIRECT.finditer(ler(p(rel))):
-        erros.append(f"{rel}: `{m.group(0)}` — nada redireciona no site; a sugestão de língua é um link (ADR-007 §1/§7)")
+    for trecho in i18n.redirecionamentos(ler(p(rel))):
+        erros.append(f"{rel}: `{trecho}` — nada redireciona no site; a sugestão de língua é um link (ADR-007 §1/§7)")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")

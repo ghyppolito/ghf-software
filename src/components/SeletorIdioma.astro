@@ -72,7 +72,7 @@ const foco = 'focus-visible:outline focus-visible:outline-2 focus-visible:outlin
               lang={hreflang(l)}
               data-troca-idioma={l}
               aria-current={l === lang ? 'true' : undefined}
-              class={`flex items-center justify-between gap-2 min-h-11 px-3 rounded-lg text-[15px] break-words ${l === lang ? 'bg-white/5 text-brand-primary' : 'text-gray-300 hover:text-white hover:bg-white/5'} ${foco}`}
+              class={`flex items-center justify-between gap-2 min-h-11 px-3 rounded-lg text-[15px] break-words ${l === lang ? 'bg-white/5 text-white' : 'text-gray-300 hover:text-white hover:bg-white/5'} ${foco}`}
             >
               <span>{IDIOMAS[l].nome}</span>
               {l === lang && <Icon nome="check" class="text-brand-primary" />}
@@ -83,8 +83,15 @@ const foco = 'focus-visible:outline focus-visible:outline-2 focus-visible:outlin
       <script>
         // Fecha a lista com Esc (o foco volta ao gatilho), com clique fora e com o foco fora. Abrir e
         // fechar no gatilho é do próprio <details>, sem script.
+        // Foco fora: `relatedTarget` nulo não basta — no Safari o clique num link não o foca, e o
+        // focusout do gatilho chega sem destino antes do clique; fechar ali perderia o clique. Com
+        // destino nulo, só fecha se o último ponteiro não foi dentro do painel (o clique fora fecha
+        // pelo listener de `click`); tecla zera a marca.
         for (const d of document.querySelectorAll<HTMLDetailsElement>('details[data-seletor-idioma]')) {
           const gatilho = d.querySelector('summary');
+          let ponteiroDentro = false;
+          document.addEventListener('pointerdown', (e) => (ponteiroDentro = d.contains(e.target as Node)), true);
+          document.addEventListener('keydown', () => (ponteiroDentro = false), true);
           d.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && d.open) {
               d.open = false;
@@ -92,7 +99,8 @@ const foco = 'focus-visible:outline focus-visible:outline-2 focus-visible:outlin
             }
           });
           d.addEventListener('focusout', (e) => {
-            if (!d.contains(e.relatedTarget as Node | null)) d.open = false;
+            const destino = e.relatedTarget as Node | null;
+            if (destino ? !d.contains(destino) : !ponteiroDentro) d.open = false;
           });
           document.addEventListener('click', (e) => {
             if (d.open && !d.contains(e.target as Node)) d.open = false;

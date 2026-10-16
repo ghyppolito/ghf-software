@@ -78,7 +78,7 @@ jobs:
       - name: Regras de i18n (unittest)
         # As regras de i18n do check (tools/regras_i18n.py, WP-15) sobre os casos sintéticos de
         # tools/fixtures/i18n/: o correto passa e cada caso inválido falha pela sua regra.
-        run: python3 -m unittest tools/test_regras_i18n.py
+        run: python3 -B -m unittest tools/test_regras_i18n.py
 
       - name: Contrato do bolão byte a byte (D13)
         # Convite, assetlinks, og:image do convite e CNAME saem iguais ao publicado. Mudar um deles é

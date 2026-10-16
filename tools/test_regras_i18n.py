@@ -82,11 +82,9 @@ def verifica(caso):
         erros += i18n.regra_front_matter(doc, fms)
         ano, mes, *dia = fms["pt"]["lastUpdated"].split("-")
         for l in linguas:
-            rotulo = mapa["idiomas"][l]["rotuloData"]
-            frags = i18n.fragmentos_data(textos[l], f"**{rotulo}**")
-            if not frags or not all(i18n.confere_data(x, mapa["idiomas"][l]["meses"], ano, mes, dia[0] if dia else "")
-                                    for x in frags):
-                erros.append(f"{doc}.{l}.md: linha de data {frags} ≠ {fms['pt']['lastUpdated']}")
+            d = mapa["idiomas"][l]
+            erros += i18n.regra_linha_data(f"{doc}.{l}.md", textos[l], d["rotuloData"], d["meses"],
+                                           ano, int(mes), dia[0] if dia else "")
         erros += i18n.regra_titulos(doc, textos)
         erros += i18n.regra_tokens(doc, textos)
         erros += i18n.regra_sdks(doc, textos)
@@ -162,12 +160,60 @@ class RegrasI18n(unittest.TestCase):
         self.assertIn("esperado /es/tres.html", ok(mapa, "es/tres.html", "/tres.html", "tres.html", '<a href="/tres.html">')[0])
         # pt também é conferido: pt → página en (pt sempre existe, então é erro)
         self.assertIn("leva a en", ok(mapa, "tres.html", "/en/tres.html", "en/tres.html", '<a href="/en/tres.html">')[0])
-        # seletor isento; fora do mapa não entra
+        # data-troca-idioma="X": a mesma página em X, hreflang/lang de X quando presentes
         self.assertEqual(ok(mapa, "tres.html", "/en/tres.html", "en/tres.html",
-                            '<a href="/en/tres.html" data-troca-idioma="en">'), [])
+                            '<a href="/en/tres.html" hreflang="en" lang="en" data-troca-idioma="en">'), [])
+        self.assertEqual(ok(mapa, "es/tres.html", "/tres.html", "tres.html",
+                            '<a href="/tres.html" hreflang="pt-BR" lang="pt-BR" data-troca-idioma="pt">'), [])
+        # a língua atual na lista do seletor aponta para a própria página
+        self.assertEqual(ok(mapa, "es/tres.html", "/es/tres.html", "es/tres.html",
+                            '<a href="/es/tres.html" hreflang="es" lang="es" data-troca-idioma="es" aria-current="true">'), [])
+        # o link da faixa não tem hreflang nem lang (vêm da <section lang>): passa
+        self.assertEqual(ok(mapa, "tres.html", "/en/tres.html", "en/tres.html",
+                            '<a href="/en/tres.html" data-troca-idioma="en" class="x">'), [])
+        # outra página, outra língua, atributo incoerente, língua fora da página
+        self.assertIn("esperado /en/tres.html", ok(mapa, "tres.html", "/en/", "en/index.html",
+                                                   '<a href="/en/" data-troca-idioma="en">')[0])
+        self.assertIn("esperado /en/tres.html", ok(mapa, "tres.html", "/es/tres.html", "es/tres.html",
+                                                   '<a href="/es/tres.html" data-troca-idioma="en">')[0])
+        self.assertIn("`hreflang=\"es\"`", ok(mapa, "tres.html", "/en/tres.html", "en/tres.html",
+                                              '<a href="/en/tres.html" hreflang="es" lang="en" data-troca-idioma="en">')[0])
+        self.assertIn("`lang=\"pt-BR\"`", ok(mapa, "tres.html", "/en/tres.html", "en/tres.html",
+                                             '<a href="/en/tres.html" hreflang="en" lang="pt-BR" data-troca-idioma="en">')[0])
+        self.assertIn("fora das línguas", ok(mapa, "so-pt.html", "/en/so-pt.html", "en/so-pt.html",
+                                             '<a href="/en/so-pt.html" data-troca-idioma="en">')[0])
+        # fora do mapa não entra
         self.assertEqual(ok(mapa, "es/tres.html", "/assets/x.png", "assets/x.png", '<a href="/assets/x.png">'), [])
         # página fora do mapa (a 404, bilíngue por desenho) não entra
         self.assertEqual(ok(mapa, "404.html", "/en/", "en/index.html", '<a href="/en/">'), [])
+
+    def test_ui_sem_blocos_e_erro(self):
+        mapa = json.loads(ler("correto", "idiomas.json"))
+        self.assertIn("nenhum bloco", i18n.regra_dicionario("ui.ts", "export const ui = {};\n", mapa, eh_ui=True)[0])
+        self.assertEqual(i18n.regra_dicionario("apps.ts", "export const apps = {};\n", mapa, eh_ui=False), [])
+
+    def test_linha_de_data(self):
+        meses = json.loads(ler("correto", "idiomas.json"))["idiomas"]["en"]["meses"]
+        ok = i18n.regra_linha_data
+        self.assertEqual(ok("x.en.md", "**Last updated:** July 13, 2026\n", "Last updated:", meses, "2026", 7, "13"), [])
+        self.assertIn("sem linha de data", ok("x.en.md", "nada\n", "Last updated:", meses, "2026", 7, "13")[0])
+        self.assertIn("≠ lastUpdated 2026-07-13",
+                      ok("x.en.md", "**Last updated:** July 14, 2026\n", "Last updated:", meses, "2026", 7, "13")[0])
+
+    def test_redirecionamento(self):
+        r = i18n.redirecionamentos
+        for forma in ["location.replace('/en/')", "location.assign(u)", "window.location.href = u",
+                      "location='/en/'", "document.location = u", "location.pathname = '/en/'",
+                      "location.search='?x'", "location.hash = '#a'", "location['href'] = u",
+                      "location [\"href\"]=u", "navigation.navigate('/en/')",
+                      '<meta http-equiv="refresh" content="0;url=/en/">', "<meta http-equiv=refresh>"]:
+            with self.subTest(forma=forma):
+                self.assertTrue(r(forma), forma)
+        for inocente in ["Permissions-Policy: geolocation=()", "allow=\"geolocation=self\"",
+                         "if (location.href == u) {}", "if (location.hash === '#a') {}",
+                         "const x = location.pathname;", "relocation = 1", "mylocation.href = u"]:
+            with self.subTest(inocente=inocente):
+                self.assertEqual(r(inocente), [], inocente)
 
 
 if __name__ == "__main__":

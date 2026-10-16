@@ -18,7 +18,10 @@ Regras (numeração do veredito do WP-15):
   (viii) hreflang: um por língua mais `x-default` (en se houver, senão pt); página com uma língua
          só não tem hreflang
   (§9)   link interno vai à página na língua da página; se o destino não a tem, en, senão pt (D23),
-         com `hreflang` e `lang` do destino quando ele está em outra língua
+         com `hreflang` e `lang` do destino quando ele está em outra língua; o link
+         `data-troca-idioma="X"` leva à mesma página em X
+  (x)    nada redireciona: `location.replace/assign(`, `location[.href|.pathname|.search|.hash] =`,
+         `location[`, `navigation.navigate(`, `<meta http-equiv="refresh">`
   (xi)   cada dicionário de src/i18n/*.ts com as mesmas chaves em todos os blocos de língua, e
          ui.ts com um bloco para cada língua do mapa
   (xii)  chaves de `paginas` mais as páginas fora do mapa (o convite) = PUBLICADAS
@@ -217,13 +220,31 @@ def lingua_do_link(mapa, lang, caminho):
 
 def regra_link(mapa, rel, href, destino, tag):
     """`rel`: a página (arquivo de dist/); `href`: como escrito; `destino`: arquivo de dist/ a que o
-    href leva; `tag`: o `<a …>` inteiro. O link marcado `data-troca-idioma` (seletor de idioma) é
-    isento. Página de origem ou de destino fora do mapa não entra: a 404 é bilíngue por desenho (um
-    bloco por língua, cada um com o seu link) e o convite e os assets não têm língua."""
-    if re.search(r"\bdata-troca-idioma\b", tag):
-        return []
+    href leva; `tag`: o `<a …>` inteiro. Página de origem ou de destino fora do mapa não entra: a 404
+    é bilíngue por desenho (um bloco por língua, cada um com o seu link) e o convite e os assets não
+    têm língua.
+
+    O link marcado `data-troca-idioma="X"` (seletor e faixa de sugestão) sai da regra D23 e entra
+    noutra: leva à **mesma página** na língua X (`destino == arquivo(X, origem)`), X é uma língua da
+    página no mapa, e `hreflang`/`lang`, quando o link os tem, são os de X. O link da faixa não leva
+    nenhum dos dois: a língua vem do `<section lang>`/`<template lang>` que o contém."""
     lang_pag, origem = pagina_de(rel)
     if origem not in mapa["paginas"]:
+        return []
+    troca = re.search(r'\sdata-troca-idioma(?:="([^"]*)")?', tag)
+    if troca:
+        x = troca.group(1) or ""
+        if x not in mapa["paginas"][origem]:
+            return [f"{rel}: data-troca-idioma=\"{x}\" fora das línguas de {origem} no mapa (§9)"]
+        if destino != arquivo(x, origem):
+            return [f"{rel}: data-troca-idioma=\"{x}\" com href=\"{href}\" leva a {destino}; "
+                    f"esperado /{arquivo(x, origem)} — a mesma página na língua do link (§9)"]
+        h = mapa["idiomas"][x]["hreflang"]
+        for atributo in ("hreflang", "lang"):
+            m = re.search(rf'\s{atributo}="([^"]*)"', tag)
+            if m and m.group(1) != h:
+                return [f"{rel}: data-troca-idioma=\"{x}\" com `{atributo}=\"{m.group(1)}\"`; "
+                        f"esperado `{h}` (WCAG 3.1.2, §9)"]
         return []
     lang_alvo, caminho = pagina_de(destino)
     if caminho not in mapa["paginas"]:
@@ -250,7 +271,9 @@ def regra_dicionario(nome, texto, mapa, eh_ui):
     """Mesmas chaves em todos os blocos; língua do bloco no mapa; `ui.ts` com todas as línguas."""
     b = blocos(texto)
     if not b:
-        return []
+        # ui.ts é o dicionário de toda página: sem bloco lido, o formato mudou e a regra ficaria
+        # calada. Os outros podem não ter blocos (só tipos e funções).
+        return [f"{nome}: nenhum bloco `  xx: {{` … `  }}` encontrado (regra xi)"] if eh_ui else []
     erros = []
     idiomas = list(mapa["idiomas"])
     if "pt" not in b:
@@ -299,3 +322,31 @@ def confere_data(fragmento, meses, ano, mes, dia):
     numeros = sorted(int(n) for n in re.findall(r"\d+", fragmento))
     esperado = sorted([int(ano)] + ([int(dia)] if dia else []))
     return citados == [meses[int(mes) - 1]] and numeros == esperado
+
+
+def regra_linha_data(nome, corpo, rotulo, meses, ano, mes, dia):
+    """Linha `**<rotulo>** <data>` do .md da língua: existe, e cada uma cita a data de `lastUpdated`
+    (`ano`, `mes` 1–12, `dia` ou "") com o mês pelo nome da língua (`meses` do mapa)."""
+    esperado = f"{int(ano):04d}-{int(mes):02d}" + (f"-{int(dia):02d}" if dia else "")
+    frags = fragmentos_data(corpo, f"**{rotulo}**")
+    if not frags:
+        return [f"{nome}: sem linha de data `**{rotulo}** <data>`"]
+    return [f"{nome}: linha de data `**{rotulo}** {x.strip()}` ≠ lastUpdated {esperado}"
+            for x in frags if not confere_data(x, meses, ano, mes, dia)]
+
+
+# ------------------------------------------------------------ (x) sem redirecionamento (§16 do check)
+# Fronteira de palavra antes de `location`: `geolocation=` (Permissions-Policy) não é redirect.
+RE_REDIRECT = re.compile(
+    r"\blocation\.(?:replace|assign)\s*\("
+    r"|\blocation(?:\.(?:href|pathname|search|hash))?\s*=(?!=)"
+    r"|\blocation\s*\["
+    r"|\bnavigation\.navigate\s*\("
+    r"|http-equiv=[\"']?refresh",
+    re.I,
+)
+
+
+def redirecionamentos(texto):
+    """Cada trecho de `texto` (HTML ou JS publicado) que muda de página sozinho (ADR-007 §1, regra x)."""
+    return [m.group(0) for m in RE_REDIRECT.finditer(texto)]

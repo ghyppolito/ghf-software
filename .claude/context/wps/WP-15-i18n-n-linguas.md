@@ -735,3 +735,75 @@ copiar endereço. (O handoff usa `<button>`, `:16`, porque o protótipo não nav
 - faixa de sugestão fixa embaixo, inserida depois do `load`;
 - link único com 2 línguas e lista de nomes nativos a partir de 3;
 - link de fallback da D23 sem sinal visual, só com `hreflang` e `lang`.
+
+## Correções da auditoria (2026-10-16)
+
+Um commit, `WP-15: correções da auditoria (…)`, só nos Arquivos-alvo do veredito.
+
+- **§16 sem redirecionamento:** a expressão foi para `regras_i18n.RE_REDIRECT`/`redirecionamentos()`
+  com fronteira de palavra (`\blocation…`). Ela cobre `location.replace/assign(`,
+  `location[.href|.pathname|.search|.hash] =`, `location[`, `navigation.navigate(` e
+  `<meta http-equiv="refresh">`. Cada forma tem um caso no `test_redirecionamento`, com os
+  inocentes que devem passar (`geolocation=`, `==`/`===`, leitura de `location.pathname`).
+  A regra antiga dava falso positivo em `allow="geolocation=self"` e deixava passar
+  `location.pathname=` e `navigation.navigate(`. Mutação em `dist/index.html`:
+  - com a regra antiga: `geolocation` vermelho, `pathname`/`navigate` verdes;
+  - com a nova: `geolocation` verde, `pathname`/`navigate` vermelhos.
+- **§9, link `data-troca-idioma="X"`:** deixou de ser isento. Agora tem de levar à mesma página na
+  língua X (`destino == arquivo(X, origem)`), X tem de ser uma língua da página no mapa, e
+  `hreflang`/`lang`, quando o link os tem, são os de X.
+  - O link da faixa não tem nenhum dos dois: a língua vem do `<section lang>`/`<template lang>`.
+    Por isso a ausência passa, e só a incoerência reprova.
+  - Casos novos no `test_link_d23`.
+  - Mutação: faixa apontando para `/en/topowalk.html` e seletor com `hreflang="pt-BR"`. As duas
+    passavam com a regra antiga e reprovam com a nova.
+- **§10:** `ui.ts` sem nenhum bloco lido é erro, porque a regra ficaria calada se o formato mudasse.
+  Teste: `test_ui_sem_blocos_e_erro`.
+- **§4, linha de data:** virou `regras_i18n.regra_linha_data()`, usada pelo `check_site.py` e pelo
+  teste. Teste: `test_linha_de_data`.
+- **CI:** `python3 -B -m unittest`.
+- **`SugestaoIdioma`:**
+  - **Foco ao fechar:** com ✕ ou Esc e o foco dentro da faixa, o foco vai ao último elemento
+    focável e visível antes da faixa no DOM. Na prática é o último link do rodapé, porque a faixa é
+    o fim do `<body>`. Com o foco fora da faixa, ele não se move.
+  - **Abaixo de md, uma linha só (~62 px):**
+    - o texto corta com reticências (`truncate`), e o texto inteiro fica no DOM;
+    - o botão e o ✕ são `shrink-0`, e o botão tem `whitespace-nowrap`, por isso nunca são cortados;
+    - os alvos continuam com 44 px.
+    - De md para cima o desenho é o de antes, com `flex-wrap`.
+- **`SeletorIdioma`:**
+  - **Língua atual da lista da barra:** passou a `text-white`, com `brand-primary` só no check, como
+    no ramo do menu.
+  - **`focusout` sem `relatedTarget`:** não fecha o painel se o último `pointerdown` foi dentro dele.
+    No Safari, o clique num link não o foca. Uma tecla zera a marca, e o clique fora continua
+    fechando.
+
+**Item 10, o Lighthouse en-US vê a faixa nas páginas pt?** Sim.
+- Na rodada sobre `/` com `LANG=en_US.UTF-8`:
+  - `configSettings.locale` é `en-US`, e o Chrome lançado herda o `LANG`: `navigator.languages`
+    dá `["en-US"]`, conferido com `--dump-dom`.
+  - `fullPageScreenshot.nodes` tem `page-24-SECTION` com `top` 6656 e altura 70, no fim da página.
+  - A captura de página inteira mostra a faixa "This page is also available in English. / Switch
+    to English".
+- Ela **não** aparece no `final-screenshot`, que é tirado a ~2,4 s, antes de `load` mais dois
+  quadros mais 200 ms de transição. Nenhuma auditoria lista o nó.
+- CLS 0 e LCP 2,33 s: a faixa não é o LCP.
+- `LANG=en_US.UTF-8 python3 tools/lighthouse.py --runs 1`: ✅ orçamento cumprido.
+- As legais ficam em a11y 90 por `color-contrast`/`link-in-text-block` dos links do corpo e pelo
+  `heading-order` do h4 do rodapé. São herdados e estão em `LOTTO-CONTRASTE-AA-01` e
+  `FOOTER-H4-ORDEM-01` (WP-10), não na faixa.
+
+**Aceito sem mudança:**
+- **Um `<template>` por língua na faixa:** o HTML cresce linearmente com as línguas da página.
+  Reavaliar no WP-16, com a terceira língua.
+- **Script inline da faixa e do seletor:** não é cacheável entre páginas. Aceito pelo tamanho.
+- **Landmark `aria-label="Idioma"`/`"Language"` na faixa:** igual ao handoff. Aceito.
+
+**Só o navegador prova (usuário):**
+- `/`, pt, a 360x568 e 360x640, com o navegador em en: a faixa numa linha, sem cobrir o botão da
+  Play do hero, o botão "Switch to English" inteiro e o texto com reticências.
+- A 1280x720: o desenho anterior.
+- Tab até o ✕ e Enter, e depois Tab até "Switch to English" e Esc: o foco fica no último link do
+  rodapé.
+- Seletor com 3 línguas, só em página de teste local: no Safari, clicar numa língua da lista
+  navega, sem fechar o painel antes.
