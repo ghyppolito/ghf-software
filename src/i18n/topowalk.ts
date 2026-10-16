@@ -6,21 +6,15 @@
 // dicionário ao carregar, então é o texto que o visitante via. Diferiam `hero_desc` e
 // `features_title` (achado TOPO-PT-HTML-DIVERGE-01).
 //
-// A página antiga não tinha title/description/og em en: os do en abaixo reusam textos en que ela
-// já publicava (achado TOPO-EN-META-01).
+// `title` e `description` (que o og e o twitter repetem) vêm da ficha da Play, pt e en,
+// ../topo-walk/docs/store_listing_texts.md (título e descrição curta) (WP-21, D19).
 
 import type { Idioma } from './ui';
 
 export const topowalk = {
   pt: {
-    title: 'TopoWalk - Levantamento Topográfico de Bolso e RTK',
-    description:
-      'TopoWalk transforma seu Android em uma ferramenta topográfica avançada de campo. Receptores GNSS/RTK externos, áreas de exclusão e área líquida, importação KML/GeoJSON, locação, laudos PDF e exportação em DXF, CSV, GeoJSON, KML e GPX. GHF Software.',
-    og_title: 'TopoWalk — Topografia de Campo no Bolso & RTK',
-    og_description:
-      'Receptores GNSS/RTK Bluetooth, áreas de exclusão (área líquida), locação de pontos, laudos PDF com logo e exportação em DXF, CSV, GeoJSON, KML e GPX. Topografia profissional no Android.',
-    twitter_description:
-      'Receptores GNSS/RTK Bluetooth, áreas de exclusão (área líquida), laudos PDF com logo e exportação DXF, CSV, GeoJSON, KML e GPX. Topografia profissional no Android.',
+    title: 'TopoWalk: Topo e Altimetria — GHF Software',
+    description: 'Topografia de campo: pontos, área, declividade, vista 3D e exportação PDF.',
     hero_badge: 'Levantamento Topográfico de Bolso & RTK',
     hero_titleHtml:
       'Precisão Profissional<br class="hidden md:block"> nas <span class="text-gradient-amber">Suas Mãos</span>',
@@ -81,14 +75,8 @@ export const topowalk = {
       'Finalize para gerar relatórios PDF A4 com sua identidade visual ou exporte arquivos DXF, CSV, GeoJSON, KML e GPX para seu software de escolha.',
   },
   en: {
-    title: 'TopoWalk - Pocket Topographic Survey & RTK',
-    description:
-      'TopoWalk turns your smartphone into an advanced fieldwork surveying tool. Supports external Bluetooth GNSS/RTK receivers, barometric altimetry, exclusion zones & net area, KML/GeoJSON import, point stakeout, field photos, and exports to PDF, DXF, CSV, GeoJSON, KML, and GPX.',
-    og_title: 'TopoWalk — Pocket Topographic Survey & RTK',
-    og_description:
-      'TopoWalk turns your smartphone into an advanced fieldwork surveying tool. Supports external Bluetooth GNSS/RTK receivers, barometric altimetry, exclusion zones & net area, KML/GeoJSON import, point stakeout, field photos, and exports to PDF, DXF, CSV, GeoJSON, KML, and GPX.',
-    twitter_description:
-      'TopoWalk turns your smartphone into an advanced fieldwork surveying tool. Supports external Bluetooth GNSS/RTK receivers, barometric altimetry, exclusion zones & net area, KML/GeoJSON import, point stakeout, field photos, and exports to PDF, DXF, CSV, GeoJSON, KML, and GPX.',
+    title: 'TopoWalk: Survey & Altimeter — GHF Software',
+    description: 'Land surveying: points, area, slope %, 3D view, PDF export.',
     hero_badge: 'Pocket Topographic Survey & RTK',
     hero_titleHtml:
       'Professional Precision<br class="hidden md:block"> in <span class="text-gradient-amber">Your Hands</span>',

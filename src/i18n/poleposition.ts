@@ -8,20 +8,15 @@
 // As seções "Veja na prática" e "Para quem é" e os `alt` das imagens não tinham `data-i18n`: o
 // visitante via pt nos dois idiomas, e o en abaixo repete o pt (achado POLE-EN-ROTULOS-PT-01).
 //
-// A página antiga não tinha title/description/og em en: os do en abaixo reusam textos en que ela
-// já publicava (o `<title>` pt já era em inglês) (achado POLE-EN-META-01).
+// `title` e `description` (que o og e o twitter repetem) vêm da ficha da Play, pt e en,
+// ../pole-position/pole-position-app/docs/aso_plan.md (título e descrição curta) (WP-21, D19).
 
 import type { Idioma } from './ui';
 
 export const poleposition = {
   pt: {
-    title: 'Pole Position: Race Telemetry & Analytics - GHF Software',
-    description:
-      'Telemetria Automotiva profissional e offline direto no seu dispositivo Android. Desenvolvido para kart e trackdays com GPS 10Hz e intersecção vetorial.',
-    og_title: 'Pole Position — Telemetria para Kart e Automobilismo',
-    og_description:
-      'GPS 10Hz, Força G e parciais com detecção vetorial. Telemetria profissional 100% offline no seu Android.',
-    twitter_description: 'GPS 10Hz, Força G e detecção vetorial de linha. 100% offline.',
+    title: 'Pole Position: Cronômetro GPS — GHF Software',
+    description: 'Lap timer GPS: cronômetro de voltas, parciais, velocidade e força G na pista',
 
     hero_badge: 'Telemetria Automotiva Profissional',
     hero_title_1: 'Pole Position',
@@ -145,14 +140,8 @@ export const poleposition = {
       'Desenvolvido com tecnologias modernas do ecossistema Android para máxima eficiência.',
   },
   en: {
-    title: 'Pole Position: Race Telemetry & Analytics - GHF Software',
-    description:
-      'Pole Position transforms your smartphone into a complete offline telemetry system for karting and trackdays. Featuring high-frequency GPS support, vector gate intersection, and integrated TTS audio.',
-    og_title: 'Pole Position — Professional Motorsports Telemetry',
-    og_description:
-      'Pole Position transforms your smartphone into a complete offline telemetry system for karting and trackdays. Featuring high-frequency GPS support, vector gate intersection, and integrated TTS audio.',
-    twitter_description:
-      'Pole Position transforms your smartphone into a complete offline telemetry system for karting and trackdays. Featuring high-frequency GPS support, vector gate intersection, and integrated TTS audio.',
+    title: 'Pole Position: GPS Lap Timer — GHF Software',
+    description: 'GPS lap timer with sector splits, speed and G-force telemetry for track days',
 
     hero_badge: 'Professional Motorsports Telemetry',
     hero_title_1: 'Pole Position',

@@ -8,19 +8,17 @@
 // O `alt` do print do app não tinha `data-i18n`: o visitante via pt nos dois idiomas, e o en abaixo
 // repete o pt (achado ECLIPSE-EN-ROTULOS-PT-01).
 //
-// A página antiga não tinha title/description/og em en: os do en abaixo reusam textos en que ela
-// já publicava (achado ECLIPSE-EN-META-01).
+// O EclipseGo não tem ficha da Play no repositório do app: o `title` (que o og e o twitter
+// repetem) é o `hero_badge` publicado, e a `description` é o "Resumo em uma frase" de
+// ../eclipse-go/docs/EclipseGoContent.md, com tradução para o en (WP-21, D19).
 
 import type { Idioma } from './ui';
 
 export const eclipsego = {
   pt: {
-    title: 'EclipseGo - Previsão de Eclipses Offline - GHF Software',
+    title: 'EclipseGo: Previsão de Eclipses Offline — GHF Software',
     description:
-      'EclipseGo calcula a visibilidade de eclipses solares e lunares de qualquer ponto do planeta de forma 100% offline. Desenvolvido pela GHF Software.',
-    og_title: 'EclipseGo — Previsão de Eclipses Offline',
-    og_description:
-      'Circunstâncias locais, visibilidade e linha do tempo de eclipses solares e lunares. 100% offline.',
+      'Descubra se e quando você vai poder ver o próximo eclipse solar ou lunar, sem precisar de internet.',
 
     hero_badge: 'Previsão de Eclipses Offline',
     hero_title_1: 'EclipseGo',
@@ -70,12 +68,9 @@ export const eclipsego = {
       'Desenvolvido com tecnologias modernas do ecossistema Android para máxima eficiência.',
   },
   en: {
-    title: 'EclipseGo - Offline Eclipse Prediction - GHF Software',
+    title: 'EclipseGo: Offline Eclipse Prediction — GHF Software',
     description:
-      'Know exactly if a solar or lunar eclipse is visible from your location. A fully offline application that calculates local start, peak, and end times without making any network calls.',
-    og_title: 'EclipseGo — Offline Eclipse Prediction',
-    og_description:
-      'Know exactly if a solar or lunar eclipse is visible from your location. A fully offline application that calculates local start, peak, and end times without making any network calls.',
+      'Find out if and when you will be able to see the next solar or lunar eclipse, no internet needed.',
 
     hero_badge: 'Offline Eclipse Prediction',
     hero_title_1: 'EclipseGo',

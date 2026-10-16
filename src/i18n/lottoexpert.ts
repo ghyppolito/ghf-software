@@ -8,8 +8,11 @@
 //
 // Rótulos sem `data-i18n` na página antiga (nomes das loterias, "LottoExpert Engine", os `alt`)
 // apareciam iguais no modo en; continuam no markup, iguais nos dois idiomas (achado
-// LOTTO-EN-ROTULOS-PT-01). A página antiga não tinha title/description/og em en: os do en abaixo
-// reusam textos en que ela já publicava (achado LOTTO-EN-META-01).
+// LOTTO-EN-ROTULOS-PT-01).
+//
+// `title` e `description` (que o og e o twitter repetem) vêm da ficha da Play,
+// ../lotto-expert/docs/ASO_METADATA.md (título, sugestão 1, e descrição curta); o en é tradução fiel
+// da ficha pt, que ainda não tem en (WP-21, D19).
 //
 // Jogo responsável: tools/check_site.py §5 (COPY_PROIBIDA) lê este arquivo também na raiz.
 
@@ -17,12 +20,8 @@ import type { Idioma } from './ui';
 
 export const lottoexpert = {
   pt: {
-    title: 'LottoExpert - GHF Software',
-    description: 'LottoExpert - O motor matemático definitivo para desdobramentos de loterias.',
-    og_title: 'LottoExpert — Motor Matemático para Loterias',
-    og_description:
-      'Fechamentos combinatórios, OCR de bilhetes e backtesting offline para Mega-Sena, Lotofácil e mais.',
-    twitter_description: 'Fechamentos combinatórios, OCR de bilhetes e backtesting offline.',
+    title: 'LottoExpert: Loterias e Bolão — GHF Software',
+    description: 'Scanner de bilhetes, fechamentos, bolão e resultados oficiais da Caixa.',
     hero_badge: 'Engenharia Estatística para Loterias',
     hero_titleHtml: 'Jogue de forma<br class="hidden md:block"> <span class="text-gradient-purple">Inteligente</span>',
     hero_desc:
@@ -150,13 +149,8 @@ export const lottoexpert = {
     price_feat13: 'Widget de Tela Inicial',
   },
   en: {
-    title: 'LottoExpert - GHF Software',
-    description:
-      'LottoExpert is a statistical engineering solution for Brazilian Caixa Lotteries. Designed with a strict focus on local processing and privacy, it handles wheel generation, ticket scanning (OCR), and result checking entirely on your device, syncing results via secure custom GCP infrastructure.',
-    og_title: 'LottoExpert — Statistical Engineering For Lotteries',
-    og_description:
-      'LottoExpert is a statistical engineering solution for Brazilian Caixa Lotteries. Designed with a strict focus on local processing and privacy, it handles wheel generation, ticket scanning (OCR), and result checking entirely on your device, syncing results via secure custom GCP infrastructure.',
-    twitter_description: 'Everything you need to manage your bets with scientific rigor.',
+    title: 'LottoExpert: Lotteries & Sweepstakes — GHF Software',
+    description: 'Ticket scanner, wheels, sweepstakes and official Caixa lottery results.',
     hero_badge: 'Statistical Engineering For Lotteries',
     hero_titleHtml: 'Play Extremely<br class="hidden md:block"> <span class="text-gradient-purple">Smart</span>',
     hero_desc:
