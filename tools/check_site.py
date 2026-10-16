@@ -91,6 +91,12 @@ Checa:
  16. sem redirecionamento (ADR-007 §1, regra x): nenhum `location.replace`/`location.assign`/
      `location[.href|.pathname|.search|.hash] =`/`location[`/`navigation.navigate(` nem
      `<meta http-equiv="refresh">` em `.html` ou `.js` de `dist/`, fora do convite (CONGELADAS)
+ 17. acessibilidade estrutural (WP-22), em toda página de `dist/` fora de CONGELADAS (o Lighthouse
+     só mede 9): (a) exatamente um `<main>`; (b) títulos sem salto de nível (`h(n)` → `h(n+2)` é
+     erro); (c) `<a>`/`<button>` com `aria-label` e texto visível: as palavras do texto visível
+     (sem o que é `aria-hidden`, `sr-only` ou `<svg>`) aparecem em sequência no `aria-label`,
+     normalizados como o axe (NFKD, sem acento, sem o que está entre parênteses, minúsculas);
+     (d) nenhum `href` com `hl=pt_BR` ou `locale=pt_BR` em página que não é pt
 
 As regras de i18n (i)–(viii), (x)–(xii), a linha de data e o link `data-troca-idioma` são funções
 puras de tools/regras_i18n.py, provadas por tools/test_regras_i18n.py (casos de
@@ -102,6 +108,7 @@ import os
 import posixpath
 import re
 import sys
+import unicodedata
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 
@@ -1179,6 +1186,105 @@ for rel in sorted(arquivos_dist):
         continue
     for trecho in i18n.redirecionamentos(ler(p(rel))):
         erros.append(f"{rel}: `{trecho}` — nada redireciona no site; a sugestão de língua é um link (ADR-007 §1/§7)")
+
+# ------------------------------------------------------------ 17: acessibilidade estrutural
+# WP-22. O Lighthouse do CI mede 9 páginas; isto vale para todas as de dist/ fora do convite
+# (CONGELADAS, D13). Landmark, ordem de títulos, nome acessível que contém o rótulo visível (WCAG
+# 2.5.3, como o `label-content-name-mismatch` do axe) e link para loja/rede social forçado em pt
+# numa página de outra língua.
+RE_LINK_PT = re.compile(r"[?&](?:amp;)?(hl|locale)=pt_BR\b")
+
+
+def palavras_axe(texto):
+    """Palavras como o axe as compara (`curateTokens`): NFKD, sem acento nem pontuação, sem o que
+    está entre parênteses, minúsculas. `English (EN)` → ["english"]: o `EN` some."""
+    texto = unicodedata.normalize("NFKD", texto)
+    anterior = None
+    while anterior != texto:
+        anterior, texto = texto, re.sub(r"\([^()]*\)", "", texto)
+    texto = "".join(" " if unicodedata.category(c)[0] not in "LN" else c for c in texto)
+    return texto.lower().split()
+
+
+def contem_em_sequencia(nome, rotulo):
+    return any(nome[i:i + len(rotulo)] == rotulo for i in range(len(nome) - len(rotulo) + 1))
+
+
+class Estrutura(HTMLParser):
+    """Quantos `<main>`; níveis dos títulos na ordem; (aria-label, texto visível) de cada `<a>` e
+    `<button>` com `aria-label`."""
+
+    VAZIOS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.mains, self.titulos, self.rotulos = 0, [], []
+        self.pilha = []  # (tag, oculto) de cada elemento aberto
+        self.abertos = []  # [tag, aria-label, texto visível, profundidade]
+
+    def oculto(self):
+        return bool(self.pilha) and self.pilha[-1][1]
+
+    def handle_starttag(self, tag, attrs):
+        d = {k.lower(): (v or "") for k, v in attrs}
+        if tag == "main":
+            self.mains += 1
+        if re.fullmatch(r"h[1-6]", tag):
+            self.titulos.append(int(tag[1]))
+        if tag in self.VAZIOS:
+            return
+        esconde = (self.oculto() or tag in ("svg", "script", "style", "template")
+                   or d.get("aria-hidden", "").lower() == "true" or "sr-only" in d.get("class", "").split())
+        self.pilha.append((tag, esconde))
+        if tag in ("a", "button") and d.get("aria-label", "").strip():
+            self.abertos.append([tag, d["aria-label"], "", len(self.pilha)])
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        if tag not in self.VAZIOS:
+            self.handle_endtag(tag)
+
+    def handle_data(self, data):
+        if not self.oculto():
+            for a in self.abertos:
+                a[2] += data
+
+    def handle_endtag(self, tag):
+        while self.pilha:
+            aberto, _ = self.pilha.pop()
+            if self.abertos and self.abertos[-1][3] == len(self.pilha) + 1:
+                self.rotulos.append(tuple(self.abertos.pop()[:3]))
+            if aberto == tag:
+                break
+
+
+for caminho in paginas:
+    rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
+    if rel in CONGELADAS:
+        continue
+    html = ler(caminho)
+    e = Estrutura()
+    e.feed(html)
+    # (a) um <main> por página: o Lighthouse `landmark-one-main`; dois seria componente com <main>
+    # dentro de página que já o tem
+    if e.mains != 1:
+        erros.append(f"{rel}: {e.mains} <main> — toda página tem exatamente um (WP-22)")
+    # (b) título sem pular nível na descida (Lighthouse `heading-order`); subir pode pular
+    for antes, depois in zip(e.titulos, e.titulos[1:]):
+        if depois > antes + 1:
+            erros.append(f"{rel}: <h{depois}> logo depois de <h{antes}> — título pula nível (WP-22)")
+            break
+    # (c) nome acessível contém o texto visível, palavra por palavra (WCAG 2.5.3)
+    for tag, rotulo, visivel in e.rotulos:
+        v = palavras_axe(visivel)
+        if v and not contem_em_sequencia(palavras_axe(rotulo), v):
+            erros.append(f"{rel}: <{tag} aria-label=\"{rotulo}\"> com texto visível {visivel.strip()!r}"
+                         " — o nome acessível tem de conter o texto visível, fora de parênteses (WCAG 2.5.3, WP-22)")
+    # (d) quem lê em outra língua não cai na loja ou na rede social forçada em pt
+    if i18n.pagina_de(rel)[0] != "pt":
+        for href in re.findall(r'\shref="([^"]*)"', html):
+            if RE_LINK_PT.search(href):
+                erros.append(f"{rel}: {href} — link com a língua fixa em pt numa página que não é pt (WP-22)")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")
