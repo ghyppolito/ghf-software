@@ -2,7 +2,7 @@
 id: WP-12
 titulo: Toda página pontua 90 ou mais nas quatro categorias do Lighthouse mobile
 area: seo
-status: doing
+status: done
 depende_de: [WP-08]
 adr: [ADR-006]
 spec: docs/AVALIACAO.md
@@ -380,3 +380,16 @@ O checklist de navegador também está aberto: menu do celular, nitidez em 2×, 
 38892232077 do #37 deu `plano`, `site` e `lighthouse` verdes. No runner, o `lighthouse` deu os
 mesmos números da medição local: perf de 98 a 100, LCP de 1,50 a 2,33 s, CLS 0, e o orçamento foi
 cumprido. Falta o vermelho provocado no CI.
+
+**Navegador (2026-10-16):** o usuário validou o checklist em `dist/` de `0640565`:
+- menu do celular trocando entre hambúrguer e X;
+- nitidez em 2×;
+- favicon;
+- ícones lado a lado com o antes;
+- dica nos logos de tecnologia;
+- card offline do EclipseGo sem ícone.
+
+**Fechamento (2026-10-16): `done`.** Os critérios de aceite estão cumpridos, e o job `lighthouse` deu
+verde no PR. O vermelho provocado ficou só na prova local (seção "Job `lighthouse`"), sem PR
+descartável no CI: é o mesmo script, e o run do #37 mostrou que o runner mede igual ao local.
+Ainda é decisão do usuário tornar o `lighthouse` check obrigatório na proteção de branch.

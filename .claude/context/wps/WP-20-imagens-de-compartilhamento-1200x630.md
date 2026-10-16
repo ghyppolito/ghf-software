@@ -15,7 +15,7 @@ branch: feat/wp-20-imagens-de-compartilhamento
 
 # WP-20 — Imagens de compartilhamento 1200×630 por página e twitter:card coerente
 
-**Depende de:** WP-11 · **Achados roteados:** `OG-IMAGE-1200-PRODUCAO-01`, `TWITTER-CARD-IMAGEM-QUADRADA-01`, `OG-IMAGE-ALT-TYPE-01`, `ORG-LOGO-NAO-QUADRADO-01`
+**Depende de:** WP-11 · **Achados roteados:** `OG-IMAGE-1200-PRODUCAO-01`, `TWITTER-CARD-IMAGEM-QUADRADA-01`, `OG-IMAGE-ALT-TYPE-01`, `ORG-LOGO-NAO-QUADRADO-01`, `OG-MOCKUP-JPEG-PESADO-01` (og:image; a parte exibida saiu no WP-12)
 
 **Objetivo:** a home, as 10 legais e as 4 landings (pt e en) compartilham uma imagem 1200×630 de verdade, e as tags
 `og:image:*`/`twitter:*` descrevem exatamente essa imagem.
