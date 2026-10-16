@@ -5,7 +5,8 @@ cada escolha está nos ADRs em `.claude/context/decisions/`; as regras de projet
 
 Em uma frase: o Astro gera `dist/` a partir de `src/` (páginas, layouts, componentes, dicionários,
 texto legal) e copia `public/` byte a byte; `dist/` é o que vai ao ar, e a rede de segurança é o
-`tools/check_site.py` rodando sobre `dist/`.
+`tools/check_site.py` rodando sobre `dist/`. Nenhum `.html` mora na raiz do repositório: página só
+sai de `src/pages/` (`tools/check_site.py` §7). Nav, footer e config mudam só no componente.
 
 ---
 
@@ -20,6 +21,9 @@ texto legal) e copia `public/` byte a byte; `dist/` é o que vai ao ar, e a rede
 | `src/styles/global.css` | valores dos tokens por tema (um tema por página), tipografia do texto legal |
 
 `npm run build` = `astro build --force`. A saída é `dist/`, que não é versionada.
+
+`design/` guarda o brief e o handoff do Claude Design (WP-06); quando houver handoff, ele prevalece
+sobre o sistema visual que está no código.
 
 ## 2. `public/` — o que passa sem build (ADR-002 §3, ADR-006)
 
@@ -69,7 +73,9 @@ prop `lang`.
 
 Um arquivo por app, documento e língua (`src/content/legal/lottoexpert-privacy.pt.md`,
 `src/content/legal/lottoexpert-privacy.en.md`, …), declarados em `src/content.config.ts`.
-Front-matter: `lastUpdated: "AAAA-MM[-DD]"`, o commit de origem no app (`origemCommit`) e, no `.pt.md`, `pendente: [códigos]` enquanto uma tradução está atrás.
+Front-matter: `lastUpdated: "AAAA-MM[-DD]"` em todos. Só o `.pt.md` tem o commit de origem no app
+(`origemCommit`, 40 hex) e, enquanto uma tradução está atrás, `pendente: [códigos]` — o
+`tools/check_site.py` reprova enquanto o `pendente` existir. A tradução só tem `lastUpdated`.
 
 - O `.pt.md` é o `.md` do repositório do app **byte a byte**, copiado de um commit por
   `tools/sync_legal.py` (só pelo `/legal`). O inglês é tradução fiel, feita aqui.
@@ -114,7 +120,7 @@ redirecionamento (o Android App Links não segue redirect):
 | Ferramenta | O que prova |
 |---|---|
 | `tools/check_site.py` | sobre `dist/` (sem `dist/`, pede o build): URLs contratuais, links e assets, metadados, datas legais contra `src/content/legal/` e o commit do app, copy do LottoExpert (jogo responsável), `public/.well-known/assetlinks.json`, `hreflang`, língua dos links, `public/` fechado, SEO técnico, desempenho (sem fonte do Google, imagem pelo build), nenhum redirecionamento |
-| `tools/regras_i18n.py` + `tools/test_regras_i18n.py` | regras de i18n como funções puras, testadas sobre `tools/fixtures/i18n/` |
+| `tools/regras_i18n.py` + `tools/test_regras_i18n.py` | regras de i18n como funções puras, que o `tools/check_site.py` chama; testadas sobre `tools/fixtures/i18n/` |
 | `tools/contrato.sha256` | convite, `public/.well-known/assetlinks.json`, `og:image` do convite e `CNAME` iguais ao publicado |
 | `tools/sync_legal.py` | o espelho legal está igual, atrás ou divergente do app (`--todos --check`) |
 | `tools/lighthouse.py` | orçamento de bytes e Lighthouse mobile contra `tools/orcamento-lighthouse.json` |
@@ -134,4 +140,5 @@ redirecionamento (o Android App Links não segue redirect):
 - Fluxo git `feat → develop → master` (D5): o PR do WP mira `develop`; `develop → master` é
   deploy, feito só pelo usuário pelo `/release` (`.claude/commands/release.md`).
 - Rollback é por tag (D13): rodar o `Deploy` sobre a tag `pre-modernizacao` (marcada em `master`
-  antes do deploy único), sem reverter merge.
+  antes do deploy único), sem reverter merge. Pré-requisito: a tag na `deployment-branch-policies`
+  do ambiente `github-pages` e um ensaio — D13 em `.claude/context/decisoes.md`.

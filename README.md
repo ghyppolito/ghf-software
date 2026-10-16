@@ -87,7 +87,7 @@ estão na seção "Comandos" do [`CLAUDE.md`](CLAUDE.md).
 
 ## 🛡️ Privacidade e Transparência
 
-Todos os documentos legais exigidos pelas diretrizes da **Google Play Store**, **LGPD** (Lei Geral de Proteção de Dados - Lei nº 13.709/2018) e **GDPR** estão publicados e versionados neste repositório.
+Todos os documentos legais exigidos pelas diretrizes da **Google Play Store**, **LGPD** (Lei Geral de Proteção de Dados - Lei nº 13.709/2018) e **GDPR** estão publicados neste site. O texto nasce e é versionado no repositório de cada app; aqui fica a cópia publicada (`src/content/legal/`).
 
 ---
 
