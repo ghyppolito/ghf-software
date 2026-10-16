@@ -67,6 +67,9 @@ Checa:
      por página); nas INDEXAVEIS, o `<title>` sem ` - ` e com a marca unida por ` — ` (termina em
      ` — GHF Software` ou começa com `GHF Software — `); o par en com `<title>` e description
      diferentes dos do pt. O convite (CONGELADAS) fica isento.
+ 15. Desempenho (WP-12, ADR-006), em toda página de `dist/` fora de CONGELADAS (o convite, D13):
+     (a) fonte servida pelo site — nenhuma menção a `fonts.googleapis`/`fonts.gstatic`, e um
+         `<link rel="preload" as="font">` para arquivo de `dist/`
 """
 import glob
 import json
@@ -1040,6 +1043,44 @@ for rel, c in sorted(cabecas.items()):
             erros.append(f"{rel}: installUrl {o.get('installUrl')!r} não é `https://play.google.com/store/apps/details?id=<id>`")
         elif ids != {m.group(1)}:
             erros.append(f"{rel}: installUrl com id {m.group(1)} ≠ id do botão da Play da página {sorted(ids)}")
+
+# ------------------------------------------------------------ 15: desempenho
+# WP-12, ADR-006. O convite fica fora (CONGELADAS, D13): ele ainda carrega Inter do Google e o pako
+# do cdnjs, e só muda num WP que aceite novo tools/contrato.sha256.
+RE_FONTE_GOOGLE = re.compile(r"fonts\.(googleapis|gstatic)\.com", re.I)
+
+
+class Recursos(HTMLParser):
+    """`href` de cada `<link rel=preload as=font>`."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.preload_fonte = []
+
+    def handle_starttag(self, tag, attrs):
+        d = {k.lower(): (v or "") for k, v in attrs}
+        if tag == "link" and "preload" in d.get("rel", "").lower().split() and d.get("as", "").lower() == "font":
+            self.preload_fonte.append(d.get("href", ""))
+
+    handle_startendtag = handle_starttag
+
+
+for caminho in paginas:
+    rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
+    if rel in CONGELADAS:
+        continue
+    html = ler(caminho)
+    r = Recursos()
+    r.feed(html)
+    # (a) a Inter é do site (astro.config.mjs, `fonts`): Google Fonts bloqueava o render (~830 ms)
+    m = RE_FONTE_GOOGLE.search(html)
+    if m:
+        erros.append(f"{rel}: {m.group(0)} — a fonte é servida pelo site (ADR-006 §3), sem Google Fonts")
+    if not r.preload_fonte:
+        erros.append(f"{rel}: sem <link rel=\"preload\" as=\"font\"> — o <Font preload> do Base.astro sumiu")
+    for href in r.preload_fonte:
+        if not href.startswith("/") or href.startswith("//") or not os.path.isfile(p(href.lstrip("/"))):
+            erros.append(f"{rel}: preload de fonte {href!r} não é arquivo de {raiz}/")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")

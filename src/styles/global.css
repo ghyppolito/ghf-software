@@ -59,14 +59,13 @@
   --sombra-glow: 0 0 20px rgba(181, 84, 28, 0.4);
 }
 
-/* poleposition.html — accent lima, JetBrains Mono */
+/* poleposition.html — accent lima */
 [data-tema='poleposition'] {
   --brand-primary: 132 204 22; /* #84cc16 */
   --brand-primary-hover: 101 163 13; /* #65a30d */
   --brand-accent: 163 230 53; /* #a3e635 */
   --sombra-glow: 0 0 #0000;
   --sombra-glow-blue: 0 0 #0000;
-  --fonte-mono: 'JetBrains Mono', monospace;
 }
 
 /* poleposition-privacy.html — accent ciano */

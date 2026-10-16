@@ -1,11 +1,12 @@
 ---
 // Layout único (WP-08). <head> de todas as páginas geradas: metadados, og:*, canonical, hreflang,
-// fontes e o CSS compilado do Tailwind (ADR-003). O tema da página vai em `data-tema` no <html>.
+// a fonte (Inter local, ADR-006 §3) e o CSS compilado do Tailwind (ADR-003). O tema da página vai em `data-tema` no <html>.
 // SEO (WP-11, ADR-005): canonical = og:url = a própria URL; hreflang pt-BR, en e x-default (→ en,
 // D8/D18) nas páginas com par; og:image:width/height lidos do cabeçalho do arquivo em public/
 // (nunca declarados à mão — D16: as imagens 1200×630 são outro WP); JSON-LD pelo slot `jsonld`.
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { Font } from 'astro:assets';
 import '../styles/global.css';
 import { SITE, rota, type Idioma } from '../i18n/ui';
 
@@ -54,9 +55,6 @@ interface Props {
   classeBody?: string;
   /** favicon da página (as landings de app usam o do app) */
   favicon?: string;
-  /** famílias do Google Fonts além da Inter, no formato do parâmetro `family=` (ex.:
-   *  'JetBrains+Mono:wght@700', só no Pole Position); entram na mesma requisição da Inter */
-  fontesExtras?: string[];
 }
 
 const {
@@ -69,7 +67,6 @@ const {
   temPar = true,
   noindex = false,
   favicon = '/assets/GHFSoftware.png',
-  fontesExtras = [],
   classeBody = 'bg-brand-base text-gray-100 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden',
 } = Astro.props;
 
@@ -84,8 +81,6 @@ const imagem = SITE + caminhoImagem;
 // /assets/x.png é o arquivo public/assets/x.png, copiado byte a byte para dist/ (ADR-002 §3).
 // O '.' antes do caminho impede que o '/' inicial faça o path.resolve voltar à raiz do disco.
 const tamanho = dimensoes(path.resolve(process.cwd(), 'public', '.' + caminhoImagem));
-const familias = ['Inter:wght@300;400;500;600;700;800', ...fontesExtras].map((f) => `family=${f}`).join('&');
-const googleFonts = `https://fonts.googleapis.com/css2?${familias}&display=swap`;
 ---
 <!doctype html>
 <html lang={lang === 'pt' ? 'pt-BR' : 'en'} class="scroll-smooth" data-tema={tema}>
@@ -119,14 +114,10 @@ const googleFonts = `https://fonts.googleapis.com/css2?${familias}&display=swap`
     <meta name="twitter:image" content={imagem}>
     <slot name="jsonld" />
 
-    <!-- Google Fonts e Font Awesome: uma vez, aqui; saem no WP-12 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    {/* Sem fonte extra, o literal de sempre (o atributo dinâmico sai com `&amp;`: mesmo URL,
-        bytes diferentes nas páginas já migradas). */}
-    {fontesExtras.length === 0
-      ? <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-      : <link href={googleFonts} rel="stylesheet">}
+    {/* Inter servida pelo site (astro.config.mjs, `fonts`): @font-face, preload do woff2 e o
+        fallback com métricas ajustadas. */}
+    <Font cssVariable="--fonte-inter" preload />
+    <!-- Font Awesome: sai no WP-12 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   </head>
   <body class={classeBody}>

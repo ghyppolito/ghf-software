@@ -1,6 +1,6 @@
 // Tailwind 3.4.19 compilado no build (ADR-003). Uma configuração para o site inteiro: é a união
 // das configs inline das 10 páginas (WP-08). O que variava por página (cores brand.*, a escala
-// amber do TopoWalk, as sombras glow e a fonte mono) é variável CSS, com valor por tema em
+// amber do TopoWalk e as sombras glow) é variável CSS, com valor por tema em
 // src/styles/global.css (`<html data-tema="…">`).
 //
 // Classe montada por concatenação de string não é detectada (a Play CDN detectava, porque
@@ -16,8 +16,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        // Só poleposition.html declarava `mono` (JetBrains Mono); nas outras vale a pilha padrão.
+        // Inter servida pelo site (ADR-006 §3): a variável é a da API `fonts` do astro.config.mjs,
+        // com o fallback de métricas ajustadas que o Astro gera e o `sans-serif` no fim.
+        sans: 'var(--fonte-inter)',
+        // Pilha mono padrão do Tailwind 3 (global.css). A JetBrains Mono do Pole Position saiu no
+        // WP-12: nenhum elemento da landing usava `font-mono`.
         mono: 'var(--fonte-mono)',
       },
       colors: {

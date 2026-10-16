@@ -2,7 +2,6 @@
 // Landing do Pole Position em inglês (/en/poleposition.html). Corpo em components/PolePosition.astro, textos
 // em i18n/poleposition.ts. Links da página para a home vão à home do mesmo idioma. O lima do
 // Pole Position é claro: a pílula do menu do celular usa texto preto (Nav `realce="primary-claro"`).
-// JetBrains Mono entra só nesta página (`fontesExtras`), na mesma requisição da Inter.
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
@@ -26,7 +25,6 @@ const home = rota(lang, 'index.html');
   caminho="poleposition.html"
   tema="poleposition"
   favicon="/assets/poleposition.png"
-  fontesExtras={['JetBrains+Mono:wght@700']}
   classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden"
 >
   <JsonLd slot="jsonld" dados={mobileApplication('poleposition')} />

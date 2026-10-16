@@ -1,5 +1,5 @@
 // Astro (ADR-002). Saída estática em dist/, publicada pelo .github/workflows/deploy.yml.
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import { satteri } from '@astrojs/markdown-satteri';
 import {
   envolveTabelaLegal,
@@ -21,8 +21,38 @@ import {
 // saem dos endpoints src/pages/sitemap.xml.ts e src/pages/robots.txt.ts, da mesma lista de rotas
 // do canonical e do hreflang (src/i18n/ui.ts).
 
+// Fonte (WP-12, ADR-006 §3): a Inter é servida pelo site, sem Google Fonts. Um woff2 variável,
+// recortado do InterVariable.woff2 4.001 do handoff (design/handoff/2026-10-13-rodada-3/fonts/,
+// OFL — src/assets/fonts/OFL.txt): eixo wght 400–800 (os pesos que o CSS compilado usa), opsz
+// fixo em 14 (o padrão que o Google Fonts servia) e a faixa "latin" do Google Fonts + U+2192 (→).
+// Recorte com fontTools 4.61, fora do CI:
+//   fonttools varLib.instancer InterVariable.woff2 wght=400:800 opsz=14 -o inst.ttf
+//   pyftsubset inst.ttf --flavor=woff2 --output-file=src/assets/fonts/inter-latin-wght.woff2 \
+//     --unicodes="U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2192,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+// O <Font preload> do Base.astro emite o @font-face, o preload e o fallback com métricas
+// ajustadas (`optimizedFallbacks`, padrão), que segura o CLS da troca de fonte.
+const fontes = [
+  {
+    provider: fontProviders.local(),
+    name: 'Inter',
+    cssVariable: '--fonte-inter',
+    fallbacks: ['sans-serif'],
+    options: {
+      variants: [
+        {
+          src: ['./src/assets/fonts/inter-latin-wght.woff2'],
+          weight: '400 800',
+          style: 'normal',
+          display: 'swap',
+        },
+      ],
+    },
+  },
+];
+
 export default defineConfig({
   site: 'https://ghfsoftware.com',
+  fonts: fontes,
   // 'preserve': x.astro → x.html e en/index.astro → en/index.html (ADR-002 §2).
   build: { format: 'preserve' },
   // Markdown (texto legal, src/content/legal/). Sätteri é o processador padrão do Astro 7; ele é
