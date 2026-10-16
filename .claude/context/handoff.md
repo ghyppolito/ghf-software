@@ -7,10 +7,9 @@
 
 ## 1. Onde parei
 
-- WP-12, WP-14 e WP-15 fechados (`done`) e integrados na `feat/wp-08-layout-unico`; nada publicado (D13).
-- D22 e D23 decididas; ADR-007 escrito. As três propostas do `site-ux` sem referência no handoff do Claude Design estão registradas no WP-15 e em `achados-novos.md`
-  (`SELETOR-2-LINGUAS-FORA-DO-HANDOFF-01`, `LINK-FALLBACK-IDIOMA-SEM-SINAL-01`, ambos roteados ao WP-10).
-- Nenhum WP desbloqueado sem o usuário.
+- WP-22 implementado e auditado na `feat/wp-22-a11y-sem-redesign` (e2bffea..12cdac7), `doing`: `visual: true`, falta o checklist de navegador (no fim do WP, "Registro de execução").
+- Faltam: merge do usuário na `feat/wp-08-layout-unico`, CI do PR #37 e o orçamento Lighthouse (rodando). Nada publicado (D13).
+- 8 achados novos do WP-22 roteados ao WP-10 (contraste de paleta, alvos de desktop, rodapé a 360 px); regressão do WP-15 nas legais do LottoExpert já resolvida (12cdac7).
 
 ## 2. Quebrado ou pela metade agora
 

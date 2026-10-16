@@ -217,3 +217,56 @@ de reduced-motion deixar o hero invisível (por isso `.01ms`, não `none`); (3) 
 componente que já tenha `<main>` dentro (a guarda (a) pega); (4) a 404 com Nav estourar o orçamento
 de LCP; (5) `overflow-wrap: anywhere` quebrar `code` curto em tabela larga de um jeito feio — conferir
 no item 2 do roteiro.
+
+## Registro de execução (2026-10-16)
+
+**Status: `doing`.** Implementado e auditado; falta o relato do navegador (`visual: true`), o merge do usuário na
+integração e o CI do PR #37. Não publicado (D13).
+
+**Commits:** `e2bffea` (início); `2d0524d..8f37d41` (9 commits do site-dev, um por passo); `316d6db` (auditoria:
+`check_site` §17 pega `hl`/`locale=pt` e `pt-BR`; fecha-tag sem par não esvazia a pilha); `12cdac7` (regressão do
+WP-15: os seletores do tema das legais do LottoExpert usavam o prefixo do slug antigo, `[id^='secao-91-']`, e
+não casavam desde e6b3e6f; trocados por `[id='secao-9-1']` etc.; conferido com Puppeteer em pt e en — 3 notas do
+§2, "Dado local" do §9.2, coluna mono do §5, tabela do §9.1, último item do §3 dos termos; guarda (e) nova no
+`check_site` §17 com prova de mutação; incluído no WP por autorização do usuário em 2026-10-16).
+
+**O que cada critério provou:**
+- `npm run build`, `check_site.py` (22 páginas, ✅), contrato `sha256sum -c`, `unittest test_regras_i18n`,
+  `html-validate` e lychee (0 erros): verdes.
+- `git diff --stat feat/wp-08-layout-unico -- src/content/legal public`: vazio (texto legal e `public/` intocados).
+- 360 px (Puppeteer): `scrollWidth` 360 nas 10 legais, na 404 e na home.
+- Lighthouse a11y das 12 páginas: `heading-order`, `label-content-name-mismatch`, `target-size` e
+  `landmark-one-main` com score 1.
+- `prefers-reduced-motion` (Puppeteer): 0 animações infinitas; hero visível.
+- Mutações provadas e desfeitas: guardas (a)–(e) do `check_site` §17 e o `textoDaChave` (`txt()` que lança).
+- Orçamento Lighthouse (`python3 tools/lighthouse.py`): ✅ orçamento cumprido no HEAD 12cdac7 (3 runs, LANG=en_US). Perf 97–99, a11y 96–100, CLS 0 nas 9 páginas; aviso só de `/`: LCP 2,55 s > 2,5 s (2,33 s no fechamento do WP-12, 2,48 s no `--medir` deste WP: oscilação perto do limite de aviso, erro é 3,0 s).
+
+**Desvios aceitos pela auditoria:**
+- Rótulo do seletor sai `English, EN` (não `English (EN)`): o axe remove parênteses ao comparar.
+- Tabela legal: `<section class="legal-tabela" tabindex="0" aria-labelledby>`, sem `role="region"` (o html-validate,
+  `prefer-native-element`, reprova o `role` no `div`).
+- A constante de foco ficou em `ui.ts` (`FOCO`).
+- "Base sólida" passou de `h3` para `p` (heading sem conteúdo de seção).
+- 404 com `pt-32` sob o Nav fixo; `animation-delay: 0s` no reduced-motion.
+- Contraste para gray-400 também em `Home.astro:185` (título da stack) e `LottoExpert.astro:219,242` ("compra no app").
+
+**Critérios que não fecham como escritos:**
+- `color-contrast` score 1 fora do violeta: os nós que restam são paleta ou desenho — violeta `#8B5CF6`,
+  terracota do TopoWalk, botão emerald da home (branco sobre `#10b981`, 2,53:1), selos `text-[9px]` com
+  `opacity-70`, slogan gray-500 das legais LE (`global.css:579`). Vão para o WP-10 (achados novos).
+- `sync_legal --todos --check` sem "atrás"/"divergente": topowalk, poleposition e eclipsego aparecem "à frente/
+  divergente", situação anterior ao WP; só o usuário resolve, nos repositórios dos apps. Texto legal intocado.
+
+**Checklist de navegador para o usuário** (junta "Só no navegador" acima com o do site-ux):
+1. `/lottoexpert-privacy.html` e `/en/...`, 360 px: sem rolagem lateral, botão do menu visível e abre, URL do googleapis quebra no bloco.
+2. Legais do LottoExpert, pt e en, 1280 e 360 px (regressão corrigida): destaques das 3 notas do §2 e do "Dado local" do §9.2; coluna mono do §5; tabela do §9.1; último item do §3 dos termos com barra.
+3. `/topowalk-`, `/poleposition-`, `/eclipsego-privacy.html` e `/lottoexpert-terms.html`, 360 e 1280 px: links e e-mail sublinhados, Tab com anel na cor do tema, tabela larga rola com setas; o anel da tabela é discreto sobre a borda cinza (PP e LE)? (`TABELA-LEGAL-ANEL-DISCRETO-01`).
+4. `/poleposition-privacy.html`, 360 px, menu aberto: pílula Contato com texto escuro legível e foco visível.
+5. `/`, 360 px: Tab até o botão do menu, anel branco inteiro; menu aberto, o último link não é cortado. 1280 px: Tab pelo Nav e Footer, anel dos sociais não cortado.
+6. Rodapé a 360 px (`/` e `/en/`): altura de 1432 px com alvos de 44 px — aceitável ou reduzir? (site-ux recomenda manter 44); "© ano" legível; sociais alinhados.
+7. `/404.html` e `/x/y` (este só no Pages), 360 e 1280 px: Nav e Footer, conteúdo centralizado, rodapé não flutua, links funcionam de subpasta.
+8. `/en/` e `/en/poleposition.html`, 1280 px: nenhum rótulo de interface em pt nos cards; ícones de tecnologia sem mão; en dos rótulos lê bem.
+9. `/en/topowalk.html`: botão da Play abre a ficha na língua da conta.
+10. Leitor de tela (TalkBack/NVDA): seletor anuncia "English, EN"; tabela Free × Premium em `/lottoexpert.html` anuncia "Incluído"/"Não incluído" e em `/en/` "Included"/"Not included".
+11. Home, LottoExpert e EclipseGo com "reduzir movimento" no SO, 1280 px: nada se move, hero aparece, blobs centrados.
+12. Cada tema: nada mudou além de foco, sublinhado e alvo.
