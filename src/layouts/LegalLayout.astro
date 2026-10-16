@@ -8,7 +8,7 @@
 // `footer` (cada página legal tem as suas variações, por prop).
 import Base from './Base.astro';
 import { legal, dataLegal, rotuloData } from '../i18n/legal';
-import type { Idioma } from '../i18n/idiomas';
+import { atributosLink, type Idioma } from '../i18n/idiomas';
 import Icon from '../components/Icon.astro';
 
 interface Props {
@@ -92,7 +92,7 @@ const CLASSES_SELO = {
 
       <div class="max-w-4xl mx-auto mt-8 text-center">
         <a
-          href={voltar.href}
+          {...atributosLink(lang, voltar.href)}
           class="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-gray-700 text-gray-300 hover:text-white hover:border-brand-primary hover:bg-gray-800/50 transition-all font-semibold"
         >
           <Icon nome="arrow-left" /> <span>{voltar.texto}</span>

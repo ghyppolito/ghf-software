@@ -16,7 +16,7 @@ import { Image } from 'astro:assets';
 import telaEclipse from '../assets/img/eclipsego_phone_screen.png';
 import { eclipsego, tecnologias, type ChaveEclipse } from '../i18n/eclipsego';
 import { apps } from '../i18n/apps';
-import { rota, type Idioma } from '../i18n/idiomas';
+import { link, type Idioma } from '../i18n/idiomas';
 
 interface Props {
   lang: Idioma;
@@ -64,8 +64,8 @@ const passos = [1, 2, 3, 4];
                     <a href={apps.eclipsego.play} target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-primary hover:bg-brand-primaryHover text-black font-bold rounded-lg shadow-glow hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
                         <Icon conjunto="brands" nome="google-play" class="text-xl" /> <span>{x.btn_play}</span>
                     </a>
-                    {/* Política é URL contratual (ADR-001); `rota` dá o par en em /en/. */}
-                    <a href={rota(lang, 'eclipsego-privacy.html')} class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
+                    {/* Política é URL contratual (ADR-001); `link` dá o par na língua da página (D23). */}
+                    <a {...link(lang, 'eclipsego-privacy.html')} class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
                         <Icon nome="shield-halved" /> <span>{x.btn_privacy}</span>
                     </a>
                 </div>

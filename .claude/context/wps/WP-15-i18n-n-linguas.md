@@ -351,6 +351,60 @@ $ diff <(cd base && find . -type f | sort) <(cd dist && find . -type f | sort)
 Os 7 caminhos de ADR-001 com `test -f`: ok. `grep -o '<link rel="alternate" hreflang=' dist/topowalk-privacy.html | wc -l` = 3;
 `grep -o 'hreflang=' … | wc -l` = 5 (igual à base). `grep -rnE "location\.(replace|assign)|location\.href *=|http-equiv=\"refresh\"" src/ dist/ --exclude-dir=lotto-expert`: vazio.
 
+### Commit 4 — `SeletorIdioma` e `rota()` com a D23
+`SeletorIdioma.astro` no lugar do `TrocaIdioma.astro` (apagado); `rota()` com a D23 (A) e
+`link()`/`atributosLink()` em `idiomas.ts`, que acrescentam `hreflang`/`lang` do destino quando ele
+está em outra língua. Nav, Footer, Home, as duas landings com link de política e o "voltar" do
+`LegalLayout` passam a espalhar esses atributos (`<a {...link(lang, x)}>`), em vez de `href={rota(…)}`:
+é o único jeito de o atributo sair do `rota()` e não de cada página (especificação, §1). §9 do
+`check_site.py` vale para toda página do mapa (pt inclusive), pela `regras_i18n.regra_link`; a 404
+(fora do mapa, bilíngue por desenho) fica de fora. Chave `idioma` nova em `ui.ts` (pt/en), usada só
+com 3+ línguas.
+
+`diff -r <base> dist`, com o nome `_astro/Base.<hash>.css` normalizado: **HTML idêntico**, mesma lista
+de arquivos. O CSS muda (o Tailwind lê as classes do ramo `n ≥ 3` do componente, que nenhuma página
+publicada renderiza): só regras novas, nenhuma removida.
+
+```
+== lista de arquivos (CSS normalizado)
+== diff -r sem o CSS
+== CSS: regras novas
+> .top-full  .mt-2  .h-2.5  .h-px  .min-h-11  .w-2.5  .w-[220px]  .shrink-0  .list-none  .gap-0.5
+> .overflow-y-auto  .break-words  .bg-gray-700  .p-1.5  .py-28  .text-[13px]  .text-[15px]
+> .[justify-content:safe_center]  .hover:bg-white/5  .focus-visible:outline-offset-2
+> .focus-visible:outline-white  .[&::-webkit-details-marker]:hidden
+```
+
+Mutação no `dist/` real (revertida): `en/topowalk.html` apontando para `/topowalk-privacy.html` e
+`topowalk.html` para `/en/topowalk-privacy.html` — os dois reprovam no §9. `unittest`: 5 testes,
+`test_link_d23` novo (mesma língua; fallback en com `hreflang`/`lang`; fallback errado; pt também
+conferido; seletor isento; fora do mapa).
+
+**Prova de 3 e de 1 língua (build descartável numa cópia do repositório, nada commitado):** mapa com
+`topowalk.html: [pt, en, es]` (es = cópia do en, sem conteúdo real) e `eclipsego.html: [pt]`.
+`check_site.py` na cópia: só a regra xi (o bloco `es` de `ui.ts` era um getter, que o check não lê —
+esperado); §9 e hreflang verdes; html-validate verde.
+
+- `es/topowalk.html`, barra (desktop): `<details data-seletor-idioma>` com `<summary>` (globo +
+  `<span lang="es">Español</span>` + seta) e `<ul aria-label="Language">` com
+  `<a href="/topowalk.html" hreflang="pt-BR" lang="pt-BR" data-troca-idioma="pt">Português</a>`,
+  `…/en/topowalk.html … data-troca-idioma="en">English`,
+  `…/es/topowalk.html … data-troca-idioma="es" aria-current="true">Español` + check; o script do
+  `<details>` (Esc, clique fora, foco fora) só aparece nessa página.
+- Barra do celular: vazia antes do botão do menu. Menu do celular: separador, "Language" e grade
+  `grid-cols-2` com os 3 links (bolinha preenchida no atual, `aria-current`); overlay com
+  `[justify-content:safe_center] py-28 overflow-y-auto`.
+- `<head>`: hreflang pt-BR/en/es + x-default→en; `og:locale` es_ES + 2 `og:locale:alternate`.
+- D23 no nav/footer de `es/topowalk.html`: `<a href="/en/" hreflang="en" lang="en">` (home sem es),
+  `/en/lottoexpert-privacy.html … hreflang="en" lang="en"`, e `/eclipsego.html hreflang="pt-BR"
+  lang="pt-BR"` (página só pt).
+- `eclipsego.html` com `[pt]`: 0 `hreflang`, 0 `og:locale:alternate`, 0 `data-troca-idioma`, 0
+  `<details>`; `en/eclipsego.html` não gerado; links de `en/index.html` para ela com `hreflang="pt-BR"`.
+
+Verificação: `npm run build`, `check_site.py`, contrato sha256, html-validate, lychee (0 erros),
+`unittest` OK, `gen_estado --check`, `check_plano` — verdes. Os 7 caminhos de ADR-001 com `test -f`;
+`test ! -e dist/pt`; hreflang do head de `topowalk-privacy.html` = 3, total = 5; grep de redirect vazio.
+
 ## Especificação do site-ux (2026-10-16)
 
 Modo DESENHAR, para os commits 4 (`SeletorIdioma`) e 6 (`SugestaoIdioma`). D23 = (A): link para

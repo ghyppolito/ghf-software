@@ -57,13 +57,47 @@ export function hreflang(lang: Idioma): string {
   return IDIOMAS[lang].hreflang;
 }
 
-// Caminho público de uma página do site na língua pedida: pt na raiz, as outras em `/<código>/`.
-// `index.html` vira a pasta (`/`, `/en/`), como o og:url que a home já declarava. Página sem a
-// língua continua em pt (D23 decide o destino quando houver mais de duas línguas).
-export function rota(lang: Idioma, caminho: string): string {
-  const destino = linguasDe(caminho).includes(lang) ? lang : 'pt';
-  const prefixo = destino === 'pt' ? '/' : `/${destino}/`;
+/** Língua para onde vai um link de uma página em `lang` para `caminho` (D23 (A), ADR-007 §5): a
+ *  própria `lang` se a página de destino a tem; senão en, se tem; senão pt — a regra do x-default. */
+export function linguaDoLink(lang: Idioma, caminho: string): Idioma {
+  const linguas = linguasDe(caminho);
+  if (linguas.includes(lang)) return lang;
+  return linguas.includes('en' as Idioma) ? ('en' as Idioma) : ('pt' as Idioma);
+}
+
+/** Caminho público de `caminho` em `lang`, sem fallback: pt na raiz, as outras em `/<código>/`.
+ *  `index.html` vira a pasta (`/`, `/en/`), como o og:url que a home já declarava. */
+export function caminhoPublico(lang: Idioma, caminho: string): string {
+  const prefixo = lang === 'pt' ? '/' : `/${lang}/`;
   return caminho === 'index.html' ? prefixo : prefixo + caminho;
+}
+
+// Caminho público de uma página do site para um link de uma página em `lang`: na mesma língua
+// quando o destino a tem; senão pela D23 (en, senão pt).
+export function rota(lang: Idioma, caminho: string): string {
+  return caminhoPublico(linguaDoLink(lang, caminho), caminho);
+}
+
+/** Língua de um href interno do site (`/`, `/en/x.html`, `/x.html#a`); `null` para âncora da
+ *  própria página, link externo ou caminho fora de `/`. */
+export function linguaDoHref(href: string): Idioma | null {
+  if (!href.startsWith('/') || href.startsWith('//')) return null;
+  const primeiro = href.slice(1).split(/[/?#]/)[0];
+  const temPasta = href.length > primeiro.length + 1 && href[primeiro.length + 1] === '/';
+  return temPasta && Object.hasOwn(IDIOMAS, primeiro) ? (primeiro as Idioma) : ('pt' as Idioma);
+}
+
+/** Atributos de um `<a>` de uma página em `lang` para `href`: o `href` e, quando o destino está em
+ *  outra língua (D23), `hreflang` e `lang` dela (WCAG 3.1.2). Uso: `<a {...atributosLink(lang, x)}>`. */
+export function atributosLink(lang: Idioma, href: string): { href: string; hreflang?: string; lang?: string } {
+  const destino = linguaDoHref(href);
+  if (!destino || destino === lang) return { href };
+  return { href, hreflang: hreflang(destino), lang: hreflang(destino) };
+}
+
+/** `atributosLink` de `rota(lang, caminho)`: o link para uma página do site, com a D23. */
+export function link(lang: Idioma, caminho: string): { href: string; hreflang?: string; lang?: string } {
+  return atributosLink(lang, rota(lang, caminho));
 }
 
 /** `getStaticPaths()` de `src/pages/[lang]/<x>.astro`: uma rota por língua da página, menos o pt

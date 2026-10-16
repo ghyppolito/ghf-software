@@ -138,5 +138,37 @@ class RegrasI18n(unittest.TestCase):
         self.assertEqual(i18n.hreflang_esperado(mapa, "index.html", SITE), {})
 
 
+    def test_link_d23(self):
+        mapa = json.loads(ler("correto", "idiomas.json"))
+        mapa["paginas"]["tres.html"] = ["pt", "en", "es"]
+        mapa["paginas"]["so-pt.html"] = ["pt"]
+        mapa["paginas"]["pt-es.html"] = ["pt", "es"]
+        mapa["paginas"]["index.html"] = ["pt", "en"]
+        mapa["idiomas"]["es"] = dict(mapa["idiomas"]["en"], hreflang="es")
+        self.assertEqual(i18n.lingua_do_link(mapa, "es", "tres.html"), "es")
+        self.assertEqual(i18n.lingua_do_link(mapa, "es", "index.html"), "en")
+        self.assertEqual(i18n.lingua_do_link(mapa, "es", "so-pt.html"), "pt")
+        self.assertEqual(i18n.lingua_do_link(mapa, "en", "pt-es.html"), "pt")
+        ok = i18n.regra_link
+        # mesma língua: sem atributo
+        self.assertEqual(ok(mapa, "es/tres.html", "/es/tres.html", "es/tres.html", '<a href="/es/tres.html">'), [])
+        # fallback para en com hreflang e lang
+        self.assertEqual(ok(mapa, "es/tres.html", "/en/", "en/index.html",
+                            '<a href="/en/" hreflang="en" lang="en">'), [])
+        self.assertIn("sem `hreflang=", ok(mapa, "es/tres.html", "/en/", "en/index.html", '<a href="/en/">')[0])
+        # fallback errado (pt quando há en) e língua errada (pt quando há es)
+        self.assertIn("esperado /en/index.html", ok(mapa, "es/tres.html", "/", "index.html",
+                                                    '<a href="/" hreflang="pt-BR" lang="pt-BR">')[0])
+        self.assertIn("esperado /es/tres.html", ok(mapa, "es/tres.html", "/tres.html", "tres.html", '<a href="/tres.html">')[0])
+        # pt também é conferido: pt → página en (pt sempre existe, então é erro)
+        self.assertIn("leva a en", ok(mapa, "tres.html", "/en/tres.html", "en/tres.html", '<a href="/en/tres.html">')[0])
+        # seletor isento; fora do mapa não entra
+        self.assertEqual(ok(mapa, "tres.html", "/en/tres.html", "en/tres.html",
+                            '<a href="/en/tres.html" data-troca-idioma="en">'), [])
+        self.assertEqual(ok(mapa, "es/tres.html", "/assets/x.png", "assets/x.png", '<a href="/assets/x.png">'), [])
+        # página fora do mapa (a 404, bilíngue por desenho) não entra
+        self.assertEqual(ok(mapa, "404.html", "/en/", "en/index.html", '<a href="/en/">'), [])
+
+
 if __name__ == "__main__":
     unittest.main()

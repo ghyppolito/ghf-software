@@ -17,6 +17,8 @@ Regras (numeração do veredito do WP-15):
   (vii)  sem `pendente` no front-matter; tradução sem `origemCommit` nem `pendente` (ADR-004)
   (viii) hreflang: um por língua mais `x-default` (en se houver, senão pt); página com uma língua
          só não tem hreflang
+  (§9)   link interno vai à página na língua da página; se o destino não a tem, en, senão pt (D23),
+         com `hreflang` e `lang` do destino quando ele está em outra língua
   (xi)   cada dicionário de src/i18n/*.ts com as mesmas chaves em todos os blocos de língua, e
          ui.ts com um bloco para cada língua do mapa
   (xii)  chaves de `paginas` mais as páginas fora do mapa (o convite) = PUBLICADAS
@@ -200,6 +202,41 @@ def regra_hreflang(mapa, rel, alternates, site):
     if len(alternates) != len(dict(alternates)) or dict(alternates) != esperado:
         return [f"{rel}: hreflang {sorted(alternates)} ≠ esperado {sorted(esperado.items())} "
                 f"(x-default = en se houver, senão pt; regra viii)"]
+    return []
+
+
+# ------------------------------------------------------------ §9 links (D23)
+def lingua_do_link(mapa, lang, caminho):
+    """Língua do destino de um link de uma página em `lang` para `caminho` (D23 (A), ADR-007 §5):
+    `lang` se o destino a tem; senão en, se tem; senão pt — a regra do x-default."""
+    linguas = mapa["paginas"].get(caminho, ["pt"])
+    if lang in linguas:
+        return lang
+    return "en" if "en" in linguas else "pt"
+
+
+def regra_link(mapa, rel, href, destino, tag):
+    """`rel`: a página (arquivo de dist/); `href`: como escrito; `destino`: arquivo de dist/ a que o
+    href leva; `tag`: o `<a …>` inteiro. O link marcado `data-troca-idioma` (seletor de idioma) é
+    isento. Página de origem ou de destino fora do mapa não entra: a 404 é bilíngue por desenho (um
+    bloco por língua, cada um com o seu link) e o convite e os assets não têm língua."""
+    if re.search(r"\bdata-troca-idioma\b", tag):
+        return []
+    lang_pag, origem = pagina_de(rel)
+    if origem not in mapa["paginas"]:
+        return []
+    lang_alvo, caminho = pagina_de(destino)
+    if caminho not in mapa["paginas"]:
+        return []
+    esperado = lingua_do_link(mapa, lang_pag, caminho)
+    if lang_alvo != esperado:
+        return [f"{rel}: href=\"{href}\" leva a {lang_alvo}; esperado /{arquivo(esperado, caminho)} "
+                f"(mesma língua se o destino a tem, senão en, senão pt — D23, §9)"]
+    if esperado != lang_pag:
+        h = mapa["idiomas"][esperado]["hreflang"]
+        for atributo in ("hreflang", "lang"):
+            if not re.search(rf'\s{atributo}="{re.escape(h)}"', tag):
+                return [f"{rel}: href=\"{href}\" leva a {esperado} sem `{atributo}=\"{h}\"` (WCAG 3.1.2, D23, §9)"]
     return []
 
 

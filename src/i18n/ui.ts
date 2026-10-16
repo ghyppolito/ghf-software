@@ -1,5 +1,6 @@
 // Textos de nav e footer, um bloco por língua de src/i18n/idiomas.json — transportados do dicionário
-// JS de index.html (WP-08, fatia 1). Toda chave nova entra em todas as línguas no mesmo commit.
+// JS de index.html (WP-08, fatia 1); `idioma` (rótulo da lista do seletor) vem do handoff
+// `content/i18n.js` (WP-15). Toda chave nova entra em todas as línguas no mesmo commit.
 // `Idioma` vem do mapa (idiomas.ts); fica reexportado aqui para os dicionários de src/i18n/.
 import type { Idioma } from './idiomas';
 
@@ -27,6 +28,7 @@ export const ui = {
     footer_rights: 'GHF Software. Todos os direitos reservados.',
     footer_dev: 'Desenvolvido com',
     footer_dev2: 'por especialistas.',
+    idioma: 'Idioma',
   },
   en: {
     nav_about: 'About Us',
@@ -47,6 +49,7 @@ export const ui = {
     footer_rights: 'GHF Software. All rights reserved.',
     footer_dev: 'Developed with',
     footer_dev2: 'by experts.',
+    idioma: 'Language',
   },
 } as const;
 

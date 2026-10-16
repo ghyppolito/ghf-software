@@ -1,6 +1,7 @@
 ---
 // Footer do site (referência: index.html). `id="contato"` é o alvo do item Contato da nav.
-// Links para páginas do site passam por `rota()`: em en, apontam para o par quando ele existe.
+// Links para páginas do site passam por `link()`/`atributosLink()`: na língua da página quando o
+// destino a tem; senão pela D23 (en, senão pt), com `hreflang` e `lang` do destino.
 // O que varia por página é prop: redes sociais do app, o app da página destacado na lista, o
 // fundo (`surface` nas landings que o usavam; `surface-sem-borda` no Pole Position, que não tinha o
 // filete do topo), a cor de realce (`accent` no TopoWalk), a política da página destacada
@@ -9,7 +10,7 @@
 // (o Tailwind não detecta concatenação).
 import { Image } from 'astro:assets';
 import { t } from '../i18n/ui';
-import { rota, type Idioma } from '../i18n/idiomas';
+import { atributosLink, link as linkPagina, type Idioma } from '../i18n/idiomas';
 import logo from '../assets/img/GHFSoftware.png';
 import Icon from './Icon.astro';
 
@@ -102,7 +103,7 @@ const ano = new Date().getFullYear();
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
       <!-- Marca -->
       <div class="md:col-span-2 lg:col-span-2">
-        <a href={inicio} class="inline-block mb-6 group">
+        <a {...atributosLink(lang, inicio)} class="inline-block mb-6 group">
           <Image src={logo} alt="GHF Software Logo" class={classeLogo} height={128} densities={[1, 2]} />
         </a>
         <p class="text-gray-400 max-w-sm mb-6">{t(lang, 'footer_desc')}</p>
@@ -165,7 +166,7 @@ const ano = new Date().getFullYear();
       <div>
         <h4 class="text-white font-semibold mb-6">{t(lang, 'footer_inst')}</h4>
         <ul class="space-y-3">
-          {institucional.map((i) => <li><a href={i.href} class={link}>{t(lang, i.chave)}</a></li>)}
+          {institucional.map((i) => <li><a {...atributosLink(lang, i.href)} class={link}>{t(lang, i.chave)}</a></li>)}
         </ul>
       </div>
 
@@ -177,12 +178,12 @@ const ano = new Date().getFullYear();
             apps.map((a) =>
               a.caminho === appAtual ? (
                 <li>
-                  <a href={rota(lang, a.caminho)} aria-current="page" class={c.atual}>
+                  <a {...linkPagina(lang, a.caminho)} aria-current="page" class={c.atual}>
                     <Icon nome="chevron-right" class="text-xs" /> {a.nome}
                   </a>
                 </li>
               ) : (
-                <li><a href={rota(lang, a.caminho)} class={link}>{a.nome}</a></li>
+                <li><a {...linkPagina(lang, a.caminho)} class={link}>{a.nome}</a></li>
               ),
             )
           }
@@ -198,7 +199,7 @@ const ano = new Date().getFullYear();
               p.caminho === politicaAtual ? (
                 <li>
                   <a
-                    href={rota(lang, p.caminho)}
+                    {...linkPagina(lang, p.caminho)}
                     aria-current="page"
                     class="text-brand-primary hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"
                   >
@@ -208,7 +209,7 @@ const ano = new Date().getFullYear();
                 </li>
               ) : (
                 <li>
-                  <a href={rota(lang, p.caminho)} class={`${link} flex items-center gap-2`}>
+                  <a {...linkPagina(lang, p.caminho)} class={`${link} flex items-center gap-2`}>
                     <Icon nome={p.icone} class="text-gray-600 text-xs" />
                     <span>{t(lang, p.chave)}</span>
                   </a>

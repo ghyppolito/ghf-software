@@ -35,8 +35,9 @@ Checa:
   8. hreflang (no laço do §14): um por língua da página no mapa mais `x-default` (en se houver,
      senão pt), recíprocos; página com uma língua só, ou fora do mapa, sem hreflang (regra viii);
      og:locale da língua da página e um og:locale:alternate por outra língua dela (regra ix)
-  9. página em `<código>/` com link interno para página que tem essa língua aponta para ela; o
-     link marcado `data-troca-idioma` é a exceção
+  9. link interno de toda página vai à página de destino na língua da página; se o destino não a
+     tem, en, senão pt (D23), com `hreflang` e `lang` do destino; o link marcado
+     `data-troca-idioma` (SeletorIdioma) é a exceção
  10. dicionários de src/i18n/ com as mesmas chaves em todos os blocos de língua, cada bloco de
      língua do mapa, e ui.ts com um bloco por língua do mapa (regra xi)
  11. `dist/` não é mais antigo que as fontes (src/, public/, configs, package.json, fontes de
@@ -545,17 +546,15 @@ for c in sorted(glob.glob(os.path.join(REPO, "*.html"))):
 # Regras viii e ix: rodam no laço do §14, que já lê o <head> de cada página.
 
 # ------------------------------------------------------------ 9: a língua aponta para a língua
-# Link interno de página em `<código>/` para página que existe nessa língua vai para ela. A troca de
-# idioma é a exceção declarada: só o link marcado `data-troca-idioma` (componente TrocaIdioma) é isento.
+# Link interno de qualquer página vai à página de destino na língua dela; se o destino não existe
+# nessa língua, en, senão pt (D23), com `hreflang`/`lang` do destino (regras_i18n.regra_link). O
+# seletor de idioma é a exceção declarada: só o link marcado `data-troca-idioma` é isento.
 for caminho in paginas:
     rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
-    lang_pag, _ = i18n.pagina_de(rel)
-    if lang_pag == "pt":
-        continue
     base = os.path.dirname(caminho)
     for tag in re.findall(r"<a\b[^>]*>", ler(caminho), re.I):
-        href = re.search(r'href="([^"#?]*)[^"]*"', tag)
-        if not href or re.search(r"\bdata-troca-idioma\b", tag):
+        href = re.search(r'\shref="([^"#?]*)[^"]*"', tag)
+        if not href:
             continue
         alvo = href.group(1)
         if alvo.startswith(SITE):
@@ -568,8 +567,7 @@ for caminho in paginas:
             destino = "index.html"
         elif alvo.endswith("/"):
             destino += "/index.html"
-        if lang_pag in LINGUAS.get(destino, []):
-            erros.append(f"{rel}: href=\"{href.group(1)}\" leva ao pt; a página em {lang_pag} é /{lang_pag}/{destino}")
+        erros.extend(i18n.regra_link(MAPA, rel, href.group(1), destino, tag))
 
 # ------------------------------------------------------------ 10: dicionários
 # O `satisfies` dos dicionários em src/i18n/ aceita bloco com chaves a menos e o build não roda
