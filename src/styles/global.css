@@ -602,39 +602,40 @@ body {
 }
 
 /* Destaques: as 3 notas de §2 (com barra) e "Dado local" de §9.2 (sem barra). O `.md` não as
- * distingue pela estrutura; o seletor ancora no `id` da seção (plugin idDosTitulosLegais), pt e en. */
-[data-tema='lottoexpert-privacy'] .legal-corpo [id^='secao-2-'] + p + ul + p,
-[data-tema='lottoexpert-privacy'] .legal-corpo [id^='secao-2-'] + p + ul + p + p,
-[data-tema='lottoexpert-privacy'] .legal-corpo [id^='secao-2-'] + p + ul + p + p + p {
+ * distingue pela estrutura; o seletor ancora no `id` da seção, que vem da posição (plugin
+ * idDosTitulosLegais, ADR-007 §6), igual em pt e en. */
+[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-2'] + p + ul + p,
+[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-2'] + p + ul + p + p,
+[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-2'] + p + ul + p + p + p {
   @apply mb-4 text-sm bg-gray-800/50 p-4 rounded-lg border-l-4 border-brand-primary;
 }
 
-[data-tema='lottoexpert-privacy'] .legal-corpo [id^='secao-92-'] + p + ul + p + p {
+[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-9-2'] + p + ul + p + p {
   @apply mb-4 text-sm bg-gray-800/50 p-4 rounded-lg;
 }
 
 /* Tabelas: §5 (permissões) com a 1ª coluna mono na cor do app; §9.1 (bases legais) toda em text-sm. */
-[data-tema='lottoexpert-privacy'] .legal-corpo [id^='secao-5-'] + .legal-tabela td:first-child {
+[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-5'] + .legal-tabela td:first-child {
   @apply font-mono text-sm text-brand-primary;
 }
 
-[data-tema='lottoexpert-privacy'] .legal-corpo [id^='secao-91-'] + .legal-tabela td {
+[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-9-1'] + .legal-tabela td {
   @apply text-sm;
 }
 
 /* lottoexpert-terms.html — §3: a página antiga mostrava os 3 itens como parágrafos, o último (ajuda
  * de jogo responsável: Jogadores Anônimos, CVV 188) em destaque com barra. Ancorado no `id`. */
-[data-tema='lottoexpert-terms'] .legal-corpo [id^='secao-3-'] + ul {
+[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul {
   @apply list-none pl-0 mb-0;
 }
 
-[data-tema='lottoexpert-terms'] .legal-corpo [id^='secao-3-'] + ul > li,
-[data-tema='lottoexpert-terms'] .legal-corpo [id^='secao-3-'] + ul > :not([hidden]) ~ :not([hidden]) {
+[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul > li,
+[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul > :not([hidden]) ~ :not([hidden]) {
   @apply mt-0 mb-4;
 }
 
-[data-tema='lottoexpert-terms'] .legal-corpo [id^='secao-3-'] + ul > li:last-child,
-[data-tema='lottoexpert-terms'] .legal-corpo [id^='secao-3-'] + ul > :not([hidden]) ~ li:last-child {
+[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul > li:last-child,
+[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul > :not([hidden]) ~ li:last-child {
   @apply text-sm bg-gray-800/50 p-4 rounded-lg border-l-4 border-brand-primary;
 }
 

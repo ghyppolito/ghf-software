@@ -1289,6 +1289,23 @@ for caminho in paginas:
             if RE_LINK_PT.search(href):
                 erros.append(f"{rel}: {href} — link com a língua fixa em pt numa página que não é pt (WP-22)")
 
+# (e) estilo de tema ancorado em título legal: o id vem da posição (ADR-007 §6, `secao-2`,
+# `secao-9-1`). Um seletor por prefixo do slug antigo (`[id^='secao-91-']`) deixou de casar sem erro
+# nenhum no WP-15; aqui todo `[id='secao-…']` de um `[data-tema='<página>']` tem de existir em cada
+# língua da página, e prefixo de id de seção é proibido.
+css_global = ler(os.path.join(REPO, "src", "styles", "global.css"))
+if re.search(r"\[id\^=['\"]secao-", css_global):
+    erros.append("src/styles/global.css: seletor por prefixo de id de seção (`[id^='secao-…']`) — o id"
+                 " é da posição; use `[id='secao-N-M']` (ADR-007 §6, WP-22)")
+for tema, sid in sorted(set(re.findall(
+        r"\[data-tema='([a-z-]+)'\][^{,]*?\[id='(secao-[0-9-]+)'\]", css_global))):
+    for lang in linguas_de(tema + ".html"):
+        rel = i18n.arquivo(lang, tema + ".html")
+        caminho = os.path.join(raiz, rel)
+        if os.path.isfile(caminho) and f'id="{sid}"' not in ler(caminho):
+            erros.append(f"src/styles/global.css: [data-tema='{tema}'] [id='{sid}'] não casa — {rel}"
+                         f" não tem id=\"{sid}\" (WP-22)")
+
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")
 for a in avisos:
