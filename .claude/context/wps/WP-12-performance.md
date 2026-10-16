@@ -264,3 +264,49 @@ html-validate e lychee. As capturas antes/depois do `site-ux` são dos commits 2
 **Nota para o `site-docs`:** a árvore de Arquitetura do `CLAUDE.md` ("assets/ … PNG, sem
 otimização"; "Base.astro … fontes") fica desatualizada no commit 4. A atualização é do
 `site-docs`/usuário, no fechamento.
+
+## Tabela antes/depois (commit 5, 2026-10-16)
+
+Lighthouse 13.5.0 mobile (throttling simulado), 3 runs por página, mediana pela nota de
+performance, `dist/` servido por `python3 -m http.server -d dist`, sem gzip. "Antes" é a linha de
+base do `site-seo-perf`, medida antes do commit 1; "depois" é o `dist/` deste commit. Cada
+célula mostra `antes → depois`; KB é o `total-byte-weight`.
+
+| página | perf | a11y | BP | SEO | LCP s | CLS | TBT ms | FCP s | KB |
+|---|---|---|---|---|---|---|---|---|---|
+| `/en/` | 65 → 98 | 94 → 95 | 100 → 100 | 100 → 100 | 16.1 → 2.3 | 0.000 → 0.000 | 0 → 0 | 4.0 → 1.4 | 3838 → 288 |
+| `/` | 65 → 98 | 94 → 95 | 100 → 100 | 100 → 100 | 16.1 → 2.3 | 0.000 → 0.000 | 0 → 0 | 4.0 → 1.4 | 3838 → 288 |
+| `/eclipsego.html` | 88 → 99 | 94 → 94 | 100 → 100 | 100 → 100 | 3.3 → 1.9 | 0.033 → 0.000 | 0 → 0 | 2.7 → 1.2 | 625 → 167 |
+| `/en/eclipsego.html` | 88 → 99 | 94 → 94 | 100 → 100 | 100 → 100 | 3.3 → 1.9 | 0.002 → 0.000 | 0 → 0 | 2.7 → 1.2 | 625 → 167 |
+| `/eclipsego-privacy.html` | 92 → 99 | 94 → 94 | 100 → 100 | 100 → 100 | 2.7 → 1.8 | 0.000 → 0.000 | 0 → 0 | 2.7 → 1.2 | 385 → 145 |
+| `/en/eclipsego-privacy.html` | 83 → 99 | 94 → 94 | 100 → 100 | 100 → 100 | 3.6 → 1.8 | 0.051 → 0.000 | 0 → 0 | 3.3 → 1.2 | 384 → 145 |
+| `/lottoexpert.html` | 70 → 98 | 96 → 96 | 100 → 100 | 100 → 100 | 15.1 → 2.2 | 0.001 → 0.000 | 0 → 0 | 2.8 → 1.5 | 4179 → 249 |
+| `/en/lottoexpert.html` | 70 → 98 | 96 → 96 | 100 → 100 | 100 → 100 | 14.9 → 2.2 | 0.001 → 0.000 | 0 → 0 | 2.8 → 1.5 | 4178 → 248 |
+| `/lottoexpert-privacy.html` | 82 → 99 | 90 → 90 | 100 → 100 | 100 → 100 | 3.8 → 2.0 | 0.002 → 0.000 | 0 → 0 | 3.4 → 1.4 | 704 → 174 |
+| `/en/lottoexpert-privacy.html` | 90 → 99 | 90 → 90 | 100 → 100 | 100 → 100 | 2.8 → 2.0 | 0.075 → 0.000 | 0 → 0 | 2.7 → 1.4 | 701 → 171 |
+| `/lottoexpert-terms.html` | 91 → 99 | 90 → 90 | 100 → 100 | 100 → 100 | 2.7 → 1.8 | 0.069 → 0.000 | 0 → 0 | 2.7 → 1.2 | 682 → 153 |
+| `/en/lottoexpert-terms.html` | 92 → 99 | 90 → 90 | 100 → 100 | 100 → 100 | 2.6 → 1.8 | 0.002 → 0.000 | 0 → 0 | 2.6 → 1.2 | 682 → 152 |
+| `/poleposition.html` | 66 → 99 | 94 → 94 | 100 → 100 | 100 → 100 | 8.9 → 2.1 | 0.024 → 0.000 | 0 → 0 | 4.0 → 1.4 | 1423 → 212 |
+| `/en/poleposition.html` | 72 → 99 | 94 → 94 | 100 → 100 | 100 → 100 | 7.1 → 2.1 | 0.001 → 0.000 | 0 → 0 | 2.7 → 1.4 | 1423 → 212 |
+| `/poleposition-privacy.html` | 83 → 99 | 90 → 90 | 100 → 100 | 100 → 100 | 3.6 → 2.0 | 0.004 → 0.000 | 0 → 0 | 3.3 → 1.4 | 451 → 161 |
+| `/en/poleposition-privacy.html` | 92 → 99 | 90 → 90 | 100 → 100 | 100 → 100 | 2.7 → 1.8 | 0.000 → 0.000 | 0 → 0 | 2.7 → 1.2 | 448 → 159 |
+| `/topowalk.html` | 80 → 99 | 96 → 96 | 100 → 100 | 100 → 100 | 4.0 → 2.0 | 0.047 → 0.000 | 0 → 0 | 3.4 → 1.4 | 586 → 171 |
+| `/en/topowalk.html` | 90 → 99 | 96 → 96 | 100 → 100 | 100 → 100 | 3.1 → 2.0 | 0.002 → 0.000 | 0 → 0 | 2.7 → 1.4 | 586 → 171 |
+| `/topowalk-privacy.html` | 91 → 99 | 94 → 94 | 100 → 100 | 100 → 100 | 2.8 → 2.0 | 0.003 → 0.000 | 0 → 0 | 2.8 → 1.4 | 510 → 183 |
+| `/en/topowalk-privacy.html` | 91 → 99 | 94 → 94 | 100 → 100 | 100 → 100 | 2.8 → 2.0 | 0.002 → 0.000 | 0 → 0 | 2.8 → 1.4 | 504 → 177 |
+| `/404.html` | 99 → 100 | 100 → 100 | 100 → 100 | 66 → 66 | 1.7 → 1.5 | 0.000 → 0.000 | 0 → 0 | 1.7 → 1.1 | 219 → 108 |
+
+**Resultado:** as 20 indexáveis cumprem a régua: performance de 98 a 99, boas práticas e SEO
+100, acessibilidade de 90 a 96, LCP de 1,8 a 2,3 s e CLS 0. A 404 tem 100/100/100. O único item de
+SEO reprovado nela é `is-crawlable`, como previsto. A oscilação entre as 3 runs ficou em no máximo
+1 ponto, contra até 9 pontos na linha de base.
+
+**Conserto feito aqui:** a primeira medição pós-commit 4 deu LCP de 2,6 s na `/en/` (2 das 3
+runs) e de 2,3 s na `/`. O LCP das duas homes é a logo da nav. As 17 imagens `lazy` dos cards
+estão perto da dobra no viewport do celular, então o navegador as busca antes de pintar a logo, e
+elas disputavam banda com ela. Sem essas imagens, o LCP caiu para 1,8–1,95 s, o que prova a
+causa. A solução foi `fetchpriority="low"` em toda `<Image>` de `Home.astro`, e o LCP ficou em
+2,33 s estável nas duas homes. As imagens continuam `lazy`, e nada muda na tela.
+
+**Acessibilidade**, para registro: o que reprova é `color-contrast`, `heading-order` e, nas legais,
+`link-in-text-block`. Os três foram roteados ao WP-10 (`A11Y-LH-BASELINE-WP12-01`), conforme o §6.
