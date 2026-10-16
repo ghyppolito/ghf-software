@@ -8,9 +8,10 @@ e confere a mediana — a run do meio pela nota de performance, como na tabela d
 código 1 se encontrar erro.
 
 Regras (veredito do WP-12 §7):
-  erro  — acessibilidade, boas práticas e SEO < 0,90 (SEO desligada onde `seo: false`, a 404,
-          que é `noindex` de propósito); performance < 0,85; LCP > 3,0 s; CLS > 0,1; qualquer
-          requisição a outra origem; bytes totais ou bytes de imagem acima do orçamento da página
+  erro  — acessibilidade, boas práticas e SEO < 0,90 (onde `seo: false`, a 404, que é `noindex`
+          de propósito, a nota não conta, mas nenhuma auditoria de SEO além de `is-crawlable` pode
+          reprovar); performance < 0,85; LCP > 3,0 s; CLS > 0,1; requisição a outra origem em
+          qualquer run; bytes totais ou bytes de imagem acima do orçamento da página
   aviso — performance < 0,90; LCP > 2,5 s
 A folga entre erro e aviso é a variação do runner (até 10 pontos nas páginas leves). Bytes e
 terceiros não variam entre runs: são eles que pegam a regressão de verdade.
@@ -40,6 +41,9 @@ if "--raiz" in sys.argv:
 runs = 3
 if "--runs" in sys.argv:
     runs = int(sys.argv[sys.argv.index("--runs") + 1])
+if runs < 1:
+    print("❌ --runs precisa ser 1 ou mais")
+    sys.exit(1)
 medir = "--medir" in sys.argv
 if not os.path.isdir(raiz):
     print(f"❌ {raiz}/ não existe — rode `npm run build`")
@@ -62,10 +66,14 @@ origem = f"http://127.0.0.1:{servidor.server_address[1]}"
 
 
 def lighthouse(url, saida):
-    r = subprocess.run(
-        ["npx", "--no-install", "lighthouse", url, "--output=json", f"--output-path={saida}",
-         "--quiet", "--chrome-flags=--headless=new --no-sandbox"],
-        cwd=RAIZ_REPO, capture_output=True, text=True)
+    # Um Chrome travado não pode gastar o timeout do job inteiro sem dizer em que página parou.
+    try:
+        r = subprocess.run(
+            ["npx", "--no-install", "lighthouse", url, "--output=json", f"--output-path={saida}",
+             "--quiet", "--chrome-flags=--headless=new --no-sandbox"],
+            cwd=RAIZ_REPO, capture_output=True, text=True, timeout=120)
+    except subprocess.TimeoutExpired:
+        raise RuntimeError(f"lighthouse passou de 120 s em {url}")
     if r.returncode != 0 or not os.path.isfile(saida):
         raise RuntimeError(f"lighthouse falhou em {url}:\n{r.stderr[-2000:]}")
     with open(saida, encoding="utf-8") as f:
@@ -79,8 +87,9 @@ def nota(rel, cat):
 
 erros, avisos, linhas = [], [], []
 with tempfile.TemporaryDirectory() as tmp:
-    for caminho, pagina in orcamento["paginas"].items():
-        relatorios = [lighthouse(origem + caminho, os.path.join(tmp, f"r{i}.json")) for i in range(runs)]
+    for n, (caminho, pagina) in enumerate(orcamento["paginas"].items()):
+        # um arquivo por run: nunca se lê o relatório de outra página
+        relatorios = [lighthouse(origem + caminho, os.path.join(tmp, f"{n}-{i}.json")) for i in range(runs)]
         perfs = [nota(r, "performance") for r in relatorios]
         m = relatorios[perfs.index(statistics.median_low(perfs))]
         a = m["audits"]
@@ -95,6 +104,12 @@ with tempfile.TemporaryDirectory() as tmp:
                       f" · seo {cats['seo']*100:3.0f} · LCP {lcp/1000:.2f} s · CLS {cls:.3f}"
                       f" · {total/1024:.0f} KB (img {imagem/1024:.0f} KB)")
 
+        if not pagina.get("seo", True):
+            reprovadas = sorted(ref["id"] for ref in m["categories"]["seo"]["auditRefs"]
+                                if ref["weight"] and a[ref["id"]]["score"] is not None
+                                and a[ref["id"]]["score"] < 1 and ref["id"] != "is-crawlable")
+            for aud in reprovadas:
+                erros.append(f"{caminho}: SEO reprovada em {aud} (só is-crawlable é esperada, ADR-005 §4)")
         for cat in ("accessibility", "best-practices", "seo"):
             if cat == "seo" and not pagina.get("seo", True):
                 continue
@@ -110,7 +125,8 @@ with tempfile.TemporaryDirectory() as tmp:
             avisos.append(f"{caminho}: LCP {lcp/1000:.2f} s > {regras['lcp_aviso_ms']/1000} s")
         if cls > regras["cls_max"]:
             erros.append(f"{caminho}: CLS {cls:.3f} > {regras['cls_max']}")
-        terceiros = sorted({r["url"] for r in reqs
+        terceiros = sorted({r["url"] for rel in relatorios
+                            for r in rel["audits"]["network-requests"]["details"]["items"]
                             if urlsplit(r["url"]).scheme in ("http", "https")
                             and not r["url"].startswith(origem + "/")})
         for u in terceiros:

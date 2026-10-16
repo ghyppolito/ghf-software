@@ -130,16 +130,22 @@ body {
   background-image: linear-gradient(135deg, #3b82f6, #10b981);
 }
 
-/* Ícone em SVG inline (components/Icon.astro, WP-12): o mesmo tamanho e a mesma linha de base do
- * glifo do Font Awesome — altura 1em do texto, largura pela proporção do viewBox e o
- * `vertical-align` do `.svg-inline--fa` do próprio FA 6.4.0. Classe vence o `svg { display: block }`
- * do preflight do Tailwind. */
+/* Ícone em SVG inline (components/Icon.astro, WP-12): o mesmo tamanho, a mesma linha de base e a
+ * mesma caixa do glifo do Font Awesome. O desenho tem altura 1em, largura pela proporção do viewBox
+ * e o `vertical-align` -0.125em do `.svg-inline--fa` do FA 6.4.0. O `<i>` do FA ocupava a altura de
+ * linha própria: 1, como no `.fa-solid`, ou a do `text-*` posto no ícone (28 px num `text-xl`, que
+ * vem depois no CSS e vence). O `padding-block` devolve essa meia-entrelinha acima e abaixo, e o
+ * `vertical-align` desce o mesmo tanto para o desenho ficar onde estava. Sem isso, botão e faixa
+ * com ícone encolhiam 4 a 8 px. Classe vence o `svg { display: block }` do preflight do Tailwind. */
 .icone {
+  line-height: 1;
+  --meia-entrelinha: max(0px, (1lh - 1em) / 2);
   display: inline-block;
   box-sizing: content-box;
   height: 1em;
+  padding-block: var(--meia-entrelinha);
   overflow: visible;
-  vertical-align: -0.125em;
+  vertical-align: calc(-0.125em - var(--meia-entrelinha));
 }
 
 /* Flutuação sutil */

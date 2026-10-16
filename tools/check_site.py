@@ -70,15 +70,19 @@ Checa:
  15. Desempenho (WP-12, ADR-006), em toda página de `dist/` fora de CONGELADAS (o convite, D13):
      (a) fonte servida pelo site — nenhuma menção a `fonts.googleapis`/`fonts.gstatic`, e um
          `<link rel="preload" as="font">` para arquivo de `dist/`
-     (b) ícone em SVG inline — nenhum `<link href>`/`<script src>` de outra origem (o Font
-         Awesome vinha do cdnjs), nenhuma menção a `cdnjs` e nenhuma classe `fa-*`
-     (c) imagem pelo astro:assets — toda `<img>` com `width` e `height`; nenhuma `<img>` (src ou
-         srcset) nem favicon apontando para `/assets/` (a cópia de public/ é para URL fixa:
-         og:image, JSON-LD e convite); no máximo um `fetchpriority="high"` por página
+     (b) ícone em SVG inline — nenhum recurso de outra origem (`<link href>`, `src`/`srcset` de
+         `<script>`, `<img>`, `<source>`, `<iframe>`, `<video>`, `<audio>`, `<embed>`, `url()` de
+         CSS inline; o Font Awesome vinha do cdnjs), nenhuma menção a `cdnjs` e nenhuma classe
+         `fa-*`; todo `<svg>` com `aria-hidden="true"` ou `role="img"` com `<title>`/`aria-label`
+     (c) imagem pelo astro:assets — toda `<img>` com `width` e `height`; nenhuma `<img>` ou
+         `<source>` (src ou srcset, absoluto ou relativo à página) nem ícone (`rel` com `icon`)
+         apontando para `assets/` da raiz (a cópia de public/ é para URL fixa: og:image, JSON-LD
+         e convite); no máximo um `fetchpriority="high"` por página, nunca junto de `loading="lazy"`
 """
 import glob
 import json
 import os
+import posixpath
 import re
 import sys
 import xml.etree.ElementTree as ET
@@ -1063,33 +1067,61 @@ for rel, c in sorted(cabecas.items()):
 RE_FONTE_GOOGLE = re.compile(r"fonts\.(googleapis|gstatic)\.com", re.I)
 
 
+def urls_srcset(v):
+    return [c.strip().split()[0] for c in v.split(",") if c.strip()]
+
+
 class Recursos(HTMLParser):
-    """`href` de cada `<link rel=preload as=font>`; `<link href>` e `<script src>` de outra origem;
-    classes `fa-*`; cada `<img>` (atributos); `href` dos `<link rel=icon>`; quantos
-    `fetchpriority=high`."""
+    """`href` de cada `<link rel=preload as=font>`; recursos de outra origem; classes `fa-*`; cada
+    `<img>` e `<source>` (atributos); `href` dos `<link>` de ícone; quantos `fetchpriority=high`
+    e quantos deles com `loading=lazy`; `<svg>` sem nome acessível nem `aria-hidden`."""
+
+    COM_SRC = ("script", "img", "source", "iframe", "video", "audio", "embed")
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.preload_fonte, self.externos, self.classes_fa = [], [], []
-        self.imgs, self.icones, self.prioridade_alta = [], [], 0
+        self.imgs, self.icones, self.prioridade_alta, self.alta_lazy = [], [], 0, 0
+        self.svgs, self.svgs_sem_nome = [], 0
 
     def handle_starttag(self, tag, attrs):
         d = {k.lower(): (v or "") for k, v in attrs}
         if tag == "link" and "preload" in d.get("rel", "").lower().split() and d.get("as", "").lower() == "font":
             self.preload_fonte.append(d.get("href", ""))
-        url = d.get("href", "") if tag == "link" else d.get("src", "") if tag == "script" else ""
+        urls = [d.get("href", "")] if tag == "link" else []
+        if tag in self.COM_SRC:
+            urls += [d.get("src", "")] + urls_srcset(d.get("srcset", ""))
+        urls += re.findall(r"url\(\s*['\"]?([^'\")\s]+)", d.get("style", ""))
         # canonical e hreflang são do próprio site (SITE); qualquer outro absoluto é terceiro
-        if re.match(r"^(https?:)?//", url, re.I) and not url.startswith(SITE):
-            self.externos.append(f"<{tag}> {url}")
+        for url in urls:
+            if re.match(r"^(https?:)?//", url, re.I) and not url.startswith(SITE):
+                self.externos.append(f"<{tag}> {url}")
         self.classes_fa += [c for c in d.get("class", "").split() if c.startswith("fa-") or c in ("fa", "fas", "fab", "far")]
-        if tag == "img":
-            self.imgs.append(d)
-        if tag == "link" and "icon" in d.get("rel", "").lower().split():
+        if tag in ("img", "source"):
+            self.imgs.append((tag, d))
+        if tag == "link" and any("icon" in r for r in d.get("rel", "").lower().split()):
             self.icones.append(d.get("href", ""))
         if d.get("fetchpriority", "").lower() == "high":
             self.prioridade_alta += 1
+            if d.get("loading", "").lower() == "lazy":
+                self.alta_lazy += 1
+        # <svg> decorativo é aria-hidden; o que tem sentido é role=img com <title> ou aria-label
+        # (components/Icon.astro). O nome só se sabe no </svg>: o <title> é filho.
+        if tag == "svg":
+            oculto = d.get("aria-hidden", "").lower() == "true"
+            self.svgs.append(oculto or (d.get("role") == "img" and bool(d.get("aria-label", "").strip())))
+        elif tag == "title" and self.svgs:
+            self.svgs[-1] = self.svgs[-1] or "titulo"
 
-    handle_startendtag = handle_starttag
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        if tag == "svg":
+            self.handle_endtag(tag)
+
+    def handle_endtag(self, tag):
+        if tag == "svg" and self.svgs:
+            if not self.svgs.pop():
+                self.svgs_sem_nome += 1
 
 
 for caminho in paginas:
@@ -1115,21 +1147,31 @@ for caminho in paginas:
         erros.append(f"{rel}: menciona cdnjs — o Font Awesome saiu (ADR-006 §4)")
     if r.classes_fa:
         erros.append(f"{rel}: classe(s) do Font Awesome {sorted(set(r.classes_fa))} — ícone é <Icon> (SVG inline, ADR-006 §4)")
+    if r.svgs_sem_nome:
+        erros.append(f"{rel}: {r.svgs_sem_nome} <svg> sem aria-hidden=\"true\" nem role=\"img\" com <title>/aria-label — use <Icon> (ADR-006 §4)")
     # (c) <img> sai do <Image>/getImage() do astro:assets: WebP com o tamanho de exibição, width e
     # height (sem salto de layout) e nunca o PNG/JPEG de public/assets/ (até 736 KB cada)
-    for d in r.imgs:
+    def de_public_assets(u):
+        # absoluto (`/assets/x`, `https://…/assets/x`) ou relativo à página (`assets/x`, `../assets/x`)
+        u = re.sub(r"^https?://[^/]+", "", u.split("#")[0].split("?")[0])
+        if not u or re.match(r"^[a-z][a-z0-9+.-]*:", u, re.I):
+            return False
+        alvo = u.lstrip("/") if u.startswith("/") else posixpath.normpath(posixpath.join(posixpath.dirname(rel), u))
+        return alvo.startswith("assets/")
+    for tag, d in r.imgs:
         nome = d.get("src") or d.get("srcset") or "?"
-        if not (d.get("width", "").strip() and d.get("height", "").strip()):
+        if tag == "img" and not (d.get("width", "").strip() and d.get("height", "").strip()):
             erros.append(f"{rel}: <img {nome}> sem width e height — use <Image> de astro:assets (ADR-006 §1)")
-        urls = [d.get("src", "")] + [c.strip().split()[0] for c in d.get("srcset", "").split(",") if c.strip()]
-        for u in urls:
-            if re.match(r"^(https?://[^/]+)?/assets/", u):
-                erros.append(f"{rel}: <img> com {u} — imagem exibida sai de src/assets/img/ pelo astro:assets, não de public/assets/ (ADR-006 §2)")
+        for u in [d.get("src", "")] + urls_srcset(d.get("srcset", "")):
+            if de_public_assets(u):
+                erros.append(f"{rel}: <{tag}> com {u} — imagem exibida sai de src/assets/img/ pelo astro:assets, não de public/assets/ (ADR-006 §2)")
     for href in r.icones:
-        if re.match(r"^(https?://[^/]+)?/assets/", href):
-            erros.append(f"{rel}: favicon {href} — sai do getImage() do Base.astro (48 px), não de public/assets/ (ADR-006 §1)")
+        if de_public_assets(href):
+            erros.append(f"{rel}: ícone {href} — sai do getImage() do Base.astro (48 px), não de public/assets/ (ADR-006 §1)")
     if r.prioridade_alta > 1:
         erros.append(f"{rel}: {r.prioridade_alta} elementos com fetchpriority=\"high\" — no máximo um, o LCP medido (ADR-006 §1)")
+    if r.alta_lazy:
+        erros.append(f"{rel}: fetchpriority=\"high\" junto de loading=\"lazy\" — o LCP não pode esperar o lazy (ADR-006 §1)")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")

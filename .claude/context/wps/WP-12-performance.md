@@ -328,3 +328,50 @@ commit 5 + 20%. `--medir` imprime os bytes para atualizar o orçamento de propó
 - **Pendente:** o job verde no PR e o vermelho provocado numa branch descartável no CI. Os dois
   dependem de push, e push é do usuário. Tornar o check obrigatório na proteção de branch também
   é decisão do usuário.
+
+## Auditoria (2026-10-16) e correções
+
+`site-qa`, `site-seo-perf` e `site-ux` rodaram em paralelo sobre `ad62095..8d16a5f`. Nenhum achado alto.
+
+**Corrigido no commit de correções:**
+- **Caixa dos ícones (`site-ux`, médio).** O `<i>` do FA ocupava a própria altura de linha, que é 1 no
+  `.fa-solid` e 28 px num `text-xl`. O SVG tinha `height: 1em`. Por isso o botão da Play encolhia
+  4 px e a faixa de tecnologia da home 8 px. Agora o `.icone` (`global.css`) tem `line-height: 1`,
+  `padding-block` com a meia-entrelinha (`(1lh - 1em) / 2`) e o `vertical-align` compensado.
+  Medido em 10 páginas × 3 larguras contra os DOMs "antes":
+  - alturas de página iguais (±1 px de arredondamento), exceto `eclipsego` en a 768;
+  - altura e centro de todos os ícones iguais.
+- **Reflow em `/en/eclipsego.html` a 768 px: aceito.** Um parágrafo passa de 4 para 3 linhas e a
+  página fica 23 px menor, por métrica da Inter servida pelo site contra a do Google. Não há quebra
+  nova; o texto ficou mais curto.
+- **§15 do `check_site.py` (`site-qa`)** agora pega:
+  - `<img>`/`<source>` de `assets/` também por caminho relativo à página;
+  - `srcset` de `<source>`;
+  - terceiro em `img`, `source`, `iframe`, `video`, `audio`, `embed` e `url()` de `style`;
+  - ícone de qualquer `rel` com `icon`;
+  - `fetchpriority="high"` junto de `loading="lazy"`;
+  - `<svg>` sem `aria-hidden` nem `role="img"` com nome.
+
+  Prova: 10 mutações numa cópia de `dist/`, 9 vermelhas e o SVG correto verde.
+- **`tools/lighthouse.py` (`site-qa`):**
+  - um arquivo por run, para não ler o relatório de outra página;
+  - `timeout` de 120 s por run, com a URL na mensagem;
+  - na 404, falha se reprovar qualquer auditoria de SEO além de `is-crawlable`;
+  - terceiros somados de todas as runs;
+  - `--runs` precisa ser 1 ou mais.
+
+**Aceito sem mudança:**
+- **Orçamento só em pt e em 9 páginas.** É o desenho do §7: uma página por template, e o par en
+  usa os mesmos recursos.
+- **Folga de 135 bytes entre o orçamento e o +20% de hoje.** É variação entre runs.
+- **`fetchpriority="low"` nas imagens do hero da home.** É de propósito (commit 5). O LCP é a logo.
+- **Mockup do LottoExpert `lazy`.** O LCP medido da landing é a logo, com 2,18 s.
+- **Margem de 0,17 s no LCP da home**, a menor do conjunto. O aviso do CI pega primeiro.
+
+**Roteado ao WP-10** (`achados-novos.md`):
+- `NAV-MENU-ALVO-TOQUE-01`: alvo de toque do menu com ~17,5×28 px. Já era assim antes.
+- `HOME-TECH-CURSOR-01`: `cursor-pointer` sem interação.
+- `POLE-PRINTS-2X-01`: as capturas do Pole Position têm só 460 px na origem.
+
+**Ainda aberto:** o job verde no PR e o vermelho provocado no CI dependem de push, que é do usuário.
+O checklist de navegador também está aberto: menu do celular, nitidez em 2×, favicon e paridade dos ícones.
