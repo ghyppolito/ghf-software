@@ -12,7 +12,7 @@ import mockup from '../assets/img/lottoexpert_app_mockup.png';
 import logoLotto from '../assets/img/lottoexpert.png';
 import { lottoexpert, type ChaveLotto } from '../i18n/lottoexpert';
 import { apps } from '../i18n/apps';
-import type { Idioma } from '../i18n/ui';
+import { textoDaChave, type Idioma } from '../i18n/ui';
 
 interface Props {
   lang: Idioma;
@@ -42,8 +42,8 @@ const funcionalidades: { n: number; fundo: Icone; icone: Icone }[] = [
   { n: 14, fundo: { conjunto: 'solid', nome: 'file-pdf' }, icone: { conjunto: 'solid', nome: 'file-export' } },
   { n: 15, fundo: { conjunto: 'solid', nome: 'shield-virus' }, icone: { conjunto: 'solid', nome: 'vault' } },
 ];
-const titulo = (n: number) => x[`feat${n}_title` as ChaveLotto];
-const descricao = (n: number) => x[`feat${n}_desc` as ChaveLotto];
+const titulo = (n: number) => textoDaChave(x, `feat${n}_title`, `lottoexpert.ts [${lang}]`);
+const descricao = (n: number) => textoDaChave(x, `feat${n}_desc`, `lottoexpert.ts [${lang}]`);
 
 // Logos das loterias (src/assets/img/lottoexpert/, cópia das de public/assets/lottoexpert/, que o
 // convite usa por URL fixa — ADR-006 §2). Nome de arquivo ausente falha o build.
@@ -265,16 +265,16 @@ const linhas: { chave: ChaveLotto; free: Celula; premium: Celula }[] = [
                             <tr class="border-b border-gray-800 hover:bg-gray-800/20 transition-colors">
                                 <td class="p-6 font-medium text-sm md:text-base">{x[r.chave]}</td>
                                 {r.free === 'sim' ? (
-                                    <td class="p-6 text-center text-green-500"><Icon nome="circle-check" /></td>
+                                    <td class="p-6 text-center text-green-500"><Icon nome="circle-check" /><span class="sr-only">{x.pricing_incluido}</span></td>
                                 ) : r.free === 'nao' ? (
-                                    <td class="p-6 text-center text-gray-600">—</td>
+                                    <td class="p-6 text-center text-gray-600"><span aria-hidden="true">—</span><span class="sr-only">{x.pricing_nao_incluido}</span></td>
                                 ) : (
                                     <td class="p-6 text-center text-gray-400 font-semibold text-xs">{x[r.free]}</td>
                                 )}
                                 {r.premium === 'sim' ? (
-                                    <td class="p-6 text-center text-green-500"><Icon nome="circle-check" /></td>
+                                    <td class="p-6 text-center text-green-500"><Icon nome="circle-check" /><span class="sr-only">{x.pricing_incluido}</span></td>
                                 ) : r.premium === 'nao' ? (
-                                    <td class="p-6 text-center text-gray-600">—</td>
+                                    <td class="p-6 text-center text-gray-600"><span aria-hidden="true">—</span><span class="sr-only">{x.pricing_nao_incluido}</span></td>
                                 ) : (
                                     <td class="p-6 text-center text-green-500 font-semibold text-xs">{x[r.premium]}</td>
                                 )}

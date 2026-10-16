@@ -9,9 +9,9 @@
 import Icon from './Icon.astro';
 import { Image } from 'astro:assets';
 import logoTopo from '../assets/img/topo-walk.png';
-import { topowalk, type ChaveTopo } from '../i18n/topowalk';
+import { topowalk } from '../i18n/topowalk';
 import { apps } from '../i18n/apps';
-import type { Idioma } from '../i18n/ui';
+import { textoDaChave, type Idioma } from '../i18n/ui';
 
 interface Props {
   lang: Idioma;
@@ -19,7 +19,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const x = topowalk[lang];
-const txt = (chave: string) => x[chave as ChaveTopo];
+const txt = (chave: string) => textoDaChave(x, chave, `topowalk.ts [${lang}]`);
 
 // Ícone de cada card de #features, na ordem da página antiga.
 const funcionalidades = [
@@ -149,7 +149,7 @@ const passos = [1, 2, 3, 4];
                 {
                     passos.map((n) => (
                         <div class="relative pl-10 md:pl-16">
-                            <div class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-brand-accent flex items-center justify-center text-brand-accent font-bold text-lg">{n}</div>
+                            <div aria-hidden="true" class="absolute -left-5 md:-left-6 top-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-brand-base border-2 border-brand-accent flex items-center justify-center text-brand-accent font-bold text-lg">{n}</div>
                             <h3 class="text-2xl font-bold text-white mb-3">{txt(`how${n}_title`)}</h3>
                             <p class="text-gray-400 text-lg leading-relaxed">{txt(`how${n}_desc`)}</p>
                         </div>

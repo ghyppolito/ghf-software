@@ -67,6 +67,15 @@ export const ui = {
 
 export type ChaveUi = keyof (typeof ui)['pt'];
 
+/** Texto de chave montada em tempo de build (`feat${n}_title`): a chave fora do dicionário falha o
+ *  build com o nome dela, em vez de sair vazia nas duas línguas (WP-22, `I18N-CHAVE-DINAMICA-01`).
+ *  `onde` é o dicionário e a língua, para a mensagem (`topowalk.ts [en]`). */
+export function textoDaChave(dicionario: object, chave: string, onde: string): string {
+  const valor = (dicionario as Record<string, unknown>)[chave];
+  if (valor === undefined) throw new Error(`${onde}: chave \`${chave}\` não existe`);
+  return valor as string;
+}
+
 export function t(lang: Idioma, chave: ChaveUi): string {
   return ui[lang][chave];
 }

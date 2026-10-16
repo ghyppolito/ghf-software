@@ -5,7 +5,7 @@ import { IDIOMAS, type Idioma } from './idiomas';
 
 export const legal = {
   pt: {
-    // Selo do hero. Não tinha `data-i18n` na página antiga: o modo en mostrava o pt (transportado).
+    // Selo do hero. Não tinha `data-i18n` na página antiga (o modo en mostrava o pt); traduzido no WP-22.
     selo: 'Documento Legal',
     voltar_app: 'Voltar para a Página do App',
     voltar_home: 'Voltar para a GHF Software',
@@ -27,7 +27,7 @@ export const legal = {
     lottoexpert_terms_description: 'Termos de Uso do aplicativo LottoExpert desenvolvido pela GHF Software.',
   },
   en: {
-    selo: 'Documento Legal',
+    selo: 'Legal Document',
     voltar_app: 'Back to App Page',
     voltar_home: 'Back to GHF Software',
     eclipsego_privacy_h1: 'Privacy Policy — EclipseGo',

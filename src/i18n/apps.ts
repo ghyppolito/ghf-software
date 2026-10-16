@@ -14,7 +14,8 @@ export interface App {
   id: string;
   /** enum do schema.org para `applicationCategory` */
   categoria: 'UtilitiesApplication' | 'SportsApplication' | 'LifestyleApplication';
-  /** link do botão "Google Play", como a página sempre publicou (o TopoWalk leva `&hl=pt_BR`) */
+  /** link do botão "Google Play": sem `hl`, a Play abre na língua da conta (WP-22; o TopoWalk levava
+   *  `&hl=pt_BR` e mandava quem lê em inglês para a ficha em pt) */
   play: string;
 }
 
@@ -24,7 +25,7 @@ export const apps = {
   // Play: TOOLS
   lottoexpert: { nome: 'LottoExpert', id: 'br.com.ghfsoftware.lottoexpert', categoria: 'UtilitiesApplication', play: `${PLAY}br.com.ghfsoftware.lottoexpert` },
   // Play: TOOLS
-  topowalk: { nome: 'TopoWalk', id: 'br.com.ghfsoftware.topowalk', categoria: 'UtilitiesApplication', play: `${PLAY}br.com.ghfsoftware.topowalk&hl=pt_BR` },
+  topowalk: { nome: 'TopoWalk', id: 'br.com.ghfsoftware.topowalk', categoria: 'UtilitiesApplication', play: `${PLAY}br.com.ghfsoftware.topowalk` },
   // Play: SPORTS
   poleposition: { nome: 'Pole Position', id: 'br.com.ghfsoftware.polepositionapp', categoria: 'SportsApplication', play: `${PLAY}br.com.ghfsoftware.polepositionapp` },
   // Play: LIFESTYLE

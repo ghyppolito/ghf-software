@@ -112,6 +112,9 @@ export const lottoexpert = {
     pricing_th_features: 'Funcionalidade',
     pricing_th_free: 'Free',
     pricing_th_premium: 'Premium',
+    // Rótulo só para leitor de tela das células de ícone e de "—" (WP-22, aprovado pelo usuário).
+    pricing_incluido: 'Incluído',
+    pricing_nao_incluido: 'Não incluído',
     price_feat1: 'Loterias Básicas (Mega-Sena/Lotofácil)',
     price_feat2: 'Todas as Loterias (9 modalidades)',
     price_feat_garantidos: 'Desdobramentos com Garantia (ILP)',
@@ -239,6 +242,8 @@ export const lottoexpert = {
     pricing_th_features: 'Features',
     pricing_th_free: 'Free',
     pricing_th_premium: 'Premium',
+    pricing_incluido: 'Included',
+    pricing_nao_incluido: 'Not included',
     price_feat1: 'Basic Lotteries (Mega-Sena/Lotofácil)',
     price_feat2: 'All Lotteries (9 modalities)',
     price_feat_garantidos: 'Guaranteed Wheelings (ILP)',
