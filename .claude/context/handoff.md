@@ -7,9 +7,8 @@
 
 ## 1. Onde parei
 
-- WP-22 implementado e auditado na `feat/wp-22-a11y-sem-redesign` (e2bffea..12cdac7), `doing`: `visual: true`, falta o checklist de navegador (no fim do WP, "Registro de execução").
-- Faltam: merge do usuário na `feat/wp-08-layout-unico`, CI do PR #37 e o orçamento Lighthouse (rodando). Nada publicado (D13).
-- 8 achados novos do WP-22 roteados ao WP-10 (contraste de paleta, alvos de desktop, rodapé a 360 px); regressão do WP-15 nas legais do LottoExpert já resolvida (12cdac7).
+- WP-22 `done` em 2026-10-16: integrado (41e3b56), CI do #37 verde, usuário rodou o checklist de navegador ("testei, pode fechar"). Nada publicado (D13). Branch `feat/wp-22-a11y-sem-redesign` integrada (local; pode apagar).
+- Nenhum WP desbloqueado sem o usuário: WP-16 (`PREVALENCIA-PT-NOS-APPS-01`), WP-10 (checklist do WP-19, D11, D12, copy; agora com menos achados), WP-20 (Claude Design), WP-13 (D3).
 
 ## 2. Quebrado ou pela metade agora
 

@@ -2,7 +2,7 @@
 id: WP-22
 titulo: Acessibilidade e i18n sem redesign (a11y AA, foco, `<main>`, headings, reduced-motion, contraste fora da paleta, rótulos pt na /en/)
 area: landing
-status: doing
+status: done
 depende_de: [WP-12, WP-15]
 adr: [ADR-003, ADR-007]
 spec: docs/AVALIACAO.md
@@ -220,8 +220,8 @@ no item 2 do roteiro.
 
 ## Registro de execução (2026-10-16)
 
-**Status: `doing`.** Implementado e auditado; falta o relato do navegador (`visual: true`), o merge do usuário na
-integração e o CI do PR #37. Não publicado (D13).
+**Status: `done` (2026-10-16).** Implementado, auditado, integrado em `feat/wp-08-layout-unico` (41e3b56), CI do #37 verde
+(run 38971448793) e checklist de navegador rodado pelo usuário. Publicado em: ainda não (D13).
 
 **Commits:** `e2bffea` (início); `2d0524d..8f37d41` (9 commits do site-dev, um por passo); `316d6db` (auditoria:
 `check_site` §17 pega `hl`/`locale=pt` e `pt-BR`; fecha-tag sem par não esvazia a pilha); `12cdac7` (regressão do
@@ -271,3 +271,8 @@ não casavam desde e6b3e6f; trocados por `[id='secao-9-1']` etc.; conferido com 
 10. Leitor de tela (TalkBack/NVDA): seletor anuncia "English, EN"; tabela Free × Premium em `/lottoexpert.html` anuncia "Incluído"/"Não incluído" e em `/en/` "Included"/"Not included".
 11. Home, LottoExpert e EclipseGo com "reduzir movimento" no SO, 1280 px: nada se move, hero aparece, blobs centrados.
 12. Cada tema: nada mudou além de foco, sublinhado e alvo.
+
+**Relato do navegador (2026-10-16):** o usuário rodou os 12 itens do checklist acima e reportou: "testei, pode fechar".
+Interpretação dos dois itens que pediam opinião: (6) altura do rodapé a 360 px com alvos de 44 px **aceita**
+(`RODAPE-360-ALTO-01`); (3) anel de foco da tabela legal **aceito como está** (`TABELA-LEGAL-ANEL-DISCRETO-01`).
+O redesign (WP-10) pode revisitar os dois.
