@@ -18,7 +18,7 @@ branch: feat/wp-18-landings-n-linguas
 **Depende de:** WP-10 (redesign — senão traduz duas vezes), WP-15 · **Achados roteados:** —
 
 **Objetivo:** `topowalk.html` em pt, en, es, fr, it, de, ru e `poleposition.html` em pt, en,
-es, fr, it, de, com copy vinda da ficha da Play de cada língua; mapa de `idiomas.ts` atualizado.
+es, fr, it, de, com copy vinda da ficha da Play de cada língua; mapa de `idiomas.json` atualizado.
 **Só existe se D8 (a) for (a2) ou (a3)** — com (a1), este WP vira `adiado`.
 
 **Contexto:** D8. Fonte da copy, com origem rastreável por língua:
@@ -31,7 +31,7 @@ de `:290`, it `:349`, ru `:406`) e `../pole-position/pole-position-app/docs/aso_
 
 **Arquivos-alvo:** `src/pages/{es,fr,it,de,ru}/topowalk.astro` (ou a forma de conteúdo que o
 WP-10 deixar), `src/pages/{es,fr,it,de}/poleposition.astro`, `src/content/landing/**` se o
-WP-10 criar, `src/i18n/idiomas.ts` (só as duas entradas), `src/i18n/ui.ts` (rótulos de seção
+WP-10 criar, `src/i18n/idiomas.json` (só as duas entradas), `src/i18n/ui.ts` (rótulos de seção
 nas línguas novas), `public/assets/{topowalk,poleposition}/**` (capturas localizadas, se houver).
 
 **Passos:**
@@ -46,6 +46,8 @@ nas línguas novas), `public/assets/{topowalk,poleposition}/**` (capturas locali
 - Mesmo número de `<section` em todas as versões de uma landing (`grep -c "<section"`).
 - Nenhuma página em `dist/{es,fr,it,de,ru}/` além das listadas (sem home, LottoExpert, EclipseGo).
 - Lista no WP: cada frase sem origem na ficha da Play, com a língua.
+
+**Do WP-15:** as landings entram em `PAGINAS` só nas línguas listadas; a faixa de sugestão não aparece em página sem a língua do navegador, e o `check_site.py` §9 já barra `hreflang` para língua inexistente.
 
 **Só no navegador:** as 11 versões novas em 360/768/1280: textos sem estouro (de e ru são
 mais longos), seletor, link da Play abre na língua. O usuário reporta.

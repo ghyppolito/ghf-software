@@ -1,0 +1,13 @@
+---
+// /<código>/: uma rota por língua de index.html no mapa (src/i18n/idiomas.json), menos o pt, que fica
+// literal em src/pages/index.astro (ADR-007 §3). Língua fora do mapa não gera página.
+import Pagina from '../../components/paginas/PaginaHome.astro';
+import { rotasDeLingua, type Idioma } from '../../i18n/idiomas';
+
+export function getStaticPaths() {
+  return rotasDeLingua('index.html');
+}
+
+const { lang } = Astro.params as { lang: Idioma };
+---
+<Pagina lang={lang} />

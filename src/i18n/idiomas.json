@@ -1,0 +1,30 @@
+{
+  "idiomas": {
+    "pt": {
+      "hreflang": "pt-BR",
+      "ogLocale": "pt_BR",
+      "nome": "Português",
+      "rotuloData": "Última atualização:",
+      "meses": ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"]
+    },
+    "en": {
+      "hreflang": "en",
+      "ogLocale": "en_US",
+      "nome": "English",
+      "rotuloData": "Last updated:",
+      "meses": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    }
+  },
+  "paginas": {
+    "index.html": ["pt", "en"],
+    "lottoexpert.html": ["pt", "en"],
+    "topowalk.html": ["pt", "en"],
+    "poleposition.html": ["pt", "en"],
+    "eclipsego.html": ["pt", "en"],
+    "eclipsego-privacy.html": ["pt", "en"],
+    "topowalk-privacy.html": ["pt", "en"],
+    "poleposition-privacy.html": ["pt", "en"],
+    "lottoexpert-privacy.html": ["pt", "en"],
+    "lottoexpert-terms.html": ["pt", "en"]
+  }
+}

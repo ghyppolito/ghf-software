@@ -1,0 +1,56 @@
+---
+// Landing do LottoExpert (/lottoexpert.html e /<código>/lottoexpert.html), a página inteira com a prop `lang`. Corpo em components/LottoExpert.astro, textos em
+// i18n/lottoexpert.ts. Links da página para a home vão à home do mesmo idioma.
+import Base from '../../layouts/Base.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
+import LottoExpert from '../LottoExpert.astro';
+import { lottoexpert } from '../../i18n/lottoexpert';
+import { rota, type Idioma } from '../../i18n/idiomas';
+import JsonLd from '../JsonLd.astro';
+import { mobileApplication } from '../../i18n/apps';
+
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
+const x = lottoexpert[lang];
+const home = rota(lang, 'index.html');
+---
+<Base
+  title={x.title}
+  description={x.description}
+  og={{
+    imagem: '/assets/lottoexpert_app_mockup.png',
+  }}
+  lang={lang}
+  caminho="lottoexpert.html"
+  tema="lottoexpert"
+  favicon="/assets/lottoexpert_favicon_v3.png"
+>
+  <JsonLd slot="jsonld" dados={mobileApplication('lottoexpert')} />
+  <Nav
+    lang={lang}
+    caminho="lottoexpert.html"
+    inicio={home}
+    itens={[
+      { href: `${home}#sobre`, chave: 'nav_about' },
+      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
+      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <main>
+    <LottoExpert lang={lang} />
+  </main>
+  <Footer
+    lang={lang}
+    inicio={home}
+    prefixoAncora={home}
+    redes={{
+      youtube: 'https://www.youtube.com/channel/UC0CgG5V33UB-7zhyfMatUGg',
+      instagram: 'https://www.instagram.com/lotto_expert/',
+    }}
+    appAtual="lottoexpert.html"
+  />
+</Base>

@@ -1,0 +1,45 @@
+---
+// Home (/ e /<código>/), a página inteira com a prop `lang`; as cascas ficam em src/pages/
+// (ADR-007 §3). Corpo em components/Home.astro, textos em i18n/home.ts.
+import Base from '../../layouts/Base.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
+import Home from '../Home.astro';
+import { home } from '../../i18n/home';
+import JsonLd from '../JsonLd.astro';
+import { organization } from '../../i18n/apps';
+import type { Idioma } from '../../i18n/idiomas';
+
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
+const x = home[lang];
+---
+<Base
+  title={x.title}
+  description={x.description}
+  og={{
+    imagem: '/assets/GHFSoftware.png',
+  }}
+  lang={lang}
+  caminho="index.html"
+  tema="ghf"
+>
+  <JsonLd slot="jsonld" dados={organization} />
+  <Nav
+    lang={lang}
+    caminho="index.html"
+    inicio="#"
+    itens={[
+      { href: '#sobre', chave: 'nav_about' },
+      { href: '#portfolio', chave: 'nav_portfolio' },
+      { href: '#contato', chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <main>
+    <Home lang={lang} />
+  </main>
+  <Footer lang={lang} inicio="#" prefixoAncora="" />
+</Base>

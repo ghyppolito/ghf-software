@@ -1,0 +1,60 @@
+---
+// Política de privacidade do LottoExpert (/lottoexpert-privacy.html, URL contratual de ADR-001, e /<código>/lottoexpert-privacy.html): a página
+// inteira, com a prop `lang`; as cascas ficam em src/pages/ (ADR-007 §3). Texto em
+// src/content/legal/lottoexpert-privacy.<código>.md; hero,
+// botão e <head> em i18n/legal.ts. Nav e footer como na página antiga: realce `primary` (violeta do
+// tema) com logo brilhando, só o e-mail entre os canais, rodapé `surface` e esta página destacada na
+// lista de políticas. O botão volta para a home da GHF, como na página antiga.
+import { getEntry, render } from 'astro:content';
+import LegalLayout from '../../layouts/LegalLayout.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
+import { legal } from '../../i18n/legal';
+import { rota, type Idioma } from '../../i18n/idiomas';
+
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
+const x = legal[lang];
+const home = rota(lang, 'index.html');
+const entrada = await getEntry('legal', `lottoexpert-privacy.${lang}`);
+if (!entrada) throw new Error(`src/content/legal/lottoexpert-privacy.${lang}.md ausente`);
+const { Content } = await render(entrada);
+---
+<LegalLayout
+  lang={lang}
+  caminho="lottoexpert-privacy.html"
+  title={x.lottoexpert_privacy_title}
+  description={x.lottoexpert_privacy_description}
+  titulo={x.lottoexpert_privacy_h1}
+  lastUpdated={entrada.data.lastUpdated}
+  tema="lottoexpert-privacy"
+  favicon="/assets/lottoexpert_favicon_v3.png"
+  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden"
+  selo="primary"
+  voltar={{ href: home, texto: x.voltar_home }}
+>
+  <Nav
+    slot="nav"
+    lang={lang}
+    caminho="lottoexpert-privacy.html"
+    inicio={home}
+    itens={[
+      { href: `${home}#sobre`, chave: 'nav_about' },
+      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
+      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <Content />
+  <Footer
+    slot="footer"
+    lang={lang}
+    inicio={home}
+    prefixoAncora={home}
+    redes={{}}
+    politicaAtual="lottoexpert-privacy.html"
+    fundo="surface"
+  />
+</LegalLayout>
