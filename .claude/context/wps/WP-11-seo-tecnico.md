@@ -2,7 +2,7 @@
 id: WP-11
 titulo: Buscadores leem sitemap, canonical, hreflang e dados estruturados de cada página
 area: seo
-status: doing
+status: done
 depende_de: [WP-08]
 adr: [ADR-005]
 spec: docs/AVALIACAO.md
@@ -288,6 +288,12 @@ desenho. O que muda no veredito acima:
   O critério "x-default (= en)" fica como está.
 
 ## Estado (fim da implementação, 2026-10-15)
+
+**Fechamento (2026-10-15):** o usuário integrou (`git merge --no-ff feat/wp-11-seo-tecnico` na `feat/wp-08-layout-unico`,
+be43372); push e CI do #37 verde (run 38838938355: `plano` pass, `site` pass). O usuário colou o HTML de `npm run build` nos
+dois validadores e relatou "os dois validadores passaram, 0 erro". Status `done`. Integrado, não publicado: vai ao ar no
+deploy único (D13). Achados: `ROBOTS-SITEMAP-AUSENTES-01`, `CONVITE-FORA-DO-WP-11-01`, `LEGAL-SEM-OG-01` e
+`OG-IMAGE-DIMENSAO-01` resolvidos; `LEGAL-OG-IMAGE-DIMENSAO-01` para o WP-20; `LEGAL-SLUG-ACENTO-01` para o WP-15 (tabela "Achados").
 
 **Status: `doing`, de propósito.** Falta o relato do usuário nos dois validadores (`visual: true`). Depois do merge dele na
 integração (`feat/wp-08-layout-unico`) e do CI do #37 verde, o agente marca `done`. "Publicado" só com o deploy único (D13).

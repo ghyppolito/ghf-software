@@ -7,9 +7,8 @@
 
 ## 1. Onde parei
 
-- **WP-11 pronto, `doing`** na `feat/wp-11-seo-tecnico` (547c29c), aguardando o merge do usuário:
-  `git switch feat/wp-08-layout-unico && git merge --no-ff feat/wp-11-seo-tecnico -m "WP-11: sitemap, robots, canonical/hreflang e JSON-LD (ADR-005)"`.
-- Depois: o agente faz o push, acompanha o CI do #37 e marca `done`. O usuário roda os 2 validadores (WP-11, "Estado").
+- **WP-11 `done`** (2026-10-15): integrado na `feat/wp-08-layout-unico` (be43372), CI do #37 verde (run 38838938355),
+  os 2 validadores com 0 erro pelo usuário. Não publicado (D13).
 - **Próximos:** WP-20 (imagens 1200×630, sessão no Claude Design) e WP-21 (copy da ficha da Play), ambos antes do deploy único (D13); depois WP-10.
 
 ## 2. Quebrado ou pela metade agora
@@ -35,7 +34,7 @@ de um convite real gerado pelo app e de uma landing, sobre o site no ar.
 2. Checklist de navegador do WP-19; escrever o resultado no WP.
 3. Decidir D11 (`--success`) e D12 (limiares de destaque), ambas só para o WP-10; D3 (medição) bloqueia o WP-13. `PP-NAV-CONTRASTE-01` aguarda decisão.
 
-**Do agente:** `/wp` para o WP-10 (branch a partir da integração, D13).
+**Do agente:** `/wp` para o WP-21 (copy da ficha da Play) ou o WP-20 quando as imagens existirem; depois o WP-10 (branch a partir da integração, D13).
 
 **Copy pendente do usuário antes do WP-10:** "chance matemática" -> "probabilidade exata"; texto final do aviso de jogo
 responsável (o export traz "Texto provisório"); confirmar "Nada de cadastro, e-mail ou CPF" e "Nenhum SDK de publicidade";
