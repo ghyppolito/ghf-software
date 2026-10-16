@@ -9,6 +9,8 @@ import Footer from '../../components/Footer.astro';
 import PolePosition from '../../components/PolePosition.astro';
 import { poleposition } from '../../i18n/poleposition';
 import { rota } from '../../i18n/ui';
+import JsonLd from '../../components/JsonLd.astro';
+import { mobileApplication } from '../../i18n/apps';
 
 const lang = 'en';
 const x = poleposition[lang];
@@ -22,8 +24,6 @@ const home = rota(lang, 'index.html');
     descricao: x.og_description,
     descricaoTwitter: x.twitter_description,
     imagem: '/assets/poleposition_real_mockup.png',
-    largura: 1200,
-    altura: 630,
   }}
   lang={lang}
   caminho="poleposition.html"
@@ -32,6 +32,7 @@ const home = rota(lang, 'index.html');
   fontesExtras={['JetBrains+Mono:wght@700']}
   classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden"
 >
+  <JsonLd slot="jsonld" dados={mobileApplication('poleposition')} />
   <Nav
     lang={lang}
     caminho="poleposition.html"

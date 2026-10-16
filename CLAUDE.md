@@ -78,15 +78,19 @@ tools/                      gen_estado.py · check_plano.py · check_site.py
 design/                     brief e handoff do Claude Design (WP-06)
 astro.config.mjs            Astro (ADR-002): build.format 'preserve', Sätteri com os plugins legais
 tailwind.config.mjs         Tailwind 3.4.19 compilado pelo PostCSS (ADR-003); brand.* por variável CSS
-src/                        layouts/ (Base.astro: head único, og, canonical, hreflang, tema;
+src/                        layouts/ (Base.astro: head único, og com width/height lidos do arquivo,
+                            canonical, hreflang pt-BR/en/x-default→en, slot jsonld, tema;
                             LegalLayout.astro: hero e card das páginas legais) · components/ (Nav,
-                            Footer, TrocaIdioma, uma por landing) · i18n/ (ui.ts, <pagina>.ts, legal.ts) ·
+                            Footer, TrocaIdioma, JsonLd, uma por landing) · i18n/ (ui.ts, <pagina>.ts,
+                            legal.ts, apps.ts: id, categoria e link da Play de cada app — botão e
+                            JSON-LD leem dali) ·
                             content.config.ts + content/legal/<app>-<doc>.<idioma>.md (texto legal;
                             front-matter `lastUpdated: "AAAA-MM[-DD]"`, pt = .md do app byte a byte) ·
                             markdown/legal.mjs (plugins do Sätteri: título e data saem do corpo,
                             link do próprio site vira caminho a partir da raiz, /en/ no inglês) ·
                             styles/global.css (temas por página, tipografia do texto legal) ·
-                            pages/ (páginas pt literais, en/ os pares, 404)
+                            pages/ (páginas pt literais, en/ os pares, 404; robots.txt.ts e
+                            sitemap.xml.ts, endpoints da mesma lista de rotas do canonical — ADR-005)
 dist/                       saída do build (não versionada) — é o que vai ao ar
 .github/workflows/          pr.yml (checks `plano` e `site`) · deploy.yml (master → Pages por Actions)
 ```

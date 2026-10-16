@@ -12,6 +12,7 @@
 // dela tiraria o blob do centro; o atributo sai, reproduzindo a página antiga. `corona-glow` (o
 // brilho pulsante da moldura do celular) era declarada na página e continua, em global.css.
 import { eclipsego, tecnologias, type ChaveEclipse } from '../i18n/eclipsego';
+import { apps } from '../i18n/apps';
 import { rota, type Idioma } from '../i18n/ui';
 
 interface Props {
@@ -55,7 +56,7 @@ const passos = [1, 2, 3, 4];
                 <p class="mt-4 text-xl text-gray-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed mb-10">{x.hero_desc}</p>
 
                 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                    <a href="https://play.google.com/store/apps/details?id=br.com.ghfsoftware.eclipsego" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-primary hover:bg-brand-primaryHover text-black font-bold rounded-lg shadow-glow hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
+                    <a href={apps.eclipsego.play} target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-primary hover:bg-brand-primaryHover text-black font-bold rounded-lg shadow-glow hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
                         <i class="fa-brands fa-google-play text-xl" aria-hidden="true"></i> <span>{x.btn_play}</span>
                     </a>
                     {/* Política é URL contratual (ADR-001); `rota` dá o par en em /en/. */}

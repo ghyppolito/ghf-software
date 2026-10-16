@@ -9,7 +9,7 @@ erro.
 
 Checa:
   1. URLs contratuais (ADR-001) existem
-  2. cada página tem <html lang>, <title>, meta description e og:image
+  2. cada página tem <html lang>, <title>, meta description e og:image (sem og:image é erro desde o WP-11)
   3. href/src locais resolvem para arquivo existente; og:image em ghfsoftware.com resolve localmente;
      nenhum `<a>`, `<area>` ou `<form>` com `target="_blank"` sem o token `noopener` em `rel`, em
      qualquer página de `dist/` (lido por html.parser, não por regex)
@@ -46,12 +46,28 @@ Checa:
      verde — sem esta guarda, uma cópia velha de página contratual iria ao ar calada; e o
      `.htmlvalidateignore` da raiz isenta do html-validate só o convite (congelado pelo sha256, D13),
      e `rules` do `.htmlvalidate.json` é exatamente `{"no-inline-style": "off"}`
+ 14. SEO técnico (WP-11, ADR-005). Toda página de `dist/` está em INDEXAVEIS (as 20 com par),
+     NOINDEX (a 404) ou CONGELADAS (o convite, o mesmo `.html` de tools/contrato.sha256, isento das
+     regras e sem canonical, hreflang, JSON-LD nem meta robots). Fora de CONGELADAS: um só canonical, igual ao og:url e à URL da própria página
+     (`/x.html`, `/`, `/en/`); hreflang pt-BR, en e x-default (= en), recíprocos, só nas
+     INDEXAVEIS; `noindex` (ou `none`) só e sempre nas NOINDEX; og:* e twitter:* completos; og:image
+     é arquivo do site (nunca externo) e twitter:image é igual a ele; og:image:width e
+     height juntos e iguais ao tamanho real do arquivo (cabeçalho PNG/JPEG lido aqui).
+     `robots.txt` igual ao literal ROBOTS (nenhum `Disallow`), gerado por src/pages/robots.txt.ts;
+     `sitemap.xml` (src/pages/sitemap.xml.ts) faz parse, seus `<loc>` são exatamente as URLs das
+     INDEXAVEIS (sem repetir, cada uma existe em dist/) e cada `<url>` traz os mesmos três hreflang
+     da página. JSON-LD: cada `<script type="application/ld+json">` faz `json.loads`; `Organization`
+     só nas duas home, `MobileApplication` só nas 8 landings, nenhum nas demais; chaves exatamente
+     as permitidas (sem `aggregateRating`, `review`, preço do Premium); `name` e
+     `applicationCategory` os da landing (APP_DA_PAGINA, D17); `installUrl` com o mesmo
+     `id` do botão da Play da página; o texto do JSON-LD (já decodificado) passa pela régua do §5
 """
 import glob
 import json
 import os
 import re
 import sys
+import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 
 sys.dont_write_bytecode = True  # importar sync_legal não deixa tools/__pycache__ no repositório
@@ -128,7 +144,7 @@ PAGINAS_LOTTO = ["index.html", "lottoexpert.html", "lottoexpert-privacy.html", "
 # sempre que o check roda — além do HTML gerado em dist/ (PAGINAS_LOTTO), que o check exige.
 FONTES_LOTTO = ["src/i18n/home.ts", "src/components/Home.astro",
                 "src/i18n/lottoexpert.ts", "src/components/LottoExpert.astro",
-                "src/i18n/legal.ts",
+                "src/i18n/legal.ts", "src/i18n/apps.ts",
                 "src/content/legal/lottoexpert-privacy.pt.md", "src/content/legal/lottoexpert-privacy.en.md",
                 "src/content/legal/lottoexpert-terms.pt.md", "src/content/legal/lottoexpert-terms.en.md"]
 
@@ -237,7 +253,7 @@ for caminho in paginas:
         erros.append(f"{rel}: sem meta description")
     m = re.search(r'property="og:image"\s+content="([^"]+)"', html)
     if not m:
-        avisos.append(f"{rel}: sem og:image (landing deve ter; página legal pode não ter)")
+        erros.append(f"{rel}: sem og:image (toda página tem, inclusive legal e 404 — WP-11)")
     else:
         og = m.group(1)
         if og.startswith("https://ghfsoftware.com/"):
@@ -676,6 +692,294 @@ except (OSError, ValueError) as e:
 else:
     if regras != REGRAS_HTMLVALIDATE:
         erros.append(f".htmlvalidate.json: rules = {regras} ≠ {REGRAS_HTMLVALIDATE} — nenhuma regra do preset é rebaixada")
+
+# ------------------------------------------------------------ 14: SEO técnico
+# ADR-005. Canonical, og:url, <loc> do sitemap e href de hreflang são a mesma string: SITE + o
+# caminho literal (`/x.html`, `/`, `/en/`). O convite fica fora de toda regra de SEO: é congelado
+# byte a byte (D13), e a lista é a mesma do tools/contrato.sha256 (conferida abaixo).
+CONGELADAS = ["lotto-expert/sweepstake-invite/lottoexpert-invite.html"]
+INDEXAVEIS = COM_PAR + ["en/" + x for x in COM_PAR]
+NOINDEX = ["404.html"]
+OG_OBRIGATORIAS = ["og:type", "og:site_name", "og:url", "og:title", "og:description", "og:image",
+                   "og:locale", "twitter:card", "twitter:title", "twitter:description", "twitter:image"]
+
+arq_contrato = os.path.join(REPO, "tools", "contrato.sha256")
+html_contrato = sorted(linha.split()[-1] for linha in ler(arq_contrato).splitlines()
+                       if linha.strip() and linha.split()[-1].endswith(".html")) if os.path.exists(arq_contrato) else []
+if html_contrato != sorted(CONGELADAS):
+    erros.append(f"check_site.py: CONGELADAS {CONGELADAS} ≠ páginas de tools/contrato.sha256 {html_contrato}")
+
+
+def url_canonica(rel):
+    """URL pública de um arquivo de dist/: `index.html` vira a pasta (`/`, `/en/`)."""
+    return SITE + (rel[: -len("index.html")] if rel.endswith("index.html") else rel)
+
+
+class Cabeca(HTMLParser):
+    """Lê canonical, hreflang, meta (property/name) e o texto de cada `<script type=application/ld+json>`."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.canonicas, self.alternates, self.meta, self.jsonld = [], [], {}, []
+        self._ld = None
+
+    def handle_starttag(self, tag, attrs):
+        d = {k.lower(): (v or "") for k, v in attrs}
+        if tag == "link":
+            rels = d.get("rel", "").lower().split()
+            if "canonical" in rels:
+                self.canonicas.append(d.get("href", ""))
+            if "alternate" in rels and "hreflang" in d:
+                self.alternates.append((d["hreflang"], d.get("href", "")))
+        elif tag == "meta":
+            chave = d.get("property") or d.get("name")
+            if chave:
+                self.meta.setdefault(chave.lower(), []).append(d.get("content", ""))
+        elif tag == "script" and d.get("type", "").lower() == "application/ld+json":
+            self._ld = []
+
+    handle_startendtag = handle_starttag
+
+    def handle_data(self, data):
+        if self._ld is not None:
+            self._ld.append(data)
+
+    def handle_endtag(self, tag):
+        if tag == "script" and self._ld is not None:
+            self.jsonld.append("".join(self._ld))
+            self._ld = None
+
+
+def dimensoes(caminho):
+    """(largura, altura) de um PNG ou JPEG pelo cabeçalho; None se o formato for outro."""
+    with open(caminho, "rb") as f:
+        b = f.read()
+    if b[:8] == b"\x89PNG\r\n\x1a\n" and b[12:16] == b"IHDR":
+        return int.from_bytes(b[16:20], "big"), int.from_bytes(b[20:24], "big")
+    if b[:2] == b"\xff\xd8":
+        i = 2
+        while i + 9 < len(b):
+            if b[i] != 0xFF:
+                return None
+            marcador = b[i + 1]
+            if marcador == 0xFF:
+                i += 1
+                continue
+            if 0xC0 <= marcador <= 0xCF and marcador not in (0xC4, 0xC8, 0xCC):
+                return int.from_bytes(b[i + 7:i + 9], "big"), int.from_bytes(b[i + 5:i + 7], "big")
+            i += 2 + int.from_bytes(b[i + 2:i + 4], "big")
+    return None
+
+
+cabecas = {}
+for caminho in paginas:
+    rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
+    if rel in CONGELADAS:
+        # isenta das regras, mas sem marcação de SEO (ADR-005 §5): canonical, hreflang, JSON-LD ou
+        # noindex no convite seriam edição do arquivo congelado — o sha256 também pega, o check diz o quê
+        c = Cabeca()
+        c.feed(ler(caminho))
+        c.close()
+        marcas = ((["canonical"] if c.canonicas else []) + (["hreflang"] if c.alternates else [])
+                  + (["JSON-LD"] if c.jsonld else []) + (["meta robots"] if c.meta.get("robots") else []))
+        if marcas:
+            erros.append(f"{rel}: {', '.join(marcas)} na página congelada — o convite fica fora de toda regra de SEO (D13)")
+        continue
+    if rel not in INDEXAVEIS and rel not in NOINDEX:
+        erros.append(f"{rel}: página fora de INDEXAVEIS, NOINDEX e CONGELADAS do §14 — classifique-a")
+        continue
+    c = Cabeca()
+    c.feed(ler(caminho))
+    c.close()
+    cabecas[rel] = c
+    propria = url_canonica(rel)
+    if len(c.canonicas) != 1:
+        erros.append(f"{rel}: {len(c.canonicas)} <link rel=\"canonical\"> (esperado 1)")
+    elif c.canonicas[0] != propria:
+        erros.append(f"{rel}: canonical {c.canonicas[0]} ≠ a URL da própria página {propria}")
+    og_url = c.meta.get("og:url", [])
+    if og_url and og_url != c.canonicas[:1]:
+        erros.append(f"{rel}: og:url {og_url} ≠ canonical {c.canonicas[:1]}")
+    for chave in OG_OBRIGATORIAS:
+        if len(c.meta.get(chave, [])) != 1 or not c.meta[chave][0].strip():
+            erros.append(f"{rel}: {chave} ausente, vazio ou repetido ({len(c.meta.get(chave, []))}×)")
+    # hreflang: só nas INDEXAVEIS, exatamente pt-BR, en e x-default (= en, D8/D18), recíprocos (o par
+    # declara os mesmos três endereços, porque os dois apontam para as mesmas URLs esperadas).
+    alt = dict(c.alternates)
+    if rel in INDEXAVEIS:
+        pt_rel = rel[len("en/"):] if rel.startswith("en/") else rel
+        esperado = {"pt-BR": url_canonica(pt_rel), "en": url_canonica("en/" + pt_rel), "x-default": url_canonica("en/" + pt_rel)}
+        if len(c.alternates) != len(alt) or alt != esperado:
+            erros.append(f"{rel}: hreflang {sorted(c.alternates)} ≠ esperado {sorted(esperado.items())} (x-default = en)")
+    elif c.alternates:
+        erros.append(f"{rel}: hreflang {c.alternates} numa página sem par (só as INDEXAVEIS declaram)")
+    # indexação: `noindex` só e sempre nas NOINDEX
+    # `none` = `noindex, nofollow` para o Google: conta como noindex
+    tem_noindex = any(re.search(r"\b(noindex|none)\b", v, re.I) for k in ("robots", "googlebot") for v in c.meta.get(k, []))
+    if rel in NOINDEX and not tem_noindex:
+        erros.append(f"{rel}: sem <meta name=\"robots\" content=\"noindex\"> (está em NOINDEX)")
+    if rel not in NOINDEX and tem_noindex:
+        erros.append(f"{rel}: noindex numa página indexável — some do Google")
+    # og:image: largura e altura declaradas juntas e iguais às do arquivo (D16)
+    larg, alt_img = c.meta.get("og:image:width", []), c.meta.get("og:image:height", [])
+    imagem = (c.meta.get("og:image") or [""])[0]
+    if imagem and not (imagem.startswith(SITE) and os.path.isfile(p(imagem[len(SITE):]))):
+        erros.append(f"{rel}: og:image {imagem} não é URL absoluta de arquivo do site ({SITE}…)")
+    tw_imagem = c.meta.get("twitter:image", [])
+    if tw_imagem and tw_imagem[:1] != [imagem]:
+        erros.append(f"{rel}: twitter:image {tw_imagem} ≠ og:image {imagem!r}")
+    if bool(larg) != bool(alt_img) or len(larg) > 1 or len(alt_img) > 1:
+        erros.append(f"{rel}: og:image:width {larg} e og:image:height {alt_img} — os dois juntos, uma vez, ou nenhum")
+    elif larg and imagem.startswith(SITE) and os.path.isfile(p(imagem[len(SITE):])):
+        real = dimensoes(p(imagem[len(SITE):]))
+        if real is None:
+            erros.append(f"{rel}: og:image {imagem} não é PNG nem JPEG legível — não dá para conferir width/height")
+        elif (larg[0], alt_img[0]) != (str(real[0]), str(real[1])):
+            erros.append(f"{rel}: og:image:width×height {larg[0]}×{alt_img[0]} ≠ tamanho real de {imagem} ({real[0]}×{real[1]})")
+
+# robots.txt e sitemap.xml: endpoints do Astro (ADR-005 §1), nunca public/ (§13 já barra).
+ROBOTS = "User-agent: *\nAllow: /\n\nSitemap: https://ghfsoftware.com/sitemap.xml\n"
+for fonte in ("src/pages/robots.txt.ts", "src/pages/sitemap.xml.ts"):
+    if not os.path.isfile(os.path.join(REPO, fonte)):
+        erros.append(f"{fonte}: ausente — robots.txt e sitemap.xml saem de endpoint do Astro (ADR-005)")
+if not os.path.isfile(p("robots.txt")):
+    erros.append(f"{raiz}/robots.txt ausente")
+else:
+    robots = ler(p("robots.txt"))
+    for n, linha in enumerate(robots.splitlines(), 1):
+        if re.match(r"\s*disallow\s*:", linha, re.I):
+            erros.append(f"robots.txt:{n}: `{linha.strip()}` — nenhum Disallow (convite, assetlinks e og são lidos por robô)")
+    if robots != ROBOTS:
+        erros.append(f"robots.txt ≠ o literal do ADR-005 §4: {robots!r}")
+NS_SM = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+NS_XHTML = "{http://www.w3.org/1999/xhtml}"
+if not os.path.isfile(p("sitemap.xml")):
+    erros.append(f"{raiz}/sitemap.xml ausente")
+else:
+    try:
+        urlset = ET.parse(p("sitemap.xml")).getroot()
+    except ET.ParseError as e:
+        erros.append(f"sitemap.xml não faz parse: {e}")
+        urlset = None
+    if urlset is not None and urlset.tag != NS_SM + "urlset":
+        erros.append(f"sitemap.xml: raiz {urlset.tag} ≠ {NS_SM}urlset")
+    elif urlset is not None:
+        esperadas = {url_canonica(r): r for r in INDEXAVEIS}
+        locs = []
+        for u in urlset.findall(NS_SM + "url"):
+            loc = (u.findtext(NS_SM + "loc") or "").strip()
+            locs.append(loc)
+            rel = esperadas.get(loc)
+            if rel is None:
+                erros.append(f"sitemap.xml: <loc>{loc}</loc> não é a URL canônica de nenhuma página indexável "
+                             f"(convite, 404, URL sem .html ou /en sem barra?)")
+                continue
+            if not os.path.isfile(p(rel)):
+                erros.append(f"sitemap.xml: <loc>{loc}</loc> não existe em {raiz}/ ({rel})")
+            alts = sorted((x.get("hreflang"), x.get("href")) for x in u.findall(NS_XHTML + "link"))
+            pagina = sorted(cabecas[rel].alternates) if rel in cabecas else None
+            if pagina is not None and alts != pagina:
+                erros.append(f"sitemap.xml: hreflang de {loc} {alts} ≠ o da página {pagina}")
+        repetidas = sorted({x for x in locs if locs.count(x) > 1})
+        if repetidas:
+            erros.append(f"sitemap.xml: <loc> repetido: {repetidas}")
+        faltam = sorted(set(esperadas) - set(locs))
+        if faltam:
+            erros.append(f"sitemap.xml: faltam páginas indexáveis: {faltam}")
+
+# JSON-LD (ADR-005 §6): o que cada página declara, com as chaves fechadas. Dados de src/i18n/apps.ts.
+JSONLD_TIPO = {"index.html": "Organization", "en/index.html": "Organization"}
+for app in ("lottoexpert.html", "topowalk.html", "poleposition.html", "eclipsego.html"):
+    JSONLD_TIPO[app] = JSONLD_TIPO["en/" + app] = "MobileApplication"
+CHAVES_JSONLD = {
+    "Organization": {"@context", "@type", "name", "url", "logo"},
+    "MobileApplication": {"@context", "@type", "name", "operatingSystem", "applicationCategory", "installUrl", "offers"},
+}
+# applicationCategory: o enum do Google para SoftwareApplication (nunca o valor cru da Play, `TOOLS`)
+CATEGORIAS = {f"{c}Application" for c in (
+    "Game", "SocialNetworking", "Travel", "Shopping", "Sports", "Lifestyle", "Business", "Design",
+    "Developer", "Driving", "Educational", "Health", "Finance", "Security", "Browser", "Communication",
+    "DesktopEnhancement", "Entertainment", "Multimedia", "Home", "Utilities", "Reference")}
+OFERTA = {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}
+# app de cada landing (D17): name e applicationCategory esperados — espelho de src/i18n/apps.ts,
+# declarado aqui para que um dado trocado lá (ou uma landing lendo a chave errada) não passe
+APP_DA_PAGINA = {}
+for pagina, nome, categoria in (
+    ("lottoexpert.html", "LottoExpert", "UtilitiesApplication"),
+    ("topowalk.html", "TopoWalk", "UtilitiesApplication"),
+    ("poleposition.html", "Pole Position", "SportsApplication"),
+    ("eclipsego.html", "EclipseGo", "LifestyleApplication"),
+):
+    APP_DA_PAGINA[pagina] = APP_DA_PAGINA["en/" + pagina] = (nome, categoria)
+RE_PLAY = re.compile(r"^https://play\.google\.com/store/apps/details\?id=([\w.]+)(?:&|$)")
+
+
+class BotoesPlay(HTMLParser):
+    """`id` de cada `<a href>` para a ficha de um app na Play."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.ids = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "a":
+            m = RE_PLAY.match(dict(attrs).get("href") or "")
+            if m:
+                self.ids.append(m.group(1))
+
+
+for rel, c in sorted(cabecas.items()):
+    objetos = []
+    for n, bruto in enumerate(c.jsonld, 1):
+        try:
+            objetos.append(json.loads(bruto))
+        except ValueError as e:
+            erros.append(f"{rel}: JSON-LD #{n} não faz parse: {e}")
+            continue
+        # §5 sobre o texto decodificado: `\u0061` não esconde "maximiza" da régua
+        texto = json.dumps(objetos[-1], ensure_ascii=False)
+        for padrao in COPY_PROIBIDA:
+            for m in re.finditer(padrao, texto, re.I):
+                erros.append(f"{rel}: JSON-LD fere jogo responsável (`{padrao}`): …{texto[max(0, m.start() - 40): m.end() + 40]}…")
+    tipos = [o.get("@type") if isinstance(o, dict) else type(o).__name__ for o in objetos]
+    esperado = [JSONLD_TIPO[rel]] if rel in JSONLD_TIPO else []
+    if len(c.jsonld) == len(objetos) and tipos != esperado:
+        erros.append(f"{rel}: JSON-LD com @type {tipos} ≠ esperado {esperado}")
+    for o in objetos:
+        if not isinstance(o, dict) or o.get("@type") not in CHAVES_JSONLD:
+            continue
+        tipo = o["@type"]
+        if set(o) != CHAVES_JSONLD[tipo]:
+            erros.append(f"{rel}: {tipo} com chaves {sorted(set(o))} ≠ {sorted(CHAVES_JSONLD[tipo])} "
+                         f"(sobrando: {sorted(set(o) - CHAVES_JSONLD[tipo])}, faltando: {sorted(CHAVES_JSONLD[tipo] - set(o))})")
+        if o.get("@context") != "https://schema.org":
+            erros.append(f"{rel}: {tipo} com @context {o.get('@context')!r} ≠ 'https://schema.org'")
+        if tipo == "Organization":
+            if o.get("url") != SITE or o.get("name") != "GHF Software":
+                erros.append(f"{rel}: Organization com name/url {o.get('name')!r}/{o.get('url')!r} ≠ 'GHF Software'/{SITE!r}")
+            logo = o.get("logo", "")
+            if not (isinstance(logo, str) and logo.startswith(SITE) and os.path.isfile(p(logo[len(SITE):]))):
+                erros.append(f"{rel}: Organization.logo {logo!r} não é URL absoluta de arquivo do site")
+            continue
+        if o.get("operatingSystem") != "Android":
+            erros.append(f"{rel}: MobileApplication.operatingSystem {o.get('operatingSystem')!r} ≠ 'Android'")
+        if o.get("applicationCategory") not in CATEGORIAS:
+            erros.append(f"{rel}: applicationCategory {o.get('applicationCategory')!r} fora do enum do Google (`UtilitiesApplication`, …)")
+        if o.get("offers") != OFERTA:
+            erros.append(f"{rel}: offers {o.get('offers')!r} ≠ {OFERTA} (só o download gratuito; preço do Premium nunca)")
+        if not isinstance(o.get("name"), str) or not o["name"].strip():
+            erros.append(f"{rel}: MobileApplication sem name")
+        if rel in APP_DA_PAGINA and (o.get("name"), o.get("applicationCategory")) != APP_DA_PAGINA[rel]:
+            erros.append(f"{rel}: MobileApplication name/applicationCategory {o.get('name')!r}/{o.get('applicationCategory')!r} "
+                         f"≠ {APP_DA_PAGINA[rel][0]!r}/{APP_DA_PAGINA[rel][1]!r} (D17)")
+        m = RE_PLAY.match(o.get("installUrl") or "")
+        botoes = BotoesPlay()
+        botoes.feed(ler(p(rel)))
+        ids = set(botoes.ids)
+        if not m or o["installUrl"] != f"https://play.google.com/store/apps/details?id={m.group(1)}":
+            erros.append(f"{rel}: installUrl {o.get('installUrl')!r} não é `https://play.google.com/store/apps/details?id=<id>`")
+        elif ids != {m.group(1)}:
+            erros.append(f"{rel}: installUrl com id {m.group(1)} ≠ id do botão da Play da página {sorted(ids)}")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")

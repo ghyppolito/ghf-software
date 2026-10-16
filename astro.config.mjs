@@ -16,6 +16,11 @@ import {
 // verde. A guarda é o §13 do tools/check_site.py: primeiro nível de public/ fechado, nenhum .html
 // além do convite e todo arquivo de public/ igual byte a byte ao de dist/ (WP-08, fatia 9).
 
+// SEO (WP-11, ADR-005): sem @astrojs/sitemap. Com `build.format: 'preserve'` ele emite
+// `/eclipsego` e `/en` (sem `.html`, sem barra), divergindo do canonical. sitemap.xml e robots.txt
+// saem dos endpoints src/pages/sitemap.xml.ts e src/pages/robots.txt.ts, da mesma lista de rotas
+// do canonical e do hreflang (src/i18n/ui.ts).
+
 export default defineConfig({
   site: 'https://ghfsoftware.com',
   // 'preserve': x.astro → x.html e en/index.astro → en/index.html (ADR-002 §2).
