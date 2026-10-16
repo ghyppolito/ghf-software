@@ -94,7 +94,8 @@ D12 e o checklist do WP-19; estes 26 não precisam esperar. Evidência (detalhe 
   ele fica como está em pt e vira linha em `achados-novos.md` → `WP-10`; não se reescreve aqui.
 - `PP-NAV-CONTRASTE-01` dizia "trocar é decisão do usuário". Não é desenho novo: `primary-claro` é a
   variante que o mesmo app já usa na landing (`PaginaPolePosition.astro`); o WP alinha a política à
-  landing. Se o usuário discordar no pré-voo, o achado volta ao WP-10 e o resto do WP segue.
+  landing. **Confirmado pelo usuário em 2026-10-16** ("pode seguir o recomendado"), junto com a posição
+  do WP na trilha C, antes do WP-10.
 - `TOPO-PLAY-HL-PT-01` e o `?locale=pt_BR`: tirar o parâmetro (a Play e o Facebook usam a língua da
   conta/navegador), igual aos outros três apps em `apps.ts:25,29,31`. Não é `hl` por língua: isso
   seria um mapa novo por idioma para um parâmetro que os outros apps não usam.

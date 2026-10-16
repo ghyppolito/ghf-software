@@ -34,6 +34,7 @@ SEQUENCIA = [
     ("C · evolução — design, SEO, performance e medição; WP-06 e WP-19 podem rodar a qualquer momento (são sessões do usuário no Claude Design)", [
         ("WP-06", "brief de design (`design/BRIEF.md`) e sessão no Claude Design (D4): tokens, nav, footer, hero, card de app, seção de features, página legal; export em `design/handoff/<data>/`. Independe da stack"),
         ("WP-19", "export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true)"),
+        ("WP-22", "a11y e i18n sem redesign: 26 achados da varredura de 2026-10-16 (360 px nas legais primeiro, <main>, headings, foco/alvo, contraste do rodapé, rótulos pt na /en/); M, visual, antes do WP-10 e do deploy único (D13)"),
         ("WP-10", "redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08"),
         ("WP-11", "SEO técnico: sitemap, robots, canonical, hreflang pt/en, JSON-LD (Organization, MobileApplication), OG por página. M, depois do WP-08"),
         ("WP-20", "imagens de compartilhamento 1200×630 (D16 A): marca para home e legais, uma por app; sessão do usuário no Claude Design, depois `twitter:card` e `og:image:alt`. M, `visual`, antes do deploy único (D13)"),
