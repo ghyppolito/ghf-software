@@ -240,6 +240,7 @@ não casavam desde e6b3e6f; trocados por `[id='secao-9-1']` etc.; conferido com 
 - `prefers-reduced-motion` (Puppeteer): 0 animações infinitas; hero visível.
 - Mutações provadas e desfeitas: guardas (a)–(e) do `check_site` §17 e o `textoDaChave` (`txt()` que lança).
 - Orçamento Lighthouse (`python3 tools/lighthouse.py`): ✅ orçamento cumprido no HEAD 12cdac7 (3 runs, LANG=en_US). Perf 97–99, a11y 96–100, CLS 0 nas 9 páginas; aviso só de `/`: LCP 2,55 s > 2,5 s (2,33 s no fechamento do WP-12, 2,48 s no `--medir` deste WP: oscilação perto do limite de aviso, erro é 3,0 s).
+- Integrado em `feat/wp-08-layout-unico` (41e3b56) em 2026-10-16; CI do #37 verde (run 38971448793: plano, site, lighthouse).
 
 **Desvios aceitos pela auditoria:**
 - Rótulo do seletor sai `English, EN` (não `English (EN)`): o axe remove parênteses ao comparar.
