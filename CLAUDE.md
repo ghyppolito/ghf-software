@@ -59,8 +59,10 @@ existindo no resultado publicado.
   `tools/check_site.py` barra os termos — mesma régua do `PaywallCopyComplianceTest` do app.
 - Marca **privacy-first** em todos os apps: o site segue a mesma régua (sem rastreador sem
   consentimento; D3 decide a medição).
-- Português é o idioma primário; inglês é espelho completo, nunca parcial. Texto de interface
-  e comentários em português.
+- Português é o idioma primário. **Toda língua listada para uma página em `src/i18n/idiomas.json`
+  é espelho completo, nunca parcial; língua não listada não aparece** (nem página, nem seletor,
+  nem `hreflang`). pt fica na raiz e as outras em `/<código>/`, sem redirecionamento (ADR-007).
+  Texto de interface e comentários em português.
 - Data de "Última atualização" de uma página legal é o `lastUpdated` do `.pt.md` em
   `src/content/legal/`, igual à linha do corpo e ao repositório do app. `check_site.py` confere.
 
@@ -75,24 +77,36 @@ public/                     copiado byte a byte para dist/ pelo Astro (ADR-002 �
   .well-known/assetlinks.json       App Links do LottoExpert
   CNAME                       domínio do Pages
 docs/*.md                   README de cada app (o texto legal está em src/content/legal/)
-tools/                      gen_estado.py · check_plano.py · check_site.py
+tools/                      gen_estado.py · check_plano.py · check_site.py · regras_i18n.py (regras de
+                            i18n como funções puras, que o check_site chama) + test_regras_i18n.py sobre
+                            fixtures/i18n/ · sync_legal.py · lighthouse.py
 design/                     brief e handoff do Claude Design (WP-06)
 astro.config.mjs            Astro (ADR-002): build.format 'preserve', Sätteri com os plugins legais
 tailwind.config.mjs         Tailwind 3.4.19 compilado pelo PostCSS (ADR-003); brand.* por variável CSS
 src/                        assets/img/ (imagens exibidas, pelo astro:assets: WebP, width/height, lazy) ·
                             icons/fa + components/Icon.astro (SVG inline, sem Font Awesome por CDN) ·
                             layouts/ (Base.astro: head único, Inter local pela API fonts, og com width/height lidos do arquivo,
-                            canonical, hreflang pt-BR/en/x-default→en, slot jsonld, tema;
+                            canonical, hreflang por língua da página + x-default (en se houver, senão pt),
+                            slot jsonld, tema, faixa SugestaoIdioma no fim do <body>;
                             LegalLayout.astro: hero e card das páginas legais) · components/ (Nav,
-                            Footer, TrocaIdioma, JsonLd, uma por landing) · i18n/ (ui.ts, <pagina>.ts,
+                            Footer, SeletorIdioma: só as línguas da página, link com 2, lista com 3+;
+                            SugestaoIdioma: faixa que sugere a língua do navegador, nunca navega
+                            sozinha; JsonLd, uma por landing; paginas/: a página inteira com a prop
+                            `lang`) · i18n/ (idiomas.json: línguas do site e de cada página — fonte
+                            única, lida pelo build, check_site e sync_legal (ADR-007); idiomas.ts:
+                            valida e exporta linguasDe/rota/link, com a D23 para destino sem a
+                            língua; ui.ts, <pagina>.ts,
                             legal.ts, apps.ts: id, categoria e link da Play de cada app — botão e
                             JSON-LD leem dali) ·
                             content.config.ts + content/legal/<app>-<doc>.<idioma>.md (texto legal;
-                            front-matter `lastUpdated: "AAAA-MM[-DD]"`, pt = .md do app byte a byte) ·
+                            front-matter `lastUpdated: "AAAA-MM[-DD]"`, pt = .md do app byte a byte;
+                            `pendente: [códigos]` no .pt.md enquanto uma tradução está atrás) ·
                             markdown/legal.mjs (plugins do Sätteri: título e data saem do corpo,
-                            link do próprio site vira caminho a partir da raiz, /en/ no inglês) ·
+                            link do próprio site vira caminho a partir da raiz, /en/ no inglês,
+                            id dos títulos pela posição — secao-2-1, igual em todas as línguas) ·
                             styles/global.css (temas por página, tipografia do texto legal) ·
-                            pages/ (páginas pt literais, en/ os pares, 404; robots.txt.ts e
+                            pages/ (cascas: pt literal na raiz; [lang]/ as outras línguas do mapa
+                            por getStaticPaths, nunca pt/; 404 só em pt; robots.txt.ts e
                             sitemap.xml.ts, endpoints da mesma lista de rotas do canonical — ADR-005)
 dist/                       saída do build (não versionada) — é o que vai ao ar
 .github/workflows/          pr.yml (checks `plano` e `site`) · deploy.yml (master → Pages por Actions)
@@ -138,6 +152,7 @@ npm ci && npm run build                                       # Astro → dist/ 
 python3 tools/check_site.py                                   # sobre dist/ (= --raiz dist; sem dist/, pede o build): URLs contratuais,
                                                               # links, assets, metadados, datas legais contra src/content/legal/, copy
 (cd dist && sha256sum --quiet -c ../tools/contrato.sha256)    # convite, assetlinks, og:image do convite e CNAME iguais ao publicado (D13)
+python3 -B -m unittest tools/test_regras_i18n.py              # regras de i18n (ADR-007) sobre tools/fixtures/i18n/
 python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regenerar e verificar
 python3 -m http.server 8080 -d dist                           # servir dist/ para inspeção (Claude in Chrome ou usuário)
 python3 tools/sync_legal.py --todos --check                    # o site está atrás do app? igual / atrás / à frente-divergente / origem ausente
@@ -149,7 +164,8 @@ python3 tools/lighthouse.py                                   # orçamento de by
 
 `.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`: job `plano`
 (`gen_estado.py --check`, `check_plano.py`), job `site` (`npm ci`, `npm run build`,
-`check_site.py --raiz dist`, contrato byte a byte, html-validate e lychee sobre `dist/`) e job
+`check_site.py --raiz dist`, contrato byte a byte, unittest das regras de i18n, html-validate e
+lychee sobre `dist/`) e job
 `lighthouse` (`tools/lighthouse.py` contra `tools/orcamento-lighthouse.json`).
 `.github/workflows/deploy.yml` roda em push para `master` (e à mão): build, `check_site.py --raiz
 dist` e publicação de `dist/` no Pages — só tem efeito com o Pages em modo "GitHub Actions".

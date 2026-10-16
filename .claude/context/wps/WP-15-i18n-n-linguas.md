@@ -478,6 +478,19 @@ acrescenta nenhuma.
 
 Verificação completa verde (§16 inclusive). `grep -rnE "location\.(replace|assign)|location\.href *=|http-equiv=\"refresh\"" src/ dist/ --exclude-dir=lotto-expert`: vazio.
 
+### Commit 7 — `CLAUDE.md` e ADR-007
+"Produto e copy": "toda língua listada para uma página em `src/i18n/idiomas.json` é espelho
+completo, nunca parcial; língua não listada não aparece", pt na raiz e as outras em `/<código>/`,
+sem redirecionamento (ADR-007). "Arquitetura": `tools/` (regras_i18n.py, test_regras_i18n.py,
+fixtures/i18n/), Base (hreflang pelo mapa, faixa no fim do `<body>`), components (SeletorIdioma,
+SugestaoIdioma, `paginas/`), i18n (`idiomas.json` como fonte única, `idiomas.ts` com
+`linguasDe`/`rota`/`link` e a D23), `pendente: [códigos]`, ids legais por posição, `pages/[lang]/`
+(nunca `pt/`). "Comandos": `python3 -B -m unittest tools/test_regras_i18n.py` e o passo no job
+`site`. `dist/` não muda. Verificação completa verde.
+
+O achado `TOOLS-PYCACHE-GITIGNORE-01` **não** foi resolvido aqui: `.gitignore` não está nos
+Arquivos-alvo. O `-B` nos comandos de teste evita o `tools/__pycache__` enquanto isso.
+
 ## Especificação do site-ux (2026-10-16)
 
 Modo DESENHAR, para os commits 4 (`SeletorIdioma`) e 6 (`SugestaoIdioma`). D23 = (A): link para
