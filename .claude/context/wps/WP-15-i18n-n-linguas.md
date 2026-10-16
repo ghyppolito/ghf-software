@@ -334,6 +334,8 @@ OK
 
 `diff -r <base> dist`: vazio (o commit não muda o gerado). `check_site.py` verde; provado à mão sobre o real (revertido): `pendente` no `.pt.md`, `lastUpdated` divergente, `dist/ru/` e `dist/pt/`, `location.replace` em `dist/en/`, token, SDK, linha de data e `###` a menos no en — cada um reprovou pela sua regra.
 
+---
+
 ### Commit 3 — `[lang]/` no lugar de `en/`
 Medição (ADR-007 §3): `src/pages/[lang]/index.astro` com `lang=en` e `build.format: 'preserve'`
 gera `dist/en/index.html`; `dist/en.html` não existe; `dist/pt` não existe.
@@ -348,3 +350,243 @@ $ diff <(cd base && find . -type f | sort) <(cd dist && find . -type f | sort)
 
 Os 7 caminhos de ADR-001 com `test -f`: ok. `grep -o '<link rel="alternate" hreflang=' dist/topowalk-privacy.html | wc -l` = 3;
 `grep -o 'hreflang=' … | wc -l` = 5 (igual à base). `grep -rnE "location\.(replace|assign)|location\.href *=|http-equiv=\"refresh\"" src/ dist/ --exclude-dir=lotto-expert`: vazio.
+
+## Especificação do site-ux (2026-10-16)
+
+Modo DESENHAR, para os commits 4 (`SeletorIdioma`) e 6 (`SugestaoIdioma`). D23 = (A): link para
+página sem a língua atual vai para **en** se a página tiver en, senão **pt** (mesma regra do
+`x-default`). Fonte visual: `design/handoff/2026-10-13-rodada-3/Site Nav.dc.html` (prevalece sobre o
+HTML) e `content/i18n.js`. O handoff é um protótipo em estilo inline; aqui só se tiram **estrutura,
+medidas e comportamento**. Cor, fonte e classes saem dos tokens atuais (`tailwind.config.mjs`,
+`src/styles/global.css`). Nenhum token novo.
+
+### 0. Onde o handoff e o site divergem (decisão já tomada ou do humano)
+
+| Ponto | Handoff | Site hoje / WP | Resolução |
+|---|---|---|---|
+| 2 línguas | grupo segmentado `PT`/`EN` com `aria-pressed` (`Site Nav.dc.html:44-50`, `two: avail.length<=3`, linha 138) | link único com globo + código da outra língua | **Fica o de hoje** (critério `diff -r` vazio). Reconciliar com o segmentado é decisão de produto, fora do WP-15: vira linha em `achados-novos.md` (`SELETOR-2-LINGUAS-FORA-DO-HANDOFF-01`). |
+| 3 línguas | ainda segmentado (≤3) | arquiteto: 3+ = lista | **Lista a partir de 3.** Divergência assumida; o segmentado com 3 códigos de 2 letras não tem nome nativo (WCAG 2.5.3 / 1.1). |
+| Lista com 4+ | botão + `ul` de `<button>` com `aria-haspopup="true"` (`:53-65`) | links `<a hreflang>` | **Links, não botões** (ADR-007: é navegação para outra URL). `aria-haspopup` sai: promete `role=menu` com setas, que o handoff não implementa. Padrão adotado: botão de disclosure (`aria-expanded`). |
+| Faixa de sugestão | no topo, **em fluxo**, empurra o nav (`:10-21`) | nav é `fixed` (`Nav.astro:88`) | **Sem referência no handoff para `position: fixed`.** Posição e overlay da faixa abaixo são proposta do site-ux; o usuário confirma no navegador. |
+| Breakpoints do nav | 600 / 1024 (`:105`) | menu desktop em `md` (768) | Mantém o `md` do site. Sem referência no handoff para a quebra em 768. |
+
+### 1. `SeletorIdioma.astro` (substitui `TrocaIdioma.astro`)
+
+**Props:** `lang`, `caminho` (pt), `class` (como hoje) e `posicao: 'barra' | 'menu'`. As línguas vêm
+de `linguasDe(pagina)` em `idiomas.ts`; o componente não conhece a lista.
+
+**Regra por número de línguas `n` da página:**
+
+- `n = 1`: não renderiza nada (nem wrapper, nem `<span>` vazio).
+- `n = 2`: **idêntico ao `TrocaIdioma.astro` de hoje**, byte a byte: `<a href hreflang lang aria-label
+  data-troca-idioma class><Icon globo/><span>EN|PT</span></a>`. A cópia das classes `trocaDesktop` /
+  `trocaCelular` do `Nav.astro` não muda. `posicao` é ignorado.
+- `n >= 3`: abaixo.
+
+**`n >= 3`, `posicao='barra'` (>= md):** lugar do `TrocaIdioma` atual (depois dos itens, com a
+mesma borda `border-l border-gray-700 pl-6 ml-2`).
+- Gatilho: `<button type="button" aria-expanded="false" aria-controls="<id>">`, ícone `globe`
+  + nome nativo da língua atual (`<span lang>`) + seta. Mín. 44 px de altura, `rounded-full`,
+  borda `border-gray-500` (não `gray-700`: 3:1 contra `brand-base` para o limite do controle),
+  texto `text-gray-300`, hover `text-white`. Sem rótulo extra: o nome visível já contém o
+  rótulo acessível (WCAG 2.5.3). O painel é `<ul aria-label="{idioma}">` (chave `idioma`, §2).
+- Painel: `<ul>` posicionado `absolute right-0 top-full mt-2`, largura 220 px (`w-[220px]`,
+  `Site Nav.dc.html:57`), `bg-brand-surface border border-gray-600 rounded-xl shadow-xl`, `p-1.5`,
+  `gap-0.5`. Máx. de altura = a lista toda (7 itens x 44 = 308 px + padding: cabe em 1280x720).
+- Item: `<li><a href hreflang lang data-troca-idioma="<código>">Nome nativo</a></li>`, `min-h-11`
+  (44 px), `px-3`, `rounded-lg`, texto 15 px. Língua atual: `aria-current="true"`, fundo
+  `bg-white/5` e check à direita (o ícone `check`, se existir em `Icon.astro`; senão, um
+  `border-r-2 border-b-2` rotacionado como em `:63`), cor `brand-primary`. **O atual não é
+  apenas cor:** tem check e `aria-current`.
+- Os nomes são sempre nativos e cada `<a>` leva `lang` próprio: `Português`, `English`, `Español`,
+  `Français`, `Italiano`, `Deutsch`, `Русский` (fonte: `nome` em `idiomas.json`; handoff: `NAMES`,
+  `Site Nav.dc.html:130`). Sem bandeira. O nome da língua atual no gatilho é o mesmo texto (não a sigla).
+
+**Estados do painel (só n >= 3):** fechado (padrão) / aberto. Sem JS o painel precisa existir:
+renderizar com `<details><summary>` como base (abre/fecha nativo, sem script) e o script de
+~15 linhas só acrescenta o fechamento. Se o site-dev preferir o `<button aria-expanded>` do handoff,
+o estado sem JS é "painel sempre visível dentro do menu mobile e escondido na barra"; a escolha
+do site-dev tem de manter a lista **acessível sem JS**, porque é a única forma de achar a página
+em outra língua. Recomendação do site-ux: `<details>`.
+- Teclado: `Enter`/`Espaço` no gatilho abre; `Tab` percorre os links na ordem do DOM; `Esc` fecha
+  e devolve o foco ao gatilho; `Tab` para fora do painel fecha. Clique fora fecha. **Sem setas**:
+  não é `role=menu`, então sem armadilha de teclado (WCAG 2.1.1/2.1.2).
+- Foco visível: `outline outline-2 outline-offset-2 outline-white` (`focus-visible:`). O site hoje
+  não tem estilo de foco global (`grep focus src/styles/global.css` vazio) e o botão do menu usa
+  `focus:outline-none` (`Nav.astro:129`): isso é **achado fora do diff**
+  (`NAV-FOCO-VISIVEL-01`), não se corrige neste commit. O seletor novo já nasce com foco
+  visível; o handoff usa 2 px em `--br` `#3CC8D0` (`:51`), e `white` evita o terracota
+  `#B5541C` do TopoWalk (~3,2:1 sobre `#111827`, no limite).
+- Movimento: sem animação de entrada (abre instantâneo). Não há nada a reduzir.
+
+**`n >= 3`, `posicao='menu'` (< md, dentro de `#mobile-menu`):** sem reaproveitar o painel.
+Referência: handoff `sheetLang` (`Site Nav.dc.html:88-99`, abaixo de 600 px).
+- No overlay existente (`Nav.astro:140`), depois dos links e do separador `h-px bg-gray-700`:
+  rótulo "Idioma" (13 px, `text-gray-400`, 600) e uma grade `grid grid-cols-2 gap-1` de
+  `<a href hreflang lang data-troca-idioma>`, `min-h-11`, texto 15 px, `rounded-lg`. Atual:
+  `aria-current="true"` + bolinha preenchida à esquerda (anel `border-brand-primary`), não só cor
+  (`:94`).
+- Na barra do celular, para `n >= 3`, **não** há atalho ao lado do botão do menu (some o
+  `trocaCelular`): vale o que o handoff faz abaixo de 600 px (`barLang: bp!=='m'`, `:140`).
+  Para `n = 2` o link da barra continua como hoje.
+- O overlay é `justify-center` e sem scroll. Com a grade de 7 línguas (4 linhas x 44 + gaps)
+  mais 4-5 links em 360x640 o conteúdo pode passar de 640 px. Pedido ao site-dev: `overflow-y-auto`
+  e `justify-start`/`safe center` no overlay **só quando houver o bloco de idiomas** (com 2 línguas,
+  o overlay não muda). Verificar a 360x640 e 360x568.
+- Ao ativar um link de idioma, a página muda; não há estado do menu a fechar (navegação completa).
+- Alemão/russo: o nome é o próprio nome (não "35% mais longo"), mas o painel tem `w-[220px]`
+  e a grade `1fr 1fr` aceita `Русский`/`Français` a 360 px (cada coluna ~150 px). Sem truncar:
+  `break-words`, nunca `truncate`.
+
+**D23 no resto do nav (não é o seletor):** o seletor só lista línguas que existem para a
+página atual, então seus links nunca caem em fallback. A regra (A) vale para `rota(lang, caminho)`
+usado em Nav/Footer/Home/landings quando a página-destino não tem a língua atual (ex.: `/es/`
+numa landing que linka a `lottoexpert-privacy.html`, só pt/en). Para o desenho:
+- Esses links levam `hreflang` e `lang` do destino **quando a língua do destino difere da
+  da página** (WCAG 3.1.2): leitor de tela lê em en/pt certo. O site-dev emite o atributo no
+  `rota()`/componente de link, não em cada página.
+- Sem indicação visual (sem selo "EN"): o brief não pede, e o texto do link já fica na língua da
+  página. **Sem referência no handoff** para marcar visualmente o link que muda de língua; se o
+  usuário quiser, é decisão dele (Claude Design). Registrado em `achados-novos.md` como
+  `LINK-FALLBACK-IDIOMA-SEM-SINAL-01`.
+
+**Uma coisa que o §9 do `check_site.py` precisa ler:** `data-troca-idioma="<código>"` em **todo**
+`<a>` do seletor (barra e menu), com o código da língua de destino. Atributo do link, não do wrapper.
+
+### 2. `SugestaoIdioma.astro` (D8 c1, ADR-007 §7)
+
+**Copy (do handoff, nada de texto novo):**
+
+| Chave | pt | en | Fonte |
+|---|---|---|---|
+| `band` | Esta página também está disponível em português. | This page is also available in English. | `content/i18n.js:4` (pt), `:6` (en) |
+| `bandGo` | Ver em português | Switch to English | `content/i18n.js:4`, `:6` |
+| `close` | Fechar | Close | `content/i18n.js:3`, `:5` |
+| `language` | Idioma | Language | `content/i18n.js:3`, `:5` |
+
+(es/fr/it/de/ru estão em `content/i18n.js:8,10,12,14,16` e entram com cada língua, WP-16/17/18.)
+**A copy da faixa é sempre na língua sugerida**, não na da página atual. Por isso o `<template>`
+carrega **um bloco por língua da página que não seja a atual**, cada um com `lang="<código>"`; o
+script escolhe e clona o bloco certo (o handoff faz o mesmo: `T(sug,'band')`, `Site Nav.dc.html:141`).
+Chaves novas em `ui.ts` por língua: `faixa`, `faixaIr`, `fechar`, `idioma` (nomes a critério do dev;
+conteúdo = tabela).
+
+**Quando aparece (todas as condições):**
+1. A página tem 2+ línguas (`n >= 2`); com `n = 1` o componente nem entra no HTML.
+2. Língua preferida = `localStorage.ghf_lang`, se existir e estiver em `linguasDe(pagina)`;
+   senão a **primeira** entrada de `navigator.languages` (`navigator.language` se vazio) cujo
+   prefixo de 2 letras (`pt-BR`, `pt-PT` → `pt`) esteja em `linguasDe(pagina)` (`Site Nav.dc.html:113-115`).
+   Entrada que não existe na página é pulada (`["fr","en"]` numa página pt/en → `en`).
+3. Preferida **diferente** da língua da página (`<html lang>` / prop `lang`).
+4. `sessionStorage.ghf_faixa_idioma` ≠ `"off"` (o handoff usa `ghf-lang-band`, `:109`; o nome do
+   ADR-007 prevalece).
+5. O parâmetro `?suggest=<código>` do handoff (`Site Nav.dc.html:108`) é só de teste do protótipo: o site **não** o implementa.
+
+Sem JS: não aparece (e o seletor continua lá). Falhas de `localStorage`/`sessionStorage`
+(modo privado, bloqueio): `try/catch` e a faixa se comporta como sem preferência salva; fechar sem
+`sessionStorage` só some até recarregar.
+
+**Gravação (sem rastreador, sem rede):** `localStorage.ghf_lang = <código>` somente no **clique**
+no botão da faixa ou em um link do seletor. Fechar com ✕ grava só `sessionStorage`
+(`ghf_faixa_idioma = "off"`). Clique no botão **não** usa `location.href=`/`replace`: o botão é um
+`<a href=<URL da língua>>` e a navegação é a do navegador; o script só grava antes (`click` listener
+sem `preventDefault`). Assim `grep location.href` fica vazio e o link funciona com clique do meio e
+copiar endereço. (O handoff usa `<button>`, `:16`, porque o protótipo não navega; o site navega, logo
+é link: divergência intencional.)
+
+**Posição e layout (sem referência no handoff para fixed; proposta):**
+- `position: fixed`, **embaixo**, nunca no topo: o nav é `fixed top-0 z-50` com altura variável
+  (logo `h-16 lg:h-20` + `py-5`, ~104-120 px) e a hero ocupa `min-h-screen` logo embaixo. Uma faixa
+  no topo cobriria o menu ou a hero; no rodapé não cobre o nav nem o CTA da Play no hero.
+- < md: `inset-x-3 bottom-3`; >= md: `bottom-4 left-4`, `max-w-[560px]` (canto, nada no centro da
+  hero). Sem `inset-x-0` de ponta a ponta: não vira "barra de cookies".
+- `bottom` soma `env(safe-area-inset-bottom)`. Sem `100vh`/`100dvh` no cálculo: não empurra
+  nem redimensiona nada. **Nunca altera o fluxo:** nada de `padding-top` no `body`, nada de
+  `position: sticky`, CLS 0.
+- z-index **30**: abaixo do overlay do menu mobile (`z-40`) e do nav (`z-50`). Com o menu aberto
+  a faixa fica por baixo e, como o overlay cobre a tela, não é alcançável (e o foco da faixa sai
+  da ordem se o overlay tiver trap; hoje não tem, ver `NAV-FOCO-VISIVEL-01`).
+- Cobre conteúdo enquanto estiver aberta: aceito porque se fecha com um toque e não volta na
+  sessão. **Não pode cobrir o botão da Play do hero no carregamento** em 360x640 e 1280x720: a
+  faixa vem depois do hero no DOM, mas fixed sobrepõe. Em 360x640 o CTA do hero fica acima de
+  ~y=480, a faixa (110 px) ocupa ~y=520-628: conferir no navegador. Se cobrir, a saída é reduzir a faixa em < md a uma linha de texto curto (nunca subir para o topo). Decisão visual a confirmar pelo usuário.
+- Estrutura: `<div role="region" aria-label="{idioma}" lang="{sug}">` (o handoff faz o mesmo, `:11`)
+  contendo `<p>` com `band`, `<a>` com `bandGo` e `<button type="button" aria-label="{fechar}">`
+  com ✕. Não é `role=alert`/`aria-live`: não interrompe leitor de tela; ele chega nela na ordem do DOM.
+  Colocar o componente **no fim do `<body>`** (depois do footer), não no topo, para não ser o
+  primeiro foco de Tab.
+- Cores (tokens atuais): fundo `bg-brand-surface` (#111827), borda `border border-gray-600`,
+  sombra `shadow-xl`, `rounded-xl`; texto `text-gray-200` 14/20 px (contraste ~12:1, AA); o link
+  `bandGo` é botão contornado, `border-gray-500 text-white` 600, `min-h-11`, `px-4`, `rounded-full`,
+  hover `bg-white/10`. **Não** usa `bg-brand-primary` sólido: a faixa não pode competir com o CTA da
+  página (um primário acima da dobra). ✕: 44x44, `text-gray-300`, hover `text-white bg-white/10`.
+  Cores independentes do tema da página (lottoexpert violeta, topowalk terracota), a faixa fica
+  neutra de propósito.
+- Foco: mesmo `focus-visible:outline-2 outline-offset-2 outline-white` do seletor.
+- Teclado: `Esc` com foco dentro da faixa fecha. Fechar não move o foco para lugar nenhum se o foco
+  estava fora; se estava dentro, devolve ao `<body>`/próximo ponto de Tab natural (o link anterior
+  no DOM), sem foco perdido.
+- Movimento: entrada com `opacity` + `translateY(8px)` em 200 ms. `@media (prefers-reduced-motion:
+  reduce)`: sem transição, aparece direto. Só `opacity`/`transform` (sem CLS).
+- Inserção: o script clona o bloco do `<template>` num `DOMContentLoaded`/`load`. Como o
+  Lighthouse do CI roda em `en-US` e vê a faixa nas páginas pt, ela não pode virar o elemento LCP
+  nem gerar CLS: `fixed` + `opacity` inicial 0 e inserção depois do `load`. Verificar o LCP das
+  páginas pt medidas (D22).
+- 360 px: texto em até 3 linhas, depois linha com `bandGo` + ✕ (`flex-wrap`, texto `flex: 1 1 220px`,
+  igual ao handoff `:13`). Sem largura fixa em nenhum texto. 1280 px: uma linha, texto + `bandGo` + ✕.
+- Idiomas longos (de/ru): `bandGo` "Auf Deutsch ansehen" / "Открыть на русском" quebra a linha em 360;
+  `flex-wrap` e `whitespace-normal` resolvem. Não usar `truncate`.
+
+### 3. Acessibilidade (checklist para o `site-dev` e a auditoria)
+
+- Contraste AA: texto 4,5:1 (gray-200 em #111827 ~12:1; gray-400 do rótulo "Idioma" em #111827 ~7:1);
+  bordas de controle `gray-500`/`gray-600` >= 3:1 contra o fundo do componente.
+- Alvo de toque >= 44 px em tudo (links da lista, gatilho, ✕, `bandGo`).
+- Um `h1` por página não muda; o seletor e a faixa **não** têm heading.
+- `lang` nos nomes de língua e na faixa (WCAG 3.1.2); `aria-current="true"` na língua atual.
+- Sem armadilha de foco; `Esc` fecha painel e faixa.
+- `prefers-reduced-motion` respeitado na faixa; o seletor não anima.
+- `alt`: o ícone do globo é decorativo (`aria-hidden`), o texto visível nomeia o controle.
+
+### 4. Estados
+
+| Estado | Seletor | Faixa |
+|---|---|---|
+| 1 língua | não renderiza | não renderiza |
+| 2 línguas | link de hoje | pode aparecer |
+| 3+ línguas | disclosure (barra) / grade (menu) | pode aparecer |
+| JS desligado | `<details>` funciona; lista visível no menu mobile | não aparece |
+| Idioma incompleto (`pendente`) | a língua **não** aparece em `PAGINAS` até estar completa (regra do WP); sem estado "em tradução" no seletor | n/a |
+| Storage bloqueado | n/a | `try/catch`, comportamento sem preferência |
+
+### 5. Componentes e referência
+
+- Reaproveita: `Nav.astro` (lugar do `TrocaIdioma`, classes `trocaDesktop`/`trocaCelular` por
+  `realce`), `Icon.astro` (`globe`), overlay `#mobile-menu`.
+- **Componente novo: nenhum fora dos dois pedidos.** O painel de idioma (lista) e a faixa são
+  novos, mas existem no handoff (`Site Nav.dc.html:10-21`, `:53-65`, `:88-99`), então não voltam ao
+  Claude Design; as divergências da seção 0 sim, se o usuário quiser reabrir.
+- **Sem referência no handoff:** faixa `position: fixed` e embaixo; seletor com 3 línguas em lista;
+  breakpoint do menu em 768; marca visual de link que muda de língua (D23); foco em branco em vez
+  de `--br`. O usuário decide se quer levar algum ao Claude Design; o site-dev implementa a
+  proposta acima enquanto isso.
+
+### 6. Para o `site-dev` (não decide, só implementa)
+
+- Commit 4: n = 2 gera o **mesmo** HTML; `diff -r` vazio. A parte `n >= 3` não aparece em nenhuma
+  página publicada (mapa só pt/en): prove com uma página de teste local mapeada com 3+ línguas (não
+  publicada) e capturas a 360 e 1280 para o usuário. O §9 passa a ler `data-troca-idioma` em qualquer
+  língua.
+- Commit 6: `diff` só com `<template>`, script e CSS. Chaves novas em `ui.ts` (pt/en).
+  `grep -rnE "location\.(replace|assign)|location\.href *=" src/` vazio.
+- Auditoria (`site-ux` AUDITAR depois do commit): cobertura da faixa sobre o CTA da Play a 360x640 e
+  1280x720, foco, `Esc`, `prefers-reduced-motion`, overlay do menu por cima da faixa, 7 línguas a 360.
+
+### 7. Achados novos a registrar (destino sugerido)
+
+- `NAV-FOCO-VISIVEL-01`: `Nav.astro:129` usa `focus:outline-none` no botão do menu e não há estilo de
+  foco global (`global.css`). WCAG 2.4.7. Destino: WP de acessibilidade/QA (não WP-15).
+- `SELETOR-2-LINGUAS-FORA-DO-HANDOFF-01`: seletor pt/en é link único com globo; handoff desenha
+  grupo segmentado com `aria-pressed`. Destino: decisão do usuário/Claude Design.
+- `LINK-FALLBACK-IDIOMA-SEM-SINAL-01`: D23 (A) leva a página em outra língua sem sinal visual.
+  Destino: decisão do usuário, só se virar problema real (nasce com WP-16).
