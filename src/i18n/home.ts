@@ -14,9 +14,11 @@ import type { Idioma } from './ui';
 
 export const home = {
   pt: {
-    title: 'GHF Software - Soluções Inovadoras em IoT e Engenharia de Software',
+    // title = h1 (hero_titleHtml) e description = footer_desc (ui.ts), nos dois idiomas; o og e o
+    // twitter repetem os dois (WP-21, D19).
+    title: 'GHF Software — Construímos o futuro da Mobilidade e IoT',
     description:
-      'GHF Software. Trazendo soluções inovadoras com foco em IoT e mobilidade para facilitar o dia a dia das pessoas.',
+      'Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.',
     hero_badge: 'Elevando o Padrão do Software',
     hero_titleHtml: 'Construímos o futuro da<br class="hidden md:block"> <span class="text-gradient">Mobilidade e IoT</span>',
     hero_desc:
@@ -65,11 +67,9 @@ export const home = {
     btn_privacy: 'PRIVACIDADE',
   },
   en: {
-    // title, description e og não existiam em en (o JS só trocava o corpo); montados de textos
-    // en que a página já publicava: hero_title + hero_desc, e footer_desc no og/twitter.
-    title: 'GHF Software - Building the future of Mobility & IoT',
+    title: 'GHF Software — Building the future of Mobility & IoT',
     description:
-      'Bringing innovative solutions focused on Internet of Things and mobility to empower and simplify your daily routines.',
+      'Cutting-edge software engineering for Mobile and IoT applications. Creating the future with performance since 2004.',
     hero_badge: 'Elevating Software Standards',
     hero_titleHtml: 'Building the future of<br class="hidden md:block"> <span class="text-gradient">Mobility &amp; IoT</span>',
     hero_desc:
