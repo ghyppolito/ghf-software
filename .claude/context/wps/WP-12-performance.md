@@ -2,7 +2,7 @@
 id: WP-12
 titulo: Toda página pontua 90 ou mais nas quatro categorias do Lighthouse mobile
 area: seo
-status: todo
+status: doing
 depende_de: [WP-08]
 adr: []
 spec: docs/AVALIACAO.md
