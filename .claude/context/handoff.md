@@ -7,9 +7,9 @@
 
 ## 1. Onde parei
 
-- **WP-15 `done`** (2026-10-16): código integrado na `feat/wp-08-layout-unico` (0e6b666..e31f059), CI do #37 verde (run 38920589727) e checklist de navegador reportado pelo usuário ("ficou ok"). Nada publicado (D13).
-- **WP-12 `done`**, também integrado. Decisões D22 e D23 (A) registradas.
-- **Próximos:** WP-14 (docs, S); WP-16 (depende de `PREVALENCIA-PT-NOS-APPS-01`); WP-10 (espera checklist do WP-19, D11, D12 e copy); WP-20 (sessão do usuário no Claude Design); WP-13 (D3).
+- **WP-14 `done`** na `feat/wp-14-readme-e-arquitetura` (2026-10-16), sem push; nada publicado (D13). Auditoria do site-qa corrigida.
+- **Próximo passo:** o usuário roda `! git checkout feat/wp-08-layout-unico && git merge --ff-only feat/wp-14-readme-e-arquitetura`; depois o agente faz push da integração e acompanha o CI do #37.
+- **Próximos WPs:** WP-16 (depende de `PREVALENCIA-PT-NOS-APPS-01`); WP-10 (checklist do WP-19, D11, D12 e copy); WP-20 (sessão do usuário no Claude Design); WP-13 (D3). Pendências do usuário seguem as da seção 3.
 
 ## 2. Quebrado ou pela metade agora
 

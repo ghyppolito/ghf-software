@@ -2,7 +2,7 @@
 id: WP-14
 titulo: README e docs/ARQUITETURA.md descrevem a stack nova e como publicar
 area: docs
-status: doing
+status: done
 depende_de: [WP-09]
 adr: []
 spec: ""
@@ -38,3 +38,11 @@ Astro, AGENTES-PRE-ASTRO-01).
   `translations`/`data-i18n`, "antes do WP-08").
 
 **Risco:** baixo.
+
+## Registro
+
+Publicado em: ainda não (D13: sobe com a modernização inteira).
+
+Commits: 35650b3 (início; `AGENTES-PRE-ASTRO-01` entrou no escopo), 05d3f08 (`docs/ARQUITETURA.md` novo, `CLAUDE.md` 12909 → 9540 B com "Arquitetura" apontando para o ARQUITETURA e "Comandos" com os 3 jobs, README com estrutura/como rodar/como publicar, `__pycache__/` no `.gitignore`, agentes sem stack pré-Astro), dda4340 (auditoria do site-qa: 0 alta, 1 média, 5 baixas, todas corrigidas: regra "nenhum .html na raiz" via `check_site.py` §7, front-matter legal, `regras_i18n` chamadas pelo `check_site`, `design/`, pré-requisito do rollback da D13, README sobre a origem do texto legal).
+
+Critérios: caminhos citados existem (sobras são só URLs do site, comandos e extensões soltas); README sem `.html` de raiz; `CLAUDE.md` 9540 B; unittest sem `-B` não suja o `git status`; grep nos agentes limpo; `check_plano` e `check_site` verdes. `visual: false`, nada para o navegador.
