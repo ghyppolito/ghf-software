@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**21 WPs** · 14 concluídos · 0 em andamento
+**22 WPs** · 14 concluídos · 0 em andamento
 
 ## Sequência recomendada
 
@@ -57,6 +57,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-19](wps/WP-19-rodada-3-do-claude-design.md) | A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2 | design | S | baixo | 🖥️ | WP-06 | — | `blocked` |
 | [WP-20](wps/WP-20-imagens-de-compartilhamento-1200x630.md) | Imagens de compartilhamento 1200×630 por página e twitter:card coerente | design | M | baixo | 🖥️ | WP-11 | ADR-005 | `todo` |
 | [WP-21](wps/WP-21-copy-de-compartilhamento-da-ficha-da-play.md) | Title e description de compartilhamento vêm da ficha da Play | landing | M | baixo |  | WP-11 | — | `done` |
+| [WP-22](wps/WP-22-acessibilidade-e-i18n-sem-redesign.md) | Acessibilidade e i18n sem redesign (a11y AA, foco, `<main>`, headings, reduced-motion, contraste fora da paleta, rótulos pt na /en/) | landing | M | medio | 🖥️ | WP-12, WP-15 | ADR-003, ADR-007 | `todo` |
 
 ## Bloqueios ativos
 
