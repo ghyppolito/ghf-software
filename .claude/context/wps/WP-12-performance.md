@@ -310,3 +310,21 @@ causa. A solução foi `fetchpriority="low"` em toda `<Image>` de `Home.astro`, 
 
 **Acessibilidade**, para registro: o que reprova é `color-contrast`, `heading-order` e, nas legais,
 `link-in-text-block`. Os três foram roteados ao WP-10 (`A11Y-LH-BASELINE-WP12-01`), conforme o §6.
+
+## Job `lighthouse` (commit 6, 2026-10-16)
+
+`tools/lighthouse.py` usa só a biblioteca padrão. Ele serve `dist/` num `http.server` de porta livre e
+roda o `lighthouse` 13.5.0 do lockfile 3× em cada uma das 9 páginas de `tools/orcamento-lighthouse.json`.
+Confere a mediana pela performance contra as regras do §7. O orçamento em bytes é o medido no
+commit 5 + 20%. `--medir` imprime os bytes para atualizar o orçamento de propósito.
+
+- **Verde local** sobre o `dist/` do commit 5: as 9 páginas cumprem as regras (perf 98–100, LCP de 1,50 a
+  2,33 s, CLS 0).
+- **Vermelho provocado local** numa cópia de `dist/` com o `lottoexpert_app_mockup.png` (555 KB) e
+  o CSS do Google Fonts injetados na home. Deu `exit=1` com 3 erros: requisição a
+  `fonts.googleapis.com`, 852.264 bytes > 354.427 no total e 674.549 > 142.673 em imagem. O LCP
+  só gerou aviso (2,63 s). Isso confirma o §7: são os bytes e os terceiros que pegam a regressão.
+  Boas práticas ficou em 100 mesmo com o terceiro.
+- **Pendente:** o job verde no PR e o vermelho provocado numa branch descartável no CI. Os dois
+  dependem de push, e push é do usuário. Tornar o check obrigatório na proteção de branch também
+  é decisão do usuário.

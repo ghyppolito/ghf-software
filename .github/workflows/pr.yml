@@ -7,7 +7,8 @@ name: PR
 # metadados, datas legais, copy de jogo responsável), o contrato byte a byte, a validação de HTML
 # e os links internos — o que é provado é o que seria publicado. A raiz do repositório não é mais
 # verificada desde a fatia 6 do WP-08: uma URL contratual (`eclipsego-privacy.html`) só existe em
-# `dist/`. Nada de deploy aqui: publicar é o `deploy.yml`, em push para `master`, e
+# `dist/`. `lighthouse` mede o desempenho de `dist/` contra tools/orcamento-lighthouse.json
+# (WP-12, D20). Nada de deploy aqui: publicar é o `deploy.yml`, em push para `master`, e
 # `develop → master` é decisão do usuário (`/release`).
 #
 # Fluxo `feat → develop → master` (decisoes.md D5): PR do WP mira `develop`; `develop → master` é
@@ -109,3 +110,32 @@ jobs:
           set -euo pipefail
           ls dist/*.html dist/lotto-expert/sweepstake-invite/*.html > /dev/null
           lychee --offline --no-progress --root-dir "$GITHUB_WORKSPACE/dist" 'dist/**/*.html'
+
+  # Orçamento de desempenho (WP-12, D20 B). Job separado: não atrasa o `site`, e o vermelho diz
+  # de cara que o problema é desempenho. Não publica nada.
+  lighthouse:
+    name: lighthouse
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22.22'
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Build (Astro → dist/)
+        env:
+          ASTRO_TELEMETRY_DISABLED: 1
+        run: npm run build
+
+      - name: Lighthouse (dist)
+        # `lighthouse` 13.5.0 do lockfile, Chrome do runner. 9 páginas (uma por template, mais as
+        # que medem diferente) × 3 runs; regras e bytes em tools/orcamento-lighthouse.json.
+        run: python3 tools/lighthouse.py --raiz dist
