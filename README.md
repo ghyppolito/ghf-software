@@ -23,27 +23,65 @@ A **GHF Software** desenvolve aplicações mobile nativas para Android e soluç�
 
 ## 🌐 Estrutura do Repositório
 
+O site é gerado pelo [Astro](https://astro.build) a partir de `src/` e publicado a partir de `dist/`.
+Detalhe de cada parte em [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md).
+
 ```
 .
-├── src/pages/                   # Páginas (Astro): landing corporativa, uma landing por app, as legais e a 404;
-│                                #   en/ com os pares em inglês → dist/x.html, dist/en/x.html
-├── src/content/legal/           # Políticas e termos, pt e en (espelho do repositório de cada app)
-│   ├── lottoexpert-privacy.pt.md / .en.md     → /lottoexpert-privacy.html, /en/lottoexpert-privacy.html
-│   ├── lottoexpert-terms.pt.md / .en.md       → /lottoexpert-terms.html, /en/lottoexpert-terms.html
-│   ├── topowalk-privacy.pt.md / .en.md        → /topowalk-privacy.html, /en/topowalk-privacy.html
-│   ├── poleposition-privacy.pt.md / .en.md    → /poleposition-privacy.html, /en/poleposition-privacy.html
-│   └── eclipsego-privacy.pt.md / .en.md       → /eclipsego-privacy.html, /en/eclipsego-privacy.html
-├── public/                      # Publicado byte a byte em dist/, sem passar pelo Astro (lista fechada)
-│   ├── assets/                  # Imagens, logotipos, favicons e assets visuais das páginas
-│   ├── .well-known/             # assetlinks.json (App Links do LottoExpert)
-│   ├── lotto-expert/            # Convite do bolão (/lotto-expert/sweepstake-invite/lottoexpert-invite.html)
-│   └── CNAME                    # Domínio do GitHub Pages
-└── docs/                        # Especificações técnicas e documentação interna dos projetos
-    ├── TOPOWALK_README.md
-    ├── LOTTOEXPERT_README.md
-    ├── POLEPOSITION_README.md
-    └── ECLIPSE_GO_README.md
+├── src/
+│   ├── pages/                 # Rotas: pt na raiz (index.astro, lottoexpert.astro, …, 404.astro),
+│   │   │                      #   robots.txt.ts e sitemap.xml.ts
+│   │   └── [lang]/            # As outras línguas de cada página (hoje en) → dist/en/x.html
+│   ├── layouts/               # Base.astro (<head> único) e LegalLayout.astro (páginas legais)
+│   ├── components/            # Nav, Footer, seletor e sugestão de idioma, corpo de cada landing;
+│   │   └── paginas/           #   a página inteira, com a prop `lang`
+│   ├── i18n/                  # idiomas.json (línguas do site e de cada página) e os dicionários
+│   ├── content/legal/         # Políticas e termos por língua (o pt é cópia do repositório do app)
+│   ├── markdown/legal.mjs     # Plugins do texto legal
+│   ├── assets/                # Imagens exibidas (otimizadas pelo build) e a fonte Inter
+│   ├── icons/fa/              # Ícones SVG inline
+│   └── styles/global.css      # Temas e tipografia do texto legal
+├── public/                    # Copiado byte a byte para dist/ (lista fechada)
+│   ├── assets/                # Arquivos de URL fixa: og:image, imagens do convite
+│   ├── .well-known/           # assetlinks.json (App Links do LottoExpert)
+│   ├── lotto-expert/          # Convite do bolão (/lotto-expert/sweepstake-invite/lottoexpert-invite.html)
+│   └── CNAME                  # Domínio do GitHub Pages
+├── tools/                     # Verificações em Python (check_site.py, check_plano.py, sync_legal.py, …)
+├── docs/                      # ARQUITETURA.md, AVALIACAO.md e o README técnico de cada app
+├── design/                    # Brief e handoff do sistema visual
+├── astro.config.mjs           # Configuração do Astro
+└── tailwind.config.mjs        # Tokens de cor e fonte da marca
 ```
+
+Cada arquivo de `src/content/legal/` vira uma URL: `src/content/legal/lottoexpert-privacy.pt.md` →
+`/lottoexpert-privacy.html`, `src/content/legal/lottoexpert-privacy.en.md` → `/en/lottoexpert-privacy.html`.
+
+---
+
+## 🛠️ Como rodar
+
+Precisa de Node 22.22 e Python 3.
+
+```bash
+npm ci && npm run build                # gera dist/
+python3 -m http.server 8080 -d dist    # abre em http://localhost:8080
+python3 tools/check_site.py            # verifica dist/: URLs contratuais, links, metadados, datas legais, copy
+python3 tools/check_plano.py           # verifica o backlog
+```
+
+Os demais checks do CI (contrato byte a byte, regras de i18n, html-validate, lychee, Lighthouse)
+estão na seção "Comandos" do [`CLAUDE.md`](CLAUDE.md).
+
+---
+
+## 🚢 Como publicar
+
+1. O trabalho nasce numa branch `feat/…` a partir de `develop` e vai por PR para `develop`. O
+   workflow `.github/workflows/pr.yml` roda os checks `plano`, `site` e `lighthouse`.
+2. **`develop → master` é deploy.** Só o mantenedor faz esse merge, pelo ritual `/release`
+   (`.claude/commands/release.md`), depois de conferir no navegador o que só ele prova.
+3. O push em `master` dispara `.github/workflows/deploy.yml`, que builda, verifica e publica `dist/`
+   no GitHub Pages (modo "GitHub Actions").
 
 ---
 

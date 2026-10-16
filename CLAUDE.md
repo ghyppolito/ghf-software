@@ -68,52 +68,13 @@ existindo no resultado publicado.
 
 ## Arquitetura
 
-```
-public/                     copiado byte a byte para dist/ pelo Astro (ADR-002 §3); lista fechada,
-                            sem página — check_site.py §13 prova:
-  assets/                     só URL fixa: og:image, favicons do convite, convite (PNG, sem otimização);
-                              imagem exibida na página sai de src/assets/img/ (ADR-006)
-  lotto-expert/sweepstake-invite/   página do convite de bolão (pako + Base64, lê o link)
-  .well-known/assetlinks.json       App Links do LottoExpert
-  CNAME                       domínio do Pages
-docs/*.md                   README de cada app (o texto legal está em src/content/legal/)
-tools/                      gen_estado.py · check_plano.py · check_site.py · regras_i18n.py (regras de
-                            i18n como funções puras, que o check_site chama) + test_regras_i18n.py sobre
-                            fixtures/i18n/ · sync_legal.py · lighthouse.py
-design/                     brief e handoff do Claude Design (WP-06)
-astro.config.mjs            Astro (ADR-002): build.format 'preserve', Sätteri com os plugins legais
-tailwind.config.mjs         Tailwind 3.4.19 compilado pelo PostCSS (ADR-003); brand.* por variável CSS
-src/                        assets/img/ (imagens exibidas, pelo astro:assets: WebP, width/height, lazy) ·
-                            icons/fa + components/Icon.astro (SVG inline, sem Font Awesome por CDN) ·
-                            layouts/ (Base.astro: head único, Inter local pela API fonts, og com width/height lidos do arquivo,
-                            canonical, hreflang por língua da página + x-default (en se houver, senão pt),
-                            slot jsonld, tema, faixa SugestaoIdioma no fim do <body>;
-                            LegalLayout.astro: hero e card das páginas legais) · components/ (Nav,
-                            Footer, SeletorIdioma: só as línguas da página, link com 2, lista com 3+;
-                            SugestaoIdioma: faixa que sugere a língua do navegador, nunca navega
-                            sozinha; JsonLd, uma por landing; paginas/: a página inteira com a prop
-                            `lang`) · i18n/ (idiomas.json: línguas do site e de cada página — fonte
-                            única, lida pelo build, check_site e sync_legal (ADR-007); idiomas.ts:
-                            valida e exporta linguasDe/rota/link, com a D23 para destino sem a
-                            língua; ui.ts, <pagina>.ts,
-                            legal.ts, apps.ts: id, categoria e link da Play de cada app — botão e
-                            JSON-LD leem dali) ·
-                            content.config.ts + content/legal/<app>-<doc>.<idioma>.md (texto legal;
-                            front-matter `lastUpdated: "AAAA-MM[-DD]"`, pt = .md do app byte a byte;
-                            `pendente: [códigos]` no .pt.md enquanto uma tradução está atrás) ·
-                            markdown/legal.mjs (plugins do Sätteri: título e data saem do corpo,
-                            link do próprio site vira caminho a partir da raiz, /en/ no inglês,
-                            id dos títulos pela posição — secao-2-1, igual em todas as línguas) ·
-                            styles/global.css (temas por página, tipografia do texto legal) ·
-                            pages/ (cascas: pt literal na raiz; [lang]/ as outras línguas do mapa
-                            por getStaticPaths, nunca pt/; 404 só em pt; robots.txt.ts e
-                            sitemap.xml.ts, endpoints da mesma lista de rotas do canonical — ADR-005)
-dist/                       saída do build (não versionada) — é o que vai ao ar
-.github/workflows/          pr.yml (checks `plano` e `site`) · deploy.yml (master → Pages por Actions)
-```
-
-Desde a fatia 8 do WP-08 nenhuma página vem da raiz: nav, footer e config mudam só no componente
-(`src/components/`, `src/layouts/`), e a rede é o `check_site.py` sobre `dist/`.
+Detalhe em **`docs/ARQUITETURA.md`** (build, rotas, layouts, componentes, conteúdo legal, i18n,
+verificação, CI e deploy). O essencial: a fonte é `src/` (páginas em `src/pages/`, pt na raiz e as
+outras línguas em `[lang]/`; layouts, componentes, dicionários em `src/i18n/` com `idiomas.json`
+como fonte única das línguas; texto legal em `src/content/legal/`) mais `public/`, copiado byte a
+byte e fechado em `assets/`, `.well-known/`, `lotto-expert/` e `CNAME`. Imagem exibida sai de
+`src/assets/img/` pelo `astro:assets` (ADR-006). **`dist/` é o que vai ao ar**, e a rede é o
+`check_site.py` sobre `dist/`. Nav, footer e config mudam só no componente.
 
 ---
 
@@ -162,13 +123,13 @@ lychee --offline --no-progress --root-dir "$PWD/dist" 'dist/**/*.html'  # links 
 python3 tools/lighthouse.py                                   # orçamento de bytes e Lighthouse mobile (3 runs, 9 páginas); serve dist/, precisa de Chrome
 ```
 
-`.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`: job `plano`
-(`gen_estado.py --check`, `check_plano.py`), job `site` (`npm ci`, `npm run build`,
-`check_site.py --raiz dist`, contrato byte a byte, unittest das regras de i18n, html-validate e
-lychee sobre `dist/`) e job
-`lighthouse` (`tools/lighthouse.py` contra `tools/orcamento-lighthouse.json`).
-`.github/workflows/deploy.yml` roda em push para `master` (e à mão): build, `check_site.py --raiz
-dist` e publicação de `dist/` no Pages — só tem efeito com o Pages em modo "GitHub Actions".
+`.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`, em três jobs: `plano`
+(`gen_estado.py --check`, `check_plano.py`), `site` (`npm ci`, `npm run build`,
+`check_site.py --raiz dist`, unittest das regras de i18n, contrato byte a byte, html-validate e
+lychee sobre `dist/`) e `lighthouse` (build e `tools/lighthouse.py --raiz dist` contra
+`tools/orcamento-lighthouse.json`). `.github/workflows/deploy.yml` roda em push para `master` (e à
+mão): build, `check_site.py --raiz dist`, contrato byte a byte e publicação de `dist/` no Pages
+(modo "GitHub Actions").
 
 ## Referência rápida
 
