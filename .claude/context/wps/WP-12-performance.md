@@ -24,8 +24,8 @@ inline no lugar do Font Awesome, imagens em WebP/AVIF com `width/height` e `srcs
 **Contexto:** `docs/AVALIACAO.md` §2 item 4; baseline a medir no passo 0 (`site-seo-perf`),
 antes de qualquer mudança — sem número de partida o WP não começa.
 
-**Ler antes:** `docs/AVALIACAO.md` §2.4; `@astrojs/image`/`astro:assets`; `@lhci/cli` com
-`lighthouserc.json`.
+**Ler antes:** `docs/AVALIACAO.md` §2.4; `@astrojs/image`/`astro:assets`; CLI do `lighthouse`
+13.5.0 (D20 B).
 
 **Arquivos-alvo:** (fechados pelo veredito do arquiteto, 2026-10-16; ADR-006)
 - remoção: `public/assets/lottoexpert_favicon_v2.png`, `public/assets/poleposition_dashboard_mockup.png`,
@@ -40,9 +40,9 @@ antes de qualquer mudança — sem número de partida o WP não começa.
   `src/pages/poleposition.astro`, `src/pages/en/poleposition.astro` (`fontesExtras`),
   `src/pages/lottoexpert-terms.astro`, `src/pages/en/lottoexpert-terms.astro` (`iconeSelo`)
 - guarda: `tools/check_site.py` (§15 novo)
-- Lighthouse no CI, conforme D20: (A) `package.json`, `package-lock.json`, `lighthouserc.json`;
-  (B) `package.json`, `package-lock.json`, `tools/lighthouse.py`, `tools/orcamento-lighthouse.json`;
-  as duas com `.github/workflows/pr.yml` (job `lighthouse`). (C) nenhum destes.
+- Lighthouse no CI (D20 decidida: B): `package.json` e `package-lock.json` (`lighthouse` 13.5.0
+  exato em `devDependencies`), `tools/lighthouse.py`, `tools/orcamento-lighthouse.json`,
+  `.github/workflows/pr.yml` (job `lighthouse`).
 
 Fora da lista, de propósito: `public/lotto-expert/**`, `public/.well-known/**`, `public/CNAME`,
 `tools/contrato.sha256`, `.github/workflows/deploy.yml`, `.htmlvalidate.json`, `public/fonts/`.
@@ -62,7 +62,7 @@ Fora da lista, de propósito: `public/lotto-expert/**`, `public/.well-known/**`,
   convite.
 - `(cd dist && sha256sum --quiet -c ../tools/contrato.sha256)` verde; `public/assets/` sem os 4
   órfãos e com todo o resto byte a byte.
-- Job `lighthouse` verde no PR (D20 A ou B); com D20 (C), o critério sai e a medição local fica.
+- Job `lighthouse` verde no PR (D20 B).
 
 **Só no navegador:** capturas antes/depois (360 e 1280, pt) da home, das 4 landings, de uma
 legal e da 404, nos commits de fonte, ícones e imagens: ícones no mesmo lugar, tamanho e cor;
@@ -77,8 +77,8 @@ métrica da fonte recortada; imagem LCP com `loading="lazy"`; o recorte sem um g
 
 **Aprovado com mudanças**, já aplicadas no cabeçalho e nas seções acima: ADR-006, `tamanho: L`,
 `risco: medio`, Arquivos-alvo fechados, régua da 404 explícita e exceção do convite no critério
-de CDN. Os commits 1 a 5 não dependem de nenhuma decisão em aberto. O commit 6 espera a D20.
-D21 não bloqueia: sem resposta, vale a opção (C).
+de CDN. Os commits 1 a 5 não dependem de nenhuma decisão em aberto. D20 e D21 foram decididas
+em 2026-10-16 ("pode seguir o recomendado"): D20 (B) e D21 (C). Ver §8.
 
 **Guarda.** (1) URL contratual: nenhuma muda. O convite, o `assetlinks.json`, o
 `lottoexpert_app_mockup.png` e o `CNAME` ficam fora da lista, e o `contrato.sha256` roda em todo
@@ -98,8 +98,8 @@ publica nada. (5) i18n: nenhum texto novo. (6) Nenhum rastreador; D3 não se apl
   - os favicons apontados hoje;
   - tudo o que o convite carrega (`lottoexpert_app_mockup`, `lottoexpert`,
     `lottoexpert_favicon_v3` e as 9 de `lottoexpert/`).
-- O que a página exibe passa a sair de uma cópia em `src/assets/img/`. As cópias somam ≈ 3,5 MB
-  no git, e esse custo é aceito para que a URL externa não mude.
+- O que a página exibe passa a sair de uma cópia em `src/assets/img/`. As cópias somam 6,2 MB
+  no git (medido; o veredito estimou ≈ 3,5 MB, ver §10), e esse custo é aceito para que a URL externa não mude.
 - Formato WebP. `densities={[1, 2]}` para o que tem tamanho fixo (logos de 48 px, ícone da nav).
   `widths` + `sizes` para mockup fluido. `fetchpriority="high"` + `loading="eager"` só no
   elemento LCP medido de cada página; a logo da nav é sempre `eager`.
@@ -113,7 +113,7 @@ publica nada. (5) i18n: nenhum texto novo. (6) Nenhum rastreador; D3 não se apl
 - Os pesos que o CSS compilado usa são 400, 500, 600, 700 e 800: há `font-weight` 400, 500, 600,
   700 e 800 em `dist/_astro/Base.poFuGAu4.css`, e nenhum `font-light` em `src/`. O 300 sai.
 - O arquivo é o `InterVariable.woff2` 4.001 do handoff (OFL), recortado em `wght` 400–800,
-  `opsz` 14, faixa latina + U+2192: medido 24,9 KB. O único caractere fora da faixa latina em
+  `opsz` 14, faixa latina + U+2192: 33,7 KB com as features padrão (o veredito mediu 24,9 KB; ver §10). O único caractere fora da faixa latina em
   `dist/` é o `⭐` do LottoExpert, que vem da fonte de emoji.
 - Não entra `@fontsource`: seria pacote novo, decisão de stack, para fazer o que a API `fonts`
   do Astro 7 já faz. Também não entra `public/fonts/`: abriria a lista fechada do §13 e exigiria
@@ -176,8 +176,8 @@ publica nada. (5) i18n: nenhum texto novo. (6) Nenhum rastreador; D3 não se apl
   Repete-se com 5 runs só para relatar a dispersão.
 
 ### 7. Lighthouse no CI
-- A ferramenta é a D20, porque a D2 deixou "Lighthouse CI" em aberto.
-- Desenho para (A) ou (B): job `lighthouse` separado no `pr.yml`, com o próprio `npm ci` +
+- A ferramenta é a D20 (B): `lighthouse` 13.5.0 + `tools/lighthouse.py` + `tools/orcamento-lighthouse.json`.
+- Desenho: job `lighthouse` separado no `pr.yml`, com o próprio `npm ci` +
   build, `timeout-minutes: 15`, sem `paths:`.
 - 9 páginas, uma por template, mais as que medem diferente: `/`, `lottoexpert`, `topowalk`,
   `poleposition`, `eclipsego`, `lottoexpert-privacy`, `lottoexpert-terms`, `eclipsego-privacy` e
@@ -194,11 +194,13 @@ publica nada. (5) i18n: nenhum texto novo. (6) Nenhum rastreador; D3 não se apl
   regressão de verdade (PNG de 700 KB, CDN de volta).
 - Tornar o check obrigatório na proteção de branch é decisão do usuário.
 
-### 8. Decisões do usuário
-- **D20**: ferramenta do Lighthouse no CI. Recomendada: (B).
-- **D21**: o ícone que falta no card "offline" do EclipseGo. Recomendada: (C).
+### 8. Decisões do usuário (decididas em 2026-10-16)
+- **D20 → (B)**: `lighthouse` 13.5.0 exato em `devDependencies`, `tools/lighthouse.py` (biblioteca
+  padrão) e `tools/orcamento-lighthouse.json`; job `lighthouse` no `pr.yml`. (A) e (C) fechadas.
+- **D21 → (C)**: o card "offline" do EclipseGo fica sem ícone, como no ar. A escolha vai ao WP-10
+  pelo achado `ECLIPSE-ICONE-OFFLINE-01` (destino `WP-10`, listado nos achados roteados de lá).
 
-Opções, custos e motivos em `decisoes.md`.
+Motivos e o que fica aberto em `decisoes.md`.
 
 ### 9. Sequência de commits
 
@@ -224,7 +226,7 @@ html-validate e lychee. As capturas antes/depois do `site-ux` são dos commits 2
 5. `WP-12: tabela antes/depois`. Medição das 21 pelo `site-seo-perf` nas condições da linha de
    base, colada no WP. Se alguma ficar abaixo da régua, o conserto é feito aqui e medido de novo,
    antes do CI.
-6. `WP-12: job lighthouse no PR com orçamento` (só depois da D20). Prova: o job verde no PR, e um
+6. `WP-12: job lighthouse no PR com orçamento` (D20 B). Prova: o job verde no PR, e um
    vermelho provocado e revertido (PNG grande de volta numa branch descartável) mostrando que a
    regra de bytes pega.
 
@@ -235,6 +237,29 @@ html-validate e lychee. As capturas antes/depois do `site-ux` são dos commits 2
 - `OG-MOCKUP-JPEG-PESADO-01` → WP-20, na parte da og:image; o que é exibido sai no commit 4.
 - `CONVITE-FORA-DO-WP-12-01` → resolvido pelo §5 deste veredito, ao fechar.
 - `INVITE-PAKO-CDNJS-01` → `triagem`, para WP pós-deploy.
+
+### 10. Desvios da implementação (commits c7d5683..1856a27), julgados em 2026-10-16
+- **Fonte com 33,7 KB, não 24,9 KB: aceito.** Refeito o comando do `astro.config.mjs:29-31`
+  (fontTools 4.61.1, `InterVariable.woff2` da rodada 3): 33.492 bytes com as features padrão do
+  `pyftsubset` (o arquivo commitado tem 33.740; a diferença é de versão do fontTools); 28.812 com `--layout-features=kern,liga,calt`; 25.312 só com `kern`. O 24,9 KB do
+  veredito e do ADR-006 §3 não se reproduz com as features padrão; o mais perto é o recorte só com
+  `kern`. Cortar
+  `ccmp`, `locl`, `mark`/`mkmk` e `calt` muda o desenho de texto que hoje sai certo (acento
+  combinado, `→` contextual da Inter), e o WP promete paridade. São ~8 KB num único arquivo com
+  preload, sem efeito mensurável na nota. Nada a cortar. O número do ADR-006 §3 foi corrigido
+  com uma nota no próprio ADR.
+- **§14 do `check_site.py` ignora `<title>` dentro de `<svg>`: aceito.** O `<title>` de um `<svg>`
+  é o nome acessível do gráfico, não o título do documento. Contá-lo faria o §14 acusar título
+  duplicado em toda página com logo de tecnologia. O recorte é estreito: só o que está entre
+  `<svg>` e `</svg>`, e `<svg/>` vazio não abre nível (`tools/check_site.py:746-779`). A falha é
+  segura: um `<svg>` mal fechado esconderia o `<title>` real, e o §14 reprovaria por falta de
+  título. Está fora da letra "§15 novo" dos Arquivos-alvo, mas é o mesmo arquivo e é consequência
+  direta do commit de ícones. Não é escopo novo.
+- **`src/assets/img/` com 6,2 MB, não ≈ 3,5 MB: aceito, e o número do §1 está corrigido.** Medido:
+  6.425.245 bytes. Desses, 2.369.902 são as 9 loterias de `lottoexpert/`, exibidas na landing por
+  `<img>` e por isso cópia pela regra do §1 (o original fica em `public/` porque o convite o
+  carrega). Mais 309 KB são origens de favicon para o `getImage()`. O custo é só no git, uma vez:
+  `dist/` recebe o WebP. O que o veredito errou foi a conta, não a regra.
 
 **Nota para o `site-docs`:** a árvore de Arquitetura do `CLAUDE.md` ("assets/ … PNG, sem
 otimização"; "Base.astro … fontes") fica desatualizada no commit 4. A atualização é do

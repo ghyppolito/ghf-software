@@ -38,7 +38,7 @@ tudo PNG/JPEG de `public/assets/` exibido em tamanho menor (9 logos 500×500 de 
    latino (o `unicode-range` "latin" do Google Fonts + U+2192 `→`, que as páginas usam), em
    `src/assets/fonts/`, com a licença OFL ao lado. Origem: `InterVariable.woff2` 4.001 (rsms/inter)
    do handoff (`design/handoff/2026-10-13-rodada-3/fonts/`). O comando do recorte (fontTools,
-   fora do CI) fica no comentário do `astro.config.mjs`; medido em 2026-10-16: 24,9 KB. O
+   fora do CI) fica no comentário do `astro.config.mjs`; medido em 2026-10-16: 33,7 KB com as features OpenType padrão do `pyftsubset` (o 24,9 KB da primeira versão deste ADR não se reproduz com elas; correção no WP-12 §10). O
    `<Font preload>` no `<head>` do `Base.astro` faz o preload, e o fallback com métricas ajustadas
    (`size-adjust`) que o Astro gera é o que segura o CLS do swap. Pesos 300 e 900 ficam fora: o
    CSS compilado usa 400, 500, 600, 700 e 800 (`font-weight` em `dist/_astro/*.css`; nenhum
