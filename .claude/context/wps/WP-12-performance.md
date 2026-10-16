@@ -375,3 +375,8 @@ commit 5 + 20%. `--medir` imprime os bytes para atualizar o orçamento de propó
 
 **Ainda aberto:** o job verde no PR e o vermelho provocado no CI dependem de push, que é do usuário.
 O checklist de navegador também está aberto: menu do celular, nitidez em 2×, favicon e paridade dos ícones.
+
+**CI (2026-10-16):** `9abce41` foi integrado por fast-forward na `feat/wp-08-layout-unico`. O run
+38892232077 do #37 deu `plano`, `site` e `lighthouse` verdes. No runner, o `lighthouse` deu os
+mesmos números da medição local: perf de 98 a 100, LCP de 1,50 a 2,33 s, CLS 0, e o orçamento foi
+cumprido. Falta o vermelho provocado no CI.
