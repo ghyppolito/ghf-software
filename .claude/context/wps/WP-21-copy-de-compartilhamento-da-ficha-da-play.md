@@ -177,3 +177,22 @@ objeto `og`) · `tools/check_site.py` (§14 e docstring). Fora: convite, `public
 4. `WP-21: title e description da ficha da Play` — só depois da D19 decidida; home e 4 landings.
 5. `/verify`: build, `check_site.py`, `sha256sum -c ../tools/contrato.sha256`, html-validate, lychee.
    Achados roteados fecham no `site-docs`.
+
+## Estado (2026-10-16)
+
+**Implementado e auditado; `doing` até o usuário integrar na `feat/wp-08-layout-unico` e o CI do #37 ficar verde** (mesmo padrão do WP-11/WP-09). Não publicado (D13).
+
+Commits: 4fdc621 início · 87f829c veredito · af37c9b D19 decidida (usuário: "pode seguir o recomendado", A nos 6 itens) · 3d65224 og/twitter iguais a title/description · 0e2c21a separador — nas legais · 76122c8 copy da ficha · 30fe7de guardas no §14 · 5dc205f correções da auditoria (description única; par en comparado sem caixa e com espaço normalizado).
+
+**Critérios de aceite e a prova de cada um:**
+- `check_site.py` verde, com a regra do title: §14 (`len(title) > 60`, `len(description) > 160`, og/twitter iguais, separador ` — `); verde em 30fe7de e após 5dc205f. Mutações (2 descriptions iguais; title en = pt em maiúsculas com espaço) falham como deviam.
+- Copy do LottoExpert sob o §5: `COPY_PROIBIDA` do §5 sobre o HTML e sobre `src/i18n/lottoexpert.ts`/`home.ts`; verde. Resíduo (entidade no `<title>`): `COPY-PROIBIDA-ENTIDADE-01`, `nota`.
+- Nenhum `title`/`description` en igual ao pt: guarda do §14 (comparação sem caixa e com espaço normalizado).
+
+**/verify** em 30fe7de: build, `check_site --raiz dist`, sha256 do contrato, html-validate, `gen_estado --check` e `check_plano`, todos com código 0; lychee não instalado localmente (fica para o CI do #37). O `<body>` das 22 páginas é idêntico ao build da integração; só o `<head>` muda.
+
+**Auditoria:** site-qa 0 alto/0 médio, 3 baixos (2 corrigidos em 5dc205f; `COPY-PROIBIDA-ENTIDADE-01` como `nota`). site-seo-perf 0 bloqueante: titles 40–55, descriptions 59–126, sem duplicidade, landings até −652 B; `LEGAL-DESC-QUASE-IGUAL-01` e `JSONLD-SEM-DESCRIPTION-01` como `nota`. Descriptions do Pole Position sem ponto final são literais da ficha (D19). site-ux não invocado (nada visível).
+
+**`visual: false`.** O card do WhatsApp/LinkedIn (título com travessão e descrição curta em `/`, `/en/`, `/lottoexpert.html`, `/en/topowalk.html`) está no checklist do deploy único em `handoff.md` §3.
+
+**Pendências do usuário (D19, fora do site):** registrar o en do LottoExpert (título e curta) no `ASO_METADATA.md` do app; criar a ficha do EclipseGo no app. A D19 fica aberta nesses dois pontos.

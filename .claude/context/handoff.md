@@ -7,9 +7,11 @@
 
 ## 1. Onde parei
 
-- **WP-11 `done`** (2026-10-15): integrado na `feat/wp-08-layout-unico` (be43372), CI do #37 verde (run 38838938355),
-  os 2 validadores com 0 erro pelo usuário. Não publicado (D13).
-- **Próximos:** WP-20 (imagens 1200×630, sessão no Claude Design) e WP-21 (copy da ficha da Play), ambos antes do deploy único (D13); depois WP-10.
+- **WP-21 pronto, aguardando o merge do usuário** (`doing`; 5dc205f na `feat/wp-21-copy-de-compartilhamento`): check_site, contrato,
+  html-validate e planos verdes; auditoria sem alto nem médio; lychee fica para o CI. Os 7 achados roteados estão `resolvido`.
+- **Merge (usuário):** `git switch feat/wp-08-layout-unico && git merge --no-ff feat/wp-21-copy-de-compartilhamento -m "WP-21: title e description de compartilhamento vêm da ficha da Play (D19)"`;
+  depois o agente faz push, espera o CI do #37 e marca `done`. WP-11 `done` (2026-10-15), não publicado (D13).
+- **Próximos:** WP-20 (imagens 1200×630, sessão no Claude Design) ou WP-10.
 
 ## 2. Quebrado ou pela metade agora
 
@@ -25,7 +27,8 @@ Nada quebrado no ar nem pela metade. Servidor antigo na porta 8081 (pid 686166),
   forçado do navegador; o usuário testou e não pediu WP. Convite é URL contratual.
 
 **Checklist do deploy único (D13), vindo do WP-11:** Search Console com o `sitemap.xml` enviado e lido; preview no WhatsApp
-de um convite real gerado pelo app e de uma landing, sobre o site no ar.
+de um convite real gerado pelo app e de uma landing, sobre o site no ar. Vindo do WP-21: card do WhatsApp/LinkedIn com título
+em travessão e descrição curta em `/`, `/en/`, `/lottoexpert.html` e `/en/topowalk.html`.
 
 ## 4. Próxima ação
 
@@ -34,7 +37,9 @@ de um convite real gerado pelo app e de uma landing, sobre o site no ar.
 2. Checklist de navegador do WP-19; escrever o resultado no WP.
 3. Decidir D11 (`--success`) e D12 (limiares de destaque), ambas só para o WP-10; D3 (medição) bloqueia o WP-13. `PP-NAV-CONTRASTE-01` aguarda decisão.
 
-**Do agente:** `/wp` para o WP-21 (copy da ficha da Play) ou o WP-20 quando as imagens existirem; depois o WP-10 (branch a partir da integração, D13).
+4. Nos apps (D19, mantém a decisão aberta): registrar o en do LottoExpert (título e curta) no `ASO_METADATA.md` e criar a ficha do EclipseGo.
+
+**Do agente:** após o merge do WP-21, push, CI do #37 e `done`; depois o WP-20 quando as imagens existirem ou o WP-10 (branch a partir da integração, D13).
 
 **Copy pendente do usuário antes do WP-10:** "chance matemática" -> "probabilidade exata"; texto final do aviso de jogo
 responsável (o export traz "Texto provisório"); confirmar "Nada de cadastro, e-mail ou CPF" e "Nenhum SDK de publicidade";
