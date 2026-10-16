@@ -826,6 +826,8 @@ for caminho in paginas:
     # texto próprio; os dois cabem na SERP; nas INDEXAVEIS, a marca vem unida por travessão, o do h1
     titulo = c.titulos[0] if len(c.titulos) == 1 else None
     descricao = (c.meta.get("description") or [None])[0]
+    if len(c.meta.get("description", [])) > 1:
+        erros.append(f"{rel}: {len(c.meta['description'])} <meta name=\"description\"> (esperado 1)")
     if titulo is None:
         erros.append(f"{rel}: {len(c.titulos)} <title> (esperado 1)")
     else:
@@ -881,14 +883,18 @@ for caminho in paginas:
         elif (larg[0], alt_img[0]) != (str(real[0]), str(real[1])):
             erros.append(f"{rel}: og:image:width×height {larg[0]}×{alt_img[0]} ≠ tamanho real de {imagem} ({real[0]}×{real[1]})")
 
-# par en com o mesmo <title> ou a mesma description do pt: texto herdado, não traduzido (WP-21)
+# par en com o mesmo <title> ou a mesma description do pt: texto herdado, não traduzido (WP-21);
+# compara sem caixa e com espaços normalizados, para um espaço a mais não valer como tradução
+def _norm(textos):
+    return [" ".join(t.split()).casefold() for t in textos]
+
 for pt_rel in COM_PAR:
     a, b = cabecas.get(pt_rel), cabecas.get("en/" + pt_rel)
     if a is None or b is None:
         continue
-    if a.titulos and a.titulos == b.titulos:
+    if a.titulos and _norm(a.titulos) == _norm(b.titulos):
         erros.append(f"en/{pt_rel}: <title> igual ao do pt {a.titulos[0]!r}")
-    if a.meta.get("description") and a.meta.get("description") == b.meta.get("description"):
+    if a.meta.get("description") and _norm(a.meta["description"]) == _norm(b.meta.get("description", [])):
         erros.append(f"en/{pt_rel}: description igual à do pt {a.meta['description'][0]!r}")
 
 # robots.txt e sitemap.xml: endpoints do Astro (ADR-005 §1), nunca public/ (§13 já barra).
