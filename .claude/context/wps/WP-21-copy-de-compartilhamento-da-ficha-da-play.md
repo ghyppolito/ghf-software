@@ -6,7 +6,7 @@ status: doing
 depende_de: [WP-11]
 adr: []
 spec: docs/AVALIACAO.md
-decisoes: []
+decisoes: [D19]
 tamanho: M
 risco: baixo
 visual: false
@@ -26,7 +26,9 @@ que a página antiga já publicava; o title pt da home tem 66 caracteres; o `<ti
 **Ler antes:** `../lotto-expert/docs/ASO_METADATA.md`, `../topo-walk/docs/store_listing_texts.md`,
 `../pole-position/pole-position-app/docs/aso_plan.md`, `../eclipse-go/docs/EclipseGoContent.md`; `src/i18n/<pagina>.ts`.
 
-**Arquivos-alvo:** `src/i18n/{home,lottoexpert,topowalk,poleposition,eclipsego}.ts`, `tools/check_site.py` (limite de title).
+**Arquivos-alvo:** `src/i18n/{home,lottoexpert,topowalk,poleposition,eclipsego}.ts` · `src/i18n/legal.ts` (só `*_title`) ·
+`src/layouts/Base.astro` (`Og` sem `titulo`/`descricao`/`descricaoTwitter`) · `src/pages/{index,lottoexpert,topowalk,poleposition,eclipsego}.astro`
+e os 5 de `src/pages/en/` (só o objeto `og`) · `tools/check_site.py` (§14 e docstring). Lista final do veredito do arquiteto.
 
 **Passos:**
 1. Para cada página, escolher title (≤ 60) e description da ficha, em pt e en. Copy de produto é decisão do usuário: opções
@@ -139,7 +141,7 @@ longa, `Fechamento com Garantia Matemática` e `garanta uma premiação mínima`
 og:title/twitter:title = title; og:description/twitter:description = description, em todas.
 Nenhum par en igual ao pt. Régua do §5 roda sobre os valores do LottoExpert e da home: verde.
 
-### D19 — copy de compartilhamento (abrir com `/decisao`; o commit da copy espera)
+### D19 — copy de compartilhamento (**decidida 2026-10-15: (A) nos seis itens**, ver `decisoes.md`; a proposta acima vale como está)
 
 - **(a) Ficha diverge da página** (TopoWalk perde "RTK"; Pole Position pt deixa de ser título em
   inglês): **(A) recomendada: a ficha vence** (é o objetivo do WP) · (B) manter o texto da página.
@@ -157,7 +159,7 @@ Nenhum par en igual ao pt. Régua do §5 roda sobre os valores do LottoExpert e 
   og pt atual (`Soluções em IoT e Mobilidade` + `Aplicativos Android de engenharia para telemetria,
   topografia e loterias…`, 127) com tradução nova — omite o EclipseGo.
 
-### Arquivos-alvo (substituem os do front-matter)
+### Arquivos-alvo (já copiados para o cabeçalho do WP)
 
 `src/i18n/{home,lottoexpert,topowalk,poleposition,eclipsego}.ts` · `src/i18n/legal.ts` (só `*_title`) ·
 `src/layouts/Base.astro` (`Og` sem `titulo`/`descricao`/`descricaoTwitter`) ·
