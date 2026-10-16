@@ -2,7 +2,7 @@
 id: WP-15
 titulo: Cada página declara em que línguas existe e o site roteia, anuncia e verifica só essas
 area: infra
-status: doing
+status: done
 depende_de: [WP-08, WP-09, WP-11]
 adr: [ADR-001, ADR-002, ADR-004, ADR-005, ADR-007]
 spec: docs/AVALIACAO.md
@@ -810,4 +810,15 @@ Um commit, `WP-15: correções da auditoria (…)`, só nos Arquivos-alvo do ver
 
 **CI (2026-10-16):** `b0ee3df` entrou na `feat/wp-08-layout-unico` por fast-forward. O run 38920589727
 do #37 deu verde em `plano`, `site` (`check_site` consistente, unittest com 8 testes OK, lychee) e
-`lighthouse` (orçamento cumprido). Falta o checklist de navegador do usuário.
+`lighthouse` (orçamento cumprido).
+
+**Navegador (usuário, 2026-10-16):** rodou o checklist inteiro (build e `http.server` em `dist/`) e
+reportou: "ja fechei o teste, ficou ok". Cobre a faixa em Chrome en em `/`, `/lottoexpert.html` e
+`/topowalk-privacy.html` a 360x568, 360x640 e 1280x720 (embaixo, uma linha abaixo de 768 px, URL pt,
+sem pulo, sem cobrir CTA); "Switch to English" para a mesma página em `/en/` e recarregar volta a
+faixa sem redirect; ✕ e Esc fecham, não volta na aba, volta em aba nova, foco no último link do
+rodapé; reduced-motion sem animação; menu do celular por cima da faixa; Chrome pt-BR sem faixa em `/`
+e com "Ver em português" em `/en/`; seletor pt/en igual ao anterior. O seletor com 3+ línguas fica no
+checklist do WP-16.
+
+Publicado em: ainda não (D13, deploy único em `master`).

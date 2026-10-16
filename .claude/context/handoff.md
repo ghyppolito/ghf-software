@@ -3,27 +3,21 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-10-16.** WP-12 fechado e integrado; WP-15 (i18n em N línguas) implementado e auditado, falta integrar e o navegador.
+**Sessão de 2026-10-16.** WP-12 e WP-15 (i18n em N línguas) fechados e integrados na `feat/wp-08-layout-unico`.
 
 ## 1. Onde parei
 
-- **WP-12 `done`** e integrado na `feat/wp-08-layout-unico` (0640565). Performance 98–100, LCP máx 2,33 s, CLS 0.
-- **WP-15 `doing`**, branch `feat/wp-15-i18n-n-linguas` (0e6b666..e31f059): 7 commits, auditoria (qa, seo-perf, ux) e correções feitas, `/verify` verde.
-  Entrega: `idiomas.ts`, `SeletorIdioma`, `SugestaoIdioma` (faixa sem redirect), `rota()` com a D23 (A), âncoras legais por posição, regras i18n no `check_site.py` §9 e `tools/test_regras_i18n.py`. ADR-007.
-- **Decisões:** D22 (lighthouse obrigatório em `develop`; em `master` entra no `/release`) e D23 (A).
-- **Falta para fechar o WP-15:** (1) integração por fast-forward na `feat/wp-08-layout-unico`, push e CI do #37 verde (agora com o passo `unittest` no job `site`); (2) checklist de navegador (seção 3).
+- **WP-15 `done`** (2026-10-16): código integrado na `feat/wp-08-layout-unico` (0e6b666..e31f059), CI do #37 verde (run 38920589727) e checklist de navegador reportado pelo usuário ("ficou ok"). Nada publicado (D13).
+- **WP-12 `done`**, também integrado. Decisões D22 e D23 (A) registradas.
+- **Próximos:** WP-14 (docs, S); WP-16 (depende de `PREVALENCIA-PT-NOS-APPS-01`); WP-10 (espera checklist do WP-19, D11, D12 e copy); WP-20 (sessão do usuário no Claude Design); WP-13 (D3).
 
 ## 2. Quebrado ou pela metade agora
 
 Nada quebrado. WP-15 integrado só na própria branch; nada publicado (D13).
 
-## 3. O que só o navegador prova (usuário ainda não reportou)
+## 3. O que só o navegador prova (pendente)
 
-- **WP-15** (`npm run build && python3 -m http.server 8080 -d dist`, Chrome em en): `/`, `/lottoexpert.html`, `/topowalk-privacy.html` a 360x568,
-  360x640 e 1280x720. Faixa embaixo em uma linha abaixo de 768 px, URL continua pt, conteúdo não pula, não cobre CTA.
-  "Switch to English" leva à mesma página em `/en/`; recarregar volta a faixa, sem redirect. ✕/Esc fecham; não volta na aba, volta em aba nova.
-  Foco após fechar vai ao último link do rodapé. `prefers-reduced-motion` sem animação. Menu do celular por cima da faixa.
-  Chrome em pt-BR: `/` sem faixa, `/en/` com "Ver em português". Seletor pt/en igual ao de antes. (Seletor 3+ línguas vai ao checklist do WP-16.)
+- **WP-15:** reportado como ok em 2026-10-16; o seletor com 3+ línguas segue no checklist do WP-16.
 - **WP-19, rodada 3:** `python3 -m http.server 8080 -d design/handoff/2026-10-13-rodada-3`. `Landing App.dc.html?app=topo&lang=ru`
   a 360; `?app=topo`, `?app=pole`, `?app=eclipse` a 1280; `Home.dc.html`, `Landing App.dc.html` e `Legal LottoExpert.dc.html`
   a 768; troca pt/en na legal (en é stub); `?app=pole&suggest=de`; Tab em "Ver todas" e nos sociais do footer; selo "Publicado" distinto do verde do Pole. Escrever no WP-19.
@@ -34,11 +28,10 @@ real e de uma landing, com o site no ar; card do WhatsApp/LinkedIn com título e
 
 ## 4. Próxima ação
 
-**Do agente, depois do usuário:** integrar o WP-15 por fast-forward (o usuário roda
-`! git checkout feat/wp-08-layout-unico && git merge --ff-only feat/wp-15-i18n-n-linguas`), push da integração, CI do #37, fechar o WP com o relato do navegador.
+**Do agente:** `/wp` sem número propõe o próximo (WP-14 é o desbloqueado e pequeno).
 
 **Do usuário:**
-1. Rodar o merge acima e o checklist do WP-15.
+1. Se quiser, apagar a `feat/wp-15-i18n-n-linguas` (já integrada).
 2. Em `master`, `lighthouse` entra no `/release` do deploy único (D22). Deploy único (D13): modernização inteira num só, rollback por tag.
 3. Levar as branches dos apps para a main de cada um (topo-walk e eclipse-go; Pole Position com o `/legal poleposition` depois).
 4. Checklist de navegador do WP-19.
