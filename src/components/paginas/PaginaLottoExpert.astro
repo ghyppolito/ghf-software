@@ -40,7 +40,9 @@ const home = rota(lang, 'index.html');
       { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
     ]}
   />
-  <LottoExpert lang={lang} />
+  <main>
+    <LottoExpert lang={lang} />
+  </main>
   <Footer
     lang={lang}
     inicio={home}

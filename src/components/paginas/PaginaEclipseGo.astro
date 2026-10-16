@@ -43,7 +43,9 @@ const home = rota(lang, 'index.html');
       { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
     ]}
   />
-  <EclipseGo lang={lang} />
+  <main>
+    <EclipseGo lang={lang} />
+  </main>
   {/* A página antiga só tinha o e-mail entre os canais (sem YouTube nem Instagram do app). */}
   <Footer
     lang={lang}

@@ -43,7 +43,9 @@ const home = rota(lang, 'index.html');
       { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
     ]}
   />
-  <PolePosition lang={lang} />
+  <main>
+    <PolePosition lang={lang} />
+  </main>
   {/* Canais do app, na ordem da página antiga. O rodapé dela não tinha o filete do topo. */}
   <Footer
     lang={lang}

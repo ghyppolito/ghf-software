@@ -164,7 +164,7 @@ const ano = new Date().getFullYear();
 
       <!-- Institucional -->
       <div>
-        <h4 class="text-white font-semibold mb-6">{t(lang, 'footer_inst')}</h4>
+        <h3 class="text-white font-semibold mb-6">{t(lang, 'footer_inst')}</h3>
         <ul class="space-y-3">
           {institucional.map((i) => <li><a {...atributosLink(lang, i.href)} class={link}>{t(lang, i.chave)}</a></li>)}
         </ul>
@@ -172,7 +172,7 @@ const ano = new Date().getFullYear();
 
       <!-- Aplicativos -->
       <div>
-        <h4 class="text-white font-semibold mb-6">{t(lang, 'footer_apps')}</h4>
+        <h3 class="text-white font-semibold mb-6">{t(lang, 'footer_apps')}</h3>
         <ul class="space-y-3">
           {
             apps.map((a) =>
@@ -192,7 +192,7 @@ const ano = new Date().getFullYear();
 
       <!-- Políticas -->
       <div>
-        <h4 class="text-white font-semibold mb-6">{t(lang, 'footer_transp')}</h4>
+        <h3 class="text-white font-semibold mb-6">{t(lang, 'footer_transp')}</h3>
         <ul class="space-y-3">
           {
             politicas.map((p) =>

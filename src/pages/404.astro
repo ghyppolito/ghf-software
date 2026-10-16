@@ -1,7 +1,11 @@
 ---
 // 404 do site. O Pages serve /404.html em qualquer profundidade: caminhos absolutos, pt e en
-// lado a lado (não há par por idioma), sem JS.
+// lado a lado (não há par por idioma). Nav e Footer da home (WP-22), com hrefs absolutos: a página
+// só existe em pt (`linguasDe('404.html')`), então sem seletor de idioma. O corpo é flex em coluna
+// para o rodapé não flutuar no meio da tela com o conteúdo curto.
 import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 ---
 <Base
   title="Página não encontrada · Page not found · GHF Software"
@@ -10,8 +14,19 @@ import Base from '../layouts/Base.astro';
   caminho="404.html"
   tema="ghf"
   noindex
+  classeBody="bg-brand-base text-gray-100 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden min-h-screen flex flex-col"
 >
-  <main class="max-w-lg mx-auto px-6 py-24 grid gap-8">
+  <Nav
+    lang="pt"
+    caminho="404.html"
+    inicio="/"
+    itens={[
+      { href: '/#sobre', chave: 'nav_about' },
+      { href: '/#portfolio', chave: 'nav_portfolio' },
+      { href: '/#contato', chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <main class="flex-1 w-full max-w-lg mx-auto px-6 pt-32 pb-24 grid content-start gap-8">
     <section class="bg-brand-surface rounded-xl p-6">
       <h1 class="text-2xl font-bold mb-3">Página não encontrada</h1>
       <p>
@@ -25,4 +40,5 @@ import Base from '../layouts/Base.astro';
       </p>
     </section>
   </main>
+  <Footer lang="pt" inicio="/" prefixoAncora="/" />
 </Base>
