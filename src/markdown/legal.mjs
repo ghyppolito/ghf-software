@@ -85,26 +85,25 @@ export const linksExternosLegais = {
   },
 };
 
-/** hast: `id` dos títulos com prefixo `secao-`. O slug do Astro começaria por dígito
- *  (`1-resumo`), e o html-validate (`valid-id`) exige letra; o `id` serve de âncora (`#secao-1-resumo`).
- *  Roda antes do plugin de ids do Astro, que mantém um `id` já posto. */
+/** hast: `id` dos títulos pela posição na hierarquia, igual em todas as línguas (ADR-007 §6,
+ *  WP-15): o 2º `##` é `secao-2`, o 1º `###` dentro dele é `secao-2-1` (níveis abaixo seguem o mesmo
+ *  padrão). Do texto, a âncora mudaria a cada tradução e levaria acento (`LEGAL-SLUG-ACENTO-01`).
+ *  Pré-condição: a mesma sequência de `##`/`###` no `.pt.md` e em cada tradução — o `check_site.py`
+ *  cobra (regra ii). O prefixo `secao-` mantém o `id` começando por letra (html-validate `valid-id`).
+ *  Roda antes do plugin de ids do Astro, que mantém um `id` já posto. O `# título` já saiu do corpo
+ *  (`omiteCabecalhoLegal`), por isso a contagem começa no `##`. */
 export const idDosTitulosLegais = {
   name: 'ghf-id-dos-titulos-legais',
   element: {
-    filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+    filter: ['h2', 'h3', 'h4', 'h5', 'h6'],
     visit(node, ctx) {
       if (!ehLegal(ctx)) return;
-      // mesmo slug do github-slugger (o do Astro): minúsculas, só letras, números, espaço e hífen
-      const slug = ctx
-        .textContent(node)
-        .toLowerCase()
-        .trim()
-        .replace(/[^\p{L}\p{N}\s-]/gu, '')
-        .replace(/\s/g, '-');
-      const usados = (ctx.data.ghfIds ??= new Map());
-      const n = usados.get(slug) ?? 0;
-      usados.set(slug, n + 1);
-      ctx.setProperty(node, 'id', `secao-${slug}${n ? `-${n}` : ''}`);
+      const nivel = Number(node.tagName[1]) - 2; // h2 → 0, h3 → 1…
+      const contagem = (ctx.data.ghfTitulos ??= []);
+      contagem[nivel] = (contagem[nivel] ?? 0) + 1;
+      contagem.length = nivel + 1; // um título novo zera os níveis abaixo dele
+      const posicao = Array.from(contagem, (n) => n ?? 0).join('-');
+      ctx.setProperty(node, 'id', `secao-${posicao}`);
     },
   },
 };

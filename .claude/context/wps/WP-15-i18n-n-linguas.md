@@ -405,6 +405,32 @@ Verificação: `npm run build`, `check_site.py`, contrato sha256, html-validate,
 `unittest` OK, `gen_estado --check`, `check_plano` — verdes. Os 7 caminhos de ADR-001 com `test -f`;
 `test ! -e dist/pt`; hreflang do head de `topowalk-privacy.html` = 3, total = 5; grep de redirect vazio.
 
+### Commit 5 — âncoras legais por posição
+`idDosTitulosLegais` (`src/markdown/legal.mjs`) dá o `id` pela posição: `secao-2`, `secao-2-1`. A
+regra (ii) por sequência já estava no commit 2. **`LEGAL-SLUG-ACENTO-01` resolvido** (a linha em
+`achados-novos.md` fica para o `site-docs`, que não está nos Arquivos-alvo deste WP).
+
+`diff -r <base> dist` (CSS normalizado como no commit 4), com os `id="secao-…"` trocados por um
+marcador: as 10 legais ficam iguais à base, e nenhum outro arquivo muda. Lista de arquivos idêntica.
+
+```
+arquivo                     igual sem os ids   ids base → ids novos   exemplo
+eclipsego-privacy.html      sim                11 → 11   secao-21-localização-do-dispositivo-gps → secao-2-1
+en/eclipsego-privacy.html   sim                11 → 11   secao-21-device-location-gps → secao-2-1
+lottoexpert-privacy.html    sim                24 → 24   secao-1-princípio-geral-privacidade-por-padrão → secao-1
+en/lottoexpert-privacy.html sim                24 → 24
+lottoexpert-terms.html      sim                13 → 13   secao-2-isenção-de-responsabilidade → secao-2
+en/lottoexpert-terms.html   sim                13 → 13
+poleposition-privacy.html   sim                25 → 25   secao-resumo-de-segurança-dos-dados-google-play → secao-2
+en/poleposition-privacy.html sim               25 → 25
+topowalk-privacy.html       sim                44 → 44   secao-21-localização-gps → secao-2-1
+en/topowalk-privacy.html    sim                44 → 44
+```
+
+Os `id`s do pt e do en são iguais nas 5 políticas (`grep -o 'id="secao-[^"]*"'`, pt = en), sem
+repetição. Nenhum link interno para `#secao-…` em `dist/` (nada a atualizar). Verificação completa
+verde (a mesma lista do commit 4).
+
 ## Especificação do site-ux (2026-10-16)
 
 Modo DESENHAR, para os commits 4 (`SeletorIdioma`) e 6 (`SugestaoIdioma`). D23 = (A): link para
