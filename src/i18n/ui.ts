@@ -10,6 +10,10 @@ export type { Idioma };
 
 export const SITE = 'https://ghfsoftware.com';
 
+/** Anel de foco do teclado (WP-15, WP-22): branco, offset 2, em todos os temas; só `focus-visible:`.
+ *  Usado no SeletorIdioma, na Nav e no Footer — classe literal para o Tailwind detectar. */
+export const FOCO = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
+
 export const ui = {
   pt: {
     nav_about: 'Sobre Nós',

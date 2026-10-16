@@ -14,7 +14,7 @@
 //   fecha sem JS; o script só fecha com Esc, clique fora ou foco fora); na barra do celular, nada;
 //   no menu do celular, uma grade com os nomes nativos.
 import { IDIOMAS, caminhoPublico, hreflang, linguasDe, type Idioma } from '../i18n/idiomas';
-import { t } from '../i18n/ui';
+import { FOCO as foco, t } from '../i18n/ui';
 import Icon from './Icon.astro';
 
 interface Props {
@@ -32,10 +32,13 @@ const linguas = linguasDe(caminho);
 const n = linguas.length;
 const outro = linguas.find((l) => l !== lang) as Idioma;
 // Nome acessível que contém o rótulo visível (WCAG 2.5.3): o código aparece no nome quando o nome
-// nativo não o contém (`Português (PT)`, `Русский (RU)`; `English`, `Español` já contêm).
+// nativo não o tem **como palavra** (`English, EN`, `Português, PT`, `Русский, RU`). Substring não
+// basta: o axe compara por palavra, e `ENGLISH` contém `EN` sem ter a palavra `EN`. E sem
+// parênteses: o axe (4.14) apaga o que está entre parênteses antes de comparar, e `English (EN)`
+// reprovaria igual (WP-22).
 const codigo = outro?.toUpperCase();
-const nomeOutro = outro && (IDIOMAS[outro].nome.toUpperCase().includes(codigo) ? IDIOMAS[outro].nome : `${IDIOMAS[outro].nome} (${codigo})`);
-const foco = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
+const temCodigo = (nome: string) => nome.toUpperCase().split(/[^\p{L}\p{N}]+/u).includes(codigo);
+const nomeOutro = outro && (temCodigo(IDIOMAS[outro].nome) ? IDIOMAS[outro].nome : `${IDIOMAS[outro].nome}, ${codigo}`);
 ---
 {
   n === 2 && posicao !== 'menu' && (

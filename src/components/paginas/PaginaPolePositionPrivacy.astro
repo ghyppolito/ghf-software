@@ -3,7 +3,8 @@
 // inteira, com a prop `lang`; as cascas ficam em src/pages/ (ADR-007 §3). Texto em
 // src/content/legal/poleposition-privacy.<código>.md; hero,
 // botão e <head> em i18n/legal.ts (o h1 sem ": Race Analytics", D-c). Nav e footer como na página
-// antiga: realce `primary` (lima; pílula do celular com texto branco, como no publicado)
+// antiga, menos o realce: `primary-claro` (lima; pílula do celular com texto preto, como na landing
+// do Pole Position — o branco do publicado dava 1,98:1, WP-22)
 // com logo brilhando, só o e-mail entre os canais, rodapé `surface` e a política do Pole Position
 // destacada na lista de políticas. O botão volta para a home da GHF, como na página antiga.
 import { getEntry, render } from 'astro:content';
@@ -42,6 +43,7 @@ const { Content } = await render(entrada);
     lang={lang}
     caminho="poleposition-privacy.html"
     inicio={home}
+    realce="primary-claro"
     itens={[
       { href: `${home}#sobre`, chave: 'nav_about' },
       { href: `${home}#portfolio`, chave: 'nav_portfolio' },

@@ -9,7 +9,7 @@
 // EclipseGo, cuja classe de sombra do logo tinha espaços e não valia). Classes literais por variante
 // (o Tailwind não detecta concatenação).
 import { Image } from 'astro:assets';
-import { t } from '../i18n/ui';
+import { FOCO, t } from '../i18n/ui';
 import { atributosLink, link as linkPagina, type Idioma } from '../i18n/idiomas';
 import logo from '../assets/img/GHFSoftware.png';
 import Icon from './Icon.astro';
@@ -53,12 +53,12 @@ const {
 const CLASSES = {
   primary: {
     logo: 'h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-primary)/0.5)]',
-    atual: 'text-brand-primary font-semibold transition-colors text-sm flex items-center gap-1',
+    atual: 'text-brand-primary font-semibold transition-colors text-sm inline-flex items-center gap-1 min-h-11',
     coracao: 'text-brand-primary/50 text-xs',
   },
   accent: {
     logo: 'h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-accent)/0.5)]',
-    atual: 'text-brand-accent font-semibold transition-colors text-sm flex items-center gap-1',
+    atual: 'text-brand-accent font-semibold transition-colors text-sm inline-flex items-center gap-1 min-h-11',
     coracao: 'text-brand-accent/50 text-xs',
   },
 };
@@ -71,9 +71,11 @@ const classeFooter = {
   surface: 'bg-brand-surface pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden',
   'surface-sem-borda': 'bg-brand-surface pt-16 pb-8 relative z-10 overflow-hidden',
 }[fundo];
-const link = 'text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm';
+// Alvo de toque de 44 px de altura nos links e nos ícones sociais (WP-22); a <ul> aperta o espaço
+// entre itens para compensar.
+const link = `inline-flex items-center min-h-11 text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm ${FOCO}`;
 const social =
-  'w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-gray-700 hover:text-white transition-all';
+  `w-11 h-11 rounded-full border border-gray-700 flex items-center justify-center hover:bg-gray-700 hover:text-white transition-all ${FOCO}`;
 
 const institucional = [
   { href: `${prefixoAncora}#sobre`, chave: 'nav_about' },
@@ -103,7 +105,7 @@ const ano = new Date().getFullYear();
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
       <!-- Marca -->
       <div class="md:col-span-2 lg:col-span-2">
-        <a {...atributosLink(lang, inicio)} class="inline-block mb-6 group">
+        <a {...atributosLink(lang, inicio)} class={`inline-block mb-6 group ${FOCO}`}>
           <Image src={logo} alt="GHF Software Logo" class={classeLogo} height={128} densities={[1, 2]} />
         </a>
         <p class="text-gray-400 max-w-sm mb-6">{t(lang, 'footer_desc')}</p>
@@ -165,7 +167,7 @@ const ano = new Date().getFullYear();
       <!-- Institucional -->
       <div>
         <h3 class="text-white font-semibold mb-6">{t(lang, 'footer_inst')}</h3>
-        <ul class="space-y-3">
+        <ul class="space-y-2">
           {institucional.map((i) => <li><a {...atributosLink(lang, i.href)} class={link}>{t(lang, i.chave)}</a></li>)}
         </ul>
       </div>
@@ -173,12 +175,12 @@ const ano = new Date().getFullYear();
       <!-- Aplicativos -->
       <div>
         <h3 class="text-white font-semibold mb-6">{t(lang, 'footer_apps')}</h3>
-        <ul class="space-y-3">
+        <ul class="space-y-2">
           {
             apps.map((a) =>
               a.caminho === appAtual ? (
                 <li>
-                  <a {...linkPagina(lang, a.caminho)} aria-current="page" class={c.atual}>
+                  <a {...linkPagina(lang, a.caminho)} aria-current="page" class={`${c.atual} ${FOCO}`}>
                     <Icon nome="chevron-right" class="text-xs" /> {a.nome}
                   </a>
                 </li>
@@ -193,7 +195,7 @@ const ano = new Date().getFullYear();
       <!-- Políticas -->
       <div>
         <h3 class="text-white font-semibold mb-6">{t(lang, 'footer_transp')}</h3>
-        <ul class="space-y-3">
+        <ul class="space-y-2">
           {
             politicas.map((p) =>
               p.caminho === politicaAtual ? (
@@ -201,7 +203,7 @@ const ano = new Date().getFullYear();
                   <a
                     {...linkPagina(lang, p.caminho)}
                     aria-current="page"
-                    class="text-brand-primary hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"
+                    class={`text-brand-primary hover:text-white hover:font-bold transition-all duration-300 text-sm inline-flex items-center gap-2 min-h-11 ${FOCO}`}
                   >
                     <Icon nome={p.icone} class="text-brand-primary text-xs" />
                     <span>{t(lang, p.chave)}</span>
@@ -209,8 +211,8 @@ const ano = new Date().getFullYear();
                 </li>
               ) : (
                 <li>
-                  <a {...linkPagina(lang, p.caminho)} class={`${link} flex items-center gap-2`}>
-                    <Icon nome={p.icone} class="text-gray-600 text-xs" />
+                  <a {...linkPagina(lang, p.caminho)} class={`${link} gap-2`}>
+                    <Icon nome={p.icone} class="text-gray-400 text-xs" />
                     <span>{t(lang, p.chave)}</span>
                   </a>
                 </li>
@@ -223,10 +225,10 @@ const ano = new Date().getFullYear();
 
     <!-- Copyright -->
     <div class="pt-8 border-t border-gray-800/80 flex flex-col md:flex-row justify-between items-center gap-4">
-      <p class="text-sm text-gray-500">
+      <p class="text-sm text-gray-400">
         &copy; <span id="year">{ano}</span> <span>{t(lang, 'footer_rights')}</span>
       </p>
-      <p class="text-sm text-gray-600 flex items-center gap-2">
+      <p class="text-sm text-gray-400 flex items-center gap-2">
         <span>{t(lang, 'footer_dev')}</span>
         <Icon nome="heart" class={c.coracao} />
         <span>{t(lang, 'footer_dev2')}</span>
