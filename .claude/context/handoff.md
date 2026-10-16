@@ -31,7 +31,7 @@ travessão e descrição curta em `/`, `/en/`, `/lottoexpert.html` e `/en/topowa
 ## 4. Próxima ação
 
 **Do usuário:**
-1. Decidir se `lighthouse` vira check obrigatório na proteção de branch (`develop`/`master`).
+1. `lighthouse` já é obrigatório em `develop`; em `master` entra no `/release` do deploy único (D22).
 2. Levar as branches dos apps para a main de cada um (topo-walk e eclipse-go; o Pole Position com o `/legal poleposition` depois).
 3. Checklist de navegador do WP-19.
 4. Decidir D11 (`--success`) e D12 (limiares de destaque), só para o WP-10; D3 (medição) bloqueia o WP-13. `PP-NAV-CONTRASTE-01` aguarda decisão.

@@ -21,7 +21,11 @@ em produção aponta. Por isso o merge é do usuário; o agente prepara e confer
 5. **Usuário:** `gh pr create --base master --head develop` (ou merge direto, como preferir) e
    merge. O workflow `Deploy` (`deploy.yml`) builda e publica `dist/` (Pages em modo "GitHub
    Actions", `PAGES_VIA_ACTIONS=true` desde o WP-07). Confira que o run saiu verde.
-6. **Agente, depois do merge:** confira no ar — `curl -sI https://ghfsoftware.com/<página>`
+6. **Agente, depois do merge, primeiro o deploy único (D13) e só uma vez:** acrescente `lighthouse` aos checks
+   obrigatórios de `master` (D22): `gh api -X POST repos/ghyppolito/ghf-software/branches/master/protection/required_status_checks/contexts -f 'contexts[]=lighthouse'`.
+   Confira com `.../required_status_checks --jq .contexts`, que deve listar `plano`, `site` e `lighthouse`.
+   Depois disso, apague este passo.
+7. **Agente, depois do merge:** confira no ar — `curl -sI https://ghfsoftware.com/<página>`
    com 200 e, para texto legal, `curl -s https://ghfsoftware.com/lottoexpert-privacy.html | grep -o "Última atualização: [^<]*"`
    com a data nova. Registre "Publicado em AAAA-MM-DD" nos WPs e atualize o `handoff.md` §6.
 
