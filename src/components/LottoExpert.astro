@@ -5,6 +5,7 @@
 //
 // Cards, loterias e linhas da tabela são listas: um markup só por bloco. As classes ficam
 // literais aqui (o Tailwind não detecta classe montada por concatenação).
+import Icon from './Icon.astro';
 import { lottoexpert, type ChaveLotto } from '../i18n/lottoexpert';
 import { apps } from '../i18n/apps';
 import type { Idioma } from '../i18n/ui';
@@ -17,24 +18,25 @@ const { lang } = Astro.props;
 const x = lottoexpert[lang];
 
 // Ordem da página antiga (os cards 16 e 17 entraram no WP-02 entre os antigos).
-const funcionalidades: { n: number; fundo: string; icone: string }[] = [
-  { n: 1, fundo: 'fa-solid fa-microchip', icone: 'fa-solid fa-gears' },
-  { n: 2, fundo: 'fa-solid fa-shield-halved', icone: 'fa-solid fa-award' },
-  { n: 3, fundo: 'fa-solid fa-chart-pie', icone: 'fa-solid fa-wallet' },
-  { n: 4, fundo: 'fa-solid fa-list-check', icone: 'fa-solid fa-square-check' },
-  { n: 16, fundo: 'fa-solid fa-clone', icone: 'fa-solid fa-calendar-check' },
-  { n: 5, fundo: 'fa-solid fa-camera-retro', icone: 'fa-solid fa-eye' },
-  { n: 6, fundo: 'fa-solid fa-arrows-rotate', icone: 'fa-solid fa-bookmark' },
-  { n: 7, fundo: 'fa-solid fa-bell-concierge', icone: 'fa-solid fa-bell' },
-  { n: 8, fundo: 'fa-solid fa-users-viewfinder', icone: 'fa-solid fa-people-group' },
-  { n: 17, fundo: 'fa-solid fa-receipt', icone: 'fa-solid fa-share-from-square' },
-  { n: 9, fundo: 'fa-solid fa-qrcode', icone: 'fa-solid fa-share-nodes' },
-  { n: 10, fundo: 'fa-solid fa-chart-line', icone: 'fa-solid fa-history' },
-  { n: 11, fundo: 'fa-solid fa-cloud', icone: 'fa-solid fa-sync' },
-  { n: 12, fundo: 'fa-brands fa-google-drive', icone: 'fa-solid fa-cloud-arrow-up' },
-  { n: 13, fundo: 'fa-solid fa-table-cells-large', icone: 'fa-solid fa-border-all' },
-  { n: 14, fundo: 'fa-solid fa-file-pdf', icone: 'fa-solid fa-file-export' },
-  { n: 15, fundo: 'fa-solid fa-shield-virus', icone: 'fa-solid fa-vault' },
+type Icone = { conjunto: 'solid' | 'brands'; nome: string };
+const funcionalidades: { n: number; fundo: Icone; icone: Icone }[] = [
+  { n: 1, fundo: { conjunto: 'solid', nome: 'microchip' }, icone: { conjunto: 'solid', nome: 'gears' } },
+  { n: 2, fundo: { conjunto: 'solid', nome: 'shield-halved' }, icone: { conjunto: 'solid', nome: 'award' } },
+  { n: 3, fundo: { conjunto: 'solid', nome: 'chart-pie' }, icone: { conjunto: 'solid', nome: 'wallet' } },
+  { n: 4, fundo: { conjunto: 'solid', nome: 'list-check' }, icone: { conjunto: 'solid', nome: 'square-check' } },
+  { n: 16, fundo: { conjunto: 'solid', nome: 'clone' }, icone: { conjunto: 'solid', nome: 'calendar-check' } },
+  { n: 5, fundo: { conjunto: 'solid', nome: 'camera-retro' }, icone: { conjunto: 'solid', nome: 'eye' } },
+  { n: 6, fundo: { conjunto: 'solid', nome: 'arrows-rotate' }, icone: { conjunto: 'solid', nome: 'bookmark' } },
+  { n: 7, fundo: { conjunto: 'solid', nome: 'bell-concierge' }, icone: { conjunto: 'solid', nome: 'bell' } },
+  { n: 8, fundo: { conjunto: 'solid', nome: 'users-viewfinder' }, icone: { conjunto: 'solid', nome: 'people-group' } },
+  { n: 17, fundo: { conjunto: 'solid', nome: 'receipt' }, icone: { conjunto: 'solid', nome: 'share-from-square' } },
+  { n: 9, fundo: { conjunto: 'solid', nome: 'qrcode' }, icone: { conjunto: 'solid', nome: 'share-nodes' } },
+  { n: 10, fundo: { conjunto: 'solid', nome: 'chart-line' }, icone: { conjunto: 'solid', nome: 'clock-rotate-left' } },
+  { n: 11, fundo: { conjunto: 'solid', nome: 'cloud' }, icone: { conjunto: 'solid', nome: 'arrows-rotate' } },
+  { n: 12, fundo: { conjunto: 'brands', nome: 'google-drive' }, icone: { conjunto: 'solid', nome: 'cloud-arrow-up' } },
+  { n: 13, fundo: { conjunto: 'solid', nome: 'table-cells-large' }, icone: { conjunto: 'solid', nome: 'border-all' } },
+  { n: 14, fundo: { conjunto: 'solid', nome: 'file-pdf' }, icone: { conjunto: 'solid', nome: 'file-export' } },
+  { n: 15, fundo: { conjunto: 'solid', nome: 'shield-virus' }, icone: { conjunto: 'solid', nome: 'vault' } },
 ];
 const titulo = (n: number) => x[`feat${n}_title` as ChaveLotto];
 const descricao = (n: number) => x[`feat${n}_desc` as ChaveLotto];
@@ -85,7 +87,7 @@ const linhas: { chave: ChaveLotto; free: Celula; premium: Celula }[] = [
         <div class="flex flex-col lg:flex-row items-center gap-16">
             <div class="w-full lg:w-1/2">
                 <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-brand-primary/30 bg-brand-primary/20 backdrop-blur-sm text-sm text-brand-primary font-semibold tracking-wide uppercase">
-                    <i class="fa-solid fa-calculator mr-2" aria-hidden="true"></i> <span>{x.hero_badge}</span>
+                    <Icon nome="calculator" class="mr-2" /> <span>{x.hero_badge}</span>
                 </div>
 
                 <h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6" set:html={x.hero_titleHtml}></h1>
@@ -94,7 +96,7 @@ const linhas: { chave: ChaveLotto; free: Celula; premium: Celula }[] = [
 
                 <div class="flex flex-col sm:flex-row gap-4">
                     <a href={apps.lottoexpert.play} target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-primary hover:bg-brand-primaryHover text-white font-semibold rounded-lg shadow-glow hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
-                        <i class="fa-brands fa-google-play" aria-hidden="true"></i> <span>{x.btn_play}</span>
+                        <Icon conjunto="brands" nome="google-play" /> <span>{x.btn_play}</span>
                     </a>
                     <a href="#features" class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center">{x.btn_learn}</a>
                 </div>
@@ -124,10 +126,10 @@ const linhas: { chave: ChaveLotto; free: Celula; premium: Celula }[] = [
                 funcionalidades.map((f) => (
                     <div class="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                            <i class={`${f.fundo} text-8xl text-brand-primary`} aria-hidden="true"></i>
+                            <Icon {...f.fundo} class="text-8xl text-brand-primary" />
                         </div>
                         <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
-                            <i class={`${f.icone} text-2xl text-brand-primary`} aria-hidden="true"></i>
+                            <Icon {...f.icone} class="text-2xl text-brand-primary" />
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">{titulo(f.n)}</h3>
                         <p class="text-sm text-gray-400 leading-relaxed">{descricao(f.n)}</p>
@@ -160,7 +162,7 @@ const linhas: { chave: ChaveLotto; free: Celula; premium: Celula }[] = [
             <div class="w-full lg:w-1/2 relative">
                 <div class="aspect-square rounded-3xl bg-gradient-to-br from-brand-primary/10 to-brand-primary/5 border border-brand-primary/10 flex items-center justify-center overflow-hidden">
                     <div class="absolute inset-0 bg-tech-grid opacity-20"></div>
-                    <i class="fa-solid fa-cube text-[200px] text-brand-primary/10 animate-spin-slow" aria-hidden="true"></i>
+                    <Icon nome="cube" class="text-[200px] text-brand-primary/10 animate-spin-slow" />
                     <div class="relative z-10 glass-panel p-10 rounded-2xl shadow-2xl border-brand-primary/20 max-w-sm">
                         <div class="flex items-center gap-4 mb-6">
                             <img src="/assets/lottoexpert.png" alt="LottoExpert Logo" class="w-12 h-12 rounded-full object-contain shadow-lg border border-brand-primary/30">
@@ -250,14 +252,14 @@ const linhas: { chave: ChaveLotto; free: Celula; premium: Celula }[] = [
                             <tr class="border-b border-gray-800 hover:bg-gray-800/20 transition-colors">
                                 <td class="p-6 font-medium text-sm md:text-base">{x[r.chave]}</td>
                                 {r.free === 'sim' ? (
-                                    <td class="p-6 text-center text-green-500"><i class="fa-solid fa-circle-check"></i></td>
+                                    <td class="p-6 text-center text-green-500"><Icon nome="circle-check" /></td>
                                 ) : r.free === 'nao' ? (
                                     <td class="p-6 text-center text-gray-600">—</td>
                                 ) : (
                                     <td class="p-6 text-center text-gray-400 font-semibold text-xs">{x[r.free]}</td>
                                 )}
                                 {r.premium === 'sim' ? (
-                                    <td class="p-6 text-center text-green-500"><i class="fa-solid fa-circle-check"></i></td>
+                                    <td class="p-6 text-center text-green-500"><Icon nome="circle-check" /></td>
                                 ) : r.premium === 'nao' ? (
                                     <td class="p-6 text-center text-gray-600">—</td>
                                 ) : (

@@ -130,6 +130,18 @@ body {
   background-image: linear-gradient(135deg, #3b82f6, #10b981);
 }
 
+/* Ícone em SVG inline (components/Icon.astro, WP-12): o mesmo tamanho e a mesma linha de base do
+ * glifo do Font Awesome — altura 1em do texto, largura pela proporção do viewBox e o
+ * `vertical-align` do `.svg-inline--fa` do próprio FA 6.4.0. Classe vence o `svg { display: block }`
+ * do preflight do Tailwind. */
+.icone {
+  display: inline-block;
+  box-sizing: content-box;
+  height: 1em;
+  overflow: visible;
+  vertical-align: -0.125em;
+}
+
 /* Flutuação sutil */
 @keyframes float {
   0% {

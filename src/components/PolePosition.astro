@@ -11,6 +11,7 @@
 // A página antiga usava `animate-fade-in-up` (e `animation-delay` no atributo style) no texto e
 // nos mockups do hero, mas não declarava a classe nem a @keyframes: nada animava. No CSS único a
 // classe da home existe; ela sai daqui para reproduzir a página antiga.
+import Icon from './Icon.astro';
 import { poleposition, tecnologias, type ChavePole } from '../i18n/poleposition';
 import { apps } from '../i18n/apps';
 import { rota, type Idioma } from '../i18n/ui';
@@ -25,26 +26,26 @@ const txt = (chave: string) => x[chave as ChavePole];
 
 // Ícone grande do fundo e ícone do card de #features, na ordem da página antiga.
 const funcionalidades = [
-  { n: 1, fundo: 'fa-solid fa-satellite-dish', icone: 'fa-solid fa-satellite-dish' },
-  { n: 2, fundo: 'fa-solid fa-gauge-high', icone: 'fa-solid fa-gauge-high' },
-  { n: 3, fundo: 'fa-solid fa-bullhorn', icone: 'fa-solid fa-bullhorn' },
-  { n: 4, fundo: 'fa-solid fa-road', icone: 'fa-solid fa-road' },
-  { n: 5, fundo: 'fa-solid fa-map-location-dot', icone: 'fa-solid fa-map-location-dot' },
-  { n: 6, fundo: 'fa-solid fa-file-csv', icone: 'fa-solid fa-chart-line' },
-  { n: 7, fundo: 'fa-solid fa-route', icone: 'fa-solid fa-route' },
-  { n: 8, fundo: 'fa-solid fa-image', icone: 'fa-solid fa-share-nodes' },
-  { n: 9, fundo: 'fa-solid fa-shield-halved', icone: 'fa-solid fa-user-shield' },
-];
+  { n: 1, fundo: { conjunto: 'solid', nome: 'satellite-dish' }, icone: { conjunto: 'solid', nome: 'satellite-dish' } },
+  { n: 2, fundo: { conjunto: 'solid', nome: 'gauge-high' }, icone: { conjunto: 'solid', nome: 'gauge-high' } },
+  { n: 3, fundo: { conjunto: 'solid', nome: 'bullhorn' }, icone: { conjunto: 'solid', nome: 'bullhorn' } },
+  { n: 4, fundo: { conjunto: 'solid', nome: 'road' }, icone: { conjunto: 'solid', nome: 'road' } },
+  { n: 5, fundo: { conjunto: 'solid', nome: 'map-location-dot' }, icone: { conjunto: 'solid', nome: 'map-location-dot' } },
+  { n: 6, fundo: { conjunto: 'solid', nome: 'file-csv' }, icone: { conjunto: 'solid', nome: 'chart-line' } },
+  { n: 7, fundo: { conjunto: 'solid', nome: 'route' }, icone: { conjunto: 'solid', nome: 'route' } },
+  { n: 8, fundo: { conjunto: 'solid', nome: 'image' }, icone: { conjunto: 'solid', nome: 'share-nodes' } },
+  { n: 9, fundo: { conjunto: 'solid', nome: 'shield-halved' }, icone: { conjunto: 'solid', nome: 'user-shield' } },
+] as const;
 
 const publico = [1, 2, 3];
 const passos = [1, 2, 3, 4];
 const linhas = [1, 2, 3, 4, 5, 6];
 
 const configuracoes = [
-  { n: 1, icone: 'fa-solid fa-battery-three-quarters' },
-  { n: 2, icone: 'fa-solid fa-bell-slash' },
-  { n: 3, icone: 'fa-solid fa-mobile-screen-button' },
-];
+  { n: 1, icone: { conjunto: 'solid', nome: 'battery-three-quarters' } },
+  { n: 2, icone: { conjunto: 'solid', nome: 'bell-slash' } },
+  { n: 3, icone: { conjunto: 'solid', nome: 'mobile-screen-button' } },
+] as const;
 ---
 <!-- Hero Section -->
 <header class="relative min-h-screen flex items-center pt-32 pb-16 overflow-hidden bg-grid-pattern border-b border-gray-800">
@@ -56,7 +57,7 @@ const configuracoes = [
             <!-- Text Content -->
             <div class="text-left">
                 <div class="inline-flex items-center mb-6 px-4 py-1.5 rounded-full bg-lime-950/40 border border-lime-500/30 text-brand-primary text-sm font-semibold tracking-wide uppercase shadow-[0_0_15px_rgba(132,204,22,0.2)]">
-                    <i class="fa-solid fa-flag-checkered mr-2" aria-hidden="true"></i> <span>{x.hero_badge}</span>
+                    <Icon nome="flag-checkered" class="mr-2" /> <span>{x.hero_badge}</span>
                 </div>
 
                 <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
@@ -68,11 +69,11 @@ const configuracoes = [
 
                 <div class="flex flex-col sm:flex-row items-center gap-4">
                     <a href={apps.poleposition.play} target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-primary hover:bg-lime-400 text-black font-bold rounded-lg shadow-glow-accent hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
-                        <i class="fa-brands fa-google-play text-xl" aria-hidden="true"></i> <span>{x.btn_download}</span>
+                        <Icon conjunto="brands" nome="google-play" class="text-xl" /> <span>{x.btn_download}</span>
                     </a>
                     {/* Política é URL contratual (ADR-001); `rota` dá o par en em /en/. */}
                     <a href={rota(lang, 'poleposition-privacy.html')} class="px-6 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i> <span>{x.btn_privacy}</span>
+                        <Icon nome="shield-halved" /> <span>{x.btn_privacy}</span>
                     </a>
                 </div>
             </div>
@@ -109,10 +110,10 @@ const configuracoes = [
                 funcionalidades.map((f) => (
                     <div class="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 hover:border-brand-primary/50 relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                            <i class={`${f.fundo} text-8xl text-brand-primary`} aria-hidden="true"></i>
+                            <Icon {...f.fundo} class="text-8xl text-brand-primary" />
                         </div>
                         <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary/20 transition-colors">
-                            <i class={`${f.icone} text-2xl text-brand-primary`} aria-hidden="true"></i>
+                            <Icon {...f.icone} class="text-2xl text-brand-primary" />
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">{txt(`feat${f.n}_title`)}</h3>
                         <p class="text-sm text-gray-400 leading-relaxed">{txt(`feat${f.n}_desc`)}</p>
@@ -221,7 +222,7 @@ const configuracoes = [
                 configuracoes.map((c) => (
                     <div class="glass-panel p-8 rounded-3xl hover:border-brand-primary/30 transition-all duration-300">
                         <div class="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6">
-                            <i class={`${c.icone} text-2xl text-brand-primary`} aria-hidden="true"></i>
+                            <Icon {...c.icone} class="text-2xl text-brand-primary" />
                         </div>
                         <h4 class="text-white font-bold text-xl mb-3">{txt(`set${c.n}_title`)}</h4>
                         <p class="text-sm text-gray-400 leading-relaxed">{txt(`set${c.n}_desc`)}</p>

@@ -8,6 +8,7 @@
 // EclipseGo, cuja classe de sombra do logo tinha espaços e não valia). Classes literais por variante
 // (o Tailwind não detecta concatenação).
 import { rota, t, type Idioma } from '../i18n/ui';
+import Icon from './Icon.astro';
 
 interface Props {
   lang: Idioma;
@@ -49,12 +50,12 @@ const CLASSES = {
   primary: {
     logo: 'h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-primary)/0.5)]',
     atual: 'text-brand-primary font-semibold transition-colors text-sm flex items-center gap-1',
-    coracao: 'fa-solid fa-heart text-brand-primary/50 text-xs',
+    coracao: 'text-brand-primary/50 text-xs',
   },
   accent: {
     logo: 'h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-accent)/0.5)]',
     atual: 'text-brand-accent font-semibold transition-colors text-sm flex items-center gap-1',
-    coracao: 'fa-solid fa-heart text-brand-accent/50 text-xs',
+    coracao: 'text-brand-accent/50 text-xs',
   },
 };
 const c = CLASSES[realce];
@@ -84,11 +85,11 @@ const apps = [
 ];
 
 const politicas = [
-  { caminho: 'lottoexpert-privacy.html', icone: 'fa-shield-halved', chave: 'footer_priv_lotto' },
-  { caminho: 'lottoexpert-terms.html', icone: 'fa-file-contract', chave: 'footer_terms_lotto' },
-  { caminho: 'poleposition-privacy.html', icone: 'fa-shield-halved', chave: 'footer_priv_pole' },
-  { caminho: 'topowalk-privacy.html', icone: 'fa-shield-halved', chave: 'footer_priv_topo' },
-  { caminho: 'eclipsego-privacy.html', icone: 'fa-shield-halved', chave: 'footer_priv_eclipse' },
+  { caminho: 'lottoexpert-privacy.html', icone: 'shield-halved', chave: 'footer_priv_lotto' },
+  { caminho: 'lottoexpert-terms.html', icone: 'file-contract', chave: 'footer_terms_lotto' },
+  { caminho: 'poleposition-privacy.html', icone: 'shield-halved', chave: 'footer_priv_pole' },
+  { caminho: 'topowalk-privacy.html', icone: 'shield-halved', chave: 'footer_priv_topo' },
+  { caminho: 'eclipsego-privacy.html', icone: 'shield-halved', chave: 'footer_priv_eclipse' },
 ] as const;
 
 const ano = new Date().getFullYear();
@@ -108,7 +109,7 @@ const ano = new Date().getFullYear();
         <p class="text-gray-400 max-w-sm mb-6">{t(lang, 'footer_desc')}</p>
         <div class="flex items-center gap-4 text-gray-400">
           <a href="mailto:support@ghfsoftware.com" class={social} title="Email" aria-label="Email">
-            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+            <Icon nome="envelope" />
           </a>
           {redes.youtube && (
             <a
@@ -119,7 +120,7 @@ const ano = new Date().getFullYear();
               title="YouTube"
               aria-label="YouTube"
             >
-              <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+              <Icon conjunto="brands" nome="youtube" />
             </a>
           )}
           {redes.instagram && (
@@ -131,7 +132,7 @@ const ano = new Date().getFullYear();
               title="Instagram"
               aria-label="Instagram"
             >
-              <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+              <Icon conjunto="brands" nome="instagram" />
             </a>
           )}
           {redes.tiktok && (
@@ -143,7 +144,7 @@ const ano = new Date().getFullYear();
               title="TikTok"
               aria-label="TikTok"
             >
-              <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+              <Icon conjunto="brands" nome="tiktok" />
             </a>
           )}
           {redes.facebook && (
@@ -155,7 +156,7 @@ const ano = new Date().getFullYear();
               title="Facebook"
               aria-label="Facebook"
             >
-              <i class="fa-brands fa-facebook" aria-hidden="true"></i>
+              <Icon conjunto="brands" nome="facebook" />
             </a>
           )}
         </div>
@@ -178,7 +179,7 @@ const ano = new Date().getFullYear();
               a.caminho === appAtual ? (
                 <li>
                   <a href={rota(lang, a.caminho)} aria-current="page" class={c.atual}>
-                    <i class="fa-solid fa-chevron-right text-xs" aria-hidden="true"></i> {a.nome}
+                    <Icon nome="chevron-right" class="text-xs" /> {a.nome}
                   </a>
                 </li>
               ) : (
@@ -202,14 +203,14 @@ const ano = new Date().getFullYear();
                     aria-current="page"
                     class="text-brand-primary hover:text-white hover:font-bold transition-all duration-300 text-sm flex items-center gap-2"
                   >
-                    <i class={`fa-solid ${p.icone} text-brand-primary text-xs`} aria-hidden="true"></i>
+                    <Icon nome={p.icone} class="text-brand-primary text-xs" />
                     <span>{t(lang, p.chave)}</span>
                   </a>
                 </li>
               ) : (
                 <li>
                   <a href={rota(lang, p.caminho)} class={`${link} flex items-center gap-2`}>
-                    <i class={`fa-solid ${p.icone} text-gray-600 text-xs`} aria-hidden="true"></i>
+                    <Icon nome={p.icone} class="text-gray-600 text-xs" />
                     <span>{t(lang, p.chave)}</span>
                   </a>
                 </li>
@@ -227,7 +228,7 @@ const ano = new Date().getFullYear();
       </p>
       <p class="text-sm text-gray-600 flex items-center gap-2">
         <span>{t(lang, 'footer_dev')}</span>
-        <i class={c.coracao} aria-hidden="true"></i>
+        <Icon nome="heart" class={c.coracao} />
         <span>{t(lang, 'footer_dev2')}</span>
       </p>
     </div>

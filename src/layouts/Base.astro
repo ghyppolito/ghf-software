@@ -117,8 +117,6 @@ const tamanho = dimensoes(path.resolve(process.cwd(), 'public', '.' + caminhoIma
     {/* Inter servida pelo site (astro.config.mjs, `fonts`): @font-face, preload do woff2 e o
         fallback com métricas ajustadas. */}
     <Font cssVariable="--fonte-inter" preload />
-    <!-- Font Awesome: sai no WP-12 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   </head>
   <body class={classeBody}>
     <slot />

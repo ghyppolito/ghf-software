@@ -4,6 +4,7 @@
 import { home } from '../i18n/home';
 import { apps } from '../i18n/apps';
 import { rota, type Idioma } from '../i18n/ui';
+import Icon from './Icon.astro';
 
 interface Props {
   lang: Idioma;
@@ -30,7 +31,7 @@ const x = home[lang];
             <div class="w-full lg:w-1/2 text-center lg:text-left">
                 <div
                     class="inline-block mb-4 px-4 py-1.5 rounded-full border border-gray-700/50 bg-gray-800/30 backdrop-blur-sm text-sm text-gray-300 font-medium animate-fade-in-down">
-                    <i class="fa-solid fa-microchip text-brand-primary mr-2"></i> <span>{x.hero_badge}</span>
+                    <Icon nome="microchip" class="text-brand-primary mr-2" /> <span>{x.hero_badge}</span>
                 </div>
 
                 <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-6 animate-fade-in-down text-white"
@@ -43,7 +44,7 @@ const x = home[lang];
                     style="animation-delay: 0.3s; opacity: 0;">
                     <a href="#portfolio"
                         class="px-8 py-4 bg-brand-primary hover:bg-brand-primaryHover text-white font-semibold rounded-lg shadow-glow hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
-                        <span>{x.btn_portfolio}</span> <i class="fa-solid fa-arrow-right"></i>
+                        <span>{x.btn_portfolio}</span> <Icon nome="arrow-right" />
                     </a>
                     <a href="#sobre"
                         class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center">{x.btn_about}</a>
@@ -124,7 +125,7 @@ const x = home[lang];
     <div
         class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce flex flex-col items-center text-gray-500 pointer-events-none">
         <span class="text-xs tracking-widest uppercase mb-2">{x.scroll}</span>
-        <i class="fa-solid fa-chevron-down"></i>
+        <Icon nome="chevron-down" />
     </div>
 </header>
 
@@ -143,8 +144,7 @@ const x = home[lang];
                     <div
                         class="absolute inset-0 border border-gray-700/50 bg-brand-surface rounded-2xl p-8 flex flex-col justify-center relative overflow-hidden glass-panel group hover:border-gray-600 transition-colors duration-500">
                         <!-- Tech decorations -->
-                        <i
-                            class="fa-solid fa-server text-5xl text-gray-800 mb-6 group-hover:text-gray-700 transition-colors duration-500"></i>
+                        <Icon nome="server" class="text-5xl text-gray-800 mb-6 group-hover:text-gray-700 transition-colors duration-500" />
 
                         <h3 class="text-2xl font-bold text-white mb-2">{x.solid_foundation}</h3>
                         <p class="text-brand-primary font-medium mb-4">{x.since_2004}</p>
@@ -152,19 +152,19 @@ const x = home[lang];
                         <div class="space-y-3 mb-6">
                             <div
                                 class="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
-                                <i class="fa-solid fa-check text-brand-primary"></i> <span>{x.arch_perf}</span>
+                                <Icon nome="check" class="text-brand-primary" /> <span>{x.arch_perf}</span>
                             </div>
                             <div
                                 class="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
-                                <i class="fa-solid fa-check text-brand-primary"></i> <span>{x.extreme_scale}</span>
+                                <Icon nome="check" class="text-brand-primary" /> <span>{x.extreme_scale}</span>
                             </div>
                             <div
                                 class="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
-                                <i class="fa-solid fa-check text-brand-primary"></i> <span>{x.code_quality}</span>
+                                <Icon nome="check" class="text-brand-primary" /> <span>{x.code_quality}</span>
                             </div>
                             <div
                                 class="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
-                                <i class="fa-solid fa-check text-brand-primary"></i> <span>{x.ai_solutions}</span>
+                                <Icon nome="check" class="text-brand-primary" /> <span>{x.ai_solutions}</span>
                             </div>
                         </div>
 
@@ -173,17 +173,17 @@ const x = home[lang];
                             <p class="text-[10px] text-gray-500 font-semibold uppercase tracking-wider mb-3">{x.stack_title}</p>
                             <div class="flex flex-wrap gap-3 items-center opacity-70 group-hover:opacity-100 transition-opacity duration-300">
                                 <!-- AWS e Docker -->
-                                <i class="fa-brands fa-aws text-xl hover:text-orange-500 transition-colors cursor-pointer" title="AWS"></i>
-                                <i class="fa-brands fa-docker text-xl hover:text-blue-500 transition-colors cursor-pointer" title="Docker"></i>
+                                <Icon conjunto="brands" nome="aws" class="text-xl hover:text-orange-500 transition-colors cursor-pointer" titulo="AWS" />
+                                <Icon conjunto="brands" nome="docker" class="text-xl hover:text-blue-500 transition-colors cursor-pointer" titulo="Docker" />
                                 <!-- GCP e Azure -->
-                                <i class="fa-brands fa-google text-xl hover:text-brand-secondary transition-colors cursor-pointer" title="Google Cloud (GCP)"></i>
-                                <i class="fa-brands fa-microsoft text-xl hover:text-blue-400 transition-colors cursor-pointer" title="Azure"></i>
+                                <Icon conjunto="brands" nome="google" class="text-xl hover:text-brand-secondary transition-colors cursor-pointer" titulo="Google Cloud (GCP)" />
+                                <Icon conjunto="brands" nome="microsoft" class="text-xl hover:text-blue-400 transition-colors cursor-pointer" titulo="Azure" />
                                 <!-- Java, Python -->
-                                <i class="fa-brands fa-java text-2xl hover:text-red-500 transition-colors cursor-pointer" title="Java"></i>
-                                <i class="fa-brands fa-python text-xl hover:text-yellow-500 transition-colors cursor-pointer" title="Python"></i>
+                                <Icon conjunto="brands" nome="java" class="text-2xl hover:text-red-500 transition-colors cursor-pointer" titulo="Java" />
+                                <Icon conjunto="brands" nome="python" class="text-xl hover:text-yellow-500 transition-colors cursor-pointer" titulo="Python" />
                                 <!-- Web: Angular & React -->
-                                <i class="fa-brands fa-angular text-xl hover:text-red-600 transition-colors cursor-pointer" title="Angular"></i>
-                                <i class="fa-brands fa-react text-xl hover:text-cyan-400 transition-colors cursor-pointer" title="React"></i>
+                                <Icon conjunto="brands" nome="angular" class="text-xl hover:text-red-600 transition-colors cursor-pointer" titulo="Angular" />
+                                <Icon conjunto="brands" nome="react" class="text-xl hover:text-cyan-400 transition-colors cursor-pointer" titulo="React" />
                                 <!-- Kotlin e Flutter -->
                                 <span class="text-[9px] font-bold px-1.5 py-0.5 rounded border border-purple-500/50 text-purple-400 hover:bg-purple-500/10 transition-colors cursor-default" title="Kotlin">KOTLIN</span>
                                 <span class="text-[9px] font-bold px-1.5 py-0.5 rounded border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 transition-colors cursor-default" title="Flutter">FLUTTER</span>
@@ -264,7 +264,7 @@ const x = home[lang];
                     <div class="space-y-3 mt-auto pt-6 border-t border-gray-800">
                         <a href={apps.poleposition.play} target="_blank" rel="noopener noreferrer"
                             class="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-medium transition-colors">
-                            <i class="fa-brands fa-google-play text-brand-primary"></i> <span>{x.btn_google_play}</span>
+                            <Icon conjunto="brands" nome="google-play" class="text-brand-primary" /> <span>{x.btn_google_play}</span>
                         </a>
                         <div class="grid grid-cols-2 gap-3 pt-1">
                             <a href={rota(lang, 'poleposition.html')}
@@ -302,7 +302,7 @@ const x = home[lang];
                     <div class="space-y-3 mt-auto pt-6 border-t border-gray-800">
                         <a href={apps.topowalk.play} target="_blank" rel="noopener noreferrer"
                             class="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-medium transition-colors">
-                            <i class="fa-brands fa-google-play text-brand-primary"></i> <span>{x.btn_google_play}</span>
+                            <Icon conjunto="brands" nome="google-play" class="text-brand-primary" /> <span>{x.btn_google_play}</span>
                         </a>
                         <div class="grid grid-cols-2 gap-3 pt-1">
                             <a href={rota(lang, 'topowalk.html')}
@@ -342,7 +342,7 @@ const x = home[lang];
                     <div class="space-y-3 mt-auto pt-6 border-t border-gray-800">
                         <a href={apps.lottoexpert.play} target="_blank" rel="noopener noreferrer"
                             class="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-medium transition-colors">
-                            <i class="fa-brands fa-google-play text-brand-primary"></i> <span>{x.btn_google_play}</span>
+                            <Icon conjunto="brands" nome="google-play" class="text-brand-primary" /> <span>{x.btn_google_play}</span>
                         </a>
                         <div class="grid grid-cols-2 gap-3 pt-1">
                             <a href={rota(lang, 'lottoexpert.html')}
@@ -380,7 +380,7 @@ const x = home[lang];
                     <div class="space-y-3 mt-auto pt-6 border-t border-gray-800">
                         <a href={apps.eclipsego.play} target="_blank" rel="noopener noreferrer"
                             class="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-medium transition-colors">
-                            <i class="fa-brands fa-google-play text-brand-primary"></i> <span>{x.btn_google_play}</span>
+                            <Icon conjunto="brands" nome="google-play" class="text-brand-primary" /> <span>{x.btn_google_play}</span>
                         </a>
                         <div class="grid grid-cols-2 gap-3 pt-1">
                             <a href={rota(lang, 'eclipsego.html')}

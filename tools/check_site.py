@@ -70,6 +70,8 @@ Checa:
  15. Desempenho (WP-12, ADR-006), em toda página de `dist/` fora de CONGELADAS (o convite, D13):
      (a) fonte servida pelo site — nenhuma menção a `fonts.googleapis`/`fonts.gstatic`, e um
          `<link rel="preload" as="font">` para arquivo de `dist/`
+     (b) ícone em SVG inline — nenhum `<link href>`/`<script src>` de outra origem (o Font
+         Awesome vinha do cdnjs), nenhuma menção a `cdnjs` e nenhuma classe `fa-*`
 """
 import glob
 import json
@@ -730,16 +732,20 @@ def url_canonica(rel):
 
 class Cabeca(HTMLParser):
     """Lê canonical, hreflang, meta (property/name), o texto de cada `<title>` e o de cada
-    `<script type=application/ld+json>`."""
+    `<script type=application/ld+json>`. O `<title>` de dentro de um `<svg>` (dica do ícone,
+    components/Icon.astro) não é título da página e fica de fora."""
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.canonicas, self.alternates, self.meta, self.jsonld, self.titulos = [], [], {}, [], []
         self._ld = None
         self._titulo = None
+        self._svg = 0
 
     def handle_starttag(self, tag, attrs):
         d = {k.lower(): (v or "") for k, v in attrs}
+        if tag == "svg":
+            self._svg += 1
         if tag == "link":
             rels = d.get("rel", "").lower().split()
             if "canonical" in rels:
@@ -752,10 +758,12 @@ class Cabeca(HTMLParser):
                 self.meta.setdefault(chave.lower(), []).append(d.get("content", ""))
         elif tag == "script" and d.get("type", "").lower() == "application/ld+json":
             self._ld = []
-        elif tag == "title":
+        elif tag == "title" and not self._svg:
             self._titulo = []
 
-    handle_startendtag = handle_starttag
+    def handle_startendtag(self, tag, attrs):
+        if tag != "svg":  # `<svg/>` vazio não abre nível
+            self.handle_starttag(tag, attrs)
 
     def handle_data(self, data):
         if self._ld is not None:
@@ -764,6 +772,8 @@ class Cabeca(HTMLParser):
             self._titulo.append(data)
 
     def handle_endtag(self, tag):
+        if tag == "svg" and self._svg:
+            self._svg -= 1
         if tag == "script" and self._ld is not None:
             self.jsonld.append("".join(self._ld))
             self._ld = None
@@ -1051,16 +1061,22 @@ RE_FONTE_GOOGLE = re.compile(r"fonts\.(googleapis|gstatic)\.com", re.I)
 
 
 class Recursos(HTMLParser):
-    """`href` de cada `<link rel=preload as=font>`."""
+    """`href` de cada `<link rel=preload as=font>`; `<link href>` e `<script src>` de outra origem;
+    classes `fa-*`."""
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.preload_fonte = []
+        self.preload_fonte, self.externos, self.classes_fa = [], [], []
 
     def handle_starttag(self, tag, attrs):
         d = {k.lower(): (v or "") for k, v in attrs}
         if tag == "link" and "preload" in d.get("rel", "").lower().split() and d.get("as", "").lower() == "font":
             self.preload_fonte.append(d.get("href", ""))
+        url = d.get("href", "") if tag == "link" else d.get("src", "") if tag == "script" else ""
+        # canonical e hreflang são do próprio site (SITE); qualquer outro absoluto é terceiro
+        if re.match(r"^(https?:)?//", url, re.I) and not url.startswith(SITE):
+            self.externos.append(f"<{tag}> {url}")
+        self.classes_fa += [c for c in d.get("class", "").split() if c.startswith("fa-") or c in ("fa", "fas", "fab", "far")]
 
     handle_startendtag = handle_starttag
 
@@ -1081,6 +1097,13 @@ for caminho in paginas:
     for href in r.preload_fonte:
         if not href.startswith("/") or href.startswith("//") or not os.path.isfile(p(href.lstrip("/"))):
             erros.append(f"{rel}: preload de fonte {href!r} não é arquivo de {raiz}/")
+    # (b) nada de terceiro no carregamento da página; ícone é <svg> do components/Icon.astro
+    for x in r.externos:
+        erros.append(f"{rel}: {x} — recurso de outra origem (ADR-006 §5: nenhum terceiro em página gerada)")
+    if re.search(r"cdnjs", html, re.I):
+        erros.append(f"{rel}: menciona cdnjs — o Font Awesome saiu (ADR-006 §4)")
+    if r.classes_fa:
+        erros.append(f"{rel}: classe(s) do Font Awesome {sorted(set(r.classes_fa))} — ícone é <Icon> (SVG inline, ADR-006 §4)")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")

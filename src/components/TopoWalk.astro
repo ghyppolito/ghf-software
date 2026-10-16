@@ -6,6 +6,7 @@
 // Cards, itens do Pro e passos são listas: um markup só por bloco. As classes ficam literais
 // aqui (o Tailwind não detecta classe montada por concatenação). Ícones são decorativos (o texto
 // ao lado diz o mesmo): aria-hidden.
+import Icon from './Icon.astro';
 import { topowalk, type ChaveTopo } from '../i18n/topowalk';
 import { apps } from '../i18n/apps';
 import type { Idioma } from '../i18n/ui';
@@ -20,22 +21,22 @@ const txt = (chave: string) => x[chave as ChaveTopo];
 
 // Ícone de cada card de #features, na ordem da página antiga.
 const funcionalidades = [
-  { n: 1, icone: 'fa-solid fa-satellite-dish' },
-  { n: 2, icone: 'fa-solid fa-vector-square' },
-  { n: 3, icone: 'fa-solid fa-layer-group' },
-  { n: 4, icone: 'fa-solid fa-location-crosshairs' },
-  { n: 5, icone: 'fa-solid fa-camera font-bold' },
-  { n: 6, icone: 'fa-solid fa-file-pdf' },
-  { n: 7, icone: 'fa-solid fa-file-code' },
-  { n: 8, icone: 'fa-solid fa-gift' },
-];
+  { n: 1, icone: { conjunto: 'solid', nome: 'satellite-dish' } },
+  { n: 2, icone: { conjunto: 'solid', nome: 'vector-square' } },
+  { n: 3, icone: { conjunto: 'solid', nome: 'layer-group' } },
+  { n: 4, icone: { conjunto: 'solid', nome: 'location-crosshairs' } },
+  { n: 5, icone: { conjunto: 'solid', nome: 'camera' } },
+  { n: 6, icone: { conjunto: 'solid', nome: 'file-pdf' } },
+  { n: 7, icone: { conjunto: 'solid', nome: 'file-code' } },
+  { n: 8, icone: { conjunto: 'solid', nome: 'gift' } },
+] as const;
 
 const pro = [
-  { n: 1, icone: 'fa-solid fa-compass' },
-  { n: 2, icone: 'fa-solid fa-scissors' },
-  { n: 3, icone: 'fa-solid fa-id-card' },
-  { n: 4, icone: 'fa-solid fa-drafting-compass' },
-];
+  { n: 1, icone: { conjunto: 'solid', nome: 'compass' } },
+  { n: 2, icone: { conjunto: 'solid', nome: 'scissors' } },
+  { n: 3, icone: { conjunto: 'solid', nome: 'id-card' } },
+  { n: 4, icone: { conjunto: 'solid', nome: 'compass-drafting' } },
+] as const;
 
 const passos = [1, 2, 3, 4];
 ---
@@ -52,7 +53,7 @@ const passos = [1, 2, 3, 4];
             <!-- Text Content -->
             <div class="w-full lg:w-1/2 text-center lg:text-left">
                 <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-900/20 backdrop-blur-sm text-sm text-amber-400 font-medium">
-                    <i class="fa-solid fa-mountain mr-2" aria-hidden="true"></i> <span>{x.hero_badge}</span>
+                    <Icon nome="mountain" class="mr-2" /> <span>{x.hero_badge}</span>
                 </div>
 
                 <h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6 text-white" set:html={x.hero_titleHtml}></h1>
@@ -61,7 +62,7 @@ const passos = [1, 2, 3, 4];
 
                 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                     <a href={apps.topowalk.play} target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-accent hover:bg-amber-600 text-white font-semibold rounded-lg shadow-glow-amber hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
-                        <i class="fa-brands fa-google-play text-xl" aria-hidden="true"></i> <span>{x.btn_play}</span>
+                        <Icon conjunto="brands" nome="google-play" class="text-xl" /> <span>{x.btn_play}</span>
                     </a>
                     <a href="#how" class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center">{x.btn_learn}</a>
                 </div>
@@ -94,7 +95,7 @@ const passos = [1, 2, 3, 4];
                 funcionalidades.map((f) => (
                     <div class="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
                         <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-brand-accent text-xl mb-5 group-hover:scale-110 transition-transform">
-                            <i class={f.icone} aria-hidden="true"></i>
+                            <Icon {...f.icone} />
                         </div>
                         <h3 class="text-lg font-bold text-white mb-2">{txt(`feat${f.n}_title`)}</h3>
                         <p class="text-gray-400 text-sm leading-relaxed">{txt(`feat${f.n}_desc`)}</p>
@@ -122,7 +123,7 @@ const passos = [1, 2, 3, 4];
                     pro.map((item) => (
                         <div class="p-5 rounded-xl bg-brand-base/60 border border-gray-800">
                             <div class="text-brand-accent text-lg font-bold mb-2 flex items-center gap-2">
-                                <i class={item.icone} aria-hidden="true"></i> <span>{txt(`pro${item.n}_title`)}</span>
+                                <Icon {...item.icone} /> <span>{txt(`pro${item.n}_title`)}</span>
                             </div>
                             <p class="text-gray-400 text-sm">{txt(`pro${item.n}_desc`)}</p>
                         </div>

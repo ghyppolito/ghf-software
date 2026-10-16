@@ -11,6 +11,7 @@
 // a @keyframes: ficava parado no centro. No CSS único a @keyframes da home existe e o transform
 // dela tiraria o blob do centro; o atributo sai, reproduzindo a página antiga. `corona-glow` (o
 // brilho pulsante da moldura do celular) era declarada na página e continua, em global.css.
+import Icon from './Icon.astro';
 import { eclipsego, tecnologias, type ChaveEclipse } from '../i18n/eclipsego';
 import { apps } from '../i18n/apps';
 import { rota, type Idioma } from '../i18n/ui';
@@ -23,12 +24,14 @@ const { lang } = Astro.props;
 const x = eclipsego[lang];
 const txt = (chave: string) => x[chave as ChaveEclipse];
 
-// Ícone de cada card de recursos, na ordem da página antiga.
-const funcionalidades = [
-  { n: 1, icone: 'fa-solid fa-wifi-slash' },
-  { n: 2, icone: 'fa-solid fa-location-dot' },
-  { n: 3, icone: 'fa-solid fa-timeline' },
-  { n: 4, icone: 'fa-solid fa-calendar-days' },
+// Ícone de cada card de recursos, na ordem da página antiga. O card 1 ("offline") fica sem ícone,
+// como estava no ar: a página antiga pedia `fa-wifi-slash`, que não existe no FA Free 6.4.0 (D21,
+// opção C: o ícone é escolhido no WP-10).
+const funcionalidades: { n: number; icone: { conjunto: 'solid'; nome: string } | null }[] = [
+  { n: 1, icone: null },
+  { n: 2, icone: { conjunto: 'solid', nome: 'location-dot' } },
+  { n: 3, icone: { conjunto: 'solid', nome: 'timeline' } },
+  { n: 4, icone: { conjunto: 'solid', nome: 'calendar-days' } },
 ];
 
 const passos = [1, 2, 3, 4];
@@ -46,7 +49,7 @@ const passos = [1, 2, 3, 4];
             <!-- Text Content -->
             <div class="w-full lg:w-1/2 text-center lg:text-left">
                 <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-900/20 backdrop-blur-sm text-sm text-yellow-400 font-medium">
-                    <i class="fa-solid fa-moon mr-2 animate-pulse" aria-hidden="true"></i> <span>{x.hero_badge}</span>
+                    <Icon nome="moon" class="mr-2 animate-pulse" /> <span>{x.hero_badge}</span>
                 </div>
 
                 <h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6 text-white">
@@ -57,11 +60,11 @@ const passos = [1, 2, 3, 4];
 
                 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                     <a href={apps.eclipsego.play} target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-brand-primary hover:bg-brand-primaryHover text-black font-bold rounded-lg shadow-glow hover:shadow-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-3">
-                        <i class="fa-brands fa-google-play text-xl" aria-hidden="true"></i> <span>{x.btn_play}</span>
+                        <Icon conjunto="brands" nome="google-play" class="text-xl" /> <span>{x.btn_play}</span>
                     </a>
                     {/* Política é URL contratual (ADR-001); `rota` dá o par en em /en/. */}
                     <a href={rota(lang, 'eclipsego-privacy.html')} class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto text-center flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i> <span>{x.btn_privacy}</span>
+                        <Icon nome="shield-halved" /> <span>{x.btn_privacy}</span>
                     </a>
                 </div>
             </div>
@@ -100,7 +103,7 @@ const passos = [1, 2, 3, 4];
                 funcionalidades.map((f) => (
                     <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
                         <div class="w-14 h-14 rounded-xl bg-yellow-900/30 border border-yellow-500/20 flex items-center justify-center text-brand-primary text-2xl mb-6 group-hover:scale-110 transition-transform">
-                            <i class={f.icone} aria-hidden="true"></i>
+                            {f.icone && <Icon {...f.icone} />}
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">{txt(`feat${f.n}_title`)}</h3>
                         <p class="text-gray-400 text-sm leading-relaxed">{txt(`feat${f.n}_desc`)}</p>

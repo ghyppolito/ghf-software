@@ -10,6 +10,7 @@
 // com espaços dentro dos colchetes (`rgba(234, 179, 8, 0.5)`), que o Tailwind não reconhece: o
 // logo só crescia, sem brilho — e continua assim.
 import TrocaIdioma from './TrocaIdioma.astro';
+import Icon from './Icon.astro';
 import { t, type ChaveUi, type Idioma } from '../i18n/ui';
 
 interface Item {
@@ -125,7 +126,9 @@ const classeLogo = brilhoLogo
       aria-expanded="false"
       class="text-gray-300 hover:text-white focus:outline-none ml-2"
     >
-      <i class="fa-solid fa-bars text-xl" aria-hidden="true"></i>
+      {/* Os dois ícones vão no HTML; o script alterna `hidden` (o glifo trocava de classe). */}
+      <Icon nome="bars" class="text-xl" data-icone-menu="abrir" />
+      <Icon nome="xmark" class="text-xl hidden" data-icone-menu="fechar" />
     </button>
   </div>
 </nav>
@@ -167,20 +170,23 @@ const classeLogo = brilhoLogo
 
   // Menu do celular.
   const botao = document.getElementById('mobile-menu-btn');
-  const icone = botao?.querySelector('i');
+  const iconeAbrir = botao?.querySelector('[data-icone-menu="abrir"]');
+  const iconeFechar = botao?.querySelector('[data-icone-menu="fechar"]');
   const menu = document.getElementById('mobile-menu');
 
   function alternaMenu() {
-    if (!botao || !icone || !menu) return;
+    if (!botao || !iconeAbrir || !iconeFechar || !menu) return;
     const abrir = menu.classList.contains('opacity-0');
     if (abrir) {
       menu.classList.remove('opacity-0', 'pointer-events-none');
       menu.classList.add('opacity-100', 'pointer-events-auto');
-      icone.classList.replace('fa-bars', 'fa-xmark');
+      iconeAbrir.classList.add('hidden');
+      iconeFechar.classList.remove('hidden');
     } else {
       menu.classList.remove('opacity-100', 'pointer-events-auto');
       menu.classList.add('opacity-0', 'pointer-events-none');
-      icone.classList.replace('fa-xmark', 'fa-bars');
+      iconeFechar.classList.add('hidden');
+      iconeAbrir.classList.remove('hidden');
     }
     botao.setAttribute('aria-expanded', String(abrir));
   }
