@@ -12,6 +12,8 @@
 // dela tiraria o blob do centro; o atributo sai, reproduzindo a página antiga. `corona-glow` (o
 // brilho pulsante da moldura do celular) era declarada na página e continua, em global.css.
 import Icon from './Icon.astro';
+import { Image } from 'astro:assets';
+import telaEclipse from '../assets/img/eclipsego_phone_screen.png';
 import { eclipsego, tecnologias, type ChaveEclipse } from '../i18n/eclipsego';
 import { apps } from '../i18n/apps';
 import { rota, type Idioma } from '../i18n/ui';
@@ -76,7 +78,7 @@ const passos = [1, 2, 3, 4];
                     <div class="absolute top-0 w-1/2 h-6 bg-gray-900 mx-auto rounded-b-3xl z-20"></div>
 
                     <!-- Real App Screenshot -->
-                    <img src="/assets/eclipsego_phone_screen.png" alt={x.alt_screen} class="absolute inset-0 w-full h-full object-cover z-10">
+                    <Image src={telaEclipse} alt={x.alt_screen} class="absolute inset-0 w-full h-full object-cover z-10" width={288} densities={[1, 2]} />
 
                     <!-- Status Mention overlay -->
                     <div class="absolute bottom-10 px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-950/80 text-xs font-semibold text-yellow-400 flex items-center gap-2 z-20 shadow-lg backdrop-blur-sm">

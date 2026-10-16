@@ -7,6 +7,8 @@
 // aqui (o Tailwind não detecta classe montada por concatenação). Ícones são decorativos (o texto
 // ao lado diz o mesmo): aria-hidden.
 import Icon from './Icon.astro';
+import { Image } from 'astro:assets';
+import logoTopo from '../assets/img/topo-walk.png';
 import { topowalk, type ChaveTopo } from '../i18n/topowalk';
 import { apps } from '../i18n/apps';
 import type { Idioma } from '../i18n/ui';
@@ -72,7 +74,7 @@ const passos = [1, 2, 3, 4];
             <div class="w-full lg:w-1/2 flex justify-center">
                 <div class="relative w-72 h-[600px] border-[8px] border-gray-900 rounded-[3rem] shadow-2xl overflow-hidden glass-panel flex flex-col items-center justify-center bg-gradient-to-b from-gray-900/80 to-black/80">
                     <div class="absolute top-0 w-1/2 h-6 bg-gray-900 mx-auto rounded-b-3xl z-10"></div>
-                    <img src="/assets/topo-walk.png" alt="TopoWalk Logo" class="w-32 h-32 object-contain drop-shadow-[0_0_30px_rgba(181,84,28,0.5)]">
+                    <Image src={logoTopo} alt="TopoWalk Logo" class="w-32 h-32 object-contain drop-shadow-[0_0_30px_rgba(181,84,28,0.5)]" width={128} densities={[1, 2]} />
                     <div class="absolute bottom-8 left-0 right-0 text-center">
                         <div class="w-20 h-2 bg-gray-800 rounded-full mx-auto"></div>
                     </div>

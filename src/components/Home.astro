@@ -5,6 +5,16 @@ import { home } from '../i18n/home';
 import { apps } from '../i18n/apps';
 import { rota, type Idioma } from '../i18n/ui';
 import Icon from './Icon.astro';
+import { Image } from 'astro:assets';
+import iconeTopo from '../assets/img/topo-walk.png';
+import iconeEclipse from '../assets/img/eclipse-go-favicon.png';
+import logoEclipse from '../assets/img/eclipse-go.png';
+import iconePole from '../assets/img/poleposition.png';
+import iconeLotto from '../assets/img/lottoexpert.png';
+import telaTopo from '../assets/img/topowalk_screenshot.png';
+import telaEclipse from '../assets/img/eclipsego_screenshot.png';
+import telaPole from '../assets/img/poleposition_real_mockup.png';
+import telaLotto from '../assets/img/lottoexpert_app_mockup.png';
 
 interface Props {
   lang: Idioma;
@@ -59,11 +69,11 @@ const x = home[lang];
                     <!-- TopoWalk Card (Far Left) -->
                     <a href={rota(lang, 'topowalk.html')} class="absolute w-[150px] md:w-[190px] h-[220px] md:h-[270px] bg-gradient-to-b from-amber-600/10 to-brand-base border border-amber-500/20 rounded-2xl p-3 shadow-2xl glass-panel transform -rotate-12 -translate-x-28 md:-translate-x-32 translate-y-6 hover:-translate-y-12 hover:rotate-[-8deg] hover:scale-105 transition-all duration-500 cursor-pointer group/hero-card block z-10">
                         <div class="flex items-center gap-2 mb-2">
-                            <img src="/assets/topo-walk.png" alt="Ícone do app TopoWalk" class="w-7 h-7 rounded-lg border border-amber-500/30">
+                            <Image src={iconeTopo} alt="Ícone do app TopoWalk" class="w-7 h-7 rounded-lg border border-amber-500/30" width={32} densities={[1, 2]} />
                             <span class="text-[11px] font-bold text-white tracking-tight">TopoWalk</span>
                         </div>
                         <div class="h-24 md:h-32 bg-gray-950/80 rounded-lg flex items-center justify-center border border-gray-800 overflow-hidden relative">
-                            <img src="/assets/topowalk_screenshot.png" alt="Tela do app TopoWalk com medição de desnível barométrico em campo" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500">
+                            <Image src={telaTopo} alt="Tela do app TopoWalk com medição de desnível barométrico em campo" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500" width={200} densities={[1, 2]} />
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/20 to-transparent flex items-end p-2 justify-center">
                                 <span class="text-[9px] text-amber-400 font-bold uppercase tracking-wider">Topografia</span>
                             </div>
@@ -74,11 +84,11 @@ const x = home[lang];
                     <!-- EclipseGo Card (Inner Left) -->
                     <a href={rota(lang, 'eclipsego.html')} class="absolute w-[150px] md:w-[190px] h-[220px] md:h-[270px] bg-gradient-to-b from-yellow-600/10 to-brand-base border border-yellow-500/20 rounded-2xl p-3 shadow-2xl glass-panel transform -rotate-4 -translate-x-10 md:-translate-x-12 -translate-y-4 hover:-translate-y-14 hover:rotate-[-2deg] hover:scale-105 transition-all duration-500 cursor-pointer group/hero-card block z-20">
                         <div class="flex items-center gap-2 mb-2">
-                            <img src="/assets/eclipse-go-favicon.png" alt="Ícone do app EclipseGo" class="w-7 h-7 rounded-lg border border-yellow-500/30">
+                            <Image src={iconeEclipse} alt="Ícone do app EclipseGo" class="w-7 h-7 rounded-lg border border-yellow-500/30" width={32} densities={[1, 2]} />
                             <span class="text-[11px] font-bold text-white tracking-tight">EclipseGo</span>
                         </div>
                         <div class="h-24 md:h-32 bg-gray-950/80 rounded-lg flex items-center justify-center border border-gray-800 overflow-hidden relative">
-                            <img src="/assets/eclipsego_screenshot.png" alt="Tela do app EclipseGo" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500">
+                            <Image src={telaEclipse} alt="Tela do app EclipseGo" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500" width={200} densities={[1, 2]} />
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/20 to-transparent flex items-end p-2 justify-center">
                                 <span class="text-[9px] text-yellow-400 font-bold uppercase tracking-wider">{x.app_eclipse_tag}</span>
                             </div>
@@ -89,11 +99,11 @@ const x = home[lang];
                     <!-- Pole Position Card (Inner Right) -->
                     <a href={rota(lang, 'poleposition.html')} class="absolute w-[160px] md:w-[200px] h-[240px] md:h-[295px] bg-gradient-to-b from-lime-600/10 to-brand-base border-2 border-lime-500/30 rounded-2xl p-3.5 shadow-[0_0_30px_rgba(132,204,22,0.25)] glass-panel transform rotate-4 translate-x-10 md:translate-x-12 -translate-y-6 hover:-translate-y-16 hover:rotate-[2deg] hover:scale-105 transition-all duration-500 cursor-pointer group/hero-card block z-30">
                         <div class="flex items-center gap-2 mb-2">
-                            <img src="/assets/poleposition.png" alt="Ícone do app Pole Position" class="w-8 h-8 rounded-lg border border-lime-500/30">
+                            <Image src={iconePole} alt="Ícone do app Pole Position" class="w-8 h-8 rounded-lg border border-lime-500/30" width={32} densities={[1, 2]} />
                             <span class="text-xs font-bold text-white tracking-tight">Pole Position</span>
                         </div>
                         <div class="h-28 md:h-36 bg-gray-950/80 rounded-lg flex items-center justify-center border border-gray-800 overflow-hidden relative">
-                            <img src="/assets/poleposition_real_mockup.png" alt="Painel de telemetria do Pole Position com dados de volta e Força G" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500">
+                            <Image src={telaPole} alt="Painel de telemetria do Pole Position com dados de volta e Força G" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500" width={200} densities={[1, 2]} />
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/20 to-transparent flex items-end p-2 justify-center">
                                 <span class="text-[9px] text-lime-400 font-bold uppercase tracking-wider">Telemetria GPS</span>
                             </div>
@@ -104,11 +114,11 @@ const x = home[lang];
                     <!-- LottoExpert Card (Far Right) -->
                     <a href={rota(lang, 'lottoexpert.html')} class="absolute w-[150px] md:w-[190px] h-[220px] md:h-[270px] bg-gradient-to-b from-purple-600/10 to-brand-base border border-purple-500/20 rounded-2xl p-3 shadow-2xl glass-panel transform rotate-12 translate-x-28 md:translate-x-32 translate-y-6 hover:-translate-y-12 hover:rotate-[8deg] hover:scale-105 transition-all duration-500 cursor-pointer group/hero-card block z-10">
                         <div class="flex items-center gap-2 mb-2">
-                            <img src="/assets/lottoexpert.png" alt="Ícone do app LottoExpert" class="w-7 h-7 rounded-lg border border-purple-500/30">
+                            <Image src={iconeLotto} alt="Ícone do app LottoExpert" class="w-7 h-7 rounded-lg border border-purple-500/30" width={32} densities={[1, 2]} />
                             <span class="text-[11px] font-bold text-white tracking-tight">LottoExpert</span>
                         </div>
                         <div class="h-24 md:h-32 bg-gray-950/80 rounded-lg flex items-center justify-center border border-gray-800 overflow-hidden relative">
-                            <img src="/assets/lottoexpert_app_mockup.png" alt="Tela do app LottoExpert com gerador de fechamentos para Mega-Sena" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500">
+                            <Image src={telaLotto} alt="Tela do app LottoExpert com gerador de fechamentos para Mega-Sena" class="w-full h-full object-cover group-hover/hero-card:scale-110 transition-transform duration-500" width={200} densities={[1, 2]} />
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/20 to-transparent flex items-end p-2 justify-center">
                                 <span class="text-[9px] text-purple-400 font-bold uppercase tracking-wider">Loterias</span>
                             </div>
@@ -246,7 +256,7 @@ const x = home[lang];
 
                     <!-- Icon Header & Title -->
                     <div class="flex items-center gap-4 mb-6">
-                        <img src="/assets/poleposition.png" alt="Pole Position Logo" class="w-12 h-12 object-contain rounded-xl shadow-[0_0_15px_rgba(132,204,22,0.2)] border border-lime-500/20">
+                        <Image src={iconePole} alt="Pole Position Logo" class="w-12 h-12 object-contain rounded-xl shadow-[0_0_15px_rgba(132,204,22,0.2)] border border-lime-500/20" width={48} densities={[1, 2]} />
                         <div>
                             <h3 class="text-2xl font-bold text-white">Pole Position</h3>
                             <span class="text-xs text-lime-400 font-semibold tracking-wide uppercase">Kart &amp; Automobilismo</span>
@@ -256,7 +266,7 @@ const x = home[lang];
                     <!-- Visual Screenshot Container -->
                     <div class="w-full h-48 bg-gray-950/60 rounded-xl mb-6 border border-gray-800/80 overflow-hidden relative flex items-center justify-center group-hover:border-lime-500/30 transition-all duration-300">
                         <div class="absolute inset-0 bg-gradient-to-tr from-lime-500/5 to-transparent"></div>
-                        <img src="/assets/poleposition_real_mockup.png" alt="Painel de telemetria do Pole Position com volta atual, Força G e mapa de pista" class="w-[125px] h-[160px] object-cover rounded-md shadow-2xl border border-gray-800/80 transform translate-y-4 group-hover:translate-y-1 group-hover:scale-105 transition-all duration-500">
+                        <Image src={telaPole} alt="Painel de telemetria do Pole Position com volta atual, Força G e mapa de pista" class="w-[125px] h-[160px] object-cover rounded-md shadow-2xl border border-gray-800/80 transform translate-y-4 group-hover:translate-y-1 group-hover:scale-105 transition-all duration-500" width={160} densities={[1, 2]} />
                     </div>
 
                     <p class="text-gray-400 mb-8 flex-grow text-sm leading-relaxed">{x.app_pole_desc}</p>
@@ -284,7 +294,7 @@ const x = home[lang];
 
                     <!-- Icon Header & Title -->
                     <div class="flex items-center gap-4 mb-6">
-                        <img src="/assets/topo-walk.png" alt="TopoWalk Logo" class="w-12 h-12 object-contain rounded-xl shadow-[0_0_15px_rgba(217,119,6,0.2)] border border-amber-500/20">
+                        <Image src={iconeTopo} alt="TopoWalk Logo" class="w-12 h-12 object-contain rounded-xl shadow-[0_0_15px_rgba(217,119,6,0.2)] border border-amber-500/20" width={48} densities={[1, 2]} />
                         <div>
                             <h3 class="text-2xl font-bold text-white">TopoWalk</h3>
                             <span class="text-xs text-amber-500 font-semibold tracking-wide uppercase">Topografia &amp; SIG</span>
@@ -294,7 +304,7 @@ const x = home[lang];
                     <!-- Visual Screenshot Container -->
                     <div class="w-full h-48 bg-gray-950/60 rounded-xl mb-6 border border-gray-800/80 overflow-hidden relative flex items-center justify-center group-hover:border-amber-500/30 transition-all duration-300">
                         <div class="absolute inset-0 bg-gradient-to-tr from-amber-500/5 to-transparent"></div>
-                        <img src="/assets/topowalk_screenshot.png" alt="Tela do app TopoWalk mostrando cálculo de altimetria barométrica" class="w-[125px] h-[160px] object-cover rounded-md shadow-2xl border border-gray-800/80 transform translate-y-4 group-hover:translate-y-1 group-hover:scale-105 transition-all duration-500">
+                        <Image src={telaTopo} alt="Tela do app TopoWalk mostrando cálculo de altimetria barométrica" class="w-[125px] h-[160px] object-cover rounded-md shadow-2xl border border-gray-800/80 transform translate-y-4 group-hover:translate-y-1 group-hover:scale-105 transition-all duration-500" width={160} densities={[1, 2]} />
                     </div>
 
                     <p class="text-gray-400 mb-8 flex-grow text-sm leading-relaxed">{x.app_topo_desc}</p>
@@ -322,7 +332,7 @@ const x = home[lang];
 
                     <!-- Icon Header & Title -->
                     <div class="flex items-center gap-4 mb-6">
-                        <img src="/assets/lottoexpert.png" alt="LottoExpert Logo" class="w-12 h-12 object-contain rounded-xl shadow-[0_0_15px_rgba(139,92,246,0.2)] border border-purple-500/20">
+                        <Image src={iconeLotto} alt="LottoExpert Logo" class="w-12 h-12 object-contain rounded-xl shadow-[0_0_15px_rgba(139,92,246,0.2)] border border-purple-500/20" width={48} densities={[1, 2]} />
                         <div>
                             <div class="flex items-center gap-2 flex-wrap">
                                 <h3 class="text-2xl font-bold text-white">LottoExpert</h3>
@@ -334,7 +344,7 @@ const x = home[lang];
                     <!-- Visual Screenshot Container -->
                     <div class="w-full h-48 bg-gray-950/60 rounded-xl mb-6 border border-gray-800/80 overflow-hidden relative flex items-center justify-center group-hover:border-purple-500/30 transition-all duration-300">
                         <div class="absolute inset-0 bg-gradient-to-tr from-purple-500/5 to-transparent"></div>
-                        <img src="/assets/lottoexpert_app_mockup.png" alt="Tela do app LottoExpert com gerador de fechamentos para Mega-Sena" class="w-[125px] h-[160px] object-cover rounded-md shadow-2xl border border-gray-800/80 transform translate-y-4 group-hover:translate-y-1 group-hover:scale-105 transition-all duration-500">
+                        <Image src={telaLotto} alt="Tela do app LottoExpert com gerador de fechamentos para Mega-Sena" class="w-[125px] h-[160px] object-cover rounded-md shadow-2xl border border-gray-800/80 transform translate-y-4 group-hover:translate-y-1 group-hover:scale-105 transition-all duration-500" width={160} densities={[1, 2]} />
                     </div>
 
                     <p class="text-gray-400 mb-8 flex-grow text-sm leading-relaxed">{x.app_lotto_desc}</p>
@@ -362,7 +372,7 @@ const x = home[lang];
 
                     <!-- Icon Header & Title -->
                     <div class="flex items-center gap-4 mb-6">
-                        <img src="/assets/eclipse-go.png" alt="EclipseGo Logo" class="w-12 h-12 object-contain rounded-xl shadow-[0_0_15px_rgba(234,179,8,0.2)] border border-yellow-500/20">
+                        <Image src={logoEclipse} alt="EclipseGo Logo" class="w-12 h-12 object-contain rounded-xl shadow-[0_0_15px_rgba(234,179,8,0.2)] border border-yellow-500/20" width={48} densities={[1, 2]} />
                         <div>
                             <h3 class="text-2xl font-bold text-white">EclipseGo</h3>
                             <span class="text-xs text-yellow-500 font-semibold tracking-wide uppercase">{x.app_eclipse_tag}</span>
@@ -372,7 +382,7 @@ const x = home[lang];
                     <!-- Visual Screenshot Container -->
                     <div class="w-full h-48 bg-gray-950/60 rounded-xl mb-6 border border-gray-800/80 overflow-hidden relative flex items-center justify-center group-hover:border-yellow-500/30 transition-all duration-300">
                         <div class="absolute inset-0 bg-gradient-to-tr from-yellow-500/5 to-transparent"></div>
-                        <img src="/assets/eclipsego_screenshot.png" alt="Tela do app EclipseGo mostrando previsão de eclipse solar" class="w-[125px] h-[160px] object-cover rounded-md shadow-2xl border border-gray-800/80 transform translate-y-4 group-hover:translate-y-1 group-hover:scale-105 transition-all duration-500">
+                        <Image src={telaEclipse} alt="Tela do app EclipseGo mostrando previsão de eclipse solar" class="w-[125px] h-[160px] object-cover rounded-md shadow-2xl border border-gray-800/80 transform translate-y-4 group-hover:translate-y-1 group-hover:scale-105 transition-all duration-500" width={160} densities={[1, 2]} />
                     </div>
 
                     <p class="text-gray-400 mb-8 flex-grow text-sm leading-relaxed">{x.app_eclipse_desc}</p>

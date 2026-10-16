@@ -6,7 +6,8 @@
 // (nunca declarados à mão — D16: as imagens 1200×630 são outro WP); JSON-LD pelo slot `jsonld`.
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { Font } from 'astro:assets';
+import { Font, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import '../styles/global.css';
 import { SITE, rota, type Idioma } from '../i18n/ui';
 
@@ -53,7 +54,8 @@ interface Props {
   temPar?: boolean;
   noindex?: boolean;
   classeBody?: string;
-  /** favicon da página (as landings de app usam o do app) */
+  /** favicon da página (as landings de app usam o do app): o caminho do PNG em public/assets/; o
+   *  publicado é a cópia de src/assets/img/ reduzida a 48 px */
   favicon?: string;
 }
 
@@ -81,6 +83,16 @@ const imagem = SITE + caminhoImagem;
 // /assets/x.png é o arquivo public/assets/x.png, copiado byte a byte para dist/ (ADR-002 §3).
 // O '.' antes do caminho impede que o '/' inicial faça o path.resolve voltar à raiz do disco.
 const tamanho = dimensoes(path.resolve(process.cwd(), 'public', '.' + caminhoImagem));
+
+// Favicon (WP-12, ADR-006 §1): PNG de 48 px gerado por getImage() da cópia em src/assets/img/ de
+// mesmo nome, não o arquivo de public/ (o lottoexpert_favicon_v3.png tem 296 KB). Favicon sem
+// cópia falha o build.
+const imagens = import.meta.glob<{ default: ImageMetadata }>('../assets/img/*.png', { eager: true });
+const origemFavicon = imagens[`../assets/img/${path.posix.basename(favicon)}`];
+if (!favicon.startsWith('/assets/') || !origemFavicon) {
+  throw new Error(`favicon ${favicon}: sem cópia em src/assets/img/ (ADR-006 §1)`);
+}
+const iconeAba = await getImage({ src: origemFavicon.default, width: 48, format: 'png' });
 ---
 <!doctype html>
 <html lang={lang === 'pt' ? 'pt-BR' : 'en'} class="scroll-smooth" data-tema={tema}>
@@ -88,7 +100,7 @@ const tamanho = dimensoes(path.resolve(process.cwd(), 'public', '.' + caminhoIma
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
-    <link rel="icon" type="image/png" href={favicon}>
+    <link rel="icon" type="image/png" href={iconeAba.src}>
     <meta name="description" content={description}>
     {noindex && <meta name="robots" content="noindex">}
     <link rel="canonical" href={canonica}>

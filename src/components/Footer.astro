@@ -7,7 +7,9 @@
 // (`politicaAtual`, nas páginas legais) e o brilho do logo (`brilhoLogo={false}` na política do
 // EclipseGo, cuja classe de sombra do logo tinha espaços e não valia). Classes literais por variante
 // (o Tailwind não detecta concatenação).
+import { Image } from 'astro:assets';
 import { rota, t, type Idioma } from '../i18n/ui';
+import logo from '../assets/img/GHFSoftware.png';
 import Icon from './Icon.astro';
 
 interface Props {
@@ -100,11 +102,7 @@ const ano = new Date().getFullYear();
       <!-- Marca -->
       <div class="md:col-span-2 lg:col-span-2">
         <a href={inicio} class="inline-block mb-6 group">
-          <img
-            src="/assets/GHFSoftware.png"
-            alt="GHF Software Logo"
-            class={classeLogo}
-          >
+          <Image src={logo} alt="GHF Software Logo" class={classeLogo} height={128} densities={[1, 2]} />
         </a>
         <p class="text-gray-400 max-w-sm mb-6">{t(lang, 'footer_desc')}</p>
         <div class="flex items-center gap-4 text-gray-400">

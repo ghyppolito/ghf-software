@@ -9,7 +9,9 @@
 // `brilhoLogo={false}`: logo sem a sombra luminosa no hover. A política do EclipseGo escrevia a classe
 // com espaços dentro dos colchetes (`rgba(234, 179, 8, 0.5)`), que o Tailwind não reconhece: o
 // logo só crescia, sem brilho — e continua assim.
+import { Image } from 'astro:assets';
 import TrocaIdioma from './TrocaIdioma.astro';
+import logo from '../assets/img/GHFSoftware.png';
 import Icon from './Icon.astro';
 import { t, type ChaveUi, type Idioma } from '../i18n/ui';
 
@@ -33,6 +35,10 @@ interface Props {
 }
 
 const { lang, caminho, inicio, itens, realce = 'primary', brilhoLogo = true } = Astro.props;
+// Logo (WP-12, ADR-006 §1): WebP do astro:assets, na altura do lg:h-20 em 1× e 2×, sempre `eager`
+// (está no topo de toda página). Na home ele é o elemento LCP medido na linha de base: lá ganha
+// `fetchpriority="high"`; nas outras o LCP é texto.
+const logoLcp = caminho === 'index.html';
 
 const CLASSES = {
   primary: {
@@ -82,11 +88,7 @@ const classeLogo = brilhoLogo
   class="fixed w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center transition-all duration-300"
 >
   <a href={inicio} class="flex items-center group">
-    <img
-      src="/assets/GHFSoftware.png"
-      alt="GHF Software Logo"
-      class={classeLogo}
-    >
+    <Image src={logo} alt="GHF Software Logo" class={classeLogo} height={80} densities={[1, 2]} loading="eager" fetchpriority={logoLcp ? 'high' : undefined} />
   </a>
 
   <!-- Menu desktop -->

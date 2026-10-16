@@ -12,6 +12,10 @@
 // nos mockups do hero, mas não declarava a classe nem a @keyframes: nada animava. No CSS único a
 // classe da home existe; ela sai daqui para reproduzir a página antiga.
 import Icon from './Icon.astro';
+import { Image } from 'astro:assets';
+import telaSessao from '../assets/img/poleposition_session_analysis.png';
+import telaPainel from '../assets/img/poleposition_live_dashboard.png';
+import mockupPole from '../assets/img/poleposition_real_mockup.png';
 import { poleposition, tecnologias, type ChavePole } from '../i18n/poleposition';
 import { apps } from '../i18n/apps';
 import { rota, type Idioma } from '../i18n/ui';
@@ -84,12 +88,12 @@ const configuracoes = [
 
                 <!-- Background Mockup: Session Analysis -->
                 <div class="mockup-frame absolute z-10 transform -translate-x-8 translate-y-6 scale-90 opacity-80 border-gray-700/80 shadow-md hover:scale-95 hover:opacity-100 hover:z-30 cursor-pointer">
-                    <img src="/assets/poleposition_session_analysis.png" alt={x.alt_session} class="w-full h-full object-cover">
+                    <Image src={telaSessao} alt={x.alt_session} class="w-full h-full object-cover" width={300} densities={[1, 2]} />
                 </div>
 
                 <!-- Foreground Mockup: Live Dashboard -->
                 <div class="mockup-frame absolute z-20 transform translate-x-8 -translate-y-4 scale-100 shadow-glow-accent border-gray-800 hover:scale-[1.02] hover:z-30 cursor-pointer">
-                    <img src="/assets/poleposition_live_dashboard.png" alt={x.alt_live} class="w-full h-full object-cover">
+                    <Image src={telaPainel} alt={x.alt_live} class="w-full h-full object-cover" width={300} densities={[1, 2]} />
                 </div>
             </div>
         </div>
@@ -129,7 +133,7 @@ const configuracoes = [
     <div class="container mx-auto px-6 md:px-12">
         <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{x.mockup_title}</h2>
         <p class="text-gray-400 mb-10">{x.mockup_desc}</p>
-        <img src="/assets/poleposition_real_mockup.png" alt={x.alt_mockup} class="max-w-xs mx-auto block rounded-2xl shadow-xl">
+        <Image src={mockupPole} alt={x.alt_mockup} class="max-w-xs mx-auto block rounded-2xl shadow-xl" width={320} densities={[1, 2]} />
     </div>
 </section>
 

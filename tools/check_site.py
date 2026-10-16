@@ -72,6 +72,9 @@ Checa:
          `<link rel="preload" as="font">` para arquivo de `dist/`
      (b) ícone em SVG inline — nenhum `<link href>`/`<script src>` de outra origem (o Font
          Awesome vinha do cdnjs), nenhuma menção a `cdnjs` e nenhuma classe `fa-*`
+     (c) imagem pelo astro:assets — toda `<img>` com `width` e `height`; nenhuma `<img>` (src ou
+         srcset) nem favicon apontando para `/assets/` (a cópia de public/ é para URL fixa:
+         og:image, JSON-LD e convite); no máximo um `fetchpriority="high"` por página
 """
 import glob
 import json
@@ -1062,11 +1065,13 @@ RE_FONTE_GOOGLE = re.compile(r"fonts\.(googleapis|gstatic)\.com", re.I)
 
 class Recursos(HTMLParser):
     """`href` de cada `<link rel=preload as=font>`; `<link href>` e `<script src>` de outra origem;
-    classes `fa-*`."""
+    classes `fa-*`; cada `<img>` (atributos); `href` dos `<link rel=icon>`; quantos
+    `fetchpriority=high`."""
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.preload_fonte, self.externos, self.classes_fa = [], [], []
+        self.imgs, self.icones, self.prioridade_alta = [], [], 0
 
     def handle_starttag(self, tag, attrs):
         d = {k.lower(): (v or "") for k, v in attrs}
@@ -1077,6 +1082,12 @@ class Recursos(HTMLParser):
         if re.match(r"^(https?:)?//", url, re.I) and not url.startswith(SITE):
             self.externos.append(f"<{tag}> {url}")
         self.classes_fa += [c for c in d.get("class", "").split() if c.startswith("fa-") or c in ("fa", "fas", "fab", "far")]
+        if tag == "img":
+            self.imgs.append(d)
+        if tag == "link" and "icon" in d.get("rel", "").lower().split():
+            self.icones.append(d.get("href", ""))
+        if d.get("fetchpriority", "").lower() == "high":
+            self.prioridade_alta += 1
 
     handle_startendtag = handle_starttag
 
@@ -1104,6 +1115,21 @@ for caminho in paginas:
         erros.append(f"{rel}: menciona cdnjs — o Font Awesome saiu (ADR-006 §4)")
     if r.classes_fa:
         erros.append(f"{rel}: classe(s) do Font Awesome {sorted(set(r.classes_fa))} — ícone é <Icon> (SVG inline, ADR-006 §4)")
+    # (c) <img> sai do <Image>/getImage() do astro:assets: WebP com o tamanho de exibição, width e
+    # height (sem salto de layout) e nunca o PNG/JPEG de public/assets/ (até 736 KB cada)
+    for d in r.imgs:
+        nome = d.get("src") or d.get("srcset") or "?"
+        if not (d.get("width", "").strip() and d.get("height", "").strip()):
+            erros.append(f"{rel}: <img {nome}> sem width e height — use <Image> de astro:assets (ADR-006 §1)")
+        urls = [d.get("src", "")] + [c.strip().split()[0] for c in d.get("srcset", "").split(",") if c.strip()]
+        for u in urls:
+            if re.match(r"^(https?://[^/]+)?/assets/", u):
+                erros.append(f"{rel}: <img> com {u} — imagem exibida sai de src/assets/img/ pelo astro:assets, não de public/assets/ (ADR-006 §2)")
+    for href in r.icones:
+        if re.match(r"^(https?://[^/]+)?/assets/", href):
+            erros.append(f"{rel}: favicon {href} — sai do getImage() do Base.astro (48 px), não de public/assets/ (ADR-006 §1)")
+    if r.prioridade_alta > 1:
+        erros.append(f"{rel}: {r.prioridade_alta} elementos com fetchpriority=\"high\" — no máximo um, o LCP medido (ADR-006 §1)")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")
