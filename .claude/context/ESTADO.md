@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**22 WPs** · 15 concluídos · 0 em andamento
+**23 WPs** · 15 concluídos · 0 em andamento
 
 ## Sequência recomendada
 
@@ -31,6 +31,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | 5 | [WP-17 — A política de privacidade do TopoWalk existe no site em pt, en, es, fr, it, de e ru](wps/WP-17-politica-do-topowalk-em-7-linguas.md) | `todo` | política do TopoWalk em pt/en/es/fr/it/de/ru (5.842 palavras × 6 línguas além do pt); PR por língua. L, risco alto, depois do WP-16 · ⏳ aguarda WP-16 |
 | 6 | [WP-18 — As landings do TopoWalk e do Pole Position existem nas línguas que cada app fala](wps/WP-18-landings-topowalk-e-poleposition-nas-linguas-dos-apps.md) | `todo` | landings TopoWalk (7 línguas) e Pole Position (6) com copy das fichas da Play; só se D8 (a2/a3), depois do WP-10 para não traduzir duas vezes · ⏳ aguarda WP-10 |
 | 7 | [WP-13 — O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade](wps/WP-13-medicao.md) | `todo` | medição com consentimento ou sem cookie (D3: Plausible/Umami vs GA4 Consent Mode); evento de clique na Play por app. M, depois do WP-08 |
+| 8 | [WP-23 — O convite do bolão abre sem terceiros (pako e Inter servidos pelo site, com `<main>`)](wps/WP-23-convite-sem-terceiros.md) | `todo` | convite sem terceiros: pako 2.1.0 (sha256 do tarball do npm) e Inter servidos ao lado do convite, `<main>`, `contrato.sha256` novo, convite entra no §15 (a)/(b) e §17 do check_site e no Lighthouse; teste com `?d=` real v1 e v2. M, risco alto (URL contratual), visual · ⏳ só depois do deploy único (D13), branch de `develop`, `/release` próprio |
 
 ## Todos os WPs
 
@@ -58,6 +59,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-20](wps/WP-20-imagens-de-compartilhamento-1200x630.md) | Imagens de compartilhamento 1200×630 por página e twitter:card coerente | design | M | baixo | 🖥️ | WP-11 | ADR-005 | `todo` |
 | [WP-21](wps/WP-21-copy-de-compartilhamento-da-ficha-da-play.md) | Title e description de compartilhamento vêm da ficha da Play | landing | M | baixo |  | WP-11 | — | `done` |
 | [WP-22](wps/WP-22-acessibilidade-e-i18n-sem-redesign.md) | Acessibilidade e i18n sem redesign (a11y AA, foco, `<main>`, headings, reduced-motion, contraste fora da paleta, rótulos pt na /en/) | landing | M | medio | 🖥️ | WP-12, WP-15 | ADR-003, ADR-007 | `done` |
+| [WP-23](wps/WP-23-convite-sem-terceiros.md) | O convite do bolão abre sem terceiros (pako e Inter servidos pelo site, com `<main>`) | infra | M | alto | 🖥️ | — | ADR-001, ADR-002, ADR-006 | `todo` |
 
 ## Bloqueios ativos
 

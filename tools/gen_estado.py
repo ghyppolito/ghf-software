@@ -45,6 +45,7 @@ SEQUENCIA = [
         ("WP-18", "landings TopoWalk (7 línguas) e Pole Position (6) com copy das fichas da Play; só se D8 (a2/a3), depois do WP-10 para não traduzir duas vezes"),
         ("WP-12", "performance: fontes self-hosted, ícones SVG inline no lugar do Font Awesome, imagens WebP/AVIF com dimensões, Lighthouse ≥ 90 nas 4 categorias em todas as páginas. M, depois do WP-08"),
         ("WP-13", "medição com consentimento ou sem cookie (D3: Plausible/Umami vs GA4 Consent Mode); evento de clique na Play por app. M, depois do WP-08"),
+        ("WP-23", "convite sem terceiros: pako 2.1.0 (sha256 do tarball do npm) e Inter servidos ao lado do convite, `<main>`, `contrato.sha256` novo, convite entra no §15 (a)/(b) e §17 do check_site e no Lighthouse; teste com `?d=` real v1 e v2. M, risco alto (URL contratual), visual · ⏳ só depois do deploy único (D13), branch de `develop`, `/release` próprio"),
     ]),
 ]
 
