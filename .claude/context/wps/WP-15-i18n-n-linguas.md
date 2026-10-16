@@ -290,3 +290,16 @@ O usuário reporta.
   seletor tirada do handoff) e o orçamento das páginas novas em `tools/orcamento-lighthouse.json`,
   se forem medidas.
 - **`site-docs`:** ajustar esses três WPs no fechamento deste.
+
+---
+
+## Execução
+
+Linha de base: `npm run build` em `fb68942` (veredito), copiado para o scratchpad da sessão.
+
+### Commit 1 — `idiomas.json` e `idiomas.ts`
+`diff -r <base> dist` (saída inteira):
+
+```
+(vazio)
+```

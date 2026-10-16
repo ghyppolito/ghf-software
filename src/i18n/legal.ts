@@ -1,12 +1,12 @@
 // Textos das páginas legais em volta do corpo (hero, botão de voltar, <title>, description), pt e
 // en. O corpo é o `.md` de src/content/legal/. Toda chave nova entra nos dois idiomas no mesmo commit.
-import type { Idioma } from './ui';
+// O rótulo da data e os meses são da língua, e vêm de src/i18n/idiomas.json (ADR-007 §2).
+import { IDIOMAS, type Idioma } from './idiomas';
 
 export const legal = {
   pt: {
     // Selo do hero. Não tinha `data-i18n` na página antiga: o modo en mostrava o pt (transportado).
     selo: 'Documento Legal',
-    rotulo_data: 'Última atualização:',
     voltar_app: 'Voltar para a Página do App',
     voltar_home: 'Voltar para a GHF Software',
     eclipsego_privacy_h1: 'Política de Privacidade — EclipseGo',
@@ -28,7 +28,6 @@ export const legal = {
   },
   en: {
     selo: 'Documento Legal',
-    rotulo_data: 'Last updated:',
     voltar_app: 'Back to App Page',
     voltar_home: 'Back to GHF Software',
     eclipsego_privacy_h1: 'Privacy Policy — EclipseGo',
@@ -49,17 +48,17 @@ export const legal = {
   },
 } as const satisfies Record<Idioma, Record<string, string>>;
 
-const MESES = {
-  pt: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
-  en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-};
+/** Rótulo da data legal na língua (`Última atualização:`, `Last updated:`). */
+export function rotuloData(lang: Idioma): string {
+  return IDIOMAS[lang].rotuloData;
+}
 
 // `lastUpdated` do front-matter (`AAAA-MM` ou `AAAA-MM-DD`) por extenso, no formato da linha
 // `**Última atualização:**` / `**Last updated:**` do corpo: "13 de julho de 2026" / "July 13, 2026",
 // "setembro de 2026" / "September 2026". Sem `Date`: nada de fuso, nada de dia anterior.
 export function dataLegal(lang: Idioma, lastUpdated: string): string {
   const [ano, mes, dia] = lastUpdated.split('-');
-  const nomeMes = MESES[lang][Number(mes) - 1];
+  const nomeMes = IDIOMAS[lang].meses[Number(mes) - 1];
   if (!nomeMes) throw new Error(`lastUpdated com mês inválido: ${lastUpdated}`);
   if (lang === 'pt') return dia ? `${Number(dia)} de ${nomeMes} de ${ano}` : `${nomeMes} de ${ano}`;
   return dia ? `${nomeMes} ${Number(dia)}, ${ano}` : `${nomeMes} ${ano}`;

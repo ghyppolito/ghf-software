@@ -1,7 +1,9 @@
-// Textos de nav e footer, pt e en — transportados do dicionário JS de index.html (WP-08, fatia 1).
-// Toda chave nova entra nos dois idiomas no mesmo commit.
+// Textos de nav e footer, um bloco por língua de src/i18n/idiomas.json — transportados do dicionário
+// JS de index.html (WP-08, fatia 1). Toda chave nova entra em todas as línguas no mesmo commit.
+// `Idioma` vem do mapa (idiomas.ts); fica reexportado aqui para os dicionários de src/i18n/.
+import type { Idioma } from './idiomas';
 
-export type Idioma = 'pt' | 'en';
+export type { Idioma };
 
 export const SITE = 'https://ghfsoftware.com';
 
@@ -52,18 +54,4 @@ export type ChaveUi = keyof (typeof ui)['pt'];
 
 export function t(lang: Idioma, chave: ChaveUi): string {
   return ui[lang][chave];
-}
-
-// Páginas que já têm par em /en/. Cresce a cada fatia do WP-08; espelha (ao contrário)
-// EN_PENDENTE de tools/check_site.py — página aqui sai de lá no mesmo commit.
-export const COM_PAR_EN = new Set<string>(['index.html', 'lottoexpert.html', 'topowalk.html', 'poleposition.html', 'eclipsego.html',
-  'eclipsego-privacy.html', 'topowalk-privacy.html', 'poleposition-privacy.html', 'lottoexpert-privacy.html',
-  'lottoexpert-terms.html']);
-
-// Caminho público de uma página do site no idioma pedido. `index.html` vira a raiz (`/`,
-// `/en/`), como o og:url que a home já declarava. Página sem par en continua em pt.
-export function rota(lang: Idioma, caminho: string): string {
-  const emIngles = lang === 'en' && COM_PAR_EN.has(caminho);
-  const prefixo = emIngles ? '/en/' : '/';
-  return caminho === 'index.html' ? prefixo : prefixo + caminho;
 }
