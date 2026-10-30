@@ -139,7 +139,7 @@
                 Política de Privacidade — TopoWalk
             </h1>
             <p class="text-gray-500 text-lg" data-i18n="last_updated">
-                Última atualização: setembro de 2026
+                Última atualização: outubro de 2026
             </p>
         </div>
     </div>
@@ -242,7 +242,7 @@
                 nav_portfolio: "Portfólio",
                 nav_contact: "Contato",
                 page_title: "Política de Privacidade — TopoWalk",
-                last_updated: "Última atualização: setembro de 2026",
+                last_updated: "Última atualização: outubro de 2026",
                 intro: "Esta Política de Privacidade descreve como o aplicativo <strong>TopoWalk</strong>, desenvolvido por <strong>GHF Software</strong>, trata as informações do usuário. Ao utilizar o TopoWalk, você concorda com os termos descritos neste documento.",
                 btn_back: "Voltar para a GHF Software",
                 footer_apps: "Aplicativos",
@@ -538,12 +538,12 @@
                     <ol class="list-decimal pl-6 mb-4 space-y-2">
                         <li>Cria o arquivo PDF temporariamente no <strong>diretório de cache privado</strong> do app (<code>cacheDir</code>), acessível apenas pelo próprio aplicativo.</li>
                         <li>Compartilha o arquivo via <code>FileProvider</code> com o aplicativo de sua escolha (WhatsApp, e-mail, Google Drive, etc.) usando o mecanismo padrão do Android.</li>
-                        <li>O arquivo permanece no cache até que o sistema operacional realize a limpeza automática ou o usuário limpe os dados do app.</li>
+                        <li>O arquivo permanece no cache até ser apagado: o app remove os arquivos de exportação com mais de 24 horas a cada nova exportação de DXF, CSV, GeoJSON, KML ou GPX, e o sistema operacional também pode limpar o cache automaticamente. O usuário pode ainda limpar os dados do app.</li>
                     </ol>
                     <p class="mb-4">O TopoWalk não tem acesso ao destino escolhido pelo usuário para o compartilhamento — essa operação é gerenciada inteiramente pelo sistema Android e pelo aplicativo receptor.</p>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.3 Exportação de Arquivos</h3>
-                    <p class="mb-4">O usuário pode exportar medições em <strong>GeoJSON, KML e GPX</strong> (a partir da versão 4.0) e em <strong>DXF e CSV</strong> (a partir da versão 4.1). Esses arquivos são gerados localmente no cache do dispositivo e compartilhados da mesma forma que o PDF (seção 8.2). O app não tem acesso ao destino do compartilhamento.</p>
+                    <p class="mb-4">O usuário pode exportar medições em <strong>GeoJSON, KML e GPX</strong> (a partir da versão 4.0) e em <strong>DXF e CSV</strong> (a partir da versão 4.1). Esses arquivos são gerados localmente no cache do dispositivo e compartilhados da mesma forma que o PDF (seção 8.2), inclusive quanto à permanência no cache: arquivos com mais de 24 horas são apagados pelo app na exportação seguinte. O app não tem acesso ao destino do compartilhamento.</p>
                     <p class="mb-4">A exportação em CSV gera <strong>dois arquivos</strong> — um com os pontos e outro com os segmentos —, compartilhados juntos. O DXF contém, além da geometria, a latitude e a longitude do primeiro ponto do levantamento, gravadas como texto dentro do arquivo para permitir posicionar o desenho; é o mesmo dado de coordenada que os demais formatos já carregam.</p>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.4 Backup e Restauração do Histórico (a partir da versão 4.0)</h3>
@@ -642,7 +642,7 @@
                 nav_portfolio: "Portfolio",
                 nav_contact: "Contact",
                 page_title: "Privacy Policy — TopoWalk",
-                last_updated: "Last updated: September 2026",
+                last_updated: "Last updated: October 2026",
                 intro: "This Privacy Policy describes how the <strong>TopoWalk</strong> application, developed by <strong>GHF Software</strong>, handles user information. By using TopoWalk, you agree to the terms described in this document.",
                 btn_back: "Back to GHF Software",
                 footer_apps: "Applications",
@@ -938,12 +938,12 @@
                     <ol class="list-decimal pl-6 mb-4 space-y-2">
                         <li>Creates the PDF file temporarily in the app's <strong>private cache directory</strong> (<code>cacheDir</code>), accessible only by the app itself.</li>
                         <li>Shares the file via <code>FileProvider</code> with the app of your choice (WhatsApp, email, Google Drive, etc.) using Android's standard mechanism.</li>
-                        <li>The file remains in the cache until the operating system performs automatic cleanup or the user clears app data.</li>
+                        <li>The file remains in the cache until it is deleted: the app removes export files older than 24 hours on each new DXF, CSV, GeoJSON, KML, or GPX export, and the operating system may also clear the cache automatically. The user can also clear the app data.</li>
                     </ol>
                     <p class="mb-4">TopoWalk has no access to the destination chosen by the user for sharing — this operation is managed entirely by the Android system and the receiving application.</p>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.3 Exporting Files</h3>
-                    <p class="mb-4">Users can export measurements in <strong>GeoJSON, KML, and GPX</strong> (from version 4.0) and in <strong>DXF and CSV</strong> (from version 4.1). These files are generated locally in the device's cache and shared in the same way as the PDF (section 8.2). The app has no access to the sharing destination.</p>
+                    <p class="mb-4">Users can export measurements in <strong>GeoJSON, KML, and GPX</strong> (from version 4.0) and in <strong>DXF and CSV</strong> (from version 4.1). These files are generated locally in the device's cache and shared in the same way as the PDF (section 8.2), including how long they remain in the cache: files older than 24 hours are deleted by the app on the next export. The app has no access to the sharing destination.</p>
                     <p class="mb-4">CSV export generates <strong>two files</strong> — one with points and another with segments —, shared together. DXF contains, in addition to geometry, the latitude and longitude of the first survey point, recorded as text inside the file to allow positioning the drawing; it is the same coordinate data carried by other formats.</p>
 
                     <h3 class="text-xl font-bold text-gray-200 mt-6 mb-3">8.4 History Backup and Restore (from version 4.0)</h3>
