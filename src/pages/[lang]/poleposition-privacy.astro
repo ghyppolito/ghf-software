@@ -1,0 +1,13 @@
+---
+// /<código>/poleposition-privacy.html: uma rota por língua de poleposition-privacy.html no mapa (src/i18n/idiomas.json), menos o pt, que fica
+// literal em src/pages/poleposition-privacy.astro (ADR-007 §3). Língua fora do mapa não gera página.
+import Pagina from '../../components/paginas/PaginaPolePositionPrivacy.astro';
+import { rotasDeLingua, type Idioma } from '../../i18n/idiomas';
+
+export function getStaticPaths() {
+  return rotasDeLingua('poleposition-privacy.html');
+}
+
+const { lang } = Astro.params as { lang: Idioma };
+---
+<Pagina lang={lang} />

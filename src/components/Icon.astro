@@ -1,0 +1,47 @@
+---
+// Ícone em SVG inline (WP-12, ADR-006 §4), no lugar do Font Awesome do cdnjs. Os arquivos são
+// cópia de @fortawesome/fontawesome-free@6.4.0/svgs/{solid,brands}/ (a versão que estava no ar),
+// só os usados, em src/icons/fa/, com o comentário de licença de cada um (ícones CC BY 4.0,
+// src/icons/fa/LICENSE.txt). Nome canônico do FA 6: `clock-rotate-left`, não o apelido `history`.
+// Nome que não existe em src/icons/fa/ falha o build.
+//
+// O <svg> herda cor (`fill="currentColor"`) e tamanho de texto do pai como o glifo fazia: altura
+// 1em e largura pela proporção do viewBox (classe `.icone` em global.css, com o mesmo
+// `vertical-align` do SVG do próprio Font Awesome). `class` acrescenta utilitários (tamanho,
+// margem, cor, animação). Sem `titulo`, sai `aria-hidden`; com `titulo` (os logos de tecnologia
+// da home, que tinham `title` no <i>), sai `role="img"` com <title>, que dá a dica ao passar o mouse.
+interface Props {
+  nome: string;
+  conjunto?: 'solid' | 'brands';
+  class?: string;
+  titulo?: string;
+  /** atributos `data-*` para o script da página achar o ícone (ex.: o menu do celular) */
+  [dado: `data-${string}`]: string;
+}
+
+const { nome, conjunto = 'solid', class: classe, titulo, ...resto } = Astro.props;
+
+const arquivos = import.meta.glob<string>('../icons/fa/*/*.svg', { query: '?raw', import: 'default', eager: true });
+const bruto = arquivos[`../icons/fa/${conjunto}/${nome}.svg`];
+if (!bruto) {
+  throw new Error(`Icon: src/icons/fa/${conjunto}/${nome}.svg não existe (copie do FA Free 6.4.0, nome canônico)`);
+}
+const m = bruto.match(/^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" viewBox="([\d ]+)">(.*)<\/svg>\s*$/s);
+if (!m) {
+  throw new Error(`Icon: src/icons/fa/${conjunto}/${nome}.svg fora do formato do FA 6.4.0 (<svg viewBox>…</svg>)`);
+}
+const [, viewBox, conteudo] = m;
+const classes = ['icone', classe].filter(Boolean).join(' ');
+---
+{
+  titulo ? (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox={viewBox} fill="currentColor" class={classes} role="img" {...resto}>
+      <title>{titulo}</title>
+      <Fragment set:html={conteudo} />
+    </svg>
+  ) : (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox={viewBox} fill="currentColor" class={classes} aria-hidden="true" {...resto}>
+      <Fragment set:html={conteudo} />
+    </svg>
+  )
+}

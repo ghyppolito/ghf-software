@@ -19,15 +19,16 @@ URL que o Android App Links deixa de validar e link de convite que o WhatsApp ab
    provar, com `python3 tools/check_site.py --raiz dist`, que cada caminho existe no resultado
    publicado. Redirect não é resposta: App Links não segue.
 2. **Tem fonte única?** Texto legal vem do repositório do app; copy de produto vem de
-   `ASO_METADATA.md`/README do app; tema vem dos tokens (hoje `index.html`, depois `design/handoff/`).
+   `ASO_METADATA.md`/README do app; tema vem dos tokens (`tailwind.config.mjs` + `src/styles/global.css`, a partir de `design/handoff/`).
    Conteúdo digitado direto numa página sem origem rastreável é reprovado.
-3. **Replica nas 10 páginas?** Enquanto não há build (antes do WP-08), nav, footer e
-   `tailwind.config` são copiados. WP que muda um deles lista as 10 páginas em Arquivos-alvo ou
-   diz por que não.
+3. **Um lugar só?** Nav, footer, `<head>` e tokens vivem num componente, layout ou config
+   (`src/components/`, `src/layouts/`, `tailwind.config.mjs`). Desenho que copia marcação entre
+   páginas, ou que põe página em `public/`, é reprovado.
 4. **Deploy e branch.** `master` é o que o Pages serve (D5). Nada que mude o deploy (Actions,
-   `_config.yml`, `CNAME`) entra sem WP próprio com plano de reversão.
-5. **i18n.** Hoje pt/en no mesmo HTML por JS; depois do WP-08, rota por idioma. Conteúdo novo
-   nasce nos dois idiomas no mesmo WP — inglês parcial é reprovado.
+   `CNAME`) entra sem WP próprio com plano de reversão.
+5. **i18n (ADR-007).** Rota por língua: pt na raiz, as outras em `/<código>/`, listadas por página
+   em `src/i18n/idiomas.json`; sem redirecionamento; link para destino sem a língua segue a D23.
+   Conteúdo novo nasce em todas as línguas da página no mesmo WP — tradução parcial é reprovada.
 6. **Jogo responsável e privacidade.** Página do LottoExpert passa pelo `check_site.py`;
    rastreador novo só com D3 decidida.
 

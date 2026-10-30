@@ -2,10 +2,10 @@
 
 Site estático da GHF Software: landing corporativa, uma landing por app (TopoWalk, LottoExpert,
 Pole Position, EclipseGo), políticas de privacidade, termos de uso e a página do convite de bolão
-do LottoExpert. **Em produção**, servido pelo GitHub Pages a partir da branch `master`.
+do LottoExpert. **Em produção**, servido pelo GitHub Pages (por Actions) a partir da branch `master`.
 
-Hoje as páginas são HTML puro com Tailwind via CDN, na raiz; um build Astro (WP-07) as copia
-para `dist/`, e o CI do PR (`check_site.py`, html-validate, lychee) prova raiz e `dist/`. A
+As páginas são geradas pelo Astro a partir de `src/` (Tailwind compilado) em `dist/`, com `public/`
+copiado byte a byte; o CI do PR (`check_site.py`, html-validate, lychee) prova `dist/`. A
 evolução dessa stack é o backlog (ver `docs/AVALIACAO.md`). Este arquivo é curto de propósito — leia inteiro. O detalhe
 está em `.claude/context/` e é lido **sob demanda**:
 
@@ -59,35 +59,22 @@ existindo no resultado publicado.
   `tools/check_site.py` barra os termos — mesma régua do `PaywallCopyComplianceTest` do app.
 - Marca **privacy-first** em todos os apps: o site segue a mesma régua (sem rastreador sem
   consentimento; D3 decide a medição).
-- Português é o idioma primário; inglês é espelho completo, nunca parcial. Texto de interface
-  e comentários em português.
-- Data de "Última atualização" de uma página legal é a mesma do `.md` em `docs/` e do
-  repositório do app. `check_site.py` confere.
+- Português é o idioma primário. **Toda língua listada para uma página em `src/i18n/idiomas.json`
+  é espelho completo, nunca parcial; língua não listada não aparece** (nem página, nem seletor,
+  nem `hreflang`). pt fica na raiz e as outras em `/<código>/`, sem redirecionamento (ADR-007).
+  Texto de interface e comentários em português.
+- Data de "Última atualização" de uma página legal é o `lastUpdated` do `.pt.md` em
+  `src/content/legal/`, igual à linha do corpo e ao repositório do app. `check_site.py` confere.
 
-## Arquitetura (estado atual — muda no WP-08)
+## Arquitetura
 
-```
-*.html                      uma página por arquivo; nav, footer, tailwind.config e dicionário
-                            i18n (data-i18n + JS) duplicados em cada uma — deriva conhecida
-assets/                     imagens, favicons, mockups (PNG, sem otimização)
-docs/*.md                   cópia markdown das políticas/termos e README de cada app
-lotto-expert/sweepstake-invite/   página do convite de bolão (pako + Base64, lê o link)
-.well-known/assetlinks.json       App Links do LottoExpert (no modo branch, Jekyll inclui via _config.yml)
-tools/                      gen_estado.py · check_plano.py · check_site.py
-design/                     brief e handoff do Claude Design (WP-06)
-astro.config.mjs            Astro (ADR-002); integração copia da raiz para dist/, byte a byte, a
-                            lista fechada: 10 *.html, assets/, .well-known/, lotto-expert/, CNAME
-src/                        layouts/Base.astro (mínimo) e pages/404.astro — o resto migra no WP-08
-dist/                       saída do build (não versionada) — é o que vai ao ar
-.github/workflows/          pr.yml (checks `plano` e `site`) · deploy.yml (master → Pages por Actions)
-```
-
-Até a troca do Pages para "GitHub Actions" (passo do usuário no WP-07), o Jekyll ainda publica a
-raiz de `master`; `_config.yml` exclui o projeto Astro. Depois, só `dist/` vai ao ar.
-
-Até o WP-08 o build só copia as páginas da raiz: alteração em nav/footer/config **se replica nas
-10 páginas** no mesmo WP, e a rede é o `check_site.py` (raiz e `dist/`). Depois do WP-08, há um
-layout único.
+Detalhe em **`docs/ARQUITETURA.md`** (build, rotas, layouts, componentes, conteúdo legal, i18n,
+verificação, CI e deploy). O essencial: a fonte é `src/` (páginas em `src/pages/`, pt na raiz e as
+outras línguas em `[lang]/`; layouts, componentes, dicionários em `src/i18n/` com `idiomas.json`
+como fonte única das línguas; texto legal em `src/content/legal/`) mais `public/`, copiado byte a
+byte e fechado em `assets/`, `.well-known/`, `lotto-expert/` e `CNAME`. Imagem exibida sai de
+`src/assets/img/` pelo `astro:assets` (ADR-006). **`dist/` é o que vai ao ar**, e a rede é o
+`check_site.py` sobre `dist/`. Nav, footer e config mudam só no componente.
 
 ---
 
@@ -116,27 +103,33 @@ política/termos do repositório do app) · `/decisao <texto>` · `/adr <texto>`
   de loja, compartilhamento no WhatsApp) vira checklist para o usuário; `visual: true` no WP.
 - Commit `WP-NN: …`. Sem merge, push ou PR sem o usuário pedir.
 - **Fluxo git `feat → develop → master`** (D5). Branch do WP nasce de `develop`; PR mira
-  `develop`. `develop → master` **é deploy** — só pelo usuário, via `/release`. `main` é
-  órfã (só o commit inicial) e não é usada.
+  `develop`. `develop → master` **é deploy** — só pelo usuário, via `/release`. Não há
+  `main` (era órfã; apagada em 2026-10-16).
 
 ## Comandos
 
 ```bash
-python3 tools/check_site.py                                   # links, assets, metadados, datas legais, copy — roda sempre
 npm ci && npm run build                                       # Astro → dist/ (Node 22.22)
-python3 tools/check_site.py --raiz dist                       # o mesmo sobre o publicado; datas legais contra docs/ da raiz
+python3 tools/check_site.py                                   # sobre dist/ (= --raiz dist; sem dist/, pede o build): URLs contratuais,
+                                                              # links, assets, metadados, datas legais contra src/content/legal/, copy
+(cd dist && sha256sum --quiet -c ../tools/contrato.sha256)    # convite, assetlinks, og:image do convite e CNAME iguais ao publicado (D13)
+python3 -B -m unittest tools/test_regras_i18n.py              # regras de i18n (ADR-007) sobre tools/fixtures/i18n/
 python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regenerar e verificar
 python3 -m http.server 8080 -d dist                           # servir dist/ para inspeção (Claude in Chrome ou usuário)
-diff ../lotto-expert/docs/PRIVACY_POLICY.md docs/LOTTOEXPERT_PRIVACY_POLICY.md   # o site está atrás do app?
+python3 tools/sync_legal.py --todos --check                    # o site está atrás do app? igual / atrás / à frente-divergente / origem ausente
+python3 tools/sync_legal.py <app> [--ref REF]                 # copia o pt de um commit do app (ADR-004; nunca o en); só pelo /legal
 npx html-validate 'dist/**/*.html'                            # HTML (versão do lockfile; regras em .htmlvalidate.json)
 lychee --offline --no-progress --root-dir "$PWD/dist" 'dist/**/*.html'  # links internos (binário 0.24.2 do release lycheeverse/lychee)
+python3 tools/lighthouse.py                                   # orçamento de bytes e Lighthouse mobile (3 runs, 9 páginas); serve dist/, precisa de Chrome
 ```
 
-`.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`: job `plano`
-(`gen_estado.py --check`, `check_plano.py`) e job `site` (`check_site.py` na raiz, `npm ci`,
-`npm run build`, `check_site.py --raiz dist`, html-validate e lychee sobre `dist/`).
-`.github/workflows/deploy.yml` roda em push para `master` (e à mão): build, `check_site.py --raiz
-dist` e publicação de `dist/` no Pages — só tem efeito com o Pages em modo "GitHub Actions".
+`.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`, em três jobs: `plano`
+(`gen_estado.py --check`, `check_plano.py`), `site` (`npm ci`, `npm run build`,
+`check_site.py --raiz dist`, unittest das regras de i18n, contrato byte a byte, html-validate e
+lychee sobre `dist/`) e `lighthouse` (build e `tools/lighthouse.py --raiz dist` contra
+`tools/orcamento-lighthouse.json`). `.github/workflows/deploy.yml` roda em push para `master` (e à
+mão): build, `check_site.py --raiz dist`, contrato byte a byte e publicação de `dist/` no Pages
+(modo "GitHub Actions").
 
 ## Referência rápida
 
@@ -145,6 +138,6 @@ dist` e publicação de `dist/` no Pages — só tem efeito com o Pages em modo 
 | Diagnóstico e direção | `docs/AVALIACAO.md` |
 | Texto legal de um app | repositório do app, `docs/PRIVACY_POLICY.md` / `TERMS_OF_SERVICE.md` |
 | Copy de produto | `../lotto-expert/docs/ASO_METADATA.md`, `docs/<APP>_README.md` |
-| Dicionário i18n de uma página | bloco `<script>` no fim do próprio HTML (`translations`/`data-i18n`) |
-| Cores e fonte da marca | `tailwind.config` inline em `index.html` (brand.base/surface/primary/secondary/accent, Inter) |
-| Deep link do bolão | `lotto-expert/sweepstake-invite/lottoexpert-invite.html`; formato é do app (ADR-006 lá) |
+| Dicionário i18n de uma página | `src/i18n/` (`ui.ts` nav/footer, `<pagina>.ts`, `legal.ts` hero e `<head>` das legais) |
+| Cores e fonte da marca | `tailwind.config.mjs` (brand.base/surface/primary/secondary/accent, Inter) com os valores por tema em `src/styles/global.css` |
+| Deep link do bolão | `public/lotto-expert/sweepstake-invite/lottoexpert-invite.html`; formato é do app (ADR-006 lá) |

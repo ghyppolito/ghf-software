@@ -1,0 +1,13 @@
+---
+// /<código>/lottoexpert.html: uma rota por língua de lottoexpert.html no mapa (src/i18n/idiomas.json), menos o pt, que fica
+// literal em src/pages/lottoexpert.astro (ADR-007 §3). Língua fora do mapa não gera página.
+import Pagina from '../../components/paginas/PaginaLottoExpert.astro';
+import { rotasDeLingua, type Idioma } from '../../i18n/idiomas';
+
+export function getStaticPaths() {
+  return rotasDeLingua('lottoexpert.html');
+}
+
+const { lang } = Astro.params as { lang: Idioma };
+---
+<Pagina lang={lang} />

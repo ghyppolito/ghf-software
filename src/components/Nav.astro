@@ -1,0 +1,208 @@
+---
+// Nav do site (referência: index.html). Os itens são prop; o markup é um só.
+// O último item com `destaque` é o botão em pílula (Contato).
+// `realce` é a cor de hover/destaque: `primary` em quase todas; o TopoWalk usava `accent`
+// (terracota) com primary verde. `primary-claro` é o `primary` com texto preto e hover lime-400 na
+// pílula do celular (o lima do Pole Position é claro demais para texto branco).
+// `primary-texto-preto` é o `primary` com texto preto e hover `primaryHover` na pílula do celular
+// (o dourado do EclipseGo). As classes ficam literais (o Tailwind não detecta concatenação).
+// `brilhoLogo={false}`: logo sem a sombra luminosa no hover. A política do EclipseGo escrevia a classe
+// com espaços dentro dos colchetes (`rgba(234, 179, 8, 0.5)`), que o Tailwind não reconhece: o
+// logo só crescia, sem brilho — e continua assim.
+import { Image } from 'astro:assets';
+import SeletorIdioma from './SeletorIdioma.astro';
+import logo from '../assets/img/GHFSoftware.png';
+import Icon from './Icon.astro';
+import { FOCO, t, type ChaveUi, type Idioma } from '../i18n/ui';
+import { atributosLink, linguasDe } from '../i18n/idiomas';
+
+interface Item {
+  href: string;
+  chave: ChaveUi;
+  destaque?: boolean;
+}
+
+interface Props {
+  lang: Idioma;
+  /** caminho pt da página atual — o seletor de idioma leva à mesma página nas outras línguas */
+  caminho: string;
+  /** destino do logo */
+  inicio: string;
+  itens: Item[];
+  /** cor de hover e do botão do menu do celular; padrão `primary` */
+  realce?: 'primary' | 'primary-claro' | 'primary-texto-preto' | 'accent';
+  /** brilho (sombra luminosa) no logo ao passar o mouse; padrão `true` */
+  brilhoLogo?: boolean;
+}
+
+const { lang, caminho, inicio, itens, realce = 'primary', brilhoLogo = true } = Astro.props;
+// Logo (WP-12, ADR-006 §1): WebP do astro:assets, na altura do lg:h-20 em 1× e 2×, sempre `eager`
+// (está no topo de toda página). Na home ele é o elemento LCP medido na linha de base: lá ganha
+// `fetchpriority="high"`; nas outras o LCP é texto.
+const logoLcp = caminho === 'index.html';
+
+const CLASSES = {
+  primary: {
+    logo: 'h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-primary)/0.5)]',
+    pilula: 'px-5 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-brand-primary hover:text-brand-primary transition-all duration-300',
+    link: 'text-gray-300 hover:text-white hover:text-brand-primary transition-colors',
+    trocaDesktop: 'flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold tracking-wide',
+    trocaCelular: 'flex items-center gap-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold text-sm',
+    pilulaCelular: 'mobile-link inline-flex items-center min-h-11 px-6 py-2 rounded-full bg-brand-primary text-white hover:bg-brand-primaryHover transition-colors',
+    linkCelular: 'mobile-link inline-flex items-center min-h-11 py-2 text-gray-300 hover:text-brand-primary font-semibold transition-colors',
+  },
+  'primary-claro': {
+    logo: 'h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-primary)/0.5)]',
+    pilula: 'px-5 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-brand-primary hover:text-brand-primary transition-all duration-300',
+    link: 'text-gray-300 hover:text-white hover:text-brand-primary transition-colors',
+    trocaDesktop: 'flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold tracking-wide',
+    trocaCelular: 'flex items-center gap-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold text-sm',
+    pilulaCelular: 'mobile-link inline-flex items-center min-h-11 px-6 py-2 rounded-full bg-brand-primary text-black font-bold hover:bg-lime-400 transition-colors',
+    linkCelular: 'mobile-link inline-flex items-center min-h-11 py-2 text-gray-300 hover:text-brand-primary font-semibold transition-colors',
+  },
+  'primary-texto-preto': {
+    logo: 'h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-primary)/0.5)]',
+    pilula: 'px-5 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-brand-primary hover:text-brand-primary transition-all duration-300',
+    link: 'text-gray-300 hover:text-white hover:text-brand-primary transition-colors',
+    trocaDesktop: 'flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold tracking-wide',
+    trocaCelular: 'flex items-center gap-2 text-gray-400 hover:text-brand-primary transition-colors font-semibold text-sm',
+    pilulaCelular: 'mobile-link inline-flex items-center min-h-11 px-6 py-2 rounded-full bg-brand-primary text-black font-bold hover:bg-brand-primaryHover transition-colors',
+    linkCelular: 'mobile-link inline-flex items-center min-h-11 py-2 text-gray-300 hover:text-brand-primary font-semibold transition-colors',
+  },
+  accent: {
+    logo: 'h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-accent)/0.5)]',
+    pilula: 'px-5 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-brand-accent hover:text-brand-accent transition-all duration-300',
+    link: 'text-gray-300 hover:text-white hover:text-brand-accent transition-colors',
+    trocaDesktop: 'flex items-center gap-2 border-l border-gray-700 pl-6 ml-2 text-gray-400 hover:text-brand-accent transition-colors font-semibold tracking-wide',
+    trocaCelular: 'flex items-center gap-2 text-gray-400 hover:text-brand-accent transition-colors font-semibold text-sm',
+    pilulaCelular: 'mobile-link inline-flex items-center min-h-11 px-6 py-2 rounded-full bg-brand-accent text-white hover:bg-amber-600 transition-colors',
+    linkCelular: 'mobile-link inline-flex items-center min-h-11 py-2 text-gray-300 hover:text-brand-accent font-semibold transition-colors',
+  },
+};
+const c = CLASSES[realce];
+// Menu do celular: com 3+ línguas ele ganha a grade de idiomas (SeletorIdioma) e pode passar da
+// altura da tela (360×568): rola e centra só se couber (`safe center`). Com 1–2 línguas, o de sempre.
+const classeMenu =
+  linguasDe(caminho).length >= 3
+    ? 'fixed inset-0 bg-brand-base z-40 flex flex-col [justify-content:safe_center] items-center gap-8 py-28 overflow-y-auto text-lg font-medium glass-panel opacity-0 pointer-events-none transition-opacity duration-300'
+    : 'fixed inset-0 bg-brand-base z-40 flex flex-col justify-center items-center gap-8 text-lg font-medium glass-panel opacity-0 pointer-events-none transition-opacity duration-300';
+const classeLogo = brilhoLogo
+  ? c.logo
+  : 'h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105';
+---
+<nav
+  id="navbar"
+  class="fixed w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center transition-all duration-300"
+>
+  <a {...atributosLink(lang, inicio)} class={`flex items-center group ${FOCO}`}>
+    <Image src={logo} alt="GHF Software Logo" class={classeLogo} height={80} densities={[1, 2]} loading="eager" fetchpriority={logoLcp ? 'high' : undefined} />
+  </a>
+
+  <!-- Menu desktop -->
+  <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+    {
+      itens.map((item) =>
+        item.destaque ? (
+          <a {...atributosLink(lang, item.href)} class={`${c.pilula} ${FOCO}`}>
+            {t(lang, item.chave)}
+          </a>
+        ) : (
+          <a {...atributosLink(lang, item.href)} class={`${c.link} ${FOCO}`}>
+            {t(lang, item.chave)}
+          </a>
+        ),
+      )
+    }
+    <SeletorIdioma
+      lang={lang}
+      caminho={caminho}
+      posicao="barra"
+      class={c.trocaDesktop}
+    />
+  </div>
+
+  <!-- Botões do celular -->
+  <div class="flex items-center gap-4 md:hidden">
+    <SeletorIdioma
+      lang={lang}
+      caminho={caminho}
+      posicao="celular"
+      class={c.trocaCelular}
+    />
+    <button
+      id="mobile-menu-btn"
+      type="button"
+      aria-label="Menu"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+      class={`inline-flex items-center justify-center min-w-11 min-h-11 ml-2 text-gray-300 hover:text-white ${FOCO}`}
+    >
+      {/* Os dois ícones vão no HTML; o script alterna `hidden` (o glifo trocava de classe). */}
+      <Icon nome="bars" class="text-xl" data-icone-menu="abrir" />
+      <Icon nome="xmark" class="text-xl hidden" data-icone-menu="fechar" />
+    </button>
+  </div>
+</nav>
+
+<!-- Menu do celular (sobreposto) -->
+<div
+  id="mobile-menu"
+  class={classeMenu}
+>
+  {
+    itens.map((item) =>
+      item.destaque ? (
+        <a {...atributosLink(lang, item.href)} class={`${c.pilulaCelular} ${FOCO}`}>
+          {t(lang, item.chave)}
+        </a>
+      ) : (
+        <a {...atributosLink(lang, item.href)} class={`${c.linkCelular} ${FOCO}`}>
+          {t(lang, item.chave)}
+        </a>
+      ),
+    )
+  }
+  <SeletorIdioma lang={lang} caminho={caminho} posicao="menu" />
+</div>
+
+<script>
+  // Nav com vidro ao rolar (o mesmo comportamento de index.html).
+  const navbar = document.getElementById('navbar');
+  if (navbar) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        navbar.classList.add('scrolled');
+        navbar.classList.replace('py-5', 'py-3');
+      } else {
+        navbar.classList.remove('scrolled');
+        navbar.classList.replace('py-3', 'py-5');
+      }
+    });
+  }
+
+  // Menu do celular.
+  const botao = document.getElementById('mobile-menu-btn');
+  const iconeAbrir = botao?.querySelector('[data-icone-menu="abrir"]');
+  const iconeFechar = botao?.querySelector('[data-icone-menu="fechar"]');
+  const menu = document.getElementById('mobile-menu');
+
+  function alternaMenu() {
+    if (!botao || !iconeAbrir || !iconeFechar || !menu) return;
+    const abrir = menu.classList.contains('opacity-0');
+    if (abrir) {
+      menu.classList.remove('opacity-0', 'pointer-events-none');
+      menu.classList.add('opacity-100', 'pointer-events-auto');
+      iconeAbrir.classList.add('hidden');
+      iconeFechar.classList.remove('hidden');
+    } else {
+      menu.classList.remove('opacity-100', 'pointer-events-auto');
+      menu.classList.add('opacity-0', 'pointer-events-none');
+      iconeFechar.classList.add('hidden');
+      iconeAbrir.classList.remove('hidden');
+    }
+    botao.setAttribute('aria-expanded', String(abrir));
+  }
+
+  botao?.addEventListener('click', alternaMenu);
+  document.querySelectorAll('.mobile-link').forEach((link) => link.addEventListener('click', alternaMenu));
+</script>

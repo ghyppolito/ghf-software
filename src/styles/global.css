@@ -1,0 +1,658 @@
+/*
+ * CSS único do site (ADR-003). Ordem de propósito: temas e o CSS próprio das páginas vêm antes
+ * do Tailwind, como na Play CDN — ela anexava o <style> gerado ao fim do <head>, depois do
+ * <style> de cada página; utilitário do Tailwind vence classe própria de mesma especificidade
+ * (ex.: `bg-brand-base` + `glass-panel` no menu móvel).
+ */
+
+/* ------------------------------------------------------------------ temas
+ * Um bloco por tema; o layout põe `data-tema` no <html>. Valores medidos nas configs inline das
+ * 10 páginas, inclusive as divergências entre landing e política do mesmo app — unificá-las é
+ * design (WP-10, D4). Cor em canais RGB (`R G B`), para o Tailwind aplicar opacidade
+ * (`bg-brand-primary/20` → `rgb(var(--brand-primary) / .2)`).
+ * Sombra ausente num tema é `0 0 #0000` (sem sombra): na página original a classe não existia.
+ */
+:root,
+[data-tema='ghf'] {
+  --brand-base: 11 17 32; /* #0B1120 */
+  --brand-surface: 17 24 39; /* #111827 */
+  --brand-primary: 16 185 129; /* #10B981 */
+  --brand-primary-hover: 5 150 105; /* #059669 */
+  --brand-secondary: 59 130 246; /* #3B82F6 */
+  --brand-accent: 6 182 212; /* #06B6D4 */
+  /* tons padrão do Tailwind; só o TopoWalk os troca */
+  --amber-400: 251 191 36;
+  --amber-500: 245 158 11;
+  --amber-600: 217 119 6;
+  --amber-900: 120 53 15;
+  --sombra-glow: 0 0 20px rgba(16, 185, 129, 0.4);
+  --sombra-glow-blue: 0 0 20px rgba(59, 130, 246, 0.4);
+  /* pilha mono padrão do Tailwind 3 */
+  --fonte-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+}
+
+/* lottoexpert.html, lottoexpert-privacy.html, lottoexpert-terms.html */
+[data-tema='lottoexpert'],
+[data-tema='lottoexpert-privacy'],
+[data-tema='lottoexpert-terms'] {
+  --brand-primary: 139 92 246; /* #8B5CF6 */
+  --brand-primary-hover: 124 58 237; /* #7C3AED */
+  --sombra-glow: 0 0 20px rgba(139, 92, 246, 0.4);
+  --sombra-glow-blue: 0 0 #0000;
+}
+
+/* topowalk.html — primary verde, accent e escala amber terracota */
+[data-tema='topowalk'] {
+  --brand-accent: 181 84 28; /* #B5541C */
+  --amber-400: 217 119 54; /* #D97736 */
+  --amber-500: 181 84 28; /* #B5541C */
+  --amber-600: 140 63 17; /* #8C3F11 */
+  --amber-900: 74 33 9; /* #4A2109 */
+  --sombra-glow-blue: 0 0 #0000;
+}
+
+/* topowalk-privacy.html — primary terracota */
+[data-tema='topowalk-privacy'] {
+  --brand-primary: 181 84 28; /* #B5541C */
+  --brand-primary-hover: 142 64 20; /* #8E4014 */
+  --sombra-glow: 0 0 20px rgba(181, 84, 28, 0.4);
+}
+
+/* poleposition.html — accent lima */
+[data-tema='poleposition'] {
+  --brand-primary: 132 204 22; /* #84cc16 */
+  --brand-primary-hover: 101 163 13; /* #65a30d */
+  --brand-accent: 163 230 53; /* #a3e635 */
+  --sombra-glow: 0 0 #0000;
+  --sombra-glow-blue: 0 0 #0000;
+}
+
+/* poleposition-privacy.html — accent ciano */
+[data-tema='poleposition-privacy'] {
+  --brand-primary: 132 204 22; /* #84cc16 */
+  --brand-primary-hover: 101 163 13; /* #65a30d */
+  --sombra-glow: 0 0 20px rgba(132, 204, 22, 0.4);
+}
+
+/* eclipsego.html */
+[data-tema='eclipsego'] {
+  --brand-primary: 234 179 8; /* #EAB308 */
+  --brand-primary-hover: 202 138 4; /* #CA8A04 */
+  --brand-secondary: 99 102 241; /* #6366F1 */
+  --brand-accent: 245 158 11; /* #F59E0B */
+  --sombra-glow: 0 0 25px rgba(234, 179, 8, 0.35);
+  --sombra-glow-blue: 0 0 #0000;
+}
+
+/* eclipsego-privacy.html — mesmas cores, sombras de outra intensidade */
+[data-tema='eclipsego-privacy'] {
+  --brand-primary: 234 179 8; /* #EAB308 */
+  --brand-primary-hover: 202 138 4; /* #CA8A04 */
+  --brand-secondary: 99 102 241; /* #6366F1 */
+  --brand-accent: 245 158 11; /* #F59E0B */
+  --sombra-glow: 0 0 20px rgba(234, 179, 8, 0.4);
+  --sombra-glow-blue: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+/* ------------------------------------------------------------------ CSS próprio
+ * Copiado do <style> de index.html (WP-08, fatia 1). As outras páginas trazem o seu na fatia
+ * em que migram; diferença entre elas vira bloco por tema, não segunda cópia.
+ */
+body {
+  background-color: #0b1120;
+  color: #f3f4f6;
+}
+
+/* Fundo em grade (hero) */
+.bg-grid-pattern {
+  background-color: #0b1120;
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Vidro */
+.glass-panel {
+  background: rgba(17, 24, 39, 0.6);
+  /* prefixado antes: na ordem inversa o minificador (lightningcss) descartava o sem prefixo */
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Texto em gradiente */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(135deg, #3b82f6, #10b981);
+}
+
+/* Ícone em SVG inline (components/Icon.astro, WP-12): o mesmo tamanho, a mesma linha de base e a
+ * mesma caixa do glifo do Font Awesome. O desenho tem altura 1em, largura pela proporção do viewBox
+ * e o `vertical-align` -0.125em do `.svg-inline--fa` do FA 6.4.0. O `<i>` do FA ocupava a altura de
+ * linha própria: 1, como no `.fa-solid`, ou a do `text-*` posto no ícone (28 px num `text-xl`, que
+ * vem depois no CSS e vence). O `padding-block` devolve essa meia-entrelinha acima e abaixo, e o
+ * `vertical-align` desce o mesmo tanto para o desenho ficar onde estava. Sem isso, botão e faixa
+ * com ícone encolhiam 4 a 8 px. Classe vence o `svg { display: block }` do preflight do Tailwind. */
+.icone {
+  line-height: 1;
+  --meia-entrelinha: max(0px, (1lh - 1em) / 2);
+  display: inline-block;
+  box-sizing: content-box;
+  height: 1em;
+  padding-block: var(--meia-entrelinha);
+  overflow: visible;
+  vertical-align: calc(-0.125em - var(--meia-entrelinha));
+}
+
+/* Flutuação sutil */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Entrada */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Revelar ao rolar — estado final */
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Nav: vidro ao rolar */
+#navbar {
+  transition: all 0.3s ease;
+}
+
+#navbar.scrolled {
+  background: rgba(11, 17, 32, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* ------------------------------------------------------------------ CSS próprio do LottoExpert
+ * Copiado do <style> de lottoexpert.html (WP-08, fatia 2); o resto daquele <style> é igual ao de
+ * index.html, acima.
+ */
+.text-gradient-purple {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(135deg, #a855f7, #8b5cf6);
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+/* ------------------------------------------------------------------ CSS próprio do TopoWalk
+ * Copiado do <style> de topowalk.html (WP-08, fatia 3); o resto daquele <style> (body, grade,
+ * vidro, #navbar) é igual ao de index.html, acima. O blob do hero chamava `animation: float`
+ * no atributo style, mas a página não declarava a @keyframes: não animava. O atributo saiu —
+ * com a @keyframes da home no CSS único, o transform tiraria o blob do centro.
+ */
+.text-gradient-amber {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(135deg, #b5541c, #d97736);
+}
+
+/* ------------------------------------------------------------------ CSS próprio do Pole Position
+ * Copiado do <style> de poleposition.html (WP-08, fatia 4); body, grade, vidro e #navbar são
+ * iguais aos de index.html, acima. O `.text-gradient` dela era branco → lima: bloco por tema.
+ * A página não declarava `animate-fade-in-up` (nem a @keyframes) e o hero não animava; o
+ * componente não usa a classe.
+ */
+[data-tema='poleposition'] .text-gradient {
+  background-image: linear-gradient(135deg, white, #84cc16);
+}
+
+/* Moldura de celular dos mockups do hero */
+.mockup-frame {
+  position: relative;
+  width: 260px;
+  height: 520px;
+  border-radius: 36px;
+  background: #000;
+  border: 8px solid #222;
+  box-shadow:
+    inset 0 0 0 4px #111,
+    0 25px 60px -15px rgba(132, 204, 22, 0.4);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+}
+
+@media (min-width: 768px) {
+  .mockup-frame {
+    width: 320px;
+    height: 640px;
+    border-radius: 40px;
+    border-width: 10px;
+  }
+}
+
+.mockup-frame::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 150px;
+  height: 25px;
+  background: #222;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  z-index: 20;
+}
+
+/* ------------------------------------------------------------------ CSS próprio do EclipseGo
+ * Copiado do <style> de eclipsego.html (WP-08, fatia 5); body, grade, vidro e #navbar são iguais
+ * aos de index.html, acima. O `.text-gradient` dela era dourado → índigo: bloco por tema. O blob do
+ * hero chamava `animation: float` no atributo style sem a página declarar a @keyframes (não
+ * animava); o atributo saiu, como no TopoWalk.
+ */
+[data-tema='eclipsego'] .text-gradient {
+  background-image: linear-gradient(135deg, #eab308, #6366f1);
+}
+
+/* Brilho de coroa pulsando na moldura do celular do hero */
+@keyframes corona-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 25px rgba(234, 179, 8, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 50px rgba(234, 179, 8, 0.8),
+      0 0 10px rgba(99, 102, 241, 0.5);
+  }
+}
+
+.corona-glow {
+  animation: corona-pulse 4s ease-in-out infinite;
+}
+
+/* ------------------------------------------------------------------ Movimento reduzido
+ * Com "reduzir movimento" no sistema, toda animação e transição termina na hora (WP-22): flutuar,
+ * girar, pulsar, quicar e o brilho da coroa param, e as entradas (`fade-in-*`) pulam para o estado
+ * final. Não é `animation: none`: as entradas partem de `opacity: 0` (no atributo style) e o elemento
+ * sumiria. O atraso vai a zero pelo mesmo motivo (o hero esperaria até 0,4 s invisível). As
+ * animações em loop terminam no quadro inicial (float e spin-slow voltam a 0), sem deslocar o blob. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------ Texto legal
+ * Corpo das páginas legais (src/layouts/LegalLayout.astro), renderizado do markdown de
+ * src/content/legal/. Repete as classes que o dicionário JS antigo punha em cada tag (WP-08,
+ * fatia 6); sem @tailwindcss/typography. O primeiro parágrafo é a introdução, que a página antiga
+ * mostrava fora do conteúdo dinâmico, com filete embaixo.
+ */
+.legal-corpo h2 {
+  @apply text-2xl font-bold text-white mt-10 mb-4;
+}
+
+.legal-corpo h3 {
+  @apply text-xl font-bold text-gray-200 mt-6 mb-3;
+}
+
+.legal-corpo p {
+  @apply mb-4;
+}
+
+.legal-corpo > p:first-child {
+  @apply text-lg text-gray-300 leading-relaxed mb-8 pb-8 border-b border-gray-800;
+}
+
+.legal-corpo ul {
+  @apply list-disc pl-6 mb-4 space-y-2;
+}
+
+/* URL e identificador longos em `code` (ex.: o endpoint do googleapis) e em link (ex.:
+ * jogadoresanonimos.com.br no destaque de §3 dos termos) quebram dentro do bloco: sem isso a página
+ * rola na horizontal a 360 px (WP-22). `word-break` é a reserva de quem não tem `anywhere`. */
+.legal-corpo code,
+.legal-corpo a {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Link do corpo legal sublinhado em todos os temas, `mailto:` incluso: só a cor o distinguia do texto
+ * (WCAG 1.4.1, WP-22). A cor continua nas regras de tema abaixo. */
+.legal-corpo a {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.legal-corpo a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.legal-corpo a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Contêiner da tabela (plugin envolveTabelaLegal): focável, para rolar com as setas (WP-22). */
+.legal-tabela {
+  @apply overflow-x-auto mb-4;
+}
+
+.legal-tabela:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.legal-corpo table {
+  @apply w-full text-left border-collapse;
+}
+
+.legal-corpo thead tr {
+  @apply border-b border-gray-700;
+}
+
+.legal-corpo tbody tr {
+  @apply border-b border-gray-800;
+}
+
+.legal-corpo th {
+  @apply py-2 pr-4 font-bold text-white;
+}
+
+.legal-corpo td {
+  @apply py-2 pr-4;
+}
+
+.legal-corpo th:last-child,
+.legal-corpo td:last-child {
+  @apply pr-0;
+}
+
+/* ------------------------------------------------------------------ Texto legal por tema
+ * O que muda de uma política para outra (WP-08, fatia 7). Cada bloco reproduz as classes que o
+ * dicionário JS da página antiga punha em cada tag; o que é igual nas três fica acima.
+ */
+
+/* eclipsego-privacy.html — primeira coluna sempre mono e na cor do app (era por posição) */
+[data-tema='eclipsego-privacy'] .legal-corpo td:first-child {
+  @apply font-mono text-sm text-brand-primary;
+}
+
+/* topowalk-privacy.html e poleposition-privacy.html. O `---` do .md antes de cada `## ` não
+ * aparecia na página antiga (o título já separa); só o último do TopoWalk, antes da nota LGPD. */
+:is([data-tema='topowalk-privacy'], [data-tema='poleposition-privacy']) .legal-corpo hr {
+  @apply border-gray-800 my-8;
+}
+
+:is([data-tema='topowalk-privacy'], [data-tema='poleposition-privacy']) .legal-corpo hr:has(+ h2) {
+  display: none;
+}
+
+:is([data-tema='topowalk-privacy'], [data-tema='poleposition-privacy']) .legal-corpo ol {
+  @apply list-decimal pl-6 mb-4 space-y-2;
+}
+
+/* Lista aninhada: a página antiga pedia `list-circle`, que não existe no Tailwind — sem marcador. */
+:is([data-tema='topowalk-privacy'], [data-tema='poleposition-privacy']) .legal-corpo ul ul {
+  @apply list-none pl-6 mt-1 mb-0 space-y-1;
+}
+
+/* topowalk-privacy.html. O e-mail que o GFM transforma em link `mailto:` fica como o texto da
+ * página antiga (sem link estilizado): o estilo é só do link externo. */
+[data-tema='topowalk-privacy'] .legal-corpo a[href^='http'] {
+  @apply text-brand-primary underline hover:text-white;
+}
+
+/* Primeira coluna pelo dado: `**…**` (terceiros) em negrito médio, `` `…` `` (permissões) mono. */
+[data-tema='topowalk-privacy'] .legal-corpo td:first-child:has(strong) {
+  @apply font-semibold text-brand-primary;
+}
+
+[data-tema='topowalk-privacy'] .legal-corpo td:first-child:has(strong) strong {
+  font-weight: inherit;
+}
+
+[data-tema='topowalk-privacy'] .legal-corpo td:first-child:has(code) {
+  @apply font-mono text-sm text-brand-primary;
+}
+
+/* Nota final em itálico (LGPD/GDPR), sem margem embaixo. */
+[data-tema='topowalk-privacy'] .legal-corpo > p:last-child:has(> em:only-child) {
+  @apply text-sm text-gray-500 italic mb-0;
+}
+
+/* poleposition-privacy.html */
+[data-tema='poleposition-privacy'] .legal-corpo a[href^='http'] {
+  @apply text-brand-primary hover:underline;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo code {
+  @apply font-mono bg-gray-800 px-1.5 py-0.5 rounded text-gray-200 text-sm;
+}
+
+/* Tabela em cartão: borda arredondada, cabeçalho com fundo, filete fino entre linhas. */
+[data-tema='poleposition-privacy'] .legal-tabela {
+  @apply my-6 border border-gray-800 rounded-xl;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo thead tr {
+  @apply border-b border-gray-800 bg-gray-800/30;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo tbody tr {
+  @apply border-b-0 hover:bg-gray-800/10;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo tbody tr + tr {
+  @apply border-t border-gray-800/50;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo th,
+[data-tema='poleposition-privacy'] .legal-corpo td,
+[data-tema='poleposition-privacy'] .legal-corpo th:last-child,
+[data-tema='poleposition-privacy'] .legal-corpo td:last-child {
+  @apply py-4 px-5 text-sm;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo th {
+  @apply font-semibold text-white;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo td {
+  @apply text-gray-400;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo td:first-child {
+  @apply text-gray-300;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo td:first-child:has(> code:only-child) {
+  @apply font-mono;
+}
+
+/* Código dentro da tabela é texto da célula, sem a pílula. */
+[data-tema='poleposition-privacy'] .legal-corpo td code {
+  @apply bg-transparent p-0 rounded-none;
+  color: inherit;
+}
+
+/* Lista com parágrafo de continuação: o CommonMark põe `<p>` em todos os itens dela; a página
+ * antiga não tinha esse espaço. */
+[data-tema='poleposition-privacy'] .legal-corpo li > p {
+  @apply mb-0;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo li > ul + p {
+  @apply mt-2;
+}
+
+/* "Desenvolvido por …", último parágrafo, todo em negrito. */
+[data-tema='poleposition-privacy'] .legal-corpo > p:last-child:has(> strong:only-child) {
+  @apply font-semibold text-white mt-6 mb-0;
+}
+
+[data-tema='poleposition-privacy'] .legal-corpo > p:last-child:has(> strong:only-child) strong {
+  font-weight: inherit;
+}
+
+/* lottoexpert-privacy.html e lottoexpert-terms.html (WP-08, fatia 8). O `---` do .md antes de
+ * cada `## ` e antes do slogan final não aparecia na página antiga. */
+:is([data-tema='lottoexpert-privacy'], [data-tema='lottoexpert-terms']) .legal-corpo hr {
+  display: none;
+}
+
+/* Link externo e link do próprio site (plugin linksInternosLegais: `/…`). O e-mail que o GFM
+ * transforma em `mailto:` fica como o texto da página antiga, sem estilo. */
+:is([data-tema='lottoexpert-privacy'], [data-tema='lottoexpert-terms']) .legal-corpo a[href^='http'],
+:is([data-tema='lottoexpert-privacy'], [data-tema='lottoexpert-terms']) .legal-corpo a[href^='/'] {
+  @apply text-brand-primary hover:underline;
+}
+
+/* Slogan final em itálico (`*LottoExpert — …*`), centralizado. */
+:is([data-tema='lottoexpert-privacy'], [data-tema='lottoexpert-terms']) .legal-corpo > p:last-child:has(> em:only-child) {
+  @apply mt-8 mb-0 text-center text-sm text-gray-500 italic;
+}
+
+/* lottoexpert-privacy.html — listas sob `###` (§4.1–4.10): a página antiga mostrava cada item como
+ * parágrafo sem marcador, `mb-2`, o último `mb-4`. O seletor do item repete o do `space-y-2` de
+ * `.legal-corpo ul` (`> :not([hidden]) ~ :not([hidden])`) para vencer a margem que ele põe. */
+[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul {
+  @apply list-none pl-0 mb-0;
+}
+
+[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul > li,
+[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul > :not([hidden]) ~ :not([hidden]) {
+  @apply mt-0 mb-2;
+}
+
+[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul > li:last-child,
+[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul > :not([hidden]) ~ li:last-child {
+  @apply mb-4;
+}
+
+/* Lista aninhada de §4.7 (eventos do Analytics): com marcador, mais junta, texto menor. */
+[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul ul {
+  @apply list-disc pl-6 mt-2 mb-2 space-y-1 text-sm;
+}
+
+/* Destaques: as 3 notas de §2 (com barra) e "Dado local" de §9.2 (sem barra). O `.md` não as
+ * distingue pela estrutura; o seletor ancora no `id` da seção, que vem da posição (plugin
+ * idDosTitulosLegais, ADR-007 §6), igual em pt e en. */
+[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-2'] + p + ul + p,
+[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-2'] + p + ul + p + p,
+[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-2'] + p + ul + p + p + p {
+  @apply mb-4 text-sm bg-gray-800/50 p-4 rounded-lg border-l-4 border-brand-primary;
+}
+
+[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-9-2'] + p + ul + p + p {
+  @apply mb-4 text-sm bg-gray-800/50 p-4 rounded-lg;
+}
+
+/* Tabelas: §5 (permissões) com a 1ª coluna mono na cor do app; §9.1 (bases legais) toda em text-sm. */
+[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-5'] + .legal-tabela td:first-child {
+  @apply font-mono text-sm text-brand-primary;
+}
+
+[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-9-1'] + .legal-tabela td {
+  @apply text-sm;
+}
+
+/* lottoexpert-terms.html — §3: a página antiga mostrava os 3 itens como parágrafos, o último (ajuda
+ * de jogo responsável: Jogadores Anônimos, CVV 188) em destaque com barra. Ancorado no `id`. */
+[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul {
+  @apply list-none pl-0 mb-0;
+}
+
+[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul > li,
+[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul > :not([hidden]) ~ :not([hidden]) {
+  @apply mt-0 mb-4;
+}
+
+[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul > li:last-child,
+[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul > :not([hidden]) ~ li:last-child {
+  @apply text-sm bg-gray-800/50 p-4 rounded-lg border-l-4 border-brand-primary;
+}
+
+/* Tabela dos planos (§4): mais respiro embaixo, plano em negrito na cor do app, valor em branco. */
+[data-tema='lottoexpert-terms'] .legal-tabela {
+  @apply mb-6;
+}
+
+[data-tema='lottoexpert-terms'] .legal-corpo td:first-child {
+  @apply font-semibold text-brand-primary;
+}
+
+[data-tema='lottoexpert-terms'] .legal-corpo td:nth-child(2) {
+  @apply text-white;
+}
+
+/* ------------------------------------------------------------------ Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

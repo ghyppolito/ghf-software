@@ -2,12 +2,14 @@ name: PR
 
 # Roda em **todo** PR e em push para `develop`/`master`.
 #
-# `plano` prova que o backlog está consistente. `site` roda o `check_site.py` na raiz (URLs
-# contratuais, links, assets, metadados, datas legais, copy de jogo responsável), gera o site com
-# o Astro (`npm run build` → `dist/`, ADR-002) e repete sobre `dist/` o `check_site.py`, a
-# validação de HTML e os links internos — o que é provado é o que seria publicado. Nada de deploy
-# aqui: publicar é o `deploy.yml`, em push para `master`, e `develop → master` é decisão do
-# usuário (`/release`).
+# `plano` prova que o backlog está consistente. `site` gera o site com o Astro (`npm run build` →
+# `dist/`, ADR-002) e roda sobre `dist/` o `check_site.py` (URLs contratuais, links, assets,
+# metadados, datas legais, copy de jogo responsável), o contrato byte a byte, a validação de HTML
+# e os links internos — o que é provado é o que seria publicado. A raiz do repositório não é mais
+# verificada desde a fatia 6 do WP-08: uma URL contratual (`eclipsego-privacy.html`) só existe em
+# `dist/`. `lighthouse` mede o desempenho de `dist/` contra tools/orcamento-lighthouse.json
+# (WP-12, D20). Nada de deploy aqui: publicar é o `deploy.yml`, em push para `master`, e
+# `develop → master` é decisão do usuário (`/release`).
 #
 # Fluxo `feat → develop → master` (decisoes.md D5): PR do WP mira `develop`; `develop → master` é
 # publicação. Roda em PR contra as duas e em push direto nelas. Sem `paths:` no nível do
@@ -54,11 +56,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: check_site.py (raiz)
-        # URLs contratuais (ADR-001), links e assets, metadados, datas legais e copy barrada.
-        # A raiz ainda é a fonte das páginas até o WP-08.
-        run: python3 tools/check_site.py
-
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           # engines.node do package.json; html-validate 11.16.2 exige Node ^22.22.0.
@@ -74,8 +71,19 @@ jobs:
         run: npm run build
 
       - name: check_site.py (dist)
-        # Prova o publicado; as fontes legais (docs/*.md) continuam lidas da raiz do repositório.
+        # URLs contratuais (ADR-001), links e assets, metadados, datas legais e copy barrada, sobre
+        # o publicado. As fontes legais (docs/*.md, src/content/legal/*.md) são lidas do repositório.
         run: python3 tools/check_site.py --raiz dist
+
+      - name: Regras de i18n (unittest)
+        # As regras de i18n do check (tools/regras_i18n.py, WP-15) sobre os casos sintéticos de
+        # tools/fixtures/i18n/: o correto passa e cada caso inválido falha pela sua regra.
+        run: python3 -B -m unittest tools/test_regras_i18n.py
+
+      - name: Contrato do bolão byte a byte (D13)
+        # Convite, assetlinks, og:image do convite e CNAME saem iguais ao publicado. Mudar um deles é
+        # decisão do usuário: atualiza tools/contrato.sha256 no mesmo PR, com teste de link real.
+        run: cd dist && sha256sum --quiet -c ../tools/contrato.sha256
 
       - name: Validação de HTML
         # Versão do lockfile. Regras em `.htmlvalidate.json` da raiz (vale para dist/); as
@@ -107,3 +115,32 @@ jobs:
           set -euo pipefail
           ls dist/*.html dist/lotto-expert/sweepstake-invite/*.html > /dev/null
           lychee --offline --no-progress --root-dir "$GITHUB_WORKSPACE/dist" 'dist/**/*.html'
+
+  # Orçamento de desempenho (WP-12, D20 B). Job separado: não atrasa o `site`, e o vermelho diz
+  # de cara que o problema é desempenho. Não publica nada.
+  lighthouse:
+    name: lighthouse
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22.22'
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Build (Astro → dist/)
+        env:
+          ASTRO_TELEMETRY_DISABLED: 1
+        run: npm run build
+
+      - name: Lighthouse (dist)
+        # `lighthouse` 13.5.0 do lockfile, Chrome do runner. 9 páginas (uma por template, mais as
+        # que medem diferente) × 3 runs; regras e bytes em tools/orcamento-lighthouse.json.
+        run: python3 tools/lighthouse.py --raiz dist

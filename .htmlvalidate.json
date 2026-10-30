@@ -1,12 +1,6 @@
 {
   "extends": ["html-validate:recommended"],
   "rules": {
-    "no-inline-style": "off",
-    "void-style": "warn",
-    "no-raw-characters": "warn",
-    "no-trailing-whitespace": "warn",
-    "no-implicit-button-type": "warn",
-    "wcag/h30": "warn",
-    "text-content": "warn"
+    "no-inline-style": "off"
   }
 }

@@ -15,7 +15,7 @@ branch: feat/wp-10-redesign
 
 # WP-10 — A home e as landings de app seguem o sistema visual do handoff
 
-**Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** LOGO-ANO-E-FUNDO-ESCURO-01 · landings TopoWalk, Pole Position e EclipseGo esperam o WP-19 (rodada 3)
+**Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** LOGO-ANO-E-FUNDO-ESCURO-01, ECLIPSE-ICONE-OFFLINE-01 (ícone do card "offline" do EclipseGo, D21), NAV-MENU-ALVO-TOQUE-01, HOME-TECH-CURSOR-01, POLE-PRINTS-2X-01 (do WP-12) · landings TopoWalk, Pole Position e EclipseGo esperam o WP-19 (rodada 3)
 
 **Objetivo:** tokens do handoff em `tailwind.config.mjs`; home com hierarquia por app (um
 toque até o app certo); as 4 landings com a mesma anatomia (hero + CTA → 3–5 funcionalidades
@@ -41,6 +41,10 @@ as landings prontas.
   contra o handoff e lista desvios com justificativa).
 - Contraste AA em todo texto (relato do `site-ux` com os pares cor/fundo medidos).
 - `check_site.py` verde; Lighthouse Accessibility ≥ 95 em todas as páginas.
+
+**Nota do WP-09 (2026-10-15, `LOTTO-EN-ESPELHO-AUSENTE-01`):** a página legal do redesign consome
+`src/content/legal/` (pt copiado do commit do app por `tools/sync_legal.py`, en traduzido; ADR-004),
+não o stub legal do export do Claude Design — o export não é origem de texto legal (D7).
 
 **Só no navegador:** todas as páginas, 360/768/1280, pt e en, contra o handoff.
 

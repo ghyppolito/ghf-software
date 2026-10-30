@@ -1,0 +1,58 @@
+---
+// Landing do EclipseGo (/eclipsego.html e /<código>/eclipsego.html), a página inteira com a prop `lang`. Corpo em components/EclipseGo.astro, textos em
+// i18n/eclipsego.ts. Links da página para a home vão à home do mesmo idioma. O dourado do EclipseGo
+// é claro: a pílula do menu do celular usa texto preto (Nav `realce="primary-texto-preto"`).
+import Base from '../../layouts/Base.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
+import EclipseGo from '../EclipseGo.astro';
+import { eclipsego } from '../../i18n/eclipsego';
+import { rota, type Idioma } from '../../i18n/idiomas';
+import JsonLd from '../JsonLd.astro';
+import { mobileApplication } from '../../i18n/apps';
+
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
+const x = eclipsego[lang];
+const home = rota(lang, 'index.html');
+---
+<Base
+  title={x.title}
+  description={x.description}
+  og={{
+    imagem: '/assets/eclipse-go.png',
+  }}
+  lang={lang}
+  caminho="eclipsego.html"
+  tema="eclipsego"
+  favicon="/assets/eclipse-go-favicon.png"
+  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden"
+>
+  <JsonLd slot="jsonld" dados={mobileApplication('eclipsego')} />
+  <Nav
+    lang={lang}
+    caminho="eclipsego.html"
+    inicio={home}
+    realce="primary-texto-preto"
+    itens={[
+      { href: `${home}#sobre`, chave: 'nav_about' },
+      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
+      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+    ]}
+  />
+  <main>
+    <EclipseGo lang={lang} />
+  </main>
+  {/* A página antiga só tinha o e-mail entre os canais (sem YouTube nem Instagram do app). */}
+  <Footer
+    lang={lang}
+    inicio={home}
+    prefixoAncora={home}
+    redes={{}}
+    appAtual="eclipsego.html"
+    fundo="surface"
+  />
+</Base>

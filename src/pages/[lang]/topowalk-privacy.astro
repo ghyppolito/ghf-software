@@ -1,0 +1,13 @@
+---
+// /<código>/topowalk-privacy.html: uma rota por língua de topowalk-privacy.html no mapa (src/i18n/idiomas.json), menos o pt, que fica
+// literal em src/pages/topowalk-privacy.astro (ADR-007 §3). Língua fora do mapa não gera página.
+import Pagina from '../../components/paginas/PaginaTopoWalkPrivacy.astro';
+import { rotasDeLingua, type Idioma } from '../../i18n/idiomas';
+
+export function getStaticPaths() {
+  return rotasDeLingua('topowalk-privacy.html');
+}
+
+const { lang } = Astro.params as { lang: Idioma };
+---
+<Pagina lang={lang} />

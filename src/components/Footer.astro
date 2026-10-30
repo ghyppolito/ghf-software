@@ -1,0 +1,244 @@
+---
+// Footer do site (referência: index.html). `id="contato"` é o alvo do item Contato da nav.
+// Links para páginas do site passam por `link()`/`atributosLink()`: na língua da página quando o
+// destino a tem; senão pela D23 (en, senão pt), com `hreflang` e `lang` do destino.
+// O que varia por página é prop: redes sociais do app, o app da página destacado na lista, o
+// fundo (`surface` nas landings que o usavam; `surface-sem-borda` no Pole Position, que não tinha o
+// filete do topo), a cor de realce (`accent` no TopoWalk), a política da página destacada
+// (`politicaAtual`, nas páginas legais) e o brilho do logo (`brilhoLogo={false}` na política do
+// EclipseGo, cuja classe de sombra do logo tinha espaços e não valia). Classes literais por variante
+// (o Tailwind não detecta concatenação).
+import { Image } from 'astro:assets';
+import { FOCO, t } from '../i18n/ui';
+import { atributosLink, link as linkPagina, type Idioma } from '../i18n/idiomas';
+import logo from '../assets/img/GHFSoftware.png';
+import Icon from './Icon.astro';
+
+interface Props {
+  lang: Idioma;
+  /** destino do logo */
+  inicio: string;
+  /** prefixo das âncoras da home: '' na própria home, a URL da home nas outras páginas */
+  prefixoAncora: string;
+  /** canais da página (a landing de cada app aponta para os do app; canal ausente não aparece);
+   *  padrão: os da GHF. O e-mail aparece sempre. */
+  redes?: { youtube?: string; instagram?: string; tiktok?: string; facebook?: string };
+  /** caminho pt da landing atual: o app aparece destacado, com chevron, na lista de aplicativos */
+  appAtual?: string;
+  /** fundo do rodapé; padrão `base` */
+  fundo?: 'base' | 'surface' | 'surface-sem-borda';
+  /** cor do brilho do logo, do app destacado e do coração; padrão `primary` */
+  realce?: 'primary' | 'accent';
+  /** caminho pt da página legal atual: a política aparece destacada na lista de políticas */
+  politicaAtual?: string;
+  /** brilho (sombra luminosa) no logo ao passar o mouse; padrão `true` */
+  brilhoLogo?: boolean;
+}
+
+const {
+  lang,
+  inicio,
+  prefixoAncora,
+  redes = {
+    youtube: 'https://www.youtube.com/channel/UCZfKMp0qRRIEu103Vb3OGJg',
+    instagram: 'https://www.instagram.com/ghfsoftware/',
+  },
+  appAtual,
+  fundo = 'base',
+  realce = 'primary',
+  politicaAtual,
+  brilhoLogo = true,
+} = Astro.props;
+
+const CLASSES = {
+  primary: {
+    logo: 'h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-primary)/0.5)]',
+    atual: 'text-brand-primary font-semibold transition-colors text-sm inline-flex items-center gap-1 min-h-11',
+    coracao: 'text-brand-primary/50 text-xs',
+  },
+  accent: {
+    logo: 'h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgb(var(--brand-accent)/0.5)]',
+    atual: 'text-brand-accent font-semibold transition-colors text-sm inline-flex items-center gap-1 min-h-11',
+    coracao: 'text-brand-accent/50 text-xs',
+  },
+};
+const c = CLASSES[realce];
+const classeLogo = brilhoLogo
+  ? c.logo
+  : 'h-24 lg:h-32 w-auto object-contain transition-transform duration-300 group-hover:scale-105';
+const classeFooter = {
+  base: 'bg-brand-base pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden',
+  surface: 'bg-brand-surface pt-16 pb-8 border-t border-gray-800 relative z-10 overflow-hidden',
+  'surface-sem-borda': 'bg-brand-surface pt-16 pb-8 relative z-10 overflow-hidden',
+}[fundo];
+// Alvo de toque de 44 px de altura nos links e nos ícones sociais (WP-22); a <ul> aperta o espaço
+// entre itens para compensar.
+const link = `inline-flex items-center min-h-11 text-gray-400 hover:text-white hover:font-bold transition-all duration-300 text-sm ${FOCO}`;
+const social =
+  `w-11 h-11 rounded-full border border-gray-700 flex items-center justify-center hover:bg-gray-700 hover:text-white transition-all ${FOCO}`;
+
+const institucional = [
+  { href: `${prefixoAncora}#sobre`, chave: 'nav_about' },
+  { href: `${prefixoAncora}#portfolio`, chave: 'footer_port' },
+  { href: `${prefixoAncora}#contato`, chave: 'footer_cont' },
+] as const;
+
+const apps = [
+  { caminho: 'lottoexpert.html', nome: 'LottoExpert' },
+  { caminho: 'topowalk.html', nome: 'TopoWalk' },
+  { caminho: 'poleposition.html', nome: 'Pole Position' },
+  { caminho: 'eclipsego.html', nome: 'EclipseGo' },
+];
+
+const politicas = [
+  { caminho: 'lottoexpert-privacy.html', icone: 'shield-halved', chave: 'footer_priv_lotto' },
+  { caminho: 'lottoexpert-terms.html', icone: 'file-contract', chave: 'footer_terms_lotto' },
+  { caminho: 'poleposition-privacy.html', icone: 'shield-halved', chave: 'footer_priv_pole' },
+  { caminho: 'topowalk-privacy.html', icone: 'shield-halved', chave: 'footer_priv_topo' },
+  { caminho: 'eclipsego-privacy.html', icone: 'shield-halved', chave: 'footer_priv_eclipse' },
+] as const;
+
+const ano = new Date().getFullYear();
+---
+<footer id="contato" class={classeFooter}>
+  <div class="container mx-auto px-6 md:px-12 relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+      <!-- Marca -->
+      <div class="md:col-span-2 lg:col-span-2">
+        <a {...atributosLink(lang, inicio)} class={`inline-block mb-6 group ${FOCO}`}>
+          <Image src={logo} alt="GHF Software Logo" class={classeLogo} height={128} densities={[1, 2]} />
+        </a>
+        <p class="text-gray-400 max-w-sm mb-6">{t(lang, 'footer_desc')}</p>
+        <div class="flex items-center gap-4 text-gray-400">
+          <a href="mailto:support@ghfsoftware.com" class={social} title="Email" aria-label="Email">
+            <Icon nome="envelope" />
+          </a>
+          {redes.youtube && (
+            <a
+              href={redes.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              class={social}
+              title="YouTube"
+              aria-label="YouTube"
+            >
+              <Icon conjunto="brands" nome="youtube" />
+            </a>
+          )}
+          {redes.instagram && (
+            <a
+              href={redes.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class={social}
+              title="Instagram"
+              aria-label="Instagram"
+            >
+              <Icon conjunto="brands" nome="instagram" />
+            </a>
+          )}
+          {redes.tiktok && (
+            <a
+              href={redes.tiktok}
+              target="_blank"
+              rel="noopener noreferrer"
+              class={social}
+              title="TikTok"
+              aria-label="TikTok"
+            >
+              <Icon conjunto="brands" nome="tiktok" />
+            </a>
+          )}
+          {redes.facebook && (
+            <a
+              href={redes.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              class={social}
+              title="Facebook"
+              aria-label="Facebook"
+            >
+              <Icon conjunto="brands" nome="facebook" />
+            </a>
+          )}
+        </div>
+      </div>
+
+      <!-- Institucional -->
+      <div>
+        <h3 class="text-white font-semibold mb-6">{t(lang, 'footer_inst')}</h3>
+        <ul class="space-y-2">
+          {institucional.map((i) => <li><a {...atributosLink(lang, i.href)} class={link}>{t(lang, i.chave)}</a></li>)}
+        </ul>
+      </div>
+
+      <!-- Aplicativos -->
+      <div>
+        <h3 class="text-white font-semibold mb-6">{t(lang, 'footer_apps')}</h3>
+        <ul class="space-y-2">
+          {
+            apps.map((a) =>
+              a.caminho === appAtual ? (
+                <li>
+                  <a {...linkPagina(lang, a.caminho)} aria-current="page" class={`${c.atual} ${FOCO}`}>
+                    <Icon nome="chevron-right" class="text-xs" /> {a.nome}
+                  </a>
+                </li>
+              ) : (
+                <li><a {...linkPagina(lang, a.caminho)} class={link}>{a.nome}</a></li>
+              ),
+            )
+          }
+        </ul>
+      </div>
+
+      <!-- Políticas -->
+      <div>
+        <h3 class="text-white font-semibold mb-6">{t(lang, 'footer_transp')}</h3>
+        <ul class="space-y-2">
+          {
+            politicas.map((p) =>
+              p.caminho === politicaAtual ? (
+                <li>
+                  <a
+                    {...linkPagina(lang, p.caminho)}
+                    aria-current="page"
+                    class={`text-brand-primary hover:text-white hover:font-bold transition-all duration-300 text-sm inline-flex items-center gap-2 min-h-11 ${FOCO}`}
+                  >
+                    <Icon nome={p.icone} class="text-brand-primary text-xs" />
+                    <span>{t(lang, p.chave)}</span>
+                  </a>
+                </li>
+              ) : (
+                <li>
+                  <a {...linkPagina(lang, p.caminho)} class={`${link} gap-2`}>
+                    <Icon nome={p.icone} class="text-gray-400 text-xs" />
+                    <span>{t(lang, p.chave)}</span>
+                  </a>
+                </li>
+              ),
+            )
+          }
+        </ul>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="pt-8 border-t border-gray-800/80 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-sm text-gray-400">
+        &copy; <span id="year">{ano}</span> <span>{t(lang, 'footer_rights')}</span>
+      </p>
+      <p class="text-sm text-gray-400 flex items-center gap-2">
+        <span>{t(lang, 'footer_dev')}</span>
+        <Icon nome="heart" class={c.coracao} />
+        <span>{t(lang, 'footer_dev2')}</span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Ano corrente (o do build fica como texto sem JS).
+  const ano = document.getElementById('year');
+  if (ano) ano.textContent = String(new Date().getFullYear());
+</script>
