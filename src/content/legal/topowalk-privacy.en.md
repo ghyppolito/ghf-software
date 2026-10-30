@@ -1,9 +1,9 @@
 ---
-lastUpdated: "2026-09"
+lastUpdated: "2026-10"
 ---
 # Privacy Policy — TopoWalk
 
-**Last updated:** September 2026
+**Last updated:** October 2026
 
 This Privacy Policy describes how the **TopoWalk** application, developed by **GHF Software**, handles user information. By using TopoWalk, you agree to the terms described in this document.
 
@@ -272,13 +272,13 @@ When requesting PDF report generation, the application:
 
 1. Creates the PDF file temporarily in the app's **private cache directory** (`cacheDir`), accessible only by the app itself.
 2. Shares the file via `FileProvider` with the app of your choice (WhatsApp, email, Google Drive, etc.) using Android's standard mechanism.
-3. The file remains in the cache until the operating system performs automatic cleanup or the user clears app data.
+3. The file remains in the cache until it is deleted: the app removes export files older than 24 hours on each new DXF, CSV, GeoJSON, KML, or GPX export, and the operating system may also clear the cache automatically. The user can also clear the app data.
 
 TopoWalk has no access to the destination chosen by the user for sharing — this operation is managed entirely by the Android system and the receiving application.
 
 ### 8.3 Exporting Files
 
-Users can export measurements in **GeoJSON, KML, and GPX** (from version 4.0) and in **DXF and CSV** (from version 4.1). These files are generated locally in the device's cache and shared in the same way as the PDF (section 8.2). The app has no access to the sharing destination.
+Users can export measurements in **GeoJSON, KML, and GPX** (from version 4.0) and in **DXF and CSV** (from version 4.1). These files are generated locally in the device's cache and shared in the same way as the PDF (section 8.2), including how long they remain in the cache: files older than 24 hours are deleted by the app on the next export. The app has no access to the sharing destination.
 
 CSV export generates **two files** — one with points and another with segments —, shared together. DXF contains, in addition to geometry, the latitude and longitude of the first survey point, recorded as text inside the file to allow positioning the drawing; it is the same coordinate data carried by other formats.
 
