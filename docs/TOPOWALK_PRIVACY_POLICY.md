@@ -1,6 +1,6 @@
 # Política de Privacidade — TopoWalk
 
-**Última atualização:** setembro de 2026
+**Última atualização:** outubro de 2026
 
 Esta Política de Privacidade descreve como o aplicativo **TopoWalk**, desenvolvido por **GHF Software**, trata as informações do usuário. Ao utilizar o TopoWalk, você concorda com os termos descritos neste documento.
 
@@ -151,7 +151,7 @@ O TopoWalk **não coleta, não armazena remotamente e não transmite**:
 - Localização em segundo plano ou histórico de localização fora do uso ativo do app
 - ID de publicidade (o aplicativo remove explicitamente esta permissão)
 
-Duas observações de precisão:
+Três observações de precisão:
 
 1. **Feedback por e-mail.** Se o usuário voluntariamente nos escrever pelo botão "Enviar feedback" (seção 2.6), passamos a conhecer o endereço de e-mail que ele escolheu usar e o conteúdo que ele escreveu. Isso depende sempre de uma ação explícita do usuário e não ocorre em nenhum outro fluxo do aplicativo.
 2. **Migração do TopoWalk Pro (seção 2.11).** Esse recurso envia ao nosso servidor um identificador embaralhado do aparelho e um identificador de sessão anônimo. Nenhum dos dois carrega nome, e-mail ou conta, e nenhum deles é usado fora dessa finalidade. É a **única** situação em que o aplicativo guarda algo num servidor nosso.
@@ -290,13 +290,13 @@ Ao solicitar a geração de um relatório PDF, o aplicativo:
 
 1. Cria o arquivo PDF temporariamente no **diretório de cache privado** do app (`cacheDir`), acessível apenas pelo próprio aplicativo.
 2. Compartilha o arquivo via `FileProvider` com o aplicativo de sua escolha (WhatsApp, e-mail, Google Drive, etc.) usando o mecanismo padrão do Android.
-3. O arquivo permanece no cache até que o sistema operacional realize a limpeza automática ou o usuário limpe os dados do app.
+3. O arquivo permanece no cache até ser apagado: o app remove os arquivos de exportação com mais de 24 horas a cada nova exportação de DXF, CSV, GeoJSON, KML ou GPX, e o sistema operacional também pode limpar o cache automaticamente. O usuário pode ainda limpar os dados do app.
 
 O TopoWalk não tem acesso ao destino escolhido pelo usuário para o compartilhamento — essa operação é gerenciada inteiramente pelo sistema Android e pelo aplicativo receptor.
 
 ### 8.3 Exportação de Arquivos
 
-O usuário pode exportar medições em **GeoJSON, KML e GPX** (a partir da versão 4.0) e em **DXF e CSV** (a partir da versão 4.1). Esses arquivos são gerados localmente no cache do dispositivo e compartilhados da mesma forma que o PDF (seção 8.2). O app não tem acesso ao destino do compartilhamento.
+O usuário pode exportar medições em **GeoJSON, KML e GPX** (a partir da versão 4.0) e em **DXF e CSV** (a partir da versão 4.1). Esses arquivos são gerados localmente no cache do dispositivo e compartilhados da mesma forma que o PDF (seção 8.2), inclusive quanto à permanência no cache: arquivos com mais de 24 horas são apagados pelo app na exportação seguinte. O app não tem acesso ao destino do compartilhamento.
 
 A exportação em CSV gera **dois arquivos** — um com os pontos e outro com os segmentos —, compartilhados juntos. O DXF contém, além da geometria, a latitude e a longitude do primeiro ponto do levantamento, gravadas como texto dentro do arquivo para permitir posicionar o desenho; é o mesmo dado de coordenada que os demais formatos já carregam.
 
@@ -380,7 +380,7 @@ Recomendamos que você revise esta política periodicamente.
 
 Dúvidas, solicitações ou comentários sobre esta Política de Privacidade podem ser enviados para:
 
-**GHF Software**
+**GHF Software**\
 E-mail: **support@ghfsoftware.com**
 
 ---
