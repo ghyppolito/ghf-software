@@ -2,6 +2,7 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import { satteri } from '@astrojs/markdown-satteri';
 import tailwindcss from '@tailwindcss/vite';
+import semPolyfill from './src/styles/sem-polyfill.mjs';
 import {
   envolveTabelaLegal,
   idDosTitulosLegais,
@@ -80,8 +81,9 @@ export default defineConfig({
   vite: {
     // Tailwind 4 pelo plugin do Vite (ADR-008 §1): sem PostCSS nem autoprefixer; prefixo e
     // minificação pelo Lightning CSS. O ponto de entrada e a fonte das classes estão em
-    // src/styles/global.css (`source(none)` + `@source`, ADR-008 §3).
-    plugins: [tailwindcss()],
+    // src/styles/global.css (`source(none)` + `@source`, ADR-008 §3). `semPolyfill` tira do CSS
+    // gerado os polyfills do Tailwind para navegador abaixo do piso (src/styles/sem-polyfill.mjs).
+    plugins: [tailwindcss(), semPolyfill()],
     build: {
       // Piso de navegador (D24, ADR-008 §4): Safari 16.4, Chrome 111, Firefox 128. Alvo explícito
       // do minificador de CSS (lightningcss): o Safari 16.4 a 17 ainda exige
