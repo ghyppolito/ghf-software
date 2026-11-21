@@ -4,9 +4,9 @@ titulo: A home e as landings de app seguem o sistema visual do handoff
 area: design
 status: doing
 depende_de: [WP-06, WP-08]
-adr: []
+adr: [ADR-001, ADR-004, ADR-006, ADR-007, ADR-008]
 spec: docs/AVALIACAO.md
-decisoes: [D4, D11, D12]
+decisoes: [D4, D11, D12, D24, D25, D26, D27]
 tamanho: L
 risco: medio
 visual: true
@@ -15,9 +15,9 @@ branch: feat/wp-10-redesign
 
 # WP-10 — A home e as landings de app seguem o sistema visual do handoff
 
-**Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** LOGO-ANO-E-FUNDO-ESCURO-01, ECLIPSE-ICONE-OFFLINE-01 (ícone do card "offline" do EclipseGo, D21), NAV-MENU-ALVO-TOQUE-01, HOME-TECH-CURSOR-01, POLE-PRINTS-2X-01 (do WP-12) · landings TopoWalk, Pole Position e EclipseGo esperam o WP-19 (rodada 3)
+**Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** ECLIPSE-ICONE-OFFLINE-01 (ícone do card "offline" do EclipseGo, D21), NAV-MENU-ALVO-TOQUE-01, HOME-TECH-CURSOR-01, POLE-PRINTS-2X-01 (do WP-12) · landings TopoWalk, Pole Position e EclipseGo esperam o WP-19 (rodada 3)
 
-**Objetivo:** tokens do handoff em `tailwind.config.mjs`; home com hierarquia por app (um
+**Objetivo:** tokens do handoff em `src/styles/tokens.css` (`@theme`, ADR-008); home com hierarquia por app (um
 toque até o app certo); as 4 landings com a mesma anatomia (hero + CTA → 3–5 funcionalidades
 com imagem real → prova → privacidade em uma frase → FAQ → CTA); página legal legível (largura
 de leitura, sumário, data no topo).
@@ -27,7 +27,10 @@ de leitura, sumário, data no topo).
 **Ler antes:** `design/README.md` (mapa do handoff) e só os componentes do handoff que a
 página usa; `docs/AVALIACAO.md` §3.3.
 
-**Arquivos-alvo:** `tailwind.config.mjs`, `src/components/**`, `src/layouts/**`,
+**Arquivos-alvo:** fatia 1: `package.json`, `package-lock.json`, `astro.config.mjs`,
+`postcss.config.mjs` e `tailwind.config.mjs` (removidos), `src/styles/**`,
+`tools/orcamento-lighthouse.json`, e as linhas que citam `tailwind.config.mjs` como origem do tema
+(`CLAUDE.md:142`, `docs/ARQUITETURA.md:19`). Todas as fatias: `src/components/**`, `src/layouts/**`,
 `src/pages/**` (pt e en), `src/assets/img/**` (imagens novas, pelo `astro:assets`; ADR-006 e
 `check_site.py` §13 proíbem imagem exibida em `public/`). O convite fica de fora (ver "Plano").
 
@@ -65,36 +68,45 @@ merge revertível (`git revert -m 1`). O CI roda pelo PR rascunho #37 da integra
 que a integração recebe o merge de `feat/wp-10-redesign`. Para ter CI a cada fatia, abra um PR
 rascunho `feat/wp-10-redesign → develop` com o título `[NÃO FAZER MERGE — D13]`.
 
-**Fora do WP-10: o convite** (`CONVITE-REDESIGN-CONTRATO-01`). O WP-10 entra no deploy único, e a
+**Fora do WP-10: o convite** (`CONVITE-REDESIGN-CONTRATO-01`, agora no WP-24). O WP-10 entra no deploy único, e a
 D13 congela os bytes do convite até esse deploy (`tools/contrato.sha256`, conferido no `pr.yml` e
-no `deploy.yml`). Um convite redesenhado aqui reprova o próprio deploy. O redesenho vira um WP novo
-(`/novo-wp`), que depende do WP-23 e sai num `/release` próprio depois do deploy único. Esse WP tem
-o parse de `?d=` intocado, os `og:*` preservados e o teste com link real.
+no `deploy.yml`). Um convite redesenhado aqui reprova o próprio deploy. O redesenho é o WP-24
+(resposta 6, 2026-11-21), que depende do WP-23 e sai num `/release` próprio depois do deploy único,
+com o parse de `?d=` intocado, os `og:*` preservados e o teste com link real.
 
 **Fora do WP-10 também:** o card "em breve" (`GHF Kit v3` §5), porque nenhum app está em breve. E o
 sinal visual do link de fallback de língua (`LINK-FALLBACK-IDIOMA-SEM-SINAL-01`), porque hoje toda
-página tem pt e en e nenhum link cai na D23. Ele volta no primeiro WP que publica uma língua a mais
-(WP-16).
+página tem pt e en e nenhum link cai na D23. O achado foi para o WP-16, o primeiro que publica uma
+língua a mais.
 
-**Regra de copy em todas as fatias.** A copy do export é placeholder. Cada frase vem do
+**Regra de copy em todas as fatias (D25, resposta 2).** A copy do export é placeholder. Cada frase vem do
 dicionário publicado (`src/i18n/*.ts`), do README/ASO do app ou de uma resposta do usuário. Frase
 sem origem fica fora da página. Quando a página e a ficha da Play divergem, vale a ficha (D19 a).
 Rótulo de interface (sumário, "ver todas", seletor) vem de `content/i18n.js` do export. O en de
 cada frase nova é tradução fiel, na mesma fatia (ADR-007). Uma fatia sem en não fecha.
+**Alerta:** o §5 do `check_site.py` (`tools/check_site.py:195`) reprova também a negação. "ele não
+aumenta suas chances reais de ganhar" (`../lotto-expert/docs/LottoExpertContent.md:389`) tem origem e
+reprova a página se copiado literal; o mesmo vale para "doesn't increase your chances" (`:198`). O
+padrão não se afrouxa. Se a única fonte da frase dispara o §5, a redação é pergunta ao usuário.
+**Imagens (D26, resposta 3):** uma captura real do app por funcionalidade em destaque, 3 a 5 por
+landing, fornecida pelo usuário, em `src/assets/img/<app>/`. Sem mockup e sem ilustração do export.
+**768 (D27, resposta 4):** home e landing usam o fluido do export; nav e footer, o ramo `t`. A
+prova é o checklist de navegador.
 
 ### Fatias
 
-1. **Stack e tokens.** Se a D24 for (A): ADR-008 substitui o ADR-003. O Tailwind 4 entra pelo
+1. **Stack e tokens** (D24 A, ADR-008, que substitui o ADR-003). O Tailwind 4 entra pelo
    `@tailwindcss/vite`, e os tokens ficam em `@theme`. Os tokens vêm do `GHF Kit v3` (inclusive
    `--border-strong` #66738D) e da D11 (`--success` e `--success-surface`). Também entram
    `--app-acc`, `--app-acc-edge` e `--app-acc-light` por app e os tokens de papel da legal. Tudo
    fica num arquivo só, `src/styles/tokens.css`. Os temas antigos (`[data-tema=…]` em `global.css`)
    ficam como camada de legado até a fatia 10, para que as páginas ainda não redesenhadas
-   continuem montando. O `cssTarget` e o `orcamento-lighthouse.json` se ajustam ao piso novo. Se a
-   D24 for (B), a fatia fica só nos tokens, sobre o Tailwind 3.
-   **Achados:** `TAILWIND3-NPM-AUDIT-01` (D24 A), `SUCCESS-DOIS-VALORES-01`,
+   continuem montando. O `cssTarget` vai ao piso novo (Safari 16.4, Chrome 111, Firefox 128) e o
+   `orcamento-lighthouse.json` é remedido. A paridade das páginas ainda não redesenhadas não é
+   critério (ADR-008 §5); o build, o `check_site.py --raiz dist` e o html-validate são.
+   **Achados:** `TAILWIND3-NPM-AUDIT-01` (`npm audit` sem os 7 avisos), `SUCCESS-DOIS-VALORES-01`,
    `HOME-BOTAO-EMERALD-CONTRASTE-01` (o esmeralda sai do sistema, brief §10).
-   **Bloqueio:** D24. **Copy:** nenhuma.
+   **Bloqueio:** nenhum. **Copy:** nenhuma.
 2. **Casca: `Base`, `Nav`, `Footer`, `SeletorIdioma`, `SugestaoIdioma` e um `Logo.astro` novo.**
    Ramos 360, 768 e 1280 de `Site Nav` e `Site Footer`. Seletor segmentado PT/EN. Foco visível e
    alvos de 44 px. O logo fica num componente só. Até existir a arte, ele usa o PNG atual. Pela
@@ -127,29 +139,29 @@ cada frase nova é tradução fiel, na mesma fatia (ADR-007). Uma fatia sem en n
    `FreemiumConfig.kt`), `LOTTO-CONTRASTE-AA-01` (violeta), `LOTTO-EN-ROTULOS-PT-01`,
    `LOTTO-COPY-VANTAGEM-01`, `LOTTO-PT-HTML-DIVERGE-01`, `LANDINGS-RESIDUO-RODADA-2-01`, a parte
    LottoExpert de `EXPORT-COPY-SEM-ORIGEM-01` e de `LANDINGS-URL-E-PLAY-01`.
-   **Bloqueio para fechar (não para começar):** a resposta de copy do LottoExpert e as capturas
-   das funcionalidades destacadas. O repositório só tem o mockup do hero e os logos das loterias.
+   **Bloqueio para fechar (não para começar):** a copy que falte na fonte (D25) e as capturas
+   das funcionalidades destacadas (D26). O repositório só tem o mockup do hero e os logos das loterias.
    Quem desbloqueia: o usuário.
 6. **Home.** Os cards seguem a ordem do brief §10 e a regra da D12. A lista "ver todas" fica vazia
    enquanto os 4 apps forem destaque. Cada app em `apps.ts` ganha um campo de data da última
    atualização, com comentário de origem (tag de release no repositório do app).
    **Achados:** `INDEX-LOTTO-DESC-DIVERGE-01`, `HOME-ALT-DESCREVE-FUNCIONALIDADE-01`,
    `HOME-STACK-SELOS-CONTRASTE-01`, `DESTAQUE-LIMIARES-INVENTADOS-01`.
-   **Bloqueio:** a resposta de copy (texto do card do LottoExpert) e a decisão do 768. Quem
-   desbloqueia: o usuário. O WP-19 não bloqueia a home.
+   **Bloqueio:** o texto do card do LottoExpert, se a fonte não tiver (D25). O 768 está decidido
+   (D27). Quem desbloqueia: o usuário. O WP-19 não bloqueia a home.
 7. **TopoWalk** (pt e en; as outras línguas são do WP-18). **Achados:** `TOPO-PT-HTML-DIVERGE-01`,
    `TOPO-CONTRASTE-AA-01`, a parte TopoWalk de `LANDINGS-URL-E-PLAY-01`. **Bloqueio:** WP-19
-   (checklist) e as 4 capturas. Quem desbloqueia: o usuário.
+   (checklist) e as 4 capturas (D26). Quem desbloqueia: o usuário.
 8. **Pole Position.** **Achados:** `POLE-PT-HTML-DIVERGE-01` (vale o que a política do app diz
    sobre o Firebase), `POLE-EN-ROTULOS-PT-01`, `POLE-PRINTS-2X-01`, `POLE-MOCKUP-CURSOR-01`.
-   **Bloqueio:** WP-19, 2 capturas e as capturas em 2× para `POLE-PRINTS-2X-01`. Quem desbloqueia:
+   **Bloqueio:** WP-19, 2 capturas (D26) e as capturas em 2× para `POLE-PRINTS-2X-01`. Quem desbloqueia:
    o usuário. O preço e a faixa etária vêm da ficha pública da Play, lidos como na D17, e não
    bloqueiam.
 9. **EclipseGo.** **Achados:** `ECLIPSE-ICONE-OFFLINE-01` e `ECLIPSE-ICONE-WIFI-SLASH-01` (o ícone
    de `Landing App?app=eclipse`; ícone de fora do FA entra com a licença ao lado),
    `ECLIPSE-EN-ROTULOS-PT-01`, a parte EclipseGo de `EXPORT-COPY-SEM-ORIGEM-01` ("Sem backend" e
    "Nenhuma chamada de rede" só entram se o README do app disser). **Bloqueio:** WP-19 e 2
-   capturas. Quem desbloqueia: o usuário.
+   capturas (D26). Quem desbloqueia: o usuário.
 10. **Limpeza e aceite.** Saem a camada de legado de `global.css` e os temas `[data-tema]`. O grep
     de tokens fica vazio. Entram a tabela de contraste do `site-ux`, o Lighthouse de
     acessibilidade ≥ 95 e o checklist de navegador (todas as páginas, 360/768/1280, pt e en).
@@ -159,6 +171,9 @@ fecha com as respostas. A 6 vem depois da 5. As fatias 7 a 9 esperam o WP-19. A 
 WP-10 só fica `done` com a 9, e o deploy único (D13) espera o WP-10. Logo, o WP-19 segura o deploy
 único.
 
-**Logo** (`LOGO-ANO-E-FUNDO-ESCURO-01`; recomendação, à espera da resposta do usuário). O PNG atual fica no `Logo.astro`. A arte nova clara e
-escura, com "desde 2004", vai para a sessão do usuário no Claude Design do WP-20 (D16), que já
-produz as imagens da marca. Esse achado deixa de bloquear o WP-10.
+**Logo** (resposta 5 do usuário, 2026-11-21; decisão de execução, sem linha D). O PNG atual
+(`GHFSoftware.png`) fica no `Logo.astro` da fatia 2; o agente não faz arte nova. A arte nova clara e escura, com "desde 2004", vai para a sessão do usuário no Claude Design
+do WP-20 (D16); `LOGO-ANO-E-FUNDO-ESCURO-01` foi para o WP-20 e não bloqueia o WP-10.
+
+**Respostas do usuário (2026-11-21, "Segue o recomendado").** As seis perguntas do veredito ficam na
+opção (A): 1 D24, 2 D25, 3 D26, 4 D27, 5 logo (acima), 6 convite no WP-24.

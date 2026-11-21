@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**23 WPs** · 15 concluídos · 1 em andamento
+**24 WPs** · 15 concluídos · 1 em andamento
 
 ## Sequência recomendada
 
@@ -46,7 +46,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-07](wps/WP-07-stack-com-build-spike.md) | O site tem build que preserva as URLs contratuais e publica no Pages por Actions | infra | L | alto | 🖥️ | WP-05 | ADR-001, ADR-002 | `done` |
 | [WP-08](wps/WP-08-layout-e-componentes-unicos.md) | As 10 páginas usam um layout, componentes únicos e rota por idioma | landing | L | alto | 🖥️ | WP-07 | ADR-001, ADR-002, ADR-003 | `done` |
 | [WP-09](wps/WP-09-legal-como-fonte-unica.md) | O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência | legal | M | alto |  | WP-08 | ADR-004 | `done` |
-| [WP-10](wps/WP-10-redesign-com-o-handoff.md) | A home e as landings de app seguem o sistema visual do handoff | design | L | medio | 🖥️ | WP-06, WP-08 | — | `doing` |
+| [WP-10](wps/WP-10-redesign-com-o-handoff.md) | A home e as landings de app seguem o sistema visual do handoff | design | L | medio | 🖥️ | WP-06, WP-08 | ADR-001, ADR-004, ADR-006, ADR-007, ADR-008 | `doing` |
 | [WP-11](wps/WP-11-seo-tecnico.md) | Buscadores leem sitemap, canonical, hreflang e dados estruturados de cada página | seo | M | medio | 🖥️ | WP-08 | ADR-005 | `done` |
 | [WP-12](wps/WP-12-performance.md) | Toda página pontua 90 ou mais nas quatro categorias do Lighthouse mobile | seo | L | medio | 🖥️ | WP-08 | ADR-006 | `done` |
 | [WP-13](wps/WP-13-medicao.md) | O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade | infra | M | medio | 🖥️ | WP-08 | — | `todo` |
@@ -60,6 +60,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-21](wps/WP-21-copy-de-compartilhamento-da-ficha-da-play.md) | Title e description de compartilhamento vêm da ficha da Play | landing | M | baixo |  | WP-11 | — | `done` |
 | [WP-22](wps/WP-22-acessibilidade-e-i18n-sem-redesign.md) | Acessibilidade e i18n sem redesign (a11y AA, foco, `<main>`, headings, reduced-motion, contraste fora da paleta, rótulos pt na /en/) | landing | M | medio | 🖥️ | WP-12, WP-15 | ADR-003, ADR-007 | `done` |
 | [WP-23](wps/WP-23-convite-sem-terceiros.md) | O convite do bolão abre sem terceiros (pako e Inter servidos pelo site, com `<main>`) | infra | M | alto | 🖥️ | — | ADR-001, ADR-002, ADR-006 | `todo` |
+| [WP-24](wps/WP-24-convite-com-o-sistema-visual-do-handoff.md) | O convite do bolão segue o sistema visual do handoff, com o parse de `?d=` intocado | design | M | alto | 🖥️ | WP-10, WP-23 | ADR-001, ADR-006, ADR-008 | `todo` |
 
 ## Bloqueios ativos
 
