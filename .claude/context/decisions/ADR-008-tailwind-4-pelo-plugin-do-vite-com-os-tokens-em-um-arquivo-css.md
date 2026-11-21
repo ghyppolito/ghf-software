@@ -40,6 +40,30 @@ cor vive em dois lugares: `tailwind.config.mjs` (`brand.*`) e `src/styles/global
    (`tools/contrato.sha256`, D13); não usa este CSS nem este piso. Hotfix de texto legal sai de
    `master`, que segue no Tailwind 3 até o deploy único.
 
+7. **Os polyfills do Tailwind para navegador abaixo do piso saem por um plugin do Vite próprio**
+   (`src/styles/sem-polyfill.mjs`, ligado depois do `tailwindcss()` em `vite.plugins`; adendo de
+   2026-11-21, fatia 1, `CSS-V4-FALLBACKS-01`).
+   - **O que faz:** sobre o CSS de `src/styles/global.css`, antes do minificador, funde cada
+     `@supports (color: color-mix(in lab, red, red))` na regra anterior do mesmo seletor e tira o
+     `@layer properties { @supports (… margin-trim …) }`. As regras `@property` ficam; nenhuma
+     classe sai.
+   - **Por quê:** o Tailwind 4.3.5 emite os dois polyfills sempre. O `@tailwindcss/vite` não tem
+     opção, e o `@tailwindcss/postcss` fixa `polyfills` em `All` (ou `All ^ AtProperty` para CSS
+     module), sem opção do usuário. O Lightning CSS, com `targets` ou `exclude`, transpila para
+     baixo e não remove `@supports`. Os polyfills custavam 15 KB de CSS bloqueante e 0,15 s de
+     FCP na home. Aceitar e remedir o orçamento troca uma peça de build por desempenho
+     permanente, e o piso da D24 já dispensa os dois blocos.
+   - **Sinal de quebra:** chave sem par faz o build falhar (`sem-polyfill: chave sem par`). Formato
+     novo que o plugin não reconhece vira no-op e o CSS volta a crescer. O orçamento do
+     `lighthouse` só pega isso se o FCP passar do limite, então não é guarda suficiente. Fusão
+     errada de declarações não quebra o build nem o HTML: só o teste do plugin pega
+     (`SEM-POLYFILL-TESTE-01`).
+   - **Regra para upgrade do Tailwind:** a versão continua exata (§1). Quem sobe o Tailwind
+     regenera a fixture do teste com o CSS cru da versão nova (sem o plugin) e confirma três
+     coisas: o teste passa, o CSS publicado não tem nenhum dos dois marcadores, e o tamanho do CSS
+     cai como antes. Se o Tailwind passar a oferecer opção para desligar os polyfills, o plugin
+     sai no mesmo WP.
+
 ## O que isto fecha
 
 O Tailwind 3.4 e a Play CDN. Um `tailwind.config.mjs` como fonte de tema. Cor literal em
