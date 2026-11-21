@@ -6,7 +6,7 @@ status: todo
 depende_de: [WP-06, WP-08]
 adr: []
 spec: docs/AVALIACAO.md
-decisoes: [D4]
+decisoes: [D4, D11, D12]
 tamanho: L
 risco: medio
 visual: true

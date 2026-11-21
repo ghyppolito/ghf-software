@@ -204,3 +204,7 @@ Respondem a seção 9. Prevalecem sobre o que as seções 1–8 deixavam em aber
   (também uma para fundo escuro) — achado `LOGO-ANO-E-FUNDO-ESCURO-01`.
 - **Ícone do LottoExpert (trevo):** o site usa o ícone oficial como está (identidade do app na
   Play); nada além dele remete a sorte.
+- **`--success` (2026-11-21, D11):** dois tokens. `--success` = `#C5E86C` (selo "Publicado") e
+  `--success-surface` = `#DDF3A8` (estado semântico "Backup concluído").
+- **Destaque vs ver todas (2026-11-21, D12):** os limiares propostos no `GHF Kit v3` §6 valem como
+  estão — atualização nos últimos 12 meses, 4 posições de destaque, selo "Indisponível".
