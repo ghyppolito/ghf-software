@@ -233,7 +233,7 @@ prova é o checklist de navegador.
      sai; o plugin tira o mesmo tanto (12 224 bytes); `test:css` 21 de 21.
 4. **404.** `404.dc.html`, só pt, com o texto atual. **Feita em 2026-11-22** (commits 1f6c207 e 27700db; branch `feat/wp-10-fatia-4`, não enviada). `404.astro` segue `404.dc.html` da rodada 3: duas colunas a partir de 1024; lista dos 4 apps com ícone por `astro:assets`, quadradinho `bg-app-*`, link da landing e link "Privacidade" com `sr-only` do nome. Tokens no lugar de `brand.*`. A copy atual fica; o eyebrow, o h1 e os parágrafos do export ficam fora (D25). `tema="ghf"` segue porque o `Base` ainda exige a prop. Desvios do export aceitos pelo `site-ux`: `anel-foco-interno` em vez de offset +2 (a `ul` tem `overflow-hidden`), sem `scale(1.06)` no ícone, colunas em `lg` em vez de `auto-fit minmax(420px)`, `first:border-t-0` (o export tem linha dupla no topo), `loading="eager"`. Auditorias de `site-qa`, `site-ux` e `site-seo-perf`: nenhum achado alto nem médio. Medidas na 404 (Lighthouse mobile, mediana de 3): Performance 99, Acessibilidade 100, Boas práticas 100, LCP 1,80 s, CLS 0, 148 KB no total e 14 KB de imagem (os ícones somam 3,1 KB no 1x e 6,4 KB no 2x). Orçamento cumprido em todas as páginas. Fixture do sem-polyfill regenerada. `/verify` passou (`lychee` só no CI). Resta o checklist de navegador, que é do usuário.
    **Achados:** `APPS-LISTA-DUPLICADA-01`, `ORCAMENTO-404-FROUXO-01` (ambos na fatia 10). **Bloqueio:** nenhum. **Copy:** nenhuma.
-5. **Template de landing e EclipseGo** (D29: o template nasce no EclipseGo, não no LottoExpert).
+5. **Template de landing e EclipseGo** (D29: o template nasce no EclipseGo, não no LottoExpert). **Feita em 2026-11-22** (commits f59a8c7, e8bad59 e db8f931; branch `feat/wp-10-fatia-5-eclipsego`, não enviada). Nenhuma auditoria trouxe achado alto.
    Os componentes `src/components/landing/*` são os de `Landing App.dc.html` (rodada 3, `?app=eclipse`):
    hero, funcionalidades, "ver todas" (D12), prova, planos, privacidade, FAQ e CTA. O conteúdo de cada
    app tem um formato só, em `src/i18n/<app>.ts`. O link da Play vem de `src/i18n/apps.ts`. O formato e
@@ -251,9 +251,45 @@ prova é o checklist de navegador.
    `/eclipsego-privacy.html` é, e a fatia não toca nela nem no `LegalLayout`. Sem mudança de deploy
    nem de stack. **Copy:** a publicada em `src/i18n/eclipsego.ts`, o `docs/ECLIPSE_GO_README.md` e o
    `../eclipse-go/README.md` (o app não tem ASO); frase sem origem fica fora (D25).
-   **Imagens (D26):** `src/assets/img/eclipsego_phone_screen.png` e `src/assets/img/eclipsego_screenshot.png`
-   são as 2 capturas de funcionalidade (resposta do usuário em 2026-11-22: "servem pois o eclipse go não
-   teve nem tem mudança prevista, as telas são as mesmas"; D29).
+   **Imagens (D26):** `src/assets/img/eclipsego_screenshot.png` é a imagem do hero e
+   `src/assets/img/eclipsego_phone_screen.png` é a captura de funcionalidade (resposta do usuário em
+   2026-11-22: "servem pois o eclipse go não teve nem tem mudança prevista, as telas são as mesmas";
+   D29).
+   **Entregue (2026-11-22).**
+   - **Template:** `src/components/landing/*` (Landing, Secao, CtaPlay, Hero, Funcionalidades,
+     VerTodas, Prova, Planos, PlanosNiveis, PlanosGratisPro, NotaPlanos, Privacidade, Faq, CtaFinal,
+     Aviso). **Formato único:** `ConteudoApp` em `src/i18n/landing.ts`, com `exigeEspelho` (pt é a
+     base) e `itensNav`.
+   - **EclipseGo:** `eclipsego.ts` migrou para o formato. O `resumo` é cópia de `home.ts` até a
+     fatia 6. Saíram "Como funciona" e a stack.
+   - **Copy (D25 e respostas do usuário na D29):** 3 destaques, só o primeiro com captura
+     (`eclipsego_phone_screen.png`); o `eclipsego_screenshot.png` fica só no hero. A `meta` é "100%
+     offline · Android 8.0 ou superior · Grátis". O FAQ tem 4 perguntas (anos de 2017 a 2047; 139
+     eclipses em `eclipses.json`).
+   - **Achados resolvidos:** `ECLIPSE-ICONE-OFFLINE-01` e `ECLIPSE-ICONE-WIFI-SLASH-01` (o template
+     não tem card com ícone: saem por remoção); `ECLIPSE-EN-ROTULOS-PT-01` (os `alt` estão em inglês
+     e avisam que a interface é em português); as partes EclipseGo de `EXPORT-COPY-SEM-ORIGEM-01` e
+     de `LANDINGS-URL-E-PLAY-01`; `BOTAO-ATIVO-CONTRASTE-01` no EclipseGo (o ativo dá 4,80:1, medido
+     no Chrome headless pelo `site-ux`; os outros apps medem nas fatias 7 a 9).
+   - **Desvios aceitos pelo `site-ux`:** `Landing` recebe `Record<Idioma, ConteudoApp>`;
+     `exigeEspelho` tem um 3º parâmetro; `nav_planos` e `nav_gratis_pro` existem em `ui.ts`; a
+     tabela de planos fica em `<section tabindex=0 aria-label>`, exigência do html-validate;
+     `NotaPlanos` foi criado e a `Secao` ganhou props; o hero usa `wrap-break-word`, widths
+     360/560/720/1024 e `mx-auto` com `max-w-[560px]`.
+   - **Desvio de escopo (autorizado pelo usuário nesta sessão):** `tools/orcamento-lighthouse.json`
+     foi remedido para `/eclipsego.html`: 248 687 B no total e 59 262 B de imagem (o medido + 20%,
+     regra do WP-12). O arquivo está fora dos alvos da fatia, mas a doc do `lighthouse.py` manda o
+     novo número entrar no mesmo PR.
+   - **Medidas em `/eclipsego.html`:** perf 99, a11y 100, bp 100, seo 100, LCP 2,10 s, CLS 0; 202 KB
+     no total, 48 KB de imagem. A 1280x720 o CTA do hero termina em y=591 (pt) e y=576 (en) e a
+     faixa de idioma começa em 634: o CTA fica acima da dobra.
+   - **Verificação:** o `/verify` passou, menos o `lychee` (não instalado; o CI roda). A fixture do
+     sem-polyfill foi regenerada.
+   - **Achados novos:** `LANDING-ESPELHO-SEM-TESTE-01` (fatia 7), `CORONA-GLOW-ORFAO-01` (fatia 10),
+     `HERO-ASPECT-RETRATO-01` (fatias 7 e 8), `FUNC-SEM-IMAGEM-METADE-VAZIA-01` e
+     `ECLIPSE-OG-IMAGE-442-01` (WP-20), `FAQ-SINAL-ABERTO-01` e `LANDING-JSONLD-CAMPOS-01` (fatia
+     10), `HERO-H1-SEM-PALAVRA-CHAVE-01` (decisão de copy do usuário).
+   **Checklist de navegador (usuário):** ver `handoff.md`, seção 3.
    **Bloqueio:** nenhum. O EclipseGo é o único app estável; os outros três estão em evolução.
 6. **Home.** Os cards seguem a ordem do brief §10 e a regra da D12. A lista "ver todas" fica vazia
    enquanto os 4 apps forem destaque. Cada app em `apps.ts` ganha um campo de data da última
