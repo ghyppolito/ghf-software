@@ -31,6 +31,7 @@ type TextosHome = {
   play_curto: string;
   /** `aria-label` do Play: `{app}` vira o nome do app */
   play_rotulo: string;
+  /** rótulo da data da release do app no card; não é o `rotuloData` de idiomas.json (revisão do documento legal, lido pelo §4) */
   atualizado: string;
   todos_apps: string;
   sobre_titulo: string;

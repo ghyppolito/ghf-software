@@ -12,10 +12,13 @@
 // - `clamp` e tamanhos em px literais do export, sem token do Kit (LITERAIS-SEM-TOKEN-HOME-01); a
 //   cor é sempre token.
 // - `id="portfolio"` (não `apps`, como no export): Nav, 404 e landings apontam `/#portfolio`.
+// - Sobre e Privacidade são duas regiões (`<section>` com `aria-labelledby`) num `<div id="sobre">`
+//   que só faz a grade (fatia 10a, SOBRE-REGIAO-ENGLOBA-PRIVACIDADE-01): o `#sobre` fica no
+//   invólucro com o padding, para o salto da nav pousar onde pousava.
 import { Image } from 'astro:assets';
 import { home } from '../i18n/home';
 import { eclipsego } from '../i18n/eclipsego';
-import { apps, ORDEM_APPS, particionarApps, hojeDoBuild, dataCurta, type ChaveApp } from '../i18n/apps';
+import { apps, ORDEM_APPS, COR_APP, particionarApps, hojeDoBuild, dataCurta, type ChaveApp } from '../i18n/apps';
 import { t } from '../i18n/ui';
 import { link, type Idioma } from '../i18n/idiomas';
 import { iconesApps } from '../assets/icones-apps';
@@ -37,14 +40,6 @@ const resumos: Record<ChaveApp, { tag: string; curta: string }> = {
   eclipsego: eclipsego[lang].resumo,
 };
 
-// Classe inteira literal: o Tailwind não detecta concatenação.
-const cor: Record<ChaveApp, { faixa: string; seta: string }> = {
-  lottoexpert: { faixa: 'bg-app-lotto', seta: 'text-app-lotto' },
-  topowalk: { faixa: 'bg-app-topo', seta: 'text-app-topo' },
-  poleposition: { faixa: 'bg-app-pole', seta: 'text-app-pole' },
-  eclipsego: { faixa: 'bg-app-eclipse', seta: 'text-app-eclipse' },
-};
-
 const { destaque, resto } = particionarApps(hojeDoBuild());
 const privacidade = t(lang, 'footer_privacy');
 ---
@@ -64,7 +59,7 @@ const privacidade = t(lang, 'footer_privacy');
           const r = resumos[c];
           return (
             <article class="relative flex flex-col gap-2.5 overflow-hidden rounded-card border border-border bg-surface p-4 hover:border-border-strong hover:bg-raised">
-              <span aria-hidden="true" class={`absolute inset-x-0 top-0 h-[3px] ${cor[c].faixa}`} />
+              <span aria-hidden="true" class={`absolute inset-x-0 top-0 h-[3px] ${COR_APP[c].fundo}`} />
               <div class="flex items-center gap-3">
                 <Image src={iconesApps[c]} alt="" width={44} height={44} densities={[1, 2]} loading="eager" class="size-11 flex-none rounded-[10px] object-cover bg-raised" />
                 <div class="flex-1 min-w-0">
@@ -88,7 +83,7 @@ const privacidade = t(lang, 'footer_privacy');
                     {x.atualizado}: <time datetime={a.atualizadoEm}>{dataCurta(a.atualizadoEm, lang)}</time>
                   </span>
                 </div>
-                <span aria-hidden="true" class={`hidden min-[43.75rem]:inline text-[14px] font-semibold ${cor[c].seta}`}>→</span>
+                <span aria-hidden="true" class={`hidden min-[43.75rem]:inline text-[14px] font-semibold ${COR_APP[c].texto}`}>→</span>
               </div>
             </article>
           );
@@ -99,13 +94,13 @@ const privacidade = t(lang, 'footer_privacy');
   <VerTodasApps lang={lang} chaves={resto} />
 </section>
 
-<section id="sobre" aria-labelledby="h-sobre" class="max-w-[1216px] mx-auto px-[clamp(16px,2.6vw,32px)] py-[clamp(48px,7vw,96px)] grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-[clamp(28px,4vw,48px)]">
-  <div class="flex flex-col gap-3">
+<div id="sobre" class="max-w-[1216px] mx-auto px-[clamp(16px,2.6vw,32px)] py-[clamp(48px,7vw,96px)] grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-[clamp(28px,4vw,48px)]">
+  <section aria-labelledby="h-sobre" class="flex flex-col gap-3">
     <h2 id="h-sobre" class="text-[length:clamp(22px,2.4vw,28px)] leading-[1.25] font-bold text-text">{x.sobre_titulo}</h2>
     <p class="text-body text-text-2 text-pretty" set:html={x.about_p1Html} />
-  </div>
-  <div class="flex flex-col gap-3">
-    <h2 class="text-[length:clamp(22px,2.4vw,28px)] leading-[1.25] font-bold text-text">{privacidade}</h2>
+  </section>
+  <section aria-labelledby="h-privacidade" class="flex flex-col gap-3">
+    <h2 id="h-privacidade" class="text-[length:clamp(22px,2.4vw,28px)] leading-[1.25] font-bold text-text">{privacidade}</h2>
     <ul class="flex flex-wrap gap-x-5">
       {
         ORDEM_APPS.map((c) => (
@@ -117,5 +112,5 @@ const privacidade = t(lang, 'footer_privacy');
         ))
       }
     </ul>
-  </div>
-</section>
+  </section>
+</div>

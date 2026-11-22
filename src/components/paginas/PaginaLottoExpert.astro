@@ -8,7 +8,7 @@ import LottoExpert from '../LottoExpert.astro';
 import { lottoexpert } from '../../i18n/lottoexpert';
 import { rota, type Idioma } from '../../i18n/idiomas';
 import JsonLd from '../JsonLd.astro';
-import { mobileApplication } from '../../i18n/apps';
+import { apps, mobileApplication } from '../../i18n/apps';
 
 interface Props {
   lang: Idioma;
@@ -28,9 +28,9 @@ const home = rota(lang, 'index.html');
   caminho="lottoexpert.html"
   tema="lottoexpert"
   app="lottoexpert"
-  favicon="/assets/lottoexpert_favicon_v3.png"
+  favicon={apps.lottoexpert.icone}
 >
-  <JsonLd slot="jsonld" dados={mobileApplication('lottoexpert')} />
+  <JsonLd slot="jsonld" dados={mobileApplication('lottoexpert', lang, x.description)} />
   <Nav
     lang={lang}
     caminho="lottoexpert.html"

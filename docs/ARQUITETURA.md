@@ -133,7 +133,7 @@ redirecionamento (o Android App Links não segue redirect):
 - `.github/workflows/pr.yml`, em todo PR e push para `develop`/`master`, três jobs:
   - `plano`: `gen_estado.py --check` e `tools/check_plano.py`;
   - `site`: `npm ci`, `npm run build`, `tools/check_site.py --raiz dist`, unittest das regras de
-    i18n, contrato byte a byte, html-validate e lychee sobre `dist/`;
+    i18n e da lista de apps, contrato byte a byte, html-validate e lychee sobre `dist/`;
   - `lighthouse`: build e `tools/lighthouse.py --raiz dist`.
 - `.github/workflows/deploy.yml`, em push para `master` (e à mão): build, `tools/check_site.py`,
   conferência do `public/.well-known/assetlinks.json` e do contrato byte a byte, e publicação de `dist/` no

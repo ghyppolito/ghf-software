@@ -20,7 +20,8 @@
 // "Transparência & Políticas" (as 5 políticas ficam na coluna de cada app), os ícones circulares
 // (redes em texto com seta) e "Desenvolvido com ♥ por especialistas.".
 import Logo from './Logo.astro';
-import { t } from '../i18n/ui';
+import { t, type ChaveUi } from '../i18n/ui';
+import { apps as dadosApps, ORDEM_APPS, ACENTO, COR_APP, REDES_GHF, type App } from '../i18n/apps';
 import { atributosLink, link as linkPagina, type Idioma } from '../i18n/idiomas';
 
 interface Props {
@@ -28,7 +29,7 @@ interface Props {
   /** destino do logo */
   inicio: string;
   /** canais da página (a landing de cada app aponta para os do app; canal ausente não aparece);
-   *  padrão: os da GHF. O e-mail aparece sempre. */
+   *  padrão: os da GHF (REDES_GHF). O e-mail aparece sempre. */
   redes?: { youtube?: string; instagram?: string; tiktok?: string; facebook?: string };
   /** caminho pt da landing atual: o link "Página do app" dele leva `aria-current` */
   appAtual?: string;
@@ -39,55 +40,26 @@ interface Props {
 const {
   lang,
   inicio,
-  redes = {
-    youtube: 'https://www.youtube.com/channel/UCZfKMp0qRRIEu103Vb3OGJg',
-    instagram: 'https://www.instagram.com/ghfsoftware/',
-  },
+  redes = REDES_GHF,
   appAtual,
   politicaAtual,
 } = Astro.props;
 
-// Ordem do brief §10. O quadrado é a cor do app (classe inteira literal: o Tailwind não detecta
-// concatenação).
-const apps = [
-  {
-    id: 'rodape-app-lotto',
-    nome: 'LottoExpert',
-    quadrado: 'size-2 flex-none rounded-[2px] bg-app-lotto',
+// Ordem do brief §10 e dados de src/i18n/apps.ts (fonte única, WP-10 fatia 10a). O quadrado é a
+// cor do app (COR_APP: classe inteira literal).
+const apps = ORDEM_APPS.map((c) => {
+  const a: App = dadosApps[c];
+  return {
+    id: `rodape-app-${ACENTO[c]}`,
+    nome: a.nome,
+    quadrado: `size-2 flex-none rounded-[2px] ${COR_APP[c].fundo}`,
     links: [
-      { caminho: 'lottoexpert.html', chave: 'footer_app_page' },
-      { caminho: 'lottoexpert-privacy.html', chave: 'footer_privacy' },
-      { caminho: 'lottoexpert-terms.html', chave: 'footer_terms' },
-    ],
-  },
-  {
-    id: 'rodape-app-topo',
-    nome: 'TopoWalk',
-    quadrado: 'size-2 flex-none rounded-[2px] bg-app-topo',
-    links: [
-      { caminho: 'topowalk.html', chave: 'footer_app_page' },
-      { caminho: 'topowalk-privacy.html', chave: 'footer_privacy' },
-    ],
-  },
-  {
-    id: 'rodape-app-pole',
-    nome: 'Pole Position',
-    quadrado: 'size-2 flex-none rounded-[2px] bg-app-pole',
-    links: [
-      { caminho: 'poleposition.html', chave: 'footer_app_page' },
-      { caminho: 'poleposition-privacy.html', chave: 'footer_privacy' },
-    ],
-  },
-  {
-    id: 'rodape-app-eclipse',
-    nome: 'EclipseGo',
-    quadrado: 'size-2 flex-none rounded-[2px] bg-app-eclipse',
-    links: [
-      { caminho: 'eclipsego.html', chave: 'footer_app_page' },
-      { caminho: 'eclipsego-privacy.html', chave: 'footer_privacy' },
-    ],
-  },
-] as const;
+      { caminho: a.pagina, chave: 'footer_app_page' },
+      { caminho: a.privacidade, chave: 'footer_privacy' },
+      ...(a.termos ? [{ caminho: a.termos, chave: 'footer_terms' }] : []),
+    ] as { caminho: string; chave: ChaveUi }[],
+  };
+});
 
 const redesTexto = [
   { nome: 'YouTube', href: redes.youtube },

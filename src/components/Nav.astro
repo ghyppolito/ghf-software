@@ -12,16 +12,12 @@
 // teal da marca). A folha abre e fecha sem animação. Sem JS o botão não age e os links ficam
 // escondidos abaixo de 1024 px (como antes); home e políticas continuam no rodapé.
 import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
 import Logo from './Logo.astro';
 import SeletorIdioma from './SeletorIdioma.astro';
 import { t, type ChaveUi, type Idioma } from '../i18n/ui';
 import { atributosLink, link } from '../i18n/idiomas';
 import { apps, type ChaveApp } from '../i18n/apps';
-import faviconLotto from '../assets/img/lottoexpert_favicon_v3.png';
-import faviconTopo from '../assets/img/topo-walk.png';
-import faviconPole from '../assets/img/poleposition.png';
-import faviconEclipse from '../assets/img/eclipse-go-favicon.png';
+import { iconesApps } from '../assets/icones-apps';
 
 interface Item {
   href: string;
@@ -42,14 +38,6 @@ interface Props {
 }
 
 const { lang, caminho, inicio, itens, app, current } = Astro.props;
-
-// Os mesmos PNGs do favicon da aba de cada página (Base.astro, prop `favicon`).
-const FAVICON: Record<ChaveApp, ImageMetadata> = {
-  lottoexpert: faviconLotto,
-  topowalk: faviconTopo,
-  poleposition: faviconPole,
-  eclipsego: faviconEclipse,
-};
 ---
 <header class="relative z-20">
   <div class="h-15 t:h-17 flex items-center gap-4 pl-4 pr-2 t:px-[clamp(16px,2.6vw,32px)] border-b border-border bg-bg">
@@ -60,7 +48,7 @@ const FAVICON: Record<ChaveApp, ImageMetadata> = {
           <span aria-hidden="true" class="w-px h-6 flex-none bg-border-strong" />
           <a {...link(lang, `${app}.html`)} class="flex items-center gap-2.5 min-h-11 min-w-0 rounded-ctl text-text anel-foco">
             <span class="block size-7 flex-none overflow-hidden rounded-ctl">
-              <Image src={FAVICON[app]} width={28} height={28} densities={[1, 2]} alt="" loading="eager" class="size-full object-cover scale-[1.06]" />
+              <Image src={iconesApps[app]} width={28} height={28} densities={[1, 2]} alt="" loading="eager" class="size-full object-cover scale-[1.06]" />
             </span>
             <span class="truncate whitespace-nowrap text-[16px] font-bold">{apps[app].nome}</span>
           </a>

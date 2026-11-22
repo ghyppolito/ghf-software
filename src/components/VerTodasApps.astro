@@ -1,14 +1,13 @@
 ---
 // "Todos os apps GHF" da Home (WP-10, fatia 6; D12, `GHF Kit v3` §6): a lista compacta do que não
 // entrou na grade (app sem atualização há mais de 12 meses, retirado da Play ou além do 4º). Sem
-// desenho no handoff (HOME-VER-TODAS-SEM-DESENHO-01): anatomia da lista da 404. App `indisponivel`:
-// nome sem link, selo "Indisponível" e só o link da política. Lista vazia: não renderiza.
-import { Image } from 'astro:assets';
-import { apps, type App, type ChaveApp } from '../i18n/apps';
+// desenho no handoff (HOME-VER-TODAS-SEM-DESENHO-01): a lista da 404 (ListaApps.astro, variante
+// `home`). App `indisponivel`: nome sem link, selo "Indisponível" e só o link da política. Lista
+// vazia: não renderiza.
+import ListaApps from './ListaApps.astro';
+import { type ChaveApp } from '../i18n/apps';
 import { home } from '../i18n/home';
-import { t } from '../i18n/ui';
-import { link, type Idioma } from '../i18n/idiomas';
-import { iconesApps } from '../assets/icones-apps';
+import { type Idioma } from '../i18n/idiomas';
 
 interface Props {
   lang: Idioma;
@@ -17,40 +16,12 @@ interface Props {
 
 const { lang, chaves } = Astro.props;
 const x = home[lang];
-const privacidade = t(lang, 'footer_privacy');
 ---
 {
   chaves.length > 0 && (
     <div class="mt-[clamp(24px,3vw,40px)] flex flex-col gap-2">
       <h3 class="text-[13px] font-semibold text-text-muted">{x.todos_apps}</h3>
-      <ul class="border border-border rounded-card bg-surface overflow-hidden">
-        {chaves.map((c) => {
-          const a: App = apps[c];
-          return (
-            <li class="border-t first:border-t-0 border-border px-4 py-3 flex flex-wrap items-center gap-3.5">
-              <Image src={iconesApps[c]} alt="" width={40} height={40} densities={[1, 2]} class="size-10 flex-none rounded-[10px] object-cover bg-raised" />
-              {a.indisponivel ? (
-                <span class="flex-1 min-h-11 min-w-[120px] flex items-center font-bold text-text">{a.nome}</span>
-              ) : (
-                <a {...link(lang, a.pagina)} class="flex-1 min-h-11 min-w-[120px] flex items-center font-bold text-text no-underline hover:underline anel-foco-interno">
-                  {a.nome}
-                </a>
-              )}
-              {a.indisponivel ? (
-                <span class="text-[12px] leading-4 text-text-2">{x.selo_indisponivel}</span>
-              ) : (
-                <span class="text-[12px] leading-4 text-text-2 flex items-center gap-1.5">
-                  <span aria-hidden="true" class="font-extrabold text-success">✓</span>
-                  {x.selo_publicado}
-                </span>
-              )}
-              <a {...link(lang, a.privacidade)} class="min-h-11 inline-flex items-center text-small text-text-2 underline decoration-border-strong underline-offset-4 anel-foco-interno">
-                {privacidade}<span class="sr-only"> — {a.nome}</span>
-              </a>
-            </li>
-          );
-        })}
-      </ul>
+      <ListaApps lang={lang} chaves={chaves} variante="home" />
     </div>
   )
 }

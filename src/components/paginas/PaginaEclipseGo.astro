@@ -12,7 +12,7 @@ import { eclipsego } from '../../i18n/eclipsego';
 import { rota, type Idioma } from '../../i18n/idiomas';
 import { itensNav } from '../../i18n/landing';
 import JsonLd from '../JsonLd.astro';
-import { mobileApplication } from '../../i18n/apps';
+import { apps, mobileApplication } from '../../i18n/apps';
 
 interface Props {
   lang: Idioma;
@@ -32,9 +32,9 @@ const home = rota(lang, 'index.html');
   caminho="eclipsego.html"
   tema="ghf"
   app="eclipsego"
-  favicon="/assets/eclipse-go-favicon.png"
+  favicon={apps.eclipsego.icone}
 >
-  <JsonLd slot="jsonld" dados={mobileApplication('eclipsego')} />
+  <JsonLd slot="jsonld" dados={mobileApplication('eclipsego', lang, x.meta.description)} />
   <Nav
     lang={lang}
     caminho="eclipsego.html"

@@ -16,6 +16,9 @@ interface Props {
 
 const { lang } = Astro.props;
 const x = home[lang];
+// O ano do "Desde 2004" do hero (ADR-009: o JSON-LD só repete o que a página publica).
+const fundacao = x.since_2004.match(/\d{4}/)?.[0];
+if (!fundacao) throw new Error(`home.ts since_2004 (${lang}) sem o ano de fundação`);
 ---
 <Base
   title={x.title}
@@ -27,7 +30,7 @@ const x = home[lang];
   caminho="index.html"
   tema="ghf"
 >
-  <JsonLd slot="jsonld" dados={organization} />
+  <JsonLd slot="jsonld" dados={organization(x.description, fundacao)} />
   <Nav
     lang={lang}
     caminho="index.html"
