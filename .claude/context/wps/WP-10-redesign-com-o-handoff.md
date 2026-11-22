@@ -10,7 +10,7 @@ decisoes: [D4, D11, D12, D24, D25, D26, D27]
 tamanho: L
 risco: medio
 visual: true
-branch: feat/wp-10-fatia-2
+branch: feat/wp-10-fatia-3
 ---
 
 # WP-10 — A home e as landings de app seguem o sistema visual do handoff
@@ -178,7 +178,8 @@ prova é o checklist de navegador.
    - **LCP de `/`.** Caiu de 2,56 para 2,33 s (mediana do `lighthouse.py`) porque o elemento LCP mudou do `<img>` do logo para o
      `<span>` "GHF Software", não por otimização: o observado sem throttle não melhorou. Remedir na
      fatia 6.
-3. **Legal: `LegalLayout`, 10 páginas.** Papel claro, largura de leitura, sumário (recolhível
+3. **Legal: `LegalLayout`, 10 páginas.** **Feita em 2026-11-22** (commits 1dfe3bf e 6f5bf3e; branch `feat/wp-10-fatia-3`, não enviada; o `risco` do WP segue `medio`, a fatia é alta). Auditorias de `site-qa`, `site-seo-perf` e `site-ux`: nenhum achado alto; os médios foram corrigidos (ênfase restaurada, decisão (A); troca de idioma mantém `#secao-N`; §12 do `check_site.py` confere âncoras e caixas; parágrafo quebrado do item 10 do plano consertado). Medidas: acessibilidade das legais de 96 para 100 (LottoExpert e TopoWalk); LCP das legais +~80 ms (1,73-1,88 para 1,80-1,95 s; o elemento é um `<p>` do corpo); +2 a 5 KB por página (sumário duplicado); CSS 86,7 para 81,9 KB (antes das caixas); `<head>`, `sitemap` e `id` das seções idênticos; `.legal-corpo` idêntico byte a byte nas 10 páginas; `src/content/legal/` intocado; `sync_legal --check` igual ao de antes. `/verify` passou (`lychee` só no CI). Resta o checklist de navegador, que é do usuário. Safari não testado.
+   Papel claro, largura de leitura, sumário (recolhível
    abaixo de 1024 px, lateral a partir de 1024 px) e data no topo. A troca de idioma mantém
    `#secao-N`. O texto vem de `src/content/legal/` e não é tocado. A prova é `sync_legal.py
    --todos --check` igual antes e depois, mais o texto extraído do corpo de cada página legal em
