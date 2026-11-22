@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**25 WPs** · 15 concluídos · 0 em andamento
+**25 WPs** · 15 concluídos · 1 em andamento
 
 ## Sequência recomendada
 
@@ -25,7 +25,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | # | WP | Status | Nota |
 |---|---|---|---|
 | 1 | [WP-19 — A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2](wps/WP-19-rodada-3-do-claude-design.md) | `blocked` | export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true) |
-| 2 | [WP-25 — O build sai do Astro 7.3.8 e o npm audit não acusa dependência vulnerável](wps/WP-25-dependencias-sem-aviso-do-npm-audit.md) | `todo` | dependências sem aviso do npm audit: Astro 7.4.7, Node 22.23.4, satteri 0.4.7; S, risco alto (deploy); entre as fatias 1 e 2 do WP-10 (usuário, 2026-11-21) |
+| 2 | [WP-25 — O build sai do Astro 7.3.8 e o npm audit não acusa dependência vulnerável](wps/WP-25-dependencias-sem-aviso-do-npm-audit.md) | `doing` | dependências sem aviso do npm audit: Astro 7.4.7, Node 22.23.4, satteri 0.4.7; S, risco alto (deploy); entre as fatias 1 e 2 do WP-10 (usuário, 2026-11-21) |
 | 3 | [WP-10 — A home e as landings de app seguem o sistema visual do handoff](wps/WP-10-redesign-com-o-handoff.md) | `blocked` | redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08 |
 | 4 | [WP-20 — Imagens de compartilhamento 1200×630 por página e twitter:card coerente](wps/WP-20-imagens-de-compartilhamento-1200x630.md) | `todo` | imagens de compartilhamento 1200×630 (D16 A): marca para home e legais, uma por app; sessão do usuário no Claude Design, depois `twitter:card` e `og:image:alt`. M, `visual`, antes do deploy único (D13) |
 | 5 | [WP-16 — A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de](wps/WP-16-politica-do-poleposition-em-6-linguas.md) | `todo` | política do Pole Position em pt/en/es/fr/it/de, traduzida do pt de origem; pré-condição: cláusula de prevalência do pt no app (D8 b1, `PREVALENCIA-PT-NOS-APPS-01`); o espelho pt fica em dia no WP-04. Texto legal, risco alto — prova o processo na política menor |
@@ -62,7 +62,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-22](wps/WP-22-acessibilidade-e-i18n-sem-redesign.md) | Acessibilidade e i18n sem redesign (a11y AA, foco, `<main>`, headings, reduced-motion, contraste fora da paleta, rótulos pt na /en/) | landing | M | medio | 🖥️ | WP-12, WP-15 | ADR-003, ADR-007 | `done` |
 | [WP-23](wps/WP-23-convite-sem-terceiros.md) | O convite do bolão abre sem terceiros (pako e Inter servidos pelo site, com `<main>`) | infra | M | alto | 🖥️ | — | ADR-001, ADR-002, ADR-006 | `todo` |
 | [WP-24](wps/WP-24-convite-com-o-sistema-visual-do-handoff.md) | O convite do bolão segue o sistema visual do handoff, com o parse de `?d=` intocado | design | M | alto | 🖥️ | WP-10, WP-23 | ADR-001, ADR-006, ADR-008 | `todo` |
-| [WP-25](wps/WP-25-dependencias-sem-aviso-do-npm-audit.md) | O build sai do Astro 7.3.8 e o npm audit não acusa dependência vulnerável | infra | S | alto |  | WP-08 | ADR-001, ADR-002, ADR-008 | `todo` |
+| [WP-25](wps/WP-25-dependencias-sem-aviso-do-npm-audit.md) | O build sai do Astro 7.3.8 e o npm audit não acusa dependência vulnerável | infra | S | alto |  | WP-08 | ADR-001, ADR-002, ADR-008 | `doing` |
 
 ## Bloqueios ativos
 
