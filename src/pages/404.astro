@@ -58,8 +58,8 @@ const lista = [
     <ul aria-label="Apps" class="flex flex-col border border-border rounded-card bg-surface overflow-hidden">
       {
         lista.map((a) => (
-          <li class="border-t border-border px-4 py-3 flex flex-wrap items-center gap-3.5">
-            <Image src={a.icone} alt="" width={40} height={40} densities={[1, 2]} loading="lazy" class="size-10 flex-none rounded-[10px] object-cover" />
+          <li class="border-t first:border-t-0 border-border px-4 py-3 flex flex-wrap items-center gap-3.5">
+            <Image src={a.icone} alt="" width={40} height={40} densities={[1, 2]} loading="eager" class="size-10 flex-none rounded-[10px] object-cover" />
             <a {...link('pt', a.pagina)} class="flex-1 min-h-11 min-w-[120px] flex items-center gap-2.5 font-bold text-text no-underline hover:underline anel-foco-interno">
               <span aria-hidden="true" class={`size-2 flex-none rounded-[2px] ${a.quadrado}`} />
               {a.nome}
