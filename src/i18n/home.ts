@@ -5,7 +5,8 @@
 // - `apps_titulo`, `atualizado`, `todos_apps` e `sobre_titulo`: `apps`, `updated`, `allApps` e
 //   `about` de `content/i18n.js` do handoff (rótulos de interface).
 // - `selo_publicado`, `play_curto` e `play_rotulo`: rótulos de `Home.dc.html:30,32,87` ("Publicado",
-//   "Play ↗", `{app} na Google Play`); `selo_indisponivel`: o selo do `GHF Kit v3` §6.
+//   "Play ↗", `{app} na Google Play`); `selo_indisponivel`: o selo do `GHF Kit v3` §6. O export só
+//   traz o pt destes quatro: o en ("Published", "Unavailable", "{app} on Google Play") é tradução.
 // - `resumos`: tag, texto longo e texto curto de cada app, no formato `ConteudoApp['resumo']`
 //   (landing.ts), movidos sem edição das chaves antigas (`tag_*`, `app_*_desc`, `hero_*_desc`).
 //   O card usa só `tag` e `curta` (D30 (3)); o `descricao` do LottoExpert é o do dicionário antigo

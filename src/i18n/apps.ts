@@ -7,6 +7,8 @@
 // ou do Pro nunca entra (vem da Play e do Remote Config), nem `aggregateRating`/`review`.
 // App que mudar de categoria ou deixar de ser gratuito muda uma linha aqui.
 
+import { hreflang, type Idioma } from './idiomas';
+
 export interface App {
   /** nome do app (o mesmo da página) */
   nome: string;
@@ -42,7 +44,7 @@ export const apps = {
     nome: 'TopoWalk', id: 'br.com.ghfsoftware.topowalk', categoria: 'UtilitiesApplication', play: `${PLAY}br.com.ghfsoftware.topowalk`,
     pagina: 'topowalk.html', privacidade: 'topowalk-privacy.html', atualizadoEm: '2026-10-29',
   },
-  // Play: SPORTS. Tag v2.2.0 (repositório ../pole-position/pole-position-app)
+  // Play: SPORTS. Tag v2.2.0 (repositório ../pole-position-app)
   poleposition: {
     nome: 'Pole Position', id: 'br.com.ghfsoftware.polepositionapp', categoria: 'SportsApplication', play: `${PLAY}br.com.ghfsoftware.polepositionapp`,
     pagina: 'poleposition.html', privacidade: 'poleposition-privacy.html', atualizadoEm: '2026-10-16',
@@ -74,8 +76,14 @@ export const ORDEM_APPS = ['lottoexpert', 'topowalk', 'poleposition', 'eclipsego
 export function hojeDoBuild(): Date {
   const forcada = process.env.GHF_HOJE;
   if (forcada) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(forcada)) throw new Error(`GHF_HOJE=${forcada}: formato não é AAAA-MM-DD`);
-    return new Date(forcada + 'T00:00:00Z');
+    // Guarda: a data forçada nunca chega ao dist/ do PR nem do deploy.
+    if (process.env.CI || process.env.GITHUB_ACTIONS) throw new Error('GHF_HOJE é só para teste local; não use no CI nem no deploy');
+    const d = new Date(forcada + 'T00:00:00Z');
+    // Mesmo teste de `atualizadoEm`: o regex sozinho deixa passar 2027-13-45 (Invalid Date) e 2027-02-30.
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(forcada) || Number.isNaN(d.getTime()) || d.toISOString().slice(0, 10) !== forcada) {
+      throw new Error(`GHF_HOJE=${forcada}: não é uma data AAAA-MM-DD válida`);
+    }
+    return d;
   }
   return new Date();
 }
@@ -112,8 +120,9 @@ export function particionarApps(hoje: Date): { destaque: ChaveApp[]; resto: Chav
 
 /** Data curta do card ("26 de jul. de 2026" / "Jul 26, 2026"): `medium`, porque o `long` quebra em
  *  duas linhas no card de 1280 px. Em UTC, para não cair no dia anterior. */
-export function dataCurta(iso: string, lang: string): string {
-  return new Intl.DateTimeFormat(lang === 'pt' ? 'pt-BR' : 'en-US', { dateStyle: 'medium', timeZone: 'UTC' }).format(
+export function dataCurta(iso: string, lang: Idioma): string {
+  // Locale do idiomas.json (fonte única das línguas): uma língua nova sai com a data dela, não em en.
+  return new Intl.DateTimeFormat(hreflang(lang), { dateStyle: 'medium', timeZone: 'UTC' }).format(
     new Date(iso + 'T00:00:00Z'),
   );
 }

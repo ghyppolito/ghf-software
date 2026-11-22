@@ -76,7 +76,7 @@ const privacidade = t(lang, 'footer_privacy');
                     {x.selo_publicado}
                   </span>
                 </div>
-                <a href={a.play} target="_blank" rel="noopener noreferrer" aria-label={x.play_rotulo.replace('{app}', a.nome)} class="relative z-10 min-h-11 px-3.5 inline-flex items-center gap-1 flex-none rounded-pill border border-border-strong text-[13px] font-semibold text-text no-underline hover:bg-raised anel-foco">
+                <a href={a.play} target="_blank" rel="noopener noreferrer" aria-label={x.play_rotulo.replace('{app}', a.nome)} class="relative z-10 min-h-11 px-3.5 inline-flex items-center gap-1 flex-none rounded-pill border border-border-strong text-[13px] font-semibold text-text no-underline hover:border-text anel-foco">
                   {x.play_curto}<span aria-hidden="true">↗</span>
                 </a>
               </div>
@@ -105,7 +105,7 @@ const privacidade = t(lang, 'footer_privacy');
     <p class="text-body text-text-2 text-pretty" set:html={x.about_p1Html} />
   </div>
   <div class="flex flex-col gap-3">
-    <h2 id="h-privacidade" class="text-[length:clamp(22px,2.4vw,28px)] leading-[1.25] font-bold text-text">{privacidade}</h2>
+    <h2 class="text-[length:clamp(22px,2.4vw,28px)] leading-[1.25] font-bold text-text">{privacidade}</h2>
     <ul class="flex flex-wrap gap-x-5">
       {
         ORDEM_APPS.map((c) => (
