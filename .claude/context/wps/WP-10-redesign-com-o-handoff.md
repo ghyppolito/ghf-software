@@ -6,16 +6,16 @@ status: doing
 depende_de: [WP-06, WP-08]
 adr: [ADR-001, ADR-004, ADR-006, ADR-007, ADR-008]
 spec: docs/AVALIACAO.md
-decisoes: [D4, D11, D12, D24, D25, D26, D27]
+decisoes: [D4, D11, D12, D24, D25, D26, D27, D29]
 tamanho: L
 risco: medio
 visual: true
-branch: feat/wp-10-fatia-4
+branch: feat/wp-10-fatia-5-eclipsego
 ---
 
 # WP-10 — A home e as landings de app seguem o sistema visual do handoff
 
-**Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** ECLIPSE-ICONE-OFFLINE-01 (ícone do card "offline" do EclipseGo, D21), NAV-MENU-ALVO-TOQUE-01, HOME-TECH-CURSOR-01, POLE-PRINTS-2X-01 (do WP-12) · landings TopoWalk, Pole Position e EclipseGo esperam o WP-19 (rodada 3)
+**Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** ECLIPSE-ICONE-OFFLINE-01 (ícone do card "offline" do EclipseGo, D21), NAV-MENU-ALVO-TOQUE-01, HOME-TECH-CURSOR-01, POLE-PRINTS-2X-01 (do WP-12) · o WP-19 (rodada 3) está `done` e não segura mais as landings
 
 **Objetivo:** tokens do handoff em `src/styles/tokens.css` (`@theme`, ADR-008); home com hierarquia por app (um
 toque até o app certo); as 4 landings com a mesma anatomia (hero + CTA → 3–5 funcionalidades
@@ -37,10 +37,10 @@ página usa; `docs/AVALIACAO.md` §3.3.
 `tools/check_site.py` (§19, o rodapé com as 5 URLs legais). Fatia 3: `tools/check_site.py` §12. O convite fica de fora (ver "Plano").
 
 **Passos:** por página: `site-ux` DESENHAR (referência no handoff, estados) → `site-dev` →
-`/verify` → auditoria (`site-ux` AUDITAR + `site-qa` + `site-seo-perf`). Home por último, com
-o componente de landing pronto (fatia 5), não depois do WP-19: os cards de TopoWalk, Pole Position
-e EclipseGo leem o resumo de cada app da mesma fonte que a landing dele, e mudam sozinhos quando
-as fatias 7 a 9 entrarem (ver "Plano").
+`/verify` → auditoria (`site-ux` AUDITAR + `site-qa` + `site-seo-perf`). Home depois do template
+de landing (fatia 5, com o EclipseGo; D29), sem esperar o LottoExpert: os cards de TopoWalk, Pole
+Position e LottoExpert leem o resumo de cada app da mesma fonte que a landing dele, e mudam
+sozinhos quando as fatias 7 a 9 entrarem (ver "Plano").
 
 **Critérios de aceite:**
 - Tokens: nenhuma cor literal (`#…`, `rgb(`) em `src/` fora do arquivo único de tokens
@@ -233,20 +233,28 @@ prova é o checklist de navegador.
      sai; o plugin tira o mesmo tanto (12 224 bytes); `test:css` 21 de 21.
 4. **404.** `404.dc.html`, só pt, com o texto atual. **Feita em 2026-11-22** (commits 1f6c207 e 27700db; branch `feat/wp-10-fatia-4`, não enviada). `404.astro` segue `404.dc.html` da rodada 3: duas colunas a partir de 1024; lista dos 4 apps com ícone por `astro:assets`, quadradinho `bg-app-*`, link da landing e link "Privacidade" com `sr-only` do nome. Tokens no lugar de `brand.*`. A copy atual fica; o eyebrow, o h1 e os parágrafos do export ficam fora (D25). `tema="ghf"` segue porque o `Base` ainda exige a prop. Desvios do export aceitos pelo `site-ux`: `anel-foco-interno` em vez de offset +2 (a `ul` tem `overflow-hidden`), sem `scale(1.06)` no ícone, colunas em `lg` em vez de `auto-fit minmax(420px)`, `first:border-t-0` (o export tem linha dupla no topo), `loading="eager"`. Auditorias de `site-qa`, `site-ux` e `site-seo-perf`: nenhum achado alto nem médio. Medidas na 404 (Lighthouse mobile, mediana de 3): Performance 99, Acessibilidade 100, Boas práticas 100, LCP 1,80 s, CLS 0, 148 KB no total e 14 KB de imagem (os ícones somam 3,1 KB no 1x e 6,4 KB no 2x). Orçamento cumprido em todas as páginas. Fixture do sem-polyfill regenerada. `/verify` passou (`lychee` só no CI). Resta o checklist de navegador, que é do usuário.
    **Achados:** `APPS-LISTA-DUPLICADA-01`, `ORCAMENTO-404-FROUXO-01` (ambos na fatia 10). **Bloqueio:** nenhum. **Copy:** nenhuma.
-5. **Template de landing e LottoExpert.** Os componentes `src/components/landing/*` são os de
-   `Landing App.dc.html`: hero, funcionalidades, "ver todas" (D12), prova, planos, privacidade,
-   FAQ, CTA e aviso de jogo responsável. O conteúdo de cada app tem um formato só, em
-   `src/i18n/<app>.ts`. O link da Play vem de `src/i18n/apps.ts`. Os blocos da D1 (Teimosinha e
-   prestação de contas do bolão) ficam.
-   **Achados:** `FEATURES-SELO-PREMIUM-01`, `TEIMOSINHA-FORA-DA-TABELA-01` (o limite vem de
-   `FreemiumConfig.kt`), `LOTTO-CONTRASTE-AA-01` (violeta), `LOTTO-EN-ROTULOS-PT-01`,
-   `LOTTO-COPY-VANTAGEM-01`, `LOTTO-PT-HTML-DIVERGE-01`, `LANDINGS-RESIDUO-RODADA-2-01`, a parte
-   LottoExpert de `EXPORT-COPY-SEM-ORIGEM-01` e de `LANDINGS-URL-E-PLAY-01`.
-   **Topo:** recalcular o topo e recolocar o CTA da Play acima da dobra a 1280×720. Com o nav em
-   fluxo desde a fatia 2, o CTA do LottoExpert sai da dobra.
-   **Bloqueio para fechar (não para começar):** a copy que falte na fonte (D25) e as capturas
-   das funcionalidades destacadas (D26). O repositório só tem o mockup do hero e os logos das loterias.
-   Quem desbloqueia: o usuário.
+5. **Template de landing e EclipseGo** (D29: o template nasce no EclipseGo, não no LottoExpert).
+   Os componentes `src/components/landing/*` são os de `Landing App.dc.html` (rodada 3, `?app=eclipse`):
+   hero, funcionalidades, "ver todas" (D12), prova, planos, privacidade, FAQ e CTA. O conteúdo de cada
+   app tem um formato só, em `src/i18n/<app>.ts`. O link da Play vem de `src/i18n/apps.ts`. O formato e
+   os componentes admitem blocos opcionais (o aviso de jogo responsável e os blocos da D1), mas esses
+   blocos só entram na fatia 9; aqui nenhum app os consome. Seção sem conteúdo com origem (D25) não
+   aparece, sem placeholder. `EclipseGo.astro` e `PaginaEclipseGo.astro` passam a montar o template.
+   **Achados:** `ECLIPSE-ICONE-OFFLINE-01` e `ECLIPSE-ICONE-WIFI-SLASH-01` (o ícone
+   de `Landing App?app=eclipse`; ícone de fora do FA entra com a licença ao lado),
+   `ECLIPSE-EN-ROTULOS-PT-01`, a parte EclipseGo de `EXPORT-COPY-SEM-ORIGEM-01` ("Sem backend" e
+   "Nenhuma chamada de rede" só entram se o README do app disser), a parte EclipseGo de
+   `LANDINGS-URL-E-PLAY-01`, `BOTAO-ATIVO-CONTRASTE-01` (medir o 88% no navegador).
+   **Topo:** recalcular o topo e recolocar o CTA da Play acima da dobra a 1280×720; com o nav em
+   fluxo desde a fatia 2, o CTA do EclipseGo sai da dobra.
+   **URL e deploy:** nenhuma URL contratual muda. `/eclipsego.html` não é contratual;
+   `/eclipsego-privacy.html` é, e a fatia não toca nela nem no `LegalLayout`. Sem mudança de deploy
+   nem de stack. **Copy:** a publicada em `src/i18n/eclipsego.ts`, o `docs/ECLIPSE_GO_README.md` e o
+   `../eclipse-go/README.md` (o app não tem ASO); frase sem origem fica fora (D25).
+   **Imagens (D26):** `src/assets/img/eclipsego_phone_screen.png` e `src/assets/img/eclipsego_screenshot.png`
+   são as 2 capturas de funcionalidade (resposta do usuário em 2026-11-22: "servem pois o eclipse go não
+   teve nem tem mudança prevista, as telas são as mesmas"; D29).
+   **Bloqueio:** nenhum. O EclipseGo é o único app estável; os outros três estão em evolução.
 6. **Home.** Os cards seguem a ordem do brief §10 e a regra da D12. A lista "ver todas" fica vazia
    enquanto os 4 apps forem destaque. Cada app em `apps.ts` ganha um campo de data da última
    atualização, com comentário de origem (tag de release no repositório do app).
@@ -257,31 +265,40 @@ prova é o checklist de navegador.
 7. **TopoWalk** (pt e en; as outras línguas são do WP-18). **Achados:** `TOPO-PT-HTML-DIVERGE-01`,
    `TOPO-CONTRASTE-AA-01`, a parte TopoWalk de `LANDINGS-URL-E-PLAY-01`. **Topo:** recalcular o
    topo e recolocar o CTA da Play acima da dobra a 1280×720 (nav em fluxo desde a fatia 2).
-   **Bloqueio:** WP-19
-   (checklist) e as 4 capturas (D26). Quem desbloqueia: o usuário.
+   **Bloqueio:** as 4 capturas (D26; o app está em evolução). Quem desbloqueia: o usuário.
 8. **Pole Position.** **Achados:** `POLE-PT-HTML-DIVERGE-01` (vale o que a política do app diz
    sobre o Firebase), `POLE-EN-ROTULOS-PT-01`, `POLE-PRINTS-2X-01`, `POLE-MOCKUP-CURSOR-01`.
    **Topo:** recalcular o topo e recolocar o CTA da Play acima da dobra a 1280×720 (nav em fluxo
    desde a fatia 2).
-   **Bloqueio:** WP-19, 2 capturas (D26) e as capturas em 2× para `POLE-PRINTS-2X-01`. Quem desbloqueia:
+   **Bloqueio:** 2 capturas (D26; o app está em evolução) e as capturas em 2× para `POLE-PRINTS-2X-01`. Quem desbloqueia:
    o usuário. O preço e a faixa etária vêm da ficha pública da Play, lidos como na D17, e não
    bloqueiam.
-9. **EclipseGo.** **Achados:** `ECLIPSE-ICONE-OFFLINE-01` e `ECLIPSE-ICONE-WIFI-SLASH-01` (o ícone
-   de `Landing App?app=eclipse`; ícone de fora do FA entra com a licença ao lado),
-   `ECLIPSE-EN-ROTULOS-PT-01`, a parte EclipseGo de `EXPORT-COPY-SEM-ORIGEM-01` ("Sem backend" e
-   "Nenhuma chamada de rede" só entram se o README do app disser). **Topo:** recalcular o topo e
-   recolocar o CTA da Play acima da dobra a 1280×720; com o nav em fluxo desde a fatia 2, o CTA do
-   EclipseGo sai da dobra. **Bloqueio:** WP-19 e 2
-   capturas (D26). Quem desbloqueia: o usuário.
+9. **LottoExpert** (D29: consome o template da fatia 5). Entram os blocos opcionais do template: o
+   aviso de jogo responsável e os blocos da D1 (Teimosinha e prestação de contas do bolão).
+   **Achados:** `FEATURES-SELO-PREMIUM-01`, `TEIMOSINHA-FORA-DA-TABELA-01` (o limite vem de
+   `FreemiumConfig.kt`), `LOTTO-CONTRASTE-AA-01` (violeta), `LOTTO-EN-ROTULOS-PT-01`,
+   `LOTTO-COPY-VANTAGEM-01`, `LOTTO-PT-HTML-DIVERGE-01`, `LANDINGS-RESIDUO-RODADA-2-01`, a parte
+   LottoExpert de `EXPORT-COPY-SEM-ORIGEM-01` e de `LANDINGS-URL-E-PLAY-01`.
+   **Topo:** recalcular o topo e recolocar o CTA da Play acima da dobra a 1280×720. Com o nav em
+   fluxo desde a fatia 2, o CTA do LottoExpert sai da dobra.
+   **Bloqueio para fechar (não para começar):** a copy que falte na fonte (D25) e as capturas
+   das funcionalidades destacadas (D26). O repositório só tem o mockup do hero e os logos das loterias.
+   Quem desbloqueia: o usuário.
 10. **Limpeza e aceite.** Saem a camada de legado de `global.css` e os temas `[data-tema]`. O grep
     de tokens fica vazio. Entram a tabela de contraste do `site-ux`, o Lighthouse de
     acessibilidade ≥ 95 e o checklist de navegador (todas as páginas, 360/768/1280, pt e en).
     **Revisão final no site real (do WP-19, decisão do usuário em 2026-11-22):** TopoWalk em russo a 360 (se a língua existir no site até lá); home, landing e legal a 768; faixa de sugestão de idioma (fecha e não volta na sessão); foco visível em "Ver todas" e nos sociais do rodapé; selo "Publicado" distinto do verde do Pole Position.
 
-**Ordem.** As fatias 1 a 4 andam sem nenhuma copy nova. A fatia 5 começa com a copy publicada e só
-fecha com as respostas. A 6 vem depois da 5. As fatias 7 a 9 esperam o WP-19. A 10 é a última. O
-WP-10 só fica `done` com a 9, e o deploy único (D13) espera o WP-10. Logo, o WP-19 segura o deploy
-único.
+**Ordem** (replanejada pela D29, 2026-11-22). As fatias 1 a 4 andam sem nenhuma copy nova e estão
+feitas. A 5 (template e EclipseGo) não tem bloqueio: a copy é a publicada e as 2 capturas já estão no repositório (D26, D29). A 6
+(home) vem depois da 5 e não espera a 9: o card do LottoExpert lê o resumo publicado e muda sozinho
+quando a 9 entrar; o bloqueio dela continua sendo o texto desse card, se a fonte não tiver (D25). As
+fatias 7 a 9 usam o template e não esperam mais o WP-19 (`done`); cada uma só fecha com as capturas
+dela, pendentes porque o app está em evolução. A 9 (LottoExpert) é a última landing, porque depende de copy (D25) e capturas (D26) que ainda
+faltam e leva os blocos opcionais. A 10 é a última. O WP-10 só fica `done` com a 9 e a 10, e o deploy
+único (D13) espera o WP-10. Logo, o que segura o deploy único são as capturas e a copy que o usuário
+fornece. A numeração só troca a 5 e a 9 de lugar, para as referências a "fatia 6", "7", "8" e "10"
+continuarem válidas.
 
 **Logo** (resposta 5 do usuário, 2026-11-21; decisão de execução, sem linha D). O PNG atual
 (`GHFSoftware.png`) fica no `Logo.astro` da fatia 2; o agente não faz arte nova. A arte nova clara e escura, com "desde 2004", vai para a sessão do usuário no Claude Design
