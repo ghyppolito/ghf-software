@@ -95,7 +95,7 @@ prova é o checklist de navegador.
 
 ### Fatias
 
-1. **Stack e tokens** (D24 A, ADR-008, que substitui o ADR-003). O Tailwind 4 entra pelo
+1. **Stack e tokens** — **feita em 2026-11-21** (commits c2e2de8, 837d483, ee0ea3e, eb52fbe; o `/verify` e a auditoria de `site-qa`, `site-seo-perf` e `site-ux` passaram; resta o checklist de navegador, que é do usuário). (D24 A, ADR-008, que substitui o ADR-003). O Tailwind 4 entra pelo
    `@tailwindcss/vite`, e os tokens ficam em `@theme`. Os tokens vêm do `GHF Kit v3` (inclusive
    `--border-strong` #66738D) e da D11 (`--success` e `--success-surface`). Também entram
    `--app-acc`, `--app-acc-edge` e `--app-acc-light` por app e os tokens de papel da legal. Tudo
