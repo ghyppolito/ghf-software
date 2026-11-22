@@ -2,11 +2,9 @@
 // Política de privacidade do Pole Position (/poleposition-privacy.html, URL contratual de ADR-001, e /<código>/poleposition-privacy.html): a página
 // inteira, com a prop `lang`; as cascas ficam em src/pages/ (ADR-007 §3). Texto em
 // src/content/legal/poleposition-privacy.<código>.md; hero,
-// botão e <head> em i18n/legal.ts (o h1 sem ": Race Analytics", D-c). Nav e footer como na página
-// antiga, menos o realce: `primary-claro` (lima; pílula do celular com texto preto, como na landing
-// do Pole Position — o branco do publicado dava 1,98:1, WP-22)
-// com logo brilhando, só o e-mail entre os canais, rodapé `surface` e a política do Pole Position
-// destacada na lista de políticas. O botão volta para a home da GHF, como na página antiga.
+// botão e <head> em i18n/legal.ts (o h1 sem ": Race Analytics", D-c). Footer só com o e-mail entre
+// os canais e a política do Pole Position marcada como atual; o acento da casca vem de `app` (WP-10
+// fatia 2). O botão volta para a home da GHF, como na página antiga.
 import { getEntry, render } from 'astro:content';
 import LegalLayout from '../../layouts/LegalLayout.astro';
 import Nav from '../Nav.astro';
@@ -33,6 +31,7 @@ const { Content } = await render(entrada);
   titulo={x.poleposition_privacy_h1}
   lastUpdated={entrada.data.lastUpdated}
   tema="poleposition-privacy"
+  app="poleposition"
   favicon="/assets/poleposition.png"
   classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden"
   selo="lima"
@@ -43,11 +42,10 @@ const { Content } = await render(entrada);
     lang={lang}
     caminho="poleposition-privacy.html"
     inicio={home}
-    realce="primary-claro"
     itens={[
       { href: `${home}#sobre`, chave: 'nav_about' },
       { href: `${home}#portfolio`, chave: 'nav_portfolio' },
-      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+      { href: `${home}#contato`, chave: 'nav_contact' },
     ]}
   />
   <Content />
@@ -55,9 +53,7 @@ const { Content } = await render(entrada);
     slot="footer"
     lang={lang}
     inicio={home}
-    prefixoAncora={home}
     redes={{}}
     politicaAtual="poleposition-privacy.html"
-    fundo="surface"
   />
 </LegalLayout>

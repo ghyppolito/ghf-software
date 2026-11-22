@@ -129,6 +129,13 @@
   --text-label--line-height: 18px;
   --text-label--font-weight: 600;
 
+  /* Ramos de nav e footer — `Site Nav.dc.html:119` e `Site Footer.dc.html:65`: `m` < 600 px,
+   * `t` 600–1023, `d` ≥ 1024 (D27). O 600 não existe no Tailwind (sm = 640): a variante `t:` sai
+   * daqui, um lugar só. O `d` é o `lg:` (1024) padrão. Fatia 2. Em rem, como os do Tailwind
+   * (`--breakpoint-lg: 64rem`): o v4 ordena as variantes pelo valor, e unidade misturada poria
+   * `t:` depois de `lg:` no CSS, e o `t:` venceria no desktop. 37,5rem = 600 px. */
+  --breakpoint-t: 37.5rem;
+
   /* Espaçamento — K3:635 (--s-1…--s-24 = 4…96 px, base 4). O `--spacing: 0.25rem` padrão do
    * Tailwind 4 já gera a mesma escala (p-11 = 44 px, p-24 = 96 px): não se redefine.
    * Alvo de toque mínimo: `min-h-11`. Seção: `py-16 lg:py-24`. */
@@ -137,14 +144,22 @@
 /* ------------------------------------------------------------------ acento do app da página
  * `data-app="lotto|topo|pole|eclipse"` no <html> aponta os aliases para o app (LA:11, K3:492);
  * o componente usa `*-app-acc`, nunca o nome do app. Página sem `data-app` (home, 404,
- * institucional) não tem acento definido: o handoff não diz qual usar (achado
- * ACENTO-PADRAO-SEM-APP-01). Hover e ativo do primário: K3, seção 2 "Estados". */
+ * institucional): só o acento tem padrão, o teal da marca — o único que o handoff dá, no Nav sem
+ * app (`Site Nav.dc.html:123`, `acc = '#3CC8D0'`); `-light` e `-edge` sem app ficam indefinidos
+ * até uma fatia ter consumidor (ACENTO-PADRAO-SEM-APP-01, resposta 5 do usuário, 2026-11-22).
+ * Hover e ativo do primário: K3, seção 2 "Estados"; o ativo é 88% e não os 82% do K3, que davam
+ * texto `--bg` abaixo de 4,5:1 em lotto, topo e eclipse (4,20 / 4,39 / 4,07); 88% dá 4,98 / 5,21 /
+ * 7,16 / 4,80 (BOTAO-ATIVO-CONTRASTE-01, resposta 6, 2026-11-22; o Claude Design confirma). */
 @theme inline {
   --color-app-acc: var(--app-acc);
   --color-app-acc-light: var(--app-acc-light);
   --color-app-acc-edge: var(--app-acc-edge);
   --color-app-acc-hover: color-mix(in oklab, var(--app-acc) 80%, white);
-  --color-app-acc-active: color-mix(in oklab, var(--app-acc) 82%, black);
+  --color-app-acc-active: color-mix(in oklab, var(--app-acc) 88%, black);
+}
+
+:root {
+  --app-acc: var(--color-brand);
 }
 
 :root[data-app='lotto'] {
@@ -184,5 +199,15 @@
   &:focus-visible {
     outline: 2px solid var(--color-paper-link);
     outline-offset: 3px;
+  }
+}
+
+/* Anel interno: em elemento dentro de caixa que corta (folha do menu, links do rodapé), o handoff
+ * põe o anel para dentro (`Site Nav.dc.html:76`, `Site Footer.dc.html:22`). Mesmo traço do
+ * `anel-foco`. */
+@utility anel-foco-interno {
+  &:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: -2px;
   }
 }

@@ -1,7 +1,7 @@
 ---
 // Landing do EclipseGo (/eclipsego.html e /<código>/eclipsego.html), a página inteira com a prop `lang`. Corpo em components/EclipseGo.astro, textos em
-// i18n/eclipsego.ts. Links da página para a home vão à home do mesmo idioma. O dourado do EclipseGo
-// é claro: a pílula do menu do celular usa texto preto (Nav `realce="primary-texto-preto"`).
+// i18n/eclipsego.ts. Links da página para a home vão à home do mesmo idioma. O acento da casca vem
+// de `app` (`data-app`, WP-10 fatia 2).
 import Base from '../../layouts/Base.astro';
 import Nav from '../Nav.astro';
 import Footer from '../Footer.astro';
@@ -28,6 +28,7 @@ const home = rota(lang, 'index.html');
   lang={lang}
   caminho="eclipsego.html"
   tema="eclipsego"
+  app="eclipsego"
   favicon="/assets/eclipse-go-favicon.png"
   classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden"
 >
@@ -36,23 +37,20 @@ const home = rota(lang, 'index.html');
     lang={lang}
     caminho="eclipsego.html"
     inicio={home}
-    realce="primary-texto-preto"
     itens={[
       { href: `${home}#sobre`, chave: 'nav_about' },
       { href: `${home}#portfolio`, chave: 'nav_portfolio' },
-      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+      { href: `${home}#contato`, chave: 'nav_contact' },
     ]}
   />
-  <main>
+  <main id="conteudo" tabindex="-1" class="focus-visible:outline-none">
     <EclipseGo lang={lang} />
   </main>
   {/* A página antiga só tinha o e-mail entre os canais (sem YouTube nem Instagram do app). */}
   <Footer
     lang={lang}
     inicio={home}
-    prefixoAncora={home}
     redes={{}}
     appAtual="eclipsego.html"
-    fundo="surface"
   />
 </Base>

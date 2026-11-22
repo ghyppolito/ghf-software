@@ -27,6 +27,7 @@ const home = rota(lang, 'index.html');
   lang={lang}
   caminho="lottoexpert.html"
   tema="lottoexpert"
+  app="lottoexpert"
   favicon="/assets/lottoexpert_favicon_v3.png"
 >
   <JsonLd slot="jsonld" dados={mobileApplication('lottoexpert')} />
@@ -37,16 +38,15 @@ const home = rota(lang, 'index.html');
     itens={[
       { href: `${home}#sobre`, chave: 'nav_about' },
       { href: `${home}#portfolio`, chave: 'nav_portfolio' },
-      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+      { href: `${home}#contato`, chave: 'nav_contact' },
     ]}
   />
-  <main>
+  <main id="conteudo" tabindex="-1" class="focus-visible:outline-none">
     <LottoExpert lang={lang} />
   </main>
   <Footer
     lang={lang}
     inicio={home}
-    prefixoAncora={home}
     redes={{
       youtube: 'https://www.youtube.com/channel/UC0CgG5V33UB-7zhyfMatUGg',
       instagram: 'https://www.instagram.com/lotto_expert/',

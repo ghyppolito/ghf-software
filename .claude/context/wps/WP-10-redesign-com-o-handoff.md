@@ -2,7 +2,7 @@
 id: WP-10
 titulo: A home e as landings de app seguem o sistema visual do handoff
 area: design
-status: blocked
+status: doing
 depende_de: [WP-06, WP-08]
 adr: [ADR-001, ADR-004, ADR-006, ADR-007, ADR-008]
 spec: docs/AVALIACAO.md
@@ -10,7 +10,7 @@ decisoes: [D4, D11, D12, D24, D25, D26, D27]
 tamanho: L
 risco: medio
 visual: true
-branch: feat/wp-10-redesign
+branch: feat/wp-10-fatia-2
 ---
 
 # WP-10 — A home e as landings de app seguem o sistema visual do handoff
@@ -32,7 +32,9 @@ página usa; `docs/AVALIACAO.md` §3.3.
 `tools/orcamento-lighthouse.json`, e as linhas que citam `tailwind.config.mjs` como origem do tema
 (`CLAUDE.md:142`, `docs/ARQUITETURA.md:19`). Todas as fatias: `src/components/**`, `src/layouts/**`,
 `src/pages/**` (pt e en), `src/assets/img/**` (imagens novas, pelo `astro:assets`; ADR-006 e
-`check_site.py` §13 proíbem imagem exibida em `public/`). O convite fica de fora (ver "Plano").
+`check_site.py` §13 proíbem imagem exibida em `public/`), `src/i18n/**`, `src/styles/tokens.css` e
+`tools/fixtures/sem-polyfill/*` (regenerada pelo ADR-008 §7 quando o CSS muda). Fatia 2:
+`tools/check_site.py` (§19, o rodapé com as 5 URLs legais). O convite fica de fora (ver "Plano").
 
 **Passos:** por página: `site-ux` DESENHAR (referência no handoff, estados) → `site-dev` →
 `/verify` → auditoria (`site-ux` AUDITAR + `site-qa` + `site-seo-perf`). Home por último, com
@@ -107,7 +109,7 @@ prova é o checklist de navegador.
    **Achados:** `TAILWIND3-NPM-AUDIT-01` (`npm audit` sem os 7 avisos), `SUCCESS-DOIS-VALORES-01`,
    `HOME-BOTAO-EMERALD-CONTRASTE-01` (o esmeralda sai do sistema, brief §10).
    **Bloqueio:** nenhum. **Copy:** nenhuma.
-2. **Casca: `Base`, `Nav`, `Footer`, `SeletorIdioma`, `SugestaoIdioma` e um `Logo.astro` novo.**
+2. **Casca: `Base`, `Nav`, `Footer`, `SeletorIdioma`, `SugestaoIdioma` e um `Logo.astro` novo.** **Feita em 2026-11-22** (commits 8999f11, 872c0ef, 0ee743c; branch `feat/wp-10-fatia-2`). Auditorias de `site-qa`, `site-seo-perf` e `site-ux`: nenhum achado alto; os médios (ordem do foco no rodapé, WCAG 2.4.3; "Pular" saltando o `<h1>` das legais) foram corrigidos. Medidas: rodapé a 360 de 1432 para 871 px, a 768 de 1108 para 687 px (contato em linha própria e coluna ao lado da marca vazia: `RODAPE-ORDEM-M-T-01`, WP-19); LCP de `/` de 2,56 para 2,33 s (o elemento mudou de `<img>` para `<span>`; remedir na fatia 6); orçamento cumprido sem `--medir`; axe sem nó da casca. `/verify` passou (`lychee` só no CI). Resta o checklist de navegador (handoff).
    Ramos 360, 768 e 1280 de `Site Nav` e `Site Footer`. Seletor segmentado PT/EN. Foco visível e
    alvos de 44 px. O logo fica num componente só. Até existir a arte, ele usa o PNG atual. Pela
    WCAG 1.4.3, logotipo não tem exigência de contraste. A troca da arte depois é um arquivo. O
@@ -119,6 +121,63 @@ prova é o checklist de navegador.
    `A11Y-LH-BASELINE-WP12-01` (o `h4` do rodapé).
    **Bloqueio:** nenhum. O 768 de nav e footer está no checklist do WP-19. Se esse checklist achar
    defeito, ele é corrigido nesta fatia. **Copy:** nenhuma.
+   **Respostas do usuário (2026-11-22, "segue o recomendado"): as oito perguntas da especificação do
+   `site-ux` (DESENHAR) ficam na opção (A).**
+   1. Pílula "Contato" do nav: sai (`GHF Kit v3` "Nav sem CTA: o botão da Play é do hero"). "Contato"
+      vira link comum. Fecha `LOTTO-NAV-CONTATO-CONTRASTE-01` por remoção.
+   2. Segmento da língua atual: fundo `raised` mais `ring-1 ring-inset ring-border-strong` (3,30:1).
+      Só o fundo dá 1,20:1 e reprova o 1.4.11.
+   3. Seletor de 2 línguas: segmentado em `<a>` (troca de língua é navegação; funciona sem JS e é o
+      que o §9 do `check_site.py` conhece), não `<button aria-pressed>` como no handoff.
+   4. Faixa de sugestão de idioma: fica fixa embaixo (desenho do WP-15, CLS 0), com os tokens novos.
+      Não vai para o topo em fluxo como no handoff.
+   5. Acento sem app: só `--app-acc: var(--color-brand)` no `:root` de `tokens.css`. `-light` e
+      `-edge` sem app ficam indefinidos até uma fatia ter consumidor.
+   6. Ativo do botão primário: `color-mix(in oklab, acento 88%, black)` em `tokens.css` (4,98 / 5,21 /
+      7,16 / 4,80 com texto `--bg`). O Claude Design confirma na próxima rodada. Fecha
+      `BOTAO-ATIVO-CONTRASTE-01`.
+   7. Rodapé segue o handoff: saem "Desenvolvido com ♥ por especialistas.", as colunas
+      "Institucional" e "Transparência & Políticas" (as 5 URLs legais ficam na coluna de cada app) e
+      os ícones circulares (redes viram texto com seta). A linha de baixo fica só com o ©.
+   8. "Pular para o conteúdo": entra como componente novo (`PularConteudo.astro`, chave `pular`, pt e
+      en), para o `<main id="conteudo">` de cada página. Não está no handoff: é candidato a voltar ao
+      Claude Design.
+   **Fixture do `sem-polyfill` regenerada (ADR-008 §7, 2026-11-22).** As classes da casca mudaram o
+   CSS de `src/`; `GHF_SEM_POLYFILL_FIXTURE=tools/fixtures/sem-polyfill npm run build` regravou
+   `entrada.css` (95 580 → 101 216 bytes) e `saida.css` (81 494 → 87 440). As três conferências: o
+   `npm run test:css` passa (21 de 21); o CSS publicado não tem nenhum dos dois marcadores (§18 do
+   `check_site.py` verde); o plugin continua tirando o mesmo tanto (14 086 → 13 776 bytes, 14,7% →
+   13,6% da entrada). No diff dos seletores da saída, saem 39 (o Nav, o Footer e o seletor antigos)
+   e entram os da casca; nenhum seletor some sem motivo.
+   **Correções da auditoria (2026-11-22, sobre 872c0ef).**
+   - **Ordem do rodapé em m e t (desvio do `Site Footer`).** O handoff mostra marca → contato →
+     apps em m e t, e o DOM único (marca → apps → contato, para os apps virarem colunas em d) só
+     reproduzia isso com `order-last`, o que punha o Tab fora da ordem visual (WCAG 2.4.3). O
+     `order-last` saiu: a ordem visual é a do DOM em toda largura. Medido em Chrome headless:
+     blocos na ordem marca → LottoExpert → TopoWalk → Pole Position → EclipseGo → contato a 360,
+     768 e 1280, e o Tab a 360 percorre o rodapé nessa ordem. A 360 a altura não muda (871 px na
+     home pt, 829 en, 915 Pole Position, 827 política do LottoExpert); a 768 sobe de 519 para 687
+     px, porque o contato deixa a coluna ao lado da marca e vai para uma linha própria. Para o
+     Claude Design: `RODAPE-ORDEM-M-T-01`.
+   - **Hero legal dentro do `<main id="conteudo">`.** O "Pular para o conteúdo" saltava o `<h1>` e a
+     data das 10 legais, e o axe acusava `region`. Só estrutura: o texto visível do `<main>` de cada
+     legal é o de antes mais o do hero (comparado nas 10 páginas, pt e en); o `<h1>` está dentro do
+     `<main>` nas 10; axe 4 (`region`, `landmark-one-main`, `bypass`, `skip-link`) sem violação a 360
+     e 1280.
+   - `<main id="conteudo" tabindex="-1">` nas 11 páginas (o Safari só move o foco para destino
+     focável), com `focus-visible:outline-none` para o contorno não cobrir a página inteira. Medido:
+     Tab + Enter no "Pular" deixa o foco no `<main>`.
+   - A prop `prefixoAncora` saiu do `Footer.astro` e das 11 chamadas.
+   - Fixture do `sem-polyfill` regenerada de novo (ADR-008 §7): `entrada.css` 101 216 → 101 279 e
+     `saida.css` 87 440 → 87 503 bytes (sai `order-last`, entra `focus-visible:outline-none`); o
+     `test:css` passa, o §18 fica verde e o plugin tira o mesmo tanto (13 776 bytes, 13,6%).
+   - `check_site.py` §19: todo `<footer>` de `dist/` tem link para as 5 URLs legais na língua da
+     página. Provado com mutação numa cópia de `dist/` (link do termos tirado de `index.html` e da
+     política do EclipseGo tirado de `en/topowalk.html`): ❌ 2 erros, um por página; a cópia foi
+     apagada.
+   - **LCP de `/`.** Caiu de 2,56 para 2,33 s (mediana do `lighthouse.py`) porque o elemento LCP mudou do `<img>` do logo para o
+     `<span>` "GHF Software", não por otimização: o observado sem throttle não melhorou. Remedir na
+     fatia 6.
 3. **Legal: `LegalLayout`, 10 páginas.** Papel claro, largura de leitura, sumário (recolhível
    abaixo de 1024 px, lateral a partir de 1024 px) e data no topo. A troca de idioma mantém
    `#secao-N`. O texto vem de `src/content/legal/` e não é tocado. A prova é `sync_legal.py
@@ -139,6 +198,8 @@ prova é o checklist de navegador.
    `FreemiumConfig.kt`), `LOTTO-CONTRASTE-AA-01` (violeta), `LOTTO-EN-ROTULOS-PT-01`,
    `LOTTO-COPY-VANTAGEM-01`, `LOTTO-PT-HTML-DIVERGE-01`, `LANDINGS-RESIDUO-RODADA-2-01`, a parte
    LottoExpert de `EXPORT-COPY-SEM-ORIGEM-01` e de `LANDINGS-URL-E-PLAY-01`.
+   **Topo:** recalcular o topo e recolocar o CTA da Play acima da dobra a 1280×720. Com o nav em
+   fluxo desde a fatia 2, o CTA do LottoExpert sai da dobra.
    **Bloqueio para fechar (não para começar):** a copy que falte na fonte (D25) e as capturas
    das funcionalidades destacadas (D26). O repositório só tem o mockup do hero e os logos das loterias.
    Quem desbloqueia: o usuário.
@@ -150,17 +211,23 @@ prova é o checklist de navegador.
    **Bloqueio:** o texto do card do LottoExpert, se a fonte não tiver (D25). O 768 está decidido
    (D27). Quem desbloqueia: o usuário. O WP-19 não bloqueia a home.
 7. **TopoWalk** (pt e en; as outras línguas são do WP-18). **Achados:** `TOPO-PT-HTML-DIVERGE-01`,
-   `TOPO-CONTRASTE-AA-01`, a parte TopoWalk de `LANDINGS-URL-E-PLAY-01`. **Bloqueio:** WP-19
+   `TOPO-CONTRASTE-AA-01`, a parte TopoWalk de `LANDINGS-URL-E-PLAY-01`. **Topo:** recalcular o
+   topo e recolocar o CTA da Play acima da dobra a 1280×720 (nav em fluxo desde a fatia 2).
+   **Bloqueio:** WP-19
    (checklist) e as 4 capturas (D26). Quem desbloqueia: o usuário.
 8. **Pole Position.** **Achados:** `POLE-PT-HTML-DIVERGE-01` (vale o que a política do app diz
    sobre o Firebase), `POLE-EN-ROTULOS-PT-01`, `POLE-PRINTS-2X-01`, `POLE-MOCKUP-CURSOR-01`.
+   **Topo:** recalcular o topo e recolocar o CTA da Play acima da dobra a 1280×720 (nav em fluxo
+   desde a fatia 2).
    **Bloqueio:** WP-19, 2 capturas (D26) e as capturas em 2× para `POLE-PRINTS-2X-01`. Quem desbloqueia:
    o usuário. O preço e a faixa etária vêm da ficha pública da Play, lidos como na D17, e não
    bloqueiam.
 9. **EclipseGo.** **Achados:** `ECLIPSE-ICONE-OFFLINE-01` e `ECLIPSE-ICONE-WIFI-SLASH-01` (o ícone
    de `Landing App?app=eclipse`; ícone de fora do FA entra com a licença ao lado),
    `ECLIPSE-EN-ROTULOS-PT-01`, a parte EclipseGo de `EXPORT-COPY-SEM-ORIGEM-01` ("Sem backend" e
-   "Nenhuma chamada de rede" só entram se o README do app disser). **Bloqueio:** WP-19 e 2
+   "Nenhuma chamada de rede" só entram se o README do app disser). **Topo:** recalcular o topo e
+   recolocar o CTA da Play acima da dobra a 1280×720; com o nav em fluxo desde a fatia 2, o CTA do
+   EclipseGo sai da dobra. **Bloqueio:** WP-19 e 2
    capturas (D26). Quem desbloqueia: o usuário.
 10. **Limpeza e aceite.** Saem a camada de legado de `global.css` e os temas `[data-tema]`. O grep
     de tokens fica vazio. Entram a tabela de contraste do `site-ux`, o Lighthouse de

@@ -1,0 +1,44 @@
+---
+// Logo da GHF (WP-10, fatia 2): um componente só para o Nav e o Footer. Até a arte nova (sessão de
+// Claude Design do WP-20, LOGO-ANO-E-FUNDO-ESCURO-01), é o PNG atual recortado no símbolo, como o
+// handoff mostra (`Site Nav.dc.html:24`, `Site Footer.dc.html:14`, `GHF Kit v3.dc.html:267`):
+// caixa 52×22 e a imagem a 122 px, deslocada em -34/-17 px, com `brightness(1.9)`. Os
+// deslocamentos estão em percentual da caixa (122/52, 34/52, 17/22) para valerem em qualquer
+// escala; a janela cai em x 189–478, y 94–216 do PNG (677×369), o símbolo, e esconde "GHF SOFTWARE
+// / INNOVATING IOT SINCE 1996", que começa em y ≈ 232. Trocar a arte depois é trocar o `import`.
+//
+// O nome acessível é do link: com `texto`, o "GHF Software" visível; sem ele, `aria-label`. A imagem
+// tem `alt=""`. Logotipo é exceção do 1.4.3 (contraste), sem medida. Sem `fetchpriority`: a 52×22
+// o logo deixa de ser o LCP da home (o `site-seo-perf` re-mede; se voltar a ser, a prop volta).
+import { Image } from 'astro:assets';
+import logo from '../assets/img/GHFSoftware.png';
+
+interface Props {
+  /** atributos do link (`atributosLink`/`link` de src/i18n/idiomas.ts, D23) */
+  link: { href: string; hreflang?: string; lang?: string };
+  /** mostra "GHF Software" ao lado do símbolo (o handoff mostra quando a página não tem app) */
+  texto?: boolean;
+  /** `lazy` no rodapé (fora da primeira dobra, ADR-006); no nav, `eager` */
+  carregamento?: 'eager' | 'lazy';
+}
+
+const { link, texto = false, carregamento = 'eager' } = Astro.props;
+---
+<a
+  {...link}
+  aria-label={texto ? undefined : 'GHF Software'}
+  class="flex flex-none items-center gap-2.5 min-h-11 rounded-ctl text-text anel-foco"
+>
+  <span class="relative block w-[52px] aspect-[52/22] overflow-hidden flex-none">
+    <Image
+      src={logo}
+      width={122}
+      height={66}
+      densities={[1, 2]}
+      alt=""
+      loading={carregamento}
+      class="absolute max-w-none w-[234.6%] h-auto left-[-65.4%] top-[-77.3%] brightness-[1.9]"
+    />
+  </span>
+  {texto && <span class="text-[16px] font-bold tracking-[-0.01em] whitespace-nowrap">GHF Software</span>}
+</a>

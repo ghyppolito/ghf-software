@@ -1,7 +1,7 @@
 ---
 // Landing do Pole Position (/poleposition.html e /<código>/poleposition.html), a página inteira com a prop `lang`. Corpo em components/PolePosition.astro, textos
-// em i18n/poleposition.ts. Links da página para a home vão à home do mesmo idioma. O lima do
-// Pole Position é claro: a pílula do menu do celular usa texto preto (Nav `realce="primary-claro"`).
+// em i18n/poleposition.ts. Links da página para a home vão à home do mesmo idioma. O acento da
+// casca vem de `app` (`data-app`, WP-10 fatia 2).
 import Base from '../../layouts/Base.astro';
 import Nav from '../Nav.astro';
 import Footer from '../Footer.astro';
@@ -28,6 +28,7 @@ const home = rota(lang, 'index.html');
   lang={lang}
   caminho="poleposition.html"
   tema="poleposition"
+  app="poleposition"
   favicon="/assets/poleposition.png"
   classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden"
 >
@@ -36,21 +37,19 @@ const home = rota(lang, 'index.html');
     lang={lang}
     caminho="poleposition.html"
     inicio={home}
-    realce="primary-claro"
     itens={[
       { href: `${home}#sobre`, chave: 'nav_about' },
       { href: `${home}#portfolio`, chave: 'nav_portfolio' },
-      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+      { href: `${home}#contato`, chave: 'nav_contact' },
     ]}
   />
-  <main>
+  <main id="conteudo" tabindex="-1" class="focus-visible:outline-none">
     <PolePosition lang={lang} />
   </main>
-  {/* Canais do app, na ordem da página antiga. O rodapé dela não tinha o filete do topo. */}
+  {/* Canais do app, na ordem da página antiga. */}
   <Footer
     lang={lang}
     inicio={home}
-    prefixoAncora={home}
     redes={{
       youtube: 'https://www.youtube.com/channel/UCo7b8Mshb_6atZt-L5Gng1A',
       instagram: 'https://www.instagram.com/pole.position.laptimer/',
@@ -58,6 +57,5 @@ const home = rota(lang, 'index.html');
       facebook: 'https://www.facebook.com/poleposition.laptimer',
     }}
     appAtual="poleposition.html"
-    fundo="surface-sem-borda"
   />
 </Base>

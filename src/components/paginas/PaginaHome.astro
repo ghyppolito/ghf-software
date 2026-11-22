@@ -35,11 +35,11 @@ const x = home[lang];
     itens={[
       { href: '#sobre', chave: 'nav_about' },
       { href: '#portfolio', chave: 'nav_portfolio' },
-      { href: '#contato', chave: 'nav_contact', destaque: true },
+      { href: '#contato', chave: 'nav_contact' },
     ]}
   />
-  <main>
+  <main id="conteudo" tabindex="-1" class="focus-visible:outline-none">
     <Home lang={lang} />
   </main>
-  <Footer lang={lang} inicio="#" prefixoAncora="" />
+  <Footer lang={lang} inicio="#" />
 </Base>
