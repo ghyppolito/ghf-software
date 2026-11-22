@@ -1,13 +1,16 @@
 ---
 // Landing do EclipseGo (/eclipsego.html e /<código>/eclipsego.html), a página inteira com a prop `lang`. Corpo em components/EclipseGo.astro, textos em
 // i18n/eclipsego.ts. Links da página para a home vão à home do mesmo idioma. O acento da casca vem
-// de `app` (`data-app`, WP-10 fatia 2).
+// de `app` (`data-app`, WP-10 fatia 2). Nav da landing (WP-10, fatia 5): as âncoras das seções que
+// existem e a política do app (`itensNav`), sem item atual (âncora não é página); corpo com o
+// padrão do Base, sem as classes `brand-*` do legado.
 import Base from '../../layouts/Base.astro';
 import Nav from '../Nav.astro';
 import Footer from '../Footer.astro';
 import EclipseGo from '../EclipseGo.astro';
 import { eclipsego } from '../../i18n/eclipsego';
 import { rota, type Idioma } from '../../i18n/idiomas';
+import { itensNav } from '../../i18n/landing';
 import JsonLd from '../JsonLd.astro';
 import { mobileApplication } from '../../i18n/apps';
 
@@ -20,28 +23,24 @@ const x = eclipsego[lang];
 const home = rota(lang, 'index.html');
 ---
 <Base
-  title={x.title}
-  description={x.description}
+  title={x.meta.title}
+  description={x.meta.description}
   og={{
     imagem: '/assets/eclipse-go.png',
   }}
   lang={lang}
   caminho="eclipsego.html"
-  tema="eclipsego"
+  tema="ghf"
   app="eclipsego"
   favicon="/assets/eclipse-go-favicon.png"
-  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden"
 >
   <JsonLd slot="jsonld" dados={mobileApplication('eclipsego')} />
   <Nav
     lang={lang}
     caminho="eclipsego.html"
     inicio={home}
-    itens={[
-      { href: `${home}#sobre`, chave: 'nav_about' },
-      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
-      { href: `${home}#contato`, chave: 'nav_contact' },
-    ]}
+    app="eclipsego"
+    itens={itensNav(x, lang, 'eclipsego')}
   />
   <main id="conteudo" tabindex="-1" class="focus-visible:outline-none">
     <EclipseGo lang={lang} />

@@ -1,0 +1,24 @@
+---
+// Faixa de privacidade (WP-10, fatia 5; LA:162-164): uma frase e o link da política do app (URL
+// contratual, ADR-001), sem `<h2>` visível, como o export (`aria-label`). O link é inline na frase:
+// fica fora do alvo de 44 px (exceção de link em texto da WCAG 2.5.8; desvio 11 da especificação).
+// O slot recebe o bloco extra da D1 (linha do backup do LottoExpert, fatia 9).
+import Secao from './Secao.astro';
+
+interface Props {
+  rotulo: string;
+  frase: string;
+  linkRotulo: string;
+  linkHref: { href: string; hreflang?: string; lang?: string };
+}
+
+const { rotulo, frase, linkRotulo, linkHref } = Astro.props;
+---
+<Secao rotulo={rotulo} compacta>
+  <p class="max-w-[62ch] text-[clamp(17px,1.7cqi,20px)] leading-[1.55] text-pretty">
+    {frase}
+    {' '}
+    <a {...linkHref} class="text-text underline decoration-brand underline-offset-4 hover:decoration-2 active:text-brand rounded-[2px] anel-foco">{linkRotulo}</a>
+  </p>
+  <slot />
+</Secao>

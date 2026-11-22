@@ -7,6 +7,8 @@
 // `menu`/`appPage`/`privacy`/`terms` de `content/i18n.js`; `nav_principal` é o `aria-label` do
 // `<nav>` de `Site Nav.dc.html:36` ("Principal"; en "Main"); `pular` é o link "Pular para o
 // conteúdo" (WCAG 2.4.1), que o handoff não tem (resposta 8 do usuário, 2026-11-22).
+// Landings do WP-10 (fatia 5): `nav_funcionalidades`, `nav_planos`, `nav_gratis_pro`, `nav_faq` e
+// `nav_privacidade` são `features`/`plans`/`freepro`/`faq`/`privacy` de `content/i18n.js`.
 // `Idioma` vem do mapa (idiomas.ts); fica reexportado aqui para os dicionários de src/i18n/.
 import type { Idioma } from './idiomas';
 
@@ -20,6 +22,11 @@ export const ui = {
     nav_portfolio: 'Portfólio',
     nav_contact: 'Contato',
     nav_principal: 'Principal',
+    nav_funcionalidades: 'Funcionalidades',
+    nav_planos: 'Planos',
+    nav_gratis_pro: 'Grátis e Pro',
+    nav_faq: 'FAQ',
+    nav_privacidade: 'Privacidade',
     menu: 'Menu',
     pular: 'Pular para o conteúdo',
     footer_desc:
@@ -38,6 +45,11 @@ export const ui = {
     nav_portfolio: 'Portfolio',
     nav_contact: 'Contact',
     nav_principal: 'Main',
+    nav_funcionalidades: 'Features',
+    nav_planos: 'Plans',
+    nav_gratis_pro: 'Free & Pro',
+    nav_faq: 'FAQ',
+    nav_privacidade: 'Privacy',
     menu: 'Menu',
     pular: 'Skip to content',
     footer_desc:

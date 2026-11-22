@@ -1,0 +1,63 @@
+---
+// Planos em níveis (WP-10, fatia 5; LA:111-145): cards de preço, nota e a tabela de comparação numa
+// região rolável com foco (`<section>` com nome) (a tabela tem 520 px de largura mínima; a página não rola de lado). O
+// nível destacado tem a borda no acento (o `-edge` do export dá 2,48:1; desvio 2 da especificação).
+import NotaPlanos from './NotaPlanos.astro';
+import type { Planos } from '../../i18n/landing';
+import type { Idioma } from '../../i18n/idiomas';
+
+type Niveis = Extract<Planos, { tipo: 'niveis' }>;
+
+interface Props {
+  lang: Idioma;
+  titulo: string;
+  planos: Niveis;
+  rotuloTermos: string;
+}
+
+const { lang, titulo, planos, rotuloTermos } = Astro.props;
+const c = planos.comparacao;
+// Nome da região rolável da tabela (`<section>` com nome = role region). O do export é o título da
+// seção, que repete o nome do landmark de fora (unique-landmark do html-validate): aqui vai o
+// título com as duas colunas comparadas, sem texto novo.
+const rotuloTabela = `${titulo}: ${c.colGratis} × ${c.colPago}`;
+---
+<div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,200px),1fr))] gap-3">
+  {
+    planos.niveis.map((n) => (
+      <div class:list={['bg-surface border rounded-card p-5 flex flex-col gap-2', n.destaque ? 'border-app-acc' : 'border-border']}>
+        <span class="text-[15px] font-bold">{n.nome}</span>
+        <span class="text-[28px] leading-[34px] font-bold tabular-nums tracking-[-0.01em]">
+          {n.preco}
+          {n.periodo && <span class="text-sm font-medium text-text-2">{n.periodo}</span>}
+        </span>
+        <span class="text-sm leading-[21px] text-text-2 text-pretty">{n.descricao}</span>
+      </div>
+    ))
+  }
+</div>
+{planos.nota && <NotaPlanos lang={lang} nota={planos.nota} rotuloTermos={rotuloTermos} />}
+<section tabindex="0" aria-label={rotuloTabela} class="overflow-x-auto border border-border rounded-card focus-visible:outline-3 focus-visible:outline-brand focus-visible:-outline-offset-3">
+  <table class="w-full min-w-[520px] border-collapse text-sm leading-5">
+    <thead>
+      <tr class="bg-surface">
+        <th scope="col" class="text-left px-4 py-3.5 font-semibold text-text-2">{c.colRecurso}</th>
+        <th scope="col" class="text-left px-4 py-3.5 font-bold w-[28%]">{c.colGratis}</th>
+        <th scope="col" class="text-left px-4 py-3.5 font-bold w-[32%] text-app-acc">
+          {c.colPago} <span class="font-medium text-text-2">{c.colPagoSub}</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        c.linhas.map(([recurso, gratis, pago]) => (
+          <tr class="border-t border-border">
+            <th scope="row" class="text-left px-4 py-3 font-medium">{recurso}</th>
+            <td class="px-4 py-3 text-text-2">{gratis}</td>
+            <td class="px-4 py-3">{pago}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</section>

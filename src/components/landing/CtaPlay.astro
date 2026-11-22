@@ -1,0 +1,18 @@
+---
+// Botão da Google Play (WP-10, fatia 5; LA:30, `GHF Kit v3` "Estados"): o único primário da
+// landing. Texto `--color-bg` sobre o acento do app (6,62:1 no EclipseGo); hover e ativo de
+// tokens.css (`app-acc-hover`, `app-acc-active`: BOTAO-ATIVO-CONTRASTE-01). Sem ícone, como o
+// export; abre em outra aba, como as páginas de antes. Sem transição.
+interface Props {
+  href: string;
+  rotulo: string;
+}
+
+const { href, rotulo } = Astro.props;
+---
+<a
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="min-h-[52px] px-7 rounded-pill bg-app-acc text-bg font-bold text-base inline-flex items-center text-center hover:bg-app-acc-hover active:bg-app-acc-active anel-foco"
+>{rotulo}</a>

@@ -1,0 +1,54 @@
+---
+// Planos "grátis e Pro" (WP-10, fatia 5; LA:146-158): dois cards lado a lado quando cabem 2 × 320
+// px. O card Pro tem a borda e o título no acento.
+import NotaPlanos from './NotaPlanos.astro';
+import type { Planos } from '../../i18n/landing';
+import type { Idioma } from '../../i18n/idiomas';
+
+type GratisPro = Extract<Planos, { tipo: 'gratis-pro' }>;
+
+interface Props {
+  lang: Idioma;
+  planos: GratisPro;
+  rotuloTermos: string;
+}
+
+const { lang, planos, rotuloTermos } = Astro.props;
+const { gratis, pro } = planos;
+---
+<div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] gap-4">
+  <div class="bg-surface border border-border rounded-card p-[clamp(20px,2.4cqi,28px)] flex flex-col gap-3.5">
+    <div class="flex items-baseline justify-between gap-3 flex-wrap">
+      <h3 class="text-[22px] font-bold">{gratis.titulo}</h3>
+      <span class="text-sm text-text-2">{gratis.sub}</span>
+    </div>
+    <ul class="flex flex-col">
+      {
+        gratis.itens.map((item) => (
+          <li class="flex gap-2.5 py-[9px] border-t border-border text-[15px] leading-[22px]">
+            <span aria-hidden="true" class="flex-none text-text-2">✓</span>
+            <span>{item}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <div class="bg-surface border border-app-acc rounded-card p-[clamp(20px,2.4cqi,28px)] flex flex-col gap-3.5">
+    <div class="flex items-baseline justify-between gap-3 flex-wrap">
+      <h3 class="text-[22px] font-bold text-app-acc">{pro.titulo}</h3>
+      <span class="text-sm text-text-2">{pro.sub}</span>
+    </div>
+    <ul class="flex flex-col">
+      {
+        pro.itens.map((item) => (
+          <li class="flex flex-col gap-0.5 py-[9px] border-t border-border">
+            <span class="text-[15px] leading-[22px] font-semibold">{item.nome}</span>
+            <span class="text-sm leading-[21px] text-text-2 text-pretty">{item.descricao}</span>
+          </li>
+        ))
+      }
+    </ul>
+    {pro.nota && <p class="text-[13px] leading-5 text-text-2">{pro.nota}</p>}
+  </div>
+</div>
+{planos.nota && <NotaPlanos lang={lang} nota={planos.nota} rotuloTermos={rotuloTermos} />}
