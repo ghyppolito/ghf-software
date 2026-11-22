@@ -10,7 +10,7 @@ decisoes: [D4, D11, D12, D24, D25, D26, D27]
 tamanho: L
 risco: medio
 visual: true
-branch: feat/wp-10-fatia-3
+branch: feat/wp-10-fatia-4
 ---
 
 # WP-10 — A home e as landings de app seguem o sistema visual do handoff

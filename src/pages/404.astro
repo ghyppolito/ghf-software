@@ -1,11 +1,33 @@
 ---
-// 404 do site. O Pages serve /404.html em qualquer profundidade: caminhos absolutos, pt e en
-// lado a lado (não há par por idioma). Nav e Footer da home (WP-22), com hrefs absolutos: a página
-// só existe em pt (`linguasDe('404.html')`), então sem seletor de idioma. O corpo é flex em coluna
-// para o rodapé não flutuar no meio da tela com o conteúdo curto.
+// 404 do site (WP-10, fatia 4; `404.dc.html` da rodada 3). O Pages serve /404.html em qualquer
+// profundidade: todo link é absoluto (`/`, `/en/`, `/lottoexpert.html`…), pt e en lado a lado (não
+// há par por idioma). Nav e Footer da home (WP-22), com hrefs absolutos: a página só existe em pt
+// (`linguasDe('404.html')`), então sem seletor de idioma e sem `app` (o acento é o teal da marca).
+// O corpo é flex em coluna para o rodapé não flutuar no meio da tela com o conteúdo curto.
+// Duas colunas a partir de 1024 px: à esquerda o título, o "Voltar para o início" e o bloco en; à
+// direita a lista dos 4 apps, cada um com o link da landing e o da política de privacidade (URL
+// contratual, ADR-001). Copy (D25): só o texto que a página já tinha e rótulos de interface; o
+// eyebrow "Erro 404", o título "Esta página não existe." e os parágrafos do export ficam de fora.
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import { t } from '../i18n/ui';
+import { atributosLink, link } from '../i18n/idiomas';
+import { apps } from '../i18n/apps';
+import iconeLotto from '../assets/img/lottoexpert_favicon_v3.png';
+import iconeTopo from '../assets/img/topo-walk.png';
+import iconePole from '../assets/img/poleposition.png';
+import iconeEclipse from '../assets/img/eclipse-go-favicon.png';
+
+// Ordem do Footer. O quadrado é a cor do app (classe inteira literal: o Tailwind não detecta
+// concatenação).
+const lista = [
+  { nome: apps.lottoexpert.nome, icone: iconeLotto, quadrado: 'bg-app-lotto', pagina: 'lottoexpert.html', privacidade: 'lottoexpert-privacy.html' },
+  { nome: apps.topowalk.nome, icone: iconeTopo, quadrado: 'bg-app-topo', pagina: 'topowalk.html', privacidade: 'topowalk-privacy.html' },
+  { nome: apps.poleposition.nome, icone: iconePole, quadrado: 'bg-app-pole', pagina: 'poleposition.html', privacidade: 'poleposition-privacy.html' },
+  { nome: apps.eclipsego.nome, icone: iconeEclipse, quadrado: 'bg-app-eclipse', pagina: 'eclipsego.html', privacidade: 'eclipsego-privacy.html' },
+];
 ---
 <Base
   title="Página não encontrada · Page not found · GHF Software"
@@ -14,7 +36,7 @@ import Footer from '../components/Footer.astro';
   caminho="404.html"
   tema="ghf"
   noindex
-  classeBody="bg-brand-base text-gray-100 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden min-h-screen flex flex-col"
+  classeBody="bg-bg text-text font-sans antialiased selection:bg-brand selection:text-bg overflow-x-hidden min-h-screen flex flex-col"
 >
   <Nav
     lang="pt"
@@ -26,19 +48,29 @@ import Footer from '../components/Footer.astro';
       { href: '/#contato', chave: 'nav_contact' },
     ]}
   />
-  <main id="conteudo" tabindex="-1" class="focus-visible:outline-none flex-1 w-full max-w-lg mx-auto px-6 pt-32 pb-24 grid content-start gap-8">
-    <section class="bg-brand-surface rounded-xl p-6">
-      <h1 class="text-2xl font-bold mb-3">Página não encontrada</h1>
-      <p>
-        <a href="/" class="inline-flex items-center min-h-[44px] text-brand-primary hover:text-brand-primaryHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-brand-accent">Voltar para o início</a>
-      </p>
-    </section>
-    <section lang="en" class="bg-brand-surface rounded-xl p-6">
-      <h2 class="text-2xl font-bold mb-3">Page not found</h2>
-      <p>
-        <a href="/en/" class="inline-flex items-center min-h-[44px] text-brand-primary hover:text-brand-primaryHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-brand-accent">Back to the home page</a>
-      </p>
-    </section>
+  <main id="conteudo" tabindex="-1" class="focus-visible:outline-none flex-1 w-full max-w-[1216px] mx-auto px-4 lg:px-8 py-10 lg:py-24 grid gap-8 lg:grid-cols-2 items-start">
+    <div class="flex flex-col items-start gap-4">
+      <h1 class="text-h1 lg:text-h1-lg text-text text-balance">Página não encontrada</h1>
+      <a {...atributosLink('pt', '/')} class="inline-flex items-center min-h-12 px-[22px] rounded-pill border border-border-strong text-small font-semibold text-text no-underline hover:bg-raised anel-foco">Voltar para o início</a>
+      <p lang="en" class="mt-2 text-body text-text-muted">Page not found</p>
+      <a {...atributosLink('pt', '/en/')} class="inline-flex items-center min-h-11 text-text-2 underline underline-offset-4 decoration-border-strong hover:text-text anel-foco">Back to the home page</a>
+    </div>
+    <ul aria-label="Apps" class="flex flex-col border border-border rounded-card bg-surface overflow-hidden">
+      {
+        lista.map((a) => (
+          <li class="border-t border-border px-4 py-3 flex flex-wrap items-center gap-3.5">
+            <Image src={a.icone} alt="" width={40} height={40} densities={[1, 2]} loading="lazy" class="size-10 flex-none rounded-[10px] object-cover" />
+            <a {...link('pt', a.pagina)} class="flex-1 min-h-11 min-w-[120px] flex items-center gap-2.5 font-bold text-text no-underline hover:underline anel-foco-interno">
+              <span aria-hidden="true" class={`size-2 flex-none rounded-[2px] ${a.quadrado}`} />
+              {a.nome}
+            </a>
+            <a {...link('pt', a.privacidade)} class="min-h-11 inline-flex items-center text-small text-text-2 underline decoration-border-strong underline-offset-4 anel-foco-interno">
+              {t('pt', 'footer_privacy')}<span class="sr-only"> - {a.nome}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </main>
   <Footer lang="pt" inicio="/" />
 </Base>
