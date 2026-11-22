@@ -2,12 +2,15 @@
 // Footer do site (WP-10, fatia 2; `Site Footer.dc.html`). `id="contato"` é o alvo do item Contato
 // da nav. Um visual só (`bg-footer`) e um DOM só para os três ramos (N:119, D27): `m` < 600 px,
 // `t` 600–1023 (variante `t:` de src/styles/tokens.css), `d` ≥ 1024 (`lg:`).
-// - m: marca, contato e, abaixo, os 4 apps empilhados (título + links em linha).
-// - t: marca e contato em 2 colunas; abaixo, os 4 apps em 4 colunas.
+// - m: marca, os 4 apps empilhados (título + links em linha) e contato.
+// - t: marca na primeira linha; os 4 apps em 4 colunas; contato embaixo.
 // - d: uma grade `1,3fr · 4×1fr · 1,3fr` — marca, os 4 apps e contato.
-// O bloco dos apps é um `<div>` só: em m e t é a linha de baixo da grade (`order-last`), em d é
-// `lg:contents` e os apps viram colunas. O handoff duplica o bloco; aqui não, para o leitor de tela
-// não ouvir os links duas vezes.
+// A ordem visual é a do DOM em toda largura (marca → apps → contato; WCAG 2.4.3). O `Site Footer`
+// põe o contato antes dos apps em m e t; seguir isso com `order` deixaria o Tab fora da ordem
+// visual (auditoria da fatia 2; desvio registrado no WP-10 e em RODAPE-ORDEM-M-T-01).
+// O bloco dos apps é um `<div>` só: em m e t é uma linha inteira da grade, em d é `lg:contents` e
+// os apps viram colunas. O handoff duplica o bloco; aqui não, para o leitor de tela não ouvir os
+// links duas vezes.
 // Links para páginas do site passam por `link()`/`atributosLink()`: na língua da página quando o
 // destino a tem; senão pela D23 (en, senão pt), com `hreflang` e `lang` do destino. O nome do app
 // entra no nome acessível de cada link por um `sr-only` ("Privacidade - LottoExpert", WCAG 2.4.4 e
@@ -24,9 +27,6 @@ interface Props {
   lang: Idioma;
   /** destino do logo */
   inicio: string;
-  /** prefixo das âncoras da home: '' na própria home, a URL da home nas outras páginas (sem uso
-   *  desde a fatia 2 do WP-10, que tirou a coluna "Institucional"; as páginas ainda passam) */
-  prefixoAncora: string;
   /** canais da página (a landing de cada app aponta para os do app; canal ausente não aparece);
    *  padrão: os da GHF. O e-mail aparece sempre. */
   redes?: { youtube?: string; instagram?: string; tiktok?: string; facebook?: string };
@@ -107,8 +107,8 @@ const ano = new Date().getFullYear();
         <p class="max-w-[36ch] text-[14px] leading-[22px] text-text-2 text-pretty">{t(lang, 'footer_desc')}</p>
       </div>
 
-      <!-- Apps: linha de baixo em m e t, colunas da grade em d -->
-      <div class="order-last col-span-full grid grid-cols-1 t:grid-cols-4 gap-x-6 pt-3 border-t border-border lg:contents">
+      <!-- Apps: linha inteira em m e t, colunas da grade em d -->
+      <div class="col-span-full grid grid-cols-1 t:grid-cols-4 gap-x-6 pt-3 border-t border-border lg:contents">
         {
           apps.map((a) => (
             <div class="flex flex-col min-w-0 py-1 border-t border-border t:py-0 t:border-t-0">

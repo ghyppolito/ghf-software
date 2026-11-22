@@ -43,14 +43,13 @@ const home = rota(lang, 'index.html');
       { href: `${home}#contato`, chave: 'nav_contact' },
     ]}
   />
-  <main id="conteudo">
+  <main id="conteudo" tabindex="-1" class="focus-visible:outline-none">
     <PolePosition lang={lang} />
   </main>
   {/* Canais do app, na ordem da página antiga. */}
   <Footer
     lang={lang}
     inicio={home}
-    prefixoAncora={home}
     redes={{
       youtube: 'https://www.youtube.com/channel/UCo7b8Mshb_6atZt-L5Gng1A',
       instagram: 'https://www.instagram.com/pole.position.laptimer/',

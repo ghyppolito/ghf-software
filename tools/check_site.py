@@ -102,6 +102,10 @@ Checa:
      `@layer properties { @supports (… margin-trim …` — se tiver, src/styles/sem-polyfill.mjs virou
      no-op (upgrade do Tailwind que mudou o formato); a fusão em si é provada por
      tools/test_sem_polyfill.mjs (`npm run test:css`)
+ 19. rodapé com as 5 URLs legais (ADR-001; WP-10 fatia 2, que tirou a coluna "Transparência &
+     Políticas" e pôs cada política na coluna do app): toda página de `dist/` fora de CONGELADAS
+     tem `<footer>`, e cada `<footer>` tem um link para cada página de LEGAL na língua da página
+     (`/en/…` nas páginas en; destino sem a língua cai na D23, como no §9)
 
 As regras de i18n (i)–(viii), (x)–(xii), a linha de data e o link `data-troca-idioma` são funções
 puras de tools/regras_i18n.py, provadas por tools/test_regras_i18n.py (casos de
@@ -1331,6 +1335,28 @@ for caminho in css_publicado:
             erros.append(f"{os.path.relpath(caminho, raiz)}: tem `{nome}` — src/styles/sem-polyfill.mjs não"
                          " tirou o polyfill (upgrade do Tailwind? regenere a fixture e rode `npm run test:css`,"
                          " ADR-008 §7)")
+
+# ------------------------------------------------------------ 19: rodapé com as 5 URLs legais
+# WP-10 fatia 2. As políticas e os termos saíram da coluna própria e foram para a coluna de cada app
+# no Footer; uma lista de app editada sem cuidado tiraria uma URL contratual (ADR-001) do rodapé de
+# todas as páginas, sem link quebrado nenhum para o §3 pegar. O href esperado é o do §9: a página
+# legal na língua da página, ou a da D23 quando ela não existe nessa língua.
+RE_FOOTER = re.compile(r"<footer\b.*?</footer>", re.S | re.I)
+for caminho in paginas:
+    rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
+    if rel in CONGELADAS:
+        continue
+    lang = i18n.pagina_de(rel)[0]
+    rodapes = RE_FOOTER.findall(ler(caminho))
+    if not rodapes:
+        erros.append(f"{rel}: sem <footer> — as 5 URLs legais saem do rodapé de toda página (WP-10)")
+    for rodape in rodapes:
+        hrefs = {h.split("#")[0].split("?")[0] for h in re.findall(r'\shref="([^"]*)"', rodape)}
+        for legal in LEGAL:
+            esperado = "/" + i18n.arquivo(i18n.lingua_do_link(MAPA, lang, legal), legal)
+            if esperado not in hrefs:
+                erros.append(f"{rel}: <footer> sem link para {esperado} — o rodapé leva as 5 URLs legais"
+                             " na língua da página (ADR-001, WP-10)")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")
