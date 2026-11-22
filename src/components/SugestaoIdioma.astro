@@ -91,10 +91,15 @@ const outras = linguas.filter((l) => l !== lang);
         }
 
         // A escolha é gravada só no clique de um link de idioma (seletor ou faixa), e a navegação é
-        // a do próprio link.
+        // a do próprio link. Na página legal, a seção aberta (`#secao-N`) vai junto: o `id` vem da
+        // posição do título e é o mesmo em toda língua (ADR-007 §6; `Legal LottoExpert.dc.html:151`,
+        // WP-10 fatia 3). Só esse formato: âncora de outra página pode não existir na outra língua.
+        // Sem JS, o link vai ao topo da página.
         document.addEventListener('click', (e) => {
           const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[data-troca-idioma]');
-          if (a?.dataset.trocaIdioma) grava(() => localStorage, ESCOLHA, a.dataset.trocaIdioma);
+          if (!a?.dataset.trocaIdioma) return;
+          grava(() => localStorage, ESCOLHA, a.dataset.trocaIdioma);
+          if (/^#secao-\d+(-\d+)*$/.test(location.hash)) a.hash = location.hash;
         });
 
         // Último elemento focável e visível antes de `el` no DOM: para onde o foco vai ao fechar.

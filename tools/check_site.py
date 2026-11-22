@@ -46,7 +46,10 @@ Checa:
  12. página legal, em cada língua do mapa: um só `<h1`, um só rótulo de data da língua da página,
      nenhuma aspa tipográfica que o `.md` não tenha; link do corpo para o próprio site é caminho a
      partir da raiz (nunca `https://ghfsoftware.com/…`), sem `target`, e em `<código>/` aponta para
-     a página na língua quando ela existe; e cada tradução com a mesma contagem de `## `, `### `,
+     a página na língua quando ela existe; todo `href="#x"` da página tem `id="x"` nela; cada caixa
+     de destaque de CAIXAS_LEGAIS (o seletor de global.css, ancorado em `secao-N`) cai no texto
+     esperado ("Nota sobre"/"Note on", "Dado local"/"Local data", o item com o CVV 188), com o
+     `data-doc` do documento no `.legal-corpo`; e cada tradução com a mesma contagem de `## `, `### `,
      linhas de tabela, itens de lista, links, crases (`code`) e `---` do `.pt.md`, a mesma
      sequência de níveis `##`/`###` (regra ii), cada `` `token` `` do pt o mesmo número de vezes
      (regra iii) e os SDKs de regras_i18n.SDKS que o pt cita (regra iv)
@@ -594,6 +597,111 @@ for ts in sorted(glob.glob(os.path.join(REPO, "src/i18n/*.ts"))):
 # provado no publicado: título e data aparecem uma vez (no hero), as aspas são as do .md do app; e
 # cada tradução tem a mesma estrutura do .pt.md (seção, tabela, token ou SDK perdido na tradução).
 TIPOGRAFICAS = "“”‘’"
+VAZIOS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
+# Caixas de destaque do corpo legal (WP-10 fatia 3): o seletor de src/styles/global.css (bloco "Texto
+# legal") ancora no `id` da seção e conta irmãos (`[id='secao-2'] + p + ul + p`), porque o .md não
+# distingue a nota pela estrutura. Se o .md do app mudar, a caixa cai em outro parágrafo calada; aqui
+# cada alvo tem de começar pelo texto esperado. Mesma tabela que o CSS: documento → (id, sequência
+# de irmãos depois do título, índices dos alvos na sequência, padrão do texto do alvo; `li:last`
+# = último item da lista daquele índice).
+CAIXAS_LEGAIS = {
+    "lottoexpert-privacy": [
+        ("secao-2", ["p", "ul", "p", "p", "p"], [2, 3, 4], r"^(Nota sobre|Note on)\b"),
+        ("secao-9-2", ["p", "ul", "p", "p"], [3], r"^(Dado local|Local data)\b"),
+    ],
+    "lottoexpert-terms": [
+        ("secao-3", ["ul"], ["li:last", 0], r"\b188\b"),
+    ],
+}
+
+
+class FilhosCorpo(HTMLParser):
+    """Filhos diretos do `.legal-corpo`: (tag, id, texto, textos dos `li` diretos de uma lista)."""
+
+    def __init__(self):
+        super().__init__()
+        self.pilha = []
+        self.filhos = []
+        self.dentro = False
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if not self.dentro:
+            if tag == "div" and "legal-corpo" in (a.get("class") or "").split():
+                self.dentro = True
+                self.doc = a.get("data-doc")
+            return
+        if tag in VAZIOS:
+            return
+        if len(self.pilha) == 0:
+            self.filhos.append({"tag": tag, "id": a.get("id"), "texto": "", "li": []})
+        elif len(self.pilha) == 1 and tag == "li" and self.filhos[-1]["tag"] in ("ul", "ol"):
+            self.filhos[-1]["li"].append("")
+        self.pilha.append(tag)
+
+    def handle_endtag(self, tag):
+        if not self.dentro or tag in VAZIOS:
+            return
+        if not self.pilha:
+            self.dentro = False  # fim do .legal-corpo
+            return
+        while self.pilha and self.pilha.pop() != tag:
+            pass
+
+    def handle_data(self, data):
+        if self.dentro and self.pilha:
+            self.filhos[-1]["texto"] += data
+            if len(self.pilha) >= 2 and self.pilha[1] == "li" and self.filhos[-1]["li"]:
+                self.filhos[-1]["li"][-1] += data
+
+
+def caixas_legais(alvo, pagina, corpo_html):
+    """Erros das caixas de destaque de CAIXAS_LEGAIS numa página legal (`corpo_html` a partir do
+    `<div class="legal-corpo"…>`)."""
+    doc = pagina[: -len(".html")]
+    regras = CAIXAS_LEGAIS.get(doc)
+    if not regras:
+        return []
+    fc = FilhosCorpo()
+    fc.feed(corpo_html)
+    out = []
+    if getattr(fc, "doc", None) != doc:
+        out.append(f"{alvo}: `.legal-corpo` sem `data-doc=\"{doc}\"` — as caixas de destaque de global.css não se aplicam")
+    for id_, seq, alvos, padrao in regras:
+        pos = next((i for i, f in enumerate(fc.filhos) if f["id"] == id_), None)
+        if pos is None:
+            out.append(f"{alvo}: caixa de destaque ancorada em #{id_}, que não existe no corpo")
+            continue
+        irmaos = fc.filhos[pos + 1 : pos + 1 + len(seq)]
+        if [f["tag"] for f in irmaos] != seq:
+            out.append(f"{alvo}: depois de #{id_} vêm {[f['tag'] for f in irmaos]}, o seletor da caixa espera {seq} — o .md mudou de estrutura")
+            continue
+        if alvos and alvos[0] == "li:last":
+            lis = irmaos[alvos[1]]["li"]
+            textos = [lis[-1] if lis else ""]
+        else:
+            textos = [irmaos[i]["texto"] for i in alvos]
+        for t in textos:
+            t = re.sub(r"\s+", " ", t).strip()
+            if not re.search(padrao, t):
+                out.append(f"{alvo}: caixa de destaque depois de #{id_} cai em \"{t[:60]}…\", que não casa com /{padrao}/ — o .md mudou e a caixa marcaria outro texto")
+    return out
+
+
+class Ancoras(HTMLParser):
+    """`id` da página e `href="#x"` (âncora na própria página)."""
+
+    def __init__(self):
+        super().__init__()
+        self.ids = set()
+        self.hrefs = []
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if a.get("id"):
+            self.ids.add(a["id"])
+        if tag == "a" and (a.get("href") or "").startswith("#") and len(a["href"]) > 1:
+            self.hrefs.append(a["href"][1:])
 for pagina, md in LEGAL.items():
     base_md = md[: -len(".pt.md")]
     fontes_md = {lang: os.path.join(REPO, f"{base_md}.{lang}.md") for lang in linguas_de(pagina)}
@@ -630,6 +738,15 @@ for pagina, md in LEGAL.items():
         corpo = html[ini:fim] if ini >= 0 and fim > ini else ""
         if not corpo:
             erros.append(f"{alvo}: corpo legal (`.legal-corpo`) não encontrado — a regra dos links do próprio site não tem onde olhar")
+        else:
+            # `corpo` começa dentro da tag (`class="legal-corpo…`); o parser precisa da tag inteira
+            erros.extend(caixas_legais(alvo, pagina, html[html.rfind("<div", 0, ini):fim]))
+        # Âncora na própria página (sumário `#secao-N`, "Pular" `#conteudo`, link do .md): todo
+        # `href="#x"` tem `id="x"` na página (WP-10 fatia 3).
+        anc = Ancoras()
+        anc.feed(html)
+        for h in sorted(set(anc.hrefs) - anc.ids):
+            erros.append(f"{alvo}: link `#{h}` sem `id=\"{h}\"` na página")
         for tag in re.findall(r"<a\b[^>]*>", corpo, re.I):
             href = re.search(r'href="([^"]*)"', tag)
             if not href:

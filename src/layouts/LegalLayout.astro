@@ -20,6 +20,8 @@
 // hero (3; o do Nav basta). O "voltar" não tem referência no handoff: botão secundário depois do
 // corpo, em `data-legal-voltar` — o fim do corpo para o §12 do tools/check_site.py.
 // Impressão (resposta 7): sem Nav, Footer, sumário e voltar; fundo branco.
+// Destaques (decisão do usuário, 2026-11-22, auditoria da fatia 3): as notas que as páginas antigas
+// punham em caixa voltam em caixa de papel, só por CSS, sem tocar no texto; ver global.css.
 import type { MarkdownHeading } from 'astro';
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
@@ -53,6 +55,9 @@ interface Props {
 
 const { lang, caminho, title, description, titulo, lastUpdated, app, favicon, headings, voltar } = Astro.props;
 const x = legal[lang];
+// Documento do corpo (`lottoexpert-terms`…): `data-doc` no `.legal-corpo`, para as caixas de destaque
+// de global.css (bloco "Texto legal") valerem só no documento delas. Vem do caminho, sem prop nova.
+const doc = caminho.replace(/\.html$/, '');
 
 const imagens = import.meta.glob<{ default: ImageMetadata }>('../assets/img/*.png', { eager: true });
 const icone = imagens[`../assets/img/${path.posix.basename(favicon)}`];
@@ -123,7 +128,7 @@ const classeItemRecolhivel =
         <h1 class="text-h1 lg:text-h1-lg text-balance text-paper-ink">{titulo}</h1>
         <div class="flex flex-wrap items-center gap-3">
           <span class="inline-flex items-center gap-2 min-h-9 px-3.5 rounded-pill bg-paper-chip border border-paper-border text-small">
-            <span class="text-paper-text-2">{rotuloData(lang)}</span>
+            <span class="text-paper-text-2">{rotuloData(lang)}</span>{' '}
             <strong class="font-bold tabular-nums"><time datetime={lastUpdated}>{dataLegal(lang, lastUpdated)}</time></strong>
           </span>
         </div>
@@ -147,7 +152,7 @@ const classeItemRecolhivel =
         </div>
       </details>
 
-      <div class="legal-corpo">
+      <div class="legal-corpo" data-doc={doc}>
         <slot />
       </div>
 

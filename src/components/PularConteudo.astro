@@ -2,7 +2,8 @@
 // "Pular para o conteúdo" (WP-10, fatia 2; WCAG 2.4.1): primeiro ponto de Tab da página, leva ao
 // `<main id="conteudo">`. O handoff não tem este componente (resposta 8 do usuário, 2026-11-22;
 // candidato a voltar ao Claude Design). Fora da tela até receber o foco; sem transição. Fora da
-// impressão (WP-10 fatia 3, resposta 7: o `fixed` sairia no pé da folha).
+// impressão (WP-10 fatia 3, resposta 7: o `fixed` sairia no pé da folha). A sombra só com o
+// foco: fora da tela, o desfoque de 32 px dela vazava no canto de cima, visível sobre o papel.
 import { t, type Idioma } from '../i18n/ui';
 
 interface Props {
@@ -13,7 +14,7 @@ const { lang } = Astro.props;
 ---
 <a
   href="#conteudo"
-  class="fixed left-3 top-3 z-50 -translate-y-[calc(100%+1rem)] focus:translate-y-0 inline-flex items-center min-h-11 px-4 rounded-pill bg-raised border border-border-strong shadow-pop text-[14px] font-semibold text-text anel-foco print:hidden"
+  class="fixed left-3 top-3 z-50 -translate-y-[calc(100%+1rem)] focus:translate-y-0 inline-flex items-center min-h-11 px-4 rounded-pill bg-raised border border-border-strong focus:shadow-pop text-[14px] font-semibold text-text anel-foco print:hidden"
 >
   {t(lang, 'pular')}
 </a>

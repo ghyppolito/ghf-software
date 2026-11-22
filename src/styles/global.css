@@ -262,4 +262,29 @@
   .legal-corpo td {
     @apply px-3.5 py-2.5 align-top;
   }
+
+  /* Destaques (decisão do usuário, 2026-11-22, auditoria da fatia 3; sem referência no handoff:
+   * LEGAL-CALLOUT-SEM-HANDOFF-01). As notas que as páginas antigas mostravam em caixa voltam em
+   * caixa de papel, sem mudar o texto. O `.md` não as distingue pela estrutura: o seletor ancora no
+   * `id` da seção, que vem da posição (plugin idDosTitulosLegais, ADR-007 §6), igual em pt e en, e
+   * no `data-doc` do LegalLayout. O §12 do tools/check_site.py (CAIXAS_LEGAIS, mesma tabela) confere
+   * que cada caixa cai no parágrafo certo: "Nota sobre"/"Note on", "Dado local"/"Local data" e o
+   * item com o CVV 188. Mudou um seletor aqui, muda lá.
+   * Privacidade do LottoExpert, §2: as 3 notas depois da lista, com barra. */
+  .legal-corpo[data-doc='lottoexpert-privacy'] [id='secao-2'] + p + ul + p,
+  .legal-corpo[data-doc='lottoexpert-privacy'] [id='secao-2'] + p + ul + p + p,
+  .legal-corpo[data-doc='lottoexpert-privacy'] [id='secao-2'] + p + ul + p + p + p {
+    @apply mb-4 px-4 py-3 rounded-ctl bg-paper-chip border-l-4 border-paper-link;
+  }
+
+  /* §9.2: "Dado local", a mesma caixa sem a barra, como era. */
+  .legal-corpo[data-doc='lottoexpert-privacy'] [id='secao-9-2'] + p + ul + p + p {
+    @apply mb-4 px-4 py-3 rounded-ctl bg-paper-chip;
+  }
+
+  /* Termos do LottoExpert, §3: o último item (ajuda de jogo responsável: Jogadores Anônimos, CVV
+   * 188) em caixa com barra, alinhada ao texto (sem o marcador da lista). */
+  .legal-corpo[data-doc='lottoexpert-terms'] [id='secao-3'] + ul > li:last-child {
+    @apply list-none -ml-6 mt-4 mb-0 px-4 py-3 rounded-ctl bg-paper-chip border-l-4 border-paper-link;
+  }
 }

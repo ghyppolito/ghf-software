@@ -34,7 +34,7 @@ página usa; `docs/AVALIACAO.md` §3.3.
 `src/pages/**` (pt e en), `src/assets/img/**` (imagens novas, pelo `astro:assets`; ADR-006 e
 `check_site.py` §13 proíbem imagem exibida em `public/`), `src/i18n/**`, `src/styles/tokens.css` e
 `tools/fixtures/sem-polyfill/*` (regenerada pelo ADR-008 §7 quando o CSS muda). Fatia 2:
-`tools/check_site.py` (§19, o rodapé com as 5 URLs legais). O convite fica de fora (ver "Plano").
+`tools/check_site.py` (§19, o rodapé com as 5 URLs legais). Fatia 3: `tools/check_site.py` §12. O convite fica de fora (ver "Plano").
 
 **Passos:** por página: `site-ux` DESENHAR (referência no handoff, estados) → `site-dev` →
 `/verify` → auditoria (`site-ux` AUDITAR + `site-qa` + `site-seo-perf`). Home por último, com
@@ -212,6 +212,24 @@ prova é o checklist de navegador.
    reservas de opacidade (`bg-gray-800/50`, `bg-lime-900/10`, `hover:bg-gray-800/50`) que só as
    legais usavam. No diff dos seletores da saída, saem 59 (os temas e o texto legal antigos) e entram
    67 (o layout novo e o `.legal-corpo` de papel); nenhum seletor de outra página sai.
+   **Correções da auditoria (2026-11-22, sobre 1dfe3bf).** Nenhum achado alto.
+   - Ênfase restaurada (opção (A) do usuário), só por CSS e com tokens de papel: o `.legal-corpo`
+     leva `data-doc` (do caminho da página), e o bloco "Texto legal" de `global.css` põe caixa
+     (`bg-paper-chip`, barra `border-paper-link`) nas 3 notas de §2 e no "Dado local" de §9.2 (sem
+     barra) da privacidade do LottoExpert, e no item do CVV 188 de §3 dos termos. O §12 do
+     `check_site.py` ganhou `CAIXAS_LEGAIS`: cada alvo tem de começar por "Nota sobre"/"Note on" ou
+     "Dado local"/"Local data", e o de §3 conter "188". Provado com mutação numa cópia de `dist/`
+     (nota trocada, 188 tirado, `data-doc` tirado, parágrafo a mais): ❌ um erro por mutação. A
+     caixa não tem referência no handoff: `LEGAL-CALLOUT-SEM-HANDOFF-01` (WP-20).
+   - A troca de idioma mantém `#secao-N` (`Legal LottoExpert.dc.html:151`): o script da faixa de
+     idioma copia o `location.hash` para o link `data-troca-idioma` no clique. Sem JS, vai ao topo.
+   - §12: todo `href="#x"` da página legal tem `id="x"` nela (provado com um `id` tirado: ❌).
+   - Espaço entre o rótulo e a data no chip (o texto extraído saía "atualização:13").
+   - A sombra do "Pular para o conteúdo" só com o foco: fora da tela, ela vazava no canto de cima,
+     visível sobre o papel.
+   - Fixture do `sem-polyfill` regenerada de novo (ADR-008 §7): `entrada.css` 94 648 → 96 042 e
+     `saida.css` 82 424 → 83 818 bytes; entram os 3 seletores das caixas e o `focus:shadow-pop`, nada
+     sai; o plugin tira o mesmo tanto (12 224 bytes); `test:css` 21 de 21.
 4. **404.** `404.dc.html`, só pt, com o texto atual. **Bloqueio:** nenhum. **Copy:** nenhuma.
 5. **Template de landing e LottoExpert.** Os componentes `src/components/landing/*` são os de
    `Landing App.dc.html`: hero, funcionalidades, "ver todas" (D12), prova, planos, privacidade,
@@ -253,9 +271,10 @@ prova é o checklist de navegador.
    recolocar o CTA da Play acima da dobra a 1280×720; com o nav em fluxo desde a fatia 2, o CTA do
    EclipseGo sai da dobra. **Bloqueio:** WP-19 e 2
    capturas (D26). Quem desbloqueia: o usuário.
-10. **Limpeza e aceite.** Saem a camada de legado de `global.css` e os temas `[data-tema]`. O grep **Revisão final no site real (do WP-19, decisão do usuário em 2026-11-22):** TopoWalk em russo a 360 (se a língua existir no site até lá); home, landing e legal a 768; faixa de sugestão de idioma (fecha e não volta na sessão); foco visível em "Ver todas" e nos sociais do rodapé; selo "Publicado" distinto do verde do Pole Position.
+10. **Limpeza e aceite.** Saem a camada de legado de `global.css` e os temas `[data-tema]`. O grep
     de tokens fica vazio. Entram a tabela de contraste do `site-ux`, o Lighthouse de
     acessibilidade ≥ 95 e o checklist de navegador (todas as páginas, 360/768/1280, pt e en).
+    **Revisão final no site real (do WP-19, decisão do usuário em 2026-11-22):** TopoWalk em russo a 360 (se a língua existir no site até lá); home, landing e legal a 768; faixa de sugestão de idioma (fecha e não volta na sessão); foco visível em "Ver todas" e nos sociais do rodapé; selo "Publicado" distinto do verde do Pole Position.
 
 **Ordem.** As fatias 1 a 4 andam sem nenhuma copy nova. A fatia 5 começa com a copy publicada e só
 fecha com as respostas. A 6 vem depois da 5. As fatias 7 a 9 esperam o WP-19. A 10 é a última. O
