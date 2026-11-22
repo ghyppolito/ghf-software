@@ -188,6 +188,30 @@ prova é o checklist de navegador.
    `LEGAL-LE-SLOGAN-CONTRASTE-01`, `TABELA-LEGAL-ANEL-DISCRETO-01` (revisitar) e a parte legal de
    `A11Y-LH-BASELINE-WP12-01`.
    **Bloqueio:** nenhum. **Copy:** nenhuma. Os rótulos de interface vêm de `content/i18n.js`.
+   **Respostas do usuário (2026-11-22, "pode seguir com as recomendações"): as perguntas da
+   especificação do `site-ux` (DESENHAR) ficam na opção (A).**
+   1. Selo "Documento Legal" do hero: sai (o handoff não o tem; o título e o app já dizem que é
+      legal). A chave `selo` sai de `legal.ts`.
+   2. Aviso "em divergência, prevalece a versão em português" no en: omitido. A cláusula nasce no
+      repositório do app (D8 b1): `PREVALENCIA-PT-EN-MD-01`.
+   3. Seletor pt/en no hero: omitido; o do Nav (fatia 2) basta.
+   4. Sumário estático, sem JS (sem realce da seção atual).
+   5. Sumário sempre visível, a mesma anatomia nas 5 páginas (inclusive o EclipseGo, com 8 seções).
+   6. Nenhum acento por app no corpo nem no hero, como o handoff; o `data-app` dá o acento da casca.
+   7. Impressão: CSS mínimo — sem Nav, Footer, sumário e voltar; fundo branco; sem a faixa de URL.
+   8. Literais: `--color-paper-chip` (#ECEBE7) e `--color-paper-raised` (#FFFFFF) entram em
+      `tokens.css`; raio `--radius-ctl` (8) no lugar de 10 px, `h2` em `text-h2` (24/32) no lugar
+      de 26/34, tabela em `text-small` (14/22) no lugar de 15/23. O Claude Design confirma na
+      próxima rodada (`LITERAIS-SEM-TOKEN-LEGAL-01`).
+   A edição do §12 do `check_site.py` (o corpo legal termina em `data-legal-voltar`, não mais no
+   `<div class="max-w-4xl …">` que saiu) foi autorizada nesta fatia, sem afrouxar a regra.
+   **Fixture do `sem-polyfill` regenerada (ADR-008 §7, 2026-11-22).** O bloco "Texto legal por tema"
+   e os temas `[data-tema='*-privacy']`/`lottoexpert-terms` saíram do CSS; `entrada.css` 101 279 →
+   94 648 e `saida.css` 87 503 → 82 424 bytes. O `npm run test:css` passa (21 de 21), o §18 fica
+   verde, e o plugin tira 12 224 bytes (12,9%) em vez de 13 776 (13,6%): saem com os temas as
+   reservas de opacidade (`bg-gray-800/50`, `bg-lime-900/10`, `hover:bg-gray-800/50`) que só as
+   legais usavam. No diff dos seletores da saída, saem 59 (os temas e o texto legal antigos) e entram
+   67 (o layout novo e o `.legal-corpo` de papel); nenhum seletor de outra página sai.
 4. **404.** `404.dc.html`, só pt, com o texto atual. **Bloqueio:** nenhum. **Copy:** nenhuma.
 5. **Template de landing e LottoExpert.** Os componentes `src/components/landing/*` são os de
    `Landing App.dc.html`: hero, funcionalidades, "ver todas" (D12), prova, planos, privacidade,
@@ -229,7 +253,7 @@ prova é o checklist de navegador.
    recolocar o CTA da Play acima da dobra a 1280×720; com o nav em fluxo desde a fatia 2, o CTA do
    EclipseGo sai da dobra. **Bloqueio:** WP-19 e 2
    capturas (D26). Quem desbloqueia: o usuário.
-10. **Limpeza e aceite.** Saem a camada de legado de `global.css` e os temas `[data-tema]`. O grep
+10. **Limpeza e aceite.** Saem a camada de legado de `global.css` e os temas `[data-tema]`. O grep **Revisão final no site real (do WP-19, decisão do usuário em 2026-11-22):** TopoWalk em russo a 360 (se a língua existir no site até lá); home, landing e legal a 768; faixa de sugestão de idioma (fecha e não volta na sessão); foco visível em "Ver todas" e nos sociais do rodapé; selo "Publicado" distinto do verde do Pole Position.
     de tokens fica vazio. Entram a tabela de contraste do `site-ux`, o Lighthouse de
     acessibilidade ≥ 95 e o checklist de navegador (todas as páginas, 360/768/1280, pt e en).
 

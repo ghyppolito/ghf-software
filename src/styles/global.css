@@ -137,303 +137,129 @@
 
 /* ------------------------------------------------------------------ Texto legal
  * Corpo das páginas legais (src/layouts/LegalLayout.astro), renderizado do markdown de
- * src/content/legal/. Repete as classes que o dicionário JS antigo punha em cada tag (WP-08,
- * fatia 6); sem @tailwindcss/typography. O primeiro parágrafo é a introdução, que a página antiga
- * mostrava fora do conteúdo dinâmico, com filete embaixo.
+ * src/content/legal/: o markdown não aceita classe, por isso os seletores. Valores do handoff da
+ * rodada 3 (`Legal LottoExpert.dc.html`, LG:109-120), só com tokens de papel de tokens.css (WP-10,
+ * fatia 3). O mesmo desenho nas 5 páginas: nada por app, nada por seção (os destaques e a 1ª coluna
+ * por tema das páginas antigas saíram com os temas `[data-tema='*-privacy']`). Desvios do handoff
+ * (resposta 8 do usuário, 2026-11-22; o Claude Design confirma): `h2` em `text-h2` (24/32) no
+ * lugar de 26/34, tabela em `text-small` (14/22) no lugar de 15/23, raio `--radius-ctl` (8).
+ * Extensões (o handoff não tem): `ol` como o `ul`, `---` escondido (o handoff o descarta, LG:90).
+ * `@layer components`: o utilitário vence, como o resto deste arquivo.
  */
-.legal-corpo h2 {
-  @apply text-2xl font-bold text-white mt-10 mb-4;
-}
+@layer components {
+  /* 18/30 no corpo inteiro (LG:113-114); a lista aninhada e a tabela mudam o seu. */
+  .legal-corpo {
+    @apply text-body-legal;
+  }
 
-.legal-corpo h3 {
-  @apply text-xl font-bold text-gray-200 mt-6 mb-3;
-}
+  .legal-corpo h2 {
+    @apply mt-14 mb-4 text-h2 text-balance scroll-mt-6 text-paper-ink;
+  }
 
-.legal-corpo p {
-  @apply mb-4;
-}
+  .legal-corpo h3 {
+    @apply mt-9 mb-3 text-h3 scroll-mt-6 text-paper-ink;
+  }
 
-.legal-corpo > p:first-child {
-  @apply text-lg text-gray-300 leading-relaxed mb-8 pb-8 border-b border-gray-800;
-}
+  .legal-corpo p {
+    @apply mb-4.5 text-pretty;
+  }
 
-.legal-corpo ul {
-  @apply list-disc pl-6 mb-4 space-y-2;
-}
+  .legal-corpo ul {
+    @apply list-disc pl-6 mb-5;
+  }
 
-/* URL e identificador longos em `code` (ex.: o endpoint do googleapis) e em link (ex.:
- * jogadoresanonimos.com.br no destaque de §3 dos termos) quebram dentro do bloco: sem isso a página
- * rola na horizontal a 360 px (WP-22). `word-break` é a reserva de quem não tem `anywhere`. */
-.legal-corpo code,
-.legal-corpo a {
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
+  .legal-corpo ol {
+    @apply list-decimal pl-6 mb-5;
+  }
 
-/* Link do corpo legal sublinhado em todos os temas, `mailto:` incluso: só a cor o distinguia do texto
- * (WCAG 1.4.1, WP-22). A cor continua nas regras de tema abaixo. */
-.legal-corpo a {
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-}
+  .legal-corpo li {
+    @apply mb-2 pl-1;
+  }
 
-.legal-corpo a:hover {
-  text-decoration-thickness: 2px;
-}
+  /* Item com parágrafo (lista "solta" do CommonMark): o espaço é o do item. */
+  .legal-corpo li > p {
+    @apply mb-0;
+  }
 
-.legal-corpo a:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 3px;
-  border-radius: 2px;
-}
+  /* Lista aninhada (LG:114): 17/28, com marcador (a página antiga não tinha). */
+  .legal-corpo li ul,
+  .legal-corpo li ol {
+    @apply mt-2 mb-0 pl-[22px] text-[17px] leading-7;
+  }
 
-/* Contêiner da tabela (plugin envolveTabelaLegal): focável, para rolar com as setas (WP-22). */
-.legal-tabela {
-  @apply overflow-x-auto mb-4;
-}
+  .legal-corpo li ul {
+    @apply list-[circle];
+  }
 
-.legal-tabela:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
-}
+  .legal-corpo li li {
+    @apply mb-1.5 pl-0;
+  }
 
-.legal-corpo table {
-  @apply w-full text-left border-collapse;
-}
+  .legal-corpo hr {
+    @apply hidden;
+  }
 
-.legal-corpo thead tr {
-  @apply border-b border-gray-700;
-}
+  .legal-corpo strong {
+    @apply font-bold;
+  }
 
-.legal-corpo tbody tr {
-  @apply border-b border-gray-800;
-}
+  .legal-corpo code {
+    @apply font-mono text-[0.86em] bg-paper-chip px-1.5 py-px rounded-sm;
+  }
 
-.legal-corpo th {
-  @apply py-2 pr-4 font-bold text-white;
-}
+  /* URL e identificador longos em `code` (ex.: o endpoint do googleapis) e em link (ex.:
+   * jogadoresanonimos.com.br nos termos, §3) quebram dentro do bloco: sem isso a página rola na
+   * horizontal a 360 px (WP-22). `word-break` é a reserva de quem não tem `anywhere`. */
+  .legal-corpo code,
+  .legal-corpo a {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
 
-.legal-corpo td {
-  @apply py-2 pr-4;
-}
+  /* Link (LG:10, LG:80): a cor do link do papel (5,59:1) e sublinhado em todos, `mailto:` incluso —
+   * a cor sozinha não o distingue do texto (WCAG 1.4.1, WP-22). */
+  .legal-corpo a {
+    @apply text-paper-link underline decoration-1 underline-offset-[3px];
+  }
 
-.legal-corpo th:last-child,
-.legal-corpo td:last-child {
-  @apply pr-0;
-}
+  .legal-corpo a:hover {
+    @apply text-paper-link-hover decoration-2;
+  }
 
-/* ------------------------------------------------------------------ Texto legal por tema
- * O que muda de uma política para outra (WP-08, fatia 7). Cada bloco reproduz as classes que o
- * dicionário JS da página antiga punha em cada tag; o que é igual nas três fica acima.
- */
+  .legal-corpo a:focus-visible {
+    outline: 2px solid var(--color-paper-link);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
 
-/* eclipsego-privacy.html — primeira coluna sempre mono e na cor do app (era por posição) */
-[data-tema='eclipsego-privacy'] .legal-corpo td:first-child {
-  @apply font-mono text-sm text-brand-primary;
-}
+  /* Contêiner da tabela (plugin envolveTabelaLegal): focável, para rolar com as setas (WP-22); a
+   * 360 px a tabela (mín. 560 px) rola dentro dele. Anel no link do papel (LG:115). */
+  .legal-tabela {
+    @apply overflow-x-auto mt-1 mb-7 border border-paper-border rounded-ctl bg-paper-raised;
+  }
 
-/* topowalk-privacy.html e poleposition-privacy.html. O `---` do .md antes de cada `## ` não
- * aparecia na página antiga (o título já separa); só o último do TopoWalk, antes da nota LGPD. */
-:is([data-tema='topowalk-privacy'], [data-tema='poleposition-privacy']) .legal-corpo hr {
-  @apply border-gray-800 my-8;
-}
+  .legal-tabela:focus-visible {
+    outline: 2px solid var(--color-paper-link);
+    outline-offset: 2px;
+  }
 
-:is([data-tema='topowalk-privacy'], [data-tema='poleposition-privacy']) .legal-corpo hr:has(+ h2) {
-  display: none;
-}
+  .legal-corpo table {
+    @apply w-full min-w-[560px] border-collapse text-left text-small;
+  }
 
-:is([data-tema='topowalk-privacy'], [data-tema='poleposition-privacy']) .legal-corpo ol {
-  @apply list-decimal pl-6 mb-4 space-y-2;
-}
+  .legal-corpo thead tr {
+    @apply bg-paper-chip;
+  }
 
-/* Lista aninhada: a página antiga pedia `list-circle`, que não existe no Tailwind — sem marcador. */
-:is([data-tema='topowalk-privacy'], [data-tema='poleposition-privacy']) .legal-corpo ul ul {
-  @apply list-none pl-6 mt-1 mb-0 space-y-1;
-}
+  .legal-corpo tbody tr {
+    @apply border-t border-paper-border;
+  }
 
-/* topowalk-privacy.html. O e-mail que o GFM transforma em link `mailto:` fica como o texto da
- * página antiga (sem link estilizado): o estilo é só do link externo. */
-[data-tema='topowalk-privacy'] .legal-corpo a[href^='http'] {
-  @apply text-brand-primary underline hover:text-white;
-}
+  .legal-corpo th {
+    @apply px-3.5 py-2.5 text-left align-top font-semibold;
+  }
 
-/* Primeira coluna pelo dado: `**…**` (terceiros) em negrito médio, `` `…` `` (permissões) mono. */
-[data-tema='topowalk-privacy'] .legal-corpo td:first-child:has(strong) {
-  @apply font-semibold text-brand-primary;
-}
-
-[data-tema='topowalk-privacy'] .legal-corpo td:first-child:has(strong) strong {
-  font-weight: inherit;
-}
-
-[data-tema='topowalk-privacy'] .legal-corpo td:first-child:has(code) {
-  @apply font-mono text-sm text-brand-primary;
-}
-
-/* Nota final em itálico (LGPD/GDPR), sem margem embaixo. */
-[data-tema='topowalk-privacy'] .legal-corpo > p:last-child:has(> em:only-child) {
-  @apply text-sm text-gray-500 italic mb-0;
-}
-
-/* poleposition-privacy.html */
-[data-tema='poleposition-privacy'] .legal-corpo a[href^='http'] {
-  @apply text-brand-primary hover:underline;
-}
-
-[data-tema='poleposition-privacy'] .legal-corpo code {
-  @apply font-mono bg-gray-800 px-1.5 py-0.5 rounded text-gray-200 text-sm;
-}
-
-/* Tabela em cartão: borda arredondada, cabeçalho com fundo, filete fino entre linhas. */
-[data-tema='poleposition-privacy'] .legal-tabela {
-  @apply my-6 border border-gray-800 rounded-xl;
-}
-
-[data-tema='poleposition-privacy'] .legal-corpo thead tr {
-  @apply border-b border-gray-800 bg-gray-800/30;
-}
-
-[data-tema='poleposition-privacy'] .legal-corpo tbody tr {
-  @apply border-b-0 hover:bg-gray-800/10;
-}
-
-[data-tema='poleposition-privacy'] .legal-corpo tbody tr + tr {
-  @apply border-t border-gray-800/50;
-}
-
-[data-tema='poleposition-privacy'] .legal-corpo th,
-[data-tema='poleposition-privacy'] .legal-corpo td,
-[data-tema='poleposition-privacy'] .legal-corpo th:last-child,
-[data-tema='poleposition-privacy'] .legal-corpo td:last-child {
-  @apply py-4 px-5 text-sm;
-}
-
-[data-tema='poleposition-privacy'] .legal-corpo th {
-  @apply font-semibold text-white;
-}
-
-[data-tema='poleposition-privacy'] .legal-corpo td {
-  @apply text-gray-400;
-}
-
-[data-tema='poleposition-privacy'] .legal-corpo td:first-child {
-  @apply text-gray-300;
-}
-
-[data-tema='poleposition-privacy'] .legal-corpo td:first-child:has(> code:only-child) {
-  @apply font-mono;
-}
-
-/* Código dentro da tabela é texto da célula, sem a pílula. */
-[data-tema='poleposition-privacy'] .legal-corpo td code {
-  @apply bg-transparent p-0 rounded-none;
-  color: inherit;
-}
-
-/* Lista com parágrafo de continuação: o CommonMark põe `<p>` em todos os itens dela; a página
- * antiga não tinha esse espaço. */
-[data-tema='poleposition-privacy'] .legal-corpo li > p {
-  @apply mb-0;
-}
-
-[data-tema='poleposition-privacy'] .legal-corpo li > ul + p {
-  @apply mt-2;
-}
-
-/* "Desenvolvido por …", último parágrafo, todo em negrito. */
-[data-tema='poleposition-privacy'] .legal-corpo > p:last-child:has(> strong:only-child) {
-  @apply font-semibold text-white mt-6 mb-0;
-}
-
-[data-tema='poleposition-privacy'] .legal-corpo > p:last-child:has(> strong:only-child) strong {
-  font-weight: inherit;
-}
-
-/* lottoexpert-privacy.html e lottoexpert-terms.html (WP-08, fatia 8). O `---` do .md antes de
- * cada `## ` e antes do slogan final não aparecia na página antiga. */
-:is([data-tema='lottoexpert-privacy'], [data-tema='lottoexpert-terms']) .legal-corpo hr {
-  display: none;
-}
-
-/* Link externo e link do próprio site (plugin linksInternosLegais: `/…`). O e-mail que o GFM
- * transforma em `mailto:` fica como o texto da página antiga, sem estilo. */
-:is([data-tema='lottoexpert-privacy'], [data-tema='lottoexpert-terms']) .legal-corpo a[href^='http'],
-:is([data-tema='lottoexpert-privacy'], [data-tema='lottoexpert-terms']) .legal-corpo a[href^='/'] {
-  @apply text-brand-primary hover:underline;
-}
-
-/* Slogan final em itálico (`*LottoExpert — …*`), centralizado. */
-:is([data-tema='lottoexpert-privacy'], [data-tema='lottoexpert-terms']) .legal-corpo > p:last-child:has(> em:only-child) {
-  @apply mt-8 mb-0 text-center text-sm text-gray-500 italic;
-}
-
-/* lottoexpert-privacy.html — listas sob `###` (§4.1–4.10): a página antiga mostrava cada item como
- * parágrafo sem marcador, `mb-2`, o último `mb-4`. O `space-y-2` de `.legal-corpo ul` (Tailwind 4:
- * `margin-block-end` em `:where(… > :not(:last-child))`, especificidade zero) perde para os
- * seletores abaixo sem precisar repeti-lo. */
-[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul {
-  @apply list-none pl-0 mb-0;
-}
-
-[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul > li {
-  @apply mt-0 mb-2;
-}
-
-[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul > li:last-child {
-  @apply mb-4;
-}
-
-/* Lista aninhada de §4.7 (eventos do Analytics): com marcador, mais junta, texto menor. */
-[data-tema='lottoexpert-privacy'] .legal-corpo h3 + ul ul {
-  @apply list-disc pl-6 mt-2 mb-2 space-y-1 text-sm;
-}
-
-/* Destaques: as 3 notas de §2 (com barra) e "Dado local" de §9.2 (sem barra). O `.md` não as
- * distingue pela estrutura; o seletor ancora no `id` da seção, que vem da posição (plugin
- * idDosTitulosLegais, ADR-007 §6), igual em pt e en. */
-[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-2'] + p + ul + p,
-[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-2'] + p + ul + p + p,
-[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-2'] + p + ul + p + p + p {
-  @apply mb-4 text-sm bg-gray-800/50 p-4 rounded-lg border-l-4 border-brand-primary;
-}
-
-[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-9-2'] + p + ul + p + p {
-  @apply mb-4 text-sm bg-gray-800/50 p-4 rounded-lg;
-}
-
-/* Tabelas: §5 (permissões) com a 1ª coluna mono na cor do app; §9.1 (bases legais) toda em text-sm. */
-[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-5'] + .legal-tabela td:first-child {
-  @apply font-mono text-sm text-brand-primary;
-}
-
-[data-tema='lottoexpert-privacy'] .legal-corpo [id='secao-9-1'] + .legal-tabela td {
-  @apply text-sm;
-}
-
-/* lottoexpert-terms.html — §3: a página antiga mostrava os 3 itens como parágrafos, o último (ajuda
- * de jogo responsável: Jogadores Anônimos, CVV 188) em destaque com barra. Ancorado no `id`. */
-[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul {
-  @apply list-none pl-0 mb-0;
-}
-
-[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul > li {
-  @apply mt-0 mb-4;
-}
-
-[data-tema='lottoexpert-terms'] .legal-corpo [id='secao-3'] + ul > li:last-child {
-  @apply text-sm bg-gray-800/50 p-4 rounded-lg border-l-4 border-brand-primary;
-}
-
-/* Tabela dos planos (§4): mais respiro embaixo, plano em negrito na cor do app, valor em branco. */
-[data-tema='lottoexpert-terms'] .legal-tabela {
-  @apply mb-6;
-}
-
-[data-tema='lottoexpert-terms'] .legal-corpo td:first-child {
-  @apply font-semibold text-brand-primary;
-}
-
-[data-tema='lottoexpert-terms'] .legal-corpo td:nth-child(2) {
-  @apply text-white;
+  .legal-corpo td {
+    @apply px-3.5 py-2.5 align-top;
+  }
 }

@@ -26,6 +26,7 @@
 //   botão em pílula, ✕ como glifo (N:17) e o anel de foco teal. A posição fica a do WP-15 (fixa
 //   embaixo), não a do handoff (no topo, em fluxo): a faixa entra depois do `load` e, no topo,
 //   empurraria a página (resposta 4 do usuário, 2026-11-22).
+// - Fora da impressão (WP-10 fatia 3): fixa, ela cobriria o pé de cada folha da página legal.
 import { caminhoPublico, hreflang, linguasDe, type Idioma } from '../i18n/idiomas';
 import { t } from '../i18n/ui';
 
@@ -47,7 +48,7 @@ const outras = linguas.filter((l) => l !== lang);
           <section
             aria-label={t(l, 'idioma')}
             lang={hreflang(l)}
-            class="fixed z-30 inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] md:inset-x-auto md:left-4 md:bottom-[calc(1rem+env(safe-area-inset-bottom))] md:max-w-[560px] flex flex-nowrap md:flex-wrap items-center gap-x-2 md:gap-x-3 gap-y-2 p-2 pl-3 md:p-3 md:pl-4 bg-raised border border-border-strong rounded-card shadow-pop opacity-0 translate-y-2 transition duration-200 ease-out motion-reduce:transition-none"
+            class="fixed z-30 inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] md:inset-x-auto md:left-4 md:bottom-[calc(1rem+env(safe-area-inset-bottom))] md:max-w-[560px] flex flex-nowrap md:flex-wrap items-center gap-x-2 md:gap-x-3 gap-y-2 p-2 pl-3 md:p-3 md:pl-4 bg-raised border border-border-strong rounded-card shadow-pop opacity-0 translate-y-2 transition duration-200 ease-out motion-reduce:transition-none print:hidden"
           >
             <p class="min-w-0 flex-1 truncate md:flex-[1_1_220px] md:overflow-visible md:whitespace-normal text-[14px] leading-5 text-text">{t(l, 'faixa_idioma')}</p>
             <div class="shrink-0 flex items-center gap-1 md:gap-2">

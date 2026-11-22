@@ -623,8 +623,10 @@ for pagina, md in LEGAL.items():
         # en, só para página `.html` — asset e o convite `lotto-expert/…` não têm par), na mesma aba,
         # como a página antiga. O host vale com ou sem `www.`, por http ou https. URL absoluta sai do ar com o domínio de teste,
         # abre outra aba e, em `<código>/`, leva ao pt.
+        # O corpo vai do `.legal-corpo` ao botão "voltar" (`data-legal-voltar`, LegalLayout.astro,
+        # WP-10 fatia 3), que vem logo depois dele e fica de fora, como antes.
         ini = html.find('class="legal-corpo')
-        fim = html.find('<div class="max-w-4xl mx-auto mt-8 text-center">', ini)
+        fim = html.find('<div data-legal-voltar', ini)
         corpo = html[ini:fim] if ini >= 0 and fim > ini else ""
         if not corpo:
             erros.append(f"{alvo}: corpo legal (`.legal-corpo`) não encontrado — a regra dos links do próprio site não tem onde olhar")

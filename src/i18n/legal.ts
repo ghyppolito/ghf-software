@@ -1,12 +1,13 @@
-// Textos das páginas legais em volta do corpo (hero, botão de voltar, <title>, description), pt e
+// Textos das páginas legais em volta do corpo (hero, sumário, botão de voltar, <title>, description), pt e
 // en. O corpo é o `.md` de src/content/legal/. Toda chave nova entra nos dois idiomas no mesmo commit.
 // O rótulo da data e os meses são da língua, e vêm de src/i18n/idiomas.json (ADR-007 §2).
 import { IDIOMAS, type Idioma } from './idiomas';
 
 export const legal = {
   pt: {
-    // Selo do hero. Não tinha `data-i18n` na página antiga (o modo en mostrava o pt); traduzido no WP-22.
-    selo: 'Documento Legal',
+    // Sumário (WP-10, fatia 3): rótulos de `content/i18n.js` do handoff (`onThisPage`, `sections`).
+    nesta_pagina: 'Nesta página',
+    secoes: 'seções',
     voltar_app: 'Voltar para a Página do App',
     voltar_home: 'Voltar para a GHF Software',
     eclipsego_privacy_h1: 'Política de Privacidade — EclipseGo',
@@ -27,7 +28,8 @@ export const legal = {
     lottoexpert_terms_description: 'Termos de Uso do aplicativo LottoExpert desenvolvido pela GHF Software.',
   },
   en: {
-    selo: 'Legal Document',
+    nesta_pagina: 'On this page',
+    secoes: 'sections',
     voltar_app: 'Back to App Page',
     voltar_home: 'Back to GHF Software',
     eclipsego_privacy_h1: 'Privacy Policy — EclipseGo',

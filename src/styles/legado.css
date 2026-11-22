@@ -8,9 +8,6 @@
  *
  * A fatia 10 apaga este arquivo inteiro, mais:
  * - o `@import './legado.css'` de src/styles/global.css;
- * - os blocos "Texto legal por tema" de global.css (`[data-tema='…'] .legal-corpo …`), que
- *   ficaram lá por ordem de cascata (vêm depois do `.legal-corpo` base). A fatia 3 troca o layout
- *   das legais, mas eles só saem na fatia 10, com os temas `[data-tema]` (plano do WP-10);
  * - o `data-tema` do src/layouts/Base.astro e a prop `tema` dos layouts.
  * Daqui sai: `body` com cor literal, `.bg-grid-pattern`, `.glass-panel`, `.text-gradient*`,
  * `.mockup-frame`, `.corona-glow`, `#navbar.scrolled`, `[data-tema='…'] .text-gradient`,
@@ -27,7 +24,8 @@
 
 /* ------------------------------------------------------------------ temas
  * Um bloco por tema; o layout põe `data-tema` no <html>. Valores medidos nas configs inline das
- * 10 páginas, inclusive as divergências entre landing e política do mesmo app. Cor em canais RGB
+ * 10 páginas, inclusive as divergências entre landing e política do mesmo app. Os temas das 5
+ * páginas legais saíram na fatia 3 (as legais usam `ghf`; nada delas consome `brand.*`). Cor em canais RGB
  * (`R G B`): o mapeamento abaixo embrulha em `rgb()`, e o Tailwind 4 aplica a opacidade
  * (`bg-brand-primary/20`) por `color-mix`. O Tailwind ainda emite uma reserva fora do
  * `@supports (color-mix)`, que com `var()` sai opaca (`rgb(var(--brand-primary))`, sem os 20%);
@@ -54,10 +52,8 @@
   --sombra-glow-blue: 0 0 20px rgba(59, 130, 246, 0.4);
 }
 
-/* lottoexpert.html, lottoexpert-privacy.html, lottoexpert-terms.html */
-[data-tema='lottoexpert'],
-[data-tema='lottoexpert-privacy'],
-[data-tema='lottoexpert-terms'] {
+/* lottoexpert.html */
+[data-tema='lottoexpert'] {
   --brand-primary: 139 92 246; /* #8B5CF6 */
   --brand-primary-hover: 124 58 237; /* #7C3AED */
   --sombra-glow: 0 0 20px rgba(139, 92, 246, 0.4);
@@ -74,13 +70,6 @@
   --sombra-glow-blue: 0 0 #0000;
 }
 
-/* topowalk-privacy.html — primary terracota */
-[data-tema='topowalk-privacy'] {
-  --brand-primary: 181 84 28; /* #B5541C */
-  --brand-primary-hover: 142 64 20; /* #8E4014 */
-  --sombra-glow: 0 0 20px rgba(181, 84, 28, 0.4);
-}
-
 /* poleposition.html — accent lima */
 [data-tema='poleposition'] {
   --brand-primary: 132 204 22; /* #84cc16 */
@@ -88,13 +77,6 @@
   --brand-accent: 163 230 53; /* #a3e635 */
   --sombra-glow: 0 0 #0000;
   --sombra-glow-blue: 0 0 #0000;
-}
-
-/* poleposition-privacy.html — accent ciano */
-[data-tema='poleposition-privacy'] {
-  --brand-primary: 132 204 22; /* #84cc16 */
-  --brand-primary-hover: 101 163 13; /* #65a30d */
-  --sombra-glow: 0 0 20px rgba(132, 204, 22, 0.4);
 }
 
 /* eclipsego.html */
@@ -105,16 +87,6 @@
   --brand-accent: 245 158 11; /* #F59E0B */
   --sombra-glow: 0 0 25px rgba(234, 179, 8, 0.35);
   --sombra-glow-blue: 0 0 #0000;
-}
-
-/* eclipsego-privacy.html — mesmas cores, sombras de outra intensidade */
-[data-tema='eclipsego-privacy'] {
-  --brand-primary: 234 179 8; /* #EAB308 */
-  --brand-primary-hover: 202 138 4; /* #CA8A04 */
-  --brand-secondary: 99 102 241; /* #6366F1 */
-  --brand-accent: 245 158 11; /* #F59E0B */
-  --sombra-glow: 0 0 20px rgba(234, 179, 8, 0.4);
-  --sombra-glow-blue: 0 0 20px rgba(99, 102, 241, 0.4);
 }
 
 /* ------------------------------------------------------------------ nomes da configuração do Tailwind 3
