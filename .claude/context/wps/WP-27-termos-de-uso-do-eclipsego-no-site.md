@@ -125,7 +125,7 @@ mal, ficha apontando antes da página existir dá 404 ao revisor da loja.
   **não há `/en/eclipsego-terms.html`**, e quem abre a URL vê português primeiro. No merge de volta, o
   HTML da raiz é apagado e a página nasce de novo pelo passo 5. Prazo: um PR pequeno.
 - **(B) Entra na integração e sobe no deploy único.** Custo: a página só vai ao ar quando o deploy
-  único subir, e ele espera o WP-10 até a fatia 10, D3, D11 e D12. Sem trabalho duplicado, com
+  único subir, e ele espera o WP-10 até a fatia 10, D11 e D12. Sem trabalho duplicado, com
   `/en/` desde o primeiro dia. Serve se não houver prazo de loja ou de lei.
 - **(C) Hotfix mínimo no `master` só com as URLs finais.** `eclipsego-terms.html` e
   `en/eclipsego-terms.html` como HTML estático, uma língua por arquivo, sem dicionário JS e sem link
