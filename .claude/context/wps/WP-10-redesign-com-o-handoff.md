@@ -10,7 +10,7 @@ decisoes: [D4, D11, D12, D24, D25, D26, D27, D29]
 tamanho: L
 risco: medio
 visual: true
-branch: feat/wp-10-fatia-5-eclipsego
+branch: feat/wp-10-fatia-6-home
 ---
 
 # WP-10 — A home e as landings de app seguem o sistema visual do handoff
@@ -38,9 +38,11 @@ página usa; `docs/AVALIACAO.md` §3.3.
 
 **Passos:** por página: `site-ux` DESENHAR (referência no handoff, estados) → `site-dev` →
 `/verify` → auditoria (`site-ux` AUDITAR + `site-qa` + `site-seo-perf`). Home depois do template
-de landing (fatia 5, com o EclipseGo; D29), sem esperar o LottoExpert: os cards de TopoWalk, Pole
-Position e LottoExpert leem o resumo de cada app da mesma fonte que a landing dele, e mudam
-sozinhos quando as fatias 7 a 9 entrarem (ver "Plano").
+de landing (fatia 5, com o EclipseGo; D29), sem esperar as outras landings: os cards de TopoWalk,
+Pole Position e LottoExpert leem o resumo de cada app da mesma fonte que a landing dele (hoje
+`src/i18n/home.ts`), e mudam sozinhos quando as fatias 7 a 9 entrarem (ver "Plano"). Depois da
+Home vem a 10a; as landings em evolução (7 a 9) vão para o fim, antes só da 10b (D29, complemento
+de 2026-11-22).
 
 **Critérios de aceite:**
 - Tokens: nenhuma cor literal (`#…`, `rgb(`) em `src/` fora do arquivo único de tokens
@@ -102,7 +104,7 @@ prova é o checklist de navegador.
    `--border-strong` #66738D) e da D11 (`--success` e `--success-surface`). Também entram
    `--app-acc`, `--app-acc-edge` e `--app-acc-light` por app e os tokens de papel da legal. Tudo
    fica num arquivo só, `src/styles/tokens.css`. Os temas antigos (`[data-tema=…]` em `global.css`)
-   ficam como camada de legado até a fatia 10, para que as páginas ainda não redesenhadas
+   ficam como camada de legado até a fatia 10b, para que as páginas ainda não redesenhadas
    continuem montando. O `cssTarget` vai ao piso novo (Safari 16.4, Chrome 111, Firefox 128) e o
    `orcamento-lighthouse.json` é remedido. A paridade das páginas ainda não redesenhadas não é
    critério (ADR-008 §5); o build, o `check_site.py --raiz dist` e o html-validate são.
@@ -232,7 +234,7 @@ prova é o checklist de navegador.
      `saida.css` 82 424 → 83 818 bytes; entram os 3 seletores das caixas e o `focus:shadow-pop`, nada
      sai; o plugin tira o mesmo tanto (12 224 bytes); `test:css` 21 de 21.
 4. **404.** `404.dc.html`, só pt, com o texto atual. **Feita em 2026-11-22** (commits 1f6c207 e 27700db; branch `feat/wp-10-fatia-4`, não enviada). `404.astro` segue `404.dc.html` da rodada 3: duas colunas a partir de 1024; lista dos 4 apps com ícone por `astro:assets`, quadradinho `bg-app-*`, link da landing e link "Privacidade" com `sr-only` do nome. Tokens no lugar de `brand.*`. A copy atual fica; o eyebrow, o h1 e os parágrafos do export ficam fora (D25). `tema="ghf"` segue porque o `Base` ainda exige a prop. Desvios do export aceitos pelo `site-ux`: `anel-foco-interno` em vez de offset +2 (a `ul` tem `overflow-hidden`), sem `scale(1.06)` no ícone, colunas em `lg` em vez de `auto-fit minmax(420px)`, `first:border-t-0` (o export tem linha dupla no topo), `loading="eager"`. Auditorias de `site-qa`, `site-ux` e `site-seo-perf`: nenhum achado alto nem médio. Medidas na 404 (Lighthouse mobile, mediana de 3): Performance 99, Acessibilidade 100, Boas práticas 100, LCP 1,80 s, CLS 0, 148 KB no total e 14 KB de imagem (os ícones somam 3,1 KB no 1x e 6,4 KB no 2x). Orçamento cumprido em todas as páginas. Fixture do sem-polyfill regenerada. `/verify` passou (`lychee` só no CI). Resta o checklist de navegador, que é do usuário.
-   **Achados:** `APPS-LISTA-DUPLICADA-01`, `ORCAMENTO-404-FROUXO-01` (ambos na fatia 10). **Bloqueio:** nenhum. **Copy:** nenhuma.
+   **Achados:** `APPS-LISTA-DUPLICADA-01`, `ORCAMENTO-404-FROUXO-01` (ambos na fatia 10a). **Bloqueio:** nenhum. **Copy:** nenhuma.
 5. **Template de landing e EclipseGo** (D29: o template nasce no EclipseGo, não no LottoExpert). **Feita em 2026-11-22** (commits f59a8c7, e8bad59 e db8f931; branch `feat/wp-10-fatia-5-eclipsego`, não enviada). Nenhuma auditoria trouxe achado alto.
    Os componentes `src/components/landing/*` são os de `Landing App.dc.html` (rodada 3, `?app=eclipse`):
    hero, funcionalidades, "ver todas" (D12), prova, planos, privacidade, FAQ e CTA. O conteúdo de cada
@@ -285,15 +287,19 @@ prova é o checklist de navegador.
      faixa de idioma começa em 634: o CTA fica acima da dobra.
    - **Verificação:** o `/verify` passou, menos o `lychee` (não instalado; o CI roda). A fixture do
      sem-polyfill foi regenerada.
-   - **Achados novos:** `LANDING-ESPELHO-SEM-TESTE-01` (fatia 7), `CORONA-GLOW-ORFAO-01` (fatia 10),
+   - **Achados novos:** `LANDING-ESPELHO-SEM-TESTE-01` (fatia 7), `CORONA-GLOW-ORFAO-01` (fatia 10a),
      `HERO-ASPECT-RETRATO-01` (fatias 7 e 8), `FUNC-SEM-IMAGEM-METADE-VAZIA-01` e
      `ECLIPSE-OG-IMAGE-442-01` (WP-20), `FAQ-SINAL-ABERTO-01` e `LANDING-JSONLD-CAMPOS-01` (fatia
-     10), `HERO-H1-SEM-PALAVRA-CHAVE-01` (decisão de copy do usuário).
+     10a), `HERO-H1-SEM-PALAVRA-CHAVE-01` (fatia 10b; decisão de copy do usuário).
    **Checklist de navegador (usuário):** ver `handoff.md`, seção 3.
    **Bloqueio:** nenhum. O EclipseGo é o único app estável; os outros três estão em evolução.
 6. **Home.** Os cards seguem a ordem do brief §10 e a regra da D12. A lista "ver todas" fica vazia
    enquanto os 4 apps forem destaque. Cada app em `apps.ts` ganha um campo de data da última
    atualização, com comentário de origem (tag de release no repositório do app).
+   **Fonte do card (D29, complemento de 2026-11-22):** o card do EclipseGo lê o `resumo` de
+   `src/i18n/eclipsego.ts` (`ConteudoApp`), e as chaves do EclipseGo saem de `home.ts`; os cards de
+   TopoWalk, Pole Position e LottoExpert leem `src/i18n/home.ts` até a landing de cada um migrar
+   para `ConteudoApp` (fatias 7 a 9), que move o texto do card para o `resumo` do app.
    **Achados:** `INDEX-LOTTO-DESC-DIVERGE-01`, `HOME-ALT-DESCREVE-FUNCIONALIDADE-01`,
    `HOME-STACK-SELOS-CONTRASTE-01`, `DESTAQUE-LIMIARES-INVENTADOS-01`.
    **Bloqueio:** o texto do card do LottoExpert, se a fonte não tiver (D25). O 768 está decidido
@@ -320,21 +326,42 @@ prova é o checklist de navegador.
    **Bloqueio para fechar (não para começar):** a copy que falte na fonte (D25) e as capturas
    das funcionalidades destacadas (D26). O repositório só tem o mockup do hero e os logos das loterias.
    Quem desbloqueia: o usuário.
-10. **Limpeza e aceite.** Saem a camada de legado de `global.css` e os temas `[data-tema]`. O grep
-    de tokens fica vazio. Entram a tabela de contraste do `site-ux`, o Lighthouse de
-    acessibilidade ≥ 95 e o checklist de navegador (todas as páginas, 360/768/1280, pt e en).
+10. A fatia 10 se divide em 10a e 10b (D29, complemento de 2026-11-22). As duas ficam numa
+    posição diferente da ordem: a 10a vem logo depois da 6, a 10b é a última.
+
+    **10a. Aceite parcial** (logo depois da 6, antes das landings em evolução). Só o que não depende
+    das fatias 7 a 9.
+    **Achados:** `ORCAMENTO-404-FROUXO-01` (reapertar o teto da 404), `APPS-LISTA-DUPLICADA-01`
+    (fonte única da lista de apps em `src/i18n/apps.ts`, consumida pela 404 e pelo `Footer`),
+    `FAQ-SINAL-ABERTO-01`, `LANDING-JSONLD-CAMPOS-01` e `CORONA-GLOW-ORFAO-01` (apaga só o
+    `.corona-glow` de `legado.css`; a camada de legado fica até a 10b).
+    **Aceite parcial:** a tabela de contraste do `site-ux` (pares cor/fundo medidos) e o Lighthouse de
+    acessibilidade ≥ 95 nas páginas já redesenhadas: as 10 legais, a 404, a Home e o EclipseGo, pt e
+    en. As landings de TopoWalk, Pole Position e LottoExpert ficam de fora, porque ainda não
+    migraram; entram na 10b.
+    **Bloqueio:** nenhum. **Copy:** nenhuma.
+
+    **10b. Limpeza e aceite final** (a última fatia, depois da 9). Saem a camada de legado
+    (`src/styles/legado.css`, os nomes `brand.*` e os temas `[data-tema]`). O grep de tokens fica
+    vazio. A tabela de contraste e o Lighthouse de acessibilidade ≥ 95 passam a valer para todas as
+    páginas. Entra o checklist de navegador completo (todas as páginas, 360/768/1280, pt e en).
+    **Achados:** `CSS-ORCAMENTO-BYTES-01` (teto de CSS medido depois de sair o legado),
+    `HERO-H1-SEM-PALAVRA-CHAVE-01` (decisão de copy do usuário; sem ela o h1 fica como está) e
+    `FUNC-SEM-IMAGEM-METADE-VAZIA-01` se o WP-20 não o cobrir.
     **Revisão final no site real (do WP-19, decisão do usuário em 2026-11-22):** TopoWalk em russo a 360 (se a língua existir no site até lá); home, landing e legal a 768; faixa de sugestão de idioma (fecha e não volta na sessão); foco visível em "Ver todas" e nos sociais do rodapé; selo "Publicado" distinto do verde do Pole Position.
 
-**Ordem** (replanejada pela D29, 2026-11-22). As fatias 1 a 4 andam sem nenhuma copy nova e estão
-feitas. A 5 (template e EclipseGo) não tem bloqueio: a copy é a publicada e as 2 capturas já estão no repositório (D26, D29). A 6
-(home) vem depois da 5 e não espera a 9: o card do LottoExpert lê o resumo publicado e muda sozinho
-quando a 9 entrar; o bloqueio dela continua sendo o texto desse card, se a fonte não tiver (D25). As
-fatias 7 a 9 usam o template e não esperam mais o WP-19 (`done`); cada uma só fecha com as capturas
-dela, pendentes porque o app está em evolução. A 9 (LottoExpert) é a última landing, porque depende de copy (D25) e capturas (D26) que ainda
-faltam e leva os blocos opcionais. A 10 é a última. O WP-10 só fica `done` com a 9 e a 10, e o deploy
-único (D13) espera o WP-10. Logo, o que segura o deploy único são as capturas e a copy que o usuário
-fornece. A numeração só troca a 5 e a 9 de lugar, para as referências a "fatia 6", "7", "8" e "10"
-continuarem válidas.
+**Ordem** (replanejada pela D29 e pelo complemento dela de 2026-11-22): 1 → 2 → 3 → 4 → 5 → **6 →
+10a → 7 → 8 → 9 → 10b**. As fatias 1 a 5 estão feitas. A 6 (Home) não tem bloqueio de captura: os
+cards de TopoWalk, Pole Position e LottoExpert leem `home.ts` e mudam quando as landings deles
+migrarem; o bloqueio dela continua sendo o texto do card do LottoExpert, se a fonte não tiver (D25).
+A 10a vem logo depois da 6 e fecha o que não depende das landings em evolução. As fatias 7 a 9 usam
+o template e cada uma entra quando as capturas dela chegarem (D26; os apps estão em evolução); a 9
+(LottoExpert) é a última landing, porque depende também de copy (D25) e leva os blocos opcionais. A
+10b é a última fatia. O WP-10 só fica `done` com a 10b, e o deploy único (D13) espera o WP-10. Logo,
+o que segura o deploy único são as capturas e a copy que o usuário fornece. A numeração fica: a D29
+trocou a 5 e a 9 de lugar e dividiu a 10 em 10a e 10b, para as referências a "fatia 6", "7" e "8"
+continuarem válidas; referência antiga a "fatia 10" (ADR-008 §5, `CLAUDE.md`, `docs/ARQUITETURA.md`,
+WP-19, WP-26 a WP-28) vale como 10b.
 
 **Logo** (resposta 5 do usuário, 2026-11-21; decisão de execução, sem linha D). O PNG atual
 (`GHFSoftware.png`) fica no `Logo.astro` da fatia 2; o agente não faz arte nova. A arte nova clara e escura, com "desde 2004", vai para a sessão do usuário no Claude Design
