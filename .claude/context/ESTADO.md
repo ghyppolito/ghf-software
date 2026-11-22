@@ -68,5 +68,5 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 
 | WP | Bloqueado por | Desde |
 |---|---|---|
-| WP-10 | fatia 1 feita; aguarda o WP-25 (Astro 7.4.7) antes da fatia 2 — decisão do usuário em 2026-11-21 | 2026-11-21 |
+| WP-10 | fatia 1 feita; aguarda o WP-25 fechar (implementado; falta o CI no Node 22.23.5) antes da fatia 2 — decisão do usuário em 2026-11-21 | 2026-11-21 |
 | WP-19 | export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true) | 2026-10-13 |

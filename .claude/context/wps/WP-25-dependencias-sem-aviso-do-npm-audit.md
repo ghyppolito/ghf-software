@@ -145,3 +145,38 @@ Também troca o renderizador do HTML das páginas legais. O que pode dar errado:
   do `check_site.py` acusam, e o diff de `dist/` mostra.
 - O Vite 8.3.6 reordena o CSS. Aí o `test:css` passa, mas o CSS de `dist/` muda.
 - O setup-node não acha `22.23.4` no cache do runner e baixa a versão (só fica mais lento).
+
+## Registro da execução (2026-11-21)
+
+Implementado e auditado (`site-qa`, `site-seo-perf`, sem achado alto). Continua `doing`: faltam dois
+critérios que só se provam fora desta máquina (ver "Falta").
+
+**Passo 6 — diferença do `dist/`.** Só o script inline de `src/components/SugestaoIdioma.astro:116`,
+nas 20 páginas com faixa de idioma (`404.html` e o convite ficam iguais).
+- Antes: `if((!c||!s.includes(c))&&(c=…`. Depois: `if(c&&s.includes(c)||(c=…`.
+- Reescrita por De Morgan, equivalência conferida pelo `site-qa`. Cada página perde 4 B.
+- Causa não isolada. Candidatos: `rolldown` 1.2.13 → 1.2.16 e 1.3.0, e `@oxc-project/types` 0.153 → 0.156.
+- O resto do `dist/` (CSS, `.woff2`, imagens, `sitemap`, `robots`, JSON-LD, metadados) está idêntico.
+  O `<main>` das 10 legais pt/en está idêntico byte a byte.
+
+**Achados aceitos.**
+- Dois `rolldown` na árvore (baixo, `site-qa`): 1.3.0 aninhado em `astro` e 1.2.16 do `vite`. O
+  `npm dedupe` ficou de fora, pois exigiria provar o `dist/` de novo. Aceito.
+- Pré-releases `@emnapi/core` e `@emnapi/runtime` 2.0.0-beta.2: só dependências de
+  `@rolldown/binding-wasm32-wasi`, opcional e `cpu: wasm32`. Não são instaladas em linux-x64 nem no CI. Aceitas.
+
+**Node.** CI e deploy ficam em **22.23.5** (release de segurança de 2026-11-11), não em 22.23.4 como
+os passos e o último critério dizem. É exceção à regra dos 14 dias, por decisão do usuário em
+2026-11-21: a versão completa 14 dias em 2026-11-25. O piso do `engines` continua `^22.23.4`. O node local é 22.23.4.
+
+**Medições.**
+- `npm audit`: 0.
+- `site-seo-perf`: bytes −4 B por página, imagens e CSS iguais, orçamento cumprido sem `--medir`.
+  FCP de `/` 1,50 s e LCP 2,55 s, iguais antes e depois; o aviso de LCP já existia.
+- As 96 versões novas do lock são anteriores a 2026-11-07.
+- Verify: passaram `check_site` (raiz e `dist`), `contrato.sha256`, html-validate, `test:css` e `check_plano`.
+
+**Falta (por isso não é `done`).**
+- `lychee` não está instalado localmente e não rodou.
+- Os jobs `plano`, `site` e `lighthouse` no Node 22.23.5 só rodam quando a branch entrar na
+  integração e atualizar o PR #37. Ao ver verde, fechar o WP e o último critério passa a citar 22.23.5.
