@@ -21,7 +21,7 @@ const x = legal[lang];
 const home = rota(lang, 'index.html');
 const entrada = await getEntry('legal', `poleposition-privacy.${lang}`);
 if (!entrada) throw new Error(`src/content/legal/poleposition-privacy.${lang}.md ausente`);
-const { Content } = await render(entrada);
+const { Content, headings } = await render(entrada);
 ---
 <LegalLayout
   lang={lang}
@@ -30,11 +30,9 @@ const { Content } = await render(entrada);
   description={x.poleposition_privacy_description}
   titulo={x.poleposition_privacy_h1}
   lastUpdated={entrada.data.lastUpdated}
-  tema="poleposition-privacy"
   app="poleposition"
   favicon="/assets/poleposition.png"
-  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden"
-  selo="lima"
+  headings={headings}
   voltar={{ href: home, texto: x.voltar_home }}
 >
   <Nav

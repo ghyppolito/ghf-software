@@ -3,8 +3,8 @@
 // inteira, com a prop `lang`; as cascas ficam em src/pages/ (ADR-007 §3). Texto em
 // src/content/legal/lottoexpert-terms.<código>.md; hero,
 // botão e <head> em i18n/legal.ts. Footer só com o e-mail entre os canais e esta página marcada como
-// atual; o acento da casca vem de `app` (WP-10 fatia 2). O botão volta para a home da GHF e o selo
-// leva o ícone de contrato, como na página antiga.
+// atual; o acento da casca vem de `app` (WP-10 fatia 2). O botão volta para a home da GHF, como na
+// página antiga.
 import { getEntry, render } from 'astro:content';
 import LegalLayout from '../../layouts/LegalLayout.astro';
 import Nav from '../Nav.astro';
@@ -21,7 +21,7 @@ const x = legal[lang];
 const home = rota(lang, 'index.html');
 const entrada = await getEntry('legal', `lottoexpert-terms.${lang}`);
 if (!entrada) throw new Error(`src/content/legal/lottoexpert-terms.${lang}.md ausente`);
-const { Content } = await render(entrada);
+const { Content, headings } = await render(entrada);
 ---
 <LegalLayout
   lang={lang}
@@ -30,12 +30,9 @@ const { Content } = await render(entrada);
   description={x.lottoexpert_terms_description}
   titulo={x.lottoexpert_terms_h1}
   lastUpdated={entrada.data.lastUpdated}
-  tema="lottoexpert-terms"
   app="lottoexpert"
   favicon="/assets/lottoexpert_favicon_v3.png"
-  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden"
-  selo="primary"
-  iconeSelo="file-contract"
+  headings={headings}
   voltar={{ href: home, texto: x.voltar_home }}
 >
   <Nav

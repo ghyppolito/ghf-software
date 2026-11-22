@@ -10,7 +10,7 @@ decisoes: [D4, D11, D12, D24, D25, D26, D27]
 tamanho: L
 risco: medio
 visual: true
-branch: feat/wp-10-fatia-2
+branch: feat/wp-10-fatia-3
 ---
 
 # WP-10 — A home e as landings de app seguem o sistema visual do handoff
@@ -34,7 +34,7 @@ página usa; `docs/AVALIACAO.md` §3.3.
 `src/pages/**` (pt e en), `src/assets/img/**` (imagens novas, pelo `astro:assets`; ADR-006 e
 `check_site.py` §13 proíbem imagem exibida em `public/`), `src/i18n/**`, `src/styles/tokens.css` e
 `tools/fixtures/sem-polyfill/*` (regenerada pelo ADR-008 §7 quando o CSS muda). Fatia 2:
-`tools/check_site.py` (§19, o rodapé com as 5 URLs legais). O convite fica de fora (ver "Plano").
+`tools/check_site.py` (§19, o rodapé com as 5 URLs legais). Fatia 3: `tools/check_site.py` §12. O convite fica de fora (ver "Plano").
 
 **Passos:** por página: `site-ux` DESENHAR (referência no handoff, estados) → `site-dev` →
 `/verify` → auditoria (`site-ux` AUDITAR + `site-qa` + `site-seo-perf`). Home por último, com
@@ -109,7 +109,7 @@ prova é o checklist de navegador.
    **Achados:** `TAILWIND3-NPM-AUDIT-01` (`npm audit` sem os 7 avisos), `SUCCESS-DOIS-VALORES-01`,
    `HOME-BOTAO-EMERALD-CONTRASTE-01` (o esmeralda sai do sistema, brief §10).
    **Bloqueio:** nenhum. **Copy:** nenhuma.
-2. **Casca: `Base`, `Nav`, `Footer`, `SeletorIdioma`, `SugestaoIdioma` e um `Logo.astro` novo.** **Feita em 2026-11-22** (commits 8999f11, 872c0ef, 0ee743c; branch `feat/wp-10-fatia-2`). Auditorias de `site-qa`, `site-seo-perf` e `site-ux`: nenhum achado alto; os médios (ordem do foco no rodapé, WCAG 2.4.3; "Pular" saltando o `<h1>` das legais) foram corrigidos. Medidas: rodapé a 360 de 1432 para 871 px, a 768 de 1108 para 687 px (contato em linha própria e coluna ao lado da marca vazia: `RODAPE-ORDEM-M-T-01`, WP-19); LCP de `/` de 2,56 para 2,33 s (o elemento mudou de `<img>` para `<span>`; remedir na fatia 6); orçamento cumprido sem `--medir`; axe sem nó da casca. `/verify` passou (`lychee` só no CI). Resta o checklist de navegador (handoff).
+2. **Casca: `Base`, `Nav`, `Footer`, `SeletorIdioma`, `SugestaoIdioma` e um `Logo.astro` novo.** **Feita em 2026-11-22** (commits 8999f11, 872c0ef, 0ee743c; branch `feat/wp-10-fatia-2`). Auditorias de `site-qa`, `site-seo-perf` e `site-ux`: nenhum achado alto; os médios (ordem do foco no rodapé, WCAG 2.4.3; "Pular" saltando o `<h1>` das legais) foram corrigidos. Medidas: rodapé a 360 de 1432 para 871 px, a 768 de 1108 para 687 px (contato em linha própria e coluna ao lado da marca vazia: `RODAPE-ORDEM-M-T-01`, WP-19); LCP de `/` de 2,56 para 2,33 s (o elemento mudou de `<img>` para `<span>`; remedir na fatia 6); orçamento cumprido sem `--medir`; axe sem nó da casca. `/verify` passou (`lychee` só no CI). **Checklist de navegador das fatias 1 e 2 aprovado pelo usuário em 2026-11-22** ("gostei bastante do resultado, passei pelas telas todas", Chrome, pt e en, 360/768/1280): coluna vazia do rodapé a 768 aceita ("pode ficar"); faixa de idioma conferida em inglês. Safari não testado (Linux).
    Ramos 360, 768 e 1280 de `Site Nav` e `Site Footer`. Seletor segmentado PT/EN. Foco visível e
    alvos de 44 px. O logo fica num componente só. Até existir a arte, ele usa o PNG atual. Pela
    WCAG 1.4.3, logotipo não tem exigência de contraste. A troca da arte depois é um arquivo. O
@@ -178,7 +178,8 @@ prova é o checklist de navegador.
    - **LCP de `/`.** Caiu de 2,56 para 2,33 s (mediana do `lighthouse.py`) porque o elemento LCP mudou do `<img>` do logo para o
      `<span>` "GHF Software", não por otimização: o observado sem throttle não melhorou. Remedir na
      fatia 6.
-3. **Legal: `LegalLayout`, 10 páginas.** Papel claro, largura de leitura, sumário (recolhível
+3. **Legal: `LegalLayout`, 10 páginas.** **Feita em 2026-11-22** (commits 1dfe3bf e 6f5bf3e; branch `feat/wp-10-fatia-3`, não enviada; o `risco` do WP segue `medio`, a fatia é alta). Auditorias de `site-qa`, `site-seo-perf` e `site-ux`: nenhum achado alto; os médios foram corrigidos (ênfase restaurada, decisão (A); troca de idioma mantém `#secao-N`; §12 do `check_site.py` confere âncoras e caixas; parágrafo quebrado do item 10 do plano consertado). Medidas: acessibilidade das legais de 96 para 100 (LottoExpert e TopoWalk); LCP das legais +~80 ms (1,73-1,88 para 1,80-1,95 s; o elemento é um `<p>` do corpo); +2 a 5 KB por página (sumário duplicado); CSS 86,7 para 81,9 KB (antes das caixas); `<head>`, `sitemap` e `id` das seções idênticos; `.legal-corpo` idêntico byte a byte nas 10 páginas; `src/content/legal/` intocado; `sync_legal --check` igual ao de antes. `/verify` passou (`lychee` só no CI). Resta o checklist de navegador, que é do usuário. Safari não testado.
+   Papel claro, largura de leitura, sumário (recolhível
    abaixo de 1024 px, lateral a partir de 1024 px) e data no topo. A troca de idioma mantém
    `#secao-N`. O texto vem de `src/content/legal/` e não é tocado. A prova é `sync_legal.py
    --todos --check` igual antes e depois, mais o texto extraído do corpo de cada página legal em
@@ -188,6 +189,48 @@ prova é o checklist de navegador.
    `LEGAL-LE-SLOGAN-CONTRASTE-01`, `TABELA-LEGAL-ANEL-DISCRETO-01` (revisitar) e a parte legal de
    `A11Y-LH-BASELINE-WP12-01`.
    **Bloqueio:** nenhum. **Copy:** nenhuma. Os rótulos de interface vêm de `content/i18n.js`.
+   **Respostas do usuário (2026-11-22, "pode seguir com as recomendações"): as perguntas da
+   especificação do `site-ux` (DESENHAR) ficam na opção (A).**
+   1. Selo "Documento Legal" do hero: sai (o handoff não o tem; o título e o app já dizem que é
+      legal). A chave `selo` sai de `legal.ts`.
+   2. Aviso "em divergência, prevalece a versão em português" no en: omitido. A cláusula nasce no
+      repositório do app (D8 b1): `PREVALENCIA-PT-EN-MD-01`.
+   3. Seletor pt/en no hero: omitido; o do Nav (fatia 2) basta.
+   4. Sumário estático, sem JS (sem realce da seção atual).
+   5. Sumário sempre visível, a mesma anatomia nas 5 páginas (inclusive o EclipseGo, com 8 seções).
+   6. Nenhum acento por app no corpo nem no hero, como o handoff; o `data-app` dá o acento da casca.
+   7. Impressão: CSS mínimo — sem Nav, Footer, sumário e voltar; fundo branco; sem a faixa de URL.
+   8. Literais: `--color-paper-chip` (#ECEBE7) e `--color-paper-raised` (#FFFFFF) entram em
+      `tokens.css`; raio `--radius-ctl` (8) no lugar de 10 px, `h2` em `text-h2` (24/32) no lugar
+      de 26/34, tabela em `text-small` (14/22) no lugar de 15/23. O Claude Design confirma na
+      próxima rodada (`LITERAIS-SEM-TOKEN-LEGAL-01`).
+   A edição do §12 do `check_site.py` (o corpo legal termina em `data-legal-voltar`, não mais no
+   `<div class="max-w-4xl …">` que saiu) foi autorizada nesta fatia, sem afrouxar a regra.
+   **Fixture do `sem-polyfill` regenerada (ADR-008 §7, 2026-11-22).** O bloco "Texto legal por tema"
+   e os temas `[data-tema='*-privacy']`/`lottoexpert-terms` saíram do CSS; `entrada.css` 101 279 →
+   94 648 e `saida.css` 87 503 → 82 424 bytes. O `npm run test:css` passa (21 de 21), o §18 fica
+   verde, e o plugin tira 12 224 bytes (12,9%) em vez de 13 776 (13,6%): saem com os temas as
+   reservas de opacidade (`bg-gray-800/50`, `bg-lime-900/10`, `hover:bg-gray-800/50`) que só as
+   legais usavam. No diff dos seletores da saída, saem 59 (os temas e o texto legal antigos) e entram
+   67 (o layout novo e o `.legal-corpo` de papel); nenhum seletor de outra página sai.
+   **Correções da auditoria (2026-11-22, sobre 1dfe3bf).** Nenhum achado alto.
+   - Ênfase restaurada (opção (A) do usuário), só por CSS e com tokens de papel: o `.legal-corpo`
+     leva `data-doc` (do caminho da página), e o bloco "Texto legal" de `global.css` põe caixa
+     (`bg-paper-chip`, barra `border-paper-link`) nas 3 notas de §2 e no "Dado local" de §9.2 (sem
+     barra) da privacidade do LottoExpert, e no item do CVV 188 de §3 dos termos. O §12 do
+     `check_site.py` ganhou `CAIXAS_LEGAIS`: cada alvo tem de começar por "Nota sobre"/"Note on" ou
+     "Dado local"/"Local data", e o de §3 conter "188". Provado com mutação numa cópia de `dist/`
+     (nota trocada, 188 tirado, `data-doc` tirado, parágrafo a mais): ❌ um erro por mutação. A
+     caixa não tem referência no handoff: `LEGAL-CALLOUT-SEM-HANDOFF-01` (WP-20).
+   - A troca de idioma mantém `#secao-N` (`Legal LottoExpert.dc.html:151`): o script da faixa de
+     idioma copia o `location.hash` para o link `data-troca-idioma` no clique. Sem JS, vai ao topo.
+   - §12: todo `href="#x"` da página legal tem `id="x"` nela (provado com um `id` tirado: ❌).
+   - Espaço entre o rótulo e a data no chip (o texto extraído saía "atualização:13").
+   - A sombra do "Pular para o conteúdo" só com o foco: fora da tela, ela vazava no canto de cima,
+     visível sobre o papel.
+   - Fixture do `sem-polyfill` regenerada de novo (ADR-008 §7): `entrada.css` 94 648 → 96 042 e
+     `saida.css` 82 424 → 83 818 bytes; entram os 3 seletores das caixas e o `focus:shadow-pop`, nada
+     sai; o plugin tira o mesmo tanto (12 224 bytes); `test:css` 21 de 21.
 4. **404.** `404.dc.html`, só pt, com o texto atual. **Bloqueio:** nenhum. **Copy:** nenhuma.
 5. **Template de landing e LottoExpert.** Os componentes `src/components/landing/*` são os de
    `Landing App.dc.html`: hero, funcionalidades, "ver todas" (D12), prova, planos, privacidade,
@@ -232,6 +275,7 @@ prova é o checklist de navegador.
 10. **Limpeza e aceite.** Saem a camada de legado de `global.css` e os temas `[data-tema]`. O grep
     de tokens fica vazio. Entram a tabela de contraste do `site-ux`, o Lighthouse de
     acessibilidade ≥ 95 e o checklist de navegador (todas as páginas, 360/768/1280, pt e en).
+    **Revisão final no site real (do WP-19, decisão do usuário em 2026-11-22):** TopoWalk em russo a 360 (se a língua existir no site até lá); home, landing e legal a 768; faixa de sugestão de idioma (fecha e não volta na sessão); foco visível em "Ver todas" e nos sociais do rodapé; selo "Publicado" distinto do verde do Pole Position.
 
 **Ordem.** As fatias 1 a 4 andam sem nenhuma copy nova. A fatia 5 começa com a copy publicada e só
 fecha com as respostas. A 6 vem depois da 5. As fatias 7 a 9 esperam o WP-19. A 10 é a última. O

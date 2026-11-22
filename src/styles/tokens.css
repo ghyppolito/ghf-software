@@ -41,6 +41,10 @@
   --color-paper-border: #d9d7d1; /* divisória (1,34: decorativa) */
   --color-paper-link: #0a6e75; /* link e foco no papel (LG:53) */
   --color-paper-link-hover: #07565c;
+  /* Sem token no handoff (LITERAIS-SEM-TOKEN-LEGAL-01, resposta 8 do usuário, 2026-11-22): nome
+   * proposto aqui, valor do literal do handoff; o Claude Design confirma na próxima rodada. */
+  --color-paper-chip: #ecebe7; /* chip da data (LG:36), `code` (LG:78), cabeçalho da tabela (LG:117), hover do sumário (LG:25) */
+  --color-paper-raised: #ffffff; /* sumário recolhível (LG:52), tabela (LG:115) */
 
   /* Acento por app — K3:597-604 (acc e light, rodada 3); edge de LJ:5,40,73,101.
    * `light` é o acento sobre o papel. */
@@ -199,6 +203,14 @@
   &:focus-visible {
     outline: 2px solid var(--color-paper-link);
     outline-offset: 3px;
+  }
+}
+
+/* Anel interno no papel: item do sumário da página legal (LG:25, `outline-offset:-2px`). */
+@utility anel-foco-papel-interno {
+  &:focus-visible {
+    outline: 2px solid var(--color-paper-link);
+    outline-offset: -2px;
   }
 }
 

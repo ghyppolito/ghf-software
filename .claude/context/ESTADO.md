@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**25 WPs** · 16 concluídos · 1 em andamento
+**28 WPs** · 17 concluídos · 1 em andamento
 
 ## Sequência recomendada
 
@@ -24,14 +24,16 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 
 | # | WP | Status | Nota |
 |---|---|---|---|
-| 1 | [WP-19 — A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2](wps/WP-19-rodada-3-do-claude-design.md) | `blocked` | export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true) |
-| 2 | [WP-10 — A home e as landings de app seguem o sistema visual do handoff](wps/WP-10-redesign-com-o-handoff.md) | `doing` | redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08 |
-| 3 | [WP-20 — Imagens de compartilhamento 1200×630 por página e twitter:card coerente](wps/WP-20-imagens-de-compartilhamento-1200x630.md) | `todo` | imagens de compartilhamento 1200×630 (D16 A): marca para home e legais, uma por app; sessão do usuário no Claude Design, depois `twitter:card` e `og:image:alt`. M, `visual`, antes do deploy único (D13) |
-| 4 | [WP-16 — A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de](wps/WP-16-politica-do-poleposition-em-6-linguas.md) | `todo` | política do Pole Position em pt/en/es/fr/it/de, traduzida do pt de origem; pré-condição: cláusula de prevalência do pt no app (D8 b1, `PREVALENCIA-PT-NOS-APPS-01`); o espelho pt fica em dia no WP-04. Texto legal, risco alto — prova o processo na política menor |
-| 5 | [WP-17 — A política de privacidade do TopoWalk existe no site em pt, en, es, fr, it, de e ru](wps/WP-17-politica-do-topowalk-em-7-linguas.md) | `todo` | política do TopoWalk em pt/en/es/fr/it/de/ru (5.842 palavras × 6 línguas além do pt); PR por língua. L, risco alto, depois do WP-16 · ⏳ aguarda WP-16 |
-| 6 | [WP-18 — As landings do TopoWalk e do Pole Position existem nas línguas que cada app fala](wps/WP-18-landings-topowalk-e-poleposition-nas-linguas-dos-apps.md) | `todo` | landings TopoWalk (7 línguas) e Pole Position (6) com copy das fichas da Play; só se D8 (a2/a3), depois do WP-10 para não traduzir duas vezes · ⏳ aguarda WP-10 |
-| 7 | [WP-13 — O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade](wps/WP-13-medicao.md) | `todo` | medição com consentimento ou sem cookie (D3: Plausible/Umami vs GA4 Consent Mode); evento de clique na Play por app. M, depois do WP-08 |
-| 8 | [WP-23 — O convite do bolão abre sem terceiros (pako e Inter servidos pelo site, com `<main>`)](wps/WP-23-convite-sem-terceiros.md) | `todo` | convite sem terceiros: pako 2.1.0 (sha256 do tarball do npm) e Inter servidos ao lado do convite, `<main>`, `contrato.sha256` novo, convite entra no §15 (a)/(b) e §17 do check_site e no Lighthouse; teste com `?d=` real v1 e v2. M, risco alto (URL contratual), visual · ⏳ só depois do deploy único (D13), branch de `develop`, `/release` próprio |
+| 1 | [WP-10 — A home e as landings de app seguem o sistema visual do handoff](wps/WP-10-redesign-com-o-handoff.md) | `doing` | redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08 |
+| 2 | [WP-26 — Os termos de uso do TopoWalk existem no site em pt e en, espelhados do repositório do app](wps/WP-26-termos-de-uso-do-topowalk-no-site.md) | `todo` | termos de uso do TopoWalk (exigência da UE para comerciante, prazo 2027; D28 B: vai no deploy único). Pré-condição: `TERMS_OF_SERVICE.md` na `master` do app, escrito pelo humano. Legal, risco alto, URL nova |
+| 3 | [WP-28 — Os termos de uso do Pole Position existem no site em pt e en, espelhados do repositório do app](wps/WP-28-termos-de-uso-do-poleposition-no-site.md) | `todo` | termos de uso do Pole Position (UE, D28 B). Pré-condição: texto na `master` do app; corrige a origem `../pole-position-app` (PP-ORIGEM-CAMINHO-01). Legal, risco alto, URL nova |
+| 4 | [WP-27 — Os termos de uso do EclipseGo existem no site em pt e en, espelhados do repositório do app](wps/WP-27-termos-de-uso-do-eclipsego-no-site.md) | `todo` | termos de uso do EclipseGo (UE, D28 B). Pré-condição: texto na `main` do app; EclipseGo ainda sem ficha na Play (D19 e). Legal, risco alto, URL nova |
+| 5 | [WP-20 — Imagens de compartilhamento 1200×630 por página e twitter:card coerente](wps/WP-20-imagens-de-compartilhamento-1200x630.md) | `todo` | imagens de compartilhamento 1200×630 (D16 A): marca para home e legais, uma por app; sessão do usuário no Claude Design, depois `twitter:card` e `og:image:alt`. M, `visual`, antes do deploy único (D13) |
+| 6 | [WP-16 — A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de](wps/WP-16-politica-do-poleposition-em-6-linguas.md) | `todo` | política do Pole Position em pt/en/es/fr/it/de, traduzida do pt de origem; pré-condição: cláusula de prevalência do pt no app (D8 b1, `PREVALENCIA-PT-NOS-APPS-01`); o espelho pt fica em dia no WP-04. Texto legal, risco alto — prova o processo na política menor |
+| 7 | [WP-17 — A política de privacidade do TopoWalk existe no site em pt, en, es, fr, it, de e ru](wps/WP-17-politica-do-topowalk-em-7-linguas.md) | `todo` | política do TopoWalk em pt/en/es/fr/it/de/ru (5.842 palavras × 6 línguas além do pt); PR por língua. L, risco alto, depois do WP-16 · ⏳ aguarda WP-16 |
+| 8 | [WP-18 — As landings do TopoWalk e do Pole Position existem nas línguas que cada app fala](wps/WP-18-landings-topowalk-e-poleposition-nas-linguas-dos-apps.md) | `todo` | landings TopoWalk (7 línguas) e Pole Position (6) com copy das fichas da Play; só se D8 (a2/a3), depois do WP-10 para não traduzir duas vezes · ⏳ aguarda WP-10 |
+| 9 | [WP-13 — O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade](wps/WP-13-medicao.md) | `todo` | medição com consentimento ou sem cookie (D3: Plausible/Umami vs GA4 Consent Mode); evento de clique na Play por app. M, depois do WP-08 |
+| 10 | [WP-23 — O convite do bolão abre sem terceiros (pako e Inter servidos pelo site, com `<main>`)](wps/WP-23-convite-sem-terceiros.md) | `todo` | convite sem terceiros: pako 2.1.0 (sha256 do tarball do npm) e Inter servidos ao lado do convite, `<main>`, `contrato.sha256` novo, convite entra no §15 (a)/(b) e §17 do check_site e no Lighthouse; teste com `?d=` real v1 e v2. M, risco alto (URL contratual), visual · ⏳ só depois do deploy único (D13), branch de `develop`, `/release` próprio |
 
 ## Todos os WPs
 
@@ -55,16 +57,18 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-16](wps/WP-16-politica-do-poleposition-em-6-linguas.md) | A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de | legal | M | alto | 🖥️ | WP-15 | ADR-001 | `todo` |
 | [WP-17](wps/WP-17-politica-do-topowalk-em-7-linguas.md) | A política de privacidade do TopoWalk existe no site em pt, en, es, fr, it, de e ru | legal | L | alto | 🖥️ | WP-16 | ADR-001 | `todo` |
 | [WP-18](wps/WP-18-landings-topowalk-e-poleposition-nas-linguas-dos-apps.md) | As landings do TopoWalk e do Pole Position existem nas línguas que cada app fala | landing | M | medio | 🖥️ | WP-10, WP-15 | ADR-001 | `todo` |
-| [WP-19](wps/WP-19-rodada-3-do-claude-design.md) | A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2 | design | S | baixo | 🖥️ | WP-06 | — | `blocked` |
+| [WP-19](wps/WP-19-rodada-3-do-claude-design.md) | A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2 | design | S | baixo | 🖥️ | WP-06 | — | `done` |
 | [WP-20](wps/WP-20-imagens-de-compartilhamento-1200x630.md) | Imagens de compartilhamento 1200×630 por página e twitter:card coerente | design | M | baixo | 🖥️ | WP-11 | ADR-005 | `todo` |
 | [WP-21](wps/WP-21-copy-de-compartilhamento-da-ficha-da-play.md) | Title e description de compartilhamento vêm da ficha da Play | landing | M | baixo |  | WP-11 | — | `done` |
 | [WP-22](wps/WP-22-acessibilidade-e-i18n-sem-redesign.md) | Acessibilidade e i18n sem redesign (a11y AA, foco, `<main>`, headings, reduced-motion, contraste fora da paleta, rótulos pt na /en/) | landing | M | medio | 🖥️ | WP-12, WP-15 | ADR-003, ADR-007 | `done` |
 | [WP-23](wps/WP-23-convite-sem-terceiros.md) | O convite do bolão abre sem terceiros (pako e Inter servidos pelo site, com `<main>`) | infra | M | alto | 🖥️ | — | ADR-001, ADR-002, ADR-006 | `todo` |
 | [WP-24](wps/WP-24-convite-com-o-sistema-visual-do-handoff.md) | O convite do bolão segue o sistema visual do handoff, com o parse de `?d=` intocado | design | M | alto | 🖥️ | WP-10, WP-23 | ADR-001, ADR-006, ADR-008 | `todo` |
 | [WP-25](wps/WP-25-dependencias-sem-aviso-do-npm-audit.md) | O build sai do Astro 7.3.8 e o npm audit não acusa dependência vulnerável | infra | S | alto |  | WP-08 | ADR-001, ADR-002, ADR-008 | `done` |
+| [WP-26](wps/WP-26-termos-de-uso-do-topowalk-no-site.md) | Os termos de uso do TopoWalk existem no site em pt e en, espelhados do repositório do app | legal | M | alto | 🖥️ | — | ADR-001, ADR-004, ADR-005, ADR-007 | `todo` |
+| [WP-27](wps/WP-27-termos-de-uso-do-eclipsego-no-site.md) | Os termos de uso do EclipseGo existem no site em pt e en, espelhados do repositório do app | legal | M | alto | 🖥️ | — | ADR-001, ADR-004, ADR-005, ADR-007 | `todo` |
+| [WP-28](wps/WP-28-termos-de-uso-do-poleposition-no-site.md) | Os termos de uso do Pole Position existem no site em pt e en, espelhados do repositório do app | legal | M | alto | 🖥️ | — | ADR-001, ADR-004, ADR-005, ADR-007 | `todo` |
 
 ## Bloqueios ativos
 
 | WP | Bloqueado por | Desde |
 |---|---|---|
-| WP-19 | export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true) | 2026-10-13 |

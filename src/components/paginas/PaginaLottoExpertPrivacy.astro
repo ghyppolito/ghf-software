@@ -21,7 +21,7 @@ const x = legal[lang];
 const home = rota(lang, 'index.html');
 const entrada = await getEntry('legal', `lottoexpert-privacy.${lang}`);
 if (!entrada) throw new Error(`src/content/legal/lottoexpert-privacy.${lang}.md ausente`);
-const { Content } = await render(entrada);
+const { Content, headings } = await render(entrada);
 ---
 <LegalLayout
   lang={lang}
@@ -30,11 +30,9 @@ const { Content } = await render(entrada);
   description={x.lottoexpert_privacy_description}
   titulo={x.lottoexpert_privacy_h1}
   lastUpdated={entrada.data.lastUpdated}
-  tema="lottoexpert-privacy"
   app="lottoexpert"
   favicon="/assets/lottoexpert_favicon_v3.png"
-  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden"
-  selo="primary"
+  headings={headings}
   voltar={{ href: home, texto: x.voltar_home }}
 >
   <Nav
