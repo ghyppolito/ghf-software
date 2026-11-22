@@ -31,7 +31,7 @@ WP-10. Enquanto ele roda, o WP-10 fica `blocked` (motivo: "aguarda WP-25", em `B
 Ele volta a `doing` quando o WP-25 fecha. Por quê: assim as fatias 2 em diante do WP-10, e o
 checklist de navegador delas, já rodam no Astro novo, e o upgrade não fica para o fim. A
 alternativa é rodar este WP depois do WP-10 `done`. Ela custa refazer a prova visual do
-redesign inteiro sobre outro Astro. Escolher entre as duas é do usuário.
+redesign inteiro sobre outro Astro. **Decidido pelo usuário em 2026-11-21: entre as fatias 1 e 2** ("Pode registrar as recomendações").
 
 **Objetivo:** o `npm audit` sobre a integração sai com 0 avisos. Cada versão nova é exata e foi
 publicada há mais de 14 dias. O `dist/` sai igual ao de antes, ou cada diferença tem motivo.

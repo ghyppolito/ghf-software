@@ -2,7 +2,7 @@
 id: WP-10
 titulo: A home e as landings de app seguem o sistema visual do handoff
 area: design
-status: doing
+status: blocked
 depende_de: [WP-06, WP-08]
 adr: [ADR-001, ADR-004, ADR-006, ADR-007, ADR-008]
 spec: docs/AVALIACAO.md
