@@ -109,7 +109,7 @@ prova é o checklist de navegador.
    **Achados:** `TAILWIND3-NPM-AUDIT-01` (`npm audit` sem os 7 avisos), `SUCCESS-DOIS-VALORES-01`,
    `HOME-BOTAO-EMERALD-CONTRASTE-01` (o esmeralda sai do sistema, brief §10).
    **Bloqueio:** nenhum. **Copy:** nenhuma.
-2. **Casca: `Base`, `Nav`, `Footer`, `SeletorIdioma`, `SugestaoIdioma` e um `Logo.astro` novo.**
+2. **Casca: `Base`, `Nav`, `Footer`, `SeletorIdioma`, `SugestaoIdioma` e um `Logo.astro` novo.** **Feita em 2026-11-22** (commits 8999f11, 872c0ef, 0ee743c; branch `feat/wp-10-fatia-2`). Auditorias de `site-qa`, `site-seo-perf` e `site-ux`: nenhum achado alto; os médios (ordem do foco no rodapé, WCAG 2.4.3; "Pular" saltando o `<h1>` das legais) foram corrigidos. Medidas: rodapé a 360 de 1432 para 871 px, a 768 de 1108 para 687 px (contato em linha própria e coluna ao lado da marca vazia: `RODAPE-ORDEM-M-T-01`, WP-19); LCP de `/` de 2,56 para 2,33 s (o elemento mudou de `<img>` para `<span>`; remedir na fatia 6); orçamento cumprido sem `--medir`; axe sem nó da casca. `/verify` passou (`lychee` só no CI). Resta o checklist de navegador (handoff).
    Ramos 360, 768 e 1280 de `Site Nav` e `Site Footer`. Seletor segmentado PT/EN. Foco visível e
    alvos de 44 px. O logo fica num componente só. Até existir a arte, ele usa o PNG atual. Pela
    WCAG 1.4.3, logotipo não tem exigência de contraste. A troca da arte depois é um arquivo. O

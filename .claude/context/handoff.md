@@ -3,19 +3,20 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-11-21/22.** WP-25 `done` (PR #47 integrado; CI do #37 verde no Node 22.23.5, run 44978260131). WP-10 volta a `doing`; a fatia 2 parte da branch `feat/wp-10-fatia-2`, criada de `origin/feat/wp-08-layout-unico` (79e6703).
+**Sessão de 2026-11-22.** WP-25 `done` (#47; CI do #37 verde no Node 22.23.5). Fatia 2 do WP-10 feita em `feat/wp-10-fatia-2` (criada de `origin/feat/wp-08-layout-unico`, 79e6703).
 
 ## 1. Onde parei
 
-- WP-25 implementado e auditado (`site-qa` e `site-seo-perf`, sem achado alto): Astro 7.4.7, `npm audit` 0, CI e deploy no Node 22.23.5. Segue `doing` até o CI provar. Branch `feat/wp-25-dependencias`, não enviada. Detalhe no WP.
-- Próximo passo do usuário: abrir e mesclar um PR `feat/wp-25-dependencias` -> `feat/wp-08-layout-unico`, como o #46, e conferir o CI do #37 (`plano`, `site`, `lighthouse`; `lychee` só roda lá).
-- Depois, a fatia 2 do WP-10 (casca: `Base`, `Nav`, `Footer`, `SeletorIdioma`, `SugestaoIdioma`, `Logo.astro`, prop `app`/`data-app`, `tabular-nums`). WP-10 segue `blocked` até o WP-25 fechar.
+- WP-25 `done` (#47 integrado). Fatia 2 do WP-10 (casca) feita em 2026-11-22 na branch `feat/wp-10-fatia-2` (8999f11, 872c0ef, 0ee743c; não enviada); auditorias sem achado alto. WP-10 segue `doing`.
+- Próxima: **fatia 3 (legal)**, `risco: alto` (5 URLs contratuais), passa pelo `site-legal`. Prova: `sync_legal.py --todos --check` mais o texto do corpo em `dist/` igual antes e depois.
+- Usuário: abrir e mesclar um PR `feat/wp-10-fatia-2` -> `feat/wp-08-layout-unico`, como o #46 e o #47, e conferir o CI do #37. O #37 segue sem merge até o deploy único.
+- O merge local é barrado pela permissão desta sessão: o agente abre o PR e o usuário mescla no GitHub.
 
 ## 2. Quebrado ou pela metade agora
 
-Nada quebrado. Passaram no `/verify`: `check_site.py --raiz dist`, `contrato.sha256`, html-validate, `npm run test:css` (21 testes) e `check_plano`. `lychee` não está instalado localmente e não rodou; o CI cobre.
+Nada quebrado. Passaram no `/verify` da fatia 2: `test:css`, `check_site.py` (raiz e `dist`), `contrato.sha256`, html-validate, `lighthouse.py` sem `--medir`, `gen_estado --check` e `check_plano`. `lychee` não está instalado localmente e não rodou; o CI cobre.
 **Cuidado:** o agente rodou `npm ci` num worktree com `node_modules` em symlink e isso esvaziou o `node_modules` principal; foi restaurado. Não rode `npm ci` em worktree que compartilhe `node_modules` por symlink.
-As utilidades `*-app-acc` ficam sem valor em toda página até a fatia 2 emitir `data-app`.
+`lychee` não rodou localmente na fatia 2 (CI cobre).
 
 ## 3. O que só o navegador prova (pendente)
 
@@ -27,6 +28,15 @@ As utilidades `*-app-acc` ficam sem valor em toda página até a fatia 2 emitir 
 - vidro do nav ao rolar e menu móvel a 360 px;
 - Safari 16.4.
 
+**Fatia 2 (casca)**, `python3 -m http.server 8080 -d dist`:
+- barra do nav a 360, 768 e 1280, pt e en (60/68 px; recorte do logo sem o texto "since 1996");
+- menu: abrir e fechar, Esc, girar a tela;
+- segmento PT/EN com anel;
+- rodapé a 360, 768 e 1280: ordem marca -> apps -> contato, coluna vazia a 768, linha dupla a 360;
+- "Pular para o conteúdo" e Enter, no Chrome e no Safari;
+- faixa de idioma;
+- páginas antigas com ~68 px a mais no topo; CTA da Play do LottoExpert e do EclipseGo abaixo da dobra a 1280x720 (aceito até as fatias 5 e 9).
+
 **WP-25 (`visual: false`, checagem rápida):** em `/` com o navegador em inglês e sem `ghf_lang` no `localStorage`, a faixa de idioma aparece; em `/en/`, não.
 
 **WP-19 (rodada 3):** `python3 -m http.server 8080 -d design/handoff/2026-10-13-rodada-3`. `Landing App.dc.html?app=topo&lang=ru` a 360; `?app=topo`, `?app=pole`, `?app=eclipse` a 1280; `Home.dc.html`, `Landing App.dc.html` e `Legal LottoExpert.dc.html` a 768; troca pt/en na legal (en é stub); `?app=pole&suggest=de`; Tab em "Ver todas" e nos sociais do footer; selo "Publicado" distinto do verde do Pole. Escrever o resultado no WP-19 (segue `blocked`).
@@ -35,10 +45,11 @@ Herdados, sem mudança: seletor com 3+ línguas (WP-16); Search Console, preview
 
 ## 4. Próxima ação
 
-**Do agente:** `/wp WP-10` fatia 2 (a 1 a 4 andam sem copy nova).
+**Do agente:** `/wp WP-10` fatia 3 (legal; `site-legal`). As fatias 3 e 4 andam sem copy nova.
 
 **Do usuário:**
-- checklist do WP-19 e o da fatia 1 (seção 3);
+- PR da fatia 2 (seção 1);
+- checklists do WP-19, da fatia 1 e da fatia 2 (seção 3);
 - capturas do app (D26): todas para LottoExpert e TopoWalk, 2 para Pole Position e 2 para EclipseGo;
 - push de `feat/wp-10-redesign`;
 - decidir o PR rascunho `feat/wp-10-redesign → develop`, título `[NÃO FAZER MERGE — D13]`, para o CI rodar a cada fatia;
@@ -57,5 +68,5 @@ A modernização inteira (WP-08 a WP-10 e o resto) espera o deploy único (D13, 
 
 ## 7. Escrituração e branches
 
-- Triagem: vazia. O `ASTRO-UNDICI-AUDIT-01` aponta ao WP-25 (resolve ao fechar); `DATA-APP-E-TABULAR-01` está roteado ao WP-10 (fatia 2).
-- Branches: `develop`, `master`, `feat/wp-08-layout-unico`, `feat/wp-10-redesign`, `feat/wp-19-rodada-3-claude-design` (integrada; WP-19 segue `blocked`) e `feat/wp-05-ci-no-pr` (não integrada).
+- Triagem: vazia. `RODAPE-ORDEM-M-T-01` roteado ao WP-19; `DATA-APP-E-TABULAR-01` resolvido na fatia 2.
+- Branches: `develop`, `master`, `feat/wp-08-layout-unico`, `feat/wp-10-redesign`, `feat/wp-10-fatia-2` (não enviada), `feat/wp-19-rodada-3-claude-design` (integrada; WP-19 segue `blocked`) e `feat/wp-05-ci-no-pr` (não integrada).
