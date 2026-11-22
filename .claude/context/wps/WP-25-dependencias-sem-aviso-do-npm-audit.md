@@ -60,7 +60,7 @@ publicada há mais de 14 dias. O `dist/` sai igual ao de antes, ou cada diferen�
   - **Node.** `engines.node` passa a `>=22.23.4` (a 7.3.8 pede `>=22.12.0`; o piso subiu na
     7.4.5). O CI usa `node-version: '22.22'` em `.github/workflows/pr.yml:62` e `:135` e em
     `.github/workflows/deploy.yml:38`. O `package.json:6` declara `"node": "^22.22.0"`. Node
-    22.23.4 saiu em 2026-10-21; o 22.23.5 (2026-11-11) ainda não tem 14 dias. Por isso o CI
+    22.23.4 saiu em 2026-10-20 (`nodejs.org/dist/index.json`; está no `versions-manifest.json` do `actions/node-versions`, que o setup-node usa); o 22.23.5 (2026-11-11) ainda não tem 14 dias. Por isso o CI
     fixa `22.23.4` exato, não `22.23`. `html-validate` (`^22.22.0 || >= 24.8.0`) e `lighthouse`
     (`>=22.19`) aceitam esse Node.
   - **Markdown.** `@astrojs/markdown-satteri` vai de 0.4.3 para 0.4.7. O Astro 7.4.7 depende da
@@ -69,8 +69,12 @@ publicada há mais de 14 dias. O `dist/` sai igual ao de antes, ou cada diferen�
   - **Fontes e Vite.** `unifont` vai de `~0.7.5` para `^1.0.3`, e `vite` de `^8.3.1` para `^8.3.5`.
 - **Versões transitivas.** `undici` (`^8.0.0` no `unifont@1.0.3`) e `fast-uri` resolvem para a
   versão mais nova do range. Hoje essa versão é o `undici` 8.13.1, de 2026-11-20. O
-  `npm install --before=2026-11-07` limita a resolução a versões de antes de 2026-11-07: dá
-  `undici` 8.12.4, `fast-uri` 3.1.9 e `vite` ≤ 8.3.6. Assim não é preciso `overrides`.
+  `npm install --before=2026-11-07` limita a resolução a versões de antes de 2026-11-07.
+  Medido em 2026-11-21 (`--package-lock-only` sobre cópia do lock de c5160e7): o install dá
+  `astro` 7.4.7, `@astrojs/markdown-satteri` 0.4.7, `unifont` 1.0.3, `vite` 8.3.6 e `undici`
+  8.12.4, mas **mantém `fast-uri` 3.1.8** (o `ajv` já está satisfeito e o npm não o toca), e o
+  `npm audit` sobra com 1 moderate. `npm update fast-uri --before=2026-11-07` leva a 3.1.9
+  (2026-10-19) e o audit sai `found 0 vulnerabilities`. Assim não é preciso `overrides`.
 
 **Ler antes:** ADR-002 §1 (Astro e Node fixados, lockfile versionado); ADR-008 §7 (plugin
 `sem-polyfill`, fixture do Tailwind 4.3.5); ADR-001 (caminhos contratuais);
@@ -78,18 +82,21 @@ publicada há mais de 14 dias. O `dist/` sai igual ao de antes, ou cada diferen�
 
 **Arquivos-alvo:** `package.json`, `package-lock.json`, `.github/workflows/pr.yml` (só as duas
 linhas `node-version` e o comentário de `:61`), `.github/workflows/deploy.yml` (só
-`node-version`), `README.md:63` e `CLAUDE.md:112` (versão do Node), ADR-002 (nota de rodapé:
+`node-version`), `README.md:63`, `CLAUDE.md:112` e `docs/ARQUITETURA.md:17` (versão do Node), ADR-002 (nota de rodapé:
 Astro 7.4.7 e Node 22.23.4, mesma política de versão exata — não muda a decisão).
 
 **Passos:**
 1. Pré-voo: rodar `git merge-base --is-ancestor e3430b7 feat/wp-08-layout-unico`, que deve sair
    0. Depois `node -v` deve dar `v22.23.4`. Em seguida `npm ci && npm run build`, copiar `dist/`
    para `<scratchpad>/dist-antes` e salvar `npm audit --json` como linha de base.
-2. `npm install --save-exact --before=2026-11-07 astro@7.4.7 @astrojs/markdown-satteri@0.4.7`.
-3. Rodar `npm audit`. Se sobrar `undici` < 8.12.2 ou `fast-uri` < 3.1.9, rodar
-   `npm update undici fast-uri --before=2026-11-07`. Não usar `npm audit fix --force`.
-4. `engines.node` passa a `"^22.23.4"`. `node-version: '22.23.4'` nos três pontos dos workflows.
-   README, `CLAUDE.md` e a nota do ADR-002 recebem a versão nova.
+2. `engines.node` passa a `"^22.23.4"` em `package.json` **antes** do install: o lock copia
+   `engines` na entrada raiz (`packages[""]`), e editar depois deixa o lock defasado.
+3. `npm install --save-exact --before=2026-11-07 astro@7.4.7 @astrojs/markdown-satteri@0.4.7`
+   e, em seguida, `npm update fast-uri --before=2026-11-07` (o install sozinho deixa a 3.1.8,
+   ver Contexto). `npm audit` tem de sair 0. Não usar `npm audit fix` nem `--force`.
+4. `node-version: '22.23.4'` nos três pontos dos workflows, e o comentário de `pr.yml:61` passa
+   a citar o piso do Astro 7.4.7 (`>=22.23.4`). README, `CLAUDE.md`, `docs/ARQUITETURA.md` e a
+   nota do ADR-002 recebem a versão nova. Não há `.nvmrc` no repositório; não criar.
 5. `npm ci && npm run build`, copiar o resultado para `<scratchpad>/dist-depois`, e comparar com
    os hashes normalizados:
    `diff -r <(cd dist-antes && find . -type f | sed -E 's/\.[A-Za-z0-9_-]{8}\./.HASH./' | sort) <(… dist-depois …)`
@@ -124,7 +131,9 @@ abaixo:
 - Um caminho contratual pode deixar de sair em `dist/`. O `contrato.sha256` (convite,
   `assetlinks.json`, mockup, `CNAME`) e o §15 do `check_site.py` barram isso no PR e no deploy.
 
-**Reversão:** antes do deploy único, `git revert` do commit do WP na integração. O lockfile
+**Reversão:** antes do deploy único, `git revert` dos commits do WP que tocam `package.json`,
+`package-lock.json` e os workflows, na integração (o merge do WP, se já entrou: `git revert -m 1`).
+Depois `npm ci` local para o `node_modules` voltar ao lock antigo. O lockfile
 antigo volta e o `node-version` volta para `22.22`. Depois do deploy, vale o rollback da D13 (5):
 `gh workflow run deploy.yml --ref pre-modernizacao`.
 
