@@ -113,7 +113,7 @@ npm ci && npm run build                                       # Astro → dist/ 
 python3 tools/check_site.py                                   # sobre dist/ (= --raiz dist; sem dist/, pede o build): URLs contratuais,
                                                               # links, assets, metadados, datas legais contra src/content/legal/, copy
 (cd dist && sha256sum --quiet -c ../tools/contrato.sha256)    # convite, assetlinks, og:image do convite e CNAME iguais ao publicado (D13)
-python3 -B -m unittest tools/test_regras_i18n.py              # regras de i18n (ADR-007) sobre tools/fixtures/i18n/
+python3 -B -m unittest tools/test_regras_i18n.py tools/test_regras_apps.py  # regras de i18n (ADR-007) e da lista de apps (D12, D31) sobre tools/fixtures/
 npm run test:css                                              # plugin src/styles/sem-polyfill.mjs (ADR-008 §7) sobre tools/fixtures/sem-polyfill/
 python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regenerar e verificar
 python3 -m http.server 8080 -d dist                           # servir dist/ para inspeção (Claude in Chrome ou usuário)
@@ -126,8 +126,8 @@ python3 tools/lighthouse.py                                   # orçamento de by
 
 `.github/workflows/pr.yml` roda em todo PR e push para `develop`/`master`, em três jobs: `plano`
 (`gen_estado.py --check`, `check_plano.py`), `site` (`npm ci`, `npm run build`,
-`check_site.py --raiz dist`, unittest das regras de i18n, contrato byte a byte, html-validate e
-lychee sobre `dist/`) e `lighthouse` (build e `tools/lighthouse.py --raiz dist` contra
+`check_site.py --raiz dist`, unittest das regras de i18n e da lista de apps, contrato byte a byte,
+html-validate e lychee sobre `dist/`) e `lighthouse` (build e `tools/lighthouse.py --raiz dist` contra
 `tools/orcamento-lighthouse.json`). `.github/workflows/deploy.yml` roda em push para `master` (e à
 mão): build, `check_site.py --raiz dist`, contrato byte a byte e publicação de `dist/` no Pages
 (modo "GitHub Actions").

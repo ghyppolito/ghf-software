@@ -74,6 +74,11 @@ Checa:
      as permitidas (sem `aggregateRating`, `review`, preço do Premium); `name` e
      `applicationCategory` os da landing (APP_DA_PAGINA, D17); `installUrl` com o mesmo
      `id` do botão da Play da página; o texto do JSON-LD (já decodificado) passa pela régua do §5.
+     ADR-009 (regras_apps.confere_adr009): `MobileApplication.url` = canonical, `description` = meta
+     description, `image` = SITE + `icone` do app em apps.ts (e o arquivo existe), `offers` com
+     `availability` InStock só se o app não é `indisponivel`; `Organization.description` = meta
+     description, `foundingDate` = o ano de `since_2004` de src/i18n/home.ts (e ele aparece no corpo),
+     `sameAs` = lista de https:// contida nos links do `<footer>`.
      Título e descrição (WP-21): `<title>` (uma vez, lido com as entidades decodificadas) com no
      máximo TITLE_MAX caracteres e description com no máximo DESCRIPTION_MAX; og:title =
      twitter:title = `<title>` e og:description = twitter:description = description (uma fonte só
@@ -110,9 +115,25 @@ Checa:
      tem `<footer>`, e cada `<footer>` tem um link para cada página de LEGAL na língua da página
      (`/en/…` nas páginas en; destino sem a língua cai na D23, como no §9)
 
+ 20. Home na partição D12 de hoje (D31; WP-10 fatia 10a): `src/i18n/apps.ts` lido por
+     tools/regras_apps.py (parse fechado: `ORDEM_APPS` com exatamente as chaves de `apps`, campos
+     obrigatórios, `atualizadoEm` AAAA-MM-DD válida e não futura); a partição recalculada com a data
+     de hoje em UTC (`GHF_HOJE` só fora do CI, a guarda do build) e, em cada língua da Home, os
+     `<article>` de `#portfolio` são exatamente o destaque na ordem de `ORDEM_APPS`, cada um com o
+     botão da Play do `id` do app e o `<time datetime>` = `atualizadoEm`; o resto aparece em "Todos
+     os apps" (a landing, ou a política se `indisponivel`), nunca como `<article>`. Partição de ontem
+     batendo e a de hoje não: aviso (dist/ gerado antes da meia-noite UTC). App a 30 dias ou menos de
+     sair do destaque: aviso
+ 21. `atualizadoEm` × tag do app (WP-10 fatia 10a): com o repositório do app presente (o de
+     `ORIGENS` de tools/sync_legal.py; `$GHF_APPS_DIR` ou `--apps-dir`), a `tag` de apps.ts existe e
+     a data do commit dela (`git log -1 --format=%cs`) é `atualizadoEm` (erro; tag ausente no clone
+     é erro com a instrução `git -C <repo> fetch --tags`); tag `v*` mais nova no
+     repositório é aviso. Sem o repositório (o CI): um aviso por repositório, sem erro
+
 As regras de i18n (i)–(viii), (x)–(xii), a linha de data e o link `data-troca-idioma` são funções
 puras de tools/regras_i18n.py, provadas por tools/test_regras_i18n.py (casos de
-tools/fixtures/i18n/ e casos em linha).
+tools/fixtures/i18n/ e casos em linha). As do §20 e do §21 são de tools/regras_apps.py, provadas
+por tools/test_regras_apps.py (casos de tools/fixtures/apps/).
 """
 import glob
 import json
@@ -125,8 +146,9 @@ import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 
 sys.dont_write_bytecode = True  # importar sync_legal não deixa tools/__pycache__ no repositório
-from sync_legal import ORIGENS, RE_SHA, CHAVES, apps_dir_padrao, repo_presente, resolve, mostra, em_remoto, separa  # noqa: E402
+from sync_legal import ORIGENS, RE_SHA, CHAVES, apps_dir_padrao, repo_presente, resolve, mostra, em_remoto, separa, git  # noqa: E402
 import regras_i18n as i18n  # noqa: E402
+import regras_apps  # noqa: E402
 
 raiz = "dist"
 if "--raiz" in sys.argv:
@@ -1096,21 +1118,38 @@ else:
         if faltam:
             erros.append(f"sitemap.xml: faltam páginas indexáveis: {faltam}")
 
-# JSON-LD (ADR-005 §6): o que cada página declara, com as chaves fechadas. Dados de src/i18n/apps.ts.
+# src/i18n/apps.ts lido uma vez (tools/regras_apps.py): o §14 (oferta), o §20 e o §21 usam.
+APPS_TS = os.path.join(REPO, "src", "i18n", "apps.ts")
+try:
+    dados_apps, ordem_apps, erros_apps = regras_apps.le_apps_ts(ler(APPS_TS))
+except OSError as e:
+    dados_apps, ordem_apps, erros_apps = {}, [], [f"src/i18n/apps.ts ilegível ({e})"]
+erros.extend(erros_apps)
+
+# JSON-LD (ADR-005 §6, ampliado pelo ADR-009): o que cada página declara, com as chaves fechadas, e
+# cada campo novo igual ao dado que a própria página publica. Dados de src/i18n/apps.ts.
 JSONLD_TIPO = {i18n.arquivo(l, "index.html"): "Organization" for l in linguas_de("index.html")}
 for app in ("lottoexpert.html", "topowalk.html", "poleposition.html", "eclipsego.html"):
     for l in linguas_de(app):
         JSONLD_TIPO[i18n.arquivo(l, app)] = "MobileApplication"
 CHAVES_JSONLD = {
-    "Organization": {"@context", "@type", "name", "url", "logo"},
-    "MobileApplication": {"@context", "@type", "name", "operatingSystem", "applicationCategory", "installUrl", "offers"},
+    "Organization": {"@context", "@type", "name", "url", "logo", "description", "foundingDate", "sameAs"},
+    "MobileApplication": {"@context", "@type", "name", "url", "description", "image", "operatingSystem",
+                          "applicationCategory", "installUrl", "offers"},
 }
 # applicationCategory: o enum do Google para SoftwareApplication (nunca o valor cru da Play, `TOOLS`)
 CATEGORIAS = {f"{c}Application" for c in (
     "Game", "SocialNetworking", "Travel", "Shopping", "Sports", "Lifestyle", "Business", "Design",
     "Developer", "Driving", "Educational", "Health", "Finance", "Security", "Browser", "Communication",
     "DesktopEnhancement", "Entertainment", "Multimedia", "Home", "Utilities", "Reference")}
-OFERTA = {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}
+# Oferta, url, description, image, sameAs e foundingDate (ADR-009): regras_apps.confere_adr009,
+# provada por tools/test_regras_apps.py. O ano de fundação é o de `since_2004` de src/i18n/home.ts.
+RE_FOOTER = regras_apps.RE_FOOTER
+try:
+    ano_fundacao, erros_fundacao = regras_apps.le_fundacao(ler(os.path.join(REPO, "src", "i18n", "home.ts")))
+except OSError as e:
+    ano_fundacao, erros_fundacao = None, [f"src/i18n/home.ts ilegível ({e})"]
+erros.extend(erros_fundacao)
 # app de cada landing (D17): name e applicationCategory esperados — espelho de src/i18n/apps.ts,
 # declarado aqui para que um dado trocado lá (ou uma landing lendo a chave errada) não passe
 APP_DA_PAGINA = {}
@@ -1122,7 +1161,7 @@ for pagina, nome, categoria in (
 ):
     for l in linguas_de(pagina):
         APP_DA_PAGINA[i18n.arquivo(l, pagina)] = (nome, categoria)
-RE_PLAY = re.compile(r"^https://play\.google\.com/store/apps/details\?id=([\w.]+)(?:&|$)")
+RE_PLAY = regras_apps.RE_PLAY
 
 
 class BotoesPlay(HTMLParser):
@@ -1152,6 +1191,9 @@ for rel, c in sorted(cabecas.items()):
         for padrao in COPY_PROIBIDA:
             for m in re.finditer(padrao, texto, re.I):
                 erros.append(f"{rel}: JSON-LD fere jogo responsável (`{padrao}`): …{texto[max(0, m.start() - 40): m.end() + 40]}…")
+    app_pg = next((a for a in dados_apps.values() if a.get("pagina") == i18n.pagina_de(rel)[1]), None)
+    erros.extend(regras_apps.confere_adr009(rel, ler(p(rel)), app_pg if JSONLD_TIPO.get(rel) == "MobileApplication" else None,
+                                            SITE, lambda r_: os.path.isfile(p(r_)), ano_fundacao))
     tipos = [o.get("@type") if isinstance(o, dict) else type(o).__name__ for o in objetos]
     esperado = [JSONLD_TIPO[rel]] if rel in JSONLD_TIPO else []
     if len(c.jsonld) == len(objetos) and tipos != esperado:
@@ -1176,8 +1218,6 @@ for rel, c in sorted(cabecas.items()):
             erros.append(f"{rel}: MobileApplication.operatingSystem {o.get('operatingSystem')!r} ≠ 'Android'")
         if o.get("applicationCategory") not in CATEGORIAS:
             erros.append(f"{rel}: applicationCategory {o.get('applicationCategory')!r} fora do enum do Google (`UtilitiesApplication`, …)")
-        if o.get("offers") != OFERTA:
-            erros.append(f"{rel}: offers {o.get('offers')!r} ≠ {OFERTA} (só o download gratuito; preço do Premium nunca)")
         if not isinstance(o.get("name"), str) or not o["name"].strip():
             erros.append(f"{rel}: MobileApplication sem name")
         if rel in APP_DA_PAGINA and (o.get("name"), o.get("applicationCategory")) != APP_DA_PAGINA[rel]:
@@ -1460,7 +1500,7 @@ for caminho in css_publicado:
 # no Footer; uma lista de app editada sem cuidado tiraria uma URL contratual (ADR-001) do rodapé de
 # todas as páginas, sem link quebrado nenhum para o §3 pegar. O href esperado é o do §9: a página
 # legal na língua da página, ou a da D23 quando ela não existe nessa língua.
-RE_FOOTER = re.compile(r"<footer\b.*?</footer>", re.S | re.I)
+# (RE_FOOTER definido no §14, que também lê o rodapé: sameAs do JSON-LD.)
 for caminho in paginas:
     rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
     if rel in CONGELADAS:
@@ -1476,6 +1516,48 @@ for caminho in paginas:
             if esperado not in hrefs:
                 erros.append(f"{rel}: <footer> sem link para {esperado} — o rodapé leva as 5 URLs legais"
                              " na língua da página (ADR-001, WP-10)")
+
+# ------------------------------------------------------------ 20: Home na partição D12 de hoje
+# D31. O build parte os apps com a data dele (`particionarApps`, src/i18n/apps.ts); aqui a mesma
+# regra, recalculada em Python com a data de hoje, confere o que foi publicado. Um app vencido que
+# ficou na grade (build velho) ou um card fora de ordem reprova.
+# (apps.ts já lido antes do §14: `dados_apps`, `ordem_apps`, `erros_apps`.)
+hoje, erro_hoje = regras_apps.hoje_de(os.environ)
+if erro_hoje:
+    erros.append(f"§20: {erro_hoje}")
+elif not erros_apps:
+    destaque, resto, erros_part = regras_apps.particionar(dados_apps, ordem_apps, hoje)
+    erros.extend(f"src/i18n/apps.ts: {e}" for e in erros_part)
+    for l in linguas_de("index.html"):
+        rel_home = i18n.arquivo(l, "index.html")
+        if not os.path.exists(p(rel_home)):
+            continue  # ausência já é erro no §7
+
+        def href_de(caminho, l=l):
+            return "/" + i18n.arquivo(i18n.lingua_do_link(MAPA, l, caminho), caminho)
+        e_home, a_home = regras_apps.confere_home_hoje(rel_home, ler(p(rel_home)), dados_apps, ordem_apps, hoje, href_de)
+        erros.extend(e_home if not erros_part else [])
+        avisos.extend(a_home)
+    avisos.extend(regras_apps.avisos_corte(dados_apps, destaque, hoje))
+
+# ------------------------------------------------------------ 21: atualizadoEm × tag do app
+# A data do card ("Última atualização") é a do commit da tag de release no repositório do app. O
+# repositório sai de ORIGENS (a tabela única de tools/sync_legal.py). Ausente (o CI): aviso.
+for chave in ordem_apps:
+    a = dados_apps.get(chave)
+    origem = ORIGENS.get(f"{chave}-privacy")
+    if not a or not a.get("tag") or not origem:
+        if a and not origem:
+            erros.append(f"§21: {chave} sem `{chave}-privacy` em ORIGENS de tools/sync_legal.py — de onde vem a tag?")
+        continue
+    repo = origem[0]
+    if not repo_presente(APPS_DIR, repo):
+        avisos.append(f"{repo}: origem ausente ({os.path.join(APPS_DIR, repo)}) — tag e atualizadoEm de {a['nome']} não conferidos")
+        continue
+    repo_dir = os.path.join(APPS_DIR, repo)
+    e_tag, a_tag = regras_apps.confere_tag(a["nome"], a["tag"], a["atualizadoEm"], lambda *args, d=repo_dir: git(d, *args), repo_dir)
+    erros.extend(e_tag)
+    avisos.extend(a_tag)
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")

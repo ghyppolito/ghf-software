@@ -1,6 +1,6 @@
 # ADR-005 · Sitemap, robots e hreflang saem da mesma lista de rotas, por endpoint do Astro
 
-**Data:** 2026-10-15 · **Estado:** aceita · **Complementa:** ADR-001 (URLs contratuais) e
+**Data:** 2026-10-15 · **Estado:** aceita (§6 ampliado pelo ADR-009) · **Complementa:** ADR-001 (URLs contratuais) e
 ADR-002 §2 (saída com caminho literal `.html`) · **Diverge de:** `docs/AVALIACAO.md` §3.2
 ("sitemap por integração") · **Depende de:** D8, D13, D16, D17, D18
 
@@ -37,6 +37,8 @@ divergiria do canonical.
    enum do schema.org/Google, mapeado da categoria da ficha da Play (D17): TOOLS →
    `UtilitiesApplication`, SPORTS → `SportsApplication`, LIFESTYLE → `LifestyleApplication`.
    `offers` só com preço 0 BRL; nunca preço do Premium nem `aggregateRating`/`review`.
+   **Ampliado pelo ADR-009 (2026-11-22):** `url`, `description`, `image` e `offers.availability` no
+   `MobileApplication`, `description` e `sameAs` no `Organization`, todos derivados de dado já publicado.
 7. **og:image** declara o tamanho real do arquivo, ou omite `width`/`height`, até as imagens
    1200×630 da D16 existirem. O `check_site.py` barra declaração diferente do arquivo.
 

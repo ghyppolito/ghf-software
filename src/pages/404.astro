@@ -8,26 +8,15 @@
 // direita a lista dos 4 apps, cada um com o link da landing e o da política de privacidade (URL
 // contratual, ADR-001). Copy (D25): só o texto que a página já tinha e rótulos de interface; o
 // eyebrow "Erro 404", o título "Esta página não existe." e os parágrafos do export ficam de fora.
-import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { t } from '../i18n/ui';
-import { atributosLink, link } from '../i18n/idiomas';
-import { apps } from '../i18n/apps';
-import iconeLotto from '../assets/img/lottoexpert_favicon_v3.png';
-import iconeTopo from '../assets/img/topo-walk.png';
-import iconePole from '../assets/img/poleposition.png';
-import iconeEclipse from '../assets/img/eclipse-go-favicon.png';
+import ListaApps from '../components/ListaApps.astro';
+import { atributosLink } from '../i18n/idiomas';
+import { ORDEM_APPS } from '../i18n/apps';
 
-// Ordem do Footer. O quadrado é a cor do app (classe inteira literal: o Tailwind não detecta
-// concatenação).
-const lista = [
-  { nome: apps.lottoexpert.nome, icone: iconeLotto, quadrado: 'bg-app-lotto', pagina: 'lottoexpert.html', privacidade: 'lottoexpert-privacy.html' },
-  { nome: apps.topowalk.nome, icone: iconeTopo, quadrado: 'bg-app-topo', pagina: 'topowalk.html', privacidade: 'topowalk-privacy.html' },
-  { nome: apps.poleposition.nome, icone: iconePole, quadrado: 'bg-app-pole', pagina: 'poleposition.html', privacidade: 'poleposition-privacy.html' },
-  { nome: apps.eclipsego.nome, icone: iconeEclipse, quadrado: 'bg-app-eclipse', pagina: 'eclipsego.html', privacidade: 'eclipsego-privacy.html' },
-];
+// Ordem, nomes, ícones e cores de src/i18n/apps.ts (fonte única, WP-10 fatia 10a), na lista
+// compartilhada com a Home (ListaApps.astro, variante `404`).
 ---
 <Base
   title="Página não encontrada · Page not found · GHF Software"
@@ -55,22 +44,7 @@ const lista = [
       <p lang="en" class="mt-2 text-body text-text-muted">Page not found</p>
       <a {...atributosLink('pt', '/en/')} class="inline-flex items-center min-h-11 text-text-2 underline underline-offset-4 decoration-border-strong hover:text-text anel-foco">Back to the home page</a>
     </div>
-    <ul aria-label="Apps" class="flex flex-col border border-border rounded-card bg-surface overflow-hidden">
-      {
-        lista.map((a) => (
-          <li class="border-t first:border-t-0 border-border px-4 py-3 flex flex-wrap items-center gap-3.5">
-            <Image src={a.icone} alt="" width={40} height={40} densities={[1, 2]} loading="eager" class="size-10 flex-none rounded-[10px] object-cover" />
-            <a {...link('pt', a.pagina)} class="flex-1 min-h-11 min-w-[120px] flex items-center gap-2.5 font-bold text-text no-underline hover:underline anel-foco-interno">
-              <span aria-hidden="true" class={`size-2 flex-none rounded-[2px] ${a.quadrado}`} />
-              {a.nome}
-            </a>
-            <a {...link('pt', a.privacidade)} class="min-h-11 inline-flex items-center text-small text-text-2 underline decoration-border-strong underline-offset-4 anel-foco-interno">
-              {t('pt', 'footer_privacy')}<span class="sr-only"> - {a.nome}</span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    <ListaApps lang="pt" chaves={ORDEM_APPS} variante="404" />
   </main>
   <Footer lang="pt" inicio="/" />
 </Base>

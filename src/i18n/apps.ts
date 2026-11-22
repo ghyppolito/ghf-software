@@ -7,7 +7,8 @@
 // ou do Pro nunca entra (vem da Play e do Remote Config), nem `aggregateRating`/`review`.
 // App que mudar de categoria ou deixar de ser gratuito muda uma linha aqui.
 
-import { hreflang, type Idioma } from './idiomas';
+import { hreflang, rota, type Idioma } from './idiomas';
+import { SITE } from './ui';
 
 export interface App {
   /** nome do app (o mesmo da página) */
@@ -23,6 +24,14 @@ export interface App {
    *  política). O link passa por `link(lang, …)` de idiomas.ts (D23). */
   pagina: string;
   privacidade: string;
+  /** caminho pt dos termos de uso, quando o app tem (URL contratual, ADR-001); o Footer lista */
+  termos?: string;
+  /** caminho do favicon do app em public/assets/ (URL fixa, ADR-006): o `favicon` do Base na
+   *  landing e o `image` do JSON-LD (ADR-009) */
+  icone: string;
+  /** tag de release do app no repositório dele, cuja data de commit é `atualizadoEm`
+   *  (`check_site.py` §21 confere as duas) */
+  tag: string;
   /** Última atualização do app: data (AAAA-MM-DD) do commit da tag de release no repositório do app,
    *  `git log -1 --format=%cs <tag>`, conferida em 2026-11-22 (D30). Muda a cada release publicada. */
   atualizadoEm: string;
@@ -33,26 +42,33 @@ export interface App {
 
 const PLAY = 'https://play.google.com/store/apps/details?id=';
 
+// Formato lido por tools/regras_apps.py (check_site.py §20 e §21): um `campo: 'valor'` por chave,
+// aspas simples; `indisponivel: true` sem aspas. Campo novo lido pelo Python entra lá também.
+
 export const apps = {
-  // Play: TOOLS. Tag v2.05.03
+  // Play: TOOLS
   lottoexpert: {
     nome: 'LottoExpert', id: 'br.com.ghfsoftware.lottoexpert', categoria: 'UtilitiesApplication', play: `${PLAY}br.com.ghfsoftware.lottoexpert`,
-    pagina: 'lottoexpert.html', privacidade: 'lottoexpert-privacy.html', atualizadoEm: '2026-10-12',
+    pagina: 'lottoexpert.html', privacidade: 'lottoexpert-privacy.html', termos: 'lottoexpert-terms.html',
+    icone: '/assets/lottoexpert_favicon_v3.png', tag: 'v2.05.03', atualizadoEm: '2026-10-12',
   },
-  // Play: TOOLS. Tag v4.4.0
+  // Play: TOOLS
   topowalk: {
     nome: 'TopoWalk', id: 'br.com.ghfsoftware.topowalk', categoria: 'UtilitiesApplication', play: `${PLAY}br.com.ghfsoftware.topowalk`,
-    pagina: 'topowalk.html', privacidade: 'topowalk-privacy.html', atualizadoEm: '2026-10-29',
+    pagina: 'topowalk.html', privacidade: 'topowalk-privacy.html',
+    icone: '/assets/topo-walk.png', tag: 'v4.4.0', atualizadoEm: '2026-10-29',
   },
-  // Play: SPORTS. Tag v2.2.0 (repositório ../pole-position-app)
+  // Play: SPORTS (repositório ../pole-position-app)
   poleposition: {
     nome: 'Pole Position', id: 'br.com.ghfsoftware.polepositionapp', categoria: 'SportsApplication', play: `${PLAY}br.com.ghfsoftware.polepositionapp`,
-    pagina: 'poleposition.html', privacidade: 'poleposition-privacy.html', atualizadoEm: '2026-10-16',
+    pagina: 'poleposition.html', privacidade: 'poleposition-privacy.html',
+    icone: '/assets/poleposition.png', tag: 'v2.2.0', atualizadoEm: '2026-10-16',
   },
-  // Play: LIFESTYLE. Tag v1.0.1 (tag leve, criada em 2026-11-22 sobre f5c1d6b)
+  // Play: LIFESTYLE (a tag v1.0.1 é leve, criada em 2026-11-22 sobre f5c1d6b)
   eclipsego: {
     nome: 'EclipseGo', id: 'br.com.ghfsoftware.eclipsego', categoria: 'LifestyleApplication', play: `${PLAY}br.com.ghfsoftware.eclipsego`,
-    pagina: 'eclipsego.html', privacidade: 'eclipsego-privacy.html', atualizadoEm: '2026-07-26',
+    pagina: 'eclipsego.html', privacidade: 'eclipsego-privacy.html',
+    icone: '/assets/eclipse-go-favicon.png', tag: 'v1.0.1', atualizadoEm: '2026-07-26',
   },
 } as const satisfies Record<string, App>;
 
@@ -67,9 +83,24 @@ export const ACENTO: Record<ChaveApp, 'lotto' | 'topo' | 'pole' | 'eclipse'> = {
   eclipsego: 'eclipse',
 };
 
-/** Ordem de toda lista de apps (brief §10, mesmo peso): a fonte única. Footer e 404 passam a ler
- *  daqui na fatia 10a do WP-10 (APPS-LISTA-DUPLICADA-01); por ora só a Home lê. */
+/** Ordem de toda lista de apps (brief §10, mesmo peso): a fonte única. Home, Footer e 404 leem
+ *  daqui (WP-10, fatia 10a; APPS-LISTA-DUPLICADA-01). */
 export const ORDEM_APPS = ['lottoexpert', 'topowalk', 'poleposition', 'eclipsego'] as const satisfies readonly ChaveApp[];
+
+/** Cor de cada app (faixa, quadrado e seta): classe inteira literal, porque o Tailwind não detecta
+ *  concatenação; ele varre os `.ts` de src/. */
+export const COR_APP: Record<ChaveApp, { fundo: string; texto: string }> = {
+  lottoexpert: { fundo: 'bg-app-lotto', texto: 'text-app-lotto' },
+  topowalk: { fundo: 'bg-app-topo', texto: 'text-app-topo' },
+  poleposition: { fundo: 'bg-app-pole', texto: 'text-app-pole' },
+  eclipsego: { fundo: 'bg-app-eclipse', texto: 'text-app-eclipse' },
+};
+
+/** Canais da GHF: o padrão do Footer e o `sameAs` do JSON-LD `Organization` (ADR-009). */
+export const REDES_GHF = {
+  youtube: 'https://www.youtube.com/channel/UCZfKMp0qRRIEu103Vb3OGJg',
+  instagram: 'https://www.instagram.com/ghfsoftware/',
+};
 
 /** Data de hoje do build. `GHF_HOJE=AAAA-MM-DD` só para teste da regra de destaque (verificação 4 da
  *  especificação da fatia 6), nunca no CI nem no deploy. */
@@ -127,25 +158,43 @@ export function dataCurta(iso: string, lang: Idioma): string {
   );
 }
 
-/** JSON-LD `MobileApplication` da landing: exatamente as chaves do ADR-005 §6. */
-export function mobileApplication(chave: ChaveApp) {
-  const a = apps[chave];
+/** JSON-LD `MobileApplication` da landing (ADR-005 §6, ampliado pelo ADR-009): só campo derivado
+ *  de dado que a página já publica. `descricao` é a `meta description` da landing (a mesma string do
+ *  `Base`); `url` é a canônica; `image`, o favicon do app (o mesmo arquivo do `favicon` do `Base`);
+ *  `availability` sai de o app não ser `indisponivel`. */
+export function mobileApplication(chave: ChaveApp, lang: Idioma, descricao: string) {
+  const a: App = apps[chave];
   return {
     '@context': 'https://schema.org',
     '@type': 'MobileApplication',
     name: a.nome,
+    url: SITE + rota(lang, a.pagina),
+    description: descricao,
+    image: SITE + a.icone,
     operatingSystem: 'Android',
     applicationCategory: a.categoria,
     installUrl: PLAY + a.id,
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL' },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'BRL',
+      ...(a.indisponivel ? {} : { availability: 'https://schema.org/InStock' }),
+    },
   };
 }
 
-/** JSON-LD `Organization` da home. */
-export const organization = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'GHF Software',
-  url: 'https://ghfsoftware.com/',
-  logo: 'https://ghfsoftware.com/assets/GHFSoftware.png',
-};
+/** JSON-LD `Organization` da home (ADR-009): `descricao` é a `meta description` da home na língua;
+ *  `fundacao`, o ano do "Desde 2004" que a home publica (resposta do usuário, 2026-11-22: é o ano
+ *  de fundação); `sameAs`, os canais do rodapé (REDES_GHF). */
+export function organization(descricao: string, fundacao: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'GHF Software',
+    url: 'https://ghfsoftware.com/',
+    logo: 'https://ghfsoftware.com/assets/GHFSoftware.png',
+    description: descricao,
+    foundingDate: fundacao,
+    sameAs: Object.values(REDES_GHF),
+  };
+}

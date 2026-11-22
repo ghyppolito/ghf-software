@@ -10,7 +10,7 @@
  * - o `@import './legado.css'` de src/styles/global.css;
  * - o `data-tema` do src/layouts/Base.astro e a prop `tema` dos layouts.
  * Daqui sai: `body` com cor literal, `.bg-grid-pattern`, `.glass-panel`, `.text-gradient*`,
- * `.mockup-frame`, `.corona-glow`, `#navbar.scrolled`, `[data-tema='…'] .text-gradient`,
+ * `.mockup-frame`, `#navbar.scrolled`, `[data-tema='…'] .text-gradient`,
  * `bg-tech-grid`, a compatibilidade de borda/cursor do preflight do Tailwind 3.
  *
  * Camadas. No Tailwind 3 tudo era CSS sem camada, antes dos utilitários: a especificidade
@@ -224,23 +224,6 @@
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     z-index: 20;
-  }
-
-  /* EclipseGo (WP-08, fatia 5): brilho de coroa pulsando na moldura do celular do hero */
-  .corona-glow {
-    animation: corona-pulse 4s ease-in-out infinite;
-  }
-}
-
-@keyframes corona-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 25px rgba(234, 179, 8, 0.3);
-  }
-  50% {
-    box-shadow:
-      0 0 50px rgba(234, 179, 8, 0.8),
-      0 0 10px rgba(99, 102, 241, 0.5);
   }
 }
 

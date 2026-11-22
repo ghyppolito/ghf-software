@@ -9,7 +9,7 @@ import PolePosition from '../PolePosition.astro';
 import { poleposition } from '../../i18n/poleposition';
 import { rota, type Idioma } from '../../i18n/idiomas';
 import JsonLd from '../JsonLd.astro';
-import { mobileApplication } from '../../i18n/apps';
+import { apps, mobileApplication } from '../../i18n/apps';
 
 interface Props {
   lang: Idioma;
@@ -29,10 +29,10 @@ const home = rota(lang, 'index.html');
   caminho="poleposition.html"
   tema="poleposition"
   app="poleposition"
-  favicon="/assets/poleposition.png"
+  favicon={apps.poleposition.icone}
   classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden"
 >
-  <JsonLd slot="jsonld" dados={mobileApplication('poleposition')} />
+  <JsonLd slot="jsonld" dados={mobileApplication('poleposition', lang, x.description)} />
   <Nav
     lang={lang}
     caminho="poleposition.html"

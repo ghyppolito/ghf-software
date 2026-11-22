@@ -121,6 +121,7 @@ redirecionamento (o Android App Links não segue redirect):
 |---|---|
 | `tools/check_site.py` | sobre `dist/` (sem `dist/`, pede o build): URLs contratuais, links e assets, metadados, datas legais contra `src/content/legal/` e o commit do app, copy do LottoExpert (jogo responsável), `public/.well-known/assetlinks.json`, `hreflang`, língua dos links, `public/` fechado, SEO técnico, desempenho (sem fonte do Google, imagem pelo build), nenhum redirecionamento |
 | `tools/regras_i18n.py` + `tools/test_regras_i18n.py` | regras de i18n como funções puras, que o `tools/check_site.py` chama; testadas sobre `tools/fixtures/i18n/` |
+| `tools/regras_apps.py` + `tools/test_regras_apps.py` | leitura de `src/i18n/apps.ts` e as regras dos itens 20 (partição D12 da Home com a data de hoje, D31) e 21 (`atualizadoEm` contra a tag do repositório do app) do `check_site.py`, como funções puras; testadas sobre `tools/fixtures/apps/` |
 | `tools/test_sem_polyfill.mjs` (`npm run test:css`) | o plugin `src/styles/sem-polyfill.mjs` (ADR-008 §7) tira os polyfills sem perder seletor nem `@property`, sobre `tools/fixtures/sem-polyfill/` (CSS cru do Tailwind e saída esperada) e casos em linha |
 | `tools/contrato.sha256` | convite, `public/.well-known/assetlinks.json`, `og:image` do convite e `CNAME` iguais ao publicado |
 | `tools/sync_legal.py` | o espelho legal está igual, atrás ou divergente do app (`--todos --check`) |
@@ -133,7 +134,7 @@ redirecionamento (o Android App Links não segue redirect):
 - `.github/workflows/pr.yml`, em todo PR e push para `develop`/`master`, três jobs:
   - `plano`: `gen_estado.py --check` e `tools/check_plano.py`;
   - `site`: `npm ci`, `npm run build`, `tools/check_site.py --raiz dist`, unittest das regras de
-    i18n, contrato byte a byte, html-validate e lychee sobre `dist/`;
+    i18n e da lista de apps, contrato byte a byte, html-validate e lychee sobre `dist/`;
   - `lighthouse`: build e `tools/lighthouse.py --raiz dist`.
 - `.github/workflows/deploy.yml`, em push para `master` (e à mão): build, `tools/check_site.py`,
   conferência do `public/.well-known/assetlinks.json` e do contrato byte a byte, e publicação de `dist/` no

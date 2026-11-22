@@ -9,7 +9,7 @@ import TopoWalk from '../TopoWalk.astro';
 import { topowalk } from '../../i18n/topowalk';
 import { rota, type Idioma } from '../../i18n/idiomas';
 import JsonLd from '../JsonLd.astro';
-import { mobileApplication } from '../../i18n/apps';
+import { apps, mobileApplication } from '../../i18n/apps';
 
 interface Props {
   lang: Idioma;
@@ -29,10 +29,10 @@ const home = rota(lang, 'index.html');
   caminho="topowalk.html"
   tema="topowalk"
   app="topowalk"
-  favicon="/assets/topo-walk.png"
+  favicon={apps.topowalk.icone}
   classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-accent selection:text-white font-sans overflow-x-hidden"
 >
-  <JsonLd slot="jsonld" dados={mobileApplication('topowalk')} />
+  <JsonLd slot="jsonld" dados={mobileApplication('topowalk', lang, x.description)} />
   <Nav
     lang={lang}
     caminho="topowalk.html"

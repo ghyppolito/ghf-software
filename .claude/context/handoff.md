@@ -3,15 +3,14 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-11-22.** Fatia 6 do WP-10 (Home, D30) feita em `feat/wp-10-fatia-6-home` (criada de `origin/feat/wp-08-layout-unico`; não enviada).
+**Sessão de 2026-11-22.** Fatias 6 (Home, D30) e 10a (aceite parcial) do WP-10 feitas; a 10a está em `feat/wp-10-fatia-10a-aceite-parcial`, empilhada sobre `feat/wp-10-fatia-6-home` (não enviada).
 
 ## 1. Onde parei
 
-- Fatias 1 a 5 do WP-10 integradas (a 5 pelo #51, 723ad46; o CI do #37 passou nos 3 jobs). A fatia 6 (Home) está feita na branch (20649c6, a4d30b4, 1f69780 e a escrituração) e espera PR para `feat/wp-08-layout-unico`; quem mescla é o usuário. WP-10 segue `doing`.
-- Próxima: **fatia 10a (aceite parcial)**: `BUILD-RELOGIO-NAO-REPRODUTIVEL-01` (depende de decisão, abaixo), `APPS-LISTA-DUPLICADA-01` com `ICONES-APPS-DUPLICADOS-01` e `ROTULO-DATA-DUAS-FONTES-01`, `APPS-ATUALIZADO-EM-SEM-CHECK-01`, `HOME-ORDEM-SEM-CHECK-01`, `ORCAMENTO-404-FROUXO-01`, `FAQ-SINAL-ABERTO-01`, `LANDING-JSONLD-CAMPOS-01` com `ORGANIZATION-JSONLD-MINIMO-01`, `CORONA-GLOW-ORFAO-01`, `SOBRE-REGIAO-ENGLOBA-PRIVACIDADE-01`; mais a tabela de contraste e o Lighthouse a11y >= 95 nas páginas redesenhadas.
-- Depois vêm 7 (TopoWalk), 8 (Pole Position) e 9 (LottoExpert), cada uma esperando as capturas dos apps (em evolução, D26), e a 10b.
-- Tag `v1.0.1` criada e enviada no repositório `eclipse-go` (leve, sobre `f5c1d6b`, com autorização do usuário); é a origem de `atualizadoEm` do EclipseGo em `apps.ts`.
-- WP-19 e WP-25 `done`. WP-26 a WP-28 (termos de uso, D28 B). O usuário quer o deploy único **antes do fim de 2026**.
+- Fatias 1 a 5 do WP-10 integradas. A 6 (Home) está no PR #52, esperando o usuário mesclar. A 10a (aceite parcial) está feita na branch, empilhada sobre a 6; o PR dela sai depois do merge do #52. WP-10 segue `doing`.
+- Próximas: 7 (TopoWalk), 8 (Pole Position) e 9 (LottoExpert), quando chegarem as capturas (D26) e a copy do LottoExpert (D25), e depois a 10b (limpeza e aceite final).
+- O usuário pode adiantar, em ordem de impacto no prazo: 1. capturas; 2. os `TERMS_OF_SERVICE.md` dos 3 apps (WP-26 a 28); 3. D3; 4. WP-20 no Claude Design; 5. os checklists de navegador.
+- Tag `v1.0.1` do `eclipse-go` (leve, sobre `f5c1d6b`) é a origem de `atualizadoEm` do EclipseGo; o §21 do `check_site.py` a confere. WP-19 e WP-25 `done`. O usuário quer o deploy único **antes do fim de 2026**.
 
 ## 2. Quebrado ou pela metade agora
 
@@ -25,6 +24,12 @@ Nada quebrado. Passaram no `/verify` da fatia 5: `test:css`, `check_site.py` (ra
 - `tools/sync_legal.py:51` aponta o Pole Position para `pole-position/pole-position-app`, caminho que não existe (`PP-ORIGEM-CAMINHO-01`, roteado ao WP-28).
 
 ## 3. O que só o navegador prova (pendente)
+
+**Fatia 10a do WP-10 (aceite parcial):** `python3 -m http.server 8080 -d dist`. Conferir:
+- FAQ do EclipseGo (`/eclipsego.html` e `/en/eclipsego.html`): "+" vira "−" ao abrir e volta ao fechar, a 360 e a 1280;
+- Home: Sobre e Privacidade lado a lado a 1280 e empilhados a 360; o pouso de `/#sobre`;
+- 404, Footer e Nav sem mudança visível;
+- Rich Results Test em `/` e `/eclipsego.html` (JSON-LD novo).
 
 **Fatia 6 do WP-10 (Home):** `python3 -m http.server 8080 -d dist`, em `/` e `/en/`, a 360, 768, 1024 e 1280. Conferir:
 - sem rolagem horizontal;
@@ -69,19 +74,19 @@ Resta também o Safari (pelo iPhone, `python3 -m http.server 8080 -d dist -b 0.0
 
 ## 4. Próxima ação
 
-**Do agente:** PR `feat/wp-10-fatia-6-home` -> integração (o usuário mescla) e seguir para a **fatia 10a**. As fatias 7 a 9 precisam das capturas dos apps (D26).
+**Do agente:** depois do merge do #52, PR `feat/wp-10-fatia-10a-aceite-parcial` -> integração (o usuário mescla). As fatias 7 a 9 precisam das capturas dos apps (D26).
 
 **Do usuário, em ordem de impacto no prazo:**
 1. capturas do app (D26);
 2. os textos `TERMS_OF_SERVICE.md` nos repositórios de TopoWalk, EclipseGo e Pole Position;
 3. D3 (medição);
 4. sessão do WP-20 no Claude Design (imagens 1200x630, o logo, o callout `LEGAL-CALLOUT-SEM-HANDOFF-01`);
-5. checklists de navegador das fatias 3, 4, 5 e 6 (seção 3);
+5. checklists de navegador das fatias 3, 4, 5, 6 e 10a (seção 3);
 6. Safari (pelo iPhone).
 
 ## 5. Decisões não registradas
 
-Nenhuma. **Pergunta em aberto ao usuário (`BUILD-RELOGIO-NAO-REPRODUTIVEL-01`, fatia 10a):** a partição D12 usa a data do build; o `dist/` do PR pode diferir do `dist/` do deploy se um corte de 12 meses cair entre os dois. Qual caminho? (b) regra no `check_site.py` que recalcula a partição, confere os `<article>` na ordem e avisa 30 dias antes do corte; (c) build de teste no CI com data fixa (`GHF_HOJE`); ou usar a data do commit em HEAD como "hoje", o que torna o build reprodutível. O primeiro corte real é o do EclipseGo, depois de 2027-07-26.
+Nenhuma. `BUILD-RELOGIO-NAO-REPRODUTIVEL-01` foi decidido (D31) e implementado na 10a. O primeiro corte real da D12 é o do EclipseGo, depois de 2027-07-26; o §20 avisa 30 dias antes.
 
 ## 6. Esperando publicação
 
@@ -89,5 +94,5 @@ A modernização inteira (WP-08 a WP-10 e o resto) espera o deploy único (D13, 
 
 ## 7. Escrituração e branches
 
-- Triagem: vazia. Achados novos da fatia 6 roteados: fatia 10a (`BUILD-RELOGIO-NAO-REPRODUTIVEL-01`, `APPS-ATUALIZADO-EM-SEM-CHECK-01`, `HOME-ORDEM-SEM-CHECK-01`, `ICONES-APPS-DUPLICADOS-01`, `ROTULO-DATA-DUAS-FONTES-01`, `SOBRE-REGIAO-ENGLOBA-PRIVACIDADE-01`, `ORGANIZATION-JSONLD-MINIMO-01`); fatia 10b (`HOME-ICONES-ORFAOS-01`, `CSS-BUNDLE-NOME-FOOTER-01`, `HOME-VOCABULARIO-TECNICO-01`); WP-20 (`LITERAIS-SEM-TOKEN-HOME-01`, `HOME-VER-TODAS-SEM-DESENHO-01`, `HOME-GRADE-3-CARDS-01`, `PRIV-NOME-ACESSIVEL-ORDEM-01`, `HOME-OG-IMAGE-677-01`); WP-18 (`HOME-X-DEFAULT-EN-01`); WP-28 (`CLAUDE-MD-POLE-CAMINHO-01`). `INDEX-LOTTO-DESC-DIVERGE-01` segue aberto para a fatia 9.
-- Branches: `develop`, `master`, `feat/wp-08-layout-unico`, `feat/wp-10-redesign`, `feat/wp-10-fatia-5-eclipsego` (integrada pelo #51), `feat/wp-10-fatia-6-home` (não enviada) e `feat/wp-05-ci-no-pr` (não integrada).
+- Triagem: vazia. Os 11 achados da 10a e a `ROTULO-DATA-DUAS-FONTES-01` ("mantém duas fontes") estão resolvidos. Novos da 10a: fatia 10b (`LISTAAPPS-VARIANTES-01`, `FAVICON-LITERAL-LEGAIS-01`); WP-20 (`ORG-LOGO-NAO-QUADRADO-01`, `OG-IMAGE-QUADRADA-LANDINGS-01`, e `JSONLD-IMAGE-FAVICON-PEQUENO-01`, que pode ir à 10b); WP-28 (`SYNC-LEGAL-DOCSTRING-GIT-01`); nota (`SOFTWAREAPP-SEM-RATING-01`). Da fatia 6, seguem para a 10b `HOME-ICONES-ORFAOS-01`, `CSS-BUNDLE-NOME-FOOTER-01`, `HOME-VOCABULARIO-TECNICO-01`; para o WP-20 os 5 da Home; WP-18 `HOME-X-DEFAULT-EN-01`; WP-28 `CLAUDE-MD-POLE-CAMINHO-01`. `INDEX-LOTTO-DESC-DIVERGE-01` segue aberto para a fatia 9.
+- Branches: `develop`, `master`, `feat/wp-08-layout-unico`, `feat/wp-10-redesign`, `feat/wp-10-fatia-6-home` (no PR #52, aguardando merge), `feat/wp-10-fatia-10a-aceite-parcial` (não enviada) e `feat/wp-05-ci-no-pr` (não integrada).
