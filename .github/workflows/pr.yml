@@ -65,6 +65,9 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
+      - name: Plugin sem-polyfill (ADR-008 §7)
+        run: npm run test:css
+
       - name: Build (Astro → dist/)
         env:
           ASTRO_TELEMETRY_DISABLED: 1

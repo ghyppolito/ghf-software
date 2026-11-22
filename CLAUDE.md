@@ -114,6 +114,7 @@ python3 tools/check_site.py                                   # sobre dist/ (= -
                                                               # links, assets, metadados, datas legais contra src/content/legal/, copy
 (cd dist && sha256sum --quiet -c ../tools/contrato.sha256)    # convite, assetlinks, og:image do convite e CNAME iguais ao publicado (D13)
 python3 -B -m unittest tools/test_regras_i18n.py              # regras de i18n (ADR-007) sobre tools/fixtures/i18n/
+npm run test:css                                              # plugin src/styles/sem-polyfill.mjs (ADR-008 §7) sobre tools/fixtures/sem-polyfill/
 python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regenerar e verificar
 python3 -m http.server 8080 -d dist                           # servir dist/ para inspeção (Claude in Chrome ou usuário)
 python3 tools/sync_legal.py --todos --check                    # o site está atrás do app? igual / atrás / à frente-divergente / origem ausente

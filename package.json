@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build --force",
+    "test:css": "node --test tools/test_sem_polyfill.mjs",
     "preview": "astro preview"
   },
   "dependencies": {

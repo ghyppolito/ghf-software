@@ -97,6 +97,11 @@ Checa:
      (sem o que é `aria-hidden`, `sr-only` ou `<svg>`) aparecem em sequência no `aria-label`,
      normalizados como o axe (NFKD, sem acento, sem o que está entre parênteses, minúsculas);
      (d) nenhum `href` com `hl=pt_BR` ou `locale=pt_BR` em página que não é pt
+ 18. CSS publicado sem os polyfills do Tailwind abaixo do piso (ADR-008 §7, SEM-POLYFILL-TESTE-01):
+     existe CSS em `_astro/`, e nenhum `.css` de lá tem `@supports (color: color-mix(in lab…` nem
+     `@layer properties { @supports (… margin-trim …` — se tiver, src/styles/sem-polyfill.mjs virou
+     no-op (upgrade do Tailwind que mudou o formato); a fusão em si é provada por
+     tools/test_sem_polyfill.mjs (`npm run test:css`)
 
 As regras de i18n (i)–(viii), (x)–(xii), a linha de data e o link `data-troca-idioma` são funções
 puras de tools/regras_i18n.py, provadas por tools/test_regras_i18n.py (casos de
@@ -1305,6 +1310,27 @@ for tema, sid in sorted(set(re.findall(
         if os.path.isfile(caminho) and f'id="{sid}"' not in ler(caminho):
             erros.append(f"src/styles/global.css: [data-tema='{tema}'] [id='{sid}'] não casa — {rel}"
                          f" não tem id=\"{sid}\" (WP-22)")
+
+# ------------------------------------------------------------ 18: CSS sem polyfill abaixo do piso
+# ADR-008 §7. O plugin src/styles/sem-polyfill.mjs tira do CSS do Tailwind 4 dois polyfills que só
+# valem abaixo do piso da D24. Se um upgrade do Tailwind mudar o formato, o plugin vira no-op calado
+# e o CSS bloqueante volta a crescer (CSS-V4-FALLBACKS-01): aqui o marcador de cada um reprova.
+RE_POLYFILL_CSS = {
+    "@supports (color: color-mix(in lab, red, red))":
+        re.compile(r"@supports\s*\(\s*color\s*:\s*color-mix\(\s*in\s+lab\b", re.I),
+    "@layer properties { @supports (… margin-trim …) }":
+        re.compile(r"@layer\s+properties\s*\{\s*@supports[^{]*margin-trim", re.I),
+}
+css_publicado = sorted(glob.glob(os.path.join(raiz, "_astro", "*.css")))
+if not css_publicado:
+    erros.append(f"{raiz}/_astro/: nenhum .css — o CSS do Tailwind não foi publicado onde o §18 procura")
+for caminho in css_publicado:
+    css = ler(caminho)
+    for nome, padrao in RE_POLYFILL_CSS.items():
+        if padrao.search(css):
+            erros.append(f"{os.path.relpath(caminho, raiz)}: tem `{nome}` — src/styles/sem-polyfill.mjs não"
+                         " tirou o polyfill (upgrade do Tailwind? regenere a fixture e rode `npm run test:css`,"
+                         " ADR-008 §7)")
 
 # ------------------------------------------------------------ resultado
 print(f"páginas: {len(paginas)} | links locais verificados: {n_links}")

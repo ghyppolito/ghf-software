@@ -121,6 +121,7 @@ redirecionamento (o Android App Links não segue redirect):
 |---|---|
 | `tools/check_site.py` | sobre `dist/` (sem `dist/`, pede o build): URLs contratuais, links e assets, metadados, datas legais contra `src/content/legal/` e o commit do app, copy do LottoExpert (jogo responsável), `public/.well-known/assetlinks.json`, `hreflang`, língua dos links, `public/` fechado, SEO técnico, desempenho (sem fonte do Google, imagem pelo build), nenhum redirecionamento |
 | `tools/regras_i18n.py` + `tools/test_regras_i18n.py` | regras de i18n como funções puras, que o `tools/check_site.py` chama; testadas sobre `tools/fixtures/i18n/` |
+| `tools/test_sem_polyfill.mjs` (`npm run test:css`) | o plugin `src/styles/sem-polyfill.mjs` (ADR-008 §7) tira os polyfills sem perder seletor nem `@property`, sobre `tools/fixtures/sem-polyfill/` (CSS cru do Tailwind e saída esperada) e casos em linha |
 | `tools/contrato.sha256` | convite, `public/.well-known/assetlinks.json`, `og:image` do convite e `CNAME` iguais ao publicado |
 | `tools/sync_legal.py` | o espelho legal está igual, atrás ou divergente do app (`--todos --check`) |
 | `tools/lighthouse.py` | orçamento de bytes e Lighthouse mobile contra `tools/orcamento-lighthouse.json` |
