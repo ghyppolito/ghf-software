@@ -2,9 +2,8 @@
 // Política de privacidade do EclipseGo (/eclipsego-privacy.html, URL contratual de ADR-001, e /<código>/eclipsego-privacy.html): a página
 // inteira, com a prop `lang`; as cascas ficam em src/pages/ (ADR-007 §3). Texto em
 // src/content/legal/eclipsego-privacy.<código>.md; hero,
-// botão e <head> em i18n/legal.ts. Nav e footer como na página antiga: dourado com texto preto na
-// pílula do celular, logo sem brilho (a classe antiga não valia), só o e-mail entre os canais,
-// rodapé `surface` e a política do EclipseGo destacada na lista de políticas.
+// botão e <head> em i18n/legal.ts. Footer só com o e-mail entre os canais e a política do EclipseGo
+// marcada como atual; o acento da casca vem de `app` (WP-10 fatia 2).
 import { getEntry, render } from 'astro:content';
 import LegalLayout from '../../layouts/LegalLayout.astro';
 import Nav from '../Nav.astro';
@@ -31,6 +30,7 @@ const { Content } = await render(entrada);
   titulo={x.eclipsego_privacy_h1}
   lastUpdated={entrada.data.lastUpdated}
   tema="eclipsego-privacy"
+  app="eclipsego"
   favicon="/assets/eclipse-go-favicon.png"
   classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-black font-sans overflow-x-hidden"
   selo="amarelo"
@@ -41,12 +41,10 @@ const { Content } = await render(entrada);
     lang={lang}
     caminho="eclipsego-privacy.html"
     inicio={home}
-    realce="primary-texto-preto"
-    brilhoLogo={false}
     itens={[
       { href: `${home}#sobre`, chave: 'nav_about' },
       { href: `${home}#portfolio`, chave: 'nav_portfolio' },
-      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+      { href: `${home}#contato`, chave: 'nav_contact' },
     ]}
   />
   <Content />
@@ -57,7 +55,5 @@ const { Content } = await render(entrada);
     prefixoAncora={home}
     redes={{}}
     politicaAtual="eclipsego-privacy.html"
-    fundo="surface"
-    brilhoLogo={false}
   />
 </LegalLayout>

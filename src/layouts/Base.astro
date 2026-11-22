@@ -1,6 +1,9 @@
 ---
 // Layout único (WP-08). <head> de todas as páginas geradas: metadados, og:*, canonical, hreflang,
-// a fonte (Inter local, ADR-006 §3) e o CSS compilado do Tailwind (ADR-003). O tema da página vai em `data-tema` no <html>.
+// a fonte (Inter local, ADR-006 §3) e o CSS compilado do Tailwind (ADR-008). O tema legado da página vai
+// em `data-tema` no <html> (até a fatia 10 do WP-10); o app da página, em `data-app` (o acento de
+// src/styles/tokens.css; sem app, o atributo não sai e o acento é o teal da marca). O primeiro ponto
+// de Tab é o "Pular para o conteúdo" (PularConteudo), que leva ao `<main id="conteudo">` da página.
 // SEO (WP-11, ADR-005): canonical = og:url = a própria URL; um hreflang por língua da página no mapa
 // (src/i18n/idiomas.json, ADR-007 §4) e x-default (→ en se a página tem en, senão pt; D8/D18), só
 // nas páginas com mais de uma língua; og:image:width/height lidos do cabeçalho do arquivo em public/
@@ -13,6 +16,8 @@ import '../styles/global.css';
 import { SITE } from '../i18n/ui';
 import { IDIOMAS, hreflang, linguasDe, rota, type Idioma } from '../i18n/idiomas';
 import SugestaoIdioma from '../components/SugestaoIdioma.astro';
+import PularConteudo from '../components/PularConteudo.astro';
+import { ACENTO, type ChaveApp } from '../i18n/apps';
 
 /** Largura e altura de um PNG ou JPEG, lidas do cabeçalho; undefined se o formato for outro. */
 function dimensoes(arquivo: string): { largura: number; altura: number } | undefined {
@@ -51,8 +56,10 @@ interface Props {
   lang: Idioma;
   /** caminho pt da página, ex.: 'index.html', 'lottoexpert.html' */
   caminho: string;
-  /** bloco de src/styles/global.css; 'ghf' é o da home */
+  /** bloco de src/styles/legado.css; 'ghf' é o da home */
   tema: string;
+  /** app da página (landing e páginas legais dele): `data-app` no <html> */
+  app?: ChaveApp;
   noindex?: boolean;
   classeBody?: string;
   /** favicon da página (as landings de app usam o do app): o caminho do PNG em public/assets/; o
@@ -67,9 +74,12 @@ const {
   lang,
   caminho,
   tema,
+  app,
   noindex = false,
   favicon = '/assets/GHFSoftware.png',
-  classeBody = 'bg-brand-base text-gray-100 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden',
+  // Os mesmos valores do padrão legado (`brand-base` e `gray-100`, iguais em todo tema), em token;
+  // a seleção teal sobre `--bg` (9,29:1) não tem referência no handoff e repete a de antes.
+  classeBody = 'bg-bg text-text antialiased font-sans overflow-x-hidden selection:bg-brand selection:text-bg',
 } = Astro.props;
 
 // Línguas da página no mapa; a 404, fora dele, só tem pt e não declara hreflang.
@@ -100,7 +110,7 @@ if (!favicon.startsWith('/assets/') || !origemFavicon) {
 const iconeAba = await getImage({ src: origemFavicon.default, width: 48, format: 'png' });
 ---
 <!doctype html>
-<html lang={hreflang(lang)} class="scroll-smooth" data-tema={tema}>
+<html lang={hreflang(lang)} class="scroll-smooth" data-tema={tema} data-app={app && ACENTO[app]}>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -135,6 +145,7 @@ const iconeAba = await getImage({ src: origemFavicon.default, width: 48, format:
     <Font cssVariable="--fonte-inter" preload />
   </head>
   <body class={classeBody}>
+    <PularConteudo lang={lang} />
     <slot />
     {/* No fim do <body>: a faixa não é o primeiro ponto de Tab (WP-15, ADR-007 §7). */}
     <SugestaoIdioma lang={lang} caminho={caminho} />

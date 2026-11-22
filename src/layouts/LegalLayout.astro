@@ -9,6 +9,7 @@
 import Base from './Base.astro';
 import { legal, dataLegal, rotuloData } from '../i18n/legal';
 import { atributosLink, type Idioma } from '../i18n/idiomas';
+import type { ChaveApp } from '../i18n/apps';
 import Icon from '../components/Icon.astro';
 
 interface Props {
@@ -21,8 +22,10 @@ interface Props {
   titulo: string;
   /** front-matter `lastUpdated` (`AAAA-MM` ou `AAAA-MM-DD`) */
   lastUpdated: string;
-  /** bloco de src/styles/global.css */
+  /** bloco de src/styles/legado.css */
   tema: string;
+  /** app da página: `data-app` no <html> (Base.astro) */
+  app: ChaveApp;
   favicon?: string;
   classeBody?: string;
   /** cor do selo "Documento Legal" do hero (classes literais por variante) */
@@ -41,6 +44,7 @@ const {
   titulo,
   lastUpdated,
   tema,
+  app,
   favicon,
   classeBody,
   selo,
@@ -64,6 +68,7 @@ const CLASSES_SELO = {
   lang={lang}
   caminho={caminho}
   tema={tema}
+  app={app}
   favicon={favicon}
   classeBody={classeBody}
 >
@@ -82,7 +87,7 @@ const CLASSES_SELO = {
   </div>
 
   <!-- Texto legal -->
-  <main class="py-16 relative z-10 bg-brand-base">
+  <main id="conteudo" class="py-16 relative z-10 bg-brand-base">
     <div class="container mx-auto px-6 md:px-12">
       <div class="max-w-4xl mx-auto glass-panel p-8 md:p-12 rounded-2xl shadow-xl">
         <div class="legal-corpo leading-relaxed text-gray-400">

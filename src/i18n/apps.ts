@@ -34,6 +34,15 @@ export const apps = {
 
 export type ChaveApp = keyof typeof apps;
 
+/** Id do acento de cada app em src/styles/tokens.css (`:root[data-app=…]`, `GHF Kit v3` §acento):
+ *  o valor de `data-app` no `<html>` (Base.astro, WP-10 fatia 2). Um mapa só. */
+export const ACENTO: Record<ChaveApp, 'lotto' | 'topo' | 'pole' | 'eclipse'> = {
+  lottoexpert: 'lotto',
+  topowalk: 'topo',
+  poleposition: 'pole',
+  eclipsego: 'eclipse',
+};
+
 /** JSON-LD `MobileApplication` da landing: exatamente as chaves do ADR-005 §6. */
 export function mobileApplication(chave: ChaveApp) {
   const a = apps[chave];

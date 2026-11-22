@@ -2,10 +2,9 @@
 // Termos de uso do LottoExpert (/lottoexpert-terms.html, URL contratual de ADR-001, e /<código>/lottoexpert-terms.html): a página
 // inteira, com a prop `lang`; as cascas ficam em src/pages/ (ADR-007 §3). Texto em
 // src/content/legal/lottoexpert-terms.<código>.md; hero,
-// botão e <head> em i18n/legal.ts. Nav e footer como na página antiga: realce `primary` (violeta do
-// tema) com logo brilhando, só o e-mail entre os canais, rodapé `surface` e esta página destacada na
-// lista de políticas. O botão volta para a home da GHF e o selo leva o ícone de contrato, como na
-// página antiga.
+// botão e <head> em i18n/legal.ts. Footer só com o e-mail entre os canais e esta página marcada como
+// atual; o acento da casca vem de `app` (WP-10 fatia 2). O botão volta para a home da GHF e o selo
+// leva o ícone de contrato, como na página antiga.
 import { getEntry, render } from 'astro:content';
 import LegalLayout from '../../layouts/LegalLayout.astro';
 import Nav from '../Nav.astro';
@@ -32,6 +31,7 @@ const { Content } = await render(entrada);
   titulo={x.lottoexpert_terms_h1}
   lastUpdated={entrada.data.lastUpdated}
   tema="lottoexpert-terms"
+  app="lottoexpert"
   favicon="/assets/lottoexpert_favicon_v3.png"
   classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-primary selection:text-white font-sans overflow-x-hidden"
   selo="primary"
@@ -46,7 +46,7 @@ const { Content } = await render(entrada);
     itens={[
       { href: `${home}#sobre`, chave: 'nav_about' },
       { href: `${home}#portfolio`, chave: 'nav_portfolio' },
-      { href: `${home}#contato`, chave: 'nav_contact', destaque: true },
+      { href: `${home}#contato`, chave: 'nav_contact' },
     ]}
   />
   <Content />
@@ -57,6 +57,5 @@ const { Content } = await render(entrada);
     prefixoAncora={home}
     redes={{}}
     politicaAtual="lottoexpert-terms.html"
-    fundo="surface"
   />
 </LegalLayout>

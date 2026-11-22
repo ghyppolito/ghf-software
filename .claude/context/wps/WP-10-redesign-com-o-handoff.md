@@ -119,6 +119,34 @@ prova é o checklist de navegador.
    `A11Y-LH-BASELINE-WP12-01` (o `h4` do rodapé).
    **Bloqueio:** nenhum. O 768 de nav e footer está no checklist do WP-19. Se esse checklist achar
    defeito, ele é corrigido nesta fatia. **Copy:** nenhuma.
+   **Respostas do usuário (2026-11-22, "segue o recomendado"): as oito perguntas da especificação do
+   `site-ux` (DESENHAR) ficam na opção (A).**
+   1. Pílula "Contato" do nav: sai (`GHF Kit v3` "Nav sem CTA: o botão da Play é do hero"). "Contato"
+      vira link comum. Fecha `LOTTO-NAV-CONTATO-CONTRASTE-01` por remoção.
+   2. Segmento da língua atual: fundo `raised` mais `ring-1 ring-inset ring-border-strong` (3,30:1).
+      Só o fundo dá 1,20:1 e reprova o 1.4.11.
+   3. Seletor de 2 línguas: segmentado em `<a>` (troca de língua é navegação; funciona sem JS e é o
+      que o §9 do `check_site.py` conhece), não `<button aria-pressed>` como no handoff.
+   4. Faixa de sugestão de idioma: fica fixa embaixo (desenho do WP-15, CLS 0), com os tokens novos.
+      Não vai para o topo em fluxo como no handoff.
+   5. Acento sem app: só `--app-acc: var(--color-brand)` no `:root` de `tokens.css`. `-light` e
+      `-edge` sem app ficam indefinidos até uma fatia ter consumidor.
+   6. Ativo do botão primário: `color-mix(in oklab, acento 88%, black)` em `tokens.css` (4,98 / 5,21 /
+      7,16 / 4,80 com texto `--bg`). O Claude Design confirma na próxima rodada. Fecha
+      `BOTAO-ATIVO-CONTRASTE-01`.
+   7. Rodapé segue o handoff: saem "Desenvolvido com ♥ por especialistas.", as colunas
+      "Institucional" e "Transparência & Políticas" (as 5 URLs legais ficam na coluna de cada app) e
+      os ícones circulares (redes viram texto com seta). A linha de baixo fica só com o ©.
+   8. "Pular para o conteúdo": entra como componente novo (`PularConteudo.astro`, chave `pular`, pt e
+      en), para o `<main id="conteudo">` de cada página. Não está no handoff: é candidato a voltar ao
+      Claude Design.
+   **Fixture do `sem-polyfill` regenerada (ADR-008 §7, 2026-11-22).** As classes da casca mudaram o
+   CSS de `src/`; `GHF_SEM_POLYFILL_FIXTURE=tools/fixtures/sem-polyfill npm run build` regravou
+   `entrada.css` (95 580 → 101 216 bytes) e `saida.css` (81 494 → 87 440). As três conferências: o
+   `npm run test:css` passa (21 de 21); o CSS publicado não tem nenhum dos dois marcadores (§18 do
+   `check_site.py` verde); o plugin continua tirando o mesmo tanto (14 086 → 13 776 bytes, 14,7% →
+   13,6% da entrada). No diff dos seletores da saída, saem 39 (o Nav, o Footer e o seletor antigos)
+   e entram os da casca; nenhum seletor some sem motivo.
 3. **Legal: `LegalLayout`, 10 páginas.** Papel claro, largura de leitura, sumário (recolhível
    abaixo de 1024 px, lateral a partir de 1024 px) e data no topo. A troca de idioma mantém
    `#secao-N`. O texto vem de `src/content/legal/` e não é tocado. A prova é `sync_legal.py

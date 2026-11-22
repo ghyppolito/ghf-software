@@ -3,6 +3,10 @@
 // faixa de sugestão, WP-15) são `language`/`band`/`bandGo`/`close` do handoff `content/i18n.js`,
 // sempre na língua do bloco: a faixa fala a língua que sugere. Toda chave nova entra em todas as
 // línguas no mesmo commit.
+// Casca do WP-10 (fatia 2): `menu`, `footer_app_page`, `footer_privacy` e `footer_terms` são
+// `menu`/`appPage`/`privacy`/`terms` de `content/i18n.js`; `nav_principal` é o `aria-label` do
+// `<nav>` de `Site Nav.dc.html:36` ("Principal"; en "Main"); `pular` é o link "Pular para o
+// conteúdo" (WCAG 2.4.1), que o handoff não tem (resposta 8 do usuário, 2026-11-22).
 // `Idioma` vem do mapa (idiomas.ts); fica reexportado aqui para os dicionários de src/i18n/.
 import type { Idioma } from './idiomas';
 
@@ -10,30 +14,20 @@ export type { Idioma };
 
 export const SITE = 'https://ghfsoftware.com';
 
-/** Anel de foco do teclado (WP-15, WP-22): branco, offset 2, em todos os temas; só `focus-visible:`.
- *  Usado no SeletorIdioma, na Nav e no Footer — classe literal para o Tailwind detectar. */
-export const FOCO = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
-
 export const ui = {
   pt: {
     nav_about: 'Sobre Nós',
     nav_portfolio: 'Portfólio',
     nav_contact: 'Contato',
+    nav_principal: 'Principal',
+    menu: 'Menu',
+    pular: 'Pular para o conteúdo',
     footer_desc:
       'Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.',
-    footer_inst: 'Institucional',
-    footer_port: 'Portfólio de Apps',
-    footer_cont: 'Contato Profissional',
-    footer_apps: 'Aplicativos',
-    footer_transp: 'Transparência & Políticas',
-    footer_priv_lotto: 'Privacidade - LottoExpert',
-    footer_terms_lotto: 'Termos - LottoExpert',
-    footer_priv_pole: 'Privacidade - Pole Position',
-    footer_priv_topo: 'Privacidade - TopoWalk',
-    footer_priv_eclipse: 'Privacidade - EclipseGo',
+    footer_app_page: 'Página do app',
+    footer_privacy: 'Privacidade',
+    footer_terms: 'Termos de uso',
     footer_rights: 'GHF Software. Todos os direitos reservados.',
-    footer_dev: 'Desenvolvido com',
-    footer_dev2: 'por especialistas.',
     idioma: 'Idioma',
     faixa_idioma: 'Esta página também está disponível em português.',
     faixa_ir: 'Ver em português',
@@ -43,21 +37,15 @@ export const ui = {
     nav_about: 'About Us',
     nav_portfolio: 'Portfolio',
     nav_contact: 'Contact',
+    nav_principal: 'Main',
+    menu: 'Menu',
+    pular: 'Skip to content',
     footer_desc:
       'Cutting-edge software engineering for Mobile and IoT applications. Creating the future with performance since 2004.',
-    footer_inst: 'Institutional',
-    footer_port: 'App Portfolio',
-    footer_cont: 'Professional Contact',
-    footer_apps: 'Applications',
-    footer_transp: 'Transparency & Policies',
-    footer_priv_lotto: 'Privacy - LottoExpert',
-    footer_terms_lotto: 'Terms - LottoExpert',
-    footer_priv_pole: 'Privacy - Pole Position',
-    footer_priv_topo: 'Privacy - TopoWalk',
-    footer_priv_eclipse: 'Privacy - EclipseGo',
+    footer_app_page: 'App page',
+    footer_privacy: 'Privacy',
+    footer_terms: 'Terms of use',
     footer_rights: 'GHF Software. All rights reserved.',
-    footer_dev: 'Developed with',
-    footer_dev2: 'by experts.',
     idioma: 'Language',
     faixa_idioma: 'This page is also available in English.',
     faixa_ir: 'Switch to English',
