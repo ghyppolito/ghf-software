@@ -17,14 +17,17 @@ função `git`, e devolve dados e listas de erros/avisos. O `check_site.py` as c
   confere_home       a Home publicada contra uma partição (§20)
   confere_home_hoje  a Home contra a partição de hoje; batendo só a de ontem, aviso (meia-noite UTC)
   confere_tag        `tag` e `atualizadoEm` de um app contra o repositório dele (§21)
+  le_fundacao        o ano de `since_2004` de src/i18n/home.ts (o "Desde 2004" do hero)
+  confere_adr009     os campos do JSON-LD que o ADR-009 acrescentou, contra a página e apps.ts (§14)
 """
 import datetime
+import json
 import re
 from html.parser import HTMLParser
 
 RE_PLAY = re.compile(r"^https://play\.google\.com/store/apps/details\?id=([\w.]+)(?:&|$)")
 RE_DATA = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-OBRIGATORIOS = ("nome", "id", "pagina", "privacidade", "atualizadoEm", "tag")
+OBRIGATORIOS = ("nome", "id", "pagina", "privacidade", "icone", "atualizadoEm", "tag")
 MAX_DESTAQUE = 4
 DIAS_AVISO = 30
 VAZIOS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
@@ -47,8 +50,38 @@ def soma_anos(d, anos):
 
 
 # ------------------------------------------------------------ leitura de apps.ts
-def _sem_comentario(bloco):
-    return "\n".join(l for l in bloco.splitlines() if not l.lstrip().startswith("//"))
+def sem_comentario(texto):
+    """`texto` sem comentário de TS (`// … fim da linha` e `/* … */`) fora de aspas (`'`, `"`,
+    `` ` ``). As quebras de linha ficam, para a regex por linha continuar valendo; `https://` dentro
+    de string fica."""
+    saida, i, n, aspa = [], 0, len(texto), None
+    while i < n:
+        ch = texto[i]
+        if aspa:
+            saida.append(ch)
+            if ch == "\\" and i + 1 < n:
+                saida.append(texto[i + 1])
+                i += 2
+                continue
+            if ch == aspa:
+                aspa = None
+            i += 1
+        elif ch in "'\"`":
+            aspa = ch
+            saida.append(ch)
+            i += 1
+        elif texto.startswith("//", i):
+            fim = texto.find("\n", i)
+            i = n if fim < 0 else fim
+        elif texto.startswith("/*", i):
+            fim = texto.find("*/", i + 2)
+            trecho = texto[i:n if fim < 0 else fim + 2]
+            saida.append("\n" * trecho.count("\n"))
+            i = n if fim < 0 else fim + 2
+        else:
+            saida.append(ch)
+            i += 1
+    return "".join(saida)
 
 
 def le_apps_ts(texto):
@@ -56,6 +89,7 @@ def le_apps_ts(texto):
     `indisponivel` (True/False); `ordem`: as chaves de `ORDEM_APPS`. Qualquer desvio do formato é
     erro (o check não adivinha)."""
     erros = []
+    texto = sem_comentario(texto)
     m = re.search(r"export const ORDEM_APPS\s*=\s*\[([^\]]*)\]", texto)
     if not m:
         return {}, [], ["apps.ts: `export const ORDEM_APPS = [ … ]` não encontrado"]
@@ -67,12 +101,17 @@ def le_apps_ts(texto):
     m = re.search(r"export const apps\s*=\s*\{(.*?)\n\}\s*as const\b", texto, re.S)
     if not m:
         return {}, ordem, erros + ["apps.ts: `export const apps = { … } as const` não encontrado"]
-    corpo = _sem_comentario(m.group(1))
+    corpo = m.group(1)
     apps = {}
     for chave, bloco in re.findall(r"^ {2}(\w+):\s*\{(.*?)^ {2}\},?[ \t]*$", corpo, re.S | re.M):
         if chave in apps:
             erros.append(f"apps.ts: app `{chave}` declarado duas vezes")
-        campos = dict(re.findall(r"\b(\w+):\s*'([^']*)'", bloco))
+        pares = re.findall(r"\b(\w+):\s*'([^']*)'", bloco)
+        nomes = [k for k, _ in pares] + re.findall(r"\b(indisponivel):", bloco)
+        repetidos = sorted({k for k in nomes if nomes.count(k) > 1})
+        if repetidos:
+            erros.append(f"apps.ts: `{chave}` com {', '.join(repetidos)} mais de uma vez (o check não escolhe qual vale)")
+        campos = dict(pares)
         campos["indisponivel"] = bool(re.search(r"\bindisponivel:\s*true\b", bloco))
         apps[chave] = campos
     if sorted(apps) != sorted(ordem):
@@ -82,6 +121,8 @@ def le_apps_ts(texto):
         faltam = [c for c in OBRIGATORIOS if not campos.get(c)]
         if faltam:
             erros.append(f"apps.ts: `{chave}` sem {', '.join(faltam)} (formato `campo: 'valor'`)")
+        elif not campos["icone"].startswith("/assets/"):
+            erros.append(f"apps.ts: `{chave}` com icone \"{campos['icone']}\" fora de /assets/ (URL fixa de public/, ADR-006)")
         elif data_iso(campos["atualizadoEm"]) is None:
             erros.append(f"apps.ts: `{chave}` com atualizadoEm \"{campos['atualizadoEm']}\" fora de AAAA-MM-DD válida")
     return apps, ordem, erros
@@ -254,12 +295,15 @@ def confere_home_hoje(rotulo, html, apps, ordem, hoje, href_de):
 
 
 # ------------------------------------------------------------ tag do app
-def confere_tag(nome, tag, atualizado, git):
-    """(erros, avisos) de um app contra o repositório dele. `git(*args)` → (código, stdout bytes)."""
+def confere_tag(nome, tag, atualizado, git, repo_dir="<repo>"):
+    """(erros, avisos) de um app contra o repositório dele. `git(*args)` → (código, stdout bytes).
+    Tag ausente é erro mesmo que o clone só esteja sem as tags: a mensagem diz como buscá-las (o
+    check não usa rede, e rebaixar a aviso deixaria passar tag digitada errada)."""
     erros, avisos = [], []
     cod, _ = git("rev-parse", "--verify", "--quiet", tag + "^{commit}")
     if cod != 0:
-        return [f"{nome}: tag {tag} (apps.ts) não existe no repositório do app"], []
+        return [f"{nome}: tag {tag} (apps.ts) não existe no clone local do app — se o clone está sem as tags,"
+                f" rode `git -C {repo_dir} fetch --tags` e repita; se continuar, a tag de apps.ts está errada"], []
     cod, out = git("log", "-1", "--format=%cs", tag + "^{commit}")
     data = out.decode().strip() if cod == 0 else ""
     if data != atualizado:
@@ -272,3 +316,115 @@ def confere_tag(nome, tag, atualizado, git):
         avisos.append(f"{nome}: tag {nova} ({out.decode().strip() if cod == 0 else '?'}) depois de {tag} — "
                       "atualize tag e atualizadoEm em apps.ts")
     return erros, avisos
+
+
+# ------------------------------------------------------------ JSON-LD do ADR-009 (§14)
+RE_FOOTER = re.compile(r"<footer\b.*?</footer>", re.S | re.I)
+OFERTA = {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}
+EM_ESTOQUE = "https://schema.org/InStock"
+
+
+def le_fundacao(texto_home):
+    """(ano, erros): o ano AAAA de `since_2004` em src/i18n/home.ts, o mesmo em toda língua."""
+    valores = re.findall(r"\bsince_2004:\s*'([^']*)'", sem_comentario(texto_home))
+    anos = [re.findall(r"\b(\d{4})\b", v) for v in valores]
+    if not valores:
+        return None, ["home.ts: nenhum `since_2004: '…'` — de onde vem o foundingDate?"]
+    if any(len(a) != 1 for a in anos) or len({a[0] for a in anos}) != 1:
+        return None, [f"home.ts: since_2004 {valores} sem exatamente um ano AAAA, o mesmo em toda língua"]
+    return anos[0][0], []
+
+
+class LePagina(HTMLParser):
+    """canonical, meta description, JSON-LD, texto do `<body>` (sem script/style) e `href` https://
+    de dentro de `<footer>`."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.canonicas, self.descricoes, self.jsonld, self.texto, self.rodape = [], [], [], [], []
+        self._ld = None
+        self._corpo = self._oculto = self._footer = 0
+
+    def handle_starttag(self, tag, attrs):
+        d = {k.lower(): (v or "") for k, v in attrs}
+        if tag == "body":
+            self._corpo = 1
+        elif tag in ("script", "style"):
+            self._oculto += 1
+            if tag == "script" and d.get("type", "").lower() == "application/ld+json":
+                self._ld = []
+        elif tag == "footer":
+            self._footer += 1
+        elif tag == "link" and "canonical" in d.get("rel", "").lower().split():
+            self.canonicas.append(d.get("href", ""))
+        elif tag == "meta" and d.get("name", "").lower() == "description":
+            self.descricoes.append(d.get("content", ""))
+        if tag == "a" and self._footer and d.get("href", "").startswith("https://"):
+            self.rodape.append(d["href"])
+
+    def handle_endtag(self, tag):
+        if tag in ("script", "style") and self._oculto:
+            self._oculto -= 1
+            if tag == "script" and self._ld is not None:
+                self.jsonld.append("".join(self._ld))
+                self._ld = None
+        elif tag == "footer" and self._footer:
+            self._footer -= 1
+
+    def handle_data(self, data):
+        if self._ld is not None:
+            self._ld.append(data)
+        elif self._corpo and not self._oculto:
+            self.texto.append(data)
+
+
+def confere_adr009(rotulo, html, app, site, existe, ano_fundacao):
+    """Erros dos campos do ADR-009 no JSON-LD da página. `app`: o registro de apps.ts da landing
+    (None fora das landings); `site`: `https://ghfsoftware.com/`; `existe(rel)`: o arquivo existe
+    em dist/; `ano_fundacao`: o de `le_fundacao`. JSON-LD que não faz parse fica para o §14."""
+    pg = LePagina()
+    pg.feed(html)
+    pg.close()
+    erros = []
+    descricao = pg.descricoes[0] if len(pg.descricoes) == 1 else None
+    canonica = pg.canonicas[0] if len(pg.canonicas) == 1 else None
+    corpo = re.sub(r"\s+", " ", " ".join(pg.texto))
+    for bruto in pg.jsonld:
+        try:
+            o = json.loads(bruto)
+        except ValueError:
+            continue
+        if not isinstance(o, dict):
+            continue
+        tipo = o.get("@type")
+        if tipo == "Organization":
+            if o.get("description") != descricao:
+                erros.append(f"{rotulo}: Organization.description {o.get('description')!r} ≠ meta description {descricao!r} (ADR-009)")
+            fundacao = o.get("foundingDate")
+            if ano_fundacao is None or fundacao != ano_fundacao:
+                erros.append(f"{rotulo}: Organization.foundingDate {fundacao!r} ≠ o ano de since_2004 de home.ts {ano_fundacao!r} (ADR-009)")
+            elif not re.search(rf"\b{ano_fundacao}\b", corpo):
+                erros.append(f"{rotulo}: Organization.foundingDate {fundacao!r} não aparece no corpo da página (ADR-009)")
+            same = o.get("sameAs")
+            if not (isinstance(same, list) and same and all(isinstance(u, str) and u.startswith("https://") for u in same)):
+                erros.append(f"{rotulo}: Organization.sameAs {same!r} não é lista não vazia de URLs https:// (ADR-009)")
+            elif set(same) - set(pg.rodape):
+                erros.append(f"{rotulo}: Organization.sameAs com {sorted(set(same) - set(pg.rodape))} fora dos links do <footer> da página (ADR-009)")
+        elif tipo == "MobileApplication":
+            if app is None:
+                erros.append(f"{rotulo}: MobileApplication numa página que não é landing de app de apps.ts")
+                continue
+            oferta = dict(OFERTA, **({} if app.get("indisponivel") else {"availability": EM_ESTOQUE}))
+            if o.get("offers") != oferta:
+                erros.append(f"{rotulo}: offers {o.get('offers')!r} ≠ {oferta} (só o download gratuito; preço do Premium nunca;"
+                             " InStock só se o app não é `indisponivel`, ADR-009)")
+            if canonica is None or o.get("url") != canonica:
+                erros.append(f"{rotulo}: MobileApplication.url {o.get('url')!r} ≠ canonical {canonica!r} (ADR-009)")
+            if o.get("description") != descricao:
+                erros.append(f"{rotulo}: MobileApplication.description {o.get('description')!r} ≠ meta description {descricao!r} (ADR-009)")
+            esperada = site.rstrip("/") + app["icone"]
+            if o.get("image") != esperada:
+                erros.append(f"{rotulo}: MobileApplication.image {o.get('image')!r} ≠ {esperada!r}, o icone de {app['nome']} em apps.ts (ADR-009)")
+            elif not existe(app["icone"].lstrip("/")):
+                erros.append(f"{rotulo}: MobileApplication.image {esperada!r}: o arquivo não existe no site (ADR-009)")
+    return erros

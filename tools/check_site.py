@@ -74,10 +74,11 @@ Checa:
      as permitidas (sem `aggregateRating`, `review`, preço do Premium); `name` e
      `applicationCategory` os da landing (APP_DA_PAGINA, D17); `installUrl` com o mesmo
      `id` do botão da Play da página; o texto do JSON-LD (já decodificado) passa pela régua do §5.
-     ADR-009: `MobileApplication.url` = canonical, `description` = meta description, `image` =
-     URL absoluta de arquivo do site, `offers.availability` InStock só se o app não é `indisponivel`
-     em apps.ts; `Organization.description` = meta description, `foundingDate` = ano AAAA que o
-     corpo da página publica, `sameAs` = lista de https:// contida nos links do `<footer>`.
+     ADR-009 (regras_apps.confere_adr009): `MobileApplication.url` = canonical, `description` = meta
+     description, `image` = SITE + `icone` do app em apps.ts (e o arquivo existe), `offers` com
+     `availability` InStock só se o app não é `indisponivel`; `Organization.description` = meta
+     description, `foundingDate` = o ano de `since_2004` de src/i18n/home.ts (e ele aparece no corpo),
+     `sameAs` = lista de https:// contida nos links do `<footer>`.
      Título e descrição (WP-21): `<title>` (uma vez, lido com as entidades decodificadas) com no
      máximo TITLE_MAX caracteres e description com no máximo DESCRIPTION_MAX; og:title =
      twitter:title = `<title>` e og:description = twitter:description = description (uma fonte só
@@ -125,7 +126,8 @@ Checa:
      sair do destaque: aviso
  21. `atualizadoEm` × tag do app (WP-10 fatia 10a): com o repositório do app presente (o de
      `ORIGENS` de tools/sync_legal.py; `$GHF_APPS_DIR` ou `--apps-dir`), a `tag` de apps.ts existe e
-     a data do commit dela (`git log -1 --format=%cs`) é `atualizadoEm` (erro); tag `v*` mais nova no
+     a data do commit dela (`git log -1 --format=%cs`) é `atualizadoEm` (erro; tag ausente no clone
+     é erro com a instrução `git -C <repo> fetch --tags`); tag `v*` mais nova no
      repositório é aviso. Sem o repositório (o CI): um aviso por repositório, sem erro
 
 As regras de i18n (i)–(viii), (x)–(xii), a linha de data e o link `data-troca-idioma` são funções
@@ -1140,9 +1142,14 @@ CATEGORIAS = {f"{c}Application" for c in (
     "Game", "SocialNetworking", "Travel", "Shopping", "Sports", "Lifestyle", "Business", "Design",
     "Developer", "Driving", "Educational", "Health", "Finance", "Security", "Browser", "Communication",
     "DesktopEnhancement", "Entertainment", "Multimedia", "Home", "Utilities", "Reference")}
-OFERTA = {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}  # + `availability` InStock se o app não é `indisponivel`
-EM_ESTOQUE = "https://schema.org/InStock"
-RE_FOOTER = re.compile(r"<footer\b.*?</footer>", re.S | re.I)
+# Oferta, url, description, image, sameAs e foundingDate (ADR-009): regras_apps.confere_adr009,
+# provada por tools/test_regras_apps.py. O ano de fundação é o de `since_2004` de src/i18n/home.ts.
+RE_FOOTER = regras_apps.RE_FOOTER
+try:
+    ano_fundacao, erros_fundacao = regras_apps.le_fundacao(ler(os.path.join(REPO, "src", "i18n", "home.ts")))
+except OSError as e:
+    ano_fundacao, erros_fundacao = None, [f"src/i18n/home.ts ilegível ({e})"]
+erros.extend(erros_fundacao)
 # app de cada landing (D17): name e applicationCategory esperados — espelho de src/i18n/apps.ts,
 # declarado aqui para que um dado trocado lá (ou uma landing lendo a chave errada) não passe
 APP_DA_PAGINA = {}
@@ -1184,6 +1191,9 @@ for rel, c in sorted(cabecas.items()):
         for padrao in COPY_PROIBIDA:
             for m in re.finditer(padrao, texto, re.I):
                 erros.append(f"{rel}: JSON-LD fere jogo responsável (`{padrao}`): …{texto[max(0, m.start() - 40): m.end() + 40]}…")
+    app_pg = next((a for a in dados_apps.values() if a.get("pagina") == i18n.pagina_de(rel)[1]), None)
+    erros.extend(regras_apps.confere_adr009(rel, ler(p(rel)), app_pg if JSONLD_TIPO.get(rel) == "MobileApplication" else None,
+                                            SITE, lambda r_: os.path.isfile(p(r_)), ano_fundacao))
     tipos = [o.get("@type") if isinstance(o, dict) else type(o).__name__ for o in objetos]
     esperado = [JSONLD_TIPO[rel]] if rel in JSONLD_TIPO else []
     if len(c.jsonld) == len(objetos) and tipos != esperado:
@@ -1203,38 +1213,11 @@ for rel, c in sorted(cabecas.items()):
             logo = o.get("logo", "")
             if not (isinstance(logo, str) and logo.startswith(SITE) and os.path.isfile(p(logo[len(SITE):]))):
                 erros.append(f"{rel}: Organization.logo {logo!r} não é URL absoluta de arquivo do site")
-            # ADR-009: description = meta description; foundingDate = o ano que a página publica;
-            # sameAs = canais que o <footer> da página publica
-            if o.get("description") != (c.meta.get("description") or [None])[0]:
-                erros.append(f"{rel}: Organization.description {o.get('description')!r} ≠ meta description (ADR-009)")
-            fundacao = o.get("foundingDate")
-            if not (isinstance(fundacao, str) and re.fullmatch(r"\d{4}", fundacao)
-                    and re.search(rf"\b{fundacao}\b", sem_tags(re.sub(r"<head\b.*?</head>", " ", ler(p(rel)), flags=re.S)))):
-                erros.append(f"{rel}: Organization.foundingDate {fundacao!r} não é um ano AAAA publicado no corpo da página (ADR-009)")
-            same = o.get("sameAs")
-            externos = {h for r_ in RE_FOOTER.findall(ler(p(rel))) for h in re.findall(r'\shref="(https://[^"]*)"', r_)}
-            if not (isinstance(same, list) and same and all(isinstance(u, str) and u.startswith("https://") for u in same)):
-                erros.append(f"{rel}: Organization.sameAs {same!r} não é lista não vazia de URLs https:// (ADR-009)")
-            elif set(same) - externos:
-                erros.append(f"{rel}: Organization.sameAs com {sorted(set(same) - externos)} fora dos links do <footer> da página (ADR-009)")
             continue
         if o.get("operatingSystem") != "Android":
             erros.append(f"{rel}: MobileApplication.operatingSystem {o.get('operatingSystem')!r} ≠ 'Android'")
         if o.get("applicationCategory") not in CATEGORIAS:
             erros.append(f"{rel}: applicationCategory {o.get('applicationCategory')!r} fora do enum do Google (`UtilitiesApplication`, …)")
-        app_pg = next((a for a in dados_apps.values() if a.get("pagina") == i18n.pagina_de(rel)[1]), None)
-        oferta = dict(OFERTA, **({} if app_pg is None or app_pg.get("indisponivel") else {"availability": EM_ESTOQUE}))
-        if o.get("offers") != oferta:
-            erros.append(f"{rel}: offers {o.get('offers')!r} ≠ {oferta} (só o download gratuito; preço do Premium nunca;"
-                         " InStock só se o app não é `indisponivel`, ADR-009)")
-        # ADR-009: url = canonical; description = meta description; image = arquivo do site
-        if o.get("url") != (c.canonicas or [None])[0]:
-            erros.append(f"{rel}: MobileApplication.url {o.get('url')!r} ≠ canonical {c.canonicas[:1]} (ADR-009)")
-        if o.get("description") != (c.meta.get("description") or [None])[0]:
-            erros.append(f"{rel}: MobileApplication.description {o.get('description')!r} ≠ meta description (ADR-009)")
-        imagem = o.get("image", "")
-        if not (isinstance(imagem, str) and imagem.startswith(SITE) and os.path.isfile(p(imagem[len(SITE):]))):
-            erros.append(f"{rel}: MobileApplication.image {imagem!r} não é URL absoluta de arquivo do site (ADR-009)")
         if not isinstance(o.get("name"), str) or not o["name"].strip():
             erros.append(f"{rel}: MobileApplication sem name")
         if rel in APP_DA_PAGINA and (o.get("name"), o.get("applicationCategory")) != APP_DA_PAGINA[rel]:
@@ -1572,7 +1555,7 @@ for chave in ordem_apps:
         avisos.append(f"{repo}: origem ausente ({os.path.join(APPS_DIR, repo)}) — tag e atualizadoEm de {a['nome']} não conferidos")
         continue
     repo_dir = os.path.join(APPS_DIR, repo)
-    e_tag, a_tag = regras_apps.confere_tag(a["nome"], a["tag"], a["atualizadoEm"], lambda *args, d=repo_dir: git(d, *args))
+    e_tag, a_tag = regras_apps.confere_tag(a["nome"], a["tag"], a["atualizadoEm"], lambda *args, d=repo_dir: git(d, *args), repo_dir)
     erros.extend(e_tag)
     avisos.extend(a_tag)
 
