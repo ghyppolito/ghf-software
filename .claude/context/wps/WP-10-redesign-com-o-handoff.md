@@ -15,7 +15,7 @@ branch: feat/wp-10-fatia-6-home
 
 # WP-10 — A home e as landings de app seguem o sistema visual do handoff
 
-**Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** ECLIPSE-ICONE-OFFLINE-01 (ícone do card "offline" do EclipseGo, D21), NAV-MENU-ALVO-TOQUE-01, HOME-TECH-CURSOR-01, POLE-PRINTS-2X-01 (do WP-12) · o WP-19 (rodada 3) está `done` e não segura mais as landings
+**Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** ECLIPSE-ICONE-OFFLINE-01 (ícone do card "offline" do EclipseGo, D21), POLE-PRINTS-2X-01 (do WP-12) · o WP-19 (rodada 3) está `done` e não segura mais as landings
 
 **Objetivo:** tokens do handoff em `src/styles/tokens.css` (`@theme`, ADR-008); home com hierarquia por app (um
 toque até o app certo); as 4 landings com a mesma anatomia (hero + CTA → 3–5 funcionalidades
@@ -293,7 +293,7 @@ prova é o checklist de navegador.
      10a), `HERO-H1-SEM-PALAVRA-CHAVE-01` (fatia 10b; decisão de copy do usuário).
    **Checklist de navegador (usuário):** ver `handoff.md`, seção 3.
    **Bloqueio:** nenhum. O EclipseGo é o único app estável; os outros três estão em evolução.
-6. **Home.** Os cards seguem a ordem do brief §10 e a regra da D12. A lista "ver todas" fica vazia
+6. **Home.** **Feita em 2026-11-22** (commits 20649c6, a4d30b4 e 1f69780; branch `feat/wp-10-fatia-6-home`, não enviada). Nenhuma auditoria trouxe achado alto. Os cards seguem a ordem do brief §10 e a regra da D12. A lista "ver todas" fica vazia
    enquanto os 4 apps forem destaque. Cada app em `apps.ts` ganha um campo de data da última
    atualização, com comentário de origem (tag de release no repositório do app).
    **Fonte do card (D29, complemento de 2026-11-22):** o card do EclipseGo lê o `resumo` de
@@ -304,6 +304,41 @@ prova é o checklist de navegador.
    `HOME-STACK-SELOS-CONTRASTE-01`, `DESTAQUE-LIMIARES-INVENTADOS-01`.
    **Bloqueio:** o texto do card do LottoExpert, se a fonte não tiver (D25). O 768 está decidido
    (D27). Quem desbloqueia: o usuário. O WP-19 não bloqueia a home.
+   **Entregue (2026-11-22; copy pela D30).**
+   - **Home:** `Home.astro` reescrita contra `Home.dc.html`: hero só com texto, grade `#portfolio` com
+     4 cards na ordem do brief §10, e as seções Sobre e Privacidade. `VerTodasApps.astro` (sem desenho
+     no handoff; não aparece hoje) e `src/assets/icones-apps.ts`. `home.ts` tipado, com os textos dos
+     cards em `resumos.<app>`; a lista das chaves removidas está no commit a4d30b4.
+   - **`apps.ts`:** campos `pagina`, `privacidade`, `atualizadoEm` (tag de release de cada app:
+     LottoExpert v2.05.03 2026-10-12, TopoWalk v4.4.0 2026-10-29, Pole Position v2.2.0 2026-10-16 em
+     `../pole-position-app`, EclipseGo v1.0.1 2026-07-26) e `indisponivel?`. Mais `ORDEM_APPS`,
+     `particionarApps(hoje)` (D12 no build), `hojeDoBuild()` (`GHF_HOJE`, só para teste: validado e
+     barrado com `CI`/`GITHUB_ACTIONS`) e `dataCurta` (locale do `idiomas.json`).
+   - **Tag no app:** a v1.0.1 do EclipseGo é leve. O agente a criou e enviou em 2026-11-22, com
+     autorização do usuário, sobre `f5c1d6b` (ponta da main, sem mudança de código desde o
+     `versionName` 1.0.1).
+   - **Desvios de escopo (autorizados):** `tools/test_sem_polyfill.mjs`, teste 6: a régua "saída <
+     90% da entrada", que dependia do CSS do site, virou "a entrada tem os dois polyfills e a saída é
+     menor" (decisão do usuário; o `site-qa` confirmou que não é mais fraca: plugin no-op derruba 3
+     testes). `tools/orcamento-lighthouse.json`: o teto de `"/"` só baixou, para o medido + 20% (184
+     844 / 18 234 B).
+   - **Medidas em `/`:** perf 99, a11y 100, bp 100, seo 100, LCP 1,80 s (elemento `<h1>`; era 2,33 s
+     no logo), CLS 0, 150 KB (15 KB de imagem). CSS publicado 87,7 -> 73,2 KB. Pelo `site-ux` em Chrome
+     headless: grade 1/2/2/4 colunas (360/768/1024/1280), sem card órfão, h1 em 2 linhas, alvos >= 44
+     px, menor contraste 5,97. Regra D12 exercitada com `GHF_HOJE`.
+   - **Achados resolvidos:** `HOME-ALT-DESCREVE-FUNCIONALIDADE-01` (capturas saíram),
+     `ALVOS-DESKTOP-ABAIXO-44-01` (o Play tem 44 px), `HOME-BOTAO-EMERALD-CONTRASTE-01`,
+     `HOME-STACK-SELOS-CONTRASTE-01` (por remoção, D30 (2)), `DESTAQUE-LIMIARES-INVENTADOS-01`
+     (regra D12 implementada), a parte da home de `A11Y-LH-BASELINE-WP12-01` e
+     `INDEX-LOTTO-DESC-DIVERGE-01` na home (D30 (3)); o texto longo do LottoExpert fica para a fatia 9.
+   - **Achados novos:** `LITERAIS-SEM-TOKEN-HOME-01`, `HOME-VER-TODAS-SEM-DESENHO-01`,
+     `HOME-GRADE-3-CARDS-01`, `PRIV-NOME-ACESSIVEL-ORDEM-01`, `HOME-OG-IMAGE-677-01` (WP-20);
+     `APPS-ATUALIZADO-EM-SEM-CHECK-01`, `HOME-ORDEM-SEM-CHECK-01`, `ICONES-APPS-DUPLICADOS-01`,
+     `BUILD-RELOGIO-NAO-REPRODUTIVEL-01`, `SOBRE-REGIAO-ENGLOBA-PRIVACIDADE-01`,
+     `ROTULO-DATA-DUAS-FONTES-01`, `ORGANIZATION-JSONLD-MINIMO-01` (fatia 10a);
+     `HOME-ICONES-ORFAOS-01`, `CSS-BUNDLE-NOME-FOOTER-01`, `HOME-VOCABULARIO-TECNICO-01` (fatia 10b);
+     `HOME-X-DEFAULT-EN-01` (WP-18); `CLAUDE-MD-POLE-CAMINHO-01` (WP-28).
+   **Checklist de navegador (usuário):** ver `handoff.md`, seção 3.
 7. **TopoWalk** (pt e en; as outras línguas são do WP-18). **Achados:** `TOPO-PT-HTML-DIVERGE-01`,
    `TOPO-CONTRASTE-AA-01`, a parte TopoWalk de `LANDINGS-URL-E-PLAY-01`. **Topo:** recalcular o
    topo e recolocar o CTA da Play acima da dobra a 1280×720 (nav em fluxo desde a fatia 2).
@@ -335,6 +370,10 @@ prova é o checklist de navegador.
     (fonte única da lista de apps em `src/i18n/apps.ts`, consumida pela 404 e pelo `Footer`),
     `FAQ-SINAL-ABERTO-01`, `LANDING-JSONLD-CAMPOS-01` e `CORONA-GLOW-ORFAO-01` (apaga só o
     `.corona-glow` de `legado.css`; a camada de legado fica até a 10b).
+    Da fatia 6: `BUILD-RELOGIO-NAO-REPRODUTIVEL-01` (decisão do usuário), `APPS-ATUALIZADO-EM-SEM-CHECK-01`,
+    `HOME-ORDEM-SEM-CHECK-01`, `ICONES-APPS-DUPLICADOS-01` e `ROTULO-DATA-DUAS-FONTES-01` (junto de
+    `APPS-LISTA-DUPLICADA-01`), `SOBRE-REGIAO-ENGLOBA-PRIVACIDADE-01`, `ORGANIZATION-JSONLD-MINIMO-01`
+    (junto de `LANDING-JSONLD-CAMPOS-01`).
     **Aceite parcial:** a tabela de contraste do `site-ux` (pares cor/fundo medidos) e o Lighthouse de
     acessibilidade ≥ 95 nas páginas já redesenhadas: as 10 legais, a 404, a Home e o EclipseGo, pt e
     en. As landings de TopoWalk, Pole Position e LottoExpert ficam de fora, porque ainda não
@@ -346,6 +385,7 @@ prova é o checklist de navegador.
     vazio. A tabela de contraste e o Lighthouse de acessibilidade ≥ 95 passam a valer para todas as
     páginas. Entra o checklist de navegador completo (todas as páginas, 360/768/1280, pt e en).
     **Achados:** `CSS-ORCAMENTO-BYTES-01` (teto de CSS medido depois de sair o legado),
+    `HOME-ICONES-ORFAOS-01`, `CSS-BUNDLE-NOME-FOOTER-01`, `HOME-VOCABULARIO-TECNICO-01` (decisão de copy do usuário),
     `HERO-H1-SEM-PALAVRA-CHAVE-01` (decisão de copy do usuário; sem ela o h1 fica como está) e
     `FUNC-SEM-IMAGEM-METADE-VAZIA-01` se o WP-20 não o cobrir.
     **Revisão final no site real (do WP-19, decisão do usuário em 2026-11-22):** TopoWalk em russo a 360 (se a língua existir no site até lá); home, landing e legal a 768; faixa de sugestão de idioma (fecha e não volta na sessão); foco visível em "Ver todas" e nos sociais do rodapé; selo "Publicado" distinto do verde do Pole Position.
