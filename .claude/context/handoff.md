@@ -3,7 +3,7 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-11-21.** Branch `feat/wp-10-redesign` (integração da D13, nasceu de `feat/wp-08-layout-unico`), **não enviada ao GitHub**. Árvore limpa antes deste commit. WP-10 segue `doing`.
+**Sessão de 2026-11-21.** Branch `feat/wp-25-dependencias` (nasceu de `origin/feat/wp-08-layout-unico`, que já tem a fatia 1 do WP-10 pelo PR #46). WP-25 `doing` até o CI provar o Node 22.23.5; WP-10 `blocked` até o WP-25 fechar.
 
 ## 1. Onde parei
 
