@@ -103,7 +103,7 @@ export const eclipsego = {
       titulo: 'EclipseGo: Shadow & Light in Your Pocket',
       lead: 'Know exactly if a solar or lunar eclipse is visible from your location. A fully offline application that calculates local start, peak, and end times without making any network calls.',
       meta: '100% offline · Android 8.0 or later · Free',
-      alt: 'Hand holding a phone with EclipseGo open on the total solar eclipse of August 12, 2026, seen from Praia, Cape Verde.',
+      alt: 'Hand holding a phone with EclipseGo open on the total solar eclipse of August 12, 2026, seen from Praia, Cape Verde (app interface in Portuguese).',
     },
     funcionalidades: [
       {

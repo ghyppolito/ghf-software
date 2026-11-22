@@ -158,7 +158,7 @@ function forma(c: ConteudoApp): unknown {
           tipo: c.planos.tipo,
           nota: c.planos.nota ? { selo: c.planos.nota.selo !== undefined, termos: c.planos.nota.termos ?? null } : null,
           ...(c.planos.tipo === 'niveis'
-            ? { niveis: c.planos.niveis.map((n) => !!n.destaque), linhas: c.planos.comparacao.linhas.length }
+            ? { niveis: c.planos.niveis.map((n) => ({ d: !!n.destaque, p: n.periodo !== undefined })), linhas: c.planos.comparacao.linhas.length }
             : { gratis: c.planos.gratis.itens.length, pro: c.planos.pro.itens.length, notaPro: c.planos.pro.nota !== undefined }),
         }
       : null,
@@ -172,7 +172,8 @@ function forma(c: ConteudoApp): unknown {
 export function exigeEspelho(app: string, c: Record<Idioma, ConteudoApp>, chavesImagem: string[] = []): void {
   const erros: string[] = [];
   const linguas = Object.keys(c) as Idioma[];
-  const base = linguas[0];
+  // pt é o idioma primário (CLAUDE.md): a base do espelho não depende da ordem das chaves.
+  const base: Idioma = 'pt' in c ? ('pt' as Idioma) : linguas[0];
   for (const l of linguas) {
     const x = c[l];
     for (const [onde, texto] of textos(x, '', [])) {
