@@ -3,7 +3,7 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-11-21.** Branch `feat/wp-25-dependencias` (nasceu de `origin/feat/wp-08-layout-unico`, que já tem a fatia 1 do WP-10 pelo PR #46). WP-25 `doing` até o CI provar o Node 22.23.5; WP-10 `blocked` até o WP-25 fechar.
+**Sessão de 2026-11-21/22.** WP-25 `done` (PR #47 integrado; CI do #37 verde no Node 22.23.5, run 44978260131). WP-10 volta a `doing`; a fatia 2 parte da branch `feat/wp-10-fatia-2`, criada de `origin/feat/wp-08-layout-unico` (79e6703).
 
 ## 1. Onde parei
 

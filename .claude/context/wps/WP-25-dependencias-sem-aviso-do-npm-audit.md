@@ -2,7 +2,7 @@
 id: WP-25
 titulo: O build sai do Astro 7.3.8 e o npm audit não acusa dependência vulnerável
 area: infra
-status: doing
+status: done
 depende_de: [WP-08]
 adr: [ADR-001, ADR-002, ADR-008]
 spec: ""

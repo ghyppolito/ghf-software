@@ -53,7 +53,6 @@ SEQUENCIA = [
 # Bloqueios ativos: (WP, motivo, desde). Lista escrita à mão; entrada de WP `done`
 # é filtrada, para a tabela seguir o front-matter.
 BLOQUEIOS = [
-    ("WP-10", "fatia 1 feita; aguarda o WP-25 fechar (implementado; falta o CI no Node 22.23.5) antes da fatia 2 — decisão do usuário em 2026-11-21", "2026-11-21"),
     ("WP-19", "export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true)", "2026-10-13"),
 ]
 
