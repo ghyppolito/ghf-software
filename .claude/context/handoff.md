@@ -20,24 +20,7 @@ Nada quebrado. Passaram no `/verify` da fatia 2: `test:css`, `check_site.py` (ra
 
 ## 3. O que só o navegador prova (pendente)
 
-`python3 -m http.server 8080 -d dist`. **Fatia 1**, a 1280 px, salvo onde indicado:
-- h1 do hero mais alto (entrelinha 1,25) em `/`, `/en/`, lottoexpert, topowalk e poleposition; o hero do poleposition ganhou 55 px;
-- paleta v4 (oklch) nos chips cyan, emerald e orange da home, nos ✓ verdes da tabela do lottoexpert e no lima do poleposition;
-- `backdrop-blur-sm` mais forte nos chips;
-- listas e destaques das páginas legais;
-- vidro do nav ao rolar e menu móvel a 360 px;
-- Safari 16.4.
-
-**Fatia 2 (casca)**, `python3 -m http.server 8080 -d dist`:
-- barra do nav a 360, 768 e 1280, pt e en (60/68 px; recorte do logo sem o texto "since 1996");
-- menu: abrir e fechar, Esc, girar a tela;
-- segmento PT/EN com anel;
-- rodapé a 360, 768 e 1280: ordem marca -> apps -> contato, coluna vazia a 768, linha dupla a 360;
-- "Pular para o conteúdo" e Enter, no Chrome e no Safari;
-- faixa de idioma;
-- páginas antigas com ~68 px a mais no topo; CTA da Play do LottoExpert e do EclipseGo abaixo da dobra a 1280x720 (aceito até as fatias 5 e 9).
-
-**WP-25 (`visual: false`, checagem rápida):** em `/` com o navegador em inglês e sem `ghf_lang` no `localStorage`, a faixa de idioma aparece; em `/en/`, não.
+**Fatias 1 e 2 do WP-10 e faixa de idioma do WP-25:** aprovadas pelo usuário no navegador em 2026-11-22 (Chrome, pt e en, 360/768/1280; coluna vazia do rodapé a 768 aceita). Resta só o Safari ("Pular para o conteúdo", vidro do nav), sem Mac disponível: pelo iPhone com `python3 -m http.server 8080 -d dist -b 0.0.0.0`.
 
 **WP-19 (rodada 3):** `python3 -m http.server 8080 -d design/handoff/2026-10-13-rodada-3`. `Landing App.dc.html?app=topo&lang=ru` a 360; `?app=topo`, `?app=pole`, `?app=eclipse` a 1280; `Home.dc.html`, `Landing App.dc.html` e `Legal LottoExpert.dc.html` a 768; troca pt/en na legal (en é stub); `?app=pole&suggest=de`; Tab em "Ver todas" e nos sociais do footer; selo "Publicado" distinto do verde do Pole. Escrever o resultado no WP-19 (segue `blocked`).
 
