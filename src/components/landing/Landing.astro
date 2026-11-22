@@ -1,0 +1,61 @@
+---
+// Template de landing de app (WP-10, fatia 5; D29; `Landing App.dc.html` da rodada 3). Uma
+// anatomia para os 4 apps: entre landings só mudam o acento (`data-app`, Base.astro) e o conteúdo
+// (`src/i18n/<app>.ts`, no formato de landing.ts). Ordem: Hero, Funcionalidades, slot
+// `apos-funcionalidades`, Prova, Planos, Privacidade (slot `privacidade-extra`), Faq, CtaFinal,
+// Aviso. Seção opcional sem conteúdo não sai, nem placeholder; slot vazio não gera wrapper. Os
+// slots são os blocos da D1 do LottoExpert (fatia 9); os nomes são de posição, não de app.
+//
+// O botão da Play vem de apps.ts (um `href` só, no hero e no fim); a política, de `link` (URL
+// contratual, ADR-001; D23). `exigeEspelho` falha o build se as línguas não são espelho (ADR-007).
+// O `@container` da raiz é a medida das unidades `cqi` das seções (as do export).
+import type { ImageMetadata } from 'astro';
+import Hero from './Hero.astro';
+import Funcionalidades from './Funcionalidades.astro';
+import Prova from './Prova.astro';
+import Planos from './Planos.astro';
+import Privacidade from './Privacidade.astro';
+import Faq from './Faq.astro';
+import CtaFinal from './CtaFinal.astro';
+import Aviso from './Aviso.astro';
+import { exigeEspelho, rotulosLanding, type ConteudoApp } from '../../i18n/landing';
+import { apps, type ChaveApp } from '../../i18n/apps';
+import { link, type Idioma } from '../../i18n/idiomas';
+
+interface Props {
+  lang: Idioma;
+  app: ChaveApp;
+  /** o dicionário do app, todas as línguas (para o `exigeEspelho`) */
+  conteudo: Record<Idioma, ConteudoApp>;
+  imagens: { hero: ImageMetadata; funcionalidades?: Record<string, ImageMetadata> };
+}
+
+const { lang, app, conteudo, imagens } = Astro.props;
+const figuras = imagens.funcionalidades ?? {};
+exigeEspelho(app, conteudo, Object.keys(figuras));
+
+const c = conteudo[lang];
+const r = rotulosLanding[lang];
+const cta = { href: apps[app].play, rotulo: r.cta };
+---
+<div class="@container">
+  <Hero
+    kicker={c.hero.kicker}
+    titulo={c.hero.titulo}
+    lead={c.hero.lead}
+    meta={c.hero.meta}
+    imagem={imagens.hero}
+    alt={c.hero.alt}
+    cta={cta}
+  />
+  <Funcionalidades titulo={r.features} itens={c.funcionalidades} imagens={figuras} todas={c.todas} rotuloVerTodas={r.seeAll} />
+  {Astro.slots.has('apos-funcionalidades') && <slot name="apos-funcionalidades" />}
+  {c.prova && <Prova titulo={r.proof} fatos={c.prova} />}
+  {c.planos && <Planos lang={lang} titulo={c.planos.tipo === 'gratis-pro' ? r.freepro : r.plans} planos={c.planos} rotuloTermos={r.terms} />}
+  <Privacidade rotulo={r.privacy} frase={c.privacidade} linkRotulo={r.privacyPolicy} linkHref={link(lang, `${app}-privacy.html`)}>
+    {Astro.slots.has('privacidade-extra') && <slot name="privacidade-extra" />}
+  </Privacidade>
+  <Faq titulo={r.faq} itens={c.faq} />
+  <CtaFinal titulo={r.ctaH.replace('{app}', apps[app].nome)} cta={cta} meta={c.hero.meta} />
+  {c.aviso && <Aviso texto={c.aviso} />}
+</div>

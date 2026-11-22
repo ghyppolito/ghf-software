@@ -1,0 +1,29 @@
+---
+// Planos (WP-10, fatia 5; LA:107-160), opcional: "níveis" (cards de preço, nota e tabela de
+// comparação; o LottoExpert, fatia 9) ou "grátis e Pro" (dois cards; o TopoWalk, fatia 7). Preço é
+// dado do conteúdo. Nota com `selo` opcional (o "18" é do LottoExpert; desvio 9 da especificação).
+import Secao from './Secao.astro';
+import PlanosNiveis from './PlanosNiveis.astro';
+import PlanosGratisPro from './PlanosGratisPro.astro';
+import type { Planos } from '../../i18n/landing';
+import type { Idioma } from '../../i18n/idiomas';
+
+interface Props {
+  lang: Idioma;
+  titulo: string;
+  planos: Planos;
+  rotuloTermos: string;
+}
+
+const { lang, titulo, planos, rotuloTermos } = Astro.props;
+---
+<Secao id="planos" titulo={titulo} classe="flex flex-col gap-6">
+  <p slot="lead" class="text-base leading-[26px] text-text-2 text-pretty">{planos.lead}</p>
+  {
+    planos.tipo === 'niveis' ? (
+      <PlanosNiveis lang={lang} titulo={titulo} planos={planos} rotuloTermos={rotuloTermos} />
+    ) : (
+      <PlanosGratisPro lang={lang} planos={planos} rotuloTermos={rotuloTermos} />
+    )
+  }
+</Secao>

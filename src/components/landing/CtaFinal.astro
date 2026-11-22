@@ -1,0 +1,18 @@
+---
+// Chamada final (WP-10, fatia 5; LA:178-182): `<h2>`, o mesmo botão da Play do hero (mesmo `href`)
+// e a mesma `meta`.
+import Secao from './Secao.astro';
+import CtaPlay from './CtaPlay.astro';
+
+interface Props {
+  titulo: string;
+  cta: { href: string; rotulo: string };
+  meta?: string;
+}
+
+const { titulo, cta, meta } = Astro.props;
+---
+<Secao idTitulo="h-cta" titulo={titulo} classe="flex flex-col items-start gap-4">
+  <CtaPlay href={cta.href} rotulo={cta.rotulo} />
+  {meta && <span class="text-[13px] leading-5 text-text-2">{meta}</span>}
+</Secao>

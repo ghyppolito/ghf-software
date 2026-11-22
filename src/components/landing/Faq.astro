@@ -1,0 +1,29 @@
+---
+// Perguntas frequentes (WP-10, fatia 5; LA:166-176): o `<h2>` ao lado das perguntas quando cabem 2
+// × 320 px, cada pergunta num `<details>` (sem JS). Foco do `summary` em 3 px para dentro (desvio
+// 12 da especificação).
+import Secao from './Secao.astro';
+import type { Pergunta } from '../../i18n/landing';
+
+interface Props {
+  titulo: string;
+  itens: Pergunta[];
+}
+
+const { titulo, itens } = Astro.props;
+---
+<Secao id="faq" titulo={titulo} classe="grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] gap-x-16 gap-y-6 items-start">
+  <div class="flex flex-col min-w-0">
+    {
+      itens.map((q) => (
+        <details class="border-t border-border">
+          <summary class="min-h-14 py-3.5 pr-2 flex items-center justify-between gap-4 cursor-pointer text-base leading-6 font-semibold list-none [&::-webkit-details-marker]:hidden rounded-ctl hover:bg-raised focus-visible:outline-3 focus-visible:outline-brand focus-visible:-outline-offset-3">
+            {q.pergunta}
+            <span aria-hidden="true" class="text-xl font-normal text-text-2">+</span>
+          </summary>
+          <p class="mb-[18px] text-[15px] leading-6 text-text-2 max-w-[62ch] text-pretty">{q.resposta}</p>
+        </details>
+      ))
+    }
+  </div>
+</Secao>

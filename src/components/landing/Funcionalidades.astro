@@ -1,0 +1,56 @@
+---
+// Funcionalidades em destaque (WP-10, fatia 5; LA:37-57): até 4, cada uma com captura (D26),
+// etiqueta opcional, h3 e texto; a captura alterna de lado a partir de 768 px (zebra). Sem captura,
+// só o texto, sem placeholder (desvio 3 da especificação; D25/D26). A captura é recortada só no CSS
+// (9:16, a partir do topo), o arquivo não é editado (D26). "Ver todas" (D12) fecha a seção.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Secao from './Secao.astro';
+import VerTodas from './VerTodas.astro';
+import type { Funcionalidade, GrupoTodas } from '../../i18n/landing';
+
+interface Props {
+  titulo: string;
+  itens: Funcionalidade[];
+  imagens: Record<string, ImageMetadata>;
+  todas?: GrupoTodas[];
+  rotuloVerTodas: string;
+}
+
+const { titulo, itens, imagens, todas, rotuloVerTodas } = Astro.props;
+---
+<Secao id="funcionalidades" titulo={titulo} classe="flex flex-col gap-[clamp(32px,5cqi,64px)]">
+  {
+    itens.map((f, i) => (
+      <article class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-[clamp(20px,4cqi,56px)] items-center">
+        {f.imagem && (
+          <figure class:list={['flex justify-center', i % 2 === 1 && 'md:order-2']}>
+            <Image
+              src={imagens[f.imagem]}
+              alt={f.alt ?? ''}
+              width={300}
+              densities={[1, 1.5]}
+              loading="lazy"
+              class="block w-[min(100%,300px)] aspect-[9/16] object-cover object-top rounded-3xl border border-border-strong"
+            />
+          </figure>
+        )}
+        <div class="flex flex-col gap-3 max-w-[520px] min-w-0">
+          {f.etiqueta && (
+            <span
+              class:list={[
+                'self-start inline-flex items-center min-h-6 px-2.5 py-0.5 rounded-ctl border text-xs leading-[18px] font-semibold',
+                f.etiqueta.pro ? 'text-app-acc border-app-acc' : 'text-text-2 border-border-strong',
+              ]}
+            >
+              {f.etiqueta.texto}
+            </span>
+          )}
+          <h3 class="text-[clamp(20px,2.2cqi,26px)] leading-[1.25] font-bold text-balance">{f.titulo}</h3>
+          <p class="text-base leading-[26px] text-text-2 text-pretty">{f.descricao}</p>
+        </div>
+      </article>
+    ))
+  }
+  {todas && todas.length > 0 && <VerTodas rotulo={rotuloVerTodas} grupos={todas} />}
+</Secao>

@@ -1,0 +1,32 @@
+---
+// "Como o app trabalha" (WP-10, fatia 5; LA:93-105): 2 a 4 fatos numa grade com divisória de 1 px
+// (o `gap-px` sobre `bg-border`). O export usa auto-fit, e a célula que sobra numa linha
+// incompleta aparece pintada da cor da divisória (desvio 4 da especificação): aqui as colunas são
+// fixas por largura (1, 2 a partir de 640 px, n a partir de 1024 px) e, entre 640 e 1024 px, o
+// último item ímpar ocupa a linha inteira.
+import Secao from './Secao.astro';
+import type { Fato } from '../../i18n/landing';
+
+interface Props {
+  titulo: string;
+  fatos: Fato[];
+}
+
+const { titulo, fatos } = Astro.props;
+// Classes inteiras (o Tailwind não detecta concatenação).
+const COLUNAS: Record<number, string> = { 2: 'lg:grid-cols-2', 3: 'lg:grid-cols-3', 4: 'lg:grid-cols-4' };
+---
+{
+  fatos.length > 0 && (
+    <Secao idTitulo="h-prova" titulo={titulo} classe="flex flex-col gap-6">
+      <ul class:list={['grid grid-cols-1 sm:grid-cols-2 gap-px bg-border border border-border rounded-card overflow-hidden', COLUNAS[fatos.length]]}>
+        {fatos.map((f) => (
+          <li class="bg-surface p-5 flex flex-col gap-1.5 sm:max-lg:last:odd:col-span-2">
+            <span class="text-lg leading-6 font-bold text-app-acc">{f.titulo}</span>
+            <span class="text-sm leading-[21px] text-text-2 text-pretty">{f.texto}</span>
+          </li>
+        ))}
+      </ul>
+    </Secao>
+  )
+}
