@@ -14,7 +14,7 @@ sai de `src/pages/` (`tools/check_site.py` §7). Nav, footer e config mudam só 
 
 | Arquivo | Papel |
 |---|---|
-| `package.json` / `package-lock.json` | Astro, `@astrojs/markdown-satteri`, Tailwind 4.3.5 e `@tailwindcss/vite` 4.3.5, html-validate, lighthouse; Node 22.23.4 |
+| `package.json` / `package-lock.json` | Astro, `@astrojs/markdown-satteri`, Tailwind 4.3.5 e `@tailwindcss/vite` 4.3.5, html-validate, lighthouse; Node 22.23.5 |
 | `astro.config.mjs` | `build.format: 'preserve'` (cada rota sai como `x.html`, igual às URLs contratuais), fonte Inter local pela API `fonts`, Sätteri com os plugins de `src/markdown/legal.mjs`, Tailwind pelo plugin do Vite (`vite.plugins`) e o piso de navegador no `cssTarget` (Safari 16.4, Chrome 111, Firefox 128; ADR-008 §4) |
 | `src/styles/global.css` | ponto de entrada do Tailwind 4 (`@import 'tailwindcss' source(none)` + `@source` só de `src/`, ADR-008 §3), CSS próprio sem cor literal, movimento reduzido, tipografia do texto legal |
 | `src/styles/tokens.css` | tokens do handoff em `@theme` (`GHF Kit v3`, D11): superfícies, texto, acento por app (`data-app` no `<html>` → `*-app-acc`), papel da legal, semânticos, raio, sombra, tipografia, Inter. Único arquivo com cor literal depois da fatia 10 do WP-10 |

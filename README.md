@@ -60,7 +60,7 @@ Cada arquivo de `src/content/legal/` vira uma URL: `src/content/legal/lottoexper
 
 ## 🛠️ Como rodar
 
-Precisa de Node 22.23.4 e Python 3.
+Precisa de Node 22.23.5 (mínimo 22.23.4) e Python 3.
 
 ```bash
 npm ci && npm run build                # gera dist/

@@ -63,6 +63,6 @@ quatro repositórios em 2026-10-12: só `lottoexpert-privacy.html` e o convite).
 `astro.config.mjs`, `package.json`, `.github/workflows/deploy.yml` e `pr.yml`,
 `tools/check_site.py` (`CONTRATUAIS`, §4), ADR-001, D2, D5, D9, WP-07 e WP-08.
 
-[^wp25]: WP-25 (2026-11-21): Astro 7.4.7 e Node 22.23.4, pela mesma política de versão exata
+[^wp25]: WP-25 (2026-11-21): Astro 7.4.7 e Node 22.23.5 no CI (piso 22.23.4), pela mesma política de versão exata
     (`package.json` sem `^`/`~`, `node-version` exato no `setup-node`). A 7.4.7 sobe o piso de
     `engines.node` para `>=22.23.4`; a decisão não muda.
