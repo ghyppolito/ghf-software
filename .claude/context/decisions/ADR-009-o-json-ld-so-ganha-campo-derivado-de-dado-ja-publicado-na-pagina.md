@@ -21,14 +21,15 @@ mínimos; a fatia 10a do WP-10 é o WP que leva os campos novos, sem texto novo 
    - `image`: a URL absoluta do favicon do app em `public/assets/` (URL fixa, ADR-006), o mesmo
      arquivo do `favicon` do `Base`;
    - `offers.availability`: `https://schema.org/InStock`, derivado de o app não ser `indisponivel`.
-3. `Organization` ganha `description` (a `meta description` da home na língua) e `sameAs` (os
-   canais da GHF que o rodapé da home publica, de uma constante só).
+3. `Organization` ganha `description` (a `meta description` da home na língua), `sameAs` (os
+   canais da GHF que o rodapé da home publica, de uma constante só) e `foundingDate`.
 4. `inLanguage` fica de fora: a língua da página não é a língua do app, e nenhuma fonte do app diz
-   em que línguas ele está. `foundingDate` fica de fora até o usuário dizer que "Desde 2004"
-   (`home.ts`) é a data de fundação.
+   em que línguas ele está. `foundingDate` entra: o usuário respondeu em 2026-11-22 que "Desde 2004"
+   é o ano de fundação. O valor sai de `since_2004` em `home.ts` (`"2004"`), e o §14 exige igualdade
+   estrita com ele.
 5. O `check_site.py` §14 continua com chaves fechadas e passa a conferir cada campo novo contra a
    página: `url` = canonical, `description` = `meta description`, `image` = arquivo existente do
-   site, `sameAs` contido nos links externos do `<footer>`.
+   site, `sameAs` contido nos links externos do `<footer>`, `foundingDate` = o ano de `since_2004`.
 
 ## O que isto fecha
 
@@ -38,8 +39,7 @@ mínimo custa tirar as chaves de `apps.ts` e do conjunto de `CHAVES_JSONLD`.
 
 ## O que isto mantém aberto
 
-`inLanguage` quando o README ou o ASO do app listar as línguas da interface. `foundingDate`, por
-resposta do usuário. `screenshot` quando a landing publicar as capturas da D26. Um app retirado da
+`inLanguage` quando o README ou o ASO do app listar as línguas da interface. `screenshot` quando a landing publicar as capturas da D26. Um app retirado da
 Play muda o `availability` pelo `indisponivel`, sem editar o JSON-LD.
 
 ## Onde olhar

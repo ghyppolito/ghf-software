@@ -375,7 +375,10 @@ prova é o checklist de navegador.
     posição diferente da ordem: a 10a vem logo depois da 6, a 10b é a última.
 
     **10a. Aceite parcial** (logo depois da 6, antes das landings em evolução). Só o que não depende
-    das fatias 7 a 9.
+    das fatias 7 a 9. **Feita em 2026-11-22** (commits 4a93d81, 4b32fd9 e 7d98a3c, mais a0b56c9 da D31; branch
+    `feat/wp-10-fatia-10a-aceite-parcial`, empilhada sobre `feat/wp-10-fatia-6-home` (PR #52), não enviada). Nenhuma
+    auditoria trouxe achado alto; os médios foram corrigidos em 7d98a3c (`foundingDate` e `image` estritos, parse de
+    comentários em `apps.ts`, testes do §14).
     **Achados:** `ORCAMENTO-404-FROUXO-01` (reapertar o teto da 404), `APPS-LISTA-DUPLICADA-01`
     (fonte única da lista de apps em `src/i18n/apps.ts`, consumida pela 404 e pelo `Footer`),
     `FAQ-SINAL-ABERTO-01`, `LANDING-JSONLD-CAMPOS-01` e `CORONA-GLOW-ORFAO-01` (apaga só o
@@ -390,7 +393,7 @@ prova é o checklist de navegador.
     migraram; entram na 10b.
     **Veredito do `site-arquiteto` (2026-11-22): aprovado, risco médio.** Nenhuma URL contratual,
     nem deploy, nem stack. O JSON-LD amplia o conjunto fechado do ADR-005 §6: entra pelo ADR-009 (só
-    campo derivado de dado já publicado na página; `inLanguage` e `foundingDate` fora). As regras D31
+    campo derivado de dado já publicado na página; `inLanguage` fora; `foundingDate` entra depois da resposta do usuário em 2026-11-22: "Desde 2004" é o ano de fundação). As regras D31
     e `atualizadoEm` apertam o `check_site.py` e não pedem ADR.
     **Desenho:**
     - (A) A fonte única da lista de apps é `apps.ts`. Ele ganha `termos?`, `COR_APP` (classes literais)
@@ -422,6 +425,37 @@ prova é o checklist de navegador.
       auditoria reprovada. O `tools/lighthouse.py` não muda: a régua de 95 em todas as páginas é da 10b.
     O plano completo do `site-dev` sai do arquiteto, com comandos e as mutações que têm de dar ❌.
     **Bloqueio:** nenhum. **Copy:** nenhuma.
+    **Entregue (2026-11-22).**
+    - **`apps.ts` fonte única** (`icone`, `tag`, `termos?`, `COR_APP`, `REDES_GHF`). Footer, Nav, 404, Home e
+      `VerTodasApps` leem dali. `ListaApps.astro` é compartilhado pela 404 e pela Home, com a prop `variante`. O
+      `diff -r` do `dist/` saiu vazio na refatoração, também com `GHF_HOJE`.
+    - **`check_site.py`:** §20 (D31) recalcula a partição e confere os `<article>` em `/` e `/en/`, e avisa a 30
+      dias ou menos do corte; §21 confere `atualizadoEm` contra a tag do repositório do app (aviso se o
+      repositório não existe; erro se a tag não existe ou a data diverge); §14 confere os campos do ADR-009.
+    - **`tools/regras_apps.py` e `tools/test_regras_apps.py`:** 34 testes de apps (42 com os de i18n), sobre
+      `tools/fixtures/apps/`. O teste entrou em `pr.yml`, no `CLAUDE.md` e no `docs/ARQUITETURA.md`, só nas linhas
+      do unittest e da verificação, com autorização do usuário.
+    - **JSON-LD (ADR-009):** `MobileApplication` ganhou `url`, `description`, `image` e `offers.availability`;
+      `Organization` ganhou `description`, `sameAs` e `foundingDate` "2004" (confirmado pelo usuário em
+      2026-11-22; ver D30).
+    - **FAQ:** o "+" vira "−" quando abre, só por CSS. Desvio documentado do export, que não troca o sinal.
+    - **Home:** Sobre e Privacidade viraram duas regiões dentro de `div#sobre`. `.corona-glow` removido. Teto da
+      404 de 193712 / 33006 para 170175 / 17522 B (medido + 20%). Fixture do sem-polyfill regenerada.
+    - **Aceite parcial:** acessibilidade 100 nas 15 URLs já redesenhadas (10 legais, a 404, `/`, `/en/` e o
+      EclipseGo em pt e en), pelo Lighthouse avulso; nenhum par de contraste abaixo de AA (tabela no apêndice
+      deste WP; o menor par de texto é 5,97 e o botão ativo do EclipseGo dá 4,80); `lighthouse.py` com o
+      orçamento cumprido.
+    - **Achados resolvidos:** `ORCAMENTO-404-FROUXO-01`, `APPS-LISTA-DUPLICADA-01`, `ICONES-APPS-DUPLICADOS-01`,
+      `FAQ-SINAL-ABERTO-01`, `LANDING-JSONLD-CAMPOS-01`, `ORGANIZATION-JSONLD-MINIMO-01`, `CORONA-GLOW-ORFAO-01`,
+      `BUILD-RELOGIO-NAO-REPRODUTIVEL-01`, `APPS-ATUALIZADO-EM-SEM-CHECK-01`, `HOME-ORDEM-SEM-CHECK-01`,
+      `SOBRE-REGIAO-ENGLOBA-PRIVACIDADE-01`; `ROTULO-DATA-DUAS-FONTES-01` fecha como "mantém duas fontes" (os
+      rótulos medem coisas diferentes: a data da release no card e a revisão do texto legal que o §4 lê;
+      comentário em `home.ts`).
+    - **Achados novos:** `LISTAAPPS-VARIANTES-01` e `FAVICON-LITERAL-LEGAIS-01` (fatia 10b);
+      `JSONLD-IMAGE-FAVICON-PEQUENO-01` (WP-20 ou 10b); `ORG-LOGO-NAO-QUADRADO-01` e
+      `OG-IMAGE-QUADRADA-LANDINGS-01` (WP-20); `SOFTWAREAPP-SEM-RATING-01` (nota);
+      `SYNC-LEGAL-DOCSTRING-GIT-01` (WP-28).
+    **Checklist de navegador (usuário):** ver `handoff.md`, seção 3.
 
     **10b. Limpeza e aceite final** (a última fatia, depois da 9). Saem a camada de legado
     (`src/styles/legado.css`, os nomes `brand.*` e os temas `[data-tema]`). O grep de tokens fica
@@ -452,3 +486,100 @@ do WP-20 (D16); `LOGO-ANO-E-FUNDO-ESCURO-01` foi para o WP-20 e não bloqueia o 
 
 **Respostas do usuário (2026-11-21, "Segue o recomendado").** As seis perguntas do veredito ficam na
 opção (A): 1 D24, 2 D25, 3 D26, 4 D27, 5 logo (acima), 6 convite no WP-24.
+
+## Apêndice — tabela de contraste da fatia 10a (`site-ux`, Chrome headless, 2026-11-22)
+
+Escopo: 10 legais (`LegalLayout`, papel), 404, Home, EclipseGo (template `landing/*`), pt e en
+(mesmos tokens nas duas línguas; en não altera cor). Fundos: `bg` #0b1120, `surface` #111827,
+`raised` #1a2335, `footer` #0e1524; papel `paper` #f7f7f5, `paper-chip` #ecebe7,
+`paper-raised` #ffffff. Mínimo: 4,5 texto; 3 texto grande (≥24 px ou ≥18,66 px negrito),
+componente de UI e foco.
+
+### Tabela 1: Texto e controle sobre o tema escuro
+
+| Par (token sobre token) | bg | surface | raised | Onde aparece |
+|---|---|---|---|---|
+| `text` #f3f4f6 | 17,11 | 16,12 | 14,29 | corpo, títulos, links (`text-text`), Nav, Home, landing |
+| `text-2` #c3c9d3 | 11,31 | 10,66 | 9,44 | texto secundário, resposta do FAQ, etiqueta "Grátis" (11 px), seta do seletor |
+| `text-muted` #97a0b0 | 7,15 | 6,73 | 5,97 | legendas, "Atualizado em" (12 px), tag do app, h3 "Todos os apps" (13 px), 404 "Page not found", rodapé* |
+| `brand` #3cc8d0 (texto) | 9,29 | 8,76 | 7,76 | kicker "GHF Software · desde 2004", `✓` do check do seletor, links ativos |
+| `success` #c5e86c (`✓`) | 13,57 | 12,78 | 11,33 | selo "Publicado" nos cartões da Home e em "Todos os apps" |
+| `success` sobre `success-tint` #1e2710 | — | — | — | 11,19 (selo, se usado com tinta) |
+| `text-2` / `text-muted` sobre `footer` #0e1524 | — | — | — | 10,96 / 6,92 (rodapé, 13 px); `text` 16,57 |
+
+\* Footer: `text-muted` sobre `border-t` é divisória, não texto; o texto é sobre `footer`/`bg`.
+
+### Tabela 2: Acento por app (texto e primário)
+
+Texto de acento (`text-app-acc`: kicker, título de Prova, "Pro", cabeçalho de planos; e
+`text-app-*` nas setas →, 14 px negrito):
+
+| App | `app-acc` | sobre bg | sobre surface | sobre raised | `bg` sobre `acc` (texto do botão) |
+|---|---|---|---|---|---|
+| LottoExpert | #a78bfa | 6,92 | 6,52 | 5,78 | 6,92 |
+| TopoWalk | #e38a57 | 7,21 | 6,79 | 6,02 | 7,21 |
+| Pole Position | #5fd47e | 10,05 | 9,47 | 8,39 | 10,05 |
+| EclipseGo | #ee737d | 6,62 | 6,24 | 5,53 | 6,62 |
+| sem app (teal GHF) | #3cc8d0 | 9,29 | 8,76 | 7,76 | 9,29 |
+
+Estados do botão primário (`CtaPlay`: texto `bg` sobre o fundo do botão):
+
+| App | repouso | hover (`color-mix` 80% + branco) | ativo (88% + preto) |
+|---|---|---|---|
+| LottoExpert | 6,92 | #b7a3fd → 8,67 | #8c74d3 → 4,98 |
+| TopoWalk | 7,21 | #eba27a → 8,95 | #bf7448 → 5,21 |
+| Pole Position | 10,05 | #85dd98 → 11,47 | #4fb369 → 7,16 |
+| EclipseGo | 6,62 | #f59096 → 8,35 | #c96068 → 4,80 |
+| teal (sem app) | 9,29 | #72d3d9 → 10,79 | #31a8af → 6,59 |
+
+O mínimo é 4,80 (EclipseGo ativo): passa AA com 0,30 de folga; é o par mais apertado do site.
+
+Acento como controle/borda (3:1): `border-app-acc` do selo "Pro" em Funcionalidades = valores da
+tabela "sobre bg/surface" acima (≥ 5,78): passa. Faixa colorida dos cartões da Home (`bg-app-*`,
+decorativa) também.
+
+Contorno `app-*-edge` sobre bg: lotto 3,31 · topo 2,99 · pole 2,98 · eclipse 2,48. Abaixo de 3:1
+**mas decorativo por decisão documentada** (`tokens.css:17-19`; sempre com texto ao lado).
+Verificar que nenhum componente o use sozinho: `grep` não achou uso de `app-*-edge` em classe
+(só via `app-acc-edge`, sem consumidor) — nada a marcar.
+
+### Tabela 3: Limites, hover, ativo e foco
+
+| Par | Razão | Onde / observação |
+|---|---|---|
+| `border-strong` #66738d sobre bg / surface / raised | 3,95 / 3,72 / 3,30 | contorno de selo "Grátis", botões de contorno, seta do seletor: ≥ 3 passa |
+| `border` #243046 sobre bg / surface / raised | 1,42 / 1,34 / 1,19 | divisórias (`border-t`, cartões): **decorativo**, sem informação |
+| foco `brand` #3cc8d0 (anel 2 px, offset 3) sobre bg / surface / raised / footer | 9,29 / 8,76 / 7,76 / ~8,9 | `anel-foco`, `anel-foco-interno`; FAQ summary 3 px interno sobre raised: 7,76 |
+| hover `bg-raised` com `text` / `text-2` / `text-muted` | 14,29 / 9,44 / 5,97 | summary do FAQ, itens do menu, cartões |
+| link sublinhado `decoration-brand` (2→ hover 2 px) sobre bg | 9,29 | links de privacidade (≥ 3 para o traço) |
+| `active:text-brand` sobre bg | 9,29 | links de Privacidade e Nota de planos |
+| seleção: `bg` sobre `brand` (`selection:`) | 9,29 | todas as páginas escuras |
+| `text-bg` sobre `app-acc` | ver 3.2 | botão Play |
+
+### Tabela 4: Papel (10 páginas legais, `LegalLayout`)
+
+| Par | paper | paper-chip | paper-raised | Onde |
+|---|---|---|---|---|
+| `paper-ink` #15181c | 16,60 | 14,93 | 17,81 | corpo, títulos, hover do sumário |
+| `paper-text-2` #4a5059 | 7,58 | 6,82 | 8,13 | data, números do sumário, rótulo "Nesta página", itens |
+| `paper-link` #0a6e75 (link e foco) | 5,59 | 5,03 | 6,00 | links, anel de foco (3:1 exigido; passa) |
+| `paper-link-hover` #07565c | 7,85 | 7,06 | 8,42 | hover de link |
+| `paper` sobre `paper-link` (`selection:`) | 5,59 | — | — | seleção de texto |
+| `paper-link` / `paper-ink` sobre `paper-chip` | — | 5,03 / 14,93 | — | chip da data, `code`, cabeçalho de tabela, hover do sumário |
+| `paper-border` #d9d7d1 sobre paper | 1,34 | — | — | divisória decorativa |
+| `brand` #3cc8d0 sobre paper | 1,89 | — | — | **não usado no papel** (por desenho; ver tokens.css:18) |
+| acento `-light` por app sobre paper | lotto 6,62 · topo 5,65 · pole 5,13 · eclipse 5,73 | — | — | só se a legal usar o acento do app; hoje o consumidor é o link do papel |
+
+Impressão: `print:bg-paper-raised` (branco): `paper-ink` 17,81.
+
+### Pares abaixo de AA
+
+**nenhum** para texto (mínimo medido: `text-muted` sobre `raised` 5,97; `paper-link` sobre
+`paper-chip` 5,03; botão EclipseGo ativo 4,80) nem para controle/foco (≥ 3,30).
+
+Fora do critério por decisão documentada (não é texto nem controle): `border` 1,19–1,42,
+`app-*-edge` 2,48–3,31 e `paper-border` 1,34, todos decorativos; `brand` sobre `paper` 1,89 não
+é usado.
+
+
+Fora da tabela (não redesenhadas, entram na 10b): `TopoWalk.astro`, `LottoExpert.astro` e `PolePosition.astro` ainda usam `brand-accent`/`brand-primary` (legado); o contraste delas é medido na fatia de cada landing.
