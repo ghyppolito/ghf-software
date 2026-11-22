@@ -2,8 +2,8 @@
 // fatia 5; D29). Origem de cada frase (D25):
 // - `meta`: o `title` e a `description` já publicados (WP-21: o `title` é o `hero_badge`; a
 //   `description` é o "Resumo em uma frase" de ../eclipse-go/docs/EclipseGoContent.md).
-// - `resumo`: cópia de home.ts até a fatia 6; a fatia 6 passa a Home a ler daqui e apaga as 3
-//   chaves de home.ts (`app_eclipse_tag`, `app_eclipse_desc`, `hero_eclipse_desc`).
+// - `resumo`: as chaves `app_eclipse_tag`, `app_eclipse_desc` e `hero_eclipse_desc` da home
+//   antiga, movidas sem edição; o card da Home lê daqui `tag` e `curta` (WP-10, fatia 6).
 // - `hero`: `hero_badge`, `hero_title_1` + `hero_title_2` e `hero_desc` publicados; a `meta` é a
 //   resposta 3 do usuário (2026-11-22: app gratuito; `minSdk 26` do README = Android 8.0).
 // - `funcionalidades`: `feat3_*`, `feat2_*` e `feat4_*` publicados (o `feat1` "100% Offline" virou

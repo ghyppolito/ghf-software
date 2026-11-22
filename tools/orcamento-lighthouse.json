@@ -8,7 +8,7 @@
     "cls_max": 0.1
   },
   "paginas": {
-    "/": {"bytes_total": 354427, "bytes_imagem": 142673},
+    "/": {"bytes_total": 184844, "bytes_imagem": 18234},
     "/lottoexpert.html": {"bytes_total": 305384, "bytes_imagem": 55144},
     "/topowalk.html": {"bytes_total": 210223, "bytes_imagem": 21583},
     "/poleposition.html": {"bytes_total": 260999, "bytes_imagem": 46730},

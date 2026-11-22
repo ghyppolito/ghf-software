@@ -65,8 +65,15 @@ test('fixture: as @property ficam, iguais', () => {
   assert.deepEqual(props(saida), props(entrada));
 });
 
+// Plugin que vira no-op aparece aqui. A régua antiga (saída < 90% da entrada) dependia de quanto
+// polyfill o CSS do site gera, não do plugin: a Home do WP-10 fatia 6 tirou a maior parte dos
+// color-mix com opacidade e o corte caiu para ~8% com o plugin funcionando (decisão do usuário,
+// 2026-11-22). Agora: a entrada tem os dois polyfills (há o que cortar), e a saída é menor. A
+// ausência deles na saída é o teste "nenhum @supports (color-mix) nem @layer properties…".
 test('fixture: o CSS encolhe (plugin que vira no-op aparece aqui)', () => {
-  assert.ok(saida.length < entrada.length * 0.9, `${saida.length} de ${entrada.length}`);
+  assert.ok(RE_COLOR_MIX.test(entrada), 'a entrada não tem @supports (color-mix): fixture sem o que cortar');
+  assert.ok(RE_PROPERTIES.test(entrada), 'a entrada não tem @layer properties com margin-trim');
+  assert.ok(saida.length < entrada.length, `${saida.length} de ${entrada.length}`);
 });
 
 // ------------------------------------------------------------------ casos sintéticos
