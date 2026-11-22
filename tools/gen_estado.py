@@ -56,7 +56,6 @@ SEQUENCIA = [
 # Bloqueios ativos: (WP, motivo, desde). Lista escrita à mão; entrada de WP `done`
 # é filtrada, para a tabela seguir o front-matter.
 BLOQUEIOS = [
-    ("WP-19", "export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true)", "2026-10-13"),
 ]
 
 wps = []
