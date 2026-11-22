@@ -4,13 +4,13 @@ titulo: A home e as landings de app seguem o sistema visual do handoff
 area: design
 status: doing
 depende_de: [WP-06, WP-08]
-adr: [ADR-001, ADR-004, ADR-006, ADR-007, ADR-008]
+adr: [ADR-001, ADR-004, ADR-005, ADR-006, ADR-007, ADR-008, ADR-009]
 spec: docs/AVALIACAO.md
 decisoes: [D4, D11, D12, D24, D25, D26, D27, D29, D30, D31]
 tamanho: L
 risco: medio
 visual: true
-branch: feat/wp-10-fatia-6-home
+branch: feat/wp-10-fatia-10a-aceite-parcial
 ---
 
 # WP-10 — A home e as landings de app seguem o sistema visual do handoff
@@ -34,7 +34,17 @@ página usa; `docs/AVALIACAO.md` §3.3.
 `src/pages/**` (pt e en), `src/assets/img/**` (imagens novas, pelo `astro:assets`; ADR-006 e
 `check_site.py` §13 proíbem imagem exibida em `public/`), `src/i18n/**`, `src/styles/tokens.css` e
 `tools/fixtures/sem-polyfill/*` (regenerada pelo ADR-008 §7 quando o CSS muda). Fatia 2:
-`tools/check_site.py` (§19, o rodapé com as 5 URLs legais). Fatia 3: `tools/check_site.py` §12. O convite fica de fora (ver "Plano").
+`tools/check_site.py` (§19, o rodapé com as 5 URLs legais). Fatia 3: `tools/check_site.py` §12. Fatia 10a: `tools/check_site.py` (§14 JSON-LD do ADR-009; §20
+partição D12 da Home, D31; §21 `atualizadoEm` × tag do app), `tools/regras_apps.py` e
+`tools/test_regras_apps.py` (novos), `tools/fixtures/apps/*` (novos), a linha do unittest em
+`.github/workflows/pr.yml` (`deploy.yml` não muda), `tools/orcamento-lighthouse.json` (só `/404.html`),
+`src/styles/legado.css` (só `.corona-glow` e `@keyframes corona-pulse`), `tools/fixtures/sem-polyfill/*`,
+`src/i18n/apps.ts`, `src/i18n/home.ts` (comentário do `atualizado`), `src/assets/icones-apps.ts`,
+`src/components/{Footer,Nav,Home,VerTodasApps,ListaApps}.astro`, `src/components/landing/Faq.astro`,
+`src/components/paginas/Pagina{Home,EclipseGo,TopoWalk,PolePosition,LottoExpert}.astro` (descrição e
+`favicon` do JSON-LD; nada mais nas landings em evolução), `src/pages/404.astro`, e as linhas do
+unittest e do `check_site.py` em `CLAUDE.md` (Comandos) e `docs/ARQUITETURA.md`. Fora:
+`tools/sync_legal.py` (`PP-ORIGEM-CAMINHO-01` é do WP-28) e `tools/lighthouse.py`. O convite fica de fora (ver "Plano").
 
 **Passos:** por página: `site-ux` DESENHAR (referência no handoff, estados) → `site-dev` →
 `/verify` → auditoria (`site-ux` AUDITAR + `site-qa` + `site-seo-perf`). Home depois do template
@@ -378,6 +388,39 @@ prova é o checklist de navegador.
     acessibilidade ≥ 95 nas páginas já redesenhadas: as 10 legais, a 404, a Home e o EclipseGo, pt e
     en. As landings de TopoWalk, Pole Position e LottoExpert ficam de fora, porque ainda não
     migraram; entram na 10b.
+    **Veredito do `site-arquiteto` (2026-11-22): aprovado, risco médio.** Nenhuma URL contratual,
+    nem deploy, nem stack. O JSON-LD amplia o conjunto fechado do ADR-005 §6: entra pelo ADR-009 (só
+    campo derivado de dado já publicado na página; `inLanguage` e `foundingDate` fora). As regras D31
+    e `atualizadoEm` apertam o `check_site.py` e não pedem ADR.
+    **Desenho:**
+    - (A) A fonte única da lista de apps é `apps.ts`. Ele ganha `termos?`, `COR_APP` (classes literais)
+      e `REDES_GHF`. Footer, 404, Nav, Home e VerTodasApps leem `ORDEM_APPS`, `apps`, `iconesApps`
+      e `COR_APP`. A lista da 404 e o `VerTodasApps` passam a usar um `ListaApps.astro` só.
+    - (A, prova) A saída de `dist/` fica igual byte a byte (`diff -r` antes e depois).
+    - (B) `ROTULO-DATA-DUAS-FONTES-01`: os dois rótulos ficam. Os fins são diferentes: o
+      `rotuloData` é lido pelo parse da data legal (§4).
+    - (C) O Python lê `apps.ts` por parse fechado contra falha, sem JSON gerado. O código fica em
+      `tools/regras_apps.py`.
+    - (C, §20) Recalcula a D12 com a data de hoje. `GHF_HOJE` vale só fora do CI. Confere os
+      `<article>` de `/` e `/en/`: a ordem, a Play, o `<time>` e o resto em "Todos os apps".
+      Na meia-noite UTC é aviso. A 30 dias do corte, avisa.
+    - (C, §21) A `tag` vira campo de `apps.ts`. O repositório sai de `ORIGENS`. Repositório
+      ausente dá aviso. Tag inexistente ou data diferente dá erro. Tag mais nova dá aviso. O Pole
+      Position fica em aviso até o WP-28.
+    - (D) Os testes ficam em `tools/test_regras_apps.py` e entram no `pr.yml`. A opção (c) da D31
+      fica fora: pediria afrouxar a guarda do `GHF_HOJE` no CI. O `VerTodasApps` é exercitado no
+      `/verify` com `GHF_HOJE`.
+    - (E) JSON-LD pela mesma função nas 8 landings. É seguro nas landings em evolução, porque
+      todo valor é estável ou é a `meta description` da própria página.
+    - (F) Apaga `.corona-glow`.
+    - (G) FAQ e Sobre/Privacidade cabem, com desenho do `site-ux`.
+    - (H) A 404 fica com o medido + 20%.
+    **Prova do aceite parcial:**
+    - A tabela de contraste do `site-ux` em Chrome headless.
+    - O Lighthouse de acessibilidade avulso, pelo `npx lighthouse` do lockfile, uma run por URL nas
+      15 URLs (10 legais, a 404, `/`, `/en/` e o EclipseGo em pt e en). Nota ≥ 95 e nenhuma
+      auditoria reprovada. O `tools/lighthouse.py` não muda: a régua de 95 em todas as páginas é da 10b.
+    O plano completo do `site-dev` sai do arquiteto, com comandos e as mutações que têm de dar ❌.
     **Bloqueio:** nenhum. **Copy:** nenhuma.
 
     **10b. Limpeza e aceite final** (a última fatia, depois da 9). Saem a camada de legado
