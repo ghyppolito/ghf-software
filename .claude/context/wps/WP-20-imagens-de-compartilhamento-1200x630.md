@@ -15,7 +15,7 @@ branch: feat/wp-20-imagens-de-compartilhamento
 
 # WP-20 — Imagens de compartilhamento 1200×630 por página e twitter:card coerente
 
-**Depende de:** WP-11 · **Achados roteados:** `OG-IMAGE-1200-PRODUCAO-01`, `TWITTER-CARD-IMAGEM-QUADRADA-01`, `OG-IMAGE-ALT-TYPE-01`, `ORG-LOGO-NAO-QUADRADO-01`, `OG-MOCKUP-JPEG-PESADO-01` (og:image; a parte exibida saiu no WP-12)
+**Depende de:** WP-11 · **Achados roteados:** `OG-IMAGE-1200-PRODUCAO-01`, `TWITTER-CARD-IMAGEM-QUADRADA-01`, `OG-IMAGE-ALT-TYPE-01`, `ORG-LOGO-NAO-QUADRADO-01`, `OG-MOCKUP-JPEG-PESADO-01` (og:image; a parte exibida saiu no WP-12), `LOGO-ANO-E-FUNDO-ESCURO-01` (do WP-10, 2026-11-21)
 
 **Objetivo:** a home, as 10 legais e as 4 landings (pt e en) compartilham uma imagem 1200×630 de verdade, e as tags
 `og:image:*`/`twitter:*` descrevem exatamente essa imagem.
@@ -27,11 +27,13 @@ para 2:1. O `logo` do `Organization` (`src/i18n/apps.ts`) é `GHFSoftware.png`, 
 **Ler antes:** ADR-005; D16 em `decisoes.md`; `src/layouts/Base.astro` (og e twitter); `src/i18n/apps.ts`.
 
 **Arquivos-alvo:** `assets/` (5 imagens novas + logo quadrado), `src/layouts/Base.astro`, `src/i18n/apps.ts`,
-`src/i18n/*.ts` (alt por página), `tools/check_site.py`. Fora: `assets/lottoexpert_app_mockup.png` e o og do convite (D13).
+`src/i18n/*.ts` (alt por página), `tools/check_site.py`, `src/components/Logo.astro` e o logo
+exibido em `src/assets/img/` (ADR-006; o `Logo.astro` nasce no WP-10 fatia 2 com o PNG atual). Fora: `assets/lottoexpert_app_mockup.png` e o og do convite (D13).
 
 **Passos:**
 1. **Usuário:** sessão no Claude Design com o handoff: 1 imagem da marca GHF (home e legais) e 1 por app, 1200×630, ≤ 300 KB,
-   mais um logo quadrado. Export em `design/handoff/<data>/`.
+   mais um logo quadrado e o logo do site em versão clara e escura, com "desde 2004"
+   (`LOGO-ANO-E-FUNDO-ESCURO-01`). Export em `design/handoff/<data>/`.
 2. Agente: copiar para `assets/`, apontar `Base.astro` e `apps.ts`, declarar width/height reais e `og:image:type`.
 3. Agente: `og:image:alt` e `twitter:image:alt` por página, pt e en; `twitter:card` coerente com a proporção da imagem.
 4. Agente: `check_site.py` passa a exigir 1200×630, ≤ 300 KB e `alt` presente.

@@ -4,7 +4,7 @@ Site estático da GHF Software: landing corporativa, uma landing por app (TopoWa
 Pole Position, EclipseGo), políticas de privacidade, termos de uso e a página do convite de bolão
 do LottoExpert. **Em produção**, servido pelo GitHub Pages (por Actions) a partir da branch `master`.
 
-As páginas são geradas pelo Astro a partir de `src/` (Tailwind compilado) em `dist/`, com `public/`
+As páginas são geradas pelo Astro a partir de `src/` (Tailwind 4 pelo plugin do Vite, ADR-008) em `dist/`, com `public/`
 copiado byte a byte; o CI do PR (`check_site.py`, html-validate, lychee) prova `dist/`. A
 evolução dessa stack é o backlog (ver `docs/AVALIACAO.md`). Este arquivo é curto de propósito — leia inteiro. O detalhe
 está em `.claude/context/` e é lido **sob demanda**:
@@ -114,6 +114,7 @@ python3 tools/check_site.py                                   # sobre dist/ (= -
                                                               # links, assets, metadados, datas legais contra src/content/legal/, copy
 (cd dist && sha256sum --quiet -c ../tools/contrato.sha256)    # convite, assetlinks, og:image do convite e CNAME iguais ao publicado (D13)
 python3 -B -m unittest tools/test_regras_i18n.py              # regras de i18n (ADR-007) sobre tools/fixtures/i18n/
+npm run test:css                                              # plugin src/styles/sem-polyfill.mjs (ADR-008 §7) sobre tools/fixtures/sem-polyfill/
 python3 tools/gen_estado.py && python3 tools/check_plano.py   # backlog: regenerar e verificar
 python3 -m http.server 8080 -d dist                           # servir dist/ para inspeção (Claude in Chrome ou usuário)
 python3 tools/sync_legal.py --todos --check                    # o site está atrás do app? igual / atrás / à frente-divergente / origem ausente
@@ -139,5 +140,5 @@ mão): build, `check_site.py --raiz dist`, contrato byte a byte e publicação d
 | Texto legal de um app | repositório do app, `docs/PRIVACY_POLICY.md` / `TERMS_OF_SERVICE.md` |
 | Copy de produto | `../lotto-expert/docs/ASO_METADATA.md`, `docs/<APP>_README.md` |
 | Dicionário i18n de uma página | `src/i18n/` (`ui.ts` nav/footer, `<pagina>.ts`, `legal.ts` hero e `<head>` das legais) |
-| Cores e fonte da marca | `tailwind.config.mjs` (brand.base/surface/primary/secondary/accent, Inter) com os valores por tema em `src/styles/global.css` |
+| Cores e fonte da marca | `src/styles/tokens.css` (`@theme` do Tailwind 4: tokens do handoff, acento por app via `data-app`, papel da legal, Inter; ADR-008); até a fatia 10 do WP-10, os nomes antigos `brand.*` e os temas `[data-tema]` ficam em `src/styles/legado.css` |
 | Deep link do bolão | `public/lotto-expert/sweepstake-invite/lottoexpert-invite.html`; formato é do app (ADR-006 lá) |

@@ -6,7 +6,7 @@ status: blocked
 depende_de: [WP-06]
 adr: []
 spec: docs/AVALIACAO.md
-decisoes: [D4, D8]
+decisoes: [D4, D8, D27]
 tamanho: S
 risco: baixo
 visual: true
@@ -16,6 +16,9 @@ branch: feat/wp-19-rodada-3-claude-design
 # WP-19 — A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2
 
 **Depende de:** WP-06 (handoff da rodada 2 vigente) · **Achados roteados:** DESIGN-RODADA-3-01
+
+**Nota (2026-11-21, D27):** home e landing a 768 ficam no layout fluido do export. O item 3 do
+pedido não exige ramo de tablet para elas; o checklist a 768 continua.
 
 **Objetivo:** existe `design/handoff/<AAAA-MM-DD>-rodada-3/`, exportado pelo usuário do Claude
 Design, que cobre os 8 itens do pedido abaixo, e `design/README.md` o nomeia como handoff vigente.

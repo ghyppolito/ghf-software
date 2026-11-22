@@ -1,0 +1,294 @@
+/*
+ * Camada de legado (ADR-008 §5, WP-10 fatia 1). Mantém montando as páginas ainda não
+ * redesenhadas, no Tailwind 4: os temas `[data-tema]`, os nomes `brand.*`, `amber.*` e `glow`
+ * da antiga configuração JS do Tailwind 3 (ADR-003) e o CSS próprio das páginas antigas, com cor
+ * literal.
+ * Paridade visual com o Tailwind 3 não é critério (ADR-008 §5); nada vai ao ar antes do
+ * redesenho (D13).
+ *
+ * A fatia 10 apaga este arquivo inteiro, mais:
+ * - o `@import './legado.css'` de src/styles/global.css;
+ * - os blocos "Texto legal por tema" de global.css (`[data-tema='…'] .legal-corpo …`), que
+ *   ficaram lá por ordem de cascata (vêm depois do `.legal-corpo` base). A fatia 3 troca o layout
+ *   das legais, mas eles só saem na fatia 10, com os temas `[data-tema]` (plano do WP-10);
+ * - o `data-tema` do src/layouts/Base.astro e a prop `tema` dos layouts.
+ * Daqui sai: `body` com cor literal, `.bg-grid-pattern`, `.glass-panel`, `.text-gradient*`,
+ * `.mockup-frame`, `.corona-glow`, `#navbar.scrolled`, `[data-tema='…'] .text-gradient`,
+ * `bg-tech-grid`, a compatibilidade de borda/cursor do preflight do Tailwind 3.
+ *
+ * Camadas. No Tailwind 3 tudo era CSS sem camada, antes dos utilitários: a especificidade
+ * decidia e, empatada, o utilitário vencia por vir depois. No Tailwind 4 os utilitários estão em
+ * `@layer utilities`, e CSS sem camada vence qualquer camada. Por isso:
+ * - classe simples (0,1,0) vai para `@layer components`: o utilitário continua vencendo
+ *   (ex.: `bg-brand-base` + `glass-panel` no menu móvel);
+ * - seletor mais específico que um utilitário (id, atributo + classe) fica sem camada: continua
+ *   vencendo o utilitário (ex.: `#navbar.scrolled` sobre o `py-5` do nav).
+ */
+
+/* ------------------------------------------------------------------ temas
+ * Um bloco por tema; o layout põe `data-tema` no <html>. Valores medidos nas configs inline das
+ * 10 páginas, inclusive as divergências entre landing e política do mesmo app. Cor em canais RGB
+ * (`R G B`): o mapeamento abaixo embrulha em `rgb()`, e o Tailwind 4 aplica a opacidade
+ * (`bg-brand-primary/20`) por `color-mix`. O Tailwind ainda emite uma reserva fora do
+ * `@supports (color-mix)`, que com `var()` sai opaca (`rgb(var(--brand-primary))`, sem os 20%);
+ * src/styles/sem-polyfill.mjs fica só com o `color-mix`, que todo navegador do piso da D24 tem.
+ * Abaixo do piso a declaração é inválida e a cor com opacidade some, o que a D24 aceita.
+ * Nav e Footer usam os canais direto
+ * (`drop-shadow-[0_0_15px_rgb(var(--brand-primary)/0.5)]`): continuam canais.
+ * Sombra ausente num tema é `0 0 #0000` (sem sombra): na página original a classe não existia.
+ */
+:root,
+[data-tema='ghf'] {
+  --brand-base: 11 17 32; /* #0B1120 */
+  --brand-surface: 17 24 39; /* #111827 */
+  --brand-primary: 16 185 129; /* #10B981 */
+  --brand-primary-hover: 5 150 105; /* #059669 */
+  --brand-secondary: 59 130 246; /* #3B82F6 */
+  --brand-accent: 6 182 212; /* #06B6D4 */
+  /* tons do Tailwind 3; só o TopoWalk os troca */
+  --amber-400: 251 191 36;
+  --amber-500: 245 158 11;
+  --amber-600: 217 119 6;
+  --amber-900: 120 53 15;
+  --sombra-glow: 0 0 20px rgba(16, 185, 129, 0.4);
+  --sombra-glow-blue: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+/* lottoexpert.html, lottoexpert-privacy.html, lottoexpert-terms.html */
+[data-tema='lottoexpert'],
+[data-tema='lottoexpert-privacy'],
+[data-tema='lottoexpert-terms'] {
+  --brand-primary: 139 92 246; /* #8B5CF6 */
+  --brand-primary-hover: 124 58 237; /* #7C3AED */
+  --sombra-glow: 0 0 20px rgba(139, 92, 246, 0.4);
+  --sombra-glow-blue: 0 0 #0000;
+}
+
+/* topowalk.html — primary verde, accent e escala amber terracota */
+[data-tema='topowalk'] {
+  --brand-accent: 181 84 28; /* #B5541C */
+  --amber-400: 217 119 54; /* #D97736 */
+  --amber-500: 181 84 28; /* #B5541C */
+  --amber-600: 140 63 17; /* #8C3F11 */
+  --amber-900: 74 33 9; /* #4A2109 */
+  --sombra-glow-blue: 0 0 #0000;
+}
+
+/* topowalk-privacy.html — primary terracota */
+[data-tema='topowalk-privacy'] {
+  --brand-primary: 181 84 28; /* #B5541C */
+  --brand-primary-hover: 142 64 20; /* #8E4014 */
+  --sombra-glow: 0 0 20px rgba(181, 84, 28, 0.4);
+}
+
+/* poleposition.html — accent lima */
+[data-tema='poleposition'] {
+  --brand-primary: 132 204 22; /* #84cc16 */
+  --brand-primary-hover: 101 163 13; /* #65a30d */
+  --brand-accent: 163 230 53; /* #a3e635 */
+  --sombra-glow: 0 0 #0000;
+  --sombra-glow-blue: 0 0 #0000;
+}
+
+/* poleposition-privacy.html — accent ciano */
+[data-tema='poleposition-privacy'] {
+  --brand-primary: 132 204 22; /* #84cc16 */
+  --brand-primary-hover: 101 163 13; /* #65a30d */
+  --sombra-glow: 0 0 20px rgba(132, 204, 22, 0.4);
+}
+
+/* eclipsego.html */
+[data-tema='eclipsego'] {
+  --brand-primary: 234 179 8; /* #EAB308 */
+  --brand-primary-hover: 202 138 4; /* #CA8A04 */
+  --brand-secondary: 99 102 241; /* #6366F1 */
+  --brand-accent: 245 158 11; /* #F59E0B */
+  --sombra-glow: 0 0 25px rgba(234, 179, 8, 0.35);
+  --sombra-glow-blue: 0 0 #0000;
+}
+
+/* eclipsego-privacy.html — mesmas cores, sombras de outra intensidade */
+[data-tema='eclipsego-privacy'] {
+  --brand-primary: 234 179 8; /* #EAB308 */
+  --brand-primary-hover: 202 138 4; /* #CA8A04 */
+  --brand-secondary: 99 102 241; /* #6366F1 */
+  --brand-accent: 245 158 11; /* #F59E0B */
+  --sombra-glow: 0 0 20px rgba(234, 179, 8, 0.4);
+  --sombra-glow-blue: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+/* ------------------------------------------------------------------ nomes da configuração do Tailwind 3
+ * `inline`: o utilitário resolve a variável no elemento, e o `data-tema` do <html> vale. */
+@theme inline {
+  --color-brand-base: rgb(var(--brand-base));
+  --color-brand-surface: rgb(var(--brand-surface));
+  --color-brand-primary: rgb(var(--brand-primary));
+  --color-brand-primaryHover: rgb(var(--brand-primary-hover));
+  --color-brand-secondary: rgb(var(--brand-secondary));
+  --color-brand-accent: rgb(var(--brand-accent));
+  /* topowalk.html sobrescrevia 400/500/600/900 (terracota); os demais tons são os padrão do v4 */
+  --color-amber-400: rgb(var(--amber-400));
+  --color-amber-500: rgb(var(--amber-500));
+  --color-amber-600: rgb(var(--amber-600));
+  --color-amber-900: rgb(var(--amber-900));
+  --shadow-glow: var(--sombra-glow);
+  --shadow-glow-blue: var(--sombra-glow-blue);
+  --shadow-glow-indigo: 0 0 25px rgba(99, 102, 241, 0.35);
+  --shadow-glow-accent: 0 0 20px rgba(132, 204, 22, 0.4);
+  --shadow-glow-amber: 0 0 20px rgba(181, 84, 28, 0.4);
+}
+
+/* `backgroundImage` do config JS não tem namespace no v4. `bg-gradient-radial` não migra: sem uso
+ * em src/. */
+@utility bg-tech-grid {
+  background-image:
+    linear-gradient(to right, #1f2937 1px, transparent 1px),
+    linear-gradient(to bottom, #1f2937 1px, transparent 1px);
+}
+
+/* ------------------------------------------------------------------ preflight do Tailwind 3
+ * O v4 troca a cor de borda padrão (gray-200 → currentColor) e tira o `cursor: pointer` do
+ * botão. Sem isto, todo `border` sem cor das páginas antigas ficaria da cor do texto (branco).
+ * Bloco de compatibilidade do guia de migração do Tailwind 4. */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  body {
+    background-color: #0b1120;
+    color: #f3f4f6;
+  }
+}
+
+/* ------------------------------------------------------------------ CSS próprio (classe simples)
+ * Copiado do <style> das páginas antigas (WP-08, fatias 1–5). */
+@layer components {
+  /* Fundo em grade (hero) */
+  .bg-grid-pattern {
+    background-color: #0b1120;
+    background-size: 40px 40px;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  }
+
+  /* Vidro */
+  .glass-panel {
+    background: rgba(17, 24, 39, 0.6);
+    /* prefixado antes: na ordem inversa o minificador (lightningcss) descartava o sem prefixo */
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Texto em gradiente (home) */
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, #3b82f6, #10b981);
+  }
+
+  /* LottoExpert (WP-08, fatia 2) */
+  .text-gradient-purple {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, #a855f7, #8b5cf6);
+  }
+
+  /* TopoWalk (WP-08, fatia 3) */
+  .text-gradient-amber {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, #b5541c, #d97736);
+  }
+
+  /* Pole Position (WP-08, fatia 4): moldura de celular dos mockups do hero */
+  .mockup-frame {
+    position: relative;
+    width: 260px;
+    height: 520px;
+    border-radius: 36px;
+    background: #000;
+    border: 8px solid #222;
+    box-shadow:
+      inset 0 0 0 4px #111,
+      0 25px 60px -15px rgba(132, 204, 22, 0.4);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s ease;
+  }
+
+  @media (min-width: 768px) {
+    .mockup-frame {
+      width: 320px;
+      height: 640px;
+      border-radius: 40px;
+      border-width: 10px;
+    }
+  }
+
+  .mockup-frame::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 150px;
+    height: 25px;
+    background: #222;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    z-index: 20;
+  }
+
+  /* EclipseGo (WP-08, fatia 5): brilho de coroa pulsando na moldura do celular do hero */
+  .corona-glow {
+    animation: corona-pulse 4s ease-in-out infinite;
+  }
+}
+
+@keyframes corona-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 25px rgba(234, 179, 8, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 50px rgba(234, 179, 8, 0.8),
+      0 0 10px rgba(99, 102, 241, 0.5);
+  }
+}
+
+/* ------------------------------------------------------------------ CSS próprio (específico)
+ * Sem camada: vence o utilitário, como no Tailwind 3 pela especificidade. */
+
+/* Nav: vidro ao rolar — vence o `py-5` do <nav> */
+#navbar.scrolled {
+  background: rgba(11, 17, 32, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* `.text-gradient` por tema: Pole Position era branco → lima; EclipseGo, dourado → índigo */
+[data-tema='poleposition'] .text-gradient {
+  background-image: linear-gradient(135deg, white, #84cc16);
+}
+
+[data-tema='eclipsego'] .text-gradient {
+  background-image: linear-gradient(135deg, #eab308, #6366f1);
+}

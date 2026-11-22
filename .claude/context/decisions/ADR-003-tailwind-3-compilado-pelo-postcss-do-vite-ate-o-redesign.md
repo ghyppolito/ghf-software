@@ -1,6 +1,6 @@
 # ADR-003 · O Tailwind é a v3.4 compilada pelo PostCSS do Vite até o redesign, com a cor de cada página em variável CSS
 
-**Data:** 2026-10-13 · **Estado:** aceita · **Origem:** D2 e ADR-002 deixaram versão e forma de
+**Data:** 2026-10-13 · **Estado:** substituída por ADR-008 (2026-11-21, D24) · **Origem:** D2 e ADR-002 deixaram versão e forma de
 integração do Tailwind para o WP-08
 
 ## Contexto

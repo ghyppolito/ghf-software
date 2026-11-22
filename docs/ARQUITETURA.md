@@ -10,15 +10,15 @@ sai de `src/pages/` (`tools/check_site.py` §7). Nav, footer e config mudam só 
 
 ---
 
-## 1. Build (ADR-002, ADR-003)
+## 1. Build (ADR-002, ADR-008)
 
 | Arquivo | Papel |
 |---|---|
-| `package.json` / `package-lock.json` | Astro, `@astrojs/markdown-satteri`, Tailwind 3.4.19, html-validate, lighthouse; Node 22.22 |
-| `astro.config.mjs` | `build.format: 'preserve'` (cada rota sai como `x.html`, igual às URLs contratuais), fonte Inter local pela API `fonts`, Sätteri com os plugins de `src/markdown/legal.mjs` |
-| `tailwind.config.mjs` | tokens `brand.*` (base, surface, primary, secondary, accent) por variável CSS, Inter |
-| `postcss.config.mjs` | Tailwind compilado pelo PostCSS do Vite (ADR-003) |
-| `src/styles/global.css` | valores dos tokens por tema (um tema por página), tipografia do texto legal |
+| `package.json` / `package-lock.json` | Astro, `@astrojs/markdown-satteri`, Tailwind 4.3.5 e `@tailwindcss/vite` 4.3.5, html-validate, lighthouse; Node 22.22 |
+| `astro.config.mjs` | `build.format: 'preserve'` (cada rota sai como `x.html`, igual às URLs contratuais), fonte Inter local pela API `fonts`, Sätteri com os plugins de `src/markdown/legal.mjs`, Tailwind pelo plugin do Vite (`vite.plugins`) e o piso de navegador no `cssTarget` (Safari 16.4, Chrome 111, Firefox 128; ADR-008 §4) |
+| `src/styles/global.css` | ponto de entrada do Tailwind 4 (`@import 'tailwindcss' source(none)` + `@source` só de `src/`, ADR-008 §3), CSS próprio sem cor literal, movimento reduzido, tipografia do texto legal |
+| `src/styles/tokens.css` | tokens do handoff em `@theme` (`GHF Kit v3`, D11): superfícies, texto, acento por app (`data-app` no `<html>` → `*-app-acc`), papel da legal, semânticos, raio, sombra, tipografia, Inter. Único arquivo com cor literal depois da fatia 10 do WP-10 |
+| `src/styles/legado.css` | até a fatia 10 do WP-10 (ADR-008 §5): temas `[data-tema]` (um por página), nomes `brand.*`/`amber.*`/`glow` do antigo `tailwind.config.mjs` em `@theme inline`, compatibilidade do preflight do v3 e o CSS próprio com cor literal das páginas antigas |
 
 `npm run build` = `astro build --force`. A saída é `dist/`, que não é versionada.
 
@@ -121,6 +121,7 @@ redirecionamento (o Android App Links não segue redirect):
 |---|---|
 | `tools/check_site.py` | sobre `dist/` (sem `dist/`, pede o build): URLs contratuais, links e assets, metadados, datas legais contra `src/content/legal/` e o commit do app, copy do LottoExpert (jogo responsável), `public/.well-known/assetlinks.json`, `hreflang`, língua dos links, `public/` fechado, SEO técnico, desempenho (sem fonte do Google, imagem pelo build), nenhum redirecionamento |
 | `tools/regras_i18n.py` + `tools/test_regras_i18n.py` | regras de i18n como funções puras, que o `tools/check_site.py` chama; testadas sobre `tools/fixtures/i18n/` |
+| `tools/test_sem_polyfill.mjs` (`npm run test:css`) | o plugin `src/styles/sem-polyfill.mjs` (ADR-008 §7) tira os polyfills sem perder seletor nem `@property`, sobre `tools/fixtures/sem-polyfill/` (CSS cru do Tailwind e saída esperada) e casos em linha |
 | `tools/contrato.sha256` | convite, `public/.well-known/assetlinks.json`, `og:image` do convite e `CNAME` iguais ao publicado |
 | `tools/sync_legal.py` | o espelho legal está igual, atrás ou divergente do app (`--todos --check`) |
 | `tools/lighthouse.py` | orçamento de bytes e Lighthouse mobile contra `tools/orcamento-lighthouse.json` |

@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**23 WPs** · 15 concluídos · 0 em andamento
+**25 WPs** · 15 concluídos · 0 em andamento
 
 ## Sequência recomendada
 
@@ -25,13 +25,14 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | # | WP | Status | Nota |
 |---|---|---|---|
 | 1 | [WP-19 — A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2](wps/WP-19-rodada-3-do-claude-design.md) | `blocked` | export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true) |
-| 2 | [WP-10 — A home e as landings de app seguem o sistema visual do handoff](wps/WP-10-redesign-com-o-handoff.md) | `todo` | redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08 |
-| 3 | [WP-20 — Imagens de compartilhamento 1200×630 por página e twitter:card coerente](wps/WP-20-imagens-de-compartilhamento-1200x630.md) | `todo` | imagens de compartilhamento 1200×630 (D16 A): marca para home e legais, uma por app; sessão do usuário no Claude Design, depois `twitter:card` e `og:image:alt`. M, `visual`, antes do deploy único (D13) |
-| 4 | [WP-16 — A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de](wps/WP-16-politica-do-poleposition-em-6-linguas.md) | `todo` | política do Pole Position em pt/en/es/fr/it/de, traduzida do pt de origem; pré-condição: cláusula de prevalência do pt no app (D8 b1, `PREVALENCIA-PT-NOS-APPS-01`); o espelho pt fica em dia no WP-04. Texto legal, risco alto — prova o processo na política menor |
-| 5 | [WP-17 — A política de privacidade do TopoWalk existe no site em pt, en, es, fr, it, de e ru](wps/WP-17-politica-do-topowalk-em-7-linguas.md) | `todo` | política do TopoWalk em pt/en/es/fr/it/de/ru (5.842 palavras × 6 línguas além do pt); PR por língua. L, risco alto, depois do WP-16 · ⏳ aguarda WP-16 |
-| 6 | [WP-18 — As landings do TopoWalk e do Pole Position existem nas línguas que cada app fala](wps/WP-18-landings-topowalk-e-poleposition-nas-linguas-dos-apps.md) | `todo` | landings TopoWalk (7 línguas) e Pole Position (6) com copy das fichas da Play; só se D8 (a2/a3), depois do WP-10 para não traduzir duas vezes · ⏳ aguarda WP-10 |
-| 7 | [WP-13 — O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade](wps/WP-13-medicao.md) | `todo` | medição com consentimento ou sem cookie (D3: Plausible/Umami vs GA4 Consent Mode); evento de clique na Play por app. M, depois do WP-08 |
-| 8 | [WP-23 — O convite do bolão abre sem terceiros (pako e Inter servidos pelo site, com `<main>`)](wps/WP-23-convite-sem-terceiros.md) | `todo` | convite sem terceiros: pako 2.1.0 (sha256 do tarball do npm) e Inter servidos ao lado do convite, `<main>`, `contrato.sha256` novo, convite entra no §15 (a)/(b) e §17 do check_site e no Lighthouse; teste com `?d=` real v1 e v2. M, risco alto (URL contratual), visual · ⏳ só depois do deploy único (D13), branch de `develop`, `/release` próprio |
+| 2 | [WP-25 — O build sai do Astro 7.3.8 e o npm audit não acusa dependência vulnerável](wps/WP-25-dependencias-sem-aviso-do-npm-audit.md) | `todo` | dependências sem aviso do npm audit: Astro 7.4.7, Node 22.23.4, satteri 0.4.7; S, risco alto (deploy); entre as fatias 1 e 2 do WP-10 (usuário, 2026-11-21) |
+| 3 | [WP-10 — A home e as landings de app seguem o sistema visual do handoff](wps/WP-10-redesign-com-o-handoff.md) | `blocked` | redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08 |
+| 4 | [WP-20 — Imagens de compartilhamento 1200×630 por página e twitter:card coerente](wps/WP-20-imagens-de-compartilhamento-1200x630.md) | `todo` | imagens de compartilhamento 1200×630 (D16 A): marca para home e legais, uma por app; sessão do usuário no Claude Design, depois `twitter:card` e `og:image:alt`. M, `visual`, antes do deploy único (D13) |
+| 5 | [WP-16 — A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de](wps/WP-16-politica-do-poleposition-em-6-linguas.md) | `todo` | política do Pole Position em pt/en/es/fr/it/de, traduzida do pt de origem; pré-condição: cláusula de prevalência do pt no app (D8 b1, `PREVALENCIA-PT-NOS-APPS-01`); o espelho pt fica em dia no WP-04. Texto legal, risco alto — prova o processo na política menor |
+| 6 | [WP-17 — A política de privacidade do TopoWalk existe no site em pt, en, es, fr, it, de e ru](wps/WP-17-politica-do-topowalk-em-7-linguas.md) | `todo` | política do TopoWalk em pt/en/es/fr/it/de/ru (5.842 palavras × 6 línguas além do pt); PR por língua. L, risco alto, depois do WP-16 · ⏳ aguarda WP-16 |
+| 7 | [WP-18 — As landings do TopoWalk e do Pole Position existem nas línguas que cada app fala](wps/WP-18-landings-topowalk-e-poleposition-nas-linguas-dos-apps.md) | `todo` | landings TopoWalk (7 línguas) e Pole Position (6) com copy das fichas da Play; só se D8 (a2/a3), depois do WP-10 para não traduzir duas vezes · ⏳ aguarda WP-10 |
+| 8 | [WP-13 — O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade](wps/WP-13-medicao.md) | `todo` | medição com consentimento ou sem cookie (D3: Plausible/Umami vs GA4 Consent Mode); evento de clique na Play por app. M, depois do WP-08 |
+| 9 | [WP-23 — O convite do bolão abre sem terceiros (pako e Inter servidos pelo site, com `<main>`)](wps/WP-23-convite-sem-terceiros.md) | `todo` | convite sem terceiros: pako 2.1.0 (sha256 do tarball do npm) e Inter servidos ao lado do convite, `<main>`, `contrato.sha256` novo, convite entra no §15 (a)/(b) e §17 do check_site e no Lighthouse; teste com `?d=` real v1 e v2. M, risco alto (URL contratual), visual · ⏳ só depois do deploy único (D13), branch de `develop`, `/release` próprio |
 
 ## Todos os WPs
 
@@ -46,7 +47,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-07](wps/WP-07-stack-com-build-spike.md) | O site tem build que preserva as URLs contratuais e publica no Pages por Actions | infra | L | alto | 🖥️ | WP-05 | ADR-001, ADR-002 | `done` |
 | [WP-08](wps/WP-08-layout-e-componentes-unicos.md) | As 10 páginas usam um layout, componentes únicos e rota por idioma | landing | L | alto | 🖥️ | WP-07 | ADR-001, ADR-002, ADR-003 | `done` |
 | [WP-09](wps/WP-09-legal-como-fonte-unica.md) | O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência | legal | M | alto |  | WP-08 | ADR-004 | `done` |
-| [WP-10](wps/WP-10-redesign-com-o-handoff.md) | A home e as landings de app seguem o sistema visual do handoff | design | L | medio | 🖥️ | WP-06, WP-08 | — | `todo` |
+| [WP-10](wps/WP-10-redesign-com-o-handoff.md) | A home e as landings de app seguem o sistema visual do handoff | design | L | medio | 🖥️ | WP-06, WP-08 | ADR-001, ADR-004, ADR-006, ADR-007, ADR-008 | `blocked` |
 | [WP-11](wps/WP-11-seo-tecnico.md) | Buscadores leem sitemap, canonical, hreflang e dados estruturados de cada página | seo | M | medio | 🖥️ | WP-08 | ADR-005 | `done` |
 | [WP-12](wps/WP-12-performance.md) | Toda página pontua 90 ou mais nas quatro categorias do Lighthouse mobile | seo | L | medio | 🖥️ | WP-08 | ADR-006 | `done` |
 | [WP-13](wps/WP-13-medicao.md) | O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade | infra | M | medio | 🖥️ | WP-08 | — | `todo` |
@@ -60,9 +61,12 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-21](wps/WP-21-copy-de-compartilhamento-da-ficha-da-play.md) | Title e description de compartilhamento vêm da ficha da Play | landing | M | baixo |  | WP-11 | — | `done` |
 | [WP-22](wps/WP-22-acessibilidade-e-i18n-sem-redesign.md) | Acessibilidade e i18n sem redesign (a11y AA, foco, `<main>`, headings, reduced-motion, contraste fora da paleta, rótulos pt na /en/) | landing | M | medio | 🖥️ | WP-12, WP-15 | ADR-003, ADR-007 | `done` |
 | [WP-23](wps/WP-23-convite-sem-terceiros.md) | O convite do bolão abre sem terceiros (pako e Inter servidos pelo site, com `<main>`) | infra | M | alto | 🖥️ | — | ADR-001, ADR-002, ADR-006 | `todo` |
+| [WP-24](wps/WP-24-convite-com-o-sistema-visual-do-handoff.md) | O convite do bolão segue o sistema visual do handoff, com o parse de `?d=` intocado | design | M | alto | 🖥️ | WP-10, WP-23 | ADR-001, ADR-006, ADR-008 | `todo` |
+| [WP-25](wps/WP-25-dependencias-sem-aviso-do-npm-audit.md) | O build sai do Astro 7.3.8 e o npm audit não acusa dependência vulnerável | infra | S | alto |  | WP-08 | ADR-001, ADR-002, ADR-008 | `todo` |
 
 ## Bloqueios ativos
 
 | WP | Bloqueado por | Desde |
 |---|---|---|
+| WP-10 | fatia 1 feita; aguarda o WP-25 (Astro 7.4.7) antes da fatia 2 — decisão do usuário em 2026-11-21 | 2026-11-21 |
 | WP-19 | export da rodada 3 entregue e auditado; falta o usuário: checklist de navegador da rodada 3 (visual: true) | 2026-10-13 |

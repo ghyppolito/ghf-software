@@ -1,0 +1,188 @@
+/*
+ * Tokens do sistema visual (ADR-008 §2, WP-10 fatia 1). Único arquivo de src/ com cor literal
+ * depois da fatia 10; até lá, src/styles/legado.css também tem (ADR-008 §5).
+ *
+ * Origem (handoff da rodada 3, design/handoff/2026-10-13-rodada-3/):
+ *   K3 = GHF Kit v3.dc.html · LJ = content/landings.js · LG = Legal LottoExpert.dc.html
+ * Um tema só (escuro). O "papel" é a superfície da página legal, não um segundo tema.
+ *
+ * Nomes: os do rótulo do Kit (K3:615), com o prefixo de namespace do Tailwind 4. O namespace
+ * `--text-*` do Tailwind é tamanho de fonte; por isso a cor de texto é `--color-text`,
+ * `--color-text-2`… (utilitários `text-text`, `text-text-2`), nunca `--text-2`.
+ * Os nomes curtos dos templates (`--sf`, `--bd2`, `--tx2`…) não entram aqui.
+ *
+ * Contraste (WCAG 2.x, especificação do site-ux da fatia 1):
+ * - `--color-border` (1,42 sobre --bg) é só divisória decorativa; limite de controle usa
+ *   `--color-border-strong` (3,95 / 3,72 / 3,30 sobre bg / surface / raised).
+ * - `--color-brand` sobre `--color-paper` é 1,89: no papel, link e foco são `--color-paper-link`.
+ * - `--color-app-*-edge` e as bordas `-edge` de warning/error/info ficam abaixo de 3:1: contorno
+ *   decorativo, sempre com texto ou glifo ao lado, nunca o único sinal.
+ * - Botão primário preenchido: texto `--color-bg` sobre o acento do app, nunca branco.
+ */
+
+/* ------------------------------------------------------------------ valores */
+@theme {
+  /* Superfícies, texto e marca — K3:577 (tema A, "Navy técnico") */
+  --color-bg: #0b1120; /* fundo; a nav também (navbg = bg) */
+  --color-surface: #111827; /* cartão, menu */
+  --color-raised: #1a2335; /* hover, faixa */
+  --color-border: #243046; /* divisória (decorativa) */
+  --color-border-strong: #66738d; /* controle, ≥ 3:1 (rodada 3, K3:417-420) */
+  --color-text: #f3f4f6;
+  --color-text-2: #c3c9d3; /* secundário */
+  --color-text-muted: #97a0b0; /* mudo, legenda */
+  --color-brand: #3cc8d0; /* teal GHF, foco */
+  --color-footer: #0e1524; /* fundo do footer (ft) */
+
+  /* Papel da página legal — K3:578 (paper), K3:611 e K3:624, LG:11 */
+  --color-paper: #f7f7f5;
+  --color-paper-ink: #15181c;
+  --color-paper-text-2: #4a5059;
+  --color-paper-border: #d9d7d1; /* divisória (1,34: decorativa) */
+  --color-paper-link: #0a6e75; /* link e foco no papel (LG:53) */
+  --color-paper-link-hover: #07565c;
+
+  /* Acento por app — K3:597-604 (acc e light, rodada 3); edge de LJ:5,40,73,101.
+   * `light` é o acento sobre o papel. */
+  --color-app-lotto: #a78bfa;
+  --color-app-lotto-light: #6d28d9;
+  --color-app-lotto-edge: #6b5ba8;
+  --color-app-topo: #e38a57;
+  --color-app-topo-light: #a0491c;
+  --color-app-topo-edge: #8a5233;
+  --color-app-pole: #5fd47e;
+  --color-app-pole-light: #2a7741;
+  --color-app-pole-edge: #2f6b49;
+  --color-app-eclipse: #ee737d;
+  --color-app-eclipse-light: #ae3646;
+  --color-app-eclipse-edge: #8a3a44;
+
+  /* Semânticos — K3:619-622. Texto (`--color-<estado>`) sobre a tinta (`-tint`), borda `-edge`.
+   * No uso, glifo (✓ ! × i) e palavra são obrigatórios: nunca só cor.
+   * `--color-success` é o selo "Publicado" (D11; K3:430); `--color-success-surface` é o texto do
+   * estado "Backup concluído" (D11; K3:620) — o nome vem da D11, o papel é de texto. */
+  --color-success: #c5e86c;
+  --color-success-surface: #ddf3a8;
+  --color-success-tint: #1e2710;
+  --color-success-edge: #5f7a24;
+  --color-warning: #f7dc9a;
+  --color-warning-tint: #2e240c;
+  --color-warning-edge: #7a6020;
+  --color-error: #ffc2c7;
+  --color-error-tint: #3a1219;
+  --color-error-edge: #8a2e3a;
+  --color-info: #bdf1f4;
+  --color-info-tint: #0c2a2e;
+  --color-info-edge: #1f6a70;
+
+  /* Forma e sombra — K3:578 (r, rb, rc, sh) */
+  --radius-card: 12px;
+  --radius-pill: 999px;
+  --radius-ctl: 8px;
+  --shadow-pop: 0 12px 32px rgba(0, 0, 0, 0.45);
+
+  /* Fonte. Inter servida pelo site (ADR-006 §3): a variável é a da API `fonts` do
+   * astro.config.mjs, com o fallback de métricas ajustadas. Pesos 400–800 no subset; o 300 do
+   * brief não existe. Mono: a pilha padrão do Tailwind 3, que o site já usava. */
+  --font-sans: var(--fonte-inter);
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
+
+  /* Tipografia — K3:626-633, em px como no handoff. Display, H1 e H2 mudam de tamanho com a
+   * largura ("40/48 → 56/64"); o handoff não diz onde. Aqui ficam os dois valores (`-lg` é o
+   * grande); o ponto de troca é da fatia 2, no componente. */
+  --text-display: 40px;
+  --text-display--line-height: 48px;
+  --text-display--font-weight: 700;
+  --text-display--letter-spacing: -0.025em;
+  --text-display-lg: 56px;
+  --text-display-lg--line-height: 64px;
+  --text-display-lg--font-weight: 700;
+  --text-display-lg--letter-spacing: -0.025em;
+  --text-h1: 32px;
+  --text-h1--line-height: 40px;
+  --text-h1--font-weight: 700;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h1-lg: 44px;
+  --text-h1-lg--line-height: 52px;
+  --text-h1-lg--font-weight: 700;
+  --text-h1-lg--letter-spacing: -0.02em;
+  --text-h2: 24px;
+  --text-h2--line-height: 32px;
+  --text-h2--font-weight: 700;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h2-lg: 32px;
+  --text-h2-lg--line-height: 40px;
+  --text-h2-lg--font-weight: 700;
+  --text-h2-lg--letter-spacing: -0.015em;
+  --text-h3: 20px;
+  --text-h3--line-height: 28px;
+  --text-h3--font-weight: 600;
+  --text-body: 16px;
+  --text-body--line-height: 26px;
+  --text-body-legal: 18px;
+  --text-body-legal--line-height: 30px;
+  --text-small: 14px;
+  --text-small--line-height: 22px;
+  --text-label: 13px; /* caixa normal, sem tracking (lfs/ltt/lls) */
+  --text-label--line-height: 18px;
+  --text-label--font-weight: 600;
+
+  /* Espaçamento — K3:635 (--s-1…--s-24 = 4…96 px, base 4). O `--spacing: 0.25rem` padrão do
+   * Tailwind 4 já gera a mesma escala (p-11 = 44 px, p-24 = 96 px): não se redefine.
+   * Alvo de toque mínimo: `min-h-11`. Seção: `py-16 lg:py-24`. */
+}
+
+/* ------------------------------------------------------------------ acento do app da página
+ * `data-app="lotto|topo|pole|eclipse"` no <html> aponta os aliases para o app (LA:11, K3:492);
+ * o componente usa `*-app-acc`, nunca o nome do app. Página sem `data-app` (home, 404,
+ * institucional) não tem acento definido: o handoff não diz qual usar (achado
+ * ACENTO-PADRAO-SEM-APP-01). Hover e ativo do primário: K3, seção 2 "Estados". */
+@theme inline {
+  --color-app-acc: var(--app-acc);
+  --color-app-acc-light: var(--app-acc-light);
+  --color-app-acc-edge: var(--app-acc-edge);
+  --color-app-acc-hover: color-mix(in oklab, var(--app-acc) 80%, white);
+  --color-app-acc-active: color-mix(in oklab, var(--app-acc) 82%, black);
+}
+
+:root[data-app='lotto'] {
+  --app-acc: var(--color-app-lotto);
+  --app-acc-light: var(--color-app-lotto-light);
+  --app-acc-edge: var(--color-app-lotto-edge);
+}
+
+:root[data-app='topo'] {
+  --app-acc: var(--color-app-topo);
+  --app-acc-light: var(--color-app-topo-light);
+  --app-acc-edge: var(--color-app-topo-edge);
+}
+
+:root[data-app='pole'] {
+  --app-acc: var(--color-app-pole);
+  --app-acc-light: var(--color-app-pole-light);
+  --app-acc-edge: var(--color-app-pole-edge);
+}
+
+:root[data-app='eclipse'] {
+  --app-acc: var(--color-app-eclipse);
+  --app-acc-light: var(--color-app-eclipse-light);
+  --app-acc-edge: var(--color-app-eclipse-edge);
+}
+
+/* ------------------------------------------------------------------ foco (K3, "Estados") */
+@utility anel-foco {
+  &:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+  }
+}
+
+/* No papel o teal não passa (1,89): o foco é o link do papel. */
+@utility anel-foco-papel {
+  &:focus-visible {
+    outline: 2px solid var(--color-paper-link);
+    outline-offset: 3px;
+  }
+}
