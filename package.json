@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "^22.22.0"
+    "node": "^22.23.4"
   },
   "scripts": {
     "dev": "astro dev",
@@ -12,8 +12,8 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/markdown-satteri": "0.4.3",
-    "astro": "7.3.8"
+    "@astrojs/markdown-satteri": "0.4.7",
+    "astro": "7.4.7"
   },
   "devDependencies": {
     "@tailwindcss/vite": "4.3.5",

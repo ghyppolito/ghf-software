@@ -109,7 +109,7 @@ política/termos do repositório do app) · `/decisao <texto>` · `/adr <texto>`
 ## Comandos
 
 ```bash
-npm ci && npm run build                                       # Astro → dist/ (Node 22.22)
+npm ci && npm run build                                       # Astro → dist/ (Node 22.23.4)
 python3 tools/check_site.py                                   # sobre dist/ (= --raiz dist; sem dist/, pede o build): URLs contratuais,
                                                               # links, assets, metadados, datas legais contra src/content/legal/, copy
 (cd dist && sha256sum --quiet -c ../tools/contrato.sha256)    # convite, assetlinks, og:image do convite e CNAME iguais ao publicado (D13)
