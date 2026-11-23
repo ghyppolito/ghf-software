@@ -2,7 +2,7 @@
 id: WP-13
 titulo: O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade
 area: infra
-status: todo
+status: adiado
 depende_de: [WP-08]
 adr: []
 spec: docs/AVALIACAO.md
@@ -14,6 +14,11 @@ branch: feat/wp-13-medicao
 ---
 
 # WP-13 — O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade
+
+> **Congelado (2026-11-22, D3):** o usuário decidiu não medir — "não é previsto custos no site no momento" — e
+> "deixa o item congelado para futura análise". O WP fica `adiado`, não cancelado; não sai do lugar sem o
+> usuário reabrir a D3. Reabrir com (A) ou (B) exige revisar o ADR-006 §5 e a regra de terceiros de
+> `tools/lighthouse.py`.
 
 **Depende de:** WP-08 · **Achados roteados:** —
 

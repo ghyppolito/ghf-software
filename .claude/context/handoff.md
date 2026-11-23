@@ -3,18 +3,18 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-11-22.** Fatias 6 (Home, D30) e 10a (aceite parcial) do WP-10 feitas; a 10a está em `feat/wp-10-fatia-10a-aceite-parcial`, empilhada sobre `feat/wp-10-fatia-6-home` (não enviada).
+**Sessão de 2026-11-22.** Fatias 4, 5, 6 e 10a do WP-10 mescladas em `feat/wp-08-layout-unico`; o #37 passou no CI em 0fe1b70.
 
 ## 1. Onde parei
 
-- Fatias 1 a 5 do WP-10 integradas. A 6 (Home) está no PR #52, esperando o usuário mesclar. A 10a (aceite parcial) está feita na branch, empilhada sobre a 6; o PR dela sai depois do merge do #52. WP-10 segue `doing`.
-- Próximas: 7 (TopoWalk), 8 (Pole Position) e 9 (LottoExpert), quando chegarem as capturas (D26) e a copy do LottoExpert (D25), e depois a 10b (limpeza e aceite final).
-- O usuário pode adiantar, em ordem de impacto no prazo: 1. capturas; 2. os `TERMS_OF_SERVICE.md` dos 3 apps (WP-26 a 28); 3. D3; 4. WP-20 no Claude Design; 5. os checklists de navegador.
-- Tag `v1.0.1` do `eclipse-go` (leve, sobre `f5c1d6b`) é a origem de `atualizadoEm` do EclipseGo; o §21 do `check_site.py` a confere. WP-19 e WP-25 `done`. O usuário quer o deploy único **antes do fim de 2026**.
+- WP-10 `doing`, por fatias. Cada fatia vira PR para `feat/wp-08-layout-unico`, o usuário mescla, e o CI prova no #37 (`feat/wp-08-layout-unico -> develop`), que **não se mescla antes do deploy único** (D13). Mescladas hoje: fatia 4 (404), 5 (template e EclipseGo, D29), 6 (Home, D30; #52, 5161f02) e 10a (aceite parcial, D31, JSON-LD; #53, 0fe1b70). WP-10 e `decisoes.md` já refletem D29 a D31.
+- Branch local: `feat/wp-10-fatia-10a-aceite-parcial`, já mesclada. Esta escrituração do handoff está **não commitada** nela. Quando o usuário pedir, vai para branch nova a partir de `origin/feat/wp-08-layout-unico`, com PR para ela.
+- Bloqueadas pelo usuário: fatias 7 (TopoWalk) e 8 (Pole Position) esperam capturas (D26); a 9 (LottoExpert), capturas e copy (D25); a 10b (remover `legado.css`/`brand.*`, aceite final) vem por último. Nenhuma fatia começa sem essa entrada.
+- Fora do WP-10: WP-26 a WP-28 esperam `TERMS_OF_SERVICE.md` nos repos dos apps; D3 decidida (2026-11-22: não medir; WP-13 `adiado` para futura análise, sem bloquear o deploy único); WP-20 é sessão do Claude Design. Também nesta sessão: a régua do `test:css` foi trocada (decisão do usuário) e o orçamento Lighthouse de `/eclipsego.html` foi atualizado. Tag `v1.0.1` do `eclipse-go` (leve, `f5c1d6b`, 2026-07-26) dá o `atualizadoEm` do EclipseGo; o §21 do `check_site.py` a confere. Deploy único **antes do fim de 2026**.
 
 ## 2. Quebrado ou pela metade agora
 
-Nada quebrado. Passaram no `/verify` da fatia 5: `test:css`, `check_site.py` (raiz e `dist`), `contrato.sha256`, html-validate, `lighthouse.py` sem `--medir`, `gen_estado --check` e `check_plano`. `lychee` não está instalado localmente; o CI cobre.
+Nada quebrado. CI do #37 em 0fe1b70: `plano`, `site` e `lighthouse` passaram. Passaram no `/verify` local: `test:css`, `check_site.py` (raiz e `dist`), `contrato.sha256`, html-validate, `lighthouse.py` sem `--medir`, `gen_estado --check` e `check_plano`. `lychee` não está instalado localmente; o CI cobre.
 
 **Cuidados:**
 - Num laço `until ! pgrep -f "tools/lighthouse.py"`, o `pgrep` casa com a própria linha de comando do laço, que não termina. Use `pgrep -f "^python3 tools/lighthouse.py"` ou espere pelo PID.
@@ -74,15 +74,14 @@ Resta também o Safari (pelo iPhone, `python3 -m http.server 8080 -d dist -b 0.0
 
 ## 4. Próxima ação
 
-**Do agente:** depois do merge do #52, PR `feat/wp-10-fatia-10a-aceite-parcial` -> integração (o usuário mescla). As fatias 7 a 9 precisam das capturas dos apps (D26).
+**Do agente:** nada começa sozinho. Com capturas da fatia 7 ou 8 (ou da 9, com a copy), abrir `/wp WP-10` na fatia correspondente. Se o usuário pedir, commitar este handoff em branch nova a partir de `origin/feat/wp-08-layout-unico`.
 
 **Do usuário, em ordem de impacto no prazo:**
-1. capturas do app (D26);
-2. os textos `TERMS_OF_SERVICE.md` nos repositórios de TopoWalk, EclipseGo e Pole Position;
-3. D3 (medição);
-4. sessão do WP-20 no Claude Design (imagens 1200x630, o logo, o callout `LEGAL-CALLOUT-SEM-HANDOFF-01`);
-5. checklists de navegador das fatias 3, 4, 5, 6 e 10a (seção 3);
-6. Safari (pelo iPhone).
+1. capturas do app (D26) e, para o LottoExpert, a copy (D25);
+2. os `TERMS_OF_SERVICE.md` de TopoWalk, EclipseGo e Pole Position;
+3. sessão do WP-20 no Claude Design;
+4. checklists de navegador das fatias 3, 4, 5, 6 e 10a (seção 3), a 360/768/1280, pt e en;
+5. Safari (pelo iPhone).
 
 ## 5. Decisões não registradas
 
@@ -90,9 +89,9 @@ Nenhuma. `BUILD-RELOGIO-NAO-REPRODUTIVEL-01` foi decidido (D31) e implementado n
 
 ## 6. Esperando publicação
 
-A modernização inteira (WP-08 a WP-10 e o resto) espera o deploy único (D13, `/release`; `lighthouse` obrigatório em `master`, D22). Rollback por tag. O WP-10 só fica `done` com a fatia 9; o PR #37 não se mescla até o deploy único.
+`git log origin/master..origin/develop` (após `git fetch`): 4 commits só de documentação (04f8639, 400d254, 09967ab, 44e95af), **sem texto legal**, sem urgência. O que realmente espera é a modernização inteira (WP-08 a WP-10 e o resto), que está em `feat/wp-08-layout-unico` (#37) e só vai ao ar no deploy único (D13, `/release`; `lighthouse` obrigatório em `master`, D22). Rollback por tag. O WP-10 só fica `done` com a 10b.
 
 ## 7. Escrituração e branches
 
 - Triagem: vazia. Os 11 achados da 10a e a `ROTULO-DATA-DUAS-FONTES-01` ("mantém duas fontes") estão resolvidos. Novos da 10a: fatia 10b (`LISTAAPPS-VARIANTES-01`, `FAVICON-LITERAL-LEGAIS-01`); WP-20 (`ORG-LOGO-NAO-QUADRADO-01`, `OG-IMAGE-QUADRADA-LANDINGS-01`, e `JSONLD-IMAGE-FAVICON-PEQUENO-01`, que pode ir à 10b); WP-28 (`SYNC-LEGAL-DOCSTRING-GIT-01`); nota (`SOFTWAREAPP-SEM-RATING-01`). Da fatia 6, seguem para a 10b `HOME-ICONES-ORFAOS-01`, `CSS-BUNDLE-NOME-FOOTER-01`, `HOME-VOCABULARIO-TECNICO-01`; para o WP-20 os 5 da Home; WP-18 `HOME-X-DEFAULT-EN-01`; WP-28 `CLAUDE-MD-POLE-CAMINHO-01`. `INDEX-LOTTO-DESC-DIVERGE-01` segue aberto para a fatia 9.
-- Branches: `develop`, `master`, `feat/wp-08-layout-unico`, `feat/wp-10-redesign`, `feat/wp-10-fatia-6-home` (no PR #52, aguardando merge), `feat/wp-10-fatia-10a-aceite-parcial` (não enviada) e `feat/wp-05-ci-no-pr` (não integrada).
+- Branches: `develop`, `master`, `feat/wp-08-layout-unico`, `feat/wp-10-redesign`, `feat/wp-10-fatia-6-home` e `feat/wp-10-fatia-10a-aceite-parcial` (ambas mescladas) e `feat/wp-05-ci-no-pr` (não integrada).
