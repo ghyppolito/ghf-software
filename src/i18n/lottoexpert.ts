@@ -11,7 +11,9 @@
 //   Competitiva" (LOTTO-COPY-VANTAGEM-01). A `meta` é texto do usuário. O `alt` descreve a Home sem
 //   valores e sem falar em ganho.
 // - `funcionalidades` (resposta do usuário: scanner, fechamento, bolão, prestação de contas):
-//   ASO:35 (mais o limite do plano gratuito de FC/LT), ASO:37 (8 modalidades), ASO:41 (mais os
+//   ASO:35 (mais o limite do plano gratuito de FC/LT e LC:49: o teste vale na Lotofácil e na Mega-Sena), ASO:37 (8 modalidades; a frase X/Y é LC:15 e "a garantia é sobre pontos, não sobre lucro" é
+//   ../lotto-expert/docs/SPEC_desdobramento_fechamento_volante.md:91 — a ASO:37 diz "garanta uma
+//   premiação mínima", que a landing não usa), ASO:41 (mais os
 //   limites de FC/LT) e LT `feat17_*`. O plano pago se chama Pro na landing (o texto legal não muda).
 //   Scanner e prestação de contas ainda sem captura (D26): só texto, sem placeholder.
 // - `todas`: LT `feat16_*` e FC:43-44 (Teimosinha), LC:82-87 e ASO:43 (conferência), ASO:45
@@ -44,14 +46,14 @@ export const lottoexpert = {
     hero: {
       titulo: 'LottoExpert: Loterias e Bolão',
       lead: 'Scanner de bilhetes, fechamentos, bolão e resultados oficiais da Caixa. Com análise estatística avançada, conferência automática e processamento local no seu celular, você tem o controle total das suas apostas — do jogo ao resultado.',
-      meta: 'Grátis, com assinatura Pro opcional · Android 8.0 ou superior',
+      meta: 'Grátis, com plano Pro opcional · Android 8.0 ou superior',
       alt: 'Tela inicial do LottoExpert: as loterias da Caixa, cada uma com a data do próximo sorteio e a estimativa de prêmio.',
     },
     funcionalidades: [
       {
         titulo: 'Scanner de bilhetes',
         descricao:
-          'Aponte a câmera e confira seus jogos na hora. O app identifica números, concursos e calcula seus prêmios automaticamente, tudo no seu celular, sem enviar foto para nenhum servidor. O plano gratuito tem 3 capturas de teste; no Pro, ilimitado.',
+          'Aponte a câmera e confira seus jogos na hora. O app identifica números, concursos e calcula seus prêmios automaticamente, tudo no seu celular, sem enviar foto para nenhum servidor. O plano gratuito tem 3 capturas de teste, na Lotofácil e na Mega-Sena; no Pro, ilimitado.',
       },
       {
         titulo: 'Fechamento com garantia matemática',
@@ -160,7 +162,7 @@ export const lottoexpert = {
         colPagoSub: 'Mensal · Anual · Vitalício',
         linhas: [
           ['Loterias Básicas (Mega-Sena/Lotofácil)', 'Incluído', 'Incluído'],
-          ['Todas as Loterias (9 modalidades)', 'Não incluído', 'Incluído'],
+          ['Gerador para todas as loterias (9 modalidades)', 'Não incluído', 'Incluído'],
           ['Fechamento com garantia (8 modalidades)', 'Não incluído', 'Incluído'],
           ['Scanner de Bilhetes (OCR)', '3 capturas de teste', 'Ilimitado'],
           ['Conferência das Participações', 'Manual', 'Automática pós-sorteio'],
@@ -227,14 +229,14 @@ export const lottoexpert = {
     hero: {
       titulo: 'LottoExpert: Lotteries & Sweepstakes',
       lead: 'Ticket scanner, wheels, sweepstakes and official Caixa lottery results. With advanced statistical analysis, automatic result checking and processing on your own phone, you stay in full control of your bets — from the game to the result.',
-      meta: 'Free, with an optional Pro subscription · Android 8.0 or later',
+      meta: 'Free, with an optional Pro plan · Android 8.0 or later',
       alt: 'LottoExpert home screen: the Caixa lotteries, each with the next draw date and its prize estimate (app interface in Portuguese).',
     },
     funcionalidades: [
       {
         titulo: 'Ticket scanner',
         descricao:
-          'Point the camera and check your tickets on the spot. The app reads the numbers and draws and calculates your prizes automatically, all on your phone, without sending any photo to a server. The free plan includes 3 test captures; Pro is unlimited.',
+          'Point the camera and check your tickets on the spot. The app reads the numbers and draws and calculates your prizes automatically, all on your phone, without sending any photo to a server. The free plan includes 3 test captures, for Lotofácil and Mega-Sena; Pro is unlimited.',
       },
       {
         titulo: 'Wheeling with a mathematical guarantee',
@@ -343,13 +345,13 @@ export const lottoexpert = {
         colPagoSub: 'Monthly · Annual · Lifetime',
         linhas: [
           ['Basic Lotteries (Mega-Sena/Lotofácil)', 'Included', 'Included'],
-          ['All Lotteries (9 modalities)', 'Not included', 'Included'],
+          ['Generator for all lotteries (9 modalities)', 'Not included', 'Included'],
           ['Wheeling with guarantee (8 modalities)', 'Not included', 'Included'],
           ['Ticket Scanner (OCR)', '3 test captures', 'Unlimited'],
           ['Participation Verification', 'Manual', 'Automatic post-draw'],
           ['"My Performance" Dashboard (ROI & Balance)', 'Blurred sample', 'Full Analysis'],
           ['Saved Strategies (Presets)', '1 Preset', 'Unlimited'],
-          ['Smart Alerts (Jackpots & Numbers)', 'Not included', 'Included'],
+          ['Smart Alerts (Threshold & Numbers)', 'Not included', 'Included'],
           ['Historical Backtesting', 'Not included', 'Included'],
           ['Pro Filters in Generator', 'Not included', 'Included'],
           ['Saved Games (Wallet)', 'Up to 10', 'Unlimited'],
