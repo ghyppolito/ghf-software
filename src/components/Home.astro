@@ -1,6 +1,6 @@
 ---
 // Corpo da home (/ e /en/): hero, grade dos apps, Sobre e Privacidade (WP-10, fatia 6;
-// `Home.dc.html` da rodada 3, D30). Textos em src/i18n/home.ts (o EclipseGo em eclipsego.ts), dados
+// `Home.dc.html` da rodada 3, D30). Textos em src/i18n/home.ts (o EclipseGo e o LottoExpert no `<app>.ts`), dados
 // dos apps em src/i18n/apps.ts. Nav e footer ficam em paginas/PaginaHome.astro.
 // - Cards na ordem de `ORDEM_APPS` (brief §10, mesmo peso); entra na grade o que `particionarApps`
 //   (D12) põe em `destaque`, o resto vai para "Todos os apps GHF" (VerTodasApps).
@@ -18,6 +18,7 @@
 import { Image } from 'astro:assets';
 import { home } from '../i18n/home';
 import { eclipsego } from '../i18n/eclipsego';
+import { lottoexpert } from '../i18n/lottoexpert';
 import { apps, ORDEM_APPS, COR_APP, particionarApps, hojeDoBuild, dataCurta, type ChaveApp } from '../i18n/apps';
 import { t } from '../i18n/ui';
 import { link, type Idioma } from '../i18n/idiomas';
@@ -31,10 +32,11 @@ interface Props {
 const { lang } = Astro.props;
 const x = home[lang];
 
-// Resumo de cada card: o EclipseGo já está no formato de landing (eclipsego.ts); os outros três
-// leem home.ts até a landing deles migrar (fatias 7, 8 e 9: troca só a linha do app).
+// Resumo de cada card: o EclipseGo e o LottoExpert já estão no formato de landing (eclipsego.ts,
+// lottoexpert.ts); os outros dois leem home.ts até a landing deles migrar (fatias 7 e 8: troca só a
+// linha do app).
 const resumos: Record<ChaveApp, { tag: string; curta: string }> = {
-  lottoexpert: x.resumos.lottoexpert,
+  lottoexpert: lottoexpert[lang].resumo,
   topowalk: x.resumos.topowalk,
   poleposition: x.resumos.poleposition,
   eclipsego: eclipsego[lang].resumo,

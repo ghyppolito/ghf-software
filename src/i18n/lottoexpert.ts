@@ -1,285 +1,399 @@
-// Textos da landing do LottoExpert (lottoexpert.html), pt e en — transportados do dicionário JS
-// da lottoexpert.html antiga (WP-08, fatia 2), sem retradução. Chaves `*Html` levam marcação e
-// são renderizadas com set:html: `&` escrito `&amp;`.
+// Conteúdo da landing do LottoExpert (lottoexpert.html), pt e en, no formato único de landing.ts
+// (WP-10, fatia 9; D29). Origem de cada frase (D25), com as respostas do usuário de 2026-11-24
+// registradas no WP-10 (fatia 9). Siglas: ASO = ../lotto-expert/docs/ASO_METADATA.md na tag
+// v2.06.00; LC = ../lotto-expert/docs/LottoExpertContent.md; FC = FreemiumConfig.kt do app na tag
+// v2.06.00; LT = este arquivo antes da fatia 9 (dicionário transportado da página antiga, WP-08);
+// TERMOS = src/content/legal/lottoexpert-terms.{pt,en}.md. O en é tradução fiel do pt (ADR-007).
+// - `meta`: `title` e `description` já publicados (ficha da Play: ASO:11 e ASO:20; WP-21, D19).
+// - `resumo`: o texto do card da Home, movido de home.ts sem edição (o card lê `tag` e `curta`).
+// - `hero`: título da ficha (ASO:11; en D19 c), lead = descrição curta (ASO:20) + a frase de ASO:31
+//   sem a abertura ("A ferramenta definitiva…", "Chega de…"); sem kicker nem o selo "Vantagem
+//   Competitiva" (LOTTO-COPY-VANTAGEM-01). A `meta` é texto do usuário. O `alt` descreve a Home sem
+//   valores e sem falar em ganho.
+// - `funcionalidades` (resposta do usuário: scanner, fechamento, bolão, prestação de contas):
+//   ASO:35 (mais o limite do plano gratuito de FC/LT), ASO:37 (8 modalidades), ASO:41 (mais os
+//   limites de FC/LT) e LT `feat17_*`. O plano pago se chama Pro na landing (o texto legal não muda).
+//   Scanner e prestação de contas ainda sem captura (D26): só texto, sem placeholder.
+// - `todas`: LT `feat16_*` e FC:43-44 (Teimosinha), LC:82-87 e ASO:43 (conferência), ASO:45
+//   (resultados), ASO:47 e LC:88-93 (Meu Desempenho), LT `feat12_*` (backup).
+// - `prova`: ASO:62 e LC:36; LC:47; ASO:63 e ASO:72.
+// - `planos`: LT `pricing_subtitle` + `plan_purchase_in_app`; preços e textos de ASO:68-72; a nota
+//   de idade de TERMOS (pt:34, en:33); a tabela é a `price_*` de LT, "Premium" trocado por "Pro",
+//   com a linha do fechamento (8 modalidades) e a da Teimosinha (FC:43-44; TEIMOSINHA-FORA-DA-TABELA-01).
+// - `privacidade`: LC:35, "Premium" trocado por "Pro".
+// - `faq`: LC §12 (LC:558, :561, :567, :570, :579), respostas literais com "Premium" trocado por "Pro".
+// - `aviso`: ASO:74.
 //
-// O pt é o do dicionário, não o do HTML: o JS da página antiga trocava todo `data-i18n` pelo
-// dicionário ao carregar, então é o texto que o visitante via. Diferiam `hero_desc` e
-// `plan_annual_title` (achado LOTTO-PT-HTML-DIVERGE-01).
-//
-// Rótulos sem `data-i18n` na página antiga (nomes das loterias, "LottoExpert Engine", os `alt`)
-// apareciam iguais no modo en; continuam no markup, iguais nos dois idiomas (achado
-// LOTTO-EN-ROTULOS-PT-01).
-//
-// `title` e `description` (que o og e o twitter repetem) vêm da ficha da Play,
-// ../lotto-expert/docs/ASO_METADATA.md (título, sugestão 1, e descrição curta); o en é tradução fiel
-// da ficha pt, que ainda não tem en (WP-21, D19).
-//
-// Jogo responsável: tools/check_site.py §5 (COPY_PROIBIDA) lê este arquivo também na raiz.
-
-import type { Idioma } from './ui';
+// Jogo responsável: tools/check_site.py §5 (COPY_PROIBIDA) lê este arquivo (FONTES_LOTTO). A regra
+// é por linha: frase com "garant"/"guarantee" fica numa linha só.
+import type { Idioma } from './idiomas';
+import type { ConteudoApp } from './landing';
 
 export const lottoexpert = {
   pt: {
-    title: 'LottoExpert: Loterias e Bolão — GHF Software',
-    description: 'Scanner de bilhetes, fechamentos, bolão e resultados oficiais da Caixa.',
-    hero_badge: 'Engenharia Estatística para Loterias',
-    hero_titleHtml: 'Jogue de forma<br class="hidden md:block"> <span class="text-gradient-purple">Inteligente</span>',
-    hero_desc:
-      'LottoExpert é uma solução de engenharia estatística para apostadores das Loterias da Caixa. Com processamento 100% local e privacidade, gera fechamentos, realiza conferência de bilhetes e reconhecimento OCR no próprio dispositivo, sincronizando resultados com infraestrutura própria no GCP.',
-    hero_img_alt: 'Tela principal do app LottoExpert com gerador de fechamentos e estatísticas',
-    btn_play: 'Baixar na Google Play',
-    btn_learn: 'Ver Funcionalidades',
-    features_badge: 'Vantagem Competitiva',
-    features_title: 'Projetado por Especialistas',
-    features_subtitle: 'Tudo o que você precisa para gerenciar suas apostas com rigor científico.',
-    feat1_title: 'Motor Combinatório',
-    feat1_desc:
-      'Geração de fechamentos C(n,k) otimizada para dispositivos móveis, sem risco de estouro de memória.',
-    feat2_title: 'Desdobramentos com Garantia',
-    feat2_desc:
-      'Matrizes com garantia matemática provada via solver de programação inteira (ILP) para Lotomania, Lotofácil e Timemania.',
-    feat3_title: 'Dashboard Meu Desempenho',
-    feat3_desc:
-      'Gestão financeira completa com apuração de saldo real, ROI por período, evolução mensal e relatórios automatizados.',
-    feat4_title: 'Jogos por Concurso',
-    feat4_desc:
-      'Vínculo de participação com custo congelado, apuração automática pós-sorteio e alertas de prêmios reais.',
-    feat5_title: 'Scanner OCR com Consensus',
-    feat5_desc:
-      'Reconhecimento multi-captura por votação (ML Kit) e leitor matricial customizado para bilhetes da Lotomania.',
-    feat6_title: 'Estratégias & Bolão Recorrente',
-    feat6_desc:
-      'Presets de fechamento salvos para geração em 1 toque e renovação automática de bolões a cada concurso.',
-    feat7_title: 'Alertas Inteligentes',
-    feat7_desc:
-      'Notificações por limiar de acumulado, dezenas monitoradas em ciclo de atraso e lembretes de apostas.',
-    feat8_title: 'Gestão de Bolões',
-    feat8_desc:
-      'Gerencie participantes e cotas com recálculo automático e copie estruturas de bolões com um toque.',
-    feat9_title: 'Links Mágicos & QR Code',
-    feat9_desc:
-      'Convites presenciais via QR Code local e digitais via Link Mágico (GZIP + Base64) para importação instantânea.',
-    feat10_title: 'Simulação de ROI',
-    feat10_desc:
-      'Backtesting de estratégias contra todo o histórico oficial local para projeção realista do retorno financeiro.',
-    feat11_title: 'Sync Otimizado & GCP',
-    feat11_desc:
-      'Sincronização delta otimizada via Cloud Functions Gen 2 e GCS, com atestação de segurança do Firebase App Check.',
-    feat12_title: 'Backup no Google Drive',
-    feat12_desc:
-      'Backup manual e automático (diário) na pasta oculta do app em sua conta Google Drive. A restauração não sobrescreve jogos nem bolões existentes.',
-    feat13_title: 'Widget Glance & Resiliente',
-    feat13_desc:
-      'Widget gratuito na tela inicial via Jetpack Glance e notificações resilientes reagendadas pós-reboot.',
-    feat14_title: 'Exportação em PDF',
-    feat14_desc:
-      "Gere relatórios profissionais em formato A4 para seus jogos e bolões, com cores oficiais e marca d'água por tier.",
-    feat15_title: 'Privacidade Total On-Device',
-    feat15_desc:
-      'Processamento 100% no próprio dispositivo. Seus jogos, fotos de bilhetes e cálculos nunca saem do seu aparelho.',
-    feat16_title: 'Teimosinha',
-    feat16_desc:
-      'Registre o mesmo jogo em vários concursos seguidos e acompanhe a conferência de cada participação. No Premium, até 12 concursos de uma vez.',
-    feat17_title: 'Prestação de Contas',
-    feat17_desc:
-      'Após o sorteio, o organizador gera uma imagem com o resultado do bolão e a divisão informativa do prêmio por participante. Nomes podem ser ocultados.',
-    lotteries_title: 'Todas as Loterias em um só lugar',
-    lotteries_desc: 'Todas as modalidades oficiais da Caixa Econômica Federal suportadas nativamente.',
-    lot_mega_details: '1–60 • Sel: 6–20 • R$ 6,00',
-    lot_lotofacil_details: '1–25 • Sel: 15–20 • R$ 3,50',
-    lot_quina_details: '1–80 • Sel: 5–15 • R$ 3,00',
-    lot_lotomania_details: '1–100 • Sel: 50 • R$ 3,00',
-    lot_timemania_details: '1–80 • Sel: 10 • R$ 3,50',
-    lot_diadesorte_details: '1–31 • Sel: 7–15 • R$ 2,50',
-    lot_duplasena_details: '1–50 • Sel: 6–15 • R$ 3,00',
-    lot_mais_milionaria_details: '1–50 + trv • Sel: 6 • R$ 6,00',
-    lot_supersete_details: '0–9 (7 col) • Sel: 7 • R$ 3,00',
-    pricing_title: 'Grátis ou PRO? Você escolhe.',
-    pricing_subtitle: 'Planos flexíveis para se adequar ao seu estilo de aposta. Cancele quando quiser.',
-    plan_monthly_title: 'Mensal',
-    plan_monthly_priceHtml: 'R$ 7,90<span class="text-sm text-gray-400 font-normal">/mês</span>',
-    plan_monthly_desc: 'Experimente todos os recursos Premium com flexibilidade.',
-    plan_annual_title: 'Anual ⭐',
-    plan_annual_priceHtml: 'R$ 34,90<span class="text-sm text-gray-300 font-normal">/ano</span>',
-    plan_annual_desc: 'O melhor custo-benefício para sua estratégia. Equivale a R$ 2,90/mês.',
-    plan_lifetime_title: 'Vitalício',
-    plan_lifetime_priceHtml: 'R$ 69,90<span class="text-sm text-gray-400 font-normal"> pago uma vez</span>',
-    plan_lifetime_desc: 'Acesso permanente e livre de qualquer assinatura futura.',
-    plan_badge_popular: 'Recomendado',
-    plan_purchase_in_app: 'Disponível para compra no app',
-    table_title: 'Comparação Detalhada',
-    table_subtitle: 'Veja como a versão Free se compara ao plano Premium',
-    pricing_th_features: 'Funcionalidade',
-    pricing_th_free: 'Free',
-    pricing_th_premium: 'Premium',
-    // Rótulo só para leitor de tela das células de ícone e de "—" (WP-22, aprovado pelo usuário).
-    pricing_incluido: 'Incluído',
-    pricing_nao_incluido: 'Não incluído',
-    price_feat1: 'Loterias Básicas (Mega-Sena/Lotofácil)',
-    price_feat2: 'Todas as Loterias (9 modalidades)',
-    price_feat_garantidos: 'Desdobramentos com Garantia (ILP)',
-    price_feat3: 'Scanner de Bilhetes (OCR)',
-    price_val_free_ocr: '3 capturas de teste',
-    price_val_premium_ocr: 'Ilimitado',
-    price_feat_conferencia: 'Conferência das Participações',
-    price_val_free_conf: 'Manual',
-    price_val_premium_conf: 'Automática pós-sorteio',
-    price_feat_desempenho: 'Dashboard "Meu Desempenho" (ROI & Saldo)',
-    price_val_free_desempenho: 'Amostra desfocada',
-    price_val_premium_desempenho: 'Análise Completa',
-    price_feat_presets: 'Estratégias Salvas (Presets)',
-    price_val_free_preset: '1 Preset',
-    price_val_premium_preset: 'Ilimitados',
-    price_feat_alertas: 'Alertas Inteligentes (Limiar & Dezenas)',
-    price_feat4: 'Backtesting Histórico',
-    price_feat5: 'Filtros Pro no Gerador',
-    price_feat6: 'Jogos Salvos (Carteira)',
-    price_val_free_jogos: 'Até 10',
-    price_val_premium_jogos: 'Ilimitado',
-    price_feat_concurso: 'Jogos por Concurso',
-    price_val_free_concurso: 'Até 5 por concurso',
-    price_val_premium_concurso: 'Ilimitado',
-    price_feat7: "PDF Limpo (Sem marca d'água)",
-    price_feat8: 'Bolões Simultâneos',
-    price_val_free_bolao: '1 Ativo',
-    price_val_premium_bolao: 'Ilimitado',
-    price_feat9: 'Participantes por Bolão',
-    price_val_free_part: 'Até 10',
-    price_val_premium_part: 'Ilimitado',
-    price_feat10: 'Compartilhar Link Mágico + QR Code',
-    price_feat11: 'Copiar Bolão & Bolão Recorrente',
-    price_feat12: 'Backup no Google Drive',
-    price_feat13: 'Widget de Tela Inicial',
+    meta: {
+      title: 'LottoExpert: Loterias e Bolão — GHF Software',
+      description: 'Scanner de bilhetes, fechamentos, bolão e resultados oficiais da Caixa.',
+    },
+    resumo: {
+      tag: 'Estatística & OCR',
+      descricao:
+        'Engenharia estatística para loterias com motor combinatório offline, scanner de bilhetes via OCR, gestão de bolões e simulação de ROI histórico.',
+      curta: 'Análise matemática e fechamentos offline.',
+    },
+    hero: {
+      titulo: 'LottoExpert: Loterias e Bolão',
+      lead: 'Scanner de bilhetes, fechamentos, bolão e resultados oficiais da Caixa. Com análise estatística avançada, conferência automática e processamento local no seu celular, você tem o controle total das suas apostas — do jogo ao resultado.',
+      meta: 'Grátis, com assinatura Pro opcional · Android 8.0 ou superior',
+      alt: 'Tela inicial do LottoExpert: as loterias da Caixa, cada uma com a data do próximo sorteio e a estimativa de prêmio.',
+    },
+    funcionalidades: [
+      {
+        titulo: 'Scanner de bilhetes',
+        descricao:
+          'Aponte a câmera e confira seus jogos na hora. O app identifica números, concursos e calcula seus prêmios automaticamente, tudo no seu celular, sem enviar foto para nenhum servidor. O plano gratuito tem 3 capturas de teste; no Pro, ilimitado.',
+      },
+      {
+        titulo: 'Fechamento com garantia matemática',
+        descricao:
+          'Matrizes provadas matematicamente para as 8 modalidades de dezenas: Lotofácil, Mega-Sena, Quina, Lotomania, Timemania, Dupla Sena, Dia de Sorte e +Milionária. Se X das suas dezenas saírem, algum jogo faz ao menos Y pontos. A garantia é sobre pontos, não sobre lucro.',
+        etiqueta: { texto: 'Pro', pro: true },
+        imagem: 'fechamento',
+        alt: 'Tela de fechamento da Lotofácil no LottoExpert: a explicação da garantia de pontos e as matrizes para escolher, cada uma com o número de dezenas, os pontos garantidos, a quantidade de jogos e o custo.',
+      },
+      {
+        titulo: 'Gerador de bolões',
+        descricao:
+          'Organize grupos de apostas, importe jogos via link direto, compartilhe o PDF profissional com os participantes e configure renovação automática para o próximo concurso (Pro). O plano gratuito tem 1 bolão ativo, com até 10 participantes.',
+        imagem: 'bolao',
+        alt: 'Tela de um bolão lacrado no LottoExpert: valor da cota, total arrecadado, botão de compartilhar, opção de bolão recorrente e a lista de participantes com a situação do pagamento.',
+      },
+      {
+        titulo: 'Prestação de contas do bolão',
+        descricao:
+          'Após o sorteio, o organizador gera uma imagem com o resultado do bolão e a divisão informativa do prêmio por participante. Nomes podem ser ocultados.',
+      },
+    ],
+    todas: [
+      {
+        titulo: 'Acompanhar seus jogos',
+        itens: [
+          {
+            nome: 'Teimosinha',
+            descricao:
+              'Registre o mesmo jogo em vários concursos seguidos e acompanhe a conferência de cada um. No plano gratuito, um concurso por vez; no Pro, até 12 de uma vez.',
+          },
+          {
+            nome: 'Conferência dos jogos',
+            descricao:
+              'Vincule cada jogo a um concurso. No plano gratuito você confere manualmente; no Pro, a conferência é automática após o sorteio, com notificação do resultado.',
+          },
+          {
+            nome: 'Resultados oficiais',
+            descricao:
+              'Mega-Sena, Lotofácil, Quina, Lotomania, Timemania, Dupla Sena, Dia de Sorte, +Milionária e Super Sete, sincronizados automaticamente a cada sorteio, com widget na tela inicial.',
+          },
+        ],
+      },
+      {
+        titulo: 'Desempenho e dados',
+        itens: [
+          {
+            nome: 'Meu Desempenho',
+            descricao:
+              'Painel financeiro com total apostado, prêmios, saldo real e ROI, inclusive dos seus bolões. O plano gratuito mostra uma amostra desfocada.',
+            etiqueta: { texto: 'Pro', pro: true },
+          },
+          {
+            nome: 'Backup no Google Drive',
+            descricao:
+              'Backup manual e automático (diário) na pasta oculta do app em sua conta Google Drive. A restauração não sobrescreve jogos nem bolões existentes.',
+            etiqueta: { texto: 'Pro', pro: true },
+          },
+        ],
+      },
+    ],
+    prova: [
+      {
+        titulo: 'Funciona sem internet',
+        texto:
+          'Consulte jogos salvos e gere matrizes mesmo sem internet. Os resultados ficam armazenados localmente após a sincronização.',
+      },
+      {
+        titulo: 'Leitura no aparelho',
+        texto: 'No scanner, toda a análise acontece no dispositivo e nenhuma imagem é enviada para servidores.',
+      },
+      {
+        titulo: 'Sem anúncios',
+        texto: 'Experiência limpa e focada no que importa: sua análise. Sem anúncios em nenhum plano.',
+      },
+    ],
+    planos: {
+      tipo: 'niveis',
+      lead: 'Planos flexíveis para se adequar ao seu estilo de aposta. Cancele quando quiser. Disponível para compra no app.',
+      niveis: [
+        { nome: 'Mensal', preco: 'R$ 7,90', periodo: '/mês', descricao: 'Acesso completo. Cancele quando quiser.' },
+        {
+          nome: 'Anual',
+          preco: 'R$ 34,90',
+          periodo: '/ano',
+          descricao: 'Menos de R$ 3 por mês. Acesso completo por um ano inteiro. (~R$ 2,91/mês)',
+          destaque: true,
+        },
+        {
+          nome: 'Vitalício',
+          preco: 'R$ 69,90',
+          periodo: 'pago uma vez',
+          descricao: 'Pague uma vez. Use para sempre. Sem renovação automática.',
+        },
+      ],
+      nota: {
+        texto:
+          'O LottoExpert é destinado a usuários maiores de 18 anos, dada a natureza do conteúdo (loterias e jogos de azar regulamentados pela legislação brasileira).',
+        selo: '18',
+        termos: 'lottoexpert-terms.html',
+      },
+      comparacao: {
+        colRecurso: 'Funcionalidade',
+        colGratis: 'Grátis',
+        colPago: 'Pro',
+        colPagoSub: 'Mensal · Anual · Vitalício',
+        linhas: [
+          ['Loterias Básicas (Mega-Sena/Lotofácil)', 'Incluído', 'Incluído'],
+          ['Todas as Loterias (9 modalidades)', 'Não incluído', 'Incluído'],
+          ['Fechamento com garantia (8 modalidades)', 'Não incluído', 'Incluído'],
+          ['Scanner de Bilhetes (OCR)', '3 capturas de teste', 'Ilimitado'],
+          ['Conferência das Participações', 'Manual', 'Automática pós-sorteio'],
+          ['Dashboard "Meu Desempenho" (ROI & Saldo)', 'Amostra desfocada', 'Análise Completa'],
+          ['Estratégias Salvas (Presets)', '1 Preset', 'Ilimitados'],
+          ['Alertas Inteligentes (Limiar & Dezenas)', 'Não incluído', 'Incluído'],
+          ['Backtesting Histórico', 'Não incluído', 'Incluído'],
+          ['Filtros Pro no Gerador', 'Não incluído', 'Incluído'],
+          ['Jogos Salvos (Carteira)', 'Até 10', 'Ilimitado'],
+          ['Jogos por Concurso', 'Até 5 por concurso', 'Ilimitado'],
+          ['Teimosinha (mesmo jogo em vários concursos)', '1 concurso por vez', 'Até 12 concursos'],
+          ["PDF Limpo (Sem marca d'água)", 'Não incluído', 'Incluído'],
+          ['Bolões Simultâneos', '1 Ativo', 'Ilimitado'],
+          ['Participantes por Bolão', 'Até 10', 'Ilimitado'],
+          ['Compartilhar Link Mágico + QR Code', 'Incluído', 'Incluído'],
+          ['Copiar Bolão & Bolão Recorrente', 'Não incluído', 'Incluído'],
+          ['Backup no Google Drive', 'Não incluído', 'Incluído'],
+          ['Widget de Tela Inicial', 'Incluído', 'Incluído'],
+        ],
+      },
+    },
+    privacidade:
+      'Seus jogos, estratégias e histórico de apostas ficam no seu celular (ou no Google Drive da sua própria conta, se você ativar o backup Pro) e nunca são enviados para servidores do desenvolvedor.',
+    faq: [
+      {
+        pergunta: 'O app garante ganhos na loteria?',
+        resposta:
+          'Não. O LottoExpert é uma ferramenta de organização matemática e análise estatística para entretenimento. As loterias são jogos de azar — nenhuma ferramenta pode garantir resultados, nem mesmo o Fechamento com garantia (que garante pontuação condicionada, não o prêmio máximo).',
+      },
+      {
+        pergunta: 'Meus jogos ficam seguros no app?',
+        resposta:
+          'Sim. Tickets, bolões e histórico de apostas ficam no seu celular (ou na sua própria conta do Google Drive, se você ativar o backup Pro). O app nunca envia esses dados para servidores do desenvolvedor.',
+      },
+      {
+        pergunta: 'Posso usar o app sem internet?',
+        resposta:
+          'Sim, para a maioria das funcionalidades. Consulta de jogos salvos, geração de fechamentos e backtesting funcionam offline. A sincronização de novos sorteios e o backup no Drive requerem conexão.',
+      },
+      {
+        pergunta: 'O app funciona no iPhone?',
+        resposta: 'Não. O LottoExpert é exclusivo para Android (Android 8.0 ou superior).',
+      },
+      {
+        pergunta: 'O plano vitalício é realmente para sempre?',
+        resposta:
+          'Sim. É uma compra única sem renovação automática. Após a compra, o acesso Pro é permanente naquele dispositivo (e em qualquer dispositivo associado à mesma conta Google Play, conforme política do Google).',
+      },
+    ],
+    aviso:
+      'O LottoExpert é uma ferramenta de análise estatística e entretenimento. Não realiza apostas, não garante ganhos e não tem vínculo com a Caixa Econômica Federal. As análises são baseadas em dados históricos. Jogue com responsabilidade.',
   },
   en: {
-    title: 'LottoExpert: Lotteries & Sweepstakes — GHF Software',
-    description: 'Ticket scanner, wheels, sweepstakes and official Caixa lottery results.',
-    hero_badge: 'Statistical Engineering For Lotteries',
-    hero_titleHtml: 'Play Extremely<br class="hidden md:block"> <span class="text-gradient-purple">Smart</span>',
-    hero_desc:
-      'LottoExpert is a statistical engineering solution for Brazilian Caixa Lotteries. Designed with a strict focus on local processing and privacy, it handles wheel generation, ticket scanning (OCR), and result checking entirely on your device, syncing results via secure custom GCP infrastructure.',
-    // sem par en na página antiga (o alt não tinha data-i18n): continua em pt — LOTTO-EN-ROTULOS-PT-01
-    hero_img_alt: 'Tela principal do app LottoExpert com gerador de fechamentos e estatísticas',
-    btn_play: 'Get it on Google Play',
-    btn_learn: 'View Features',
-    features_badge: 'Competitive Edge',
-    features_title: 'Engineered By Experts',
-    features_subtitle: 'Everything you need to manage your bets with scientific rigor.',
-    feat1_title: 'Combinatorial Engine',
-    feat1_desc:
-      'Mobile-optimized C(n,k) matrix generation using lazy Sequences to prevent memory overflow in large wheels.',
-    feat2_title: 'Guaranteed Wheelings',
-    feat2_desc:
-      'Proven mathematical guarantee matrices built via Integer Linear Programming (ILP) solvers for Lotomania, Lotofácil, and Timemania.',
-    feat3_title: 'My Performance Dashboard',
-    feat3_desc:
-      'Comprehensive financial tracking with real balance, ROI analysis per period, monthly charts, and automated reports.',
-    feat4_title: 'Draw-Based Tickets',
-    feat4_desc:
-      'Tickets linked to specific draws with frozen bet costs, automated post-draw verification, and real prize notifications.',
-    feat5_title: 'Consensus OCR Scanner',
-    feat5_desc: 'Multi-capture consensus reading (ML Kit) and a custom matrix reader for physical Lotomania cards.',
-    feat6_title: 'Saved Strategies & Recurrent Sweepstakes',
-    feat6_desc: 'One-touch wheeling presets and automatic sweepstake duplication for every upcoming draw.',
-    feat7_title: 'Smart Alerts',
-    feat7_desc:
-      'Notifications for custom jackpot thresholds, monitored numbers on long delay cycles, and betting reminders.',
-    feat8_title: 'Sweepstake Management',
-    feat8_desc:
-      'Manage participants and shares with automated cost calculations and single-tap sweepstake copying.',
-    feat9_title: 'Magic Links & QR Codes',
-    feat9_desc:
-      'In-person sharing with local QR Codes and compressed Magic Links (GZIP + Base64) for instant import.',
-    feat10_title: 'ROI Simulation',
-    feat10_desc:
-      'Historical strategy backtesting against all local official draws for realistic financial projections.',
-    feat11_title: 'Optimized Sync & GCP',
-    feat11_desc:
-      'Optimized delta synchronization via Cloud Functions Gen 2 and GCS, secured with Firebase App Check attestation.',
-    feat12_title: 'Google Drive Backup',
-    feat12_desc:
-      "Manual and automatic daily backups to the app's hidden folder in your Google Drive. Restoring never overwrites existing tickets or sweepstakes.",
-    feat13_title: 'Glance Widget & Resilient Notifications',
-    feat13_desc: 'Free home screen widget via Jetpack Glance and post-reboot rescheduled notification alarms.',
-    feat14_title: 'PDF Export',
-    feat14_desc:
-      'Generate professional A4 PDF reports for tickets and sweepstakes with official lottery color schemes.',
-    feat15_title: 'Total On-Device Privacy',
-    feat15_desc:
-      '100% on-device processing. Your games, ticket photos, and strategy data never leave your smartphone.',
-    feat16_title: 'Repeat Entries (Teimosinha)',
-    feat16_desc:
-      'Register the same ticket across several consecutive draws and follow the result check for each entry. On Premium, up to 12 draws at once.',
-    feat17_title: 'Sweepstake Settlement',
-    feat17_desc:
-      'After the draw, organizers generate an image with the sweepstake result and an informational prize split per participant. Names can be hidden.',
-    lotteries_title: 'All Lotteries in One Place',
-    lotteries_desc: 'All official Caixa Econômica Federal modalities supported natively.',
-    lot_mega_details: '1–60 • Sel: 6–20 • R$ 6.00',
-    lot_lotofacil_details: '1–25 • Sel: 15–20 • R$ 3.50',
-    lot_quina_details: '1–80 • Sel: 5–15 • R$ 3.00',
-    lot_lotomania_details: '1–100 • Sel: 50 • R$ 3.00',
-    lot_timemania_details: '1–80 • Sel: 10 • R$ 3.50',
-    lot_diadesorte_details: '1–31 • Sel: 7–15 • R$ 2.50',
-    lot_duplasena_details: '1–50 • Sel: 6–15 • R$ 3.00',
-    lot_mais_milionaria_details: '1–50 + clv • Sel: 6 • R$ 6.00',
-    lot_supersete_details: '0–9 (7 col) • Sel: 7 • R$ 3.00',
-    pricing_title: 'Free or PRO? Your Choice.',
-    pricing_subtitle: 'Flexible plans to fit your betting style. Cancel anytime.',
-    plan_monthly_title: 'Monthly',
-    plan_monthly_priceHtml: 'R$ 7.90<span class="text-sm text-gray-400 font-normal">/month</span>',
-    plan_monthly_desc: 'Try all Premium features with flexibility.',
-    plan_annual_title: 'Annual ⭐',
-    plan_annual_priceHtml: 'R$ 34.90<span class="text-sm text-gray-300 font-normal">/year</span>',
-    plan_annual_desc: 'The best value for your strategy. Equivalent to R$ 2.90/month.',
-    plan_lifetime_title: 'Lifetime',
-    plan_lifetime_priceHtml: 'R$ 69.90<span class="text-sm text-gray-400 font-normal"> paid once</span>',
-    plan_lifetime_desc: 'Permanent access, free from any future subscriptions.',
-    plan_badge_popular: 'Recommended',
-    plan_purchase_in_app: 'Available for purchase in-app',
-    table_title: 'Detailed Comparison',
-    table_subtitle: 'See how the Free version compares to the Premium plan',
-    pricing_th_features: 'Features',
-    pricing_th_free: 'Free',
-    pricing_th_premium: 'Premium',
-    pricing_incluido: 'Included',
-    pricing_nao_incluido: 'Not included',
-    price_feat1: 'Basic Lotteries (Mega-Sena/Lotofácil)',
-    price_feat2: 'All Lotteries (9 modalities)',
-    price_feat_garantidos: 'Guaranteed Wheelings (ILP)',
-    price_feat3: 'Ticket Scanner (OCR)',
-    price_val_free_ocr: '3 test captures',
-    price_val_premium_ocr: 'Unlimited',
-    price_feat_conferencia: 'Participation Verification',
-    price_val_free_conf: 'Manual',
-    price_val_premium_conf: 'Automatic post-draw',
-    price_feat_desempenho: '"My Performance" Dashboard (ROI & Balance)',
-    price_val_free_desempenho: 'Blurred sample',
-    price_val_premium_desempenho: 'Full Analysis',
-    price_feat_presets: 'Saved Strategies (Presets)',
-    price_val_free_preset: '1 Preset',
-    price_val_premium_preset: 'Unlimited',
-    price_feat_alertas: 'Smart Alerts (Jackpots & Numbers)',
-    price_feat4: 'Historical Backtesting',
-    price_feat5: 'Pro Filters in Generator',
-    price_feat6: 'Saved Games (Wallet)',
-    price_val_free_jogos: 'Up to 10',
-    price_val_premium_jogos: 'Unlimited',
-    price_feat_concurso: 'Draw-Based Tickets',
-    price_val_free_concurso: 'Up to 5 per draw',
-    price_val_premium_concurso: 'Unlimited',
-    price_feat7: 'Clean PDF (No watermark)',
-    price_feat8: 'Simultaneous Sweepstakes',
-    price_val_free_bolao: '1 Active',
-    price_val_premium_bolao: 'Unlimited',
-    price_feat9: 'Participants per Sweepstake',
-    price_val_free_part: 'Up to 10',
-    price_val_premium_part: 'Unlimited',
-    price_feat10: 'Share Magic Link + QR Code',
-    price_feat11: 'Copy Sweepstake & Recurrent Sweepstakes',
-    price_feat12: 'Google Drive Backup',
-    price_feat13: 'Home Screen Widget',
+    meta: {
+      title: 'LottoExpert: Lotteries & Sweepstakes — GHF Software',
+      description: 'Ticket scanner, wheels, sweepstakes and official Caixa lottery results.',
+    },
+    resumo: {
+      tag: 'Statistics & OCR',
+      descricao:
+        'Statistical engineering for lotteries featuring an offline combinatorial engine, OCR ticket scanner, sweepstakes management, and historical ROI simulation.',
+      curta: 'Mathematical analysis and offline lotto wheels.',
+    },
+    hero: {
+      titulo: 'LottoExpert: Lotteries & Sweepstakes',
+      lead: 'Ticket scanner, wheels, sweepstakes and official Caixa lottery results. With advanced statistical analysis, automatic result checking and processing on your own phone, you stay in full control of your bets — from the game to the result.',
+      meta: 'Free, with an optional Pro subscription · Android 8.0 or later',
+      alt: 'LottoExpert home screen: the Caixa lotteries, each with the next draw date and its prize estimate (app interface in Portuguese).',
+    },
+    funcionalidades: [
+      {
+        titulo: 'Ticket scanner',
+        descricao:
+          'Point the camera and check your tickets on the spot. The app reads the numbers and draws and calculates your prizes automatically, all on your phone, without sending any photo to a server. The free plan includes 3 test captures; Pro is unlimited.',
+      },
+      {
+        titulo: 'Wheeling with a mathematical guarantee',
+        descricao:
+          'Mathematically proven matrices for the 8 number-based modalities: Lotofácil, Mega-Sena, Quina, Lotomania, Timemania, Dupla Sena, Dia de Sorte and +Milionária. If X of your numbers are drawn, at least one ticket scores at least Y points. The guarantee is about points, not profit.',
+        etiqueta: { texto: 'Pro', pro: true },
+        imagem: 'fechamento',
+        alt: 'LottoExpert Lotofácil wheeling screen: the explanation of the points guarantee and the matrices to choose from, each showing the number of numbers, the guaranteed points, the number of tickets and the cost (app interface in Portuguese).',
+      },
+      {
+        titulo: 'Sweepstake generator',
+        descricao:
+          'Organize betting groups, import tickets from a direct link, share the professional PDF with participants and set up automatic renewal for the next draw (Pro). The free plan includes 1 active sweepstake with up to 10 participants.',
+        imagem: 'bolao',
+        alt: 'LottoExpert screen of a sealed sweepstake: share value, amount collected, share button, recurring sweepstake option and the participant list with payment status (app interface in Portuguese).',
+      },
+      {
+        titulo: 'Sweepstake settlement',
+        descricao:
+          'After the draw, organizers generate an image with the sweepstake result and an informational prize split per participant. Names can be hidden.',
+      },
+    ],
+    todas: [
+      {
+        titulo: 'Following your games',
+        itens: [
+          {
+            nome: 'Repeat entries (Teimosinha)',
+            descricao:
+              'Register the same ticket across several consecutive draws and follow the result check for each one. On the free plan, one draw at a time; on Pro, up to 12 at once.',
+          },
+          {
+            nome: 'Ticket checking',
+            descricao:
+              'Link each ticket to a draw. On the free plan you check manually; on Pro, checking is automatic after the draw, with a result notification.',
+          },
+          {
+            nome: 'Official results',
+            descricao:
+              'Mega-Sena, Lotofácil, Quina, Lotomania, Timemania, Dupla Sena, Dia de Sorte, +Milionária and Super Sete, synced automatically after each draw, with a home screen widget.',
+          },
+        ],
+      },
+      {
+        titulo: 'Performance and data',
+        itens: [
+          {
+            nome: 'My Performance',
+            descricao:
+              'Financial dashboard with total wagered, prizes, real balance and ROI, including your sweepstakes. The free plan shows a blurred sample.',
+            etiqueta: { texto: 'Pro', pro: true },
+          },
+          {
+            nome: 'Google Drive backup',
+            descricao:
+              "Manual and automatic daily backups to the app's hidden folder in your Google Drive. Restoring never overwrites existing tickets or sweepstakes.",
+            etiqueta: { texto: 'Pro', pro: true },
+          },
+        ],
+      },
+    ],
+    prova: [
+      {
+        titulo: 'Works offline',
+        texto:
+          'Browse saved tickets and generate matrices even without internet. Results stay stored on the device after syncing.',
+      },
+      {
+        titulo: 'Reading on the device',
+        texto: 'In the scanner, all analysis happens on the device and no image is sent to any server.',
+      },
+      {
+        titulo: 'No ads',
+        texto: 'A clean experience focused on what matters: your analysis. No ads on any plan.',
+      },
+    ],
+    planos: {
+      tipo: 'niveis',
+      lead: 'Flexible plans to fit your betting style. Cancel anytime. Available for purchase in-app.',
+      niveis: [
+        { nome: 'Monthly', preco: 'R$ 7.90', periodo: '/month', descricao: 'Full access. Cancel anytime.' },
+        {
+          nome: 'Annual',
+          preco: 'R$ 34.90',
+          periodo: '/year',
+          descricao: 'Under R$ 3 per month. Full access for a whole year. (~R$ 2.91/month)',
+          destaque: true,
+        },
+        {
+          nome: 'Lifetime',
+          preco: 'R$ 69.90',
+          periodo: 'paid once',
+          descricao: 'Pay once. Use forever. No automatic renewal.',
+        },
+      ],
+      nota: {
+        texto:
+          'LottoExpert is intended for users over 18 years of age, given the nature of the content (lotteries and gambling regulated by Brazilian legislation).',
+        selo: '18',
+        termos: 'lottoexpert-terms.html',
+      },
+      comparacao: {
+        colRecurso: 'Feature',
+        colGratis: 'Free',
+        colPago: 'Pro',
+        colPagoSub: 'Monthly · Annual · Lifetime',
+        linhas: [
+          ['Basic Lotteries (Mega-Sena/Lotofácil)', 'Included', 'Included'],
+          ['All Lotteries (9 modalities)', 'Not included', 'Included'],
+          ['Wheeling with guarantee (8 modalities)', 'Not included', 'Included'],
+          ['Ticket Scanner (OCR)', '3 test captures', 'Unlimited'],
+          ['Participation Verification', 'Manual', 'Automatic post-draw'],
+          ['"My Performance" Dashboard (ROI & Balance)', 'Blurred sample', 'Full Analysis'],
+          ['Saved Strategies (Presets)', '1 Preset', 'Unlimited'],
+          ['Smart Alerts (Jackpots & Numbers)', 'Not included', 'Included'],
+          ['Historical Backtesting', 'Not included', 'Included'],
+          ['Pro Filters in Generator', 'Not included', 'Included'],
+          ['Saved Games (Wallet)', 'Up to 10', 'Unlimited'],
+          ['Draw-Based Tickets', 'Up to 5 per draw', 'Unlimited'],
+          ['Repeat entries (Teimosinha)', '1 draw at a time', 'Up to 12 draws'],
+          ['Clean PDF (No watermark)', 'Not included', 'Included'],
+          ['Simultaneous Sweepstakes', '1 Active', 'Unlimited'],
+          ['Participants per Sweepstake', 'Up to 10', 'Unlimited'],
+          ['Share Magic Link + QR Code', 'Included', 'Included'],
+          ['Copy Sweepstake & Recurrent Sweepstakes', 'Not included', 'Included'],
+          ['Google Drive Backup', 'Not included', 'Included'],
+          ['Home Screen Widget', 'Included', 'Included'],
+        ],
+      },
+    },
+    privacidade:
+      "Your tickets, strategies and bet history stay on your phone (or in your own Google Drive account, if you turn on Pro backup) and are never sent to the developer's servers.",
+    faq: [
+      {
+        pergunta: 'Does the app guarantee gains?',
+        resposta:
+          'No. LottoExpert is a mathematical organization and statistical analysis tool for entertainment. Lotteries are games of chance: no tool can guarantee results, not even the guaranteed wheeling (which guarantees a conditional score, not the top prize).',
+      },
+      {
+        pergunta: 'Are my tickets safe in the app?',
+        resposta:
+          "Yes. Tickets, sweepstakes and bet history stay on your phone (or in your own Google Drive account, if you turn on Pro backup). The app never sends this data to the developer's servers.",
+      },
+      {
+        pergunta: 'Can I use the app without internet?',
+        resposta:
+          'Yes, for most features. Browsing saved tickets, generating wheels and backtesting work offline. Syncing new draws and the Drive backup require a connection.',
+      },
+      {
+        pergunta: 'Does the app work on iPhone?',
+        resposta: 'No. LottoExpert is Android-only (Android 8.0 or later).',
+      },
+      {
+        pergunta: 'Is the lifetime plan really forever?',
+        resposta:
+          "Yes. It is a one-time purchase with no automatic renewal. After purchase, Pro access is permanent on that device (and on any device linked to the same Google Play account, according to Google's policy).",
+      },
+    ],
+    aviso:
+      'LottoExpert is a statistical analysis and entertainment tool. It does not place bets, does not guarantee gains, and is not affiliated with Caixa Econômica Federal. The analyses are based on historical data. Play responsibly.',
   },
-} satisfies Record<Idioma, Record<string, string>>;
-
-export type ChaveLotto = keyof (typeof lottoexpert)['pt'];
+} satisfies Record<Idioma, ConteudoApp>;

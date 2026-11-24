@@ -21,6 +21,9 @@ const c = planos.comparacao;
 // seção, que repete o nome do landmark de fora (unique-landmark do html-validate): aqui vai o
 // título com as duas colunas comparadas, sem texto novo.
 const rotuloTabela = `${titulo}: ${c.colGratis}, ${c.colPago}`;
+// Período colado no preço quando começa por "/" ("R$ 7,90/mês"); por extenso, com espaço ("R$ 69,90
+// pago uma vez"), como a página antiga (WP-10, fatia 9: o primeiro app com planos em níveis).
+const sep = (periodo: string) => (periodo.startsWith('/') ? '' : ' ');
 ---
 <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,200px),1fr))] gap-3">
   {
@@ -29,7 +32,7 @@ const rotuloTabela = `${titulo}: ${c.colGratis}, ${c.colPago}`;
         <span class="text-[15px] font-bold">{n.nome}</span>
         <span class="text-[28px] leading-[34px] font-bold tabular-nums tracking-[-0.01em]">
           {n.preco}
-          {n.periodo && <span class="text-sm font-medium text-text-2">{n.periodo}</span>}
+          {n.periodo && <span class="text-sm font-medium text-text-2">{sep(n.periodo)}{n.periodo}</span>}
         </span>
         <span class="text-sm leading-[21px] text-text-2 text-pretty">{n.descricao}</span>
       </div>

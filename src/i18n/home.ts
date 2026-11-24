@@ -9,10 +9,9 @@
 //   traz o pt destes quatro: o en ("Published", "Unavailable", "{app} on Google Play") é tradução.
 // - `resumos`: tag, texto longo e texto curto de cada app, no formato `ConteudoApp['resumo']`
 //   (landing.ts), movidos sem edição das chaves antigas (`tag_*`, `app_*_desc`, `hero_*_desc`).
-//   O card usa só `tag` e `curta` (D30 (3)); o `descricao` do LottoExpert é o do dicionário antigo
-//   (INDEX-LOTTO-DESC-DIVERGE-01) e a escolha dele fica para a fatia 9. Cada fatia de landing
-//   (7, 8, 9) move o objeto para o `<app>.ts` e troca uma linha no Home.astro. O do EclipseGo já
-//   está em eclipsego.ts.
+//   O card usa só `tag` e `curta` (D30 (3)). Cada fatia de landing (7, 8, 9) move o objeto para o
+//   `<app>.ts` e troca uma linha no Home.astro. O do EclipseGo já está em eclipsego.ts, e o do
+//   LottoExpert em lottoexpert.ts (fatia 9, texto mantido por resposta do usuário em 2026-11-24).
 // Chaves `*Html` levam marcação e são renderizadas com set:html: `&` escrito `&amp;`.
 
 import type { Idioma } from './ui';
@@ -36,7 +35,7 @@ type TextosHome = {
   todos_apps: string;
   sobre_titulo: string;
   about_p1Html: string;
-  resumos: { lottoexpert: Resumo; topowalk: Resumo; poleposition: Resumo };
+  resumos: { topowalk: Resumo; poleposition: Resumo };
 };
 
 export const home = {
@@ -61,12 +60,6 @@ export const home = {
     about_p1Html:
       'A <strong>GHF Software</strong> é impulsionada pela paixão por resolver problemas complexos com soluções elegantes. Nossa empresa foi fundada por um <strong>Arquiteto de Sistemas</strong> com profunda bagagem técnica e experiência em desenvolvimento de software e soluções atuando ativamente <strong>desde 2004</strong>.',
     resumos: {
-      lottoexpert: {
-        tag: 'Estatística & OCR',
-        descricao:
-          'Engenharia estatística para loterias com motor combinatório offline, scanner de bilhetes via OCR, gestão de bolões e simulação de ROI histórico.',
-        curta: 'Análise matemática e fechamentos offline.',
-      },
       topowalk: {
         tag: 'Topografia & SIG',
         descricao:
@@ -100,12 +93,6 @@ export const home = {
     about_p1Html:
       '<strong>GHF Software</strong> is driven by a passion for solving complex mechanics into elegant solutions. Founded by a <strong>Systems Architect</strong> with profound technical background actively operating <strong>since 2004</strong>.',
     resumos: {
-      lottoexpert: {
-        tag: 'Statistics & OCR',
-        descricao:
-          'Statistical engineering for lotteries featuring an offline combinatorial engine, OCR ticket scanner, sweepstakes management, and historical ROI simulation.',
-        curta: 'Mathematical analysis and offline lotto wheels.',
-      },
       topowalk: {
         tag: 'Topography & GIS',
         descricao:

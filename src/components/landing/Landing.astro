@@ -27,7 +27,8 @@ interface Props {
   app: ChaveApp;
   /** o dicionário do app, todas as línguas (para o `exigeEspelho`) */
   conteudo: Record<Idioma, ConteudoApp>;
-  imagens: { hero: ImageMetadata; funcionalidades?: Record<string, ImageMetadata> };
+  /** `heroPosicao`: `object-position` da imagem do hero no quadrado (padrão: centro; ver Hero.astro) */
+  imagens: { hero: ImageMetadata; heroPosicao?: string; funcionalidades?: Record<string, ImageMetadata> };
 }
 
 const { lang, app, conteudo, imagens } = Astro.props;
@@ -45,6 +46,7 @@ const cta = { href: apps[app].play, rotulo: r.cta };
     lead={c.hero.lead}
     meta={c.hero.meta}
     imagem={imagens.hero}
+    posicao={imagens.heroPosicao}
     alt={c.hero.alt}
     cta={cta}
   />
