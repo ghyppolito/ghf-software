@@ -134,3 +134,25 @@ beleza ajuda a converter quem chega; o conteúdo traz quem ainda não conhece.
 7. **Prazo:** a revisão entra **antes** do deploy único. As fatias 7, 8, 9 e 10b do WP-10 pausam até
    o protótipo da Home e do LottoExpert ser aprovado; se passar de ~1 semana, revê-se o prazo.
 8. **SEO:** WP separado de conteúdo, sem bloquear a revisão.
+
+---
+
+## 7. Direção aprovada
+
+**2026-11-24 — fatia 1 do WP-30 (Home), commit `d094a0a`.** O usuário viu a Home em
+`localhost:8080` e aprovou: "agora sim, vi que foi só a home que mudou mas agora sim é uma página
+profissional". Referência: `design/referencia/wp30/home-1280.png` e `home-390.png`.
+
+O que passa a ser a direção do site (D33 (a)); o `site-ux` AUDITAR mede contra isto onde diverge
+do handoff:
+- "Engenharia luminosa": navy profundo, glow radial do acento vindo do canto, grade de pontos e
+  anéis concêntricos finos como ornamento (`orn-hero`), tudo em CSS.
+- Ritmo de seções: base → faixa tingida (`--color-band`) → base → superfície → base → glow de
+  fechamento (`--grad-glow-baixo`).
+- Escala tipográfica: `--text-hero`, `--text-section`, `--text-lead`, `--text-eyebrow` (maiúsculas
+  com tracking, desvio do handoff), `--text-numeral`.
+- Cartões: `cartao-brilho` (borda em gradiente do acento), `--radius-card-lg` 20 px, sombras
+  `--shadow-card`/`--shadow-lift`/`--shadow-brilho`; acento por `[data-app]` em qualquer elemento.
+- Botões `btn-primario` (pill, brilho do acento) e `btn-secundario`.
+- Movimento: `.revela` com `animation-timeline: view()` só em `no-preference`; nada anima o h1/LCP.
+- Moldura de aparelho: `src/components/landing/Aparelho.astro` (estreia nas landings, fatia 2).
