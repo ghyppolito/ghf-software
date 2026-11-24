@@ -9,6 +9,8 @@
 // conteúdo" (WCAG 2.4.1), que o handoff não tem (resposta 8 do usuário, 2026-11-22).
 // Landings do WP-10 (fatia 5): `nav_funcionalidades`, `nav_planos`, `nav_gratis_pro`, `nav_faq` e
 // `nav_privacidade` são `features`/`plans`/`freepro`/`faq`/`privacy` de `content/i18n.js`.
+// WP-30 (fatia 1, resposta do usuário em 2026-11-24): `nav_portfolio` passa de "Portfólio"/"Portfolio"
+// a "Produtos"/"Products", o título da seção de apps da Home; a âncora continua `#portfolio`.
 // `Idioma` vem do mapa (idiomas.ts); fica reexportado aqui para os dicionários de src/i18n/.
 import type { Idioma } from './idiomas';
 
@@ -19,7 +21,7 @@ export const SITE = 'https://ghfsoftware.com';
 export const ui = {
   pt: {
     nav_about: 'Sobre Nós',
-    nav_portfolio: 'Portfólio',
+    nav_portfolio: 'Produtos',
     nav_contact: 'Contato',
     nav_principal: 'Principal',
     nav_funcionalidades: 'Funcionalidades',
@@ -42,7 +44,7 @@ export const ui = {
   },
   en: {
     nav_about: 'About Us',
-    nav_portfolio: 'Portfolio',
+    nav_portfolio: 'Products',
     nav_contact: 'Contact',
     nav_principal: 'Main',
     nav_funcionalidades: 'Features',

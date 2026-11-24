@@ -12,11 +12,18 @@
 //   O card usa só `tag` e `curta` (D30 (3)). Cada fatia de landing (7, 8, 9) move o objeto para o
 //   `<app>.ts` e troca uma linha no Home.astro. O do EclipseGo já está em eclipsego.ts, e o do
 //   LottoExpert em lottoexpert.ts (fatia 9, texto mantido por resposta do usuário em 2026-11-24).
+// - WP-30, fatia 1 (respostas do usuário em 2026-11-24, D25 e D33): `hero_title` e `hero_desc`
+//   novos (o h1 e o subtítulo aprovados; `title` e `description` do <head> não mudam aqui),
+//   `apps_titulo` passa a "Produtos"/"Products", `areas_titulo` e `areas` (as três áreas de atuação,
+//   com o ícone FA no componente), `cta_produtos` (o CTA primário do hero) e `contato_frase` (a
+//   frase do CTA final). `about_leadHtml` + `about_restHtml` são o `about_p1Html` publicado dividido
+//   na 1ª frase, verbatim (nenhuma palavra muda; a concatenação com um espaço é o texto antigo).
 // Chaves `*Html` levam marcação e são renderizadas com set:html: `&` escrito `&amp;`.
 
 import type { Idioma } from './ui';
 
 type Resumo = { tag: string; descricao: string; curta: string };
+type Area = { titulo: string; texto: string };
 
 type TextosHome = {
   title: string;
@@ -24,6 +31,13 @@ type TextosHome = {
   since_2004: string;
   hero_title: string;
   hero_desc: string;
+  /** CTA primário do hero, para `#portfolio` */
+  cta_produtos: string;
+  areas_titulo: string;
+  /** as três áreas de atuação, na ordem dos ícones de Home.astro */
+  areas: readonly [Area, Area, Area];
+  /** frase do CTA final (o título é `nav_contact` de ui.ts) */
+  contato_frase: string;
   apps_titulo: string;
   selo_publicado: string;
   selo_indisponivel: string;
@@ -34,7 +48,10 @@ type TextosHome = {
   atualizado: string;
   todos_apps: string;
   sobre_titulo: string;
-  about_p1Html: string;
+  /** 1ª frase do texto do Sobre (lead) */
+  about_leadHtml: string;
+  /** o resto do texto do Sobre */
+  about_restHtml: string;
   resumos: { topowalk: Resumo; poleposition: Resumo };
 };
 
@@ -46,10 +63,18 @@ export const home = {
     description:
       'Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.',
     since_2004: 'Desde 2004',
-    hero_title: 'Construímos o futuro da Mobilidade e IoT',
+    hero_title: 'Engenharia de software, do celular à nuvem.',
     hero_desc:
-      'Trazer soluções inovadoras com foco em Internet das Coisas e mobilidade para facilitar e empoderar o seu dia a dia.',
-    apps_titulo: 'Apps',
+      'Apps nativos, plataformas em nuvem e IA aplicada, projetados e mantidos pela GHF Software desde 2004.',
+    cta_produtos: 'Ver produtos',
+    areas_titulo: 'Áreas de atuação',
+    areas: [
+      { titulo: 'Apps mobile', texto: 'Android nativo com Kotlin e Jetpack Compose; multiplataforma com Flutter.' },
+      { titulo: 'Nuvem e SaaS', texto: 'Back-end serverless no Google Cloud e Firebase; plataformas web.' },
+      { titulo: 'IA aplicada', texto: 'Modelos Gemini e Claude, agentes, MCP e IA no aparelho, como OCR.' },
+    ],
+    contato_frase: 'Tem um projeto em mente? Escreva para a GHF Software.',
+    apps_titulo: 'Produtos',
     selo_publicado: 'Publicado',
     selo_indisponivel: 'Indisponível',
     play_curto: 'Play',
@@ -57,8 +82,10 @@ export const home = {
     atualizado: 'Última atualização',
     todos_apps: 'Todos os apps GHF',
     sobre_titulo: 'Sobre',
-    about_p1Html:
-      'A <strong>GHF Software</strong> é impulsionada pela paixão por resolver problemas complexos com soluções elegantes. Nossa empresa foi fundada por um <strong>Arquiteto de Sistemas</strong> com profunda bagagem técnica e experiência em desenvolvimento de software e soluções atuando ativamente <strong>desde 2004</strong>.',
+    about_leadHtml:
+      'A <strong>GHF Software</strong> é impulsionada pela paixão por resolver problemas complexos com soluções elegantes.',
+    about_restHtml:
+      'Nossa empresa foi fundada por um <strong>Arquiteto de Sistemas</strong> com profunda bagagem técnica e experiência em desenvolvimento de software e soluções atuando ativamente <strong>desde 2004</strong>.',
     resumos: {
       topowalk: {
         tag: 'Topografia & SIG',
@@ -79,10 +106,18 @@ export const home = {
     description:
       'Cutting-edge software engineering for Mobile and IoT applications. Creating the future with performance since 2004.',
     since_2004: 'Since 2004',
-    hero_title: 'Building the future of Mobility & IoT',
+    hero_title: 'Software engineering, from the phone to the cloud.',
     hero_desc:
-      'Bringing innovative solutions focused on Internet of Things and mobility to empower and simplify your daily routines.',
-    apps_titulo: 'Apps',
+      'Native apps, cloud platforms and applied AI, designed and maintained by GHF Software since 2004.',
+    cta_produtos: 'See products',
+    areas_titulo: 'Areas of expertise',
+    areas: [
+      { titulo: 'Mobile apps', texto: 'Native Android with Kotlin and Jetpack Compose; cross-platform with Flutter.' },
+      { titulo: 'Cloud and SaaS', texto: 'Serverless back-end on Google Cloud and Firebase; web platforms.' },
+      { titulo: 'Applied AI', texto: 'Gemini and Claude models, agents, MCP and on-device AI, such as OCR.' },
+    ],
+    contato_frase: 'Have a project in mind? Write to GHF Software.',
+    apps_titulo: 'Products',
     selo_publicado: 'Published',
     selo_indisponivel: 'Unavailable',
     play_curto: 'Play',
@@ -90,8 +125,10 @@ export const home = {
     atualizado: 'Last updated',
     todos_apps: 'All GHF apps',
     sobre_titulo: 'About',
-    about_p1Html:
-      '<strong>GHF Software</strong> is driven by a passion for solving complex mechanics into elegant solutions. Founded by a <strong>Systems Architect</strong> with profound technical background actively operating <strong>since 2004</strong>.',
+    about_leadHtml:
+      '<strong>GHF Software</strong> is driven by a passion for solving complex mechanics into elegant solutions.',
+    about_restHtml:
+      'Founded by a <strong>Systems Architect</strong> with profound technical background actively operating <strong>since 2004</strong>.',
     resumos: {
       topowalk: {
         tag: 'Topography & GIS',

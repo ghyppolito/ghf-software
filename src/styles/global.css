@@ -117,6 +117,52 @@
   transition: all 0.3s ease;
 }
 
+/* ------------------------------------------------------------------ Revelar com a rolagem (WP-30)
+ * Só CSS (`animation-timeline: view()`), sem script: o elemento `.revela` sobe e aparece quando
+ * entra na tela; `--i` (0, 1, 2…) escalona os irmãos. Sem suporte ou com "reduzir movimento",
+ * nada anima e tudo fica visível desde o início. Nunca no hero nem no h1 (LCP).
+ * `.revela-glow`: o glow do CTA final acende com a rolagem (só opacidade).
+ * `orn-hero`: os anéis do hero entram uma vez (escala 1,06 → 1, opacidade 0 → 1). */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .revela {
+      animation: revela linear both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--i, 0) * 5%) entry calc(38% + var(--i, 0) * 5%);
+    }
+
+    .revela-glow {
+      animation: revela-glow linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 45%;
+    }
+  }
+
+  .orn-hero::before {
+    animation: orn-entra 1.2s var(--ease-suave) both;
+  }
+}
+
+@keyframes revela {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+}
+
+@keyframes revela-glow {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes orn-entra {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+}
+
 /* ------------------------------------------------------------------ Movimento reduzido
  * Com "reduzir movimento" no sistema, toda animação e transição termina na hora (WP-22): flutuar,
  * girar, pulsar, quicar e o brilho da coroa param, e as entradas (`fade-in-*`) pulam para o estado
