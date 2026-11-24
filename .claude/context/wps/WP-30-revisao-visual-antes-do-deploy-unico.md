@@ -2,7 +2,7 @@
 id: WP-30
 titulo: O site tem direção visual própria, aprovada no navegador, antes do deploy único
 area: design
-status: todo
+status: doing
 depende_de: []
 adr: [ADR-001, ADR-006, ADR-007, ADR-008]
 spec: design/REVISAO-VISUAL.md
