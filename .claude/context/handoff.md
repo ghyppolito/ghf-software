@@ -3,18 +3,18 @@
 > Reescrito do zero a cada sessão por `/handoff` (`site-docs`). Não acumule histórico aqui —
 > histórico é o git, `ESTADO.md` e os ADRs.
 
-**Sessão de 2026-11-22.** Fatias 4, 5, 6 e 10a do WP-10 mescladas em `feat/wp-08-layout-unico`; o #37 passou no CI em 0fe1b70.
+**Sessão de 2026-11-24.** Fatia 9 do WP-10 parcial, em branch própria. Fatias 4, 5, 6 e 10a já mescladas em `feat/wp-08-layout-unico` (#37 verde em 0fe1b70).
 
 ## 1. Onde parei
 
-- WP-10 `doing`, por fatias. Cada fatia vira PR para `feat/wp-08-layout-unico`, o usuário mescla, e o CI prova no #37 (`feat/wp-08-layout-unico -> develop`), que **não se mescla antes do deploy único** (D13). Mescladas hoje: fatia 4 (404), 5 (template e EclipseGo, D29), 6 (Home, D30; #52, 5161f02) e 10a (aceite parcial, D31, JSON-LD; #53, 0fe1b70). WP-10 e `decisoes.md` já refletem D29 a D31.
-- Branch local: `feat/wp-10-fatia-10a-aceite-parcial`, já mesclada. Esta escrituração do handoff está **não commitada** nela. Quando o usuário pedir, vai para branch nova a partir de `origin/feat/wp-08-layout-unico`, com PR para ela.
-- Bloqueadas pelo usuário: fatias 7 (TopoWalk) e 8 (Pole Position) esperam capturas (D26); a 9 (LottoExpert), capturas e copy (D25); a 10b (remover `legado.css`/`brand.*`, aceite final) vem por último. Nenhuma fatia começa sem essa entrada.
-- Fora do WP-10: WP-26 a WP-28 esperam `TERMS_OF_SERVICE.md` nos repos dos apps; D3 decidida (2026-11-22: não medir; WP-13 `adiado` para futura análise, sem bloquear o deploy único); WP-20 é sessão do Claude Design. Também nesta sessão: a régua do `test:css` foi trocada (decisão do usuário) e o orçamento Lighthouse de `/eclipsego.html` foi atualizado. Tag `v1.0.1` do `eclipse-go` (leve, `f5c1d6b`, 2026-07-26) dá o `atualizadoEm` do EclipseGo; o §21 do `check_site.py` a confere. Deploy único **antes do fim de 2026**.
+- Fatia 9 do WP-10 (LottoExpert) **implementada parcial em 2026-11-24, não fecha**: faltam as capturas do scanner (o usuário, no celular, com bilhete real; o agente recorta só a barra de status) e da prestação de contas (o agente, no `emulator-5580`, depois do sorteio da Mega-Sena 3090 de 24/11/2026; bolão "Turma do Trabalho" já lacrado). WP-10 segue `doing`.
+- Branches, **nenhuma enviada**: `docs/wp-27-ampliado-wp-29-respostas-fatia-9` (ff972a8, sai de `origin/feat/wp-08-layout-unico`) e `feat/wp-10-fatia-9-lottoexpert` (662e9ad, dc1dc7d e a escrituração), empilhada sobre a primeira. Emuladores ligados: `emulator-5580` (`lotto-api34`, app 2.06.00 debug) e `emulator-5582`.
+- **Deploy único só depois da 2.06.00 na produção da Play** (nota na D13). Então `apps.ts` (`tag`, `atualizadoEm`) é atualizado (aviso do §21).
+- Bloqueadas: fatias 7 (TopoWalk) e 8 (Pole Position) esperam capturas (D26); a 10b (remover `legado.css`/`brand.*`, aceite final) vem por último. WP-26 a WP-28 esperam `TERMS_OF_SERVICE.md`; WP-13 `adiado` (D3); WP-20 é sessão do Claude Design.
 
 ## 2. Quebrado ou pela metade agora
 
-Nada quebrado. CI do #37 em 0fe1b70: `plano`, `site` e `lighthouse` passaram. Passaram no `/verify` local: `test:css`, `check_site.py` (raiz e `dist`), `contrato.sha256`, html-validate, `lighthouse.py` sem `--medir`, `gen_estado --check` e `check_plano`. `lychee` não está instalado localmente; o CI cobre.
+Pela metade: a fatia 9 (acima). Nas verificações locais da fatia: build, `check_site.py` (raiz e `dist`), contrato, html-validate, unittest 42 OK, `test:css` 21 pass, Lighthouse de `/lottoexpert.html` (perf 98, a11y 100, bp 100, seo 100, LCP 2,25 s) dentro do orçamento. `lychee` não está instalado; o CI cobre. O CI ainda não viu esta branch.
 
 **Cuidados:**
 - Num laço `until ! pgrep -f "tools/lighthouse.py"`, o `pgrep` casa com a própria linha de comando do laço, que não termina. Use `pgrep -f "^python3 tools/lighthouse.py"` ou espere pelo PID.
@@ -24,6 +24,15 @@ Nada quebrado. CI do #37 em 0fe1b70: `plano`, `site` e `lighthouse` passaram. Pa
 - `tools/sync_legal.py:51` aponta o Pole Position para `pole-position/pole-position-app`, caminho que não existe (`PP-ORIGEM-CAMINHO-01`, roteado ao WP-28).
 
 ## 3. O que só o navegador prova (pendente)
+
+**Fatia 9 do WP-10 (LottoExpert):** `python3 -m http.server 8080 -d dist`, em `/lottoexpert.html` e `/en/lottoexpert.html`, a 360, 768 e 1280. Conferir:
+- recorte do hero (nome inteiro, cards Quina/Lotomania cortados na borda);
+- CTA da Play acima da dobra a 1280×720;
+- destaques sem imagem onde faltam as capturas (scanner e prestação de contas);
+- tabela a 360 rolando, com foco por teclado; Anual em destaque; "R$ 69,90 pago uma vez";
+- selo 18 e link dos termos; aviso de jogo responsável no fim; FAQ;
+- contraste do violeta; Nav e âncoras;
+- Home sem mudança visível.
 
 **Fatia 10a do WP-10 (aceite parcial):** `python3 -m http.server 8080 -d dist`. Conferir:
 - FAQ do EclipseGo (`/eclipsego.html` e `/en/eclipsego.html`): "+" vira "−" ao abrir e volta ao fechar, a 360 e a 1280;
@@ -74,14 +83,14 @@ Resta também o Safari (pelo iPhone, `python3 -m http.server 8080 -d dist -b 0.0
 
 ## 4. Próxima ação
 
-**Do agente:** nada começa sozinho. Com capturas da fatia 7 ou 8 (ou da 9, com a copy), abrir `/wp WP-10` na fatia correspondente. Se o usuário pedir, commitar este handoff em branch nova a partir de `origin/feat/wp-08-layout-unico`.
+**Do agente:** com o scanner entregue, recortar a barra de status; com a Mega-Sena 3090 apurada, capturar a prestação de contas no `emulator-5580`; depois fechar a fatia 9 (também `CAPTURAS-BARRA-GESTOS-01` e `apps.ts`). Nada de PR sem o usuário pedir.
 
 **Do usuário, em ordem de impacto no prazo:**
-1. capturas do app (D26) e, para o LottoExpert, a copy (D25);
-2. os `TERMS_OF_SERVICE.md` de TopoWalk, EclipseGo e Pole Position;
-3. sessão do WP-20 no Claude Design;
-4. checklists de navegador das fatias 3, 4, 5, 6 e 10a (seção 3), a 360/768/1280, pt e en;
-5. Safari (pelo iPhone).
+1. captura do scanner no celular, com bilhete real (Lotofácil ou Mega-Sena);
+2. capturas do TopoWalk e do Pole Position (D26) e os `TERMS_OF_SERVICE.md` dos três apps;
+3. 2.06.00 na produção da Play (libera o deploy único);
+4. sessão do WP-20 no Claude Design;
+5. checklists de navegador das fatias 3, 4, 5, 6, 9 e 10a (seção 3); Safari pelo iPhone.
 
 ## 5. Decisões não registradas
 
@@ -93,5 +102,5 @@ Nenhuma. `BUILD-RELOGIO-NAO-REPRODUTIVEL-01` foi decidido (D31) e implementado n
 
 ## 7. Escrituração e branches
 
-- Triagem: vazia. Os 11 achados da 10a e a `ROTULO-DATA-DUAS-FONTES-01` ("mantém duas fontes") estão resolvidos. Novos da 10a: fatia 10b (`LISTAAPPS-VARIANTES-01`, `FAVICON-LITERAL-LEGAIS-01`); WP-20 (`ORG-LOGO-NAO-QUADRADO-01`, `OG-IMAGE-QUADRADA-LANDINGS-01`, e `JSONLD-IMAGE-FAVICON-PEQUENO-01`, que pode ir à 10b); WP-28 (`SYNC-LEGAL-DOCSTRING-GIT-01`); nota (`SOFTWAREAPP-SEM-RATING-01`). Da fatia 6, seguem para a 10b `HOME-ICONES-ORFAOS-01`, `CSS-BUNDLE-NOME-FOOTER-01`, `HOME-VOCABULARIO-TECNICO-01`; para o WP-20 os 5 da Home; WP-18 `HOME-X-DEFAULT-EN-01`; WP-28 `CLAUDE-MD-POLE-CAMINHO-01`. `INDEX-LOTTO-DESC-DIVERGE-01` segue aberto para a fatia 9.
-- Branches: `develop`, `master`, `feat/wp-08-layout-unico`, `feat/wp-10-redesign`, `feat/wp-10-fatia-6-home` e `feat/wp-10-fatia-10a-aceite-parcial` (ambas mescladas) e `feat/wp-05-ci-no-pr` (não integrada).
+- Triagem: vazia. Fechados pela fatia 9: `LOTTO-COPY-VANTAGEM-01`, `LOTTO-EN-ROTULOS-PT-01`, `LOTTO-PT-HTML-DIVERGE-01`, `FEATURES-SELO-PREMIUM-01`, `TEIMOSINHA-FORA-DA-TABELA-01`, `LOTTO-CONTRASTE-AA-01`, `INDEX-LOTTO-DESC-DIVERGE-01`; só a parte LottoExpert de `LANDINGS-RESIDUO-RODADA-2-01`, `EXPORT-COPY-SEM-ORIGEM-01` e `LANDINGS-URL-E-PLAY-01`. Novos: 10b (`LEGADO-TEMA-LOTTOEXPERT-ORFAO-01`, `FONTES-LOTTO-SEM-LANDING-01`), WP-20 (`OG-LOTTO-MOCKUP-IPHONE-01`), 10b (`ORCAMENTO-LH-FOLGA-01`), fatia 9 (`CAPTURAS-BARRA-GESTOS-01`, `APPS-LOTTO-2060-TAG-01`), aceito (`LOTTO-LEAD-CONFERENCIA-PRO-01`). `HERO-ASPECT-RETRATO-01` agora vale também para o LottoExpert. Os da 10a e da fatia 6 seguem roteados à 10b, WP-20, WP-18 e WP-28 como registrados em `achados-novos.md`.
+- Branches: `develop`, `master`, `feat/wp-08-layout-unico` (#37), `docs/wp-27-ampliado-wp-29-respostas-fatia-9` e `feat/wp-10-fatia-9-lottoexpert` (locais, não enviadas), mais as já mescladas `feat/wp-10-redesign`, `feat/wp-10-fatia-6-home`, `feat/wp-10-fatia-10a-aceite-parcial`, e `feat/wp-05-ci-no-pr` (não integrada).

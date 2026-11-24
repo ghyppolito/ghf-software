@@ -387,6 +387,22 @@ prova é o checklist de navegador.
    - **Meta do hero:** "Grátis, com assinatura Pro opcional · Android 8.0 ou superior" (texto do usuário).
    - **Fechamento:** 8 modalidades, como a ficha da Play (D19 a); `lottoexpert.ts:40` muda.
    - **Prestação de contas:** grátis, sem etiqueta Pro.
+   **Respostas adicionais do usuário (2026-11-24):**
+   - **Lead:** a descrição curta (ASO:20) mais a frase de ASO:31. "Pro", e não "Premium", na landing.
+   - **Recorte do hero:** a prop opcional é autorizada; valor `50% 17%` (nome inteiro, borda dos cards
+     Quina/Lotomania cortada), escolhido contra `20%`.
+   - **Estrutura:** a grade de 9 logos sai; a seção "Como o app trabalha" entra. Meta: "Grátis, com plano
+     Pro opcional · Android 8.0 ou superior". O scanner diz "na Lotofácil e na Mega-Sena". Linha da tabela:
+     "Gerador para todas as loterias". O resumo da Home fica.
+   - **Deploy único só depois da 2.06.00 na produção da Play** (nota na D13).
+   **Entregue parcial (2026-11-24; commits 662e9ad e dc1dc7d, branch `feat/wp-10-fatia-9-lottoexpert`, não enviada; não fecha):**
+   - `src/i18n/lottoexpert.ts` no formato `ConteudoApp`; `LottoExpert.astro` vira invólucro de `PaginaLottoExpert` (tema `ghf`).
+   - `Hero.astro` ganha a prop opcional `posicao` e o `Landing` a `heroPosicao` (desvio do template, documentado). `PlanosNiveis`: espaço antes do período quando não começa com "/".
+   - A Home lê o resumo de `lottoexpert.ts`; `home.ts` perde `resumos.lottoexpert`.
+   - Capturas `hero`, `fechamento` e `bolao` 1080x1920 da 2.06.00 em demo mode. Removidos: mockup, `lottoexpert.png` e os 9 logos.
+   - Orçamento Lighthouse de `/lottoexpert.html` (325778 / 144680) autorizado. Medido: perf 98, a11y 100, bp 100, seo 100, LCP 2,25 s.
+   - Prova: build, `check_site.py` (raiz e `dist`), contrato, html-validate, unittest 42 OK, `test:css` 21 pass. `lychee` não rodou localmente (CI cobre).
+   **Falta para fechar a fatia 9 (4 destaques com captura):** scanner (o usuário captura no celular com bilhete real; o agente recorta só a barra de status) e prestação de contas (o agente captura no `emulator-5580` depois do sorteio da Mega-Sena 3090, de 24/11/2026; bolão "Turma do Trabalho" já lacrado nesse concurso). Depois: `apps.ts` (`tag` e `atualizadoEm` da 2.06.00) quando a versão chegar à Play.
 10. A fatia 10 se divide em 10a e 10b (D29, complemento de 2026-11-22). As duas ficam numa
     posição diferente da ordem: a 10a vem logo depois da 6, a 10b é a última.
 
