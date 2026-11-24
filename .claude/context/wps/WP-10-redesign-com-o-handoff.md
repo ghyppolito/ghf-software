@@ -17,6 +17,8 @@ branch: feat/wp-10-fatia-10a-aceite-parcial
 
 **Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** ECLIPSE-ICONE-OFFLINE-01 (ícone do card "offline" do EclipseGo, D21), POLE-PRINTS-2X-01 (do WP-12) · o WP-19 (rodada 3) está `done` e não segura mais as landings
 
+**Pausa (2026-11-24): as fatias 7, 8, 9 e 10b estão pausadas pelo WP-30 em 2026-11-24** (revisão visual antes do deploy único, D33 (g); `design/REVISAO-VISUAL.md` §6). Retomam com a direção aprovada depois da fatia 3 do WP-30. O status do WP-10 segue `doing`. A fatia 9 fica parcial na `feat/wp-10-fatia-9-lottoexpert`, que é a base do protótipo.
+
 **Objetivo:** tokens do handoff em `src/styles/tokens.css` (`@theme`, ADR-008); home com hierarquia por app (um
 toque até o app certo); as 4 landings com a mesma anatomia (hero + CTA → 3–5 funcionalidades
 com imagem real → prova → privacidade em uma frase → FAQ → CTA); página legal legível (largura
