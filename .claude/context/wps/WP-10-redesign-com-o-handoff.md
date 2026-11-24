@@ -371,6 +371,22 @@ prova é o checklist de navegador.
    **Bloqueio para fechar (não para começar):** a copy que falte na fonte (D25) e as capturas
    das funcionalidades destacadas (D26). O repositório só tem o mockup do hero e os logos das loterias.
    Quem desbloqueia: o usuário.
+   **Respostas do usuário (2026-11-24, versão 2.06.00 fechada, em teste interno):**
+   - **Destaques (4, teto do template):** scanner, fechamento com garantia, bolão e prestação de
+     contas. Teimosinha, Meu Desempenho, conferência, resultados e backup vão para `todas`, sem imagem.
+   - **Capturas (D26):** o agente captura no emulador (`../lotto-expert/scripts/emulador.sh`,
+     `emulator-5580`, build debug 2.06.00, Pro pelo toggle de debug), com dados de exemplo sem dado
+     pessoal. Feitas: Home (hero), fechamento da Lotofácil, bolão "Turma do Trabalho" lacrado. Faltam:
+     **scanner**, que o usuário captura no próprio celular com bilhete real; **prestação de contas**,
+     depois do sorteio da Mega-Sena 3090 (bolão de exemplo já lacrado nesse concurso). Telas da 2.06.00
+     valem mesmo antes da Play; se a versão mudar, recapturar.
+   - **`/en/`:** mesmas capturas em pt (o app só tem pt), com `alt` em inglês, como no EclipseGo.
+   - **Topo:** título e descrição da ficha da Play (`LottoExpert: Loterias e Bolão`, D19 b), sem o
+     selo "Vantagem Competitiva" — fecha `LOTTO-COPY-VANTAGEM-01`. Imagem do hero: a Home com as
+     estimativas de prêmio; o `alt` descreve a tela sem falar em ganho.
+   - **Meta do hero:** "Grátis, com assinatura Pro opcional · Android 8.0 ou superior" (texto do usuário).
+   - **Fechamento:** 8 modalidades, como a ficha da Play (D19 a); `lottoexpert.ts:40` muda.
+   - **Prestação de contas:** grátis, sem etiqueta Pro.
 10. A fatia 10 se divide em 10a e 10b (D29, complemento de 2026-11-22). As duas ficam numa
     posição diferente da ordem: a 10a vem logo depois da 6, a 10b é a última.
 

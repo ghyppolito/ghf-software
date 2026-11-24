@@ -37,9 +37,9 @@ SEQUENCIA = [
         ("WP-22", "a11y e i18n sem redesign: 26 achados da varredura de 2026-10-16 (360 px nas legais primeiro, <main>, headings, foco/alvo, contraste do rodapé, rótulos pt na /en/); M, visual, antes do WP-10 e do deploy único (D13)"),
         ("WP-25", "dependências sem aviso do npm audit: Astro 7.4.7, Node 22.23.4, satteri 0.4.7; S, risco alto (deploy); entre as fatias 1 e 2 do WP-10 (usuário, 2026-11-21)"),
         ("WP-10", "redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08"),
+        ("WP-27", "termos de uso do EclipseGo (UE, D28 B) e `origemCommit` da política apontando para a `main` do app. Pré-condição cumprida (`docs/TERMS_OF_USE.md`, app `5cd6b83`); EclipseGo ainda sem ficha na Play (D19 e). Legal, risco alto, URL nova"),
         ("WP-26", "termos de uso do TopoWalk (exigência da UE para comerciante, prazo 2027; D28 B: vai no deploy único). Pré-condição: `TERMS_OF_SERVICE.md` na `master` do app, escrito pelo humano. Legal, risco alto, URL nova"),
         ("WP-28", "termos de uso do Pole Position (UE, D28 B). Pré-condição: texto na `master` do app; corrige a origem `../pole-position-app` (PP-ORIGEM-CAMINHO-01). Legal, risco alto, URL nova"),
-        ("WP-27", "termos de uso do EclipseGo (UE, D28 B). Pré-condição: texto na `main` do app; EclipseGo ainda sem ficha na Play (D19 e). Legal, risco alto, URL nova"),
         ("WP-11", "SEO técnico: sitemap, robots, canonical, hreflang pt/en, JSON-LD (Organization, MobileApplication), OG por página. M, depois do WP-08"),
         ("WP-20", "imagens de compartilhamento 1200×630 (D16 A): marca para home e legais, uma por app; sessão do usuário no Claude Design, depois `twitter:card` e `og:image:alt`. M, `visual`, antes do deploy único (D13)"),
         ("WP-21", "title e description de compartilhamento vêm da ficha da Play, em pt e en (copy de produto, passa pelo usuário). M, antes do deploy único (D13)"),
@@ -50,6 +50,7 @@ SEQUENCIA = [
         ("WP-12", "performance: fontes self-hosted, ícones SVG inline no lugar do Font Awesome, imagens WebP/AVIF com dimensões, Lighthouse ≥ 90 nas 4 categorias em todas as páginas. M, depois do WP-08"),
         ("WP-13", "medição com consentimento ou sem cookie (D3: Plausible/Umami vs GA4 Consent Mode); evento de clique na Play por app. M, depois do WP-08"),
         ("WP-23", "convite sem terceiros: pako 2.1.0 (sha256 do tarball do npm) e Inter servidos ao lado do convite, `<main>`, `contrato.sha256` novo, convite entra no §15 (a)/(b) e §17 do check_site e no Lighthouse; teste com `?d=` real v1 e v2. M, risco alto (URL contratual), visual · ⏳ só depois do deploy único (D13), branch de `develop`, `/release` próprio"),
+        ("WP-29", "imagem da prévia do convite do bolão (D32: caminho novo, 1200×630, tela do bolão da 2.06.00, arte no Claude Design). M, risco alto (URL contratual), visual · ⏳ depois do deploy único e do WP-23, `/release` próprio"),
     ]),
 ]
 

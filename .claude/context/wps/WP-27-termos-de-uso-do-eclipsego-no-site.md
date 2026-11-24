@@ -1,6 +1,6 @@
 ---
 id: WP-27
-titulo: Os termos de uso do EclipseGo existem no site em pt e en, espelhados do repositório do app
+titulo: Os termos de uso do EclipseGo existem no site em pt e en, e a política aponta para o commit da main, espelhados do repositório do app
 area: legal
 status: todo
 depende_de: []
@@ -13,10 +13,10 @@ visual: true
 branch: feat/wp-27-termos-eclipsego
 ---
 
-# WP-27 — Os termos de uso do EclipseGo existem no site em pt e en, espelhados do repositório do app
+# WP-27 — Os termos de uso do EclipseGo existem no site em pt e en, e a política aponta para o commit da main, espelhados do repositório do app
 
-**Depende de:** pré-condição fora do site: `../eclipse-go/TERMS_OF_SERVICE.md` (ou `docs/`) commitado
-na branch principal do app (`main`, D14). Pelo caminho (B) abaixo, depende também da fatia 3 do
+**Depende de:** pré-condição fora do site, **cumprida em 2026-11-24**: `docs/TERMS_OF_USE.md` está na
+`origin/main` do EclipseGo (`5cd6b83`, merge `8a12c0a`, PR #3 do app). Pelo caminho (B) abaixo, depende também da fatia 3 do
 WP-10 (`LegalLayout`) estar na integração; não está em `depende_de` porque o WP-10 inteiro só fecha
 na fatia 10. · **Achados roteados:** —
 
@@ -30,9 +30,30 @@ de 2026**.
 `TERMS_OF_SERVICE.md` do repositório do EclipseGo, com a mesma data, e o rodapé de toda página leva
 o link para eles.
 
+**Ampliação (2026-11-24, `/novo-wp`).** Pedido do usuário: "atualizei a politica e criei um documento
+de termos de uso para o eclipse-go. Pode criar um /novo-wp para trazer para o site. O termo de uso
+todos os apps vao precisar agora por conta de legislaçao europeia". Os termos de TopoWalk e Pole
+Position já são o WP-26 e o WP-28; o LottoExpert já publica os dele. Fica neste WP só o EclipseGo,
+com a política junto, porque é o mesmo app e a mesma rodada do `/legal`. Evidência:
+- **Termos:** origem `docs/TERMS_OF_USE.md` (não `TERMS_OF_SERVICE.md`, como os outros apps), 1.088
+  palavras, 15 seções, `**Última atualização:** 24 de novembro de 2026`. Commit `5cd6b83`: "exigido
+  pela Google Play para usuários da União Europeia".
+- **Política:** o texto do site já é igual ao da `origin/main`
+  (`diff <(sed '1,/^---$/d' src/content/legal/eclipsego-privacy.pt.md) <(git -C ../eclipse-go show origin/main:docs/PRIVACY_POLICY.md)`
+  vazio, 2026-11-24). O e-mail `support@ghfsoftware.com` entrou no site antes, a partir do commit
+  `4668019`. Esse commit está só na branch local `notebook/docs/email-suporte-politica`, fora de
+  qualquer remoto e fora da `main`. Por isso `python3 tools/sync_legal.py --todos --check` dá
+  "⛔ eclipsego-privacy: à frente/divergente — o origemCommit 4668019 não é ancestral de main".
+  O trabalho é trocar o `origemCommit` de `eclipsego-privacy.pt.md` por um commit da `main` com o
+  mesmo texto. O corpo e o `.en.md` não mudam.
+- **Data da política:** a origem mudou o contato e manteve `13 de julho de 2026`. O site espelha a
+  data da origem. Se a mudança de contato pede data nova, a correção é do usuário, no app.
+- **`main` local atrasada:** `git -C ../eclipse-go rev-parse main` = `f5c1d6b`, e `origin/main` =
+  `8a12c0a`. O `sync_legal.py` lê a `main` local, então ela precisa estar em dia antes do passo 1.
+
 **Contexto:**
-- Hoje não há termos de uso do EclipseGo em lugar nenhum. `git -C ../eclipse-go ls-files | grep -i term`
-  não acha nada (2026-11-22). Só o LottoExpert tem termos no site (`/lottoexpert-terms.html`, origem
+- Até 2026-11-22 não havia termos de uso do EclipseGo em lugar nenhum. `git -C ../eclipse-go ls-files | grep -i term`
+  não achava nada. Só o LottoExpert tem termos no site (`/lottoexpert-terms.html`, origem
   `../lotto-expert/docs/TERMS_OF_SERVICE.md`, `tools/sync_legal.py:49`).
 - O EclipseGo não tem Play Billing no `app/build.gradle.kts` nem no catálogo de versões (`grep BillingClient`, 2026-11-22). A política dele está em `../eclipse-go/docs/PRIVACY_POLICY.md`; os termos podem nascer ao lado, em `docs/`.
 - O EclipseGo não tem ficha da Play registrada no repositório (D19 (e)). O passo 8 depende de a ficha existir.
@@ -74,10 +95,15 @@ Fora do site, e do usuário: `.claude/settings.json` (permissão de leitura da o
 `/legal` pedir) e a ficha da Play.
 
 **Passos:**
-1. Pré-condição: o `TERMS_OF_SERVICE.md` existe num commit da `main` do EclipseGo que está em
-   `origin`, com linha `**Última atualização:**`. Se não existe, **parar** e devolver ao usuário.
+1. Pré-condição: o `docs/TERMS_OF_USE.md` existe num commit da `main` do EclipseGo que está em
+   `origin`, com linha `**Última atualização:**` (cumprida: `5cd6b83`). A `main` local do app é
+   atualizada para `origin/main` (`git -C ../eclipse-go fetch origin main:main`, só fast-forward).
    O agente não redige, não completa e não adapta os termos do LottoExpert.
-2. `ORIGENS["eclipsego-terms"] = ("eclipse-go", "<caminho do .md>", "main")`. `LEGAL`,
+1b. Política: `python3 tools/sync_legal.py eclipsego --doc privacy --ref 8a12c0a` (ou o commit da
+   `main` vigente) troca só o `origemCommit` de `eclipsego-privacy.pt.md`. Se recusar por ancestralidade
+   (`4668019` não é ancestral de nenhuma ref da `main`), `--forca` é legítimo aqui: o corpo é igual. O diff do corpo tem de
+   sair vazio. Se não sair vazio, **parar**: o texto mudou e o `.en.md` precisa de tradução (D7).
+2. `ORIGENS["eclipsego-terms"] = ("eclipse-go", "docs/TERMS_OF_USE.md", "main")`. `LEGAL`,
    `CONTRATUAIS` e `PUBLICADAS` ganham `eclipsego-terms.html`.
 3. `python3 tools/sync_legal.py eclipsego --doc terms` grava `eclipsego-terms.pt.md` com
    `origemCommit` e `pendente: ["en"]`.
@@ -93,6 +119,10 @@ Fora do site, e do usuário: `.claude/settings.json` (permissão de leitura da o
    de ela estar no ar. Registra no WP qual campo e qual URL (pt ou `/en/`).
 
 **Critérios de aceite:**
+- `python3 tools/sync_legal.py --todos --check` sem ⛔ para `eclipsego-privacy` e `eclipsego-terms`
+  ("igual"), e `git -C ../eclipse-go merge-base --is-ancestor <origemCommit> origin/main` verdadeiro
+  para os dois.
+- `git diff -- src/content/legal/eclipsego-privacy.*` só muda a linha `origemCommit`.
 - `python3 tools/sync_legal.py eclipsego --doc terms --check` diz "igual".
 - `diff <(sed '1,/^---$/d' src/content/legal/eclipsego-terms.pt.md) <(git -C ../eclipse-go show <origemCommit>:<caminho>)` vazio.
 - `python3 tools/check_site.py` e `python3 tools/check_site.py --raiz dist` verdes. Isso inclui a
@@ -141,5 +171,6 @@ mal, ficha apontando antes da página existir dá 404 ao revisor da loja.
 2. Prazo: até 2027; sem urgência antes do deploy único.
 3. Onde a URL será citada: em aberto — responder antes do passo 8 (ficha da Play / campo do Play Console).
 4. Inglês: o `/en/` nasce junto (caminho B); a ficha en cita `/en/...` se o Play pedir.
-5. Quem escreve o `TERMS_OF_SERVICE.md` e quando chega à branch principal do app: em aberto — pré-condição do passo 1.
+5. Quem escreve os termos e quando chegam à branch principal do app: respondido em 2026-11-24 — o
+   usuário escreveu `docs/TERMS_OF_USE.md`, na `main` pelo PR #3 do app.
 6. Publicação: D28 (B), integração e deploy único.
