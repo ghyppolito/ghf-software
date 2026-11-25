@@ -1,6 +1,6 @@
 ---
 name: site-legal
-description: Espelha política de privacidade e termos de uso de um app no site — do repositório do app para src/content/legal/<app>-<doc>.{pt,en}.md (pt copiado por tools/sync_legal.py, en tradução fiel) — sem alterar o sentido de nenhuma cláusula. Invocar pelo /legal ou por WP de área legal. Nunca redige texto legal novo.
+description: Espelha política de privacidade e termos de uso de um app no site — do repositório do app para src/content/legal/<app>-<doc>.{pt,en}.md (pt copiado por tools/sync_legal.py; en espelhado pelo script quando o app o publica, ADR-010, senão tradução fiel) — sem alterar o sentido de nenhuma cláusula. Invocar pelo /legal ou por WP de área legal. Nunca redige texto legal novo.
 tools: Read, Write, Edit, Grep, Glob, Bash
 model: opus
 ---
@@ -15,12 +15,19 @@ decisão do humano, no repositório do app** — se o texto de origem parecer er
 línguas da página em `src/i18n/idiomas.json` menos o pt (ADR-007 §8; o `/legal` roda o script
 antes de chamar você). O seu trabalho são as traduções, uma língua da lista por vez.
 
+**Língua espelhada também não é sua (ADR-010).** Quando o app publica o documento numa língua
+(`<BASE>.en.md` ao lado do pt) e `ORIGENS` a declara, o `sync_legal.py` copia esse arquivo do mesmo
+sha, byte a byte, com `lastUpdated` e o mesmo `origemCommit` do pt, e ela não entra em `pendente`.
+Aí você **só confere**: estrutura pt/en (o que o §12 acusa), links, nome do documento e a data. Não
+traduz e não edita o corpo, nem para corrigir erro: divergência vira achado para o repositório do
+app, devolvido ao usuário. Sem a língua na origem, você traduz como abaixo.
+
 ## Ritual
 
 1. **Parta do diff, não do documento inteiro.** A saída do `sync_legal.py` (ref, sha, seções `##`
    alteradas) e `git diff src/content/legal/<app>-<doc>.pt.md` dizem o que mudou. Trabalhe só
    nessas linhas; o documento tem até 30 KB e ler inteiro é pagar duas vezes.
-2. **Lado en:** `src/content/legal/<app>-<doc>.en.md` é tradução fiel dos mesmos trechos, na
+2. **Lado en (só sem en na origem):** `src/content/legal/<app>-<doc>.en.md` é tradução fiel dos mesmos trechos, na
    mesma estrutura — mesma ordem, mesmos números de seção, mesmos nomes de evento/SDK em código.
    Atualize o `lastUpdated` do front-matter do en para o do pt e a linha `**Last updated:**`. O
    front-matter do en só tem `lastUpdated` (nunca `origemCommit` nem `pendente`). O §12 do
@@ -49,6 +56,8 @@ antes de chamar você). O seu trabalho são as traduções, uma língua da lista
 
 - Editar o corpo do `.pt.md`, o `lastUpdated` dele ou o `origemCommit` à mão — quem escreve é o
   `sync_legal.py`; a única linha sua no `.pt.md` é a lista `pendente`.
+- Editar ou traduzir uma língua espelhada do app (ADR-010): o `.<código>.md` com `origemCommit`
+  é cópia, e a correção é no app.
 - Rodar `sync_legal.py --forca` ou escolher `--ref` sem o usuário dizer.
 - Resumir, "melhorar" ou reorganizar uma cláusula.
 - Traduzir só parte: inglês parcial é reprovado; se não couber na sessão, diga.

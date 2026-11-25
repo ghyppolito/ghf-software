@@ -14,7 +14,8 @@ Regras (numeração do veredito do WP-15):
   (iv)   cada SDK de SDKS que aparece no pt aparece em cada tradução
   (v)    toda língua do mapa gerou o arquivo da página
   (vi)   nenhum arquivo em `<código>/` para língua fora do mapa da página; nunca `pt/`
-  (vii)  sem `pendente` no front-matter; tradução sem `origemCommit` nem `pendente` (ADR-004)
+  (vii)  sem `pendente` no front-matter; tradução do site sem `origemCommit` nem `pendente`
+         (ADR-004); língua espelhada do app com o `origemCommit` do pt e sem `pendente` (ADR-010)
   (viii) hreflang: um por língua mais `x-default` (en se houver, senão pt); página com uma língua
          só não tem hreflang
   (§9)   link interno vai à página na língua da página; se o destino não a tem, en, senão pt (D23),
@@ -40,6 +41,7 @@ RE_TITULO = re.compile(r"^(#{2,3}) ", re.M)
 RE_TOKEN = re.compile(r"`([^`\n]+)`")
 RE_BLOCO = re.compile(r"^  ([a-z]{2}): \{\n(.*?)^  \}", re.S | re.M)
 RE_CHAVE = re.compile(r"^    (\w+):", re.M)
+RE_SHA = re.compile(r"^[0-9a-f]{40}$")
 
 
 def carrega_mapa(caminho):
@@ -169,15 +171,29 @@ def regra_linguas_fora_do_mapa(mapa, arquivos):
 
 
 # ------------------------------------------------------------ (vii) front-matter
-def regra_front_matter(doc, fms):
-    """`fms`: {língua: front-matter já separado (dict)}. `pendente` reprova; a tradução não carrega
-    proveniência (ADR-004)."""
+def regra_front_matter(doc, fms, espelhadas=()):
+    """`fms`: {língua: front-matter já separado (dict)}; `espelhadas`: línguas que a origem do doc
+    publica e o site copia byte a byte (ADR-010, `ORIGENS` de tools/sync_legal.py). `pendente`
+    reprova; a tradução feita pelo site não carrega proveniência (ADR-004); a língua espelhada
+    carrega o `origemCommit` do pt, e só ele (ADR-010 §2 e §5)."""
     erros = []
+    sha_pt = (fms.get("pt") or {}).get("origemCommit")
     for l, fm in fms.items():
         if l == "pt":
             if "pendente" in fm:
                 erros.append(f"{doc}.pt.md: `pendente: {fm['pendente']}` — tradução atrás do pt; "
                              f"traduzir e tirar cada língua da lista (regra vii)")
+            continue
+        if l in espelhadas:
+            sha = fm.get("origemCommit")
+            if not sha or not RE_SHA.match(sha):
+                erros.append(f"{doc}.{l}.md: espelho do app sem `origemCommit` de 40 hex — o {l} é cópia da "
+                             f"origem, rode tools/sync_legal.py (regra vii, ADR-010)")
+            elif sha != sha_pt:
+                erros.append(f"{doc}.{l}.md: espelho do app com `origemCommit` {sha[:7]} ≠ o do pt "
+                             f"{(sha_pt or '')[:7]} — pt e {l} saem do mesmo commit (regra vii, ADR-010)")
+            if "pendente" in fm:
+                erros.append(f"{doc}.{l}.md: espelho do app com `pendente` — marcador fica só no .pt.md (regra vii, ADR-010)")
             continue
         for chave in ("origemCommit", "pendente"):
             if chave in fm:
@@ -224,10 +240,12 @@ def regra_link(mapa, rel, href, destino, tag):
     é bilíngue por desenho (um bloco por língua, cada um com o seu link) e o convite e os assets não
     têm língua.
 
-    O link marcado `data-troca-idioma="X"` (seletor e faixa de sugestão) sai da regra D23 e entra
-    noutra: leva à **mesma página** na língua X (`destino == arquivo(X, origem)`), X é uma língua da
-    página no mapa, e `hreflang`/`lang`, quando o link os tem, são os de X. O link da faixa não leva
-    nenhum dos dois: a língua vem do `<section lang>`/`<template lang>` que o contém."""
+    O link marcado `data-troca-idioma="X"` (seletor, faixa de sugestão e link do par no corpo da
+    legal, WP-26) sai da regra D23 e entra noutra: leva à **mesma página** na língua X
+    (`destino == arquivo(X, origem)`), X é uma língua da página no mapa, e `hreflang`/`lang`, quando
+    o link os tem, são os de X. O link da faixa não leva nenhum dos dois: a língua vem do
+    `<section lang>`/`<template lang>` que o contém. O link do par no corpo da legal leva só
+    `hreflang`: o texto dele está na língua da página."""
     lang_pag, origem = pagina_de(rel)
     if origem not in mapa["paginas"]:
         return []
