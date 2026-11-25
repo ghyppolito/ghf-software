@@ -94,7 +94,7 @@ sem-polyfill) e o ADR-006 §5 (nenhum terceiro no `<head>`).
   diverge do handoff (D33 (a)).
 - `.claude/context/wps/WP-10-redesign-com-o-handoff.md`: só a nota de retomada das fatias.
 
-Fora: as 10 legais e o `LegalLayout` (entram só se um token global mudar, e aí só para medir o
+Fora (até a fatia 4, que as inclui por pedido do usuário): as 10 legais e o `LegalLayout` (entram só se um token global mudar, e aí só para medir o
 contraste de novo), o convite e tudo em `public/` (ADR-001, D13), `TopoWalk.astro` e
 `PolePosition.astro` (são das fatias 7 e 8 do WP-10, que retomam com a direção nova), `tools/*.py`
 e os workflows.
@@ -167,7 +167,20 @@ longo dos dois hoje, e sem largura fixa para texto (`BRIEF.md` §7).
    ajuste próprio). A seção 7 de `design/REVISAO-VISUAL.md` registra a direção aprovada, e a nota
    de retomada vai para o WP-10. **Aprovação 3:** o usuário vê `/eclipsego.html` em pt e en.
 
-Depois da fatia 3, este WP fica `done`. As fatias 7 (TopoWalk), 8 (Pole Position) e 9 (LottoExpert,
+   **Aprovações 2 e 3 (2026-11-24):** o usuário viu `/lottoexpert.html`, `/eclipsego.html` e a
+   Home depois das correções da auditoria (commit `9cfec02`): "ok, agora ficou bom, aprovado".
+4. **Páginas legais (acrescentada em 2026-11-24, pedido do usuário: "não vai ter ajuste no layout
+   dos termos e política também?"; resposta ao questionário: "Topo escuro + corpo claro").** As 10
+   legais (5 documentos × pt/en) ganham o cabeçalho escuro com o glow do acento do app (ícone,
+   título, data), no padrão das landings; o corpo continua no papel claro, que é o melhor para
+   texto longo; o sumário e os números das seções usam o acento do app. **O texto legal não muda
+   em nada** (`check_site.py` §4 e `sync_legal.py --check` provam). Arquivos: `src/layouts/
+   LegalLayout.astro`, `src/styles/tokens.css` (só se faltar token), `src/components/paginas/
+   Pagina*Privacy.astro`/`*Terms.astro` (só se o cabeçalho morar nelas). URLs contratuais
+   (ADR-001) intactas: só a apresentação muda. **Aprovação 4:** o usuário vê uma legal de cada app
+   em pt e en.
+
+Depois da fatia 4, este WP fica `done`. As fatias 7 (TopoWalk), 8 (Pole Position) e 9 (LottoExpert,
 com as capturas que faltam) e a 10b do WP-10 retomam com a direção nova. A 10b é a primeira a
 medir as legais se um token global tiver mudado.
 

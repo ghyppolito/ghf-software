@@ -173,3 +173,8 @@ auditoria:**
   1024 px); tabela de planos a 360 px com a coluna Pro à vista e sombra do acento na borda rolável
   (`rolagem-sombra`, sem JS); chevrons do "Ver todas", do "Ver tabela completa" e do FAQ no mesmo
   padrão (`chevron-down` girando 180° e indo ao acento).
+
+**2026-11-24 — fatia 2 do WP-30 (landings LottoExpert e EclipseGo pelo template), commit `9cfec02`.**
+O usuário aprovou: "ok, agora ficou bom, aprovado". Referência: as landings servidas nesse commit.
+Na sequência pediu as legais na mesma direção: topo escuro com o glow do app e corpo em papel claro
+(fatia 4 do WP-30).
