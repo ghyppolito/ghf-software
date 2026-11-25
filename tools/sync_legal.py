@@ -310,9 +310,11 @@ def planeja(doc, args):
         # Reancoragem (ADR-004 §3, `--forca` no caso de corpo igual): o texto do site é o da ref, mas
         # o commit registrado não é ancestral dela (ex.: commit local fora dos remotos). Com `--forca`,
         # troca só o `origemCommit` (do pt e das línguas espelhadas, se o corpo delas também é o do
-        # sha), pela mesma escrita do bootstrap. Sem `--forca` (ou com `--check`), nada muda.
+        # sha), pela mesma escrita do bootstrap. Sem `--forca` (ou com `--check`), nada muda. Nunca recua:
+        # se o sha da ref é ancestral do registrado (o site está à frente, não divergente), não reancora
+        # (auditoria do WP-27). O corpo das línguas espelhadas já é o do sha por `em_dia`.
         if (args.forca and not args.check and not ancestral(repo_dir, registrado, sha)
-                and all(lados[l][2] == lados[l][3] for l in langs)):
+                and not ancestral(repo_dir, sha, registrado)):
             escritas = [(alvo, monta(dict(fm, origemCommit=sha), corpo))]
             escritas += [(alvo_de(doc, l), monta(dict(lados[l][1], origemCommit=sha), lados[l][2])) for l in langs]
             return "copia", escritas, msgs + [f"↻ reancorado: corpo igual — {doc}: origemCommit {registrado[:7]} → "
