@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**32 WPs** · 18 concluídos · 0 em andamento
+**32 WPs** · 18 concluídos · 1 em andamento
 
 ## Sequência recomendada
 
@@ -24,8 +24,8 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 
 | # | WP | Status | Nota |
 |---|---|---|---|
-| 1 | [WP-32 — O Lighthouse do CI mede o site com gzip, como o GitHub Pages entrega](wps/WP-32-lab-do-lighthouse-com-gzip-como-o-pages.md) | `todo` | lab do Lighthouse com gzip, como o Pages (emenda da D20); recalibra `bytes_total` com o transferido comprimido antes da fatia 10b do WP-10. S, risco médio (gate de CI); sai de `feat/wp-08-layout-unico` |
-| 2 | [WP-10 — A home e as landings de app seguem o sistema visual do handoff](wps/WP-10-redesign-com-o-handoff.md) | `todo` | redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08 |
+| 1 | [WP-10 — A home e as landings de app seguem o sistema visual do handoff](wps/WP-10-redesign-com-o-handoff.md) | `doing` | redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08 |
+| 2 | [WP-32 — O Lighthouse do CI mede o site com gzip, como o GitHub Pages entrega](wps/WP-32-lab-do-lighthouse-com-gzip-como-o-pages.md) | `todo` | lab do Lighthouse com gzip, como o Pages (emenda da D20); recalibra `bytes_total` com o transferido comprimido antes da fatia 10b do WP-10. S, risco médio (gate de CI); sai de `feat/wp-08-layout-unico` |
 | 3 | [WP-27 — Os termos de uso do EclipseGo existem no site em pt e en, e a política aponta para o commit da main, espelhados do repositório do app](wps/WP-27-termos-de-uso-do-eclipsego-no-site.md) | `todo` | termos de uso do EclipseGo (UE, D28 B) e `origemCommit` da política apontando para a `main` do app. Pré-condição cumprida (`docs/TERMS_OF_USE.md`, app `5cd6b83`); EclipseGo ainda sem ficha na Play (D19 e). Legal, risco alto, URL nova |
 | 4 | [WP-26 — Os termos de uso do TopoWalk existem no site em pt e en, espelhados do repositório do app](wps/WP-26-termos-de-uso-do-topowalk-no-site.md) | `todo` | termos de uso do TopoWalk (exigência da UE para comerciante, prazo 2027; D28 B: vai no deploy único). Pré-condição: `TERMS_OF_SERVICE.md` na `master` do app, escrito pelo humano. Legal, risco alto, URL nova |
 | 5 | [WP-28 — Os termos de uso do Pole Position existem no site em pt e en, espelhados do repositório do app](wps/WP-28-termos-de-uso-do-poleposition-no-site.md) | `todo` | termos de uso do Pole Position (UE, D28 B). Pré-condição: texto na `master` do app; corrige a origem `../pole-position-app` (PP-ORIGEM-CAMINHO-01). Legal, risco alto, URL nova |
@@ -51,7 +51,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-07](wps/WP-07-stack-com-build-spike.md) | O site tem build que preserva as URLs contratuais e publica no Pages por Actions | infra | L | alto | 🖥️ | WP-05 | ADR-001, ADR-002 | `done` |
 | [WP-08](wps/WP-08-layout-e-componentes-unicos.md) | As 10 páginas usam um layout, componentes únicos e rota por idioma | landing | L | alto | 🖥️ | WP-07 | ADR-001, ADR-002, ADR-003 | `done` |
 | [WP-09](wps/WP-09-legal-como-fonte-unica.md) | O texto legal entra no site por um comando que copia do repositório do app e o CI acusa divergência | legal | M | alto |  | WP-08 | ADR-004 | `done` |
-| [WP-10](wps/WP-10-redesign-com-o-handoff.md) | A home e as landings de app seguem o sistema visual do handoff | design | L | medio | 🖥️ | WP-06, WP-08 | ADR-001, ADR-004, ADR-005, ADR-006, ADR-007, ADR-008, ADR-009 | `todo` |
+| [WP-10](wps/WP-10-redesign-com-o-handoff.md) | A home e as landings de app seguem o sistema visual do handoff | design | L | medio | 🖥️ | WP-06, WP-08 | ADR-001, ADR-004, ADR-005, ADR-006, ADR-007, ADR-008, ADR-009 | `doing` |
 | [WP-11](wps/WP-11-seo-tecnico.md) | Buscadores leem sitemap, canonical, hreflang e dados estruturados de cada página | seo | M | medio | 🖥️ | WP-08 | ADR-005 | `done` |
 | [WP-12](wps/WP-12-performance.md) | Toda página pontua 90 ou mais nas quatro categorias do Lighthouse mobile | seo | L | medio | 🖥️ | WP-08 | ADR-006 | `done` |
 | [WP-13](wps/WP-13-medicao.md) | O site mede visitas, origem e cliques na Play sem ferir a régua de privacidade | infra | M | medio | 🖥️ | WP-08 | — | `adiado` |
