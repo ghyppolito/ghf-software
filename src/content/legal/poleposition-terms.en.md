@@ -147,14 +147,14 @@ These Terms are governed by the laws of the Federative Republic of Brazil.
 
 If you are a consumer residing in the European Union, in the European Economic Area or in another country whose law grants you this protection, the choice of Brazilian law **does not deprive you** of the protection afforded by the mandatory rules of the law of your country of residence, and you may bring claims before the courts of your country of residence, in accordance with applicable law.
 
-In all other cases, the courts of the consumer's place of domicile are chosen as the venue, in accordance with the Consumer Protection Code.
+In all other cases, the courts of the consumer's domicile have jurisdiction, in accordance with the Consumer Protection Code.
 
 ---
 
 ## 15. General provisions
 
 - If any provision of these Terms is held to be invalid or unenforceable, the remaining provisions remain valid.
-- Tolerating a breach of any provision does not mean waiving the right to enforce it.
+- Failure to enforce any provision does not constitute a waiver of the right to enforce it.
 - These Terms, together with the Privacy Policy, form the entire agreement between you and the developer regarding the use of the App.
 - In the event of any discrepancy between versions of these Terms in different languages, the Portuguese version prevails, unless the law of your country provides otherwise.
 
