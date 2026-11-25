@@ -55,7 +55,7 @@ export const apps = {
   // Play: TOOLS
   topowalk: {
     nome: 'TopoWalk', id: 'br.com.ghfsoftware.topowalk', categoria: 'UtilitiesApplication', play: `${PLAY}br.com.ghfsoftware.topowalk`,
-    pagina: 'topowalk.html', privacidade: 'topowalk-privacy.html',
+    pagina: 'topowalk.html', privacidade: 'topowalk-privacy.html', termos: 'topowalk-terms.html',
     icone: '/assets/topo-walk.png', tag: 'v4.4.0', atualizadoEm: '2026-10-29',
   },
   // Play: SPORTS (repositório ../pole-position-app)

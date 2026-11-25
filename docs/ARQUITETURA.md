@@ -69,19 +69,27 @@ prop `lang`.
 | `src/components/Home.astro`, `src/components/LottoExpert.astro`, `src/components/TopoWalk.astro`, `src/components/PolePosition.astro`, `src/components/EclipseGo.astro` | corpo de cada landing |
 | `src/components/paginas/` | uma `Pagina<Nome>.astro` por página: layout + corpo, com a prop `lang` |
 
-## 5. Conteúdo legal (`src/content/legal/`, ADR-004)
+## 5. Conteúdo legal (`src/content/legal/`, ADR-004, ADR-010)
 
 Um arquivo por app, documento e língua (`src/content/legal/lottoexpert-privacy.pt.md`,
 `src/content/legal/lottoexpert-privacy.en.md`, …), declarados em `src/content.config.ts`.
-Front-matter: `lastUpdated: "AAAA-MM[-DD]"` em todos. Só o `.pt.md` tem o commit de origem no app
+Front-matter: `lastUpdated: "AAAA-MM[-DD]"` em todos. O `.pt.md` tem o commit de origem no app
 (`origemCommit`, 40 hex) e, enquanto uma tradução está atrás, `pendente: [códigos]` — o
-`tools/check_site.py` reprova enquanto o `pendente` existir. A tradução só tem `lastUpdated`.
+`tools/check_site.py` reprova enquanto o `pendente` existir. A língua espelhada do app (abaixo) tem
+o mesmo `origemCommit` do pt; a tradução feita aqui só tem `lastUpdated`.
 
 - O `.pt.md` é o `.md` do repositório do app **byte a byte**, copiado de um commit por
-  `tools/sync_legal.py` (só pelo `/legal`). O inglês é tradução fiel, feita aqui.
+  `tools/sync_legal.py` (só pelo `/legal`). A origem de cada documento, por língua, é a tabela
+  `ORIGENS` desse script.
+- O inglês depende da origem (ADR-010). Se o app publica o documento em inglês (`<BASE>.en.md`,
+  hoje o TopoWalk) e `ORIGENS` o declara, o `.en.md` é a cópia byte a byte dele, do mesmo commit
+  do pt, e o script recusa a cópia quando as datas pt/en da origem divergem. Senão, o inglês é
+  tradução fiel, feita aqui (`site-legal`).
 - `src/markdown/legal.mjs` (plugins do Sätteri): título e data saem do corpo; link do próprio
-  site vira caminho a partir da raiz, com o prefixo da língua; id dos títulos pela posição
-  (`secao-2-1`), igual em todas as línguas.
+  site vira caminho a partir da raiz, com o prefixo da língua; link relativo do app para o par do
+  documento (`PRIVACY_POLICY.md`, `TERMS_OF_USE.en.md`, `TERMS_OF_SERVICE.md`) vira a página do
+  mesmo app, com `hreflang`/`lang` quando muda de língua (outro `.md` relativo reprova o §12 do
+  `check_site.py`); id dos títulos pela posição (`secao-2-1`), igual em todas as línguas.
 - Hero e textos de `<head>` das legais: `src/i18n/legal.ts`.
 
 ## 6. i18n (ADR-007, D23)
@@ -108,7 +116,8 @@ redirecionamento (o Android App Links não segue redirect):
 ```
 /.well-known/assetlinks.json
 /lottoexpert-privacy.html   /lottoexpert-terms.html
-/topowalk-privacy.html      /poleposition-privacy.html   /eclipsego-privacy.html
+/topowalk-privacy.html      /topowalk-terms.html
+/poleposition-privacy.html  /eclipsego-privacy.html
 /lotto-expert/sweepstake-invite/lottoexpert-invite.html
 ```
 

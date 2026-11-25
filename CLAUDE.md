@@ -26,13 +26,15 @@ está em `.claude/context/` e é lido **sob demanda**:
 
 | Documento | Autoridade |
 |---|---|
-| Repositório de cada app (`../lotto-expert/docs/PRIVACY_POLICY.md` e `TERMS_OF_SERVICE.md`; `../topo-walk/PRIVACY_POLICY.md`; `../pole-position/pole-position-app/PRIVACY_POLICY.md`; `../eclipse-go/docs/PRIVACY_POLICY.md`) | **texto legal** — o site publica cópia; nunca é a origem |
+| Repositório de cada app (`../lotto-expert/docs/PRIVACY_POLICY.md` e `TERMS_OF_SERVICE.md`; `../topo-walk/PRIVACY_POLICY.md` e `TERMS_OF_USE.md`, com os `.en.md`; `../pole-position/pole-position-app/PRIVACY_POLICY.md`; `../eclipse-go/docs/PRIVACY_POLICY.md`) | **texto legal** — o site publica cópia; nunca é a origem |
 | `../lotto-expert/docs/ASO_METADATA.md`, `LottoExpertContent.md` (e equivalentes) | copy de produto e funcionalidades de cada app |
 | `design/handoff/<data>/` (quando existir, D4) | sistema visual — prevalece sobre o que está no HTML |
 | `docs/AVALIACAO.md` | direção técnica e de design do site |
 
 **Texto legal o agente não redige.** Política e termos nascem no repositório do app; aqui o
-agente espelha (`/legal <app>`), traduz para o inglês com fidelidade e atualiza a data. Mudar o
+agente espelha (`/legal <app>`) e atualiza a data. O inglês que o app publica (`.en.md`) é
+espelhado byte a byte, do mesmo commit (ADR-010); só documento sem inglês no app é traduzido
+aqui, com fidelidade. Mudar o
 sentido de uma cláusula é decisão do humano, no repositório do app.
 
 ---
@@ -45,7 +47,8 @@ redirecionamento como substituto** — o Android App Links não segue redirect:
 ```
 /.well-known/assetlinks.json
 /lottoexpert-privacy.html          /lottoexpert-terms.html
-/topowalk-privacy.html             /poleposition-privacy.html         /eclipsego-privacy.html
+/topowalk-privacy.html             /topowalk-terms.html
+/poleposition-privacy.html         /eclipsego-privacy.html
 /lotto-expert/sweepstake-invite/lottoexpert-invite.html   (deep link do bolão; lê ?d= do link)
 ```
 
