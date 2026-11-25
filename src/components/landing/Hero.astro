@@ -1,7 +1,9 @@
 ---
 // Hero da landing (WP-10, fatia 5; WP-30, fatia 2 na direção "engenharia luminosa"). Primeira seção,
 // com o ornamento `orn-hero` (pontos, anéis e glow do acento, tokens.css). Duas colunas a partir de
-// 1024 px (texto 1,1 fr, figura 0,9 fr); abaixo, o texto e depois a figura, centrada.
+// 1024 px (texto 1,1 fr, figura 0,9 fr); abaixo, o texto e depois a figura, centrada. A partir de
+// 1024 px o texto alinha ao topo, o respiro vertical é menor e a captura tem 380 px (Aparelho `g`):
+// o CTA da Play fica na primeira tela em 1280×720 e 1366×768 (auditoria da fatia 2, 2026-11-24).
 // - h1: o título dividido no primeiro ": " — o nome do app em `text`, o descritor numa linha própria
 //   no acento (sólido). Sem ": ", sai inteiro. Nunca `.revela` no hero (LCP).
 // - `tipo`: `captura` = a tela do app inteira na moldura (`Aparelho`, tamanho `g`, sem inclinar);
@@ -29,8 +31,8 @@ const nome = corte < 0 ? titulo : titulo.slice(0, corte + 1);
 const descritor = corte < 0 ? undefined : titulo.slice(corte + 2);
 ---
 <section aria-labelledby="h1" class="orn-hero">
-  <div class="max-w-[1216px] mx-auto px-[clamp(16px,2.6cqi,32px)] py-[clamp(40px,8cqi,112px)] grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-16 items-center">
-    <div class="flex flex-col gap-5 lg:gap-6 min-w-0">
+  <div class="max-w-[1216px] mx-auto px-[clamp(16px,2.6cqi,32px)] py-[clamp(40px,8cqi,112px)] lg:py-[clamp(40px,5cqi,72px)] grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-16 items-center lg:items-start">
+    <div class="flex flex-col gap-5 lg:gap-6 min-w-0 lg:pt-6">
       {kicker && <p class="text-eyebrow uppercase text-app-acc">{kicker}</p>}
       <h1 id="h1" class="text-hero text-balance text-text wrap-break-word">
         {nome}{descritor && <> <span class="block text-app-acc">{descritor}</span></>}

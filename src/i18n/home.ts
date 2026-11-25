@@ -59,9 +59,10 @@ type TextosHome = {
 
 export const home = {
   pt: {
-    // title = "GHF Software — " + h1 sem o ponto final, e description = hero_desc = footer_desc
-    // (ui.ts), nos dois idiomas (WP-30, fatia 2, copy aprovada pelo usuário em 2026-11-24); o og, o
-    // twitter e o JSON-LD (organization) repetem os dois (WP-21, D19).
+    // title = "GHF Software — " + h1 sem o ponto final só no pt; o en é a versão curta aprovada pelo
+    // usuário em 2026-11-24 (o h1 en passaria de 60 caracteres, check_site). description = hero_desc
+    // = footer_desc (ui.ts) nos dois idiomas (WP-30, fatia 2, copy aprovada pelo usuário em
+    // 2026-11-24); o og, o twitter e o JSON-LD (organization) repetem os dois (WP-21, D19).
     title: 'GHF Software — Engenharia de software, do celular à nuvem',
     description:
       'Apps nativos, plataformas em nuvem e IA aplicada, projetados e mantidos pela GHF Software desde 2004.',

@@ -328,6 +328,22 @@
       border-box;
 }
 
+/* Região rolável de lado (a tabela de planos; WP-30, fatia 2): uma sombra do acento na borda que
+ * ainda tem conteúdo, sem JS. A sombra fica presa à caixa (`scroll`); duas capas da cor do fundo,
+ * presas ao conteúdo (`local`), a cobrem quando a rolagem chega àquela borda. `--fundo-rolagem` é a
+ * cor do que está atrás (padrão `--color-bg`). Fica sob o conteúdo: célula opaca esconde a sombra. */
+@utility rolagem-sombra {
+  background:
+    linear-gradient(to right, var(--fundo-rolagem, var(--color-bg)) 30%, transparent) left center / 48px 100%
+      no-repeat local,
+    linear-gradient(to left, var(--fundo-rolagem, var(--color-bg)) 30%, transparent) right center / 48px 100%
+      no-repeat local,
+    radial-gradient(farthest-side at 0 50%, color-mix(in oklab, var(--app-acc) 45%, transparent), transparent)
+      left center / 16px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, color-mix(in oklab, var(--app-acc) 45%, transparent), transparent)
+      right center / 16px 100% no-repeat scroll;
+}
+
 /* Botões (WP-30; o CtaPlay passa a usá-los na fatia 2). Primário preenchido com o acento e texto
  * --bg (nunca branco); um primário por viewport. Foco: `anel-foco` no elemento. O deslocamento do
  * hover só sem "reduzir movimento". */

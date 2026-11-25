@@ -10,7 +10,8 @@
 //   sem a abertura ("A ferramenta definitiva…", "Chega de…"); sem kicker nem o selo "Vantagem
 //   Competitiva" (LOTTO-COPY-VANTAGEM-01). A `meta` é texto do usuário. O `alt` descreve a Home sem
 //   valores e sem falar em ganho.
-// - `funcionalidades` (resposta do usuário: scanner, fechamento, bolão, prestação de contas):
+// - `funcionalidades` (ordem: fechamento, bolão, scanner, prestação de contas — decisão do usuário em
+//   2026-11-24, WP-30 fatia 2; as duas com captura abrem o zigzag e as duas sem captura fecham em cartões):
 //   ASO:35 (mais o limite do plano gratuito de FC/LT e LC:49: o teste vale na Lotofácil e na Mega-Sena), ASO:37 (8 modalidades; a frase X/Y é LC:15 e "a garantia é sobre pontos, não sobre lucro" é
 //   ../lotto-expert/docs/SPEC_desdobramento_fechamento_volante.md:91 — a ASO:37 diz "garanta uma
 //   premiação mínima", que a landing não usa), ASO:41 (mais os
@@ -51,12 +52,6 @@ export const lottoexpert = {
     },
     funcionalidades: [
       {
-        titulo: 'Scanner de bilhetes',
-        icone: 'camera',
-        descricao:
-          'Aponte a câmera e confira seus jogos na hora. O app identifica números, concursos e calcula seus prêmios automaticamente, tudo no seu celular, sem enviar foto para nenhum servidor. O plano gratuito tem 3 capturas de teste, na Lotofácil e na Mega-Sena; no Pro, ilimitado.',
-      },
-      {
         titulo: 'Fechamento com garantia matemática',
         descricao:
           'Matrizes provadas matematicamente para as 8 modalidades de dezenas: Lotofácil, Mega-Sena, Quina, Lotomania, Timemania, Dupla Sena, Dia de Sorte e +Milionária. Se X das suas dezenas saírem, algum jogo faz ao menos Y pontos. A garantia é sobre pontos, não sobre lucro.',
@@ -70,6 +65,12 @@ export const lottoexpert = {
           'Organize grupos de apostas, importe jogos via link direto, compartilhe o PDF profissional com os participantes e configure renovação automática para o próximo concurso (Pro). O plano gratuito tem 1 bolão ativo, com até 10 participantes.',
         imagem: 'bolao',
         alt: 'Tela de um bolão lacrado no LottoExpert: valor da cota, total arrecadado, botão de compartilhar, opção de bolão recorrente e a lista de participantes com a situação do pagamento.',
+      },
+      {
+        titulo: 'Scanner de bilhetes',
+        icone: 'camera',
+        descricao:
+          'Aponte a câmera e confira seus jogos na hora. O app identifica números, concursos e calcula seus prêmios automaticamente, tudo no seu celular, sem enviar foto para nenhum servidor. O plano gratuito tem 3 capturas de teste, na Lotofácil e na Mega-Sena; no Pro, ilimitado.',
       },
       {
         titulo: 'Prestação de contas do bolão',
@@ -237,12 +238,6 @@ export const lottoexpert = {
     },
     funcionalidades: [
       {
-        titulo: 'Ticket scanner',
-        icone: 'camera',
-        descricao:
-          'Point the camera and check your tickets on the spot. The app reads the numbers and draws and calculates your prizes automatically, all on your phone, without sending any photo to a server. The free plan includes 3 test captures, for Lotofácil and Mega-Sena; Pro is unlimited.',
-      },
-      {
         titulo: 'Wheeling with a mathematical guarantee',
         descricao:
           'Mathematically proven matrices for the 8 number-based modalities: Lotofácil, Mega-Sena, Quina, Lotomania, Timemania, Dupla Sena, Dia de Sorte and +Milionária. If X of your numbers are drawn, at least one ticket scores at least Y points. The guarantee is about points, not profit.',
@@ -256,6 +251,12 @@ export const lottoexpert = {
           'Organize betting groups, import tickets from a direct link, share the professional PDF with participants and set up automatic renewal for the next draw (Pro). The free plan includes 1 active sweepstake with up to 10 participants.',
         imagem: 'bolao',
         alt: 'LottoExpert screen of a sealed sweepstake: share value, amount collected, share button, recurring sweepstake option and the participant list with payment status (app interface in Portuguese).',
+      },
+      {
+        titulo: 'Ticket scanner',
+        icone: 'camera',
+        descricao:
+          'Point the camera and check your tickets on the spot. The app reads the numbers and draws and calculates your prizes automatically, all on your phone, without sending any photo to a server. The free plan includes 3 test captures, for Lotofácil and Mega-Sena; Pro is unlimited.',
       },
       {
         titulo: 'Sweepstake settlement',

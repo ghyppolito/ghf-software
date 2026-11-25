@@ -107,11 +107,13 @@ interface RotulosLanding {
   terms: string;
   /** `<summary>` das linhas da comparação fora da tabela principal (WP-30, fatia 2) */
   fullTable: string;
+  /** nome (só leitor de tela) da região rolável da tabela dentro do "Ver tabela completa" (WP-30, fatia 2) */
+  fullTableRegion: string;
 }
 
 // `cta`, `features`, `seeAll`, `proof`, `faqH`, `plans`, `freepro`, `privacy`, `privacyPolicy`,
-// `ctaH` e `terms` de `content/i18n.js` do export (rodada 3). `fullTable`: rótulo aprovado pelo
-// usuário em 2026-11-24 (WP-30, fatia 2).
+// `ctaH` e `terms` de `content/i18n.js` do export (rodada 3). `fullTable` e `fullTableRegion`: rótulos
+// aprovados pelo usuário em 2026-11-24 (WP-30, fatia 2).
 export const rotulosLanding: Record<Idioma, RotulosLanding> = {
   pt: {
     cta: 'Baixar na Google Play',
@@ -126,6 +128,7 @@ export const rotulosLanding: Record<Idioma, RotulosLanding> = {
     ctaH: 'Baixe o {app}',
     terms: 'Termos de uso',
     fullTable: 'Ver tabela completa',
+    fullTableRegion: 'Demais funcionalidades',
   },
   en: {
     cta: 'Get it on Google Play',
@@ -140,6 +143,7 @@ export const rotulosLanding: Record<Idioma, RotulosLanding> = {
     ctaH: 'Get {app}',
     terms: 'Terms of use',
     fullTable: 'See full table',
+    fullTableRegion: 'Other features',
   },
 };
 

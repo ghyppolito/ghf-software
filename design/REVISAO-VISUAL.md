@@ -158,3 +158,18 @@ do handoff:
 - Moldura de aparelho: `src/components/landing/Aparelho.astro` (estreia nas landings, fatia 2).
 - Desvios da especificação da fatia 1 aprovados visualmente com a Home (2026-11-24): hero com
   `max-w` de 980 px e cartões das áreas em `md:p-5` (entre 768 e 1023 px).
+
+**2026-11-24 — fatia 2 do WP-30 (landings e correções da Home), decisões do usuário e correções da
+auditoria:**
+- 2026-11-24, decisão do usuário: `title` en da Home é a versão curta "GHF Software — Software
+  engineering, phone to cloud" (o `check_site.py` limita o título a 60 caracteres; o pt segue o h1).
+- 2026-11-24, decisão do usuário: a captura do hero do LottoExpert sai em densidade 1,5x (a 2x
+  estourava o orçamento de imagem; LCP no lab sem gzip ≈ 2,48 s — o lab não comprime, ver o WP novo
+  do medidor). As demais capturas seguem em 2x.
+- 2026-11-24, decisão do usuário: ordem das funcionalidades do LottoExpert é Fechamento, Bolão,
+  Scanner, Prestação de contas (as duas com captura no zigzag, as duas sem captura em cartões no fim).
+- 2026-11-24, correções da auditoria da fatia 2: CTA da Play acima da dobra no hero das landings em
+  1280×720 e 1366×768 (texto alinhado ao topo, respiro menor e captura de 380 px a partir de
+  1024 px); tabela de planos a 360 px com a coluna Pro à vista e sombra do acento na borda rolável
+  (`rolagem-sombra`, sem JS); chevrons do "Ver todas", do "Ver tabela completa" e do FAQ no mesmo
+  padrão (`chevron-down` girando 180° e indo ao acento).

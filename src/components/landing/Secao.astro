@@ -2,7 +2,8 @@
 // Seção de landing (WP-10, fatia 5; WP-30, fatia 2 na direção "engenharia luminosa"): a `<section>`
 // ocupa a largura inteira (o fundo vai de borda a borda) e o conteúdo fica num contêiner de 1216 px
 // com margem lateral fluida, um lugar só. Com `titulo`, um `<h2>` que nomeia a seção
-// (`aria-labelledby`); sem ele, o `rotulo` vira `aria-label`. `classe` é o layout do contêiner
+// (`aria-labelledby`); sem ele, `rotuladaPor` (id de um título visível que quem chama desenha no
+// slot) vira `aria-labelledby`, ou o `rotulo` vira `aria-label`. `classe` é o layout do contêiner
 // interno (classes literais de quem chama). `fundo` é o ritmo das seções (REVISAO-VISUAL §7):
 // `base` (sem fundo), `tint` (faixa tingida pelo acento do app) ou `surface` (superfície).
 // `compacta` é o respiro menor. As unidades `cqi` medem o `@container` do Landing.astro.
@@ -12,15 +13,17 @@ interface Props {
   idTitulo?: string;
   titulo?: string;
   rotulo?: string;
+  /** id do título visível desenhado no slot (sem `titulo`) */
+  rotuladaPor?: string;
   fundo?: 'base' | 'tint' | 'surface';
   compacta?: boolean;
   classe?: string;
 }
 
-const { id, idTitulo, titulo, rotulo, fundo = 'base', compacta = false, classe } = Astro.props;
+const { id, idTitulo, titulo, rotulo, rotuladaPor, fundo = 'base', compacta = false, classe } = Astro.props;
 const idH = idTitulo ?? (id ? `h-${id}` : undefined);
 if (titulo && !idH) throw new Error(`Secao "${titulo}": título sem id (passe \`id\` ou \`idTitulo\`)`);
-if (!titulo && !rotulo) throw new Error('Secao sem título nem rótulo');
+if (!titulo && !rotulo && !rotuladaPor) throw new Error('Secao sem título nem rótulo');
 const temLead = Astro.slots.has('lead');
 // Classes inteiras literais (o Tailwind não detecta concatenação).
 const FUNDO = {
@@ -31,8 +34,8 @@ const FUNDO = {
 ---
 <section
   id={id}
-  aria-labelledby={titulo ? idH : undefined}
-  aria-label={titulo ? undefined : rotulo}
+  aria-labelledby={titulo ? idH : rotuladaPor}
+  aria-label={titulo || rotuladaPor ? undefined : rotulo}
   class:list={[FUNDO[fundo], id && 'scroll-mt-4']}
 >
   <div

@@ -3,7 +3,8 @@
 // do escudo, o `<h2>` visível ("Privacidade", decisão do usuário em 2026-11-24), uma frase e o link
 // da política do app (URL contratual, ADR-001). O link é inline na frase: fica fora do alvo de 44 px
 // (exceção de link em texto da WCAG 2.5.8; desvio 11 da especificação). O slot recebe o bloco extra
-// da D1 (linha do backup do LottoExpert, fatia 9), dentro do painel.
+// da D1 (linha do backup do LottoExpert, fatia 9), dentro do painel. A seção tem o nome do `<h2>`
+// (`aria-labelledby`), sem `aria-label` repetido (WP-30, fatia 2, auditoria).
 import Secao from './Secao.astro';
 import Icon from '../Icon.astro';
 
@@ -16,7 +17,7 @@ interface Props {
 
 const { rotulo, frase, linkRotulo, linkHref } = Astro.props;
 ---
-<Secao rotulo={rotulo} compacta>
+<Secao rotuladaPor="h-privacidade" compacta>
   <div class="revela rounded-card-lg border border-border bg-surface shadow-card p-5 t:p-6 lg:p-8 flex flex-col gap-5">
     <div class="flex items-center gap-4">
       <span aria-hidden="true" class="size-12 flex-none grid place-items-center rounded-[14px] bg-app-panel text-app-acc text-[22px]">

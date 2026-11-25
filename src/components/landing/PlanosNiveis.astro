@@ -3,9 +3,13 @@
 // preço, nota e a comparação. O nível destacado é `cartao-brilho` com o halo do acento
 // (`shadow-brilho`).
 // Comparação: a tabela principal são as linhas de `comparacao.principais` (na ordem de `linhas`),
-// numa região rolável com foco (`<section>` com nome; a tabela tem 520 px de largura mínima, a
-// página não rola de lado). As outras linhas ficam num `<details>` "Ver tabela completa", com o mesmo
-// cabeçalho e o padrão do VerTodas; nenhuma linha se repete. Coluna paga tingida (`bg-app-tint`).
+// numa região rolável com foco (`<section>` com nome; a tabela tem 400 px de largura mínima, a
+// página não rola de lado). A 360–390 px a coluna Pro aparece cortada na borda direita e a borda que
+// ainda tem conteúdo ganha a sombra do acento (`rolagem-sombra`, tokens.css; sem JS): a coluna paga é
+// tingida por `bg-app-acc/8` (translúcido, para a sombra aparecer por baixo), não por `bg-app-tint`.
+// As outras linhas ficam num `<details>` "Ver tabela completa", com o mesmo
+// cabeçalho e o padrão do VerTodas; nenhuma linha se repete. Coluna paga tingida.
+import Icon from '../Icon.astro';
 import NotaPlanos from './NotaPlanos.astro';
 import type { Planos } from '../../i18n/landing';
 import type { Idioma } from '../../i18n/idiomas';
@@ -18,15 +22,17 @@ interface Props {
   planos: Niveis;
   rotuloTermos: string;
   rotuloTabelaCompleta: string;
+  rotuloRegiaoCompleta: string;
 }
 
-const { lang, titulo, planos, rotuloTermos, rotuloTabelaCompleta } = Astro.props;
+const { lang, titulo, planos, rotuloTermos, rotuloTabelaCompleta, rotuloRegiaoCompleta } = Astro.props;
 const c = planos.comparacao;
 // Nome da região rolável da tabela (`<section>` com nome = role region). O do export é o título da
 // seção, que repete o nome do landmark de fora (unique-landmark do html-validate): aqui vai o
-// título com as duas colunas comparadas, sem texto novo. A da tabela completa leva o rótulo dela.
+// título com as duas colunas comparadas, sem texto novo. A da tabela completa se chama
+// `rotuloRegiaoCompleta` ("Demais funcionalidades", aprovado pelo usuário em 2026-11-24).
 const rotuloTabela = `${titulo}: ${c.colGratis}, ${c.colPago}`;
-const rotuloResto = `${rotuloTabela} (${rotuloTabelaCompleta})`;
+const rotuloResto = rotuloRegiaoCompleta;
 const principais = c.linhas.filter((_, i) => c.principais.includes(i));
 const resto = c.linhas.filter((_, i) => !c.principais.includes(i));
 // Período colado no preço quando começa por "/" ("R$ 7,90/mês"); por extenso, com espaço ("R$ 69,90
@@ -71,7 +77,9 @@ const tabelas = [
             {rotuloTabelaCompleta}
             <span class="flex items-center gap-2.5 text-[13px] font-medium text-text-2">
               {t.linhas.length}
-              <span aria-hidden="true" class="size-2 border-r-[1.5px] border-b-[1.5px] border-text-2 -translate-y-[3px] rotate-45 group-open:translate-y-[1px] group-open:-rotate-[135deg] transition-transform duration-[var(--dur-base)] ease-suave motion-reduce:transition-none" />
+              <span aria-hidden="true" class="flex-none">
+                <Icon nome="chevron-down" class="size-5 text-text-2 group-open:text-app-acc group-open:rotate-180 transition-transform duration-[var(--dur-base)] ease-suave motion-reduce:transition-none" />
+              </span>
             </span>
           </summary>
         )}
@@ -79,16 +87,16 @@ const tabelas = [
           tabindex="0"
           aria-label={t.rotulo}
           class:list={[
-            'overflow-x-auto border border-border rounded-card-lg focus-visible:outline-3 focus-visible:outline-brand focus-visible:-outline-offset-3',
-            completa ? 'mx-3 mb-3 t:mx-4 t:mb-4' : 'shadow-card',
+            'rolagem-sombra overflow-x-auto border border-border rounded-card-lg focus-visible:outline-3 focus-visible:outline-brand focus-visible:-outline-offset-3',
+            completa ? 'mx-3 mb-3 t:mx-4 t:mb-4 [--fundo-rolagem:var(--color-surface)]' : 'shadow-card',
           ]}
         >
-          <table class="w-full min-w-[520px] border-collapse text-small">
+          <table class="w-full min-w-[400px] border-collapse text-small">
             <thead>
               <tr class:list={[completa ? 'bg-raised' : 'bg-surface']}>
                 <th scope="col" class="text-left px-4 py-3.5 font-semibold text-text-2">{c.colRecurso}</th>
                 <th scope="col" class="text-left px-4 py-3.5 font-bold w-[28%]">{c.colGratis}</th>
-                <th scope="col" class="text-left px-4 py-3.5 font-bold w-[32%] text-app-acc bg-app-tint">
+                <th scope="col" class="text-left px-4 py-3.5 font-bold w-[32%] text-app-acc bg-app-acc/8">
                   {c.colPago} <span class="font-medium text-text-2">{c.colPagoSub}</span>
                 </th>
               </tr>
@@ -98,7 +106,7 @@ const tabelas = [
                 <tr class="border-t border-border">
                   <th scope="row" class="text-left px-4 py-3 font-medium">{recurso}</th>
                   <td class="px-4 py-3 text-text-2">{gratis}</td>
-                  <td class="px-4 py-3 bg-app-tint">{pago}</td>
+                  <td class="px-4 py-3 bg-app-acc/8">{pago}</td>
                 </tr>
               ))}
             </tbody>

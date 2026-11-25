@@ -13,6 +13,8 @@
 //   cima (`absolute z-10`, desenhado no painel) e vem no fim do corpo no DOM: leitura e Tab vão
 //   do nome ao Play (WP-30, fatia 2). O anel de foco do link é o do card inteiro (`has-[…:focus-visible]`),
 //   sem `overflow-hidden` no `<article>`, para nada cortá-lo.
+// - Altura do painel do card: a variável `--painel` no `<article>` (96 / 112 px). O Play centra nela:
+//   `top` = (painel − 44 px do `min-h-11`) / 2. Mudou a altura ou o `min-h`, muda aqui também.
 // - Ponto de troca da grade dos apps: 700 px, escrito em rem (`min-[43.75rem]:`), como o `t:` de
 //   tokens.css, para a ordem das variantes no CSS não inverter. Grade 1 / 2 / 4 colunas (700 / 1280).
 // - Movimento: `.revela` (global.css) nas seções 2 a 6, nunca no hero nem no h1 (LCP); o
@@ -118,9 +120,9 @@ const secaoPy = 'py-[clamp(64px,9vw,112px)]';
           return (
             <article
               data-app={ACENTO[c]}
-              class={`revela ${atraso[i]} relative flex flex-col rounded-card-lg border border-border bg-surface shadow-card transition-[translate,box-shadow,border-color] duration-[var(--dur-base)] ease-suave hover:border-app-acc/55 hover:shadow-lift motion-safe:hover:-translate-y-[3px] has-[h3_a:focus-visible]:outline-2 has-[h3_a:focus-visible]:outline-brand has-[h3_a:focus-visible]:outline-offset-[3px]`}
+              class={`revela ${atraso[i]} [--painel:96px] lg:[--painel:112px] relative flex flex-col rounded-card-lg border border-border bg-surface shadow-card transition-[translate,box-shadow,border-color] duration-[var(--dur-base)] ease-suave hover:border-app-acc/55 hover:shadow-lift motion-safe:hover:-translate-y-[3px] has-[h3_a:focus-visible]:outline-2 has-[h3_a:focus-visible]:outline-brand has-[h3_a:focus-visible]:outline-offset-[3px]`}
             >
-              <div class="relative h-24 lg:h-28 flex items-center justify-between gap-3 px-5 rounded-t-[19px] bg-app-panel border-b border-app-acc/30 overflow-hidden">
+              <div class="relative h-(--painel) flex items-center justify-between gap-3 px-5 rounded-t-[19px] bg-app-panel border-b border-app-acc/30 overflow-hidden">
                 <span aria-hidden="true" class="absolute inset-0 [background:var(--grad-glow-card)]" />
                 <span aria-hidden="true" class="absolute inset-0 [background:var(--orn-pontos)] [mask-image:linear-gradient(to_left,black,transparent_70%)] opacity-70" />
                 <Image src={iconesApps[c]} alt="" width={56} height={56} densities={[1, 2]} class="relative size-14 flex-none rounded-[14px] object-cover bg-raised shadow-card" />
@@ -143,7 +145,7 @@ const secaoPy = 'py-[clamp(64px,9vw,112px)]';
                   </div>
                   <span aria-hidden="true" class="text-[18px] leading-none font-semibold text-app-acc">→</span>
                 </div>
-                <a href={a.play} target="_blank" rel="noopener noreferrer" aria-label={x.play_rotulo.replace('{app}', a.nome)} class="absolute z-10 right-5 top-[26px] lg:top-[34px] min-h-11 px-4 inline-flex items-center gap-1.5 flex-none rounded-pill border border-border-strong bg-bg/40 text-[13px] font-semibold text-text no-underline transition-colors duration-[var(--dur-fast)] hover:border-text hover:bg-text/6 anel-foco">
+                <a href={a.play} target="_blank" rel="noopener noreferrer" aria-label={x.play_rotulo.replace('{app}', a.nome)} class="absolute z-10 right-5 top-[calc((var(--painel)-44px)/2)] min-h-11 px-4 inline-flex items-center gap-1.5 flex-none rounded-pill border border-border-strong bg-bg/40 text-[13px] font-semibold text-text no-underline transition-colors duration-[var(--dur-fast)] hover:border-text hover:bg-text/6 anel-foco">
                   {x.play_curto}<span aria-hidden="true">↗</span>
                 </a>
               </div>

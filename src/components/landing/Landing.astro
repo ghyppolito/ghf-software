@@ -57,7 +57,7 @@ const cta = { href: apps[app].play, rotulo: r.cta };
   <Funcionalidades titulo={r.features} itens={c.funcionalidades} imagens={figuras} todas={c.todas} rotuloVerTodas={r.seeAll} />
   {Astro.slots.has('apos-funcionalidades') && <slot name="apos-funcionalidades" />}
   {c.prova && <Prova titulo={r.proof} fatos={c.prova} />}
-  {c.planos && <Planos lang={lang} titulo={c.planos.tipo === 'gratis-pro' ? r.freepro : r.plans} planos={c.planos} rotuloTermos={r.terms} rotuloTabelaCompleta={r.fullTable} />}
+  {c.planos && <Planos lang={lang} titulo={c.planos.tipo === 'gratis-pro' ? r.freepro : r.plans} planos={c.planos} rotuloTermos={r.terms} rotuloTabelaCompleta={r.fullTable} rotuloRegiaoCompleta={r.fullTableRegion} />}
   <Privacidade rotulo={r.privacy} frase={c.privacidade} linkRotulo={r.privacyPolicy} linkHref={link(lang, `${app}-privacy.html`)}>
     {Astro.slots.has('privacidade-extra') && <slot name="privacidade-extra" />}
   </Privacidade>
