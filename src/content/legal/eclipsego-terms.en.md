@@ -81,7 +81,7 @@ We may update these Terms from time to time, for example to reflect changes in t
 
 ## 13. Governing law and jurisdiction
 
-These Terms are governed by the laws of the **Federative Republic of Brazil**. If you are a consumer residing in the European Union or in another country, this choice of law **does not deprive you** of the protection afforded by the mandatory rules of your country of residence, and you may bring complaints before the courts of your country of residence, in accordance with applicable law.
+These Terms are governed by the laws of the **Federative Republic of Brazil**. If you are a consumer residing in the European Union or in another country, this choice of law **does not deprive you** of the protection afforded by the mandatory rules of your country of residence, and you may bring claims before the courts of your country of residence, in accordance with applicable law.
 
 ## 14. General provisions
 
