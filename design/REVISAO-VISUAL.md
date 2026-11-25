@@ -178,3 +178,8 @@ auditoria:**
 O usuário aprovou: "ok, agora ficou bom, aprovado". Referência: as landings servidas nesse commit.
 Na sequência pediu as legais na mesma direção: topo escuro com o glow do app e corpo em papel claro
 (fatia 4 do WP-30).
+
+**2026-11-24 — fatia 4 do WP-30 (legais), commits `9a52463` e `b18444f`.** O usuário aprovou:
+"aprovado". As 10 legais têm topo escuro com o glow do acento do app e corpo em papel claro; o
+texto legal não mudou. O acento `-light` tem valor padrão em `:root`. A fatia 3 (propagação) foi
+absorvida pela 2: o EclipseGo recebeu a direção pelo template.

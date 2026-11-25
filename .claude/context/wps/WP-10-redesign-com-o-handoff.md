@@ -2,7 +2,7 @@
 id: WP-10
 titulo: A home e as landings de app seguem o sistema visual do handoff
 area: design
-status: blocked
+status: todo
 depende_de: [WP-06, WP-08]
 adr: [ADR-001, ADR-004, ADR-005, ADR-006, ADR-007, ADR-008, ADR-009]
 spec: docs/AVALIACAO.md
@@ -17,7 +17,7 @@ branch: feat/wp-10-fatia-10a-aceite-parcial
 
 **Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** ECLIPSE-ICONE-OFFLINE-01 (ícone do card "offline" do EclipseGo, D21), POLE-PRINTS-2X-01 (do WP-12) · o WP-19 (rodada 3) está `done` e não segura mais as landings
 
-**Pausa (2026-11-24): as fatias 7, 8, 9 e 10b estão pausadas pelo WP-30 em 2026-11-24** (revisão visual antes do deploy único, D33 (g); `design/REVISAO-VISUAL.md` §6). Retomam com a direção aprovada depois da fatia 3 do WP-30. O status do WP-10 segue `doing`. A fatia 9 fica parcial na `feat/wp-10-fatia-9-lottoexpert`, que é a base do protótipo.
+**Retomada (2026-11-24):** o WP-30 está `done`. Retomar depois do WP-32: fatias 7 (TopoWalk), 8 (Pole Position), 9 (capturas do scanner e da prestação de contas do LottoExpert) e 10b, já na direção do WP-30 (`design/REVISAO-VISUAL.md` §7). A fatia 9 fica parcial na `feat/wp-10-fatia-9-lottoexpert`. A 10b recebe `LEGAL-VOLTAR-BORDA-CASCA-01` e `ICONE-ECLIPSE-48PX-01`; a 7, `TOPOWALK-SELO-CONTRASTE-01`.
 
 **Objetivo:** tokens do handoff em `src/styles/tokens.css` (`@theme`, ADR-008); home com hierarquia por app (um
 toque até o app certo); as 4 landings com a mesma anatomia (hero + CTA → 3–5 funcionalidades

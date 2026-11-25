@@ -2,7 +2,7 @@
 id: WP-30
 titulo: O site tem direção visual própria, aprovada no navegador, antes do deploy único
 area: design
-status: doing
+status: done
 depende_de: []
 adr: [ADR-001, ADR-006, ADR-007, ADR-008]
 spec: design/REVISAO-VISUAL.md
@@ -179,6 +179,27 @@ longo dos dois hoje, e sem largura fixa para texto (`BRIEF.md` §7).
    Pagina*Privacy.astro`/`*Terms.astro` (só se o cabeçalho morar nelas). URLs contratuais
    (ADR-001) intactas: só a apresentação muda. **Aprovação 4:** o usuário vê uma legal de cada app
    em pt e en.
+
+**Aprovação 4 (2026-11-24):** o usuário viu as legais e disse "aprovado".
+
+**Fechamento (2026-11-24).** A fatia 3 (propagação) foi absorvida pela 2: o EclipseGo mudou pelo
+template e foi aprovado junto. Aprovações no navegador, todas de 2026-11-24: Home ("agora sim … é
+uma página profissional"), landings ("ok, agora ficou bom, aprovado") e legais ("aprovado"). Direção
+e decisões em `design/REVISAO-VISUAL.md` §6–§7 e D33/D20/D34. Commits: `6efbd3e`, `d094a0a`,
+`8039351`, `7e4620f`, `9cfec02`, `bf4f50d` (WP-32 escrito), `f643499`, `9a52463`, `b18444f`.
+- Verificação: build, `check_site.py` (raiz e `dist`), contrato, unittest 42 OK, `test:css` 21 pass
+  e html-validate verdes; `lychee` não instalado (o CI cobre). Lighthouse mobile: `/` perf 99, a11y
+  100, LCP 1,80 s; `/lottoexpert.html` perf 97, a11y 100, LCP 2,48 s (lab sem gzip; com gzip
+  1,73 s, WP-32); `/eclipsego.html` 99/100, 2,03 s; legais 99–100/100, 1,65–1,95 s.
+- **Ressalva:** o usuário aprovou o visual de todas as páginas, mas não reportou ainda estes itens
+  só de navegador: foco por Tab nas 4 cores, impressão real (Ctrl+P), hover do sumário,
+  `prefers-reduced-motion`, Safari e Firefox (sem `animation-timeline`; o conteúdo aparece parado).
+  Ficam como checklist pendente no `handoff.md` §3, sem segurar o WP.
+- Achados resolvidos: `FUNC-SEM-IMAGEM-METADE-VAZIA-01` e `HOME-GRADE-3-CARDS-01` (a grade de
+  `Funcionalidades.astro` escolhe as colunas por quantidade de itens) e `HOME-VOCABULARIO-TECNICO-01`
+  (a Home traz as áreas de domínio). Novos, roteados: `TOPOWALK-SELO-CONTRASTE-01`,
+  `ICONE-ECLIPSE-48PX-01`, `LEGAL-VOLTAR-BORDA-CASCA-01`, `HOME-SAAS-ARTICLE-20-01`,
+  `SOBRE-EN-MECHANICS-01`, `LANDING-HTML-PESO-01`.
 
 Depois da fatia 4, este WP fica `done`. As fatias 7 (TopoWalk), 8 (Pole Position) e 9 (LottoExpert,
 com as capturas que faltam) e a 10b do WP-10 retomam com a direção nova. A 10b é a primeira a

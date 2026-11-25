@@ -7,10 +7,10 @@
 
 ## 1. Onde parei
 
-- Fatia 9 do WP-10 (LottoExpert) **implementada parcial em 2026-11-24, não fecha**: faltam as capturas do scanner (o usuário, no celular, com bilhete real; o agente recorta só a barra de status) e da prestação de contas (o agente, no `emulator-5580`, depois do sorteio da Mega-Sena 3090 de 24/11/2026; bolão "Turma do Trabalho" já lacrado). WP-10 segue `doing`.
-- Branches, **nenhuma enviada**: `docs/wp-27-ampliado-wp-29-respostas-fatia-9` (ff972a8, sai de `origin/feat/wp-08-layout-unico`) e `feat/wp-10-fatia-9-lottoexpert` (662e9ad, dc1dc7d e a escrituração), empilhada sobre a primeira. Emuladores ligados: `emulator-5580` (`lotto-api34`, app 2.06.00 debug) e `emulator-5582`.
-- **Deploy único só depois da 2.06.00 na produção da Play** (nota na D13). Então `apps.ts` (`tag`, `atualizadoEm`) é atualizado (aviso do §21).
-- Bloqueadas: fatias 7 (TopoWalk) e 8 (Pole Position) esperam capturas (D26); a 10b (remover `legado.css`/`brand.*`, aceite final) vem por último. WP-26 a WP-28 esperam `TERMS_OF_SERVICE.md`; WP-13 `adiado` (D3); WP-20 é sessão do Claude Design.
+- **WP-30 `done` (2026-11-24)**: o usuário aprovou Home, landings (LottoExpert e EclipseGo) e legais no navegador. A fatia 3 foi absorvida pela 2. Pendentes só de navegador (seção 3): foco por Tab nas 4 cores, Ctrl+P, hover do sumário, reduced-motion, Safari/Firefox.
+- Branches **nenhuma enviada ao GitHub**: `feat/wp-10-fatia-9-lottoexpert` e `feat/wp-30-revisao-visual`, empilhadas sobre `docs/wp-27-ampliado-wp-29-respostas-fatia-9`. Emuladores `emulator-5580` e `-5582` ligados; servidor local em :8080.
+- **Próximo: WP-32** (lab do Lighthouse com gzip), depois WP-10 (`todo`): fatias 7, 8, 9 (capturas do scanner e da prestação de contas) e 10b, na direção do WP-30.
+- **Deploy único só depois da 2.06.00 na produção da Play** (nota na D13).
 
 ## 2. Quebrado ou pela metade agora
 
@@ -24,6 +24,13 @@ Pela metade: a fatia 9 (acima). Nas verificações locais da fatia: build, `chec
 - `tools/sync_legal.py:51` aponta o Pole Position para `pole-position/pole-position-app`, caminho que não existe (`PP-ORIGEM-CAMINHO-01`, roteado ao WP-28).
 
 ## 3. O que só o navegador prova (pendente)
+
+**WP-30 (direção visual):** `python3 -m http.server 8080 -d dist`. O visual foi aprovado; falta reportar:
+- foco por Tab nas 4 cores de acento (Home, landings, legais);
+- impressão real (Ctrl+P) de uma legal;
+- hover do sumário das legais;
+- `prefers-reduced-motion` ligado: nada anima;
+- Safari e Firefox (sem `animation-timeline`): o conteúdo deve aparecer parado.
 
 **Fatia 9 do WP-10 (LottoExpert):** `python3 -m http.server 8080 -d dist`, em `/lottoexpert.html` e `/en/lottoexpert.html`, a 360, 768 e 1280. Conferir:
 - recorte do hero (nome inteiro, cards Quina/Lotomania cortados na borda);
