@@ -172,6 +172,7 @@ CONTRATUAIS = [
     ".well-known/assetlinks.json",
     "lottoexpert-privacy.html", "lottoexpert-terms.html",
     "topowalk-privacy.html", "topowalk-terms.html", "poleposition-privacy.html", "eclipsego-privacy.html",
+    "eclipsego-terms.html",
     "lotto-expert/sweepstake-invite/lottoexpert-invite.html",
 ]
 
@@ -182,7 +183,7 @@ PUBLICADAS = [
     "lottoexpert.html", "lottoexpert-privacy.html", "lottoexpert-terms.html",
     "topowalk.html", "topowalk-privacy.html", "topowalk-terms.html",
     "poleposition.html", "poleposition-privacy.html",
-    "eclipsego.html", "eclipsego-privacy.html",
+    "eclipsego.html", "eclipsego-privacy.html", "eclipsego-terms.html",
     "lotto-expert/sweepstake-invite/lottoexpert-invite.html",
 ]
 
@@ -220,6 +221,7 @@ LEGAL = {
     "topowalk-terms.html": "src/content/legal/topowalk-terms.pt.md",
     "poleposition-privacy.html": "src/content/legal/poleposition-privacy.pt.md",
     "eclipsego-privacy.html": "src/content/legal/eclipsego-privacy.pt.md",
+    "eclipsego-terms.html": "src/content/legal/eclipsego-terms.pt.md",
 }
 
 MESES_PT = {"janeiro": "January", "fevereiro": "February", "março": "March", "abril": "April",

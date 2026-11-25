@@ -17,6 +17,8 @@ branch: feat/wp-10-fatia-10a-aceite-parcial
 
 **Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** ECLIPSE-ICONE-OFFLINE-01 (ícone do card "offline" do EclipseGo, D21), POLE-PRINTS-2X-01 (do WP-12) · o WP-19 (rodada 3) está `done` e não segura mais as landings
 
+**Estado (2026-11-25):** fatias 7 e 8 entregues (abaixo). Falta: fatia 9 (capturas do scanner, do usuário, e da prestação de contas, do agente, com o concurso 3090 já sorteado), 10b e `apps.ts` do LottoExpert na 2.06.00 quando sair na Play. `blocked` até as capturas do scanner.
+
 **Retomada (2026-11-24):** o WP-30 está `done`. Retomar depois do WP-32: fatias 7 (TopoWalk), 8 (Pole Position), 9 (capturas do scanner e da prestação de contas do LottoExpert) e 10b, já na direção do WP-30 (`design/REVISAO-VISUAL.md` §7). A fatia 9 fica parcial na `feat/wp-10-fatia-9-lottoexpert`. A 10b recebe `LEGAL-VOLTAR-BORDA-CASCA-01` e `ICONE-ECLIPSE-48PX-01`; a 7, `TOPOWALK-SELO-CONTRASTE-01`.
 
 **Objetivo:** tokens do handoff em `src/styles/tokens.css` (`@theme`, ADR-008); home com hierarquia por app (um
@@ -355,6 +357,11 @@ prova é o checklist de navegador.
    `TOPO-CONTRASTE-AA-01`, a parte TopoWalk de `LANDINGS-URL-E-PLAY-01`. **Topo:** recalcular o
    topo e recolocar o CTA da Play acima da dobra a 1280×720 (nav em fluxo desde a fatia 2).
    **Bloqueio:** as 4 capturas (D26; o app está em evolução). Quem desbloqueia: o usuário.
+   **Feita em 2026-11-25** (commits `fa20ee7`, `66612f7`), na direção do WP-30, com base na `master` do app
+   (TopoWalk v4.4.0, `cfbff63`) e capturas reais do emulador (`topowalk-api34`, no Ibirapuera).
+   Decisões do usuário: RTK em "todas" como Beta; Pro sem preço; laudo na p1; frase de privacidade
+   da política; FAQ com "sequencialmente" e locação "(Pro)"; hero = painel; card da Home como imagem
+   escura. Achados de app: `TOPO-APP-*` (notas). Falta o checklist de navegador.
 8. **Pole Position.** **Achados:** `POLE-PT-HTML-DIVERGE-01` (vale o que a política do app diz
    sobre o Firebase), `POLE-EN-ROTULOS-PT-01`, `POLE-PRINTS-2X-01`, `POLE-MOCKUP-CURSOR-01`.
    **Topo:** recalcular o topo e recolocar o CTA da Play acima da dobra a 1280×720 (nav em fluxo
@@ -362,6 +369,11 @@ prova é o checklist de navegador.
    **Bloqueio:** 2 capturas (D26; o app está em evolução) e as capturas em 2× para `POLE-PRINTS-2X-01`. Quem desbloqueia:
    o usuário. O preço e a faixa etária vêm da ficha pública da Play, lidos como na D17, e não
    bloqueiam.
+   **Feita em 2026-11-25** (commits `8afc42b`, `46a7f56`), na direção do WP-30, com base na `master` do app
+   (Pole v2.2.0, `0f65baa`) e capturas reais no emulador Google Play novo `pole-play34`, com circuito
+   fictício no Anhembi. Decisões do usuário: sem offline, 10 Hz, Bluetooth nem tabela; hero = painel;
+   destaque "Painel ao vivo" / "Live dashboard"; resumo da Home pela ficha da Play. Ajuste futuro:
+   traçado com o contorno de Interlagos (`POLE-TRACADO-INTERLAGOS-01`). Falta o checklist de navegador.
 9. **LottoExpert** (D29: consome o template da fatia 5). Entram os blocos opcionais do template: o
    aviso de jogo responsável e os blocos da D1 (Teimosinha e prestação de contas do bolão).
    **Achados:** `FEATURES-SELO-PREMIUM-01`, `TEIMOSINHA-FORA-DA-TABELA-01` (o limite vem de

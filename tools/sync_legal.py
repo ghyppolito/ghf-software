@@ -32,7 +32,8 @@ Uso:
   --apps-dir   pasta onde estão os repositórios dos apps (padrão: $GHF_APPS_DIR ou `..` do site)
   --check      não escreve; diz igual / atrás / à frente-divergente / origem ausente por doc
   --forca      copia mesmo quando o origemCommit registrado não é ancestral da ref (só esse caso;
-               sem origemCommit e corpo ≠ é sempre recusa: use `--ref` explícito)
+               sem origemCommit e corpo ≠ é sempre recusa: use `--ref` explícito); com o corpo
+               igual, só reancora: troca o origemCommit pelo sha da ref, sem tocar o corpo
 
 Saída: 0 = nada a fazer ou cópia feita (ou origem ausente, com aviso); 1 = `--check` achou o que
 fazer; 2 = recusa (nada foi escrito).
@@ -64,6 +65,7 @@ ORIGENS = {
     "topowalk-terms": ("topo-walk", {"pt": "TERMS_OF_USE.md", "en": "TERMS_OF_USE.en.md"}, "master"),
     "poleposition-privacy": ("pole-position/pole-position-app", {"pt": "PRIVACY_POLICY.md"}, "master"),
     "eclipsego-privacy": ("eclipse-go", {"pt": "docs/PRIVACY_POLICY.md"}, "main"),
+    "eclipsego-terms": ("eclipse-go", {"pt": "docs/TERMS_OF_USE.md"}, "main"),
 }
 
 
@@ -305,6 +307,18 @@ def planeja(doc, args):
     pt_igual = origem is not None and atual is not None and corpo == origem
     atrasadas = [l for l in langs if not (registrado and em_dia(l))]
     if pt_igual and registrado and not atrasadas:
+        # Reancoragem (ADR-004 §3, `--forca` no caso de corpo igual): o texto do site é o da ref, mas
+        # o commit registrado não é ancestral dela (ex.: commit local fora dos remotos). Com `--forca`,
+        # troca só o `origemCommit` (do pt e das línguas espelhadas, se o corpo delas também é o do
+        # sha), pela mesma escrita do bootstrap. Sem `--forca` (ou com `--check`), nada muda. Nunca recua:
+        # se o sha da ref é ancestral do registrado (o site está à frente, não divergente), não reancora
+        # (auditoria do WP-27). O corpo das línguas espelhadas já é o do sha por `em_dia`.
+        if (args.forca and not args.check and not ancestral(repo_dir, registrado, sha)
+                and not ancestral(repo_dir, sha, registrado)):
+            escritas = [(alvo, monta(dict(fm, origemCommit=sha), corpo))]
+            escritas += [(alvo_de(doc, l), monta(dict(lados[l][1], origemCommit=sha), lados[l][2])) for l in langs]
+            return "copia", escritas, msgs + [f"↻ reancorado: corpo igual — {doc}: origemCommit {registrado[:7]} → "
+                                              f"{repo}@{sha[:7]} (`--forca`; só o front-matter)"]
         return "igual", [], msgs + [f"✅ {doc}: nada a fazer ({repo}@{sha[:7]}" + (f"; {', '.join(langs)} espelhado" if langs else "") + ")"]
 
     if not pt_igual:

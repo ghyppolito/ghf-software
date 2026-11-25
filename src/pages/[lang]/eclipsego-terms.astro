@@ -1,0 +1,13 @@
+---
+// /<código>/eclipsego-terms.html: uma rota por língua de eclipsego-terms.html no mapa (src/i18n/idiomas.json), menos o pt, que fica
+// literal em src/pages/eclipsego-terms.astro (ADR-007 §3). Língua fora do mapa não gera página.
+import Pagina from '../../components/paginas/PaginaEclipseGoTerms.astro';
+import { rotasDeLingua, type Idioma } from '../../i18n/idiomas';
+
+export function getStaticPaths() {
+  return rotasDeLingua('eclipsego-terms.html');
+}
+
+const { lang } = Astro.params as { lang: Idioma };
+---
+<Pagina lang={lang} />

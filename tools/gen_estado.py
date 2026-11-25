@@ -60,6 +60,7 @@ SEQUENCIA = [
 # Bloqueios ativos: (WP, motivo, desde). Lista escrita à mão; entrada de WP `done`
 # é filtrada, para a tabela seguir o front-matter.
 BLOQUEIOS = [
+    ("WP-10", "capturas do scanner do LottoExpert (usuário, bilhete real); fatias 7 e 8 entregues", "2026-11-25"),
 ]
 
 wps = []

@@ -2,7 +2,7 @@
 id: WP-26
 titulo: Os termos de uso do TopoWalk existem no site em pt e en, e a política acompanha a do app, espelhados do repositório do app
 area: legal
-status: doing
+status: done
 depende_de: []
 adr: [ADR-001, ADR-004, ADR-005, ADR-007, ADR-010]
 spec: ""
@@ -232,3 +232,12 @@ mal, ficha apontando antes da página existir dá 404 ao revisor da loja.
 4. Inglês: o `/en/` nasce junto (caminho B); a ficha en cita `/en/...` se o Play pedir.
 5. Quem escreve o `TERMS_OF_SERVICE.md` e quando chega à branch principal do app: em aberto — pré-condição do passo 1.
 6. Publicação: D28 (B), integração e deploy único.
+
+## Registro de execução (2026-11-25)
+
+Commits: `a35f3c1` (implementação), `426533d` (trava de ‹preencher› no §4 do `check_site.py`), `973a00c` (correções da auditoria), `5843183` (texto com o fornecedor preenchido, `topo-walk@c584d19`, PR #88 do app). Auditoria de `site-qa`: nenhum achado alto. Verificações verdes (build, `check_site.py`, contrato, html-validate, unittest).
+
+**Pendente, só do usuário:** checklist de navegador de `/topowalk-terms.html` e `/en/topowalk-terms.html`; e o passo do Play Console (pergunta 8: informar a URL), a responder depois do deploy único, que é quando a URL passa a existir em produção.
+
+**Achado de origem:** o texto dos termos mudou em `c584d19` sem data nova (`TOPO-APP-TERMOS-SEM-DATA-NOVA-01`, `nota` do repositório do app).
+

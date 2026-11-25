@@ -1,6 +1,6 @@
 ---
 lastUpdated: "2026-07-13"
-origemCommit: "46680192f9f1b6e205150d892b56e969b18dd3e8"
+origemCommit: "8a12c0ae15ab2114a1c73ad317de6a0874f7561f"
 ---
 # Política de Privacidade — EclipseGo
 

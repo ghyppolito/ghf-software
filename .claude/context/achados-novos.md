@@ -233,3 +233,17 @@ tacha data e texto.
 | 2026-11-24 | WP-30 | **`HOME-SAAS-ARTICLE-20-01`** — o §20 do `check_site.py` impede um 5º `<article>` de produto (SaaS) sem landing em `apps.ts` | Baixa | `nota` — backlog: WP futuro do SaaS (o usuário disse que um virá), que ajusta o §20 e a D12 |
 | 2026-11-24 | WP-30 | **`SOBRE-EN-MECHANICS-01`** — en do Sobre: "solving complex mechanics into elegant solutions" soa estranho (copy do usuário) | Baixa | `nota` — backlog de copy; o usuário reescreve |
 | 2026-11-24 | WP-30 | **`LANDING-HTML-PESO-01`** — `/lottoexpert.html` cresceu ~8 KB de HTML (367 atributos `class` ≈ 26 KB sem compressão) | Baixa | `WP-32` (o lab com gzip mostra o efeito real); se pesar, backlog de performance |
+| 2026-11-25 | WP-10 | **`POLE-TRACADO-INTERLAGOS-01`** — a captura do Pole usa circuito fictício no Anhembi; o usuário prefere o traçado com o contorno de Interlagos ("podemos ajustar mais adiante") | Baixa | `WP-10` (fatia 8, ajuste futuro) |
+| 2026-11-25 | WP-10 | **`TOPO-APP-LAYER-FUROS-01`** — `LayerMapView.desenhar` não desenha os furos da camada KML (app) | Baixa | `nota` — repositório do app |
+| 2026-11-25 | WP-10 | **`TOPO-APP-EXCLUSAO-NOME-01`** — strings `exclusion_name_*` sem tela que as use (app) | Baixa | `nota` — repositório do app |
+| 2026-11-25 | WP-10 | **`TOPO-APP-PDF-POI-COLADO-01`** — título "Pontos de interesse" colado na p2 do PDF (app) | Baixa | `nota` — repositório do app |
+| 2026-11-25 | WP-10 | **`TOPO-APP-STRINGS-FAQ-01`** — `help_a1` com "seqüencialmente"; `help_a15` (locação) sem "(Pro)"; o site já corrige no FAQ (decisão do usuário) | Baixa | `nota` — repositório do app |
+| 2026-11-25 | WP-26 | **`TOPO-APP-TERMOS-SEM-DATA-NOVA-01`** — o texto dos termos do TopoWalk mudou em `c584d19` sem data nova | Média | `nota` — repositório do app (o site espelha a data de lá) |
+| 2026-11-25 | WP-10 | **`POLE-MAPS-LEGACY-HTTP-01`** — o app fecha no renderer legacy do Maps sem `<uses-library android:name="org.apache.http.legacy" android:required="false">` | Média | `nota` — repositório do app |
+| 2026-11-25 | WP-10 | **`POLE-RAC-ROTULOS-MISTOS-01`** — rótulos pt/en misturados no painel do Pole (app) | Baixa | `nota` — repositório do app |
+| 2026-11-25 | WP-10 | **`POLE-PISTA-ABERTA-CONFLITO-01`** — o README do app e `help_a7` divergem sobre pista aberta | Baixa | `nota` — repositório do app |
+| 2026-11-25 | WP-10 | **`POLE-ANALISE-TITULO-01`** — título quebrado na tela de análise (app) | Baixa | `nota` — repositório do app |
+| 2026-11-25 | WP-10 | **`PUBLIC-POLE-ORFAOS-01`** — `public/assets/poleposition_live_dashboard.png` e `poleposition_session_analysis.png` ficaram órfãos depois da fatia 8 | Baixa | `WP-10` (fatia 10b) |
+| 2026-11-25 | WP-10 | **`README-TERMOS-TOPO-ECLIPSE-01`** — `README.md:20` e a linha do TopoWalk não citam "Termos de Uso" (TopoWalk e EclipseGo agora têm) | Baixa | `WP-10` (fatia 10b) |
+| 2026-11-25 | WP-27 | **`SYNC-REANCORAGEM-SEM-TESTE-01`** — o caminho de reancoragem de `tools/sync_legal.py` não tem unittest | Baixa | `nota` — backlog (WP novo de testes do `sync_legal`, via `/novo-wp`) |
+| 2026-11-25 | WP-26 | **`LANDING-TOPO-PLANOS-SEM-TERMOS-01`** — o bloco de planos da landing do TopoWalk não aponta para os termos (`nota.termos`); decisão de produto pequena | Baixa | `WP-10` (fatia 10b) |
