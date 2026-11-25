@@ -1,7 +1,7 @@
 ---
 // Corpo da home (/ e /en/): hero, áreas de atuação, produtos (grade dos apps), Sobre, Privacidade e
 // CTA final de contato (WP-30, fatia 1: direção visual "engenharia luminosa", sobre a fatia 6 do
-// WP-10). Textos em src/i18n/home.ts (o EclipseGo e o LottoExpert no `<app>.ts`), dados dos apps em
+// WP-10). Textos em src/i18n/home.ts (o resumo de cada app no `<app>.ts`), dados dos apps em
 // src/i18n/apps.ts. Nav e footer ficam em paginas/PaginaHome.astro.
 // - Ritmo das seções: base (hero, com o ornamento `orn-hero`) → faixa tingida (áreas) → base
 //   (produtos) → superfície (Sobre) → base (privacidade) → glow de fechamento (contato).
@@ -26,6 +26,8 @@ import { Image } from 'astro:assets';
 import { home } from '../i18n/home';
 import { eclipsego } from '../i18n/eclipsego';
 import { lottoexpert } from '../i18n/lottoexpert';
+import { topowalk } from '../i18n/topowalk';
+import { poleposition } from '../i18n/poleposition';
 import { apps, ORDEM_APPS, ACENTO, particionarApps, hojeDoBuild, dataCurta, type ChaveApp } from '../i18n/apps';
 import { t, EMAIL_SUPORTE } from '../i18n/ui';
 import { link, type Idioma } from '../i18n/idiomas';
@@ -40,13 +42,12 @@ interface Props {
 const { lang } = Astro.props;
 const x = home[lang];
 
-// Resumo de cada card: o EclipseGo e o LottoExpert já estão no formato de landing (eclipsego.ts,
-// lottoexpert.ts); os outros dois leem home.ts até a landing deles migrar (fatias 7 e 8: troca só a
-// linha do app).
+// Resumo de cada card: os 4 apps estão no formato de landing (eclipsego.ts, lottoexpert.ts,
+// topowalk.ts, poleposition.ts; o Pole Position desde a fatia 8).
 const resumos: Record<ChaveApp, { tag: string; curta: string }> = {
   lottoexpert: lottoexpert[lang].resumo,
-  topowalk: x.resumos.topowalk,
-  poleposition: x.resumos.poleposition,
+  topowalk: topowalk[lang].resumo,
+  poleposition: poleposition[lang].resumo,
   eclipsego: eclipsego[lang].resumo,
 };
 

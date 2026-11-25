@@ -37,8 +37,8 @@ SEQUENCIA = [
         ("WP-22", "a11y e i18n sem redesign: 26 achados da varredura de 2026-10-16 (360 px nas legais primeiro, <main>, headings, foco/alvo, contraste do rodapé, rótulos pt na /en/); M, visual, antes do WP-10 e do deploy único (D13)"),
         ("WP-25", "dependências sem aviso do npm audit: Astro 7.4.7, Node 22.23.4, satteri 0.4.7; S, risco alto (deploy); entre as fatias 1 e 2 do WP-10 (usuário, 2026-11-21)"),
         ("WP-30", "revisão visual antes do deploy único (D33): direção + Home do estúdio → LottoExpert → propagação; pausa as fatias 7/8/9/10b do WP-10. L, visual"),
-        ("WP-32", "lab do Lighthouse com gzip, como o Pages (emenda da D20); recalibra `bytes_total` com o transferido comprimido antes da fatia 10b do WP-10. S, risco médio (gate de CI); sai de `feat/wp-08-layout-unico`"),
         ("WP-10", "redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08"),
+        ("WP-32", "lab do Lighthouse com gzip, como o Pages (emenda da D20); recalibra `bytes_total` com o transferido comprimido antes da fatia 10b do WP-10. S, risco médio (gate de CI); sai de `feat/wp-08-layout-unico`"),
         ("WP-27", "termos de uso do EclipseGo (UE, D28 B) e `origemCommit` da política apontando para a `main` do app. Pré-condição cumprida (`docs/TERMS_OF_USE.md`, app `5cd6b83`); EclipseGo ainda sem ficha na Play (D19 e). Legal, risco alto, URL nova"),
         ("WP-26", "termos de uso do TopoWalk (exigência da UE para comerciante, prazo 2027; D28 B: vai no deploy único). Pré-condição: `TERMS_OF_SERVICE.md` na `master` do app, escrito pelo humano. Legal, risco alto, URL nova"),
         ("WP-28", "termos de uso do Pole Position (UE, D28 B). Pré-condição: texto na `master` do app; corrige a origem `../pole-position-app` (PP-ORIGEM-CAMINHO-01). Legal, risco alto, URL nova"),
@@ -60,6 +60,7 @@ SEQUENCIA = [
 # Bloqueios ativos: (WP, motivo, desde). Lista escrita à mão; entrada de WP `done`
 # é filtrada, para a tabela seguir o front-matter.
 BLOQUEIOS = [
+    ("WP-10", "capturas do scanner do LottoExpert (usuário, bilhete real); fatias 7 e 8 entregues", "2026-11-25"),
 ]
 
 wps = []

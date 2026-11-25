@@ -1,18 +1,20 @@
 ---
-lastUpdated: "2026-10"
-origemCommit: "7d6910837ef0ce625d0dfe6ff5ce4d162cfc5c6b"
+lastUpdated: "2026-11"
+origemCommit: "c584d195a418c086d31c6ee035a02c9b58cb23b5"
 ---
 # Política de Privacidade — TopoWalk
 
-**Última atualização:** outubro de 2026
+**Última atualização:** novembro de 2026
 
-Esta Política de Privacidade descreve como o aplicativo **TopoWalk**, desenvolvido por **GHF Software**, trata as informações do usuário. Ao utilizar o TopoWalk, você concorda com os termos descritos neste documento.
+Esta Política de Privacidade descreve como o aplicativo **TopoWalk**, desenvolvido por **GHF Software**, trata as informações do usuário: o que é usado, para quê, com base em qual fundamento legal, por quanto tempo e quais são os seus direitos. As regras de uso do aplicativo estão nos [Termos de Uso](TERMS_OF_USE.md).
 
 ---
 
 ## 1. Quem Somos
 
 O TopoWalk é um aplicativo Android desenvolvido por **GHF Software** para fins de levantamento topográfico de campo. Não somos uma empresa de coleta de dados.
+
+**Controlador dos dados** (LGPD art. 5º, VI; GDPR art. 4º, 7): **GHF Software**, nome comercial de Gustavo Hyppólito, pessoa física, Campinas/SP, Brasil — e-mail **support@ghfsoftware.com**. Não há encarregado (DPO) nomeado separadamente; esse mesmo e-mail atende todas as solicitações sobre dados pessoais (seção 13).
 
 Os seus levantamentos — pontos, medições, fotos e relatórios — **ficam no seu aparelho** e não são enviados a nenhum servidor nosso. A única exceção é o serviço de **migração do TopoWalk Pro** descrito na seção 2.11, que existe por tempo limitado, guarda apenas um identificador sem nome nem e-mail, e **não toca nos seus dados de levantamento**.
 
@@ -79,7 +81,7 @@ Esta é a única parte do TopoWalk em que o usuário informa dados **sobre si me
 - **Como o logotipo é obtido:** pelo seletor de arquivos do próprio Android (Storage Access Framework). O aplicativo **não pede permissão de armazenamento** e **não enxerga nenhum outro arquivo** além do único que o usuário escolher. A imagem é redimensionada e copiada para a área privada do aplicativo; o arquivo original permanece onde estava e não é alterado.
 - **Onde esses dados ficam:** exclusivamente no dispositivo, nas preferências locais do aplicativo e na sua área privada de arquivos. **Nunca são enviados ao GHF Software, ao Firebase, ao Google Play nem a qualquer terceiro.** Eles não aparecem em nenhum evento de analytics nem em relatório de falha.
 - **Quando esses dados saem do dispositivo:** apenas quando o **próprio usuário** compartilha um relatório em PDF — porque eles fazem parte visível do documento, que é justamente o objetivo do recurso. O destino desse compartilhamento é escolhido pelo usuário e está fora do controle do aplicativo (mesmos termos da seção 8.2).
-- **Como remover:** a tela "Personalizar o laudo em PDF" permite apagar o logotipo e esvaziar cada campo a qualquer momento. Limpar os dados do aplicativo também remove tudo.
+- **Como remover:** a tela "Identidade do laudo" permite apagar o logotipo e esvaziar cada campo a qualquer momento. Limpar os dados do aplicativo também remove tudo.
 
 ### 2.9 Arquivos Importados — Camadas de Referência (a partir da versão 4.2)
 
@@ -187,7 +189,7 @@ Os dados são utilizados exclusivamente para entender como os usuários interage
 
 ### Retenção e controle:
 
-Os dados são retidos pelo Google conforme a [Política de Privacidade do Google](https://policies.google.com/privacy). O usuário pode limpar o ID de instalação do Firebase desinstalando o aplicativo.
+Os eventos ficam disponíveis para nossa análise pelo prazo de retenção configurado na propriedade do Google Analytics — **no máximo 14 meses** — e depois são apagados das análises detalhadas; dados agregados (contagens, sem identificador) podem permanecer nos relatórios. O Google também os trata conforme a [Política de Privacidade do Google](https://policies.google.com/privacy). O usuário pode limpar o ID de instalação do Firebase desinstalando o aplicativo.
 
 ---
 
@@ -216,7 +218,7 @@ Exclusivamente diagnosticar e corrigir defeitos do aplicativo. Os dados não sã
 
 ### Retenção e controle:
 
-Os relatórios são retidos pelo Google conforme a [Política de Privacidade do Google](https://policies.google.com/privacy) e a [documentação do Crashlytics](https://firebase.google.com/support/privacy).
+Os relatórios de falha são mantidos pelo Crashlytics por **90 dias** e depois apagados, conforme a [documentação de privacidade do Firebase](https://firebase.google.com/support/privacy) e a [Política de Privacidade do Google](https://policies.google.com/privacy).
 
 ---
 
@@ -358,7 +360,7 @@ O aplicativo não solicita acesso ao microfone, aos contatos nem ao armazenament
 
 ## 10. Uso por Menores
 
-O TopoWalk não é direcionado a crianças menores de 13 anos e não coleta intencionalmente dados de menores. Por se tratar de uma ferramenta técnica de campo, o uso por menores deve ocorrer sob supervisão de um adulto responsável.
+O TopoWalk não é direcionado a crianças menores de 13 anos e não coleta intencionalmente dados de menores. Na União Europeia, quem tem menos de 16 anos (ou a idade mínima definida pelo seu país, entre 13 e 16) só deve usar o aplicativo com autorização do responsável legal. Por se tratar de uma ferramenta técnica de campo, o uso por menores deve ocorrer sob supervisão de um adulto responsável.
 
 A partir da versão 4.1, a compra do TopoWalk Pro é processada pelo Google Play e está sujeita aos controles parentais e às exigências de autenticação desse serviço (seção 6). O TopoWalk não realiza verificação de idade própria.
 
@@ -366,13 +368,60 @@ A partir da versão 4.1, a compra do TopoWalk Pro é processada pelo Google Play
 
 ## 11. Segurança
 
-Os dados de medição do TopoWalk são processados e armazenados exclusivamente no dispositivo do usuário. A comunicação com serviços externos (Firebase Analytics e OpenStreetMap) é realizada exclusivamente via HTTPS com criptografia em trânsito. Os dados enviados ao Firebase não contêm informações pessoais identificáveis. A segurança dos dados armazenados localmente é gerenciada pelo sistema operacional Android e pelo isolamento de aplicativos (sandbox).
+Os dados de medição do TopoWalk são processados e armazenados exclusivamente no dispositivo do usuário. A comunicação com serviços externos (Firebase, Google Play e OpenStreetMap) é realizada exclusivamente via HTTPS com criptografia em trânsito. Os dados enviados ao Firebase não contêm nome, e-mail, coordenadas nem conteúdo dos levantamentos. O ID de instalação, as informações do aparelho e o endereço IP visto pelos servidores do Google são, ainda assim, tratados por nós como **dados pessoais**, porque é assim que a LGPD e o GDPR os classificam — e é por isso que as seções 12 a 14 se aplicam a eles. A segurança dos dados armazenados localmente é gerenciada pelo sistema operacional Android e pelo isolamento de aplicativos (sandbox).
 
 A partir da versão 4.1, **nenhum dado de pagamento transita pelo aplicativo**: a compra é conduzida inteiramente pela tela do Google Play, e o TopoWalk recebe de volta apenas a informação de que existe ou não uma compra ativa (seção 6).
 
 ---
 
-## 12. Alterações nesta Política
+## 12. Fundamentos Legais do Tratamento
+
+Cada uso de dado pessoal descrito acima tem um fundamento na LGPD (art. 7º) e no GDPR (art. 6º):
+
+| Tratamento | Seção | Fundamento |
+|---|---|---|
+| Localização, barômetro, bússola e Bluetooth para os cálculos | 2.1 a 2.3, 2.7 | Execução do serviço pedido pelo usuário (LGPD art. 7º, V; GDPR art. 6º, 1, b). Esses dados não saem do aparelho |
+| Dados digitados, fotos, arquivos importados, identidade do relatório | 2.5, 2.8 a 2.10 | Execução do serviço pedido pelo usuário. Ficam no aparelho |
+| Tiles de mapa (OpenStreetMap / OpenTopoMap) | 2.4 | Execução do serviço pedido pelo usuário: o mapa só carrega quando ele abre a aba |
+| Analytics (Firebase Analytics) | 4 | Legítimo interesse em entender o uso e melhorar o aplicativo (LGPD art. 7º, IX; GDPR art. 6º, 1, f), sem publicidade, sem perfil e sem dado de levantamento |
+| Relatórios de falha (Firebase Crashlytics) | 5 | Legítimo interesse em detectar e corrigir defeitos, inclusive os que o usuário não consegue relatar |
+| Compra do TopoWalk Pro (Google Play Billing) | 6 | Execução do contrato de compra |
+| Migração do Pro legado | 2.11 | Execução do serviço pedido pelo usuário, que só ocorre quando ele pede o código; legítimo interesse em impedir que o estoque limitado de códigos se esgote |
+| E-mails de feedback e de suporte | 2.6 | Legítimo interesse em responder a quem nos escreve |
+
+Quando o fundamento é o legítimo interesse, o usuário pode se **opor** ao tratamento (seção 13).
+
+---
+
+## 13. Seus Direitos
+
+Pela LGPD (art. 18) e pelo GDPR (arts. 15 a 22), você pode pedir:
+
+- **Acesso e confirmação:** saber se tratamos dados seus e quais são.
+- **Correção** de dados incorretos.
+- **Exclusão** dos dados tratados por nós.
+- **Portabilidade:** os levantamentos já podem ser levados para outro aparelho ou programa pelo backup (seção 8.4) e pelas exportações (seção 8.3), sem nos pedir nada.
+- **Oposição** ao tratamento baseado em legítimo interesse (analytics e relatórios de falha).
+- **Limitação** do tratamento enquanto um pedido seu é analisado.
+- **Informação** sobre com quem os dados são compartilhados (seção 7).
+
+**Como exercer:** escreva para **support@ghfsoftware.com**. Respondemos em até 15 dias e, no máximo, no prazo da lei aplicável (um mês pelo GDPR).
+
+**Uma limitação prática, dita com franqueza:** o TopoWalk não tem conta nem login, e por isso **nós não sabemos quem você é**. Os dados de analytics e de falha estão ligados apenas ao ID de instalação do aparelho, que não conseguimos associar a uma pessoa a partir de um e-mail. Para que possamos localizar seus registros, o pedido precisa trazer algo que os identifique (por exemplo, o código promocional recebido na migração do Pro). Sem isso, a forma mais direta de interromper todo envio é **desinstalar o aplicativo**: o ID de instalação deixa de existir, e os dados já enviados expiram nos prazos das seções 4 e 5. Os dados do aparelho (levantamentos, fotos, identidade do relatório) você apaga sozinho, a qualquer momento, pelo próprio aplicativo ou limpando os dados do app.
+
+**Reclamação a uma autoridade:** você pode reclamar à **Autoridade Nacional de Proteção de Dados (ANPD)**, no Brasil, ou à autoridade de proteção de dados do país da União Europeia onde mora ou trabalha — de preferência depois de falar com a gente, para que possamos resolver antes.
+
+---
+
+## 14. Transferência Internacional de Dados
+
+Os serviços do Google usados pelo aplicativo (Firebase Analytics, Crashlytics, Authentication, Cloud Firestore, Cloud Functions e Google Play) podem processar dados em servidores fora do seu país, inclusive nos Estados Unidos. O Google LLC adere ao **EU-U.S. Data Privacy Framework** e adota as **cláusulas contratuais padrão** aprovadas pela Comissão Europeia, que são os mecanismos previstos no GDPR (arts. 45 e 46) e na LGPD (art. 33) para essa transferência. Os tiles de mapa vêm dos servidores do OpenTopoMap.
+
+Os levantamentos, as fotos e os relatórios não participam de nenhuma transferência: eles ficam no aparelho (seção 8).
+
+---
+
+## 15. Alterações nesta Política
 
 Podemos atualizar esta Política de Privacidade periodicamente. Alterações relevantes serão comunicadas por meio de uma nova versão do aplicativo publicada na Google Play Store. A data de "Última atualização" no topo deste documento sempre refletirá a versão vigente.
 
@@ -380,13 +429,13 @@ Recomendamos que você revise esta política periodicamente.
 
 ---
 
-## 13. Contato
+## 16. Contato
 
-Dúvidas, solicitações ou comentários sobre esta Política de Privacidade podem ser enviados para:
+Dúvidas, solicitações ou comentários sobre esta Política de Privacidade, e os pedidos da seção 13, podem ser enviados para:
 
-**GHF Software**\
+**GHF Software** — Gustavo Hyppólito, Campinas/SP, Brasil\
 E-mail: **support@ghfsoftware.com**
 
 ---
 
-*Esta política foi elaborada em conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018), o Regulamento Geral de Proteção de Dados da União Europeia (GDPR) e as políticas de privacidade da Google Play Store.*
+*Esta política foi elaborada em conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018), o Regulamento Geral de Proteção de Dados da União Europeia (GDPR — Regulamento (UE) 2016/679) e as políticas de privacidade da Google Play Store. Esta é a versão de referência; a [versão em inglês](PRIVACY_POLICY.en.md) é uma tradução, e em caso de divergência prevalece este texto, sem prejuízo de direitos que a lei do seu país lhe garanta. Veja também os [Termos de Uso](TERMS_OF_USE.md).*

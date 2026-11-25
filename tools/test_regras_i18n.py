@@ -13,6 +13,7 @@ traz só o que muda, e o resto vem do correto. Arquivos de um caso:
   hreflang.json     {arquivo de dist/: [[hreflang, href], …]} lidos do <head>
   ui.ts             dicionário no formato de src/i18n/ui.ts
   publicadas.txt    a lista fixa PUBLICADAS do check_site.py
+  espelhadas.json   {doc: [línguas]} que a origem publica e o site espelha (ADR-010); ausente = {}
 
 O correto passa sem erro; cada caso inválido falha, e só com a mensagem da regra dele.
 """
@@ -43,6 +44,7 @@ CASOS = {
     "pt-na-pasta": "pt/app-privacy.html: `pt/` não existe",
     "pendente": "app-privacy.pt.md: `pendente: ['es']`",
     "origem-na-traducao": "app-privacy.en.md: `origemCommit` na tradução",
+    "espelho-sem-origem": "app-privacy.en.md: espelho do app sem `origemCommit`",
     "hreflang-sem-x-default": "es/app-privacy.html: hreflang",
     "ui-sem-bloco": "ui.ts: sem bloco `es`",
     "guarda": "app.html está em PUBLICADAS e falta em `paginas` (regra xii)",
@@ -67,6 +69,7 @@ def linhas(caso, nome):
 def verifica(caso):
     """Todas as regras de regras_i18n.py sobre um caso, na ordem do check_site.py."""
     mapa = json.loads(ler(caso, "idiomas.json"))
+    espelho = json.loads(ler(caso, "espelhadas.json")) if os.path.exists(arquivo_do_caso(caso, "espelhadas.json")) else {}
     erros = i18n.valida_mapa(mapa)
     # legais: (i), (vii), linha de data, (ii), (iii), (iv)
     docs = sorted({n.split(".")[0] for n in os.listdir(os.path.join(FIXTURES, "correto", "legal"))})
@@ -79,7 +82,7 @@ def verifica(caso):
                 fm, _, corpo = separa(f.read())
             fms[l], textos[l] = fm, corpo.decode("utf-8")
         erros += i18n.regra_datas(doc, {l: fm.get("lastUpdated") for l, fm in fms.items()})
-        erros += i18n.regra_front_matter(doc, fms)
+        erros += i18n.regra_front_matter(doc, fms, espelho.get(doc, []))
         ano, mes, *dia = fms["pt"]["lastUpdated"].split("-")
         for l in linguas:
             d = mapa["idiomas"][l]
@@ -117,6 +120,20 @@ class RegrasI18n(unittest.TestCase):
                 self.assertTrue(erros, f"{caso}: nenhuma regra falhou")
                 for e in erros:
                     self.assertIn(trecho, e, f"{caso}: falhou por outra regra")
+
+    def test_espelho_do_app(self):
+        """ADR-010: a língua espelhada leva o origemCommit do pt, e só ele; a traduzida não leva."""
+        sha = "0123456789abcdef0123456789abcdef01234567"
+        outro = "fedcba9876543210fedcba9876543210fedcba98"
+        fm = i18n.regra_front_matter
+        pt = {"lastUpdated": "2026-11", "origemCommit": sha}
+        self.assertEqual(fm("d", {"pt": pt, "en": {"lastUpdated": "2026-11", "origemCommit": sha}}, ["en"]), [])
+        self.assertIn("≠ o do pt", fm("d", {"pt": pt, "en": {"origemCommit": outro}}, ["en"])[0])
+        self.assertIn("sem `origemCommit`", fm("d", {"pt": pt, "en": {"origemCommit": "abc"}}, ["en"])[0])
+        self.assertIn("com `pendente`", fm("d", {"pt": pt, "en": {"origemCommit": sha, "pendente": ["es"]}}, ["en"])[0])
+        # traduzida: sem proveniência, como antes; e a espelhada não muda a regra das outras línguas
+        self.assertIn("na tradução", fm("d", {"pt": pt, "es": {"origemCommit": sha}}, ["en"])[0])
+        self.assertEqual(fm("d", {"pt": pt, "en": {"origemCommit": sha}, "es": {}}, ["en"]), [])
 
     def test_data_em_qualquer_lingua(self):
         meses_pt = json.loads(ler("correto", "idiomas.json"))["idiomas"]["pt"]["meses"]

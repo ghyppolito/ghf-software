@@ -5,6 +5,8 @@
 // página mostra o título e a data no hero (data do front-matter `lastUpdated`): os dois saem do
 // corpo renderizado, para aparecerem uma vez cada. O arquivo não é alterado.
 
+import idiomas from '../i18n/idiomas.json' with { type: 'json' };
+
 const ROTULO_DATA = /^(Última atualização|Last updated):$/;
 
 function ehLegal(ctx) {
@@ -60,12 +62,33 @@ export const envolveTabelaLegal = {
 // Host do próprio site, com ou sem `www.`, por http ou https (o `.md` do app escreve `https://ghfsoftware.com/`).
 const SITE = /^https?:\/\/(www\.)?ghfsoftware\.com\//i;
 
+// Link relativo do `.md` do app para o par dele no mesmo repositório (WP-26): `PRIVACY_POLICY.md`,
+// `TERMS_OF_USE.en.md`… Base do nome → documento do site do mesmo app; o `.<código>` antes do `.md`
+// é a língua do destino (sem ele, pt). Âncora do GitHub não existe no site e cai.
+const RELATIVO_MD = /^(?:\.\/)?(PRIVACY_POLICY|TERMS_OF_USE|TERMS_OF_SERVICE)(?:\.([a-z]{2}))?\.md(?:#.*)?$/;
+const DOC_DA_BASE = { PRIVACY_POLICY: 'privacy', TERMS_OF_USE: 'terms', TERMS_OF_SERVICE: 'terms' };
+
+/** `{ app, lang }` do arquivo legal (`<app>-<doc>.<código>.md`), ou null. */
+function arquivoLegal(ctx) {
+  const m = ctx.fileURL.pathname.match(/\/([a-z]+)-[a-z]+\.([a-z]{2})\.md$/);
+  return m ? { app: m[1], lang: m[2] } : null;
+}
+
 /** hast: link para o próprio site (`https://ghfsoftware.com/x.html`, como o `.md` do app escreve) vira
  *  caminho a partir da raiz (`/x.html`), na mesma aba, como a página antiga (WP-08, fatia 8: termos do
  *  LottoExpert, §8). No `.en.md`, página `.html` aponta para o par `/en/x.html` — desde a fatia 8 toda
  *  página `.html` do site tem par en (um par ausente quebra o link, e o §3 do `check_site.py` acusa);
  *  asset e o convite do bolão (`lotto-expert/…`) não têm par e ficam em `/`. O `.md` não é alterado:
- *  o `.en.md` mantém a URL do pt. Roda antes de `linksExternosLegais`. */
+ *  o `.en.md` mantém a URL do pt. Roda antes de `linksExternosLegais`.
+ *
+ *  Link relativo do app para o par do documento (WP-26: `[Termos de Uso](TERMS_OF_USE.md)`,
+ *  `[versão em inglês](PRIVACY_POLICY.en.md)`) vira a página do **mesmo app**: `PRIVACY_POLICY` →
+ *  `/<app>-privacy.html`, `TERMS_OF_USE`/`TERMS_OF_SERVICE` → `/<app>-terms.html`, `.en.md` → `/en/…`.
+ *  O corpo é cópia byte a byte (ADR-004 §2, ADR-010) e não muda; o GitHub segue mostrando o par.
+ *  Destino em outra língua leva `hreflang` e `lang` dela (D23, WCAG 3.1.2); se é a mesma página, leva
+ *  `data-troca-idioma`, como o seletor (o §9 do `check_site.py` exige: é troca de língua, e a seção
+ *  aberta vai junto), e só `hreflang`, sem `lang`: o texto do link está na língua da página. Página ou língua fora de `idiomas.json` deixa o link como está, e o §12
+ *  do `check_site.py` acusa o `.md` no publicado. */
 export const linksInternosLegais = {
   name: 'ghf-links-internos-legais',
   element: {
@@ -73,7 +96,27 @@ export const linksInternosLegais = {
     visit(node, ctx) {
       if (!ehLegal(ctx)) return;
       const href = node.properties?.href;
-      if (typeof href !== 'string' || !SITE.test(href)) return;
+      if (typeof href !== 'string') return;
+      const relativo = href.match(RELATIVO_MD);
+      if (relativo) {
+        const origem = arquivoLegal(ctx);
+        if (!origem) return;
+        const pagina = `${origem.app}-${DOC_DA_BASE[relativo[1]]}.html`;
+        const destino = relativo[2] ?? 'pt';
+        if (!(idiomas.paginas[pagina] ?? []).includes(destino)) return;
+        ctx.setProperty(node, 'href', (destino === 'pt' ? '/' : `/${destino}/`) + pagina);
+        if (destino !== origem.lang) {
+          const h = idiomas.idiomas[destino].hreflang;
+          ctx.setProperty(node, 'hrefLang', h);
+          const propria = ctx.fileURL.pathname.endsWith(`/${pagina.replace(/\.html$/, '')}.${origem.lang}.md`);
+          // Par da própria página: só `hreflang` — o texto do link está na língua da página, não na
+          // do destino (WCAG 3.1.2); o §9 confere `lang` só quando existe.
+          if (propria) ctx.setProperty(node, 'dataTrocaIdioma', destino);
+          else ctx.setProperty(node, 'lang', h);
+        }
+        return;
+      }
+      if (!SITE.test(href)) return;
       const caminho = href.replace(SITE, '');
       const arquivo = caminho.split(/[?#]/)[0];
       const temPar = arquivo.endsWith('.html') && !arquivo.startsWith('lotto-expert/');

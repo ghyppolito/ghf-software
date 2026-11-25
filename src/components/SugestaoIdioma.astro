@@ -8,8 +8,9 @@
 // - O texto vai no HTML, um `<template lang>` por outra língua da página, na língua sugerida: nada
 //   é buscado na rede, e sem JS nada aparece.
 // - Duas chaves de armazenamento, nenhuma com identificador, nada sai do navegador, sem cookie:
-//   `localStorage.ghf_lang` (só o código; gravado só no clique de um link de idioma — seletor ou
-//   faixa —, lido só aqui) e `sessionStorage.ghf_faixa_idioma = "off"` (fechada nesta sessão).
+//   `localStorage.ghf_lang` (só o código; gravado só no clique de um link de idioma — seletor,
+//   faixa ou link do par no corpo da legal (WP-26) —, lido só aqui) e
+//   `sessionStorage.ghf_faixa_idioma = "off"` (fechada nesta sessão).
 // - `position: fixed` embaixo, inserida depois do `load`, entrando por opacidade: não mexe no fluxo
 //   (CLS 0) e não disputa o LCP. Sem transição com `prefers-reduced-motion`.
 // - `<section aria-label>` (landmark `region`, como o handoff), sem `aria-live`: não interrompe o
@@ -90,9 +91,10 @@ const outras = linguas.filter((l) => l !== lang);
           }
         }
 
-        // A escolha é gravada só no clique de um link de idioma (seletor ou faixa), e a navegação é
-        // a do próprio link. Na página legal, a seção aberta (`#secao-N`) vai junto: o `id` vem da
-        // posição do título e é o mesmo em toda língua (ADR-007 §6; `Legal LottoExpert.dc.html:151`,
+        // A escolha é gravada só no clique de um link de idioma (seletor, faixa ou link do par no
+        // corpo da legal, WP-26), e a navegação é a do próprio link. Na página legal, a seção aberta
+        // (`#secao-N`) vai junto: o `id` vem da posição do título e é o mesmo em toda língua
+        // (ADR-007 §6; `Legal LottoExpert.dc.html:151`,
         // WP-10 fatia 3). Só esse formato: âncora de outra página pode não existir na outra língua.
         // Sem JS, o link vai ao topo da página.
         document.addEventListener('click', (e) => {

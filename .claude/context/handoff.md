@@ -7,10 +7,9 @@
 
 ## 1. Onde parei
 
-- **WP-30 `done` (2026-11-24)**: o usuário aprovou Home, landings (LottoExpert e EclipseGo) e legais no navegador. A fatia 3 foi absorvida pela 2. Pendentes só de navegador (seção 3): foco por Tab nas 4 cores, Ctrl+P, hover do sumário, reduced-motion, Safari/Firefox.
-- Branches **nenhuma enviada ao GitHub**: `feat/wp-10-fatia-9-lottoexpert` e `feat/wp-30-revisao-visual`, empilhadas sobre `docs/wp-27-ampliado-wp-29-respostas-fatia-9`. Emuladores `emulator-5580` e `-5582` ligados; servidor local em :8080.
-- **Próximo: WP-32** (lab do Lighthouse com gzip), depois WP-10 (`todo`): fatias 7, 8, 9 (capturas do scanner e da prestação de contas) e 10b, na direção do WP-30.
-- **Deploy único só depois da 2.06.00 na produção da Play** (nota na D13).
+- WP-26 e WP-27 `done` (escrituração de 2026-11-25); WP-10 fatias 7 (TopoWalk) e 8 (Pole) entregues, WP-10 `blocked` nas capturas do scanner. Branches empilhadas e locais: `feat/wp-30-revisao-visual` (PR #55 para `feat/wp-08-layout-unico`) → `feat/wp-26-termos-topowalk` → `feat/wp-27-termos-eclipsego`; nenhuma com PR além do #55.
+- **Próximo:** usuário mescla o #55; depois PRs do WP-26 e do WP-27 (rebase na integração). Então WP-10 fatia 9 (prestação de contas no emulador do LottoExpert; scanner é do usuário), WP-28 (termos do Pole: o usuário escreve no app), WP-32, e o deploy único (espera a 2.06.00 na Play).
+- Emuladores: `emulator-5582` (topowalk-api34), `emulator-5584` (pole-play34), `emulator-5580` (lotto); confira com `adb devices`, sem desligar. Servidor local :8080.
 
 ## 2. Quebrado ou pela metade agora
 

@@ -18,11 +18,13 @@ Checa:
      `lastUpdated` do front-matter do `.pt.md` de src/content/legal/, que tem de bater com a linha
      do corpo do `.pt.md`; cada tradução `.<código>.md` tem o mesmo `lastUpdated` (regra i) e a
      linha `**<rótulo da língua>**` com a mesma data (mês pelo nome da língua no mapa).
-     Proveniência (ADR-004): front-matter só com `lastUpdated`, `origemCommit` e `pendente`; o
+     Proveniência (ADR-004, ADR-010): front-matter só com `lastUpdated`, `origemCommit` e `pendente`; o
      `.pt.md` tem `origemCommit` de 40 hex e não tem `pendente` (tradução atrás do pt); a tradução
-     não tem nem um nem outro (regra vii); `ORIGENS` de tools/sync_legal.py cobre exatamente LEGAL. Com o repositório do app presente
-     (`$GHF_APPS_DIR` ou `--apps-dir`, padrão `..`): corpo do `.pt.md` igual byte a byte a
-     `git show <origemCommit>:<caminho>` (erro), commit inexistente no app (erro), commit fora de
+     feita pelo site não tem nem um nem outro, e a língua que `ORIGENS` declara (espelho do app, hoje
+     o en do TopoWalk) tem o `origemCommit` do pt e não tem `pendente` (regra vii); `ORIGENS` de
+     tools/sync_legal.py cobre exatamente LEGAL. Com o repositório do app presente
+     (`$GHF_APPS_DIR` ou `--apps-dir`, padrão `..`): corpo do `.pt.md` e de cada língua espelhada
+     igual byte a byte a `git show <origemCommit>:<caminho da língua>` (erro), commit inexistente no app (erro), commit fora de
      remoto (aviso), ref padrão com texto diferente (aviso). Sem o repositório (o CI, D15): um aviso
      por repositório, sem erro
   5. copy do LottoExpert respeita jogo responsável (mesma régua do PaywallCopyComplianceTest do app),
@@ -37,8 +39,8 @@ Checa:
      og:locale da língua da página e um og:locale:alternate por outra língua dela (regra ix)
   9. link interno de toda página vai à página de destino na língua da página; se o destino não a
      tem, en, senão pt (D23), com `hreflang` e `lang` do destino; o link marcado
-     `data-troca-idioma="X"` (seletor e faixa) leva à mesma página na língua X, com `hreflang`/
-     `lang` de X quando os tem
+     `data-troca-idioma="X"` (seletor, faixa e link do par no corpo da legal, WP-26) leva à mesma
+     página na língua X, com `hreflang`/`lang` de X quando os tem
  10. dicionários de src/i18n/ com as mesmas chaves em todos os blocos de língua, cada bloco de
      língua do mapa, e ui.ts com um bloco por língua do mapa (regra xi)
  11. `dist/` não é mais antigo que as fontes (src/, public/, configs, package.json, fontes de
@@ -46,7 +48,8 @@ Checa:
  12. página legal, em cada língua do mapa: um só `<h1`, um só rótulo de data da língua da página,
      nenhuma aspa tipográfica que o `.md` não tenha; link do corpo para o próprio site é caminho a
      partir da raiz (nunca `https://ghfsoftware.com/…`), sem `target`, e em `<código>/` aponta para
-     a página na língua quando ela existe; todo `href="#x"` da página tem `id="x"` nela; cada caixa
+     a página na língua quando ela existe; nenhum link relativo para `.md` (o app cita o par do
+     documento por nome de arquivo; o plugin linksInternosLegais reescreve os nomes que conhece); todo `href="#x"` da página tem `id="x"` nela; cada caixa
      de destaque de CAIXAS_LEGAIS (o seletor de global.css, ancorado em `secao-N`) cai no texto
      esperado ("Nota sobre"/"Note on", "Dado local"/"Local data", o item com o CVV 188), com o
      `data-doc` do documento no `.legal-corpo`; e cada tradução com a mesma contagem de `## `, `### `,
@@ -110,7 +113,7 @@ Checa:
      `@layer properties { @supports (… margin-trim …` — se tiver, src/styles/sem-polyfill.mjs virou
      no-op (upgrade do Tailwind que mudou o formato); a fusão em si é provada por
      tools/test_sem_polyfill.mjs (`npm run test:css`)
- 19. rodapé com as 5 URLs legais (ADR-001; WP-10 fatia 2, que tirou a coluna "Transparência &
+ 19. rodapé com as URLs legais de LEGAL (ADR-001; WP-10 fatia 2, que tirou a coluna "Transparência &
      Políticas" e pôs cada política na coluna do app): toda página de `dist/` fora de CONGELADAS
      tem `<footer>`, e cada `<footer>` tem um link para cada página de LEGAL na língua da página
      (`/en/…` nas páginas en; destino sem a língua cai na D23, como no §9)
@@ -168,7 +171,8 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTRATUAIS = [
     ".well-known/assetlinks.json",
     "lottoexpert-privacy.html", "lottoexpert-terms.html",
-    "topowalk-privacy.html", "poleposition-privacy.html", "eclipsego-privacy.html",
+    "topowalk-privacy.html", "topowalk-terms.html", "poleposition-privacy.html", "eclipsego-privacy.html",
+    "eclipsego-terms.html",
     "lotto-expert/sweepstake-invite/lottoexpert-invite.html",
 ]
 
@@ -177,9 +181,9 @@ CONTRATUAIS = [
 PUBLICADAS = [
     "index.html",
     "lottoexpert.html", "lottoexpert-privacy.html", "lottoexpert-terms.html",
-    "topowalk.html", "topowalk-privacy.html",
+    "topowalk.html", "topowalk-privacy.html", "topowalk-terms.html",
     "poleposition.html", "poleposition-privacy.html",
-    "eclipsego.html", "eclipsego-privacy.html",
+    "eclipsego.html", "eclipsego-privacy.html", "eclipsego-terms.html",
     "lotto-expert/sweepstake-invite/lottoexpert-invite.html",
 ]
 
@@ -214,8 +218,10 @@ LEGAL = {
     "lottoexpert-privacy.html": "src/content/legal/lottoexpert-privacy.pt.md",
     "lottoexpert-terms.html": "src/content/legal/lottoexpert-terms.pt.md",
     "topowalk-privacy.html": "src/content/legal/topowalk-privacy.pt.md",
+    "topowalk-terms.html": "src/content/legal/topowalk-terms.pt.md",
     "poleposition-privacy.html": "src/content/legal/poleposition-privacy.pt.md",
     "eclipsego-privacy.html": "src/content/legal/eclipsego-privacy.pt.md",
+    "eclipsego-terms.html": "src/content/legal/eclipsego-terms.pt.md",
 }
 
 MESES_PT = {"janeiro": "January", "fevereiro": "February", "março": "March", "abril": "April",
@@ -440,6 +446,15 @@ for pagina, md in LEGAL.items():
     ref_fm, texto = front_matter(md, ler_md(fonte))
     if ref_fm is None:
         continue
+    # Campo da origem não preenchido (ex.: "‹preencher: nome completo›", "‹fill in: city/state›"):
+    # o texto legal não pode ir ao ar assim. A correção é no repositório do app (WP-26, decisão do
+    # usuário em 2026-11-25). Vale para o pt e para toda língua do documento.
+    for lang_md in ["pt"] + list(traducoes(pagina)):
+        md_m = md if lang_md == "pt" else md[: -len(".pt.md")] + f".{lang_md}.md"
+        if os.path.exists(os.path.join(REPO, md_m)):
+            for n, linha in enumerate(ler_md(os.path.join(REPO, md_m)).splitlines(), 1):
+                for marca in re.findall(r"‹\s*(?:preencher|fill in)[^›]*›", linha, re.I):
+                    erros.append(f"{md_m}:{n}: campo não preenchido na origem {marca!r} — preencher no app e rodar /legal de novo")
     m = re.search(r"\*\*Última atualização:\*\*\s*" + RE_PT, texto)
     if not m:
         erros.append(f"{md}: sem linha `**Última atualização:** [D de ]Mês de AAAA`")
@@ -485,6 +500,11 @@ docs_legal = {os.path.basename(md)[: -len(".pt.md")] for md in LEGAL.values()}
 if set(ORIGENS) != docs_legal:
     erros.append(f"ORIGENS de tools/sync_legal.py ≠ LEGAL do check_site.py: só em ORIGENS "
                  f"{sorted(set(ORIGENS) - docs_legal)}, só em LEGAL {sorted(docs_legal - set(ORIGENS))}")
+for doc, (_, caminhos, _) in sorted(ORIGENS.items()):
+    if "pt" not in caminhos:
+        erros.append(f"ORIGENS[{doc!r}] sem o caminho do pt — a origem é sempre o pt (ADR-004, ADR-010)")
+    for l in sorted(set(caminhos) - set(linguas_de(doc + ".html"))):
+        erros.append(f"ORIGENS[{doc!r}] declara `{l}`, que {doc}.html não tem em src/i18n/idiomas.json — espelho sem página")
 ausentes = set()
 for md in LEGAL.values():
     doc = os.path.basename(md)[: -len(".pt.md")]
@@ -503,15 +523,19 @@ for md in LEGAL.values():
         estranhas = [k for k in chaves if k not in CHAVES or fm[k] is None]
         if estranhas or len(chaves) != len(set(chaves)):
             erros.append(f"{lado}: front-matter com chave fora de {{{', '.join(CHAVES)}}}, sem aspas ou repetida: {chaves}")
-        if lang != "pt":
-            continue
-        sha = fm.get("origemCommit")
-        if not sha or not RE_SHA.match(sha):
-            erros.append(f"{lado}: front-matter sem `origemCommit: \"<sha de 40 hex minúsculos>\"` — rode tools/sync_legal.py")
-            continue
+        # pt e cada língua espelhada do app (ADR-010 §5): corpo igual ao `git show` do commit. A
+        # língua traduzida pelo site não tem origem a comparar.
         if doc not in ORIGENS:
             continue  # já é erro (ORIGENS ≠ LEGAL)
-        repo, caminho, ref_padrao = ORIGENS[doc]
+        repo, caminhos, ref_padrao = ORIGENS[doc]
+        if lang not in caminhos:
+            continue
+        caminho = caminhos[lang]
+        sha = fm.get("origemCommit")
+        if not sha or not RE_SHA.match(sha):
+            if lang == "pt":
+                erros.append(f"{lado}: front-matter sem `origemCommit: \"<sha de 40 hex minúsculos>\"` — rode tools/sync_legal.py")
+            continue  # na língua espelhada, a regra vii (regra_front_matter) acusa
         repo_dir = os.path.join(APPS_DIR, repo)
         if not repo_presente(APPS_DIR, repo):
             if repo not in ausentes:
@@ -523,7 +547,7 @@ for md in LEGAL.values():
             continue
         origem = mostra(repo_dir, sha, caminho)
         if origem != corpo_b:
-            erros.append(f"{lado}: pt ≠ {repo}@{sha[:7]}:{caminho} — texto editado à mão? rode sync_legal")
+            erros.append(f"{lado}: {lang} ≠ {repo}@{sha[:7]}:{caminho} — texto editado à mão? rode sync_legal")
             continue
         if not em_remoto(repo_dir, sha):
             avisos.append(f"{lado}: origemCommit {sha[:7]} não está em nenhum remoto de {repo} — texto publicado de commit que só existe na sua máquina")
@@ -536,7 +560,7 @@ for md in LEGAL.values():
                           f"`python3 tools/sync_legal.py {app} --check` diz se é atraso ou divergência")
     if "pt" in fms:
         erros.extend(i18n.regra_datas(doc, {l: fm.get("lastUpdated") for l, fm in fms.items()}))
-        erros.extend(i18n.regra_front_matter(doc, fms))
+        erros.extend(i18n.regra_front_matter(doc, fms, [l for l in ORIGENS.get(doc, ("", {}))[1] if l != "pt"]))
 
 # ------------------------------------------------------------ 5: copy
 for rel, caminho in [(r, p(r)) for r in PAGINAS_LOTTO] + [(r, os.path.join(REPO, r)) for r in FONTES_LOTTO]:
@@ -586,7 +610,8 @@ for c in sorted(glob.glob(os.path.join(REPO, "*.html"))):
 # ------------------------------------------------------------ 9: a língua aponta para a língua
 # Link interno de qualquer página vai à página de destino na língua dela; se o destino não existe
 # nessa língua, en, senão pt (D23), com `hreflang`/`lang` do destino (regras_i18n.regra_link). O
-# link marcado `data-troca-idioma="X"` (seletor e faixa) tem a regra dele: a mesma página em X.
+# link marcado `data-troca-idioma="X"` (seletor, faixa e link do par no corpo da legal, WP-26) tem
+# a regra dele: a mesma página em X.
 for caminho in paginas:
     rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
     base = os.path.dirname(caminho)
@@ -774,6 +799,15 @@ for pagina, md in LEGAL.items():
             if not href:
                 continue
             h = href.group(1)
+            # Link relativo do app para outro `.md` (WP-26): o plugin linksInternosLegais reescreve só
+            # `PRIVACY_POLICY`/`TERMS_OF_USE`/`TERMS_OF_SERVICE` (`.md` ou `.<código>.md`) do mesmo app
+            # para página com a língua no mapa; o resto sai `href="X.md"` e quebra no ar.
+            if not re.match(r"^[a-z][a-z0-9+.-]*:", h, re.I) and not h.startswith("//") \
+                    and re.search(r"\.md$", h.split("#")[0].split("?")[0], re.I):
+                erros.append(f"{alvo}: link legal relativo para `.md` ({h}) fora da regra de linksInternosLegais "
+                             f"(src/markdown/legal.mjs: PRIVACY_POLICY / TERMS_OF_USE / TERMS_OF_SERVICE do mesmo app, "
+                             f"com a página na língua do link em idiomas.json) — o publicado leva ao `.md`, que não existe no site")
+                continue
             if SITE_HOST.match(h) or h.startswith("//"):
                 resto = SITE_HOST.sub("", h)
                 arq = resto.split("#")[0].split("?")[0]
@@ -783,7 +817,9 @@ for pagina, md in LEGAL.items():
                 if re.search(r"\btarget=", tag):
                     erros.append(f"{alvo}: link legal para o próprio site com target (abre outra aba): {tag}")
                 destino = h.lstrip("/").split("#")[0].split("?")[0] or "index.html"
-                if lang != "pt" and lang in LINGUAS.get(destino, []):
+                # `data-troca-idioma` = o par do documento na outra língua (o "Portuguese version" do
+                # app, WP-26): a regra dele é a do §9 (a mesma página na língua do link).
+                if lang != "pt" and lang in LINGUAS.get(destino, []) and "data-troca-idioma=" not in tag:
                     erros.append(f"{alvo}: link legal {h} leva ao pt; a página em {lang} é /{lang}/{destino}")
     for nome, padrao in (("`## `", r"^## "), ("`### `", r"^### "), ("linhas de tabela `|`", r"^\|"),
                          ("itens de lista", r"^\s*([-*]|\d+\.) "), ("links `](`", r"\]\("),
@@ -1495,7 +1531,7 @@ for caminho in css_publicado:
                          " tirou o polyfill (upgrade do Tailwind? regenere a fixture e rode `npm run test:css`,"
                          " ADR-008 §7)")
 
-# ------------------------------------------------------------ 19: rodapé com as 5 URLs legais
+# ------------------------------------------------------------ 19: rodapé com as URLs legais de LEGAL
 # WP-10 fatia 2. As políticas e os termos saíram da coluna própria e foram para a coluna de cada app
 # no Footer; uma lista de app editada sem cuidado tiraria uma URL contratual (ADR-001) do rodapé de
 # todas as páginas, sem link quebrado nenhum para o §3 pegar. O href esperado é o do §9: a página
@@ -1508,13 +1544,13 @@ for caminho in paginas:
     lang = i18n.pagina_de(rel)[0]
     rodapes = RE_FOOTER.findall(ler(caminho))
     if not rodapes:
-        erros.append(f"{rel}: sem <footer> — as 5 URLs legais saem do rodapé de toda página (WP-10)")
+        erros.append(f"{rel}: sem <footer> — as {len(LEGAL)} URLs legais saem do rodapé de toda página (WP-10)")
     for rodape in rodapes:
         hrefs = {h.split("#")[0].split("?")[0] for h in re.findall(r'\shref="([^"]*)"', rodape)}
         for legal in LEGAL:
             esperado = "/" + i18n.arquivo(i18n.lingua_do_link(MAPA, lang, legal), legal)
             if esperado not in hrefs:
-                erros.append(f"{rel}: <footer> sem link para {esperado} — o rodapé leva as 5 URLs legais"
+                erros.append(f"{rel}: <footer> sem link para {esperado} — o rodapé leva as {len(LEGAL)} URLs legais"
                              " na língua da página (ADR-001, WP-10)")
 
 # ------------------------------------------------------------ 20: Home na partição D12 de hoje

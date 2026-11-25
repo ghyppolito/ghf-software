@@ -1,0 +1,52 @@
+---
+// Figura de documento para uma funcionalidade cuja imagem é a página de um arquivo gerado pelo app
+// (WP-10, fatia 7: o laudo PDF do TopoWalk; `imagemTipo: 'documento'` em landing.ts). Par do
+// `Aparelho` para o que não é tela de celular: a página sai inteira (sem recorte, D26), na
+// proporção do próprio arquivo, em papel (`--color-paper`) com borda fina, raio pequeno e o brilho
+// do acento (`shadow-brilho`), e uma segunda folha atrás, deslocada (decorativa).
+// - 360 px de largura, nunca maior que o contêiner menos 32 px (a folha de trás cabe na tela a
+//   360 px); densidade 2x só se o arquivo tem ao menos o dobro da largura (sem ampliar). `loading="lazy"` (nunca é o hero).
+// - Halo desfocado atrás (acento a 30%) só a partir de 768 px, estático; gira -2° só a partir de
+//   1024 px, como o `inclinado` do Aparelho. Nada cobre a página.
+// - `variante` (WP-10, fatia 8): `papel` (o padrão; a página de um PDF) ou `imagem` (uma imagem que
+//   o app gera para tela, ex.: o card PNG do Pole Position, de fundo escuro): a mesma figura, mas a
+//   folha e a de trás em superfície (`surface`/`raised`, borda `border-strong`) em vez de papel claro.
+// Classes inteiras literais (o Tailwind não detecta concatenação).
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  imagem: ImageMetadata;
+  alt: string;
+  variante?: 'papel' | 'imagem';
+}
+
+const { imagem, alt, variante = 'papel' } = Astro.props;
+const papel = variante === 'papel';
+if (!alt.trim()) throw new Error('Documento: `alt` vazio — a página precisa de texto alternativo descritivo');
+
+const largura = 360;
+const densidades = imagem.width >= 2 * largura ? [1, 2] : [1];
+---
+<figure
+  class="relative isolate mx-auto w-[360px] max-w-[calc(100%-32px)] lg:-rotate-2 md:before:absolute md:before:-inset-6 md:before:-z-20 md:before:rounded-[40px] md:before:bg-app-acc/30 md:before:blur-[48px] md:before:content-['']"
+>
+  <div
+    aria-hidden="true"
+    class:list={[
+      'absolute inset-0 -z-10 translate-x-2 translate-y-2 rotate-2 md:translate-x-3 md:translate-y-3 md:rotate-3 rounded-[10px] border',
+      papel ? 'border-paper-border bg-paper-chip' : 'border-border-strong bg-raised',
+    ]}
+  ></div>
+  <div class:list={['rounded-[10px] border p-0 overflow-hidden shadow-brilho', papel ? 'border-paper-border bg-paper' : 'border-border-strong bg-surface']}>
+    <Image
+      src={imagem}
+      alt={alt}
+      width={largura}
+      densities={densidades}
+      loading="lazy"
+      class="block w-full h-auto"
+      style={`aspect-ratio: ${imagem.width}/${imagem.height}`}
+    />
+  </div>
+</figure>

@@ -1,13 +1,16 @@
 ---
 // Landing do TopoWalk (/topowalk.html e /<código>/topowalk.html), a página inteira com a prop `lang`. Corpo em components/TopoWalk.astro, textos em
 // i18n/topowalk.ts. Links da página para a home vão à home do mesmo idioma. O acento da casca vem
-// de `app` (`data-app`, WP-10 fatia 2).
+// de `app` (`data-app`, WP-10 fatia 2). Nav da landing (WP-10, fatia 7, como a do EclipseGo na 5):
+// as âncoras das seções que existem e a política do app (`itensNav`); corpo com o padrão do Base,
+// sem as classes `brand-*` do legado. O `og:image` segue o de URL fixa em public/assets/.
 import Base from '../../layouts/Base.astro';
 import Nav from '../Nav.astro';
 import Footer from '../Footer.astro';
 import TopoWalk from '../TopoWalk.astro';
 import { topowalk } from '../../i18n/topowalk';
 import { rota, type Idioma } from '../../i18n/idiomas';
+import { itensNav } from '../../i18n/landing';
 import JsonLd from '../JsonLd.astro';
 import { apps, mobileApplication } from '../../i18n/apps';
 
@@ -20,28 +23,24 @@ const x = topowalk[lang];
 const home = rota(lang, 'index.html');
 ---
 <Base
-  title={x.title}
-  description={x.description}
+  title={x.meta.title}
+  description={x.meta.description}
   og={{
     imagem: '/assets/topowalk_screenshot.png',
   }}
   lang={lang}
   caminho="topowalk.html"
-  tema="topowalk"
+  tema="ghf"
   app="topowalk"
   favicon={apps.topowalk.icone}
-  classeBody="bg-brand-base text-gray-400 antialiased selection:bg-brand-accent selection:text-white font-sans overflow-x-hidden"
 >
-  <JsonLd slot="jsonld" dados={mobileApplication('topowalk', lang, x.description)} />
+  <JsonLd slot="jsonld" dados={mobileApplication('topowalk', lang, x.meta.description)} />
   <Nav
     lang={lang}
     caminho="topowalk.html"
     inicio={home}
-    itens={[
-      { href: `${home}#sobre`, chave: 'nav_about' },
-      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
-      { href: `${home}#contato`, chave: 'nav_contact' },
-    ]}
+    app="topowalk"
+    itens={itensNav(x, lang, 'topowalk')}
   />
   <main id="conteudo" tabindex="-1" class="focus-visible:outline-none">
     <TopoWalk lang={lang} />

@@ -19,7 +19,7 @@ git diff --stat develop...HEAD        # nenhum arquivo fora dos Arquivos-alvo do
 **Tocou página legal (`src/content/legal/*.md`, `src/layouts/LegalLayout.astro`,
 `src/pages/**/*-privacy.astro`, `src/pages/**/*-terms.astro`):**
 ```bash
-python3 tools/check_site.py          # §4: com o app presente, o corpo do .pt.md = git show origemCommit:<caminho> (ADR-004)
+python3 tools/check_site.py          # §4: com o app presente, o corpo do .pt.md e de cada língua espelhada (ADR-010) = git show origemCommit:<caminho> (ADR-004)
 python3 tools/sync_legal.py --todos --check   # informativo: o app avançou além do origemCommit? (D14)
 ```
 O `check_site.py` falhar em "pt ≠ <app>@<sha>" = texto editado à mão ou bootstrap errado: o WP não

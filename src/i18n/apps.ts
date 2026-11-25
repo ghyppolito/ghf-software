@@ -55,7 +55,7 @@ export const apps = {
   // Play: TOOLS
   topowalk: {
     nome: 'TopoWalk', id: 'br.com.ghfsoftware.topowalk', categoria: 'UtilitiesApplication', play: `${PLAY}br.com.ghfsoftware.topowalk`,
-    pagina: 'topowalk.html', privacidade: 'topowalk-privacy.html',
+    pagina: 'topowalk.html', privacidade: 'topowalk-privacy.html', termos: 'topowalk-terms.html',
     icone: '/assets/topo-walk.png', tag: 'v4.4.0', atualizadoEm: '2026-10-29',
   },
   // Play: SPORTS (repositório ../pole-position-app)
@@ -67,7 +67,7 @@ export const apps = {
   // Play: LIFESTYLE (a tag v1.0.1 é leve, criada em 2026-11-22 sobre f5c1d6b)
   eclipsego: {
     nome: 'EclipseGo', id: 'br.com.ghfsoftware.eclipsego', categoria: 'LifestyleApplication', play: `${PLAY}br.com.ghfsoftware.eclipsego`,
-    pagina: 'eclipsego.html', privacidade: 'eclipsego-privacy.html',
+    pagina: 'eclipsego.html', privacidade: 'eclipsego-privacy.html', termos: 'eclipsego-terms.html',
     icone: '/assets/eclipse-go-favicon.png', tag: 'v1.0.1', atualizadoEm: '2026-07-26',
   },
 } as const satisfies Record<string, App>;
