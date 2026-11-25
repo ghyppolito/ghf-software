@@ -2,7 +2,7 @@
 id: WP-26
 titulo: Os termos de uso do TopoWalk existem no site em pt e en, e a política acompanha a do app, espelhados do repositório do app
 area: legal
-status: doing
+status: done
 depende_de: []
 adr: [ADR-001, ADR-004, ADR-005, ADR-007, ADR-010]
 spec: ""

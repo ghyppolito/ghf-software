@@ -2,7 +2,7 @@
 id: WP-27
 titulo: Os termos de uso do EclipseGo existem no site em pt e en, e a política aponta para o commit da main, espelhados do repositório do app
 area: legal
-status: todo
+status: doing
 depende_de: []
 adr: [ADR-001, ADR-004, ADR-005, ADR-007]
 spec: ""
