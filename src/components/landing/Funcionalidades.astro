@@ -4,7 +4,8 @@
 // - Com captura (D26): duas colunas a partir de 1024 px, texto primeiro no DOM e a captura na
 //   moldura (`Aparelho` `m`, inclinada -3° no desktop); a 1ª captura fica à esquerda, a 2ª à direita
 //   (`lg:order-first` alternado, contando só os itens com captura). Abaixo de 1024 px, o texto e
-//   depois a captura.
+//   depois a captura. Com `imagemTipo: 'documento'` (página de um arquivo gerado pelo app, WP-10
+//   fatia 7), a figura é o `Documento` no lugar da moldura; o resto do bloco é o mesmo.
 // - Sem captura: cartão (`cartao-brilho`) com o ícone do item (`icone`, src/icons/fa/solid/), sem
 //   placeholder (D25/D26). Itens sem captura em sequência viram uma grade de cartões verticais (uma
 //   coluna por item a partir de 768 px); um sozinho é um cartão largo, ícone ao lado do texto.
@@ -12,6 +13,7 @@
 import Secao from './Secao.astro';
 import VerTodas from './VerTodas.astro';
 import Aparelho from './Aparelho.astro';
+import Documento from './Documento.astro';
 import Icon from '../Icon.astro';
 import type { ImageMetadata } from 'astro';
 import type { Funcionalidade, GrupoTodas } from '../../i18n/landing';
@@ -62,7 +64,11 @@ const classeEtiqueta = (pro?: boolean) =>
               <p class="text-body text-text-2 text-pretty">{b.item.f.descricao}</p>
             </div>
             <div class:list={[b.esquerda && 'lg:order-first']}>
-              <Aparelho imagem={imagens[b.item.f.imagem!]} alt={b.item.f.alt!} tamanho="m" inclinado />
+              {b.item.f.imagemTipo === 'documento' ? (
+                <Documento imagem={imagens[b.item.f.imagem!]} alt={b.item.f.alt!} />
+              ) : (
+                <Aparelho imagem={imagens[b.item.f.imagem!]} alt={b.item.f.alt!} tamanho="m" inclinado />
+              )}
             </div>
           </article>
         ) : b.itens.length === 1 ? (

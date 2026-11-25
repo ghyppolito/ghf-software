@@ -26,6 +26,10 @@ export interface Funcionalidade {
   imagem?: string;
   /** obrigatório se há imagem */
   alt?: string;
+  /** como a imagem sai (WP-10, fatia 7): `captura` (tela do app na moldura de aparelho, o padrão) ou
+   *  `documento` (página de um arquivo gerado pelo app, ex.: o laudo PDF do TopoWalk, em papel com
+   *  borda e brilho do acento; landing/Documento.astro); igual em todas as línguas */
+  imagemTipo?: 'captura' | 'documento';
   /** ícone (nome em src/icons/fa/solid/) do destaque sem imagem, que sai em cartão (WP-30, fatia 2);
    *  igual em todas as línguas */
   icone?: string;
@@ -164,6 +168,7 @@ function forma(c: ConteudoApp): unknown {
     hero: { kicker: c.hero.kicker !== undefined, meta: c.hero.meta !== undefined },
     funcionalidades: c.funcionalidades.map((f) => ({
       imagem: f.imagem ?? null,
+      imagemTipo: f.imagemTipo ?? null,
       etiqueta: f.etiqueta ? { pro: !!f.etiqueta.pro } : null,
       icone: f.icone ?? null,
     })),
@@ -207,7 +212,10 @@ export function exigeEspelho(app: string, c: Record<Idioma, ConteudoApp>, chaves
       }
     }
     x.funcionalidades.forEach((f, i) => {
-      if (f.imagem === undefined) return;
+      if (f.imagem === undefined) {
+        if (f.imagemTipo) erros.push(`[${l}] funcionalidades[${i}]: \`imagemTipo\` sem imagem`);
+        return;
+      }
       if (!f.alt) erros.push(`[${l}] funcionalidades[${i}]: imagem \`${f.imagem}\` sem alt`);
       if (!chavesImagem.includes(f.imagem)) erros.push(`[${l}] funcionalidades[${i}]: imagem \`${f.imagem}\` não passada ao Landing`);
     });

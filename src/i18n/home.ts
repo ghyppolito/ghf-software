@@ -10,8 +10,9 @@
 // - `resumos`: tag, texto longo e texto curto de cada app, no formato `ConteudoApp['resumo']`
 //   (landing.ts), movidos sem edição das chaves antigas (`tag_*`, `app_*_desc`, `hero_*_desc`).
 //   O card usa só `tag` e `curta` (D30 (3)). Cada fatia de landing (7, 8, 9) move o objeto para o
-//   `<app>.ts` e troca uma linha no Home.astro. O do EclipseGo já está em eclipsego.ts, e o do
-//   LottoExpert em lottoexpert.ts (fatia 9, texto mantido por resposta do usuário em 2026-11-24).
+//   `<app>.ts` e troca uma linha no Home.astro. O do EclipseGo já está em eclipsego.ts, o do
+//   LottoExpert em lottoexpert.ts (fatia 9, texto mantido por resposta do usuário em 2026-11-24) e o
+//   do TopoWalk em topowalk.ts (fatia 7, texto igual).
 // - WP-30, fatia 1 (respostas do usuário em 2026-11-24, D25 e D33): `hero_title` e `hero_desc`
 //   novos (o h1 e o subtítulo aprovados),
 //   `apps_titulo` passa a "Produtos"/"Products", `areas_titulo` e `areas` (as três áreas de atuação,
@@ -54,7 +55,7 @@ type TextosHome = {
   about_leadHtml: string;
   /** o resto do texto do Sobre */
   about_restHtml: string;
-  resumos: { topowalk: Resumo; poleposition: Resumo };
+  resumos: { poleposition: Resumo };
 };
 
 export const home = {
@@ -91,12 +92,6 @@ export const home = {
     about_restHtml:
       'Nossa empresa foi fundada por um <strong>Arquiteto de Sistemas</strong> com profunda bagagem técnica e experiência em desenvolvimento de software e soluções atuando ativamente <strong>desde 2004</strong>.',
     resumos: {
-      topowalk: {
-        tag: 'Topografia & SIG',
-        descricao:
-          'Transforma seu smartphone numa ferramenta topográfica de campo com precisão barométrica. Calcule distâncias, inclinações e desníveis em tempo real, gerando relatórios em PDF 100% offline.',
-        curta: 'Levantamento de campo barométrico de bolso.',
-      },
       poleposition: {
         tag: 'Kart & Automobilismo',
         descricao:
@@ -134,12 +129,6 @@ export const home = {
     about_restHtml:
       'Founded by a <strong>Systems Architect</strong> with profound technical background actively operating <strong>since 2004</strong>.',
     resumos: {
-      topowalk: {
-        tag: 'Topography & GIS',
-        descricao:
-          'Transforms your smartphone into an advanced field topographic tool with barometric precision. Calculate distances, slopes, and elevation on the fly, generating 100% offline PDF reports.',
-        curta: 'Pocket barometric field survey tool.',
-      },
       poleposition: {
         tag: 'Karting & Motorsport',
         descricao:
