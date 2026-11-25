@@ -4,7 +4,7 @@ titulo: Os termos de uso do EclipseGo existem no site em pt e en, e a política 
 area: legal
 status: doing
 depende_de: []
-adr: [ADR-001, ADR-004, ADR-005, ADR-007]
+adr: [ADR-001, ADR-004, ADR-005, ADR-007, ADR-010]
 spec: ""
 decisoes: [D7, D13, D23, D28]
 tamanho: M
@@ -20,6 +20,71 @@ branch: feat/wp-27-termos-eclipsego
 WP-10 (`LegalLayout`) estar na integração; não está em `depende_de` porque o WP-10 inteiro só fecha
 na fatia 10. · **Achados roteados:** —
 
+**Veredito do arquiteto (2026-11-25): aprovado com três correções.** Prevalece sobre o texto abaixo
+onde diverge. Branch empilhada sobre `feat/wp-26-termos-topowalk` (`git merge-base --is-ancestor`
+verdadeiro), que já trouxe `ORIGENS` por língua (ADR-010), a reescrita de link relativo `.md` em
+`src/markdown/legal.mjs:63-118`, o §12 contra `.md` não reescrito, o §19 por `len(LEGAL)`
+(`tools/check_site.py:1545,1551`), a trava de ‹preencher› (`:447-455`), o `LegalLayout`
+(`src/layouts/LegalLayout.astro`) e a página modelo `PaginaTopoWalkTerms.astro`.
+
+1. **O passo 1b não funciona com o `sync_legal.py` de hoje.** Com o corpo do pt igual e sem língua
+   espelhada, o script devolve "igual" antes de olhar `--ref`/`--forca` (`tools/sync_legal.py:305-307`).
+   Medido: `sync_legal.py eclipsego --doc privacy --ref 8a12c0a [--forca] --check` → "✅ nada a fazer
+   (eclipse-go@8a12c0a)" + aviso de `4668019` fora dos remotos, nos dois casos; `merge-base
+   --is-ancestor 4668019 origin/main` = 1. A ADR-004 § "O que isto fecha" proíbe editar o
+   `origemCommit` à mão. **Mudança:** em `sync_legal.py`, pt igual + línguas espelhadas iguais no sha +
+   `origemCommit` registrado não ancestral do sha + `--forca` → grava só o `origemCommit` (mesma
+   escrita do bootstrap, `:353-356`), mensagem "↻ reancorado: corpo igual". Sem `--forca`, nada muda
+   (continua "igual" + aviso). Não pede ADR: é o `--forca` da ADR-004 §3 aplicado ao caso de corpo igual.
+2. **Link da tradução en para a política.** A origem pt cita `[Política de Privacidade](PRIVACY_POLICY.md)`
+   (`origin/main:docs/TERMS_OF_USE.md:49`), e o `legal.mjs` o reescreve para `/eclipsego-privacy.html` no
+   pt. No `.en.md` traduzido pelo site, o `site-legal` escreve `PRIVACY_POLICY.en.md` (o nome que o app
+   usaria, ADR-010 §1, igual a `topowalk-terms.en.md:11`), que vira `/en/eclipsego-privacy.html`. Manter
+   `PRIVACY_POLICY.md` no en levaria o leitor en para a política pt com `lang="pt-BR"`, e a página
+   existe em en (contra a D23).
+3. **Rodapé sai do dado, não do componente.** `src/components/Footer.astro:59` lista `a.termos`; a mudança é
+   `termos: 'eclipsego-terms.html'` em `src/i18n/apps.ts:70`. `Footer.astro` não muda.
+
+**Já resolvido pelo WP-26 (sai do escopo):** o texto "5 URLs" do §19; a reescrita de link relativo
+(`RELATIVO_MD` cobre `PRIVACY_POLICY.md` sem diretório, e o `arquivoLegal` tira o app do nome do
+arquivo do site, não do caminho `docs/` da origem); o `LegalLayout`; o §12 contra `.md` cru.
+
+**Arquivos-alvo finais:**
+- `tools/sync_legal.py` (`ORIGENS["eclipsego-terms"] = ("eclipse-go", {"pt": "docs/TERMS_OF_USE.md"}, "main")`
+  e a reancoragem do item 1)
+- `tools/check_site.py` (`CONTRATUAIS`, `PUBLICADAS`, `LEGAL`; só as listas)
+- `src/content/legal/eclipsego-privacy.pt.md` (só a linha `origemCommit`, pelo script)
+- `src/content/legal/eclipsego-terms.pt.md` (pelo script) e `eclipsego-terms.en.md` (`site-legal`)
+- `src/components/paginas/PaginaEclipseGoTerms.astro`, `src/pages/eclipsego-terms.astro`,
+  `src/pages/[lang]/eclipsego-terms.astro`
+- `src/i18n/legal.ts` (`eclipsego_terms_h1/_title/_description`, pt e en), `src/i18n/idiomas.json`
+  (`"eclipsego-terms.html": ["pt", "en"]`), `src/i18n/apps.ts` (`termos`)
+- `CLAUDE.md` (§ Fontes de verdade: `../eclipse-go/docs/TERMS_OF_USE.md`; § URLs que são contrato),
+  `docs/ARQUITETURA.md:116-120` (mesma lista), `.claude/commands/legal.md:24` (linha do EclipseGo)
+
+**Passos exatos (substituem 1b–4):**
+1. `git -C ../eclipse-go rev-parse main origin/main` iguais (`8a12c0a`, conferido 2026-11-25).
+2. Item 1 em `sync_legal.py`. Depois `python3 tools/sync_legal.py eclipsego --doc privacy --ref 8a12c0a --forca`;
+   `git diff -- src/content/legal/eclipsego-privacy.*` = uma linha (`origemCommit`), e o `.en.md` intocado.
+3. `ORIGENS`, `LEGAL`, `CONTRATUAIS`, `PUBLICADAS`. `python3 tools/sync_legal.py eclipsego --doc terms`
+   grava o `.pt.md` com `lastUpdated: "2026-11-24"`, `origemCommit` 8a12c0a… e `pendente: ["en"]`.
+4. `site-legal` traduz `eclipsego-terms.en.md` (D7, ADR-010 §3: sem en no app), com o link do item 2,
+   e tira `en` de `pendente`.
+5. Página, cascas, `legal.ts`, `idiomas.json`, `apps.ts`, docs. 6. `/verify`.
+
+**Critério a mais:** `grep -c 'href="/eclipsego-privacy.html"' dist/eclipsego-terms.html` ≥ 1 e
+`grep -c 'href="/en/eclipsego-privacy.html"' dist/en/eclipsego-terms.html` ≥ 1; `sync_legal.py --todos
+--check` sem o aviso "4668019 não está em nenhum remoto".
+
+**Riscos:** (a) PR empilhado sobre o WP-26, que está `blocked` pelo app: o PR do WP-27 carrega os commits
+do WP-26 até ele entrar na integração (pergunta abaixo). (b) A reancoragem com `--forca` gravaria um sha
+que não é ancestral de nada também quando o corpo diverge; a condição "pt igual" é a trava, e o diff de
+uma linha é a prova. (c) A política mantém `13 de julho de 2026` com contato novo: data é do app (já dito acima).
+
+**Pergunta ao usuário:** o PR do WP-27 sobe (A) depois de o PR do WP-26 entrar na integração, com rebase
+sobre ela, ou (B) mirando `feat/wp-26-termos-topowalk`. **Recomendo (A):** o diff revisado fica só o do
+WP-27, e o WP-26 depende só do `88bc656` chegar à `master` do topo-walk. A implementação pode seguir antes.
+
 **Pedido do usuário (2026-11-22, `/novo-wp`):** "isso está sendo exigido pela EEUU". **Esclarecido no
 mesmo dia:** a exigência é da **União Europeia** — ao se declarar comerciante (*trader*) nas lojas,
 os termos de uso passam a ser obrigatórios na UE. Prazo verificado pelo usuário: **até 2027**. Publicação
@@ -27,7 +92,7 @@ pela D28 (B): junto com o deploy único da modernização (D13), que o usuário 
 de 2026**.
 
 **Objetivo:** `/eclipsego-terms.html` (pt) e `/en/eclipsego-terms.html` publicam, byte a byte no pt, o
-`TERMS_OF_SERVICE.md` do repositório do EclipseGo, com a mesma data, e o rodapé de toda página leva
+`docs/TERMS_OF_USE.md` do repositório do EclipseGo, com a mesma data, e o rodapé de toda página leva
 o link para eles.
 
 **Ampliação (2026-11-24, `/novo-wp`).** Pedido do usuário: "atualizei a politica e criei um documento
@@ -140,7 +205,7 @@ a ela. O usuário reporta.
 
 **Irreversível:** a URL pt entra em `CONTRATUAIS` e não sai mais (ADR-001). Termos publicados são
 o que o usuário do app aceitou naquela data. Tradução en errada vale como declaração da GHF em
-inglês até ser corrigida, e importa mais aqui se a exigência vem dos Estados Unidos.
+inglês até ser corrigida, e importa mais aqui porque a exigência é da União Europeia, onde o leitor provável lê inglês.
 
 **Risco:** alto (texto legal, URL contratual nova). Específico: o §19 reprova as 22 páginas de `dist/` de uma
 vez se o link do rodapé faltar numa língua; termos publicados antes da ficha estar pronta não fazem
