@@ -4,7 +4,7 @@
 > front-matter de cada WP em `wps/` — altere lá e regenere este arquivo.
 > Status: `todo` · `doing` · `blocked` · `done` · `adiado`
 
-**32 WPs** · 20 concluídos · 0 em andamento
+**32 WPs** · 20 concluídos · 1 em andamento
 
 ## Sequência recomendada
 
@@ -26,7 +26,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 |---|---|---|---|
 | 1 | [WP-10 — A home e as landings de app seguem o sistema visual do handoff](wps/WP-10-redesign-com-o-handoff.md) | `blocked` | redesign da home e das landings de app com o handoff: hierarquia por app, anatomia única de landing, página legal legível. L, depois do WP-06 e WP-08 |
 | 2 | [WP-32 — O Lighthouse do CI mede o site com gzip, como o GitHub Pages entrega](wps/WP-32-lab-do-lighthouse-com-gzip-como-o-pages.md) | `todo` | lab do Lighthouse com gzip, como o Pages (emenda da D20); recalibra `bytes_total` com o transferido comprimido antes da fatia 10b do WP-10. S, risco médio (gate de CI); sai de `feat/wp-08-layout-unico` |
-| 3 | [WP-28 — Os termos de uso do Pole Position existem no site em pt e en, espelhados do repositório do app](wps/WP-28-termos-de-uso-do-poleposition-no-site.md) | `todo` | termos de uso do Pole Position (UE, D28 B). Pré-condição: texto na `master` do app; corrige a origem `../pole-position-app` (PP-ORIGEM-CAMINHO-01). Legal, risco alto, URL nova |
+| 3 | [WP-28 — Os termos de uso do Pole Position existem no site em pt e en, espelhados do repositório do app](wps/WP-28-termos-de-uso-do-poleposition-no-site.md) | `doing` | termos de uso do Pole Position (UE, D28 B). Pré-condição: texto na `master` do app; corrige a origem `../pole-position-app` (PP-ORIGEM-CAMINHO-01). Legal, risco alto, URL nova |
 | 4 | [WP-20 — Imagens de compartilhamento 1200×630 por página e twitter:card coerente](wps/WP-20-imagens-de-compartilhamento-1200x630.md) | `todo` | imagens de compartilhamento 1200×630 (D16 A): marca para home e legais, uma por app; sessão do usuário no Claude Design, depois `twitter:card` e `og:image:alt`. M, `visual`, antes do deploy único (D13) |
 | 5 | [WP-31 — O site tem páginas de conteúdo que trazem busca nova para os apps](wps/WP-31-conteudo-para-seo.md) | `todo` | conteúdo para SEO (D34): 2 páginas do LottoExpert em pt (fechamento da Lotofácil, bolão), rascunho do agente com origem e aprovação do usuário. M, visual · ⏳ depois do deploy único, `/release` próprio |
 | 6 | [WP-16 — A política de privacidade do Pole Position existe no site em pt, en, es, fr, it e de](wps/WP-16-politica-do-poleposition-em-6-linguas.md) | `todo` | política do Pole Position em pt/en/es/fr/it/de, traduzida do pt de origem; pré-condição: cláusula de prevalência do pt no app (D8 b1, `PREVALENCIA-PT-NOS-APPS-01`); o espelho pt fica em dia no WP-04. Texto legal, risco alto — prova o processo na política menor |
@@ -67,7 +67,7 @@ Próximo WP = o primeiro da trilha A cujas dependências estejam `done`. Reorden
 | [WP-25](wps/WP-25-dependencias-sem-aviso-do-npm-audit.md) | O build sai do Astro 7.3.8 e o npm audit não acusa dependência vulnerável | infra | S | alto |  | WP-08 | ADR-001, ADR-002, ADR-008 | `done` |
 | [WP-26](wps/WP-26-termos-de-uso-do-topowalk-no-site.md) | Os termos de uso do TopoWalk existem no site em pt e en, e a política acompanha a do app, espelhados do repositório do app | legal | L | alto | 🖥️ | — | ADR-001, ADR-004, ADR-005, ADR-007, ADR-010 | `done` |
 | [WP-27](wps/WP-27-termos-de-uso-do-eclipsego-no-site.md) | Os termos de uso do EclipseGo existem no site em pt e en, e a política aponta para o commit da main, espelhados do repositório do app | legal | M | alto | 🖥️ | — | ADR-001, ADR-004, ADR-005, ADR-007, ADR-010 | `done` |
-| [WP-28](wps/WP-28-termos-de-uso-do-poleposition-no-site.md) | Os termos de uso do Pole Position existem no site em pt e en, espelhados do repositório do app | legal | M | alto | 🖥️ | — | ADR-001, ADR-004, ADR-005, ADR-007 | `todo` |
+| [WP-28](wps/WP-28-termos-de-uso-do-poleposition-no-site.md) | Os termos de uso do Pole Position existem no site em pt e en, espelhados do repositório do app | legal | M | alto | 🖥️ | — | ADR-001, ADR-004, ADR-005, ADR-007 | `doing` |
 | [WP-29](wps/WP-29-imagem-de-previa-do-convite-do-bolao.md) | A prévia do convite do bolão mostra o LottoExpert 2.06.00 em 1200×630 | infra | M | alto | 🖥️ | — | ADR-001, ADR-002, ADR-006 | `todo` |
 | [WP-30](wps/WP-30-revisao-visual-antes-do-deploy-unico.md) | O site tem direção visual própria, aprovada no navegador, antes do deploy único | design | L | medio | 🖥️ | — | ADR-001, ADR-006, ADR-007, ADR-008 | `done` |
 | [WP-31](wps/WP-31-conteudo-para-seo.md) | O site tem páginas de conteúdo que trazem busca nova para os apps | seo | M | medio | 🖥️ | — | ADR-001, ADR-005, ADR-007, ADR-009 | `todo` |
