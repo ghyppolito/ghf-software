@@ -185,8 +185,9 @@
  * Corpo das páginas legais (src/layouts/LegalLayout.astro), renderizado do markdown de
  * src/content/legal/: o markdown não aceita classe, por isso os seletores. Valores do handoff da
  * rodada 3 (`Legal LottoExpert.dc.html`, LG:109-120), só com tokens de papel de tokens.css (WP-10,
- * fatia 3). O mesmo desenho nas 5 páginas: nada por app, nada por seção (os destaques e a 1ª coluna
- * por tema das páginas antigas saíram com os temas `[data-tema='*-privacy']`). Desvios do handoff
+ * fatia 3). O mesmo desenho nas 5 páginas, nada por seção (os destaques e a 1ª coluna por tema
+ * das páginas antigas saíram com os temas `[data-tema='*-privacy']`); por app, só a cor: link, anel,
+ * barra das caixas e marca do h2 no acento `-light` do `data-app` (WP-30, fatia 4). Desvios do handoff
  * (resposta 8 do usuário, 2026-11-22; o Claude Design confirma): `h2` em `text-h2` (24/32) no
  * lugar de 26/34, tabela em `text-small` (14/22) no lugar de 15/23, raio `--radius-ctl` (8).
  * Extensões (o handoff não tem): `ol` como o `ul`, `---` escondido (o handoff o descarta, LG:90).
@@ -200,6 +201,24 @@
 
   .legal-corpo h2 {
     @apply mt-14 mb-4 text-h2 text-balance scroll-mt-6 text-paper-ink;
+  }
+
+  /* Marca de 3 px no acento do app acima de cada h2 (WP-30, fatia 4, resposta B do usuário,
+   * 2026-11-24): decorativa, sem texto; sai na impressão. */
+  .legal-corpo h2::before {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 3px;
+    margin-bottom: 0.75rem;
+    border-radius: 2px;
+    background: var(--app-acc-light);
+  }
+
+  @media print {
+    .legal-corpo h2::before {
+      display: none;
+    }
   }
 
   .legal-corpo h3 {
@@ -262,18 +281,21 @@
     overflow-wrap: anywhere;
   }
 
-  /* Link (LG:10, LG:80): a cor do link do papel (5,59:1) e sublinhado em todos, `mailto:` incluso —
-   * a cor sozinha não o distingue do texto (WCAG 1.4.1, WP-22). */
+  /* Link (LG:10, LG:80): o acento do app sobre o papel (`-light`, ≥ 5,1:1; WP-30, fatia 4) e
+   * sublinhado em todos, `mailto:` incluso — a cor sozinha não o distingue do texto (WCAG 1.4.1,
+   * WP-22). */
   .legal-corpo a {
-    @apply text-paper-link underline decoration-1 underline-offset-[3px];
+    @apply underline decoration-1 underline-offset-[3px];
+    color: var(--app-acc-light);
   }
 
   .legal-corpo a:hover {
-    @apply text-paper-link-hover decoration-2;
+    @apply decoration-2;
+    color: color-mix(in oklab, var(--app-acc-light) 75%, black);
   }
 
   .legal-corpo a:focus-visible {
-    outline: 2px solid var(--color-paper-link);
+    outline: 2px solid var(--app-acc-light);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -285,7 +307,7 @@
   }
 
   .legal-tabela:focus-visible {
-    outline: 2px solid var(--color-paper-link);
+    outline: 2px solid var(--app-acc-light);
     outline-offset: 2px;
   }
 
@@ -320,7 +342,7 @@
   .legal-corpo[data-doc='lottoexpert-privacy'] [id='secao-2'] + p + ul + p,
   .legal-corpo[data-doc='lottoexpert-privacy'] [id='secao-2'] + p + ul + p + p,
   .legal-corpo[data-doc='lottoexpert-privacy'] [id='secao-2'] + p + ul + p + p + p {
-    @apply mb-4 px-4 py-3 rounded-ctl bg-paper-chip border-l-4 border-paper-link;
+    @apply mb-4 px-4 py-3 rounded-ctl bg-paper-chip border-l-4 border-app-acc-light;
   }
 
   /* §9.2: "Dado local", a mesma caixa sem a barra, como era. */
@@ -331,6 +353,6 @@
   /* Termos do LottoExpert, §3: o último item (ajuda de jogo responsável: Jogadores Anônimos, CVV
    * 188) em caixa com barra, alinhada ao texto (sem o marcador da lista). */
   .legal-corpo[data-doc='lottoexpert-terms'] [id='secao-3'] + ul > li:last-child {
-    @apply list-none -ml-6 mt-4 mb-0 px-4 py-3 rounded-ctl bg-paper-chip border-l-4 border-paper-link;
+    @apply list-none -ml-6 mt-4 mb-0 px-4 py-3 rounded-ctl bg-paper-chip border-l-4 border-app-acc-light;
   }
 }

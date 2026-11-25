@@ -430,6 +430,22 @@
   }
 }
 
+/* Foco no papel com o acento do app (`-light`, contraste ≥ 5,1 sobre o papel; WP-30, fatia 4):
+ * botão "voltar" e itens do sumário da página legal. Só em elemento sob `[data-app]`. */
+@utility anel-foco-acc {
+  &:focus-visible {
+    outline: 2px solid var(--app-acc-light);
+    outline-offset: 3px;
+  }
+}
+
+@utility anel-foco-acc-interno {
+  &:focus-visible {
+    outline: 2px solid var(--app-acc-light);
+    outline-offset: -2px;
+  }
+}
+
 /* Anel interno: em elemento dentro de caixa que corta (folha do menu, links do rodapé), o handoff
  * põe o anel para dentro (`Site Nav.dc.html:76`, `Site Footer.dc.html:22`). Mesmo traço do
  * `anel-foco`. */
