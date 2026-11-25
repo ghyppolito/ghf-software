@@ -161,6 +161,11 @@
   --text-eyebrow--line-height: 18px;
   --text-eyebrow--font-weight: 700;
   --text-eyebrow--letter-spacing: 0.08em;
+  /* Abaixo de 768 px o numeral fica em 96 px fixos (`text-numeral-sm`), o `clamp` daria 80. */
+  --text-numeral-sm: 96px;
+  --text-numeral-sm--line-height: 0.9;
+  --text-numeral-sm--font-weight: 800;
+  --text-numeral-sm--letter-spacing: -0.05em;
   --text-numeral: clamp(5rem, 3rem + 10vw, 11rem);
   --text-numeral--line-height: 0.9;
   --text-numeral--font-weight: 800;
@@ -193,8 +198,8 @@
   --color-app-acc: var(--app-acc);
   --color-app-acc-light: var(--app-acc-light);
   --color-app-acc-edge: var(--app-acc-edge);
-  --color-app-acc-hover: color-mix(in oklab, var(--app-acc) 80%, white);
-  --color-app-acc-active: color-mix(in oklab, var(--app-acc) 88%, black);
+  --color-app-acc-hover: var(--acc-hover);
+  --color-app-acc-active: var(--acc-active);
 
   /* Superfícies tingidas pelo acento (WP-30): `inline`, para resolver `--app-acc` no elemento —
    * o card de cada app na Home (`<article data-app>`) pega a cor dele. */
@@ -207,9 +212,7 @@
   --shadow-lift:
     inset 0 1px 0 color-mix(in oklab, white 7%, transparent), 0 18px 44px rgb(0 0 0 / 0.5),
     0 0 0 1px color-mix(in oklab, var(--app-acc) 35%, transparent);
-  --shadow-brilho:
-    0 0 0 1px color-mix(in oklab, var(--app-acc) 40%, transparent),
-    0 14px 56px -10px color-mix(in oklab, var(--app-acc) 40%, transparent);
+  --shadow-brilho: var(--brilho-acc);
 }
 
 :root {
@@ -243,6 +246,33 @@
     circle at 80% 14%,
     transparent 0 5.5rem,
     color-mix(in oklab, var(--app-acc) 16%, transparent) 5.5rem calc(5.5rem + 1px)
+  );
+  /* Anéis concêntricos do "2004" do Sobre (Home), centrados, no teal da marca (WP-30, fatia 2:
+   * saiu da página). A máscara radial que os esmaece fica no elemento. */
+  --orn-aneis-sobre: repeating-radial-gradient(
+    circle at 50% 50%,
+    transparent 0 3.5rem,
+    color-mix(in oklab, var(--color-brand) 24%, transparent) 3.5rem calc(3.5rem + 1px)
+  );
+}
+
+/* Valores que dependem do acento e que valem também num elemento com `data-app` (o card de cada app
+ * na Home): declarados em `:root` e de novo em `[data-app]`, para o `var(--app-acc)` resolver no
+ * elemento (uma propriedade herdada leva o valor já resolvido no ancestral). Um lugar só para
+ * `btn-primario` e para os utilitários `bg-app-acc-hover`, `bg-app-acc-active` e `shadow-brilho`
+ * (@theme inline acima), WP-30 fatia 2.
+ * `--grad-glow-card`: o glow do canto superior direito do painel do card de app (Home). */
+:root,
+[data-app] {
+  --acc-hover: color-mix(in oklab, var(--app-acc) 80%, white);
+  --acc-active: color-mix(in oklab, var(--app-acc) 88%, black);
+  --brilho-acc:
+    0 0 0 1px color-mix(in oklab, var(--app-acc) 40%, transparent),
+    0 14px 56px -10px color-mix(in oklab, var(--app-acc) 40%, transparent);
+  --grad-glow-card: radial-gradient(
+    16rem 9rem at 100% 0%,
+    color-mix(in oklab, var(--app-acc) 38%, transparent),
+    transparent 70%
   );
 }
 
@@ -313,19 +343,17 @@
   color: var(--color-bg);
   font-weight: 700;
   text-decoration: none;
-  box-shadow:
-    0 0 0 1px color-mix(in oklab, var(--app-acc) 40%, transparent),
-    0 14px 56px -10px color-mix(in oklab, var(--app-acc) 40%, transparent);
+  box-shadow: var(--brilho-acc);
   transition:
     background-color var(--dur-fast) var(--ease-suave),
     transform var(--dur-fast) var(--ease-suave);
 
   &:hover {
-    background-color: color-mix(in oklab, var(--app-acc) 80%, white);
+    background-color: var(--acc-hover);
   }
 
   &:active {
-    background-color: color-mix(in oklab, var(--app-acc) 88%, black);
+    background-color: var(--acc-active);
   }
 
   @media (prefers-reduced-motion: no-preference) {

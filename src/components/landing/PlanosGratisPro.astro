@@ -1,6 +1,7 @@
 ---
 // Planos "grátis e Pro" (WP-10, fatia 5; LA:146-158): dois cards lado a lado quando cabem 2 × 320
-// px. O card Pro tem a borda e o título no acento.
+// px. O card Pro tem a borda em gradiente do acento (`cartao-brilho`, WP-30 fatia 2) e o título no
+// acento.
 import NotaPlanos from './NotaPlanos.astro';
 import type { Planos } from '../../i18n/landing';
 import type { Idioma } from '../../i18n/idiomas';
@@ -33,7 +34,7 @@ const { gratis, pro } = planos;
       }
     </ul>
   </div>
-  <div class="bg-surface border border-app-acc rounded-card p-[clamp(20px,2.4cqi,28px)] flex flex-col gap-3.5">
+  <div class="cartao-brilho rounded-card p-[clamp(20px,2.4cqi,28px)] flex flex-col gap-3.5">
     <div class="flex items-baseline justify-between gap-3 flex-wrap">
       <h3 class="text-[22px] font-bold text-app-acc">{pro.titulo}</h3>
       <span class="text-sm text-text-2">{pro.sub}</span>

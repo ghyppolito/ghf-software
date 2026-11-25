@@ -10,20 +10,22 @@
 //   `#portfolio` só os `<article>` de app e essa lista (§20 de tools/check_site.py).
 // - Cada card leva `data-app` (o acento do app, tokens.css): painel, glow, seta e hover na cor dele.
 //   O card inteiro é o alvo da landing (link esticado no nome, `after:inset-0`); o Play fica por
-//   cima (`relative z-10`). O anel de foco do link é o do card inteiro (`has-[…:focus-visible]`),
+//   cima (`absolute z-10`, desenhado no painel) e vem no fim do corpo no DOM: leitura e Tab vão
+//   do nome ao Play (WP-30, fatia 2). O anel de foco do link é o do card inteiro (`has-[…:focus-visible]`),
 //   sem `overflow-hidden` no `<article>`, para nada cortá-lo.
 // - Ponto de troca da grade dos apps: 700 px, escrito em rem (`min-[43.75rem]:`), como o `t:` de
 //   tokens.css, para a ordem das variantes no CSS não inverter. Grade 1 / 2 / 4 colunas (700 / 1280).
 // - Movimento: `.revela` (global.css) nas seções 2 a 6, nunca no hero nem no h1 (LCP); o
 //   deslocamento do hover só com `motion-safe:`. Sem script.
 // - `id="portfolio"` (não `apps`, como no export): Nav, 404 e landings apontam `/#portfolio`.
-//   `#contato` continua no footer; o CTA final é uma seção própria (`h-contato`).
+//   `#contato` continua no footer (nav e landings apontam para ele); o CTA final é uma seção própria
+//   (`#fale`, `h-contato`), o alvo do botão "Contato" do hero. E-mail: `EMAIL_SUPORTE` (ui.ts).
 import { Image } from 'astro:assets';
 import { home } from '../i18n/home';
 import { eclipsego } from '../i18n/eclipsego';
 import { lottoexpert } from '../i18n/lottoexpert';
 import { apps, ORDEM_APPS, ACENTO, particionarApps, hojeDoBuild, dataCurta, type ChaveApp } from '../i18n/apps';
-import { t } from '../i18n/ui';
+import { t, EMAIL_SUPORTE } from '../i18n/ui';
 import { link, type Idioma } from '../i18n/idiomas';
 import { iconesApps } from '../assets/icones-apps';
 import Icon from './Icon.astro';
@@ -79,7 +81,7 @@ const secaoPy = 'py-[clamp(64px,9vw,112px)]';
         <a href="#portfolio" class="btn-primario anel-foco w-full t:w-auto">
           {x.cta_produtos}<span aria-hidden="true">→</span>
         </a>
-        <a href="#contato" class="btn-secundario anel-foco w-full t:w-auto">{contato}</a>
+        <a href="#fale" class="btn-secundario anel-foco w-full t:w-auto">{contato}</a>
       </div>
     </div>
   </div>
@@ -119,12 +121,9 @@ const secaoPy = 'py-[clamp(64px,9vw,112px)]';
               class={`revela ${atraso[i]} relative flex flex-col rounded-card-lg border border-border bg-surface shadow-card transition-[translate,box-shadow,border-color] duration-[var(--dur-base)] ease-suave hover:border-app-acc/55 hover:shadow-lift motion-safe:hover:-translate-y-[3px] has-[h3_a:focus-visible]:outline-2 has-[h3_a:focus-visible]:outline-brand has-[h3_a:focus-visible]:outline-offset-[3px]`}
             >
               <div class="relative h-24 lg:h-28 flex items-center justify-between gap-3 px-5 rounded-t-[19px] bg-app-panel border-b border-app-acc/30 overflow-hidden">
-                <span aria-hidden="true" class="absolute inset-0 bg-[radial-gradient(16rem_9rem_at_100%_0%,color-mix(in_oklab,var(--app-acc)_38%,transparent),transparent_70%)]" />
+                <span aria-hidden="true" class="absolute inset-0 [background:var(--grad-glow-card)]" />
                 <span aria-hidden="true" class="absolute inset-0 [background:var(--orn-pontos)] [mask-image:linear-gradient(to_left,black,transparent_70%)] opacity-70" />
                 <Image src={iconesApps[c]} alt="" width={56} height={56} densities={[1, 2]} class="relative size-14 flex-none rounded-[14px] object-cover bg-raised shadow-card" />
-                <a href={a.play} target="_blank" rel="noopener noreferrer" aria-label={x.play_rotulo.replace('{app}', a.nome)} class="relative z-10 min-h-11 px-4 inline-flex items-center gap-1.5 flex-none rounded-pill border border-border-strong bg-bg/40 text-[13px] font-semibold text-text no-underline transition-colors duration-[var(--dur-fast)] hover:border-text hover:bg-text/6 anel-foco">
-                  {x.play_curto}<span aria-hidden="true">↗</span>
-                </a>
               </div>
               <div class="flex-1 flex flex-col gap-2 p-5">
                 <h3 class="text-h3 font-bold">
@@ -144,6 +143,9 @@ const secaoPy = 'py-[clamp(64px,9vw,112px)]';
                   </div>
                   <span aria-hidden="true" class="text-[18px] leading-none font-semibold text-app-acc">→</span>
                 </div>
+                <a href={a.play} target="_blank" rel="noopener noreferrer" aria-label={x.play_rotulo.replace('{app}', a.nome)} class="absolute z-10 right-5 top-[26px] lg:top-[34px] min-h-11 px-4 inline-flex items-center gap-1.5 flex-none rounded-pill border border-border-strong bg-bg/40 text-[13px] font-semibold text-text no-underline transition-colors duration-[var(--dur-fast)] hover:border-text hover:bg-text/6 anel-foco">
+                  {x.play_curto}<span aria-hidden="true">↗</span>
+                </a>
               </div>
             </article>
           );
@@ -157,8 +159,8 @@ const secaoPy = 'py-[clamp(64px,9vw,112px)]';
 <section id="sobre" aria-labelledby="h-sobre" class="bg-surface border-y border-border">
   <div class={`${container} ${secaoPy} grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 lg:gap-16 items-center`}>
     <div class="lg:order-2 relative isolate grid place-items-center">
-      <span aria-hidden="true" class="absolute inset-0 -z-10 bg-[repeating-radial-gradient(circle_at_50%_50%,transparent_0_3.5rem,color-mix(in_oklab,var(--color-brand)_24%,transparent)_3.5rem_calc(3.5rem+1px))] [mask-image:radial-gradient(closest-side,black,transparent)]" />
-      <div aria-hidden="true" class="revela text-[96px] leading-[0.9] font-extrabold tracking-[-0.05em] md:text-numeral bg-linear-to-br from-brand to-info bg-clip-text text-transparent py-4 lg:py-10">{fundacao}</div>
+      <span aria-hidden="true" class="absolute inset-0 -z-10 [background:var(--orn-aneis-sobre)] [mask-image:radial-gradient(closest-side,black,transparent)]" />
+      <div aria-hidden="true" class="revela text-numeral-sm md:text-numeral bg-linear-to-br from-brand to-info bg-clip-text text-transparent py-4 lg:py-10">{fundacao}</div>
     </div>
     <div class="lg:order-1 flex flex-col gap-5 max-w-[62ch]">
       <h2 id="h-sobre" class="text-section text-balance text-text">{x.sobre_titulo}</h2>
@@ -192,12 +194,12 @@ const secaoPy = 'py-[clamp(64px,9vw,112px)]';
   </div>
 </section>
 
-<section aria-labelledby="h-contato" class="relative isolate overflow-hidden border-t border-border">
+<section id="fale" aria-labelledby="h-contato" class="relative isolate overflow-hidden border-t border-border">
   <span aria-hidden="true" class="revela-glow absolute inset-0 -z-10 [background:var(--grad-glow-baixo)]" />
   <span aria-hidden="true" class="absolute inset-x-0 bottom-0 h-1/2 -z-10 [background:var(--orn-pontos)] [mask-image:linear-gradient(to_top,black,transparent)]" />
   <div class={`${container} py-[clamp(72px,10vw,128px)] flex flex-col items-center gap-5 text-center`}>
     <h2 id="h-contato" class="revela text-section text-balance text-text">{contato}</h2>
     <p class="revela [--i:1] text-lead text-text-2 max-w-[48ch] text-pretty">{x.contato_frase}</p>
-    <a href="mailto:support@ghfsoftware.com" class="revela [--i:2] mt-3 btn-primario anel-foco max-w-full [overflow-wrap:anywhere]">support@ghfsoftware.com</a>
+    <a href={`mailto:${EMAIL_SUPORTE}`} class="revela [--i:2] mt-3 btn-primario anel-foco max-w-full [overflow-wrap:anywhere]">{EMAIL_SUPORTE}</a>
   </div>
 </section>

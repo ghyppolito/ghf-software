@@ -1,9 +1,8 @@
 ---
-// "Como o app trabalha" (WP-10, fatia 5; LA:93-105): 2 a 4 fatos numa grade com divisória de 1 px
-// (o `gap-px` sobre `bg-border`). O export usa auto-fit, e a célula que sobra numa linha
-// incompleta aparece pintada da cor da divisória (desvio 4 da especificação): aqui as colunas são
-// fixas por largura (1, 2 a partir de 640 px, n a partir de 1024 px) e, entre 640 e 1024 px, o
-// último item ímpar ocupa a linha inteira.
+// "Como o app trabalha" (WP-10, fatia 5; WP-30, fatia 2 na direção "engenharia luminosa"): 2 a 4
+// fatos em cartões (`cartao-brilho`) numa faixa tingida pelo acento (`fundo="tint"`), numerados
+// (01, 02…, decorativo). Uma coluna até 768 px; a partir daí, uma coluna por fato (4 fatos: 2
+// colunas até 1024 px). Entre 768 e 1023 px o respiro do cartão é `p-5`, como as áreas da Home.
 import Secao from './Secao.astro';
 import type { Fato } from '../../i18n/landing';
 
@@ -14,16 +13,18 @@ interface Props {
 
 const { titulo, fatos } = Astro.props;
 // Classes inteiras (o Tailwind não detecta concatenação).
-const COLUNAS: Record<number, string> = { 2: 'lg:grid-cols-2', 3: 'lg:grid-cols-3', 4: 'lg:grid-cols-4' };
+const COLUNAS: Record<number, string> = { 2: 'md:grid-cols-2', 3: 'md:grid-cols-3', 4: 'md:grid-cols-2 lg:grid-cols-4' };
+const atraso = ['[--i:0]', '[--i:1]', '[--i:2]', '[--i:3]'] as const;
 ---
 {
   fatos.length > 0 && (
-    <Secao idTitulo="h-prova" titulo={titulo} classe="flex flex-col gap-6">
-      <ul class:list={['grid grid-cols-1 sm:grid-cols-2 gap-px bg-border border border-border rounded-card overflow-hidden', COLUNAS[fatos.length]]}>
-        {fatos.map((f) => (
-          <li class="bg-surface p-5 flex flex-col gap-1.5 sm:max-lg:last:odd:col-span-2">
-            <span class="text-lg leading-6 font-bold text-app-acc">{f.titulo}</span>
-            <span class="text-sm leading-[21px] text-text-2 text-pretty">{f.texto}</span>
+    <Secao idTitulo="h-prova" titulo={titulo} fundo="tint" classe="flex flex-col gap-10 lg:gap-12">
+      <ul class:list={['grid gap-5 md:gap-6 grid-cols-1', COLUNAS[fatos.length]]}>
+        {fatos.map((f, i) => (
+          <li class={`revela ${atraso[i]} cartao-brilho rounded-card-lg shadow-card p-6 md:p-5 lg:p-6 flex flex-col gap-2`}>
+            <span aria-hidden="true" class="text-eyebrow text-app-acc">{String(i + 1).padStart(2, '0')}</span>
+            <span class="mt-3 text-h3 text-text text-balance">{f.titulo}</span>
+            <span class="text-body text-text-2 text-pretty">{f.texto}</span>
           </li>
         ))}
       </ul>

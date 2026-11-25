@@ -1,7 +1,9 @@
 ---
 // "Ver todas as funcionalidades" (WP-10, fatia 5; LA:58-75, D12): `<details>` com os grupos, sem
 // JS. Foco do `summary` em 3 px para dentro (o anel-foco-interno tem 2 px; desvio 12 da
-// especificação). Sem grupos, não renderiza.
+// especificação). Sem grupos, não renderiza. WP-30, fatia 2: raio `card-lg`, sombra de cartão e o
+// chevron gira ao abrir (sem transição com "reduzir movimento"); o mesmo padrão do "Ver tabela
+// completa" de PlanosNiveis.astro.
 import type { GrupoTodas } from '../../i18n/landing';
 
 interface Props {
@@ -14,12 +16,12 @@ const total = grupos.reduce((n, g) => n + g.itens.length, 0);
 ---
 {
   grupos.length > 0 && (
-    <details class="border border-border-strong rounded-card bg-surface">
-      <summary class="min-h-14 px-5 flex items-center justify-between gap-3 cursor-pointer text-base font-semibold list-none [&::-webkit-details-marker]:hidden rounded-card hover:bg-raised focus-visible:outline-3 focus-visible:outline-brand focus-visible:-outline-offset-3 focus-visible:bg-raised">
+    <details class="group border border-border-strong rounded-card-lg bg-surface shadow-card">
+      <summary class="min-h-14 px-5 flex items-center justify-between gap-3 cursor-pointer text-base font-semibold list-none [&::-webkit-details-marker]:hidden rounded-card-lg hover:bg-raised focus-visible:outline-3 focus-visible:outline-brand focus-visible:-outline-offset-3 focus-visible:bg-raised">
         {rotulo}
         <span class="flex items-center gap-2.5 text-[13px] font-medium text-text-2">
           {total}
-          <span aria-hidden="true" class="size-2 border-r-[1.5px] border-b-[1.5px] border-text-2 -translate-y-[3px] rotate-45" />
+          <span aria-hidden="true" class="size-2 border-r-[1.5px] border-b-[1.5px] border-text-2 -translate-y-[3px] rotate-45 group-open:translate-y-[1px] group-open:-rotate-[135deg] transition-transform duration-[var(--dur-base)] ease-suave motion-reduce:transition-none" />
         </span>
       </summary>
       <div class="px-5 pt-1 pb-6 grid grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-x-8 gap-y-6">

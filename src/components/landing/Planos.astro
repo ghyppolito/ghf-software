@@ -13,15 +13,17 @@ interface Props {
   titulo: string;
   planos: Planos;
   rotuloTermos: string;
+  /** `<summary>` das linhas fora da tabela principal (só "níveis") */
+  rotuloTabelaCompleta: string;
 }
 
-const { lang, titulo, planos, rotuloTermos } = Astro.props;
+const { lang, titulo, planos, rotuloTermos, rotuloTabelaCompleta } = Astro.props;
 ---
-<Secao id="planos" titulo={titulo} classe="flex flex-col gap-6">
-  <p slot="lead" class="text-base leading-[26px] text-text-2 text-pretty">{planos.lead}</p>
+<Secao id="planos" titulo={titulo} classe="flex flex-col gap-8 lg:gap-10">
+  <p slot="lead" class="text-lead text-text-2 text-pretty">{planos.lead}</p>
   {
     planos.tipo === 'niveis' ? (
-      <PlanosNiveis lang={lang} titulo={titulo} planos={planos} rotuloTermos={rotuloTermos} />
+      <PlanosNiveis lang={lang} titulo={titulo} planos={planos} rotuloTermos={rotuloTermos} rotuloTabelaCompleta={rotuloTabelaCompleta} />
     ) : (
       <PlanosGratisPro lang={lang} planos={planos} rotuloTermos={rotuloTermos} />
     )

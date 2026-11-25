@@ -52,6 +52,7 @@ export const lottoexpert = {
     funcionalidades: [
       {
         titulo: 'Scanner de bilhetes',
+        icone: 'camera',
         descricao:
           'Aponte a câmera e confira seus jogos na hora. O app identifica números, concursos e calcula seus prêmios automaticamente, tudo no seu celular, sem enviar foto para nenhum servidor. O plano gratuito tem 3 capturas de teste, na Lotofácil e na Mega-Sena; no Pro, ilimitado.',
       },
@@ -72,6 +73,7 @@ export const lottoexpert = {
       },
       {
         titulo: 'Prestação de contas do bolão',
+        icone: 'receipt',
         descricao:
           'Após o sorteio, o organizador gera uma imagem com o resultado do bolão e a divisão informativa do prêmio por participante. Nomes podem ser ocultados.',
       },
@@ -160,6 +162,7 @@ export const lottoexpert = {
         colGratis: 'Grátis',
         colPago: 'Pro',
         colPagoSub: 'Mensal · Anual · Vitalício',
+        principais: [0, 1, 2, 3, 4, 5, 14, 18],
         linhas: [
           ['Loterias Básicas (Mega-Sena/Lotofácil)', 'Incluído', 'Incluído'],
           ['Gerador para todas as loterias (9 modalidades)', 'Não incluído', 'Incluído'],
@@ -235,6 +238,7 @@ export const lottoexpert = {
     funcionalidades: [
       {
         titulo: 'Ticket scanner',
+        icone: 'camera',
         descricao:
           'Point the camera and check your tickets on the spot. The app reads the numbers and draws and calculates your prizes automatically, all on your phone, without sending any photo to a server. The free plan includes 3 test captures, for Lotofácil and Mega-Sena; Pro is unlimited.',
       },
@@ -255,6 +259,7 @@ export const lottoexpert = {
       },
       {
         titulo: 'Sweepstake settlement',
+        icone: 'receipt',
         descricao:
           'After the draw, organizers generate an image with the sweepstake result and an informational prize split per participant. Names can be hidden.',
       },
@@ -343,6 +348,7 @@ export const lottoexpert = {
         colGratis: 'Free',
         colPago: 'Pro',
         colPagoSub: 'Monthly · Annual · Lifetime',
+        principais: [0, 1, 2, 3, 4, 5, 14, 18],
         linhas: [
           ['Basic Lotteries (Mega-Sena/Lotofácil)', 'Included', 'Included'],
           ['Generator for all lotteries (9 modalities)', 'Not included', 'Included'],

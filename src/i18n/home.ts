@@ -1,5 +1,5 @@
 // Textos da home (index.html), pt e en (WP-10, fatia 6; D30). Origem de cada frase (D25):
-// - `title`, `description`, `since_2004`, `hero_desc` e `about_p1Html`: o dicionário já publicado,
+// - `since_2004` e `about_p1Html`: o dicionário já publicado,
 //   transportado da index.html antiga no WP-08 (fatia 1), sem retradução.
 // - `hero_title`: o `hero_titleHtml` publicado sem a marcação (sem o `text-gradient` e o `<br>`; D30 (1)).
 // - `apps_titulo`, `atualizado`, `todos_apps` e `sobre_titulo`: `apps`, `updated`, `allApps` e
@@ -13,11 +13,13 @@
 //   `<app>.ts` e troca uma linha no Home.astro. O do EclipseGo já está em eclipsego.ts, e o do
 //   LottoExpert em lottoexpert.ts (fatia 9, texto mantido por resposta do usuário em 2026-11-24).
 // - WP-30, fatia 1 (respostas do usuário em 2026-11-24, D25 e D33): `hero_title` e `hero_desc`
-//   novos (o h1 e o subtítulo aprovados; `title` e `description` do <head> não mudam aqui),
+//   novos (o h1 e o subtítulo aprovados),
 //   `apps_titulo` passa a "Produtos"/"Products", `areas_titulo` e `areas` (as três áreas de atuação,
 //   com o ícone FA no componente), `cta_produtos` (o CTA primário do hero) e `contato_frase` (a
 //   frase do CTA final). `about_leadHtml` + `about_restHtml` são o `about_p1Html` publicado dividido
 //   na 1ª frase, verbatim (nenhuma palavra muda; a concatenação com um espaço é o texto antigo).
+// - WP-30, fatia 2 (copy aprovada pelo usuário em 2026-11-24): `title` e `description` do <head>
+//   novos (description = `hero_desc`, verbatim).
 // Chaves `*Html` levam marcação e são renderizadas com set:html: `&` escrito `&amp;`.
 
 import type { Idioma } from './ui';
@@ -57,11 +59,12 @@ type TextosHome = {
 
 export const home = {
   pt: {
-    // title = h1 e description = footer_desc (ui.ts), nos dois idiomas; o og e o twitter repetem
-    // os dois (WP-21, D19).
-    title: 'GHF Software — Construímos o futuro da Mobilidade e IoT',
+    // title = "GHF Software — " + h1 sem o ponto final, e description = hero_desc = footer_desc
+    // (ui.ts), nos dois idiomas (WP-30, fatia 2, copy aprovada pelo usuário em 2026-11-24); o og, o
+    // twitter e o JSON-LD (organization) repetem os dois (WP-21, D19).
+    title: 'GHF Software — Engenharia de software, do celular à nuvem',
     description:
-      'Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.',
+      'Apps nativos, plataformas em nuvem e IA aplicada, projetados e mantidos pela GHF Software desde 2004.',
     since_2004: 'Desde 2004',
     hero_title: 'Engenharia de software, do celular à nuvem.',
     hero_desc:
@@ -102,9 +105,9 @@ export const home = {
     },
   },
   en: {
-    title: 'GHF Software — Building the future of Mobility & IoT',
+    title: 'GHF Software — Software engineering, phone to cloud', // ≤ 60 caracteres (check_site); versão curta aprovada pelo usuário em 2026-11-24
     description:
-      'Cutting-edge software engineering for Mobile and IoT applications. Creating the future with performance since 2004.',
+      'Native apps, cloud platforms and applied AI, designed and maintained by GHF Software since 2004.',
     since_2004: 'Since 2004',
     hero_title: 'Software engineering, from the phone to the cloud.',
     hero_desc:

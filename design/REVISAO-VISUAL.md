@@ -156,3 +156,5 @@ do handoff:
 - Botões `btn-primario` (pill, brilho do acento) e `btn-secundario`.
 - Movimento: `.revela` com `animation-timeline: view()` só em `no-preference`; nada anima o h1/LCP.
 - Moldura de aparelho: `src/components/landing/Aparelho.astro` (estreia nas landings, fatia 2).
+- Desvios da especificação da fatia 1 aprovados visualmente com a Home (2026-11-24): hero com
+  `max-w` de 980 px e cartões das áreas em `md:p-5` (entre 768 e 1023 px).

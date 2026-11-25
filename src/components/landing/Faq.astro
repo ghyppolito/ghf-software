@@ -1,10 +1,11 @@
 ---
 // Perguntas frequentes (WP-10, fatia 5; LA:166-176): o `<h2>` ao lado das perguntas quando cabem 2
-// × 320 px, cada pergunta num `<details>` (sem JS). Foco do `summary` em 3 px para dentro (desvio
-// 12 da especificação). Sinal "+" fechado e "−" (U+2212) aberto, por `group-open:`, sem transição
-// (WP-10 fatia 10a, FAQ-SINAL-ABERTO-01): desvio do export, que deixa o "+" fixo (LA:173);
-// candidato a voltar ao Claude Design. Largura fixa (`w-5`) para a pergunta não saltar na troca; o
-// estado é anunciado pelo `<details>`, o sinal é `aria-hidden`.
+// × 320 px, cada pergunta num `<details>` (sem JS), numa seção de superfície (`fundo="surface"`).
+// Foco do `summary` em 3 px para dentro (desvio 12 da especificação). WP-30, fatia 2: o sinal é um
+// chevron (`chevron-down`) que gira 180° e passa ao acento quando a pergunta abre (sem transição com
+// "reduzir movimento"); substitui o "+"/"−" da fatia 10a (FAQ-SINAL-ABERTO-01). O estado é anunciado
+// pelo `<details>`, o chevron é `aria-hidden`.
+import Icon from '../Icon.astro';
 import Secao from './Secao.astro';
 import type { Pergunta } from '../../i18n/landing';
 
@@ -15,15 +16,15 @@ interface Props {
 
 const { titulo, itens } = Astro.props;
 ---
-<Secao id="faq" titulo={titulo} classe="grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] gap-x-16 gap-y-6 items-start">
+<Secao id="faq" titulo={titulo} fundo="surface" classe="grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] gap-x-16 gap-y-6 items-start">
   <div class="flex flex-col min-w-0">
     {
       itens.map((q) => (
         <details class="group border-t border-border">
           <summary class="min-h-14 py-3.5 pr-2 flex items-center justify-between gap-4 cursor-pointer text-base leading-6 font-semibold list-none [&::-webkit-details-marker]:hidden rounded-ctl hover:bg-raised focus-visible:outline-3 focus-visible:outline-brand focus-visible:-outline-offset-3">
             {q.pergunta}
-            <span aria-hidden="true" class="inline-block w-5 text-center text-xl font-normal text-text-2">
-              <span class="group-open:hidden">+</span><span class="hidden group-open:inline">−</span>
+            <span aria-hidden="true" class="flex-none">
+              <Icon nome="chevron-down" class="size-5 text-text-2 group-open:text-app-acc group-open:rotate-180 transition-transform duration-[var(--dur-base)] ease-suave motion-reduce:transition-none" />
             </span>
           </summary>
           <p class="mb-[18px] text-[15px] leading-6 text-text-2 max-w-[62ch] text-pretty">{q.resposta}</p>

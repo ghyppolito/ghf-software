@@ -20,7 +20,7 @@
 // "Transparência & Políticas" (as 5 políticas ficam na coluna de cada app), os ícones circulares
 // (redes em texto com seta) e "Desenvolvido com ♥ por especialistas.".
 import Logo from './Logo.astro';
-import { t, type ChaveUi } from '../i18n/ui';
+import { t, EMAIL_SUPORTE, type ChaveUi } from '../i18n/ui';
 import { apps as dadosApps, ORDEM_APPS, ACENTO, COR_APP, REDES_GHF, type App } from '../i18n/apps';
 import { atributosLink, link as linkPagina, type Idioma } from '../i18n/idiomas';
 
@@ -111,7 +111,7 @@ const ano = new Date().getFullYear();
       <!-- Contato -->
       <div class="flex flex-col min-w-0">
         <p class="flex items-center min-h-11 text-[14px] font-bold text-text">{t(lang, 'nav_contact')}</p>
-        <a href="mailto:support@ghfsoftware.com" class="flex items-center min-h-11 rounded-[4px] text-[14px] text-text underline decoration-brand underline-offset-[3px] [overflow-wrap:anywhere] anel-foco-interno">support@ghfsoftware.com</a>
+        <a href={`mailto:${EMAIL_SUPORTE}`} class="flex items-center min-h-11 rounded-[4px] text-[14px] text-text underline decoration-brand underline-offset-[3px] [overflow-wrap:anywhere] anel-foco-interno">{EMAIL_SUPORTE}</a>
         {
           redesTexto.length > 0 && (
             <ul class="flex flex-row flex-wrap gap-x-6 t:flex-col">

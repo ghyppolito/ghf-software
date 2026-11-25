@@ -4,12 +4,9 @@
 // footer ficam na página (paginas/PaginaLottoExpert.astro). tools/check_site.py §5 lê este arquivo
 // (FONTES_LOTTO): ele fica, mesmo fino.
 // Capturas (D26, respostas do usuário em 2026-11-24): telas do app 2.06.00 em src/assets/img/lottoexpert/,
-// sem edição (o astro:assets só redimensiona e converte). O hero é a Home; o recorte quadrado mostra
-// da barra do app ("LottoExpert") até a linha Quina/Lotomania, sem a barra de status: 50% 17% (17%
-// de 840 px de sobra = 143 px; o quadrado vai de y=143 a y=1223 na captura de 1080×1920). Scanner e
-// prestação de contas ainda sem captura: o destaque sai só com texto.
-// Com a barra do app inteira, as duas linhas de cards não cabem (precisariam de ~1135 px): a borda de
-// baixo dos cards Quina/Lotomania fica cortada, por escolha do usuário (2026-11-24, 17% e não 20%).
+// sem edição (o astro:assets só redimensiona e converte). O hero é a Home, inteira na moldura de
+// aparelho (WP-30, fatia 2: sai o recorte quadrado). Scanner e prestação de contas ainda sem
+// captura: o destaque sai em cartão, com ícone.
 import Landing from './landing/Landing.astro';
 import hero from '../assets/img/lottoexpert/hero.png';
 import fechamento from '../assets/img/lottoexpert/fechamento.png';
@@ -27,5 +24,5 @@ const { lang } = Astro.props;
   lang={lang}
   app="lottoexpert"
   conteudo={lottoexpert}
-  imagens={{ hero, heroPosicao: '50% 17%', funcionalidades: { fechamento, bolao } }}
+  imagens={{ hero, funcionalidades: { fechamento, bolao } }}
 />

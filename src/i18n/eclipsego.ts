@@ -45,11 +45,13 @@ export const eclipsego = {
       },
       {
         titulo: 'Modos de Localização',
+        icone: 'location-crosshairs',
         descricao:
           'Minha localização (GPS), busca por cidade ou a ferramenta exclusiva que localiza o ponto de melhor visibilidade mais próximo de você.',
       },
       {
         titulo: 'Calendário Completo',
+        icone: 'calendar-days',
         descricao:
           'Acesse o histórico e as datas futuras de eclipses solares e lunares com mecanismos rápidos de busca e filtragem.',
       },
@@ -115,11 +117,13 @@ export const eclipsego = {
       },
       {
         titulo: 'Location Modes',
+        icone: 'location-crosshairs',
         descricao:
           'My location (GPS), city search, or the exclusive tool that finds the nearest location with the best visibility.',
       },
       {
         titulo: 'Full Calendar',
+        icone: 'calendar-days',
         descricao:
           'Access past and future dates of solar and lunar eclipses with fast searching and filtering mechanisms.',
       },

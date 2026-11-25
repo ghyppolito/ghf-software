@@ -1,11 +1,13 @@
 ---
-// Moldura de aparelho para captura de tela (WP-30, fatia 1; só CSS, nenhuma imagem de moldura).
-// Fica pronta nesta fatia sem consumidor; as landings passam a usá-la na fatia 2.
+// Moldura de aparelho para captura de tela (WP-30, fatias 1 e 2; só CSS, nenhuma imagem de
+// moldura): o hero das landings (`g`) e as funcionalidades com captura (`m`, inclinada).
 // - `tamanho`: `m` = 300 px, `g` = 420 px de largura (nunca maior que o contêiner).
 // - Borda de 10 px em `--color-raised`, raio 36, anel de 1 px e halo do acento (`shadow-brilho`);
-//   a imagem tem raio 26, proporção 9/16, `object-fit: cover` e `object-position` = `posicao`.
-// - Halo desfocado atrás (::before, acento a 30%) só a partir de 768 px; `inclinado` gira -3° só a
-//   partir de 1024 px. Nada cobre a captura.
+//   a imagem tem raio 26 e a proporção do próprio arquivo (a captura sai inteira, sem recorte: D26),
+//   `object-fit: cover` e `object-position` = `posicao` só por segurança.
+// - Densidade 2x só se o arquivo tem ao menos o dobro da largura exibida (sem ampliar).
+// - Halo desfocado atrás (::before, acento a 30%) só a partir de 768 px, estático; `inclinado` gira
+//   -3° só a partir de 1024 px. Nada cobre a captura.
 // - `loading="lazy"` salvo `eager` (a captura do hero: `fetchpriority="high"`). `alt` descritivo é
 //   obrigatório (ADR-006).
 // Classes inteiras literais (o Tailwind não detecta concatenação).
@@ -26,6 +28,10 @@ const { imagem, alt, posicao = 'top', tamanho = 'm', inclinado = false, eager = 
 if (!alt.trim()) throw new Error('Aparelho: `alt` vazio — a captura precisa de texto alternativo descritivo');
 
 const largura = tamanho === 'g' ? 420 : 300;
+// A captura do hero (eager, LCP) sai em 1,5x: a 2x estourava o orçamento de imagem de /lottoexpert.html
+// e levava o LCP a 2,48 s (decisão do usuário em 2026-11-24, WP-30 fatia 2). As demais ficam em 2x.
+const densidadeMax = eager ? 1.5 : 2;
+const densidades = imagem.width >= densidadeMax * largura ? [1, densidadeMax] : [1];
 const classeTamanho = tamanho === 'g' ? 'w-[420px]' : 'w-[300px]';
 const classeInclinado = inclinado ? 'lg:-rotate-3' : '';
 ---
@@ -37,11 +43,11 @@ const classeInclinado = inclinado ? 'lg:-rotate-3' : '';
       src={imagem}
       alt={alt}
       width={largura}
-      densities={[1, 2]}
+      densities={densidades}
       loading={eager ? 'eager' : 'lazy'}
       fetchpriority={eager ? 'high' : undefined}
-      class="block w-full aspect-[9/16] rounded-[26px] object-cover"
-      style={`object-position: ${posicao}`}
+      class="block w-full h-auto rounded-[26px] object-cover"
+      style={`aspect-ratio: ${imagem.width}/${imagem.height}; object-position: ${posicao}`}
     />
   </div>
 </figure>
