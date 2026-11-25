@@ -86,8 +86,8 @@ function arquivoLegal(ctx) {
  *  `/<app>-privacy.html`, `TERMS_OF_USE`/`TERMS_OF_SERVICE` → `/<app>-terms.html`, `.en.md` → `/en/…`.
  *  O corpo é cópia byte a byte (ADR-004 §2, ADR-010) e não muda; o GitHub segue mostrando o par.
  *  Destino em outra língua leva `hreflang` e `lang` dela (D23, WCAG 3.1.2); se é a mesma página, leva
- *  também `data-troca-idioma`, como o seletor (o §9 do `check_site.py` exige: é troca de língua, e a
- *  seção aberta vai junto). Página ou língua fora de `idiomas.json` deixa o link como está, e o §12
+ *  `data-troca-idioma`, como o seletor (o §9 do `check_site.py` exige: é troca de língua, e a seção
+ *  aberta vai junto), e só `hreflang`, sem `lang`: o texto do link está na língua da página. Página ou língua fora de `idiomas.json` deixa o link como está, e o §12
  *  do `check_site.py` acusa o `.md` no publicado. */
 export const linksInternosLegais = {
   name: 'ghf-links-internos-legais',
@@ -108,9 +108,11 @@ export const linksInternosLegais = {
         if (destino !== origem.lang) {
           const h = idiomas.idiomas[destino].hreflang;
           ctx.setProperty(node, 'hrefLang', h);
-          ctx.setProperty(node, 'lang', h);
           const propria = ctx.fileURL.pathname.endsWith(`/${pagina.replace(/\.html$/, '')}.${origem.lang}.md`);
+          // Par da própria página: só `hreflang` — o texto do link está na língua da página, não na
+          // do destino (WCAG 3.1.2); o §9 confere `lang` só quando existe.
           if (propria) ctx.setProperty(node, 'dataTrocaIdioma', destino);
+          else ctx.setProperty(node, 'lang', h);
         }
         return;
       }

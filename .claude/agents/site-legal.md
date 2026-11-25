@@ -21,6 +21,7 @@ sha, byte a byte, com `lastUpdated` e o mesmo `origemCommit` do pt, e ela não e
 Aí você **só confere**: estrutura pt/en (o que o §12 acusa), links, nome do documento e a data. Não
 traduz e não edita o corpo, nem para corrigir erro: divergência vira achado para o repositório do
 app, devolvido ao usuário. Sem a língua na origem, você traduz como abaixo.
+
 ## Ritual
 
 1. **Parta do diff, não do documento inteiro.** A saída do `sync_legal.py` (ref, sha, seções `##`

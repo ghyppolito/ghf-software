@@ -384,7 +384,16 @@ def planeja(doc, args):
     if args.check:
         if estado == "bootstrap":
             return estado, [], msgs + [f"{texto} — rode sem `--check`"]
-        return "atras", [], msgs + [f"↻ {doc}: atrás — {repo}@{sha[:7]} tem texto novo ({data})" + (f"; {texto}" if pt_igual else "")]
+        # Língua espelhada já no sha da ref e com corpo ≠ origem: não é atraso, é edição à mão
+        # (o corpo dela só o script escreve, ADR-010).
+        editadas = [l for l in langs if lados[l][0] is not None and lados[l][1].get("origemCommit") == sha
+                    and lados[l][2] != lados[l][3]]
+        if editadas:
+            return "divergente", [], msgs + [f"⛔ {doc}.{l}: divergente ({l} editado à mão) — corpo ≠ "
+                                             f"{repo}@{sha[:7]}:{caminhos[l]}; rode sem `--check` para recopiar"
+                                             for l in editadas]
+        return "atras", [], msgs + [f"↻ {doc}: atrás — {repo}@{sha[:7]} tem texto novo ({data})"
+                                    + (f"; {texto.removeprefix(f'{doc}: ')}" if pt_igual else "")]
     return estado, escritas, msgs + [f"↻ {texto}"]
 
 

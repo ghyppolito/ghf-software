@@ -61,7 +61,8 @@ e até 60 arquivos por cópia.
    buscado na rede, e sem JS nada aparece. A faixa é `position: fixed` (CLS 0). Duas chaves de
    armazenamento, nenhuma com identificador:
    - `localStorage.ghf_lang`: só o código da língua. É gravado só quando o usuário clica no seletor
-     ou no link da faixa, e lido só pela faixa.
+     ou no link da faixa, e lido só pela faixa. (Nota, WP-26: o link do par no corpo da legal,
+     marcado `data-troca-idioma`, também grava.)
    - `sessionStorage.ghf_faixa_idioma = "off"`: a faixa foi fechada nesta sessão.
 
    Nada sai do navegador, e não há cookie. É uma preferência pedida pelo próprio usuário, e não pede

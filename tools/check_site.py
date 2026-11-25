@@ -39,8 +39,8 @@ Checa:
      og:locale da língua da página e um og:locale:alternate por outra língua dela (regra ix)
   9. link interno de toda página vai à página de destino na língua da página; se o destino não a
      tem, en, senão pt (D23), com `hreflang` e `lang` do destino; o link marcado
-     `data-troca-idioma="X"` (seletor e faixa) leva à mesma página na língua X, com `hreflang`/
-     `lang` de X quando os tem
+     `data-troca-idioma="X"` (seletor, faixa e link do par no corpo da legal, WP-26) leva à mesma
+     página na língua X, com `hreflang`/`lang` de X quando os tem
  10. dicionários de src/i18n/ com as mesmas chaves em todos os blocos de língua, cada bloco de
      língua do mapa, e ui.ts com um bloco por língua do mapa (regra xi)
  11. `dist/` não é mais antigo que as fontes (src/, public/, configs, package.json, fontes de
@@ -608,7 +608,8 @@ for c in sorted(glob.glob(os.path.join(REPO, "*.html"))):
 # ------------------------------------------------------------ 9: a língua aponta para a língua
 # Link interno de qualquer página vai à página de destino na língua dela; se o destino não existe
 # nessa língua, en, senão pt (D23), com `hreflang`/`lang` do destino (regras_i18n.regra_link). O
-# link marcado `data-troca-idioma="X"` (seletor e faixa) tem a regra dele: a mesma página em X.
+# link marcado `data-troca-idioma="X"` (seletor, faixa e link do par no corpo da legal, WP-26) tem
+# a regra dele: a mesma página em X.
 for caminho in paginas:
     rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
     base = os.path.dirname(caminho)

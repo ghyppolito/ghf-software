@@ -240,10 +240,12 @@ def regra_link(mapa, rel, href, destino, tag):
     é bilíngue por desenho (um bloco por língua, cada um com o seu link) e o convite e os assets não
     têm língua.
 
-    O link marcado `data-troca-idioma="X"` (seletor e faixa de sugestão) sai da regra D23 e entra
-    noutra: leva à **mesma página** na língua X (`destino == arquivo(X, origem)`), X é uma língua da
-    página no mapa, e `hreflang`/`lang`, quando o link os tem, são os de X. O link da faixa não leva
-    nenhum dos dois: a língua vem do `<section lang>`/`<template lang>` que o contém."""
+    O link marcado `data-troca-idioma="X"` (seletor, faixa de sugestão e link do par no corpo da
+    legal, WP-26) sai da regra D23 e entra noutra: leva à **mesma página** na língua X
+    (`destino == arquivo(X, origem)`), X é uma língua da página no mapa, e `hreflang`/`lang`, quando
+    o link os tem, são os de X. O link da faixa não leva nenhum dos dois: a língua vem do
+    `<section lang>`/`<template lang>` que o contém. O link do par no corpo da legal leva só
+    `hreflang`: o texto dele está na língua da página."""
     lang_pag, origem = pagina_de(rel)
     if origem not in mapa["paginas"]:
         return []
