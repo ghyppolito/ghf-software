@@ -1,6 +1,6 @@
 # ADR-007 · pt fica na raiz, as outras línguas ficam em `/<código>/`, e um mapa JSON único diz quais existem, sem redirecionamento
 
-**Data:** 2026-10-16 · **Estado:** aceita · **Complementa:** ADR-001 (URLs contratuais), ADR-002 §2
+**Data:** 2026-10-16 · **Estado:** aceita; §8 emendado pelo ADR-010 (en espelhado do app tem `origemCommit`) · **Complementa:** ADR-001 (URLs contratuais), ADR-002 §2
 (`build.format: 'preserve'`, página contratual literal), ADR-004 (espelho legal por commit), ADR-005
 (sitemap e hreflang da mesma lista de rotas) · **Depende de:** D8, D18, D23
 

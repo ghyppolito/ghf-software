@@ -1,24 +1,113 @@
 ---
 id: WP-26
-titulo: Os termos de uso do TopoWalk existem no site em pt e en, espelhados do repositório do app
+titulo: Os termos de uso do TopoWalk existem no site em pt e en, e a política acompanha a do app, espelhados do repositório do app
 area: legal
 status: doing
 depende_de: []
-adr: [ADR-001, ADR-004, ADR-005, ADR-007]
+adr: [ADR-001, ADR-004, ADR-005, ADR-007, ADR-010]
 spec: ""
 decisoes: [D7, D13, D23, D28]
-tamanho: M
+tamanho: L
 risco: alto
 visual: true
 branch: feat/wp-26-termos-topowalk
 ---
 
-# WP-26 — Os termos de uso do TopoWalk existem no site em pt e en, espelhados do repositório do app
+# WP-26 — Os termos de uso do TopoWalk existem no site em pt e en, e a política acompanha a do app, espelhados do repositório do app
 
 **Depende de:** pré-condição fora do site: `../topo-walk/TERMS_OF_SERVICE.md` (ou `docs/`) commitado
 na branch principal do app (`master`, D14). Pelo caminho (B) abaixo, depende também da fatia 3 do
 WP-10 (`LegalLayout`) estar na integração; não está em `depende_de` porque o WP-10 inteiro só fecha
 na fatia 10. · **Achados roteados:** —
+
+**Veredito do arquiteto (2026-11-25): aprovado com ampliação.** Prevalece sobre o texto abaixo onde
+divergir (origem, arquivos-alvo, passos).
+- **Pergunta 7 respondida (2026-11-25, usuário): (A), "O inglês do app, cópia exata".** Regra no
+  ADR-010, que emenda o ADR-004 §2–§3, o ADR-007 §8 e a D7. `TERMS_OF_USE.en.md` e
+  `PRIVACY_POLICY.en.md` são espelhados byte a byte, do mesmo sha do pt e com `origemCommit` próprio.
+  O `sync_legal.py` recusa quando as datas pt/en da origem divergem, e o problema volta ao app. O
+  §4 compara o en com a origem en. O `site-legal` só confere. Tamanho: M → L.
+- **Pré-condição cumprida.** A origem é `TERMS_OF_USE.md`, na raiz do app, e não `TERMS_OF_SERVICE.md`.
+  Está em `origin/master` do TopoWalk: `cfbff63`, merge do PR #84 do app, commit `873343b`. Tem 13 `##`
+  e a linha `**Última atualização:** novembro de 2026` (`:3`).
+- **Data sem dia: nenhuma mudança de regra.** `sync_legal.py:60` e `:160` geram `lastUpdated: "2026-11"`.
+  `check_site.py:423` aceita `AAAA-MM`, e `topowalk-privacy.pt.md:2` já está em `"2026-10"`. O
+  `<time datetime="2026-11">` (`LegalLayout.astro:124`) é válido em HTML (mês válido).
+- **Política junto.** `PRIVACY_POLICY.md` mudou em `origin/master`: +73 linhas, data `novembro de 2026`,
+  e a cláusula "prevalece o português", que é a pré-condição da D8 (b1). O site espelha `7d69108`. Mesmo
+  app e mesma rodada do `/legal`: entra aqui, como a política do EclipseGo entrou no WP-27.
+- **`master` local do app atrasada.** `master` = `7d69108` e `origin/master` = `cfbff63`. O avanço é
+  fast-forward (`merge-base --is-ancestor`, verificado), e o checkout está em `docs/d21-bigquery-adiado`.
+  Como está hoje, `sync_legal.py --todos --check` diz "✅ topowalk-privacy: nada a fazer", e isso é
+  falso. Já `--doc terms` recusaria com "TERMS_OF_USE.md não existe em topo-walk@7d69108". Primeiro passo:
+  rodar `git -C ../topo-walk fetch origin master:master`.
+- **Links relativos da origem (novo).** O app cita `[Termos de Uso](TERMS_OF_USE.md)`
+  (`PRIVACY_POLICY.md:5`, `:437`), `[Política de Privacidade](PRIVACY_POLICY.md)` (`TERMS_OF_USE.md:7`) e
+  `[versão em inglês](….en.md)` (`TERMS_OF_USE.md:157`, `PRIVACY_POLICY.md:437`). Hoje o plugin só
+  reescreve `https://ghfsoftware.com/…` (`src/markdown/legal.mjs:61`, `:69-84`). O LottoExpert escreve
+  a URL absoluta (`../lotto-expert` `docs/TERMS_OF_SERVICE.md:94`). Sem tratamento, o link sai
+  `href="TERMS_OF_USE.md"` e quebra o build: o lychee e o §3 acusam.
+  O corpo é cópia byte a byte (ADR-004 §2) e não pode ser editado. **Desenho aprovado:** o
+  `linksInternosLegais` reescreve um link relativo `<BASE>.md` / `<BASE>.en.md`, dentro de
+  `<app>-<doc>.<lang>.md`, para a página do **mesmo app** cuja origem tem esse nome. A regra é
+  `PRIVACY_POLICY` → `<app>-privacy.html` e `TERMS_OF_USE`/`TERMS_OF_SERVICE` → `<app>-terms.html`.
+  `.en.md` vai para `/en/…`, e `.md` vai para a raiz. Quando a língua do destino difere da página,
+  o link leva `hreflang` (D23). Link relativo `.md` fora da regra é erro do `check_site.py` §12, com o
+  arquivo e o link. O app continua livre para usar link relativo, e o GitHub continua mostrando o par.
+  Alternativa descartada: pedir URL absoluta no app. O link do GitHub iria para uma página do site que
+  só existe depois do deploy único.
+- **Rodapé:** o link sai de `src/i18n/apps.ts`, na entrada `topowalk`, com `termos: 'topowalk-terms.html'`.
+  Só o `Footer.astro:59` lê esse campo, e o `Footer.astro` não muda.
+- **Conflito previsível com o WP-27/WP-28.** As mesmas linhas mudam em `ORIGENS`, `LEGAL`, `CONTRATUAIS`,
+  `PUBLICADAS`, no texto "5 URLs" (`check_site.py:113`, `:1498`, `:1511`, `:1517`) e no `CLAUDE.md`.
+  O texto do §19 passa a ser derivado de `len(LEGAL)`, para não mudar de novo.
+
+**Arquivos-alvo (finais, substituem a lista abaixo):**
+- `tools/sync_legal.py`: `ORIGENS["topowalk-terms"] = ("topo-walk", "TERMS_OF_USE.md", "master")`. Pela
+  pergunta 7 (A): `ORIGENS` com caminho por língua, cópia do en, recusa por data pt/en divergente e
+  avisos do ADR-010 §1 e §4.
+- `tools/check_site.py`: `CONTRATUAIS`, `PUBLICADAS`, `LEGAL`, o texto do §19 a partir de `len(LEGAL)`,
+  e o §12 (link relativo `.md` fora da regra). Pela pergunta 7 (A), também o §4: o corpo do `.en.md`
+  é comparado com a origem en (ADR-010 §5), com `tools/regras_i18n.py` (`regra_front_matter`),
+  fixture e caso em `tools/test_regras_i18n.py`.
+- `src/markdown/legal.mjs` (`linksInternosLegais`: links relativos `.md`)
+- `src/content/legal/topowalk-terms.pt.md`, `topowalk-terms.en.md`, `topowalk-privacy.pt.md`,
+  `topowalk-privacy.en.md`
+- `src/components/paginas/PaginaTopoWalkTerms.astro`, `src/pages/topowalk-terms.astro`,
+  `src/pages/[lang]/topowalk-terms.astro`
+- `src/i18n/legal.ts` (`topowalk_terms_h1/_title/_description`, pt e en), `src/i18n/idiomas.json`
+  (`"topowalk-terms.html": ["pt", "en"]`), `src/i18n/apps.ts` (`termos` do TopoWalk)
+- `CLAUDE.md` (§ Fontes de verdade e § "URLs que são contrato"), `.claude/commands/legal.md`. Pela
+  pergunta 7 (A), também `.claude/agents/site-legal.md` e `docs/ARQUITETURA.md` §5. O ADR-010 já
+  está escrito.
+
+**Passos (finais):**
+0. `git -C ../topo-walk fetch origin master:master` (só fast-forward), e depois
+   `python3 tools/sync_legal.py --todos --check`. O resultado esperado é "↻ topowalk-privacy: atrás".
+1. Pergunta 7 = (A), e o ADR-010 está escrito. Implementar primeiro o código do `sync_legal.py`
+   e do §4 (ADR-010 §1–§5), com teste nas fixtures.
+2. `ORIGENS`, `LEGAL`, `CONTRATUAIS`, `PUBLICADAS` e `idiomas.json`. Depois,
+   `python3 tools/sync_legal.py topowalk` para os dois docs.
+3. en: o `sync_legal` copia `TERMS_OF_USE.en.md` e `PRIVACY_POLICY.en.md` (ADR-010), e o
+   `site-legal` só confere.
+4. `legal.mjs` e a regra do §12. Depois página, cascas, `legal.ts` e `apps.ts`.
+5. `gen_estado.py`, `check_plano.py` e `/verify`. Critério novo: `grep -c 'href="[^"#]*\.md"'` em
+   `dist/topowalk-*.html` e em `dist/en/topowalk-*.html` dá 0.
+
+**Perguntas ao usuário (2026-11-25):**
+7. **Respondida (2026-11-25): (A), ADR-010.** O `.en.md` do TopoWalk espelha o en do app ou continua sendo traduzido pelo site?
+   **(A) é a recomendada: espelhar** `TERMS_OF_USE.en.md` e `PRIVACY_POLICY.en.md` byte a byte, com
+   `origemCommit` próprio. Quem escreveu o texto legal escreveu o inglês. Se o site traduzir, o mesmo
+   documento passa a ter dois textos em inglês públicos (o do GitHub e o do site), e a D7 existe para
+   evitar exatamente isso: "duas origens derivam". A estrutura do en do app já bate com o pt, nos
+   termos e na política: 13/16 `##`, 4/31 `###`, as mesmas tabelas, itens, links, crases e `---`, e
+   nenhuma aspa tipográfica. Ou seja, as regras ii–iv do §12 passam. Custo: emendar o ADR-004 (§2, só
+   o `.pt.md` guarda o commit; §3, o script nunca escreve `.en.md`) e a D7 ("traduz o en") com um ADR
+   novo, e mudar o `sync_legal.py` e o §4. Pela regra nova, um doc cuja origem tem en espelha o en, e
+   um doc sem en continua com o en traduzido pelo site (LottoExpert hoje). Tamanho do WP: M → L.
+   **(B) traduzir (D7 como está).** Não muda regra nem ferramenta. Custo: duas versões em inglês do
+   mesmo texto legal.
+8. **Antes do passo 8:** em que campo do Play Console a URL dos termos entra. É a pergunta 3, ainda aberta.
 
 **Pedido do usuário (2026-11-22, `/novo-wp`):** "isso está sendo exigido pela EEUU". **Esclarecido no
 mesmo dia:** a exigência é da **União Europeia** — ao se declarar comerciante (*trader*) nas lojas,

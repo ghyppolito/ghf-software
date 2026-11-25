@@ -1,6 +1,6 @@
 # ADR-004 · O espelho legal registra o commit do app de onde foi copiado
 
-**Data:** 2026-10-15 · **Estado:** aceita · **Complementa:** D7 (o texto legal nasce no
+**Data:** 2026-10-15 · **Estado:** aceita; §2–§3 emendados pelo ADR-010 (en espelhado quando o app o publica) · **Complementa:** D7 (o texto legal nasce no
 repositório do app; o site é espelho) · **Depende de:** D14, D15
 
 ## Contexto
