@@ -444,6 +444,15 @@ for pagina, md in LEGAL.items():
     ref_fm, texto = front_matter(md, ler_md(fonte))
     if ref_fm is None:
         continue
+    # Campo da origem não preenchido (ex.: "‹preencher: nome completo›", "‹fill in: city/state›"):
+    # o texto legal não pode ir ao ar assim. A correção é no repositório do app (WP-26, decisão do
+    # usuário em 2026-11-25). Vale para o pt e para toda língua do documento.
+    for lang_md in ["pt"] + list(traducoes(pagina)):
+        md_m = md if lang_md == "pt" else md[: -len(".pt.md")] + f".{lang_md}.md"
+        if os.path.exists(os.path.join(REPO, md_m)):
+            for n, linha in enumerate(ler_md(os.path.join(REPO, md_m)).splitlines(), 1):
+                for marca in re.findall(r"‹\s*(?:preencher|fill in)[^›]*›", linha, re.I):
+                    erros.append(f"{md_m}:{n}: campo não preenchido na origem {marca!r} — preencher no app e rodar /legal de novo")
     m = re.search(r"\*\*Última atualização:\*\*\s*" + RE_PT, texto)
     if not m:
         erros.append(f"{md}: sem linha `**Última atualização:** [D de ]Mês de AAAA`")
