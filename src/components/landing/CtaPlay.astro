@@ -1,0 +1,14 @@
+---
+// Botão da Google Play (WP-10, fatia 5; WP-30, fatia 2): o único primário da landing, `btn-primario`
+// (tokens.css: pill, texto `--color-bg` sobre o acento do app, hover e ativo de `--acc-hover` e
+// `--acc-active`, BOTAO-ATIVO-CONTRASTE-01, e o brilho do acento). Sem ícone, como o export; abre em
+// outra aba, como as páginas de antes. `classe` acrescenta utilitários (largura no hero).
+interface Props {
+  href: string;
+  rotulo: string;
+  classe?: string;
+}
+
+const { href, rotulo, classe } = Astro.props;
+---
+<a href={href} target="_blank" rel="noopener noreferrer" class:list={['btn-primario anel-foco text-center', classe]}>{rotulo}</a>

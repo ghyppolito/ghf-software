@@ -1,0 +1,62 @@
+---
+// Lista compacta de apps (WP-10, fatia 10a; APPS-LISTA-DUPLICADA-01): a da 404 e a "Todos os apps
+// GHF" da Home (VerTodasApps.astro). Uma linha por app: ícone, nome (link da landing) e o link da
+// política de privacidade (URL contratual, ADR-001). Dados de src/i18n/apps.ts e
+// src/assets/icones-apps.ts, na ordem de `chaves`.
+// App `indisponivel` (D12): nome sem link e só o link da política.
+// O que muda por `variante` é só o que as duas listas já tinham de diferente (a extração não mudou
+// um byte de dist/):
+// - `404`: lista nomeada "Apps", quadrado da cor do app no nome, ícone `eager` (acima da dobra);
+// - `home`: selo "Publicado"/"Indisponível" (home.ts), ícone com fundo `raised` e `lazy`.
+import { Image } from 'astro:assets';
+import { apps, COR_APP, type App, type ChaveApp } from '../i18n/apps';
+import { home } from '../i18n/home';
+import { t } from '../i18n/ui';
+import { link, type Idioma } from '../i18n/idiomas';
+import { iconesApps } from '../assets/icones-apps';
+
+interface Props {
+  lang: Idioma;
+  chaves: readonly ChaveApp[];
+  variante: '404' | 'home';
+}
+
+const { lang, chaves, variante } = Astro.props;
+const e404 = variante === '404';
+const x = home[lang];
+const privacidade = t(lang, 'footer_privacy');
+const separador = e404 ? ' - ' : ' — ';
+---
+<ul aria-label={e404 ? 'Apps' : undefined} class={e404 ? 'flex flex-col border border-border rounded-card bg-surface overflow-hidden' : 'border border-border rounded-card bg-surface overflow-hidden'}>
+  {chaves.map((c) => {
+    const a: App = apps[c];
+    return (
+      <li class="border-t first:border-t-0 border-border px-4 py-3 flex flex-wrap items-center gap-3.5">
+        <Image src={iconesApps[c]} alt="" width={40} height={40} densities={[1, 2]} loading={e404 ? 'eager' : undefined} class={e404 ? 'size-10 flex-none rounded-[10px] object-cover' : 'size-10 flex-none rounded-[10px] object-cover bg-raised'} />
+        {a.indisponivel ? (
+          <span class="flex-1 min-h-11 min-w-[120px] flex items-center font-bold text-text">{a.nome}</span>
+        ) : e404 ? (
+          <a {...link(lang, a.pagina)} class="flex-1 min-h-11 min-w-[120px] flex items-center gap-2.5 font-bold text-text no-underline hover:underline anel-foco-interno">
+            <span aria-hidden="true" class={`size-2 flex-none rounded-[2px] ${COR_APP[c].fundo}`} />
+            {a.nome}
+          </a>
+        ) : (
+          <a {...link(lang, a.pagina)} class="flex-1 min-h-11 min-w-[120px] flex items-center font-bold text-text no-underline hover:underline anel-foco-interno">
+            {a.nome}
+          </a>
+        )}
+        {!e404 && (a.indisponivel ? (
+          <span class="text-[12px] leading-4 text-text-2">{x.selo_indisponivel}</span>
+        ) : (
+          <span class="text-[12px] leading-4 text-text-2 flex items-center gap-1.5">
+            <span aria-hidden="true" class="font-extrabold text-success">✓</span>
+            {x.selo_publicado}
+          </span>
+        ))}
+        <a {...link(lang, a.privacidade)} class="min-h-11 inline-flex items-center text-small text-text-2 underline decoration-border-strong underline-offset-4 anel-foco-interno">
+          {privacidade}<span class="sr-only">{separador}{a.nome}</span>
+        </a>
+      </li>
+    );
+  })}
+</ul>

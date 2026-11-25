@@ -1,0 +1,118 @@
+---
+// Planos em níveis (WP-10, fatia 5; WP-30, fatia 2 na direção "engenharia luminosa"): cartões de
+// preço, nota e a comparação. O nível destacado é `cartao-brilho` com o halo do acento
+// (`shadow-brilho`).
+// Comparação: a tabela principal são as linhas de `comparacao.principais` (na ordem de `linhas`),
+// numa região rolável com foco (`<section>` com nome; a tabela tem 400 px de largura mínima, a
+// página não rola de lado). A 360–390 px a coluna Pro aparece cortada na borda direita e a borda que
+// ainda tem conteúdo ganha a sombra do acento (`rolagem-sombra`, tokens.css; sem JS): a coluna paga é
+// tingida por `bg-app-acc/8` (translúcido, para a sombra aparecer por baixo), não por `bg-app-tint`.
+// As outras linhas ficam num `<details>` "Ver tabela completa", com o mesmo
+// cabeçalho e o padrão do VerTodas; nenhuma linha se repete. Coluna paga tingida.
+import Icon from '../Icon.astro';
+import NotaPlanos from './NotaPlanos.astro';
+import type { Planos } from '../../i18n/landing';
+import type { Idioma } from '../../i18n/idiomas';
+
+type Niveis = Extract<Planos, { tipo: 'niveis' }>;
+
+interface Props {
+  lang: Idioma;
+  titulo: string;
+  planos: Niveis;
+  rotuloTermos: string;
+  rotuloTabelaCompleta: string;
+  rotuloRegiaoCompleta: string;
+}
+
+const { lang, titulo, planos, rotuloTermos, rotuloTabelaCompleta, rotuloRegiaoCompleta } = Astro.props;
+const c = planos.comparacao;
+// Nome da região rolável da tabela (`<section>` com nome = role region). O do export é o título da
+// seção, que repete o nome do landmark de fora (unique-landmark do html-validate): aqui vai o
+// título com as duas colunas comparadas, sem texto novo. A da tabela completa se chama
+// `rotuloRegiaoCompleta` ("Demais funcionalidades", aprovado pelo usuário em 2026-11-24).
+const rotuloTabela = `${titulo}: ${c.colGratis}, ${c.colPago}`;
+const rotuloResto = rotuloRegiaoCompleta;
+const principais = c.linhas.filter((_, i) => c.principais.includes(i));
+const resto = c.linhas.filter((_, i) => !c.principais.includes(i));
+// Período colado no preço quando começa por "/" ("R$ 7,90/mês"); por extenso, com espaço ("R$ 69,90
+// pago uma vez"), como a página antiga (WP-10, fatia 9: o primeiro app com planos em níveis).
+const sep = (periodo: string) => (periodo.startsWith('/') ? '' : ' ');
+const tabelas = [
+  { linhas: principais, rotulo: rotuloTabela },
+  { linhas: resto, rotulo: rotuloResto },
+];
+---
+<div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-4 lg:gap-5">
+  {
+    planos.niveis.map((n) => (
+      <div
+        class:list={[
+          'rounded-card-lg shadow-card p-6 flex flex-col gap-2',
+          n.destaque ? 'cartao-brilho shadow-brilho' : 'bg-surface border border-border',
+        ]}
+      >
+        <span class:list={['text-h3', n.destaque ? 'text-app-acc' : 'text-text']}>{n.nome}</span>
+        <span class="text-h1 tabular-nums text-text">
+          {n.preco}
+          {n.periodo && <span class="text-small font-medium text-text-2">{sep(n.periodo)}{n.periodo}</span>}
+        </span>
+        <span class="text-small text-text-2 text-pretty">{n.descricao}</span>
+      </div>
+    ))
+  }
+</div>
+{planos.nota && <NotaPlanos lang={lang} nota={planos.nota} rotuloTermos={rotuloTermos} />}
+{
+  tabelas.map((t, k) => {
+    if (t.linhas.length === 0) return null;
+    // A 2ª tabela fica dentro do `<details>`; a 1ª, solta (o envoltório é um Fragment).
+    const completa = k === 1;
+    const Envoltorio = completa ? 'details' : Fragment;
+    const atributos = completa ? { class: 'group border border-border-strong rounded-card-lg bg-surface shadow-card' } : {};
+    return (
+      <Envoltorio {...atributos}>
+        {completa && (
+          <summary class="min-h-14 px-5 flex items-center justify-between gap-3 cursor-pointer text-base font-semibold list-none [&::-webkit-details-marker]:hidden rounded-card-lg hover:bg-raised focus-visible:outline-3 focus-visible:outline-brand focus-visible:-outline-offset-3 focus-visible:bg-raised">
+            {rotuloTabelaCompleta}
+            <span class="flex items-center gap-2.5 text-[13px] font-medium text-text-2">
+              {t.linhas.length}
+              <span aria-hidden="true" class="flex-none">
+                <Icon nome="chevron-down" class="size-5 text-text-2 group-open:text-app-acc group-open:rotate-180 transition-transform duration-[var(--dur-base)] ease-suave motion-reduce:transition-none" />
+              </span>
+            </span>
+          </summary>
+        )}
+        <section
+          tabindex="0"
+          aria-label={t.rotulo}
+          class:list={[
+            'rolagem-sombra overflow-x-auto border border-border rounded-card-lg focus-visible:outline-3 focus-visible:outline-brand focus-visible:-outline-offset-3',
+            completa ? 'mx-3 mb-3 t:mx-4 t:mb-4 [--fundo-rolagem:var(--color-surface)]' : 'shadow-card',
+          ]}
+        >
+          <table class="w-full min-w-[400px] border-collapse text-small">
+            <thead>
+              <tr class:list={[completa ? 'bg-raised' : 'bg-surface']}>
+                <th scope="col" class="text-left px-4 py-3.5 font-semibold text-text-2">{c.colRecurso}</th>
+                <th scope="col" class="text-left px-4 py-3.5 font-bold w-[28%]">{c.colGratis}</th>
+                <th scope="col" class="text-left px-4 py-3.5 font-bold w-[32%] text-app-acc bg-app-acc/8">
+                  {c.colPago} <span class="font-medium text-text-2">{c.colPagoSub}</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {t.linhas.map(([recurso, gratis, pago]) => (
+                <tr class="border-t border-border">
+                  <th scope="row" class="text-left px-4 py-3 font-medium">{recurso}</th>
+                  <td class="px-4 py-3 text-text-2">{gratis}</td>
+                  <td class="px-4 py-3 bg-app-acc/8">{pago}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      </Envoltorio>
+    );
+  })
+}

@@ -1,0 +1,21 @@
+{
+  "regras": {
+    "categoria_min": 0.9,
+    "performance_erro": 0.85,
+    "performance_aviso": 0.9,
+    "lcp_erro_ms": 3000,
+    "lcp_aviso_ms": 2500,
+    "cls_max": 0.1
+  },
+  "paginas": {
+    "/": {"bytes_total": 184844, "bytes_imagem": 18234},
+    "/lottoexpert.html": {"bytes_total": 325778, "bytes_imagem": 144680},
+    "/topowalk.html": {"bytes_total": 347899, "bytes_imagem": 151445},
+    "/poleposition.html": {"bytes_total": 363833, "bytes_imagem": 188888},
+    "/eclipsego.html": {"bytes_total": 248687, "bytes_imagem": 59262},
+    "/lottoexpert-privacy.html": {"bytes_total": 213521, "bytes_imagem": 11232},
+    "/lottoexpert-terms.html": {"bytes_total": 187592, "bytes_imagem": 11232},
+    "/eclipsego-privacy.html": {"bytes_total": 178482, "bytes_imagem": 11232},
+    "/404.html": {"bytes_total": 170175, "bytes_imagem": 17522, "seo": false}
+  }
+}

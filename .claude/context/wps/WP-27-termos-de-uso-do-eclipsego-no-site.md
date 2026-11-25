@@ -1,0 +1,248 @@
+---
+id: WP-27
+titulo: Os termos de uso do EclipseGo existem no site em pt e en, e a política aponta para o commit da main, espelhados do repositório do app
+area: legal
+status: done
+depende_de: []
+adr: [ADR-001, ADR-004, ADR-005, ADR-007, ADR-010]
+spec: ""
+decisoes: [D7, D13, D23, D28]
+tamanho: M
+risco: alto
+visual: true
+branch: feat/wp-27-termos-eclipsego
+---
+
+# WP-27 — Os termos de uso do EclipseGo existem no site em pt e en, e a política aponta para o commit da main, espelhados do repositório do app
+
+**Depende de:** pré-condição fora do site, **cumprida em 2026-11-24**: `docs/TERMS_OF_USE.md` está na
+`origin/main` do EclipseGo (`5cd6b83`, merge `8a12c0a`, PR #3 do app). Pelo caminho (B) abaixo, depende também da fatia 3 do
+WP-10 (`LegalLayout`) estar na integração; não está em `depende_de` porque o WP-10 inteiro só fecha
+na fatia 10. · **Achados roteados:** —
+
+**Veredito do arquiteto (2026-11-25): aprovado com três correções.** Prevalece sobre o texto abaixo
+onde diverge. Branch empilhada sobre `feat/wp-26-termos-topowalk` (`git merge-base --is-ancestor`
+verdadeiro), que já trouxe `ORIGENS` por língua (ADR-010), a reescrita de link relativo `.md` em
+`src/markdown/legal.mjs:63-118`, o §12 contra `.md` não reescrito, o §19 por `len(LEGAL)`
+(`tools/check_site.py:1545,1551`), a trava de ‹preencher› (`:447-455`), o `LegalLayout`
+(`src/layouts/LegalLayout.astro`) e a página modelo `PaginaTopoWalkTerms.astro`.
+
+1. **O passo 1b não funciona com o `sync_legal.py` de hoje.** Com o corpo do pt igual e sem língua
+   espelhada, o script devolve "igual" antes de olhar `--ref`/`--forca` (`tools/sync_legal.py:305-307`).
+   Medido: `sync_legal.py eclipsego --doc privacy --ref 8a12c0a [--forca] --check` → "✅ nada a fazer
+   (eclipse-go@8a12c0a)" + aviso de `4668019` fora dos remotos, nos dois casos; `merge-base
+   --is-ancestor 4668019 origin/main` = 1. A ADR-004 § "O que isto fecha" proíbe editar o
+   `origemCommit` à mão. **Mudança:** em `sync_legal.py`, pt igual + línguas espelhadas iguais no sha +
+   `origemCommit` registrado não ancestral do sha + `--forca` → grava só o `origemCommit` (mesma
+   escrita do bootstrap, `:353-356`), mensagem "↻ reancorado: corpo igual". Sem `--forca`, nada muda
+   (continua "igual" + aviso). Não pede ADR: é o `--forca` da ADR-004 §3 aplicado ao caso de corpo igual.
+2. **Link da tradução en para a política.** A origem pt cita `[Política de Privacidade](PRIVACY_POLICY.md)`
+   (`origin/main:docs/TERMS_OF_USE.md:49`), e o `legal.mjs` o reescreve para `/eclipsego-privacy.html` no
+   pt. No `.en.md` traduzido pelo site, o `site-legal` escreve `PRIVACY_POLICY.en.md` (o nome que o app
+   usaria, ADR-010 §1, igual a `topowalk-terms.en.md:11`), que vira `/en/eclipsego-privacy.html`. Manter
+   `PRIVACY_POLICY.md` no en levaria o leitor en para a política pt com `lang="pt-BR"`, e a página
+   existe em en (contra a D23).
+3. **Rodapé sai do dado, não do componente.** `src/components/Footer.astro:59` lista `a.termos`; a mudança é
+   `termos: 'eclipsego-terms.html'` em `src/i18n/apps.ts:70`. `Footer.astro` não muda.
+
+**Já resolvido pelo WP-26 (sai do escopo):** o texto "5 URLs" do §19; a reescrita de link relativo
+(`RELATIVO_MD` cobre `PRIVACY_POLICY.md` sem diretório, e o `arquivoLegal` tira o app do nome do
+arquivo do site, não do caminho `docs/` da origem); o `LegalLayout`; o §12 contra `.md` cru.
+
+**Arquivos-alvo finais:**
+- `tools/sync_legal.py` (`ORIGENS["eclipsego-terms"] = ("eclipse-go", {"pt": "docs/TERMS_OF_USE.md"}, "main")`
+  e a reancoragem do item 1)
+- `tools/check_site.py` (`CONTRATUAIS`, `PUBLICADAS`, `LEGAL`; só as listas)
+- `src/content/legal/eclipsego-privacy.pt.md` (só a linha `origemCommit`, pelo script)
+- `src/content/legal/eclipsego-terms.pt.md` (pelo script) e `eclipsego-terms.en.md` (`site-legal`)
+- `src/components/paginas/PaginaEclipseGoTerms.astro`, `src/pages/eclipsego-terms.astro`,
+  `src/pages/[lang]/eclipsego-terms.astro`
+- `src/i18n/legal.ts` (`eclipsego_terms_h1/_title/_description`, pt e en), `src/i18n/idiomas.json`
+  (`"eclipsego-terms.html": ["pt", "en"]`), `src/i18n/apps.ts` (`termos`)
+- `CLAUDE.md` (§ Fontes de verdade: `../eclipse-go/docs/TERMS_OF_USE.md`; § URLs que são contrato),
+  `docs/ARQUITETURA.md:116-120` (mesma lista), `.claude/commands/legal.md:24` (linha do EclipseGo)
+
+**Passos exatos (substituem 1b–4):**
+1. `git -C ../eclipse-go rev-parse main origin/main` iguais (`8a12c0a`, conferido 2026-11-25).
+2. Item 1 em `sync_legal.py`. Depois `python3 tools/sync_legal.py eclipsego --doc privacy --ref 8a12c0a --forca`;
+   `git diff -- src/content/legal/eclipsego-privacy.*` = uma linha (`origemCommit`), e o `.en.md` intocado.
+3. `ORIGENS`, `LEGAL`, `CONTRATUAIS`, `PUBLICADAS`. `python3 tools/sync_legal.py eclipsego --doc terms`
+   grava o `.pt.md` com `lastUpdated: "2026-11-24"`, `origemCommit` 8a12c0a… e `pendente: ["en"]`.
+4. `site-legal` traduz `eclipsego-terms.en.md` (D7, ADR-010 §3: sem en no app), com o link do item 2,
+   e tira `en` de `pendente`.
+5. Página, cascas, `legal.ts`, `idiomas.json`, `apps.ts`, docs. 6. `/verify`.
+
+**Critério a mais:** `grep -c 'href="/eclipsego-privacy.html"' dist/eclipsego-terms.html` ≥ 1 e
+`grep -c 'href="/en/eclipsego-privacy.html"' dist/en/eclipsego-terms.html` ≥ 1; `sync_legal.py --todos
+--check` sem o aviso "4668019 não está em nenhum remoto".
+
+**Riscos:** (a) PR empilhado sobre o WP-26, que está `blocked` pelo app: o PR do WP-27 carrega os commits
+do WP-26 até ele entrar na integração (pergunta abaixo). (b) A reancoragem com `--forca` gravaria um sha
+que não é ancestral de nada também quando o corpo diverge; a condição "pt igual" é a trava, e o diff de
+uma linha é a prova. (c) A política mantém `13 de julho de 2026` com contato novo: data é do app (já dito acima).
+
+**Pergunta ao usuário:** o PR do WP-27 sobe (A) depois de o PR do WP-26 entrar na integração, com rebase
+sobre ela, ou (B) mirando `feat/wp-26-termos-topowalk`. **Recomendo (A):** o diff revisado fica só o do
+WP-27, e o WP-26 depende só do `88bc656` chegar à `master` do topo-walk. A implementação pode seguir antes.
+
+**Pedido do usuário (2026-11-22, `/novo-wp`):** "isso está sendo exigido pela EEUU". **Esclarecido no
+mesmo dia:** a exigência é da **União Europeia** — ao se declarar comerciante (*trader*) nas lojas,
+os termos de uso passam a ser obrigatórios na UE. Prazo verificado pelo usuário: **até 2027**. Publicação
+pela D28 (B): junto com o deploy único da modernização (D13), que o usuário quer subir **antes do fim
+de 2026**.
+
+**Objetivo:** `/eclipsego-terms.html` (pt) e `/en/eclipsego-terms.html` publicam, byte a byte no pt, o
+`docs/TERMS_OF_USE.md` do repositório do EclipseGo, com a mesma data, e o rodapé de toda página leva
+o link para eles.
+
+**Ampliação (2026-11-24, `/novo-wp`).** Pedido do usuário: "atualizei a politica e criei um documento
+de termos de uso para o eclipse-go. Pode criar um /novo-wp para trazer para o site. O termo de uso
+todos os apps vao precisar agora por conta de legislaçao europeia". Os termos de TopoWalk e Pole
+Position já são o WP-26 e o WP-28; o LottoExpert já publica os dele. Fica neste WP só o EclipseGo,
+com a política junto, porque é o mesmo app e a mesma rodada do `/legal`. Evidência:
+- **Termos:** origem `docs/TERMS_OF_USE.md` (não `TERMS_OF_SERVICE.md`, como os outros apps), 1.088
+  palavras, 15 seções, `**Última atualização:** 24 de novembro de 2026`. Commit `5cd6b83`: "exigido
+  pela Google Play para usuários da União Europeia".
+- **Política:** o texto do site já é igual ao da `origin/main`
+  (`diff <(sed '1,/^---$/d' src/content/legal/eclipsego-privacy.pt.md) <(git -C ../eclipse-go show origin/main:docs/PRIVACY_POLICY.md)`
+  vazio, 2026-11-24). O e-mail `support@ghfsoftware.com` entrou no site antes, a partir do commit
+  `4668019`. Esse commit está só na branch local `notebook/docs/email-suporte-politica`, fora de
+  qualquer remoto e fora da `main`. Por isso `python3 tools/sync_legal.py --todos --check` dá
+  "⛔ eclipsego-privacy: à frente/divergente — o origemCommit 4668019 não é ancestral de main".
+  O trabalho é trocar o `origemCommit` de `eclipsego-privacy.pt.md` por um commit da `main` com o
+  mesmo texto. O corpo e o `.en.md` não mudam.
+- **Data da política:** a origem mudou o contato e manteve `13 de julho de 2026`. O site espelha a
+  data da origem. Se a mudança de contato pede data nova, a correção é do usuário, no app.
+- **`main` local atrasada:** `git -C ../eclipse-go rev-parse main` = `f5c1d6b`, e `origin/main` =
+  `8a12c0a`. O `sync_legal.py` lê a `main` local, então ela precisa estar em dia antes do passo 1.
+
+**Contexto:**
+- Até 2026-11-22 não havia termos de uso do EclipseGo em lugar nenhum. `git -C ../eclipse-go ls-files | grep -i term`
+  não achava nada. Só o LottoExpert tem termos no site (`/lottoexpert-terms.html`, origem
+  `../lotto-expert/docs/TERMS_OF_SERVICE.md`, `tools/sync_legal.py:49`).
+- O EclipseGo não tem Play Billing no `app/build.gradle.kts` nem no catálogo de versões (`grep BillingClient`, 2026-11-22). A política dele está em `../eclipse-go/docs/PRIVACY_POLICY.md`; os termos podem nascer ao lado, em `docs/`.
+- O EclipseGo não tem ficha da Play registrada no repositório (D19 (e)). O passo 8 depende de a ficha existir.
+- Nenhum dos três apps cita URL do site no código (`grep -rn "ghfsoftware.com/" app/src` só acha
+  `support@`). A URL nova vira contrato pela ficha da Play, como as políticas (ADR-001 § Contexto).
+- **Texto legal o agente não redige** (`CLAUDE.md` § Fontes de verdade). Se a origem não existir no
+  app, o WP para no passo 1.
+- O site hoje espelha 5 documentos: `ORIGENS` em `tools/sync_legal.py:47-53`, `LEGAL` em
+  `tools/check_site.py:188-194`. O §19 (`tools/check_site.py:1339-1359`) percorre `LEGAL`, então
+  passa a exigir uma URL a mais (6, 7 ou 8, conforme a ordem dos WP-26, WP-27 e WP-28) no rodapé sem mudar a lógica; só o texto "5 URLs" (`:105`, `:1339`,
+  `:1352`, `:1358`) fica errado.
+
+**URL contratual (ADR-001).** Não pede ADR novo nem emenda: o ADR-001 § Decisão já diz "Caminho
+novo que um app passe a citar entra na lista no mesmo WP que o app o adota". `/eclipsego-terms.html`
+entra em `CONTRATUAIS` e no `CLAUDE.md` § "URLs que são contrato" **neste WP**, antes de a ficha
+apontar para ela. `/en/eclipsego-terms.html` só vira contrato se a ficha en citar esse caminho; o
+ADR-001 § "O que isto mantém aberto" já cobre a versão en noutro caminho. Nome no padrão
+`<app>-terms.html`, igual ao do LottoExpert, e não rota limpa: o par com `lottoexpert-terms.html`
+mantém o `rota()` e o §9 sem caso novo.
+
+**Ler antes:** `.claude/commands/legal.md`; `.claude/agents/site-legal.md`; ADR-001; ADR-004; ADR-007
+§2–§5; D7, D13 (6), D14, D23 em `decisoes.md`; o `TERMS_OF_SERVICE.md` do EclipseGo inteiro;
+`src/components/paginas/PaginaLottoExpertTerms.astro` (o modelo).
+
+**Arquivos-alvo:**
+- `tools/sync_legal.py` (só uma entrada `eclipsego-terms` em `ORIGENS`)
+- `tools/check_site.py` (`CONTRATUAIS`, `PUBLICADAS`, `LEGAL`; o texto "5 URLs" do §19 passa a
+  dizer o número de `LEGAL`, sem mudar a regra)
+- `src/content/legal/eclipsego-terms.pt.md` (gerado pelo `sync_legal.py`) e `eclipsego-terms.en.md`
+- `src/components/paginas/PaginaEclipseGoTerms.astro`, `src/pages/eclipsego-terms.astro`,
+  `src/pages/[lang]/eclipsego-terms.astro`
+- `src/i18n/legal.ts` (só `eclipsego_terms_h1/_title/_description`, pt e en)
+- `src/i18n/idiomas.json` (só a entrada `eclipsego-terms.html: ["pt", "en"]`)
+- `src/components/Footer.astro` (só o link `eclipsego-terms.html` com `footer_terms` na coluna do EclipseGo)
+- `.claude/commands/legal.md` (linha do EclipseGo na tabela)
+- `CLAUDE.md` (§ Fontes de verdade e § "URLs que são contrato")
+
+Fora do site, e do usuário: `.claude/settings.json` (permissão de leitura da origem nova, se o
+`/legal` pedir) e a ficha da Play.
+
+**Passos:**
+1. Pré-condição: o `docs/TERMS_OF_USE.md` existe num commit da `main` do EclipseGo que está em
+   `origin`, com linha `**Última atualização:**` (cumprida: `5cd6b83`). A `main` local do app é
+   atualizada para `origin/main` (`git -C ../eclipse-go fetch origin main:main`, só fast-forward).
+   O agente não redige, não completa e não adapta os termos do LottoExpert.
+1b. Política: `python3 tools/sync_legal.py eclipsego --doc privacy --ref 8a12c0a` (ou o commit da
+   `main` vigente) troca só o `origemCommit` de `eclipsego-privacy.pt.md`. Se recusar por ancestralidade
+   (`4668019` não é ancestral de nenhuma ref da `main`), `--forca` é legítimo aqui: o corpo é igual. O diff do corpo tem de
+   sair vazio. Se não sair vazio, **parar**: o texto mudou e o `.en.md` precisa de tradução (D7).
+2. `ORIGENS["eclipsego-terms"] = ("eclipse-go", "docs/TERMS_OF_USE.md", "main")`. `LEGAL`,
+   `CONTRATUAIS` e `PUBLICADAS` ganham `eclipsego-terms.html`.
+3. `python3 tools/sync_legal.py eclipsego --doc terms` grava `eclipsego-terms.pt.md` com
+   `origemCommit` e `pendente: ["en"]`.
+4. `site-legal` traduz para `eclipsego-terms.en.md`, cláusula por cláusula (D7), e tira `en` de
+   `pendente`. Nomes próprios, e-mail, valores e prazos ficam literais.
+5. Página: `PaginaEclipseGoTerms.astro` sobre o `LegalLayout` da fatia 3 do WP-10, copiando a
+   estrutura de `PaginaLottoExpertTerms.astro`; cascas pt e `[lang]`; chaves em `legal.ts`;
+   `idiomas.json`. Sitemap, canonical e `hreflang` saem do mapa (ADR-005, `src/pages/sitemap.xml.ts`)
+   e não pedem código.
+6. Rodapé: `footer_terms` na coluna do EclipseGo. Links para a página em língua sem versão seguem a D23.
+7. `python3 tools/gen_estado.py && python3 tools/check_plano.py`; `/verify`.
+8. Usuário: aponta a ficha da Play (e onde mais a exigência pedir) para a URL publicada, **só depois**
+   de ela estar no ar. Registra no WP qual campo e qual URL (pt ou `/en/`).
+
+**Critérios de aceite:**
+- `python3 tools/sync_legal.py --todos --check` sem ⛔ para `eclipsego-privacy` e `eclipsego-terms`
+  ("igual"), e `git -C ../eclipse-go merge-base --is-ancestor <origemCommit> origin/main` verdadeiro
+  para os dois.
+- `git diff -- src/content/legal/eclipsego-privacy.*` só muda a linha `origemCommit`.
+- `python3 tools/sync_legal.py eclipsego --doc terms --check` diz "igual".
+- `diff <(sed '1,/^---$/d' src/content/legal/eclipsego-terms.pt.md) <(git -C ../eclipse-go show <origemCommit>:<caminho>)` vazio.
+- `python3 tools/check_site.py` e `python3 tools/check_site.py --raiz dist` verdes. Isso inclui a
+  data do `.pt.md` igual à da origem e à do `.en.md`, as mesmas seções nas duas línguas,
+  `ORIGENS` = `LEGAL`, `/eclipsego-terms.html` em `CONTRATUAIS` e o §19 com o link novo em todo `<footer>`.
+- `test -f dist/eclipsego-terms.html && test -f dist/en/eclipsego-terms.html`.
+- `grep -o '<link rel="alternate" hreflang="[^"]*"' dist/eclipsego-terms.html | wc -l` = 3 (pt-BR, en, x-default → en), igual a `dist/eclipsego-privacy.html` hoje; `grep -c '<loc>https://ghfsoftware.com/\(en/\)\?eclipsego-terms.html</loc>' dist/sitemap.xml` = 2.
+- `.en.md` sem `pendente`.
+- `npx html-validate 'dist/**/*.html'` sem erro.
+
+**Só no navegador:** `/eclipsego-terms.html` e `/en/eclipsego-terms.html` a 360 e 1280: título, data
+no topo, sumário, troca de idioma mantendo `#secao-N`, link do rodapé na coluna do EclipseGo em
+uma página qualquer, pt e en. Depois do deploy: a URL do ar abre sem login, e a ficha da Play leva
+a ela. O usuário reporta.
+
+**Irreversível:** a URL pt entra em `CONTRATUAIS` e não sai mais (ADR-001). Termos publicados são
+o que o usuário do app aceitou naquela data. Tradução en errada vale como declaração da GHF em
+inglês até ser corrigida, e importa mais aqui porque a exigência é da União Europeia, onde o leitor provável lê inglês.
+
+**Risco:** alto (texto legal, URL contratual nova). Específico: o §19 reprova as 22 páginas de `dist/` de uma
+vez se o link do rodapé faltar numa língua; termos publicados antes da ficha estar pronta não fazem
+mal, ficha apontando antes da página existir dá 404 ao revisor da loja.
+
+**Caminho de publicação (D13 (6)) — decisão do usuário, proposta como D28:**
+- **(A) Hotfix no `master`, stack antiga, e depois a integração.** Em `master` as páginas são HTML na
+  raiz, copiadas por uma lista fechada (`origin/master:astro.config.mjs:10-19`), com o inglês num
+  dicionário JS que abre em pt (`origin/master:lottoexpert-terms.html:504`,
+  `localStorage.getItem('ghf_lang') || 'pt'`). Custo: a página é feita duas vezes; o rodapé muda nas
+  10 páginas da raiz à mão; `CONTRATUAIS`/datas no `check_site.py` de `master`, que é outro;
+  **não há `/en/eclipsego-terms.html`**, e quem abre a URL vê português primeiro. No merge de volta, o
+  HTML da raiz é apagado e a página nasce de novo pelo passo 5. Prazo: um PR pequeno.
+- **(B) Entra na integração e sobe no deploy único.** Custo: a página só vai ao ar quando o deploy
+  único subir, e ele espera o WP-10 até a fatia 10, D11 e D12. Sem trabalho duplicado, com
+  `/en/` desde o primeiro dia. Serve se não houver prazo de loja ou de lei.
+- **(C) Hotfix mínimo no `master` só com as URLs finais.** `eclipsego-terms.html` e
+  `en/eclipsego-terms.html` como HTML estático, uma língua por arquivo, sem dicionário JS e sem link
+  no rodapé de `master`; entram na lista de cópia de `astro.config.mjs` de `master` e no
+  `CONTRATUAIS` dele. Custo: duas páginas fora do sistema até o deploy único, e uma linha a mais na
+  lista de cópia do build de `master` (é deploy, risco alto); o rodapé de `master` não leva o link.
+  Ganho sobre (A): as URLs pt e en já são as finais, e o revisor dos Estados Unidos abre o inglês.
+  No deploy único, o build novo gera as mesmas URLs, e os arquivos estáticos saem.
+- Fora: antecipar o deploy único só para isto reabre a D13 (condições (1)–(5)).
+
+**Perguntas ao usuário (respondidas em 2026-11-22):**
+1. Origem: União Europeia, status de comerciante nas lojas torna os termos obrigatórios.
+2. Prazo: até 2027; sem urgência antes do deploy único.
+3. Onde a URL será citada: em aberto — responder antes do passo 8 (ficha da Play / campo do Play Console).
+4. Inglês: o `/en/` nasce junto (caminho B); a ficha en cita `/en/...` se o Play pedir.
+5. Quem escreve os termos e quando chegam à branch principal do app: respondido em 2026-11-24 — o
+   usuário escreveu `docs/TERMS_OF_USE.md`, na `main` pelo PR #3 do app.
+6. Publicação: D28 (B), integração e deploy único.
+
+## Registro de execução (2026-11-25)
+
+Commits: `2d06c2d` (termos pt espelhados, en traduzido, `origemCommit` da política), `ffc84e1` ("claims" na cláusula do foro, revisão do usuário), `2768663` (a reancoragem do `sync_legal.py` nunca recua para commit ancestral; auditoria). Critérios verdes. O usuário revisou a tradução: "wilful misconduct" mantido; "claims" no foro.
+
+**Pendente, só do usuário:** checklist de navegador de `/eclipsego-terms.html` e `/en/eclipsego-terms.html` a 360 e 1280. O caminho de reancoragem não tem unittest (`SYNC-REANCORAGEM-SEM-TESTE-01`, backlog).
+

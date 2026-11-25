@@ -1,0 +1,31 @@
+---
+// Corpo da landing do Pole Position, comum a /poleposition.html e /en/poleposition.html: o template
+// de landing (components/landing/, WP-10 fatia 8; D29) com o conteúdo de i18n/poleposition.ts, na
+// direção visual do WP-30. Nav e footer ficam na página (paginas/PaginaPolePosition.astro).
+// Capturas (D26, respostas do usuário em 2026-11-24): telas do app 2.2.0 (master) em modo demo, em
+// src/assets/img/poleposition/, sem edição (o astro:assets só redimensiona e converte); circuito
+// fictício ("Circuito Exemplo") num estacionamento público. O hero é o painel ao vivo, inteiro na
+// moldura de aparelho; por isso o destaque "Painel do Piloto" sai em cartão, sem imagem (não repete
+// o hero). Os outros três têm imagem: análise e traçado como tela; o card de compartilhamento é a
+// imagem PNG gerada pelo app, que sai na figura de documento em superfície escura
+// (`imagemTipo: 'imagem'`), não como tela.
+import Landing from './landing/Landing.astro';
+import hero from '../assets/img/poleposition/painel.png';
+import analise from '../assets/img/poleposition/analise.png';
+import tracado from '../assets/img/poleposition/tracado.png';
+import card from '../assets/img/poleposition/card.png';
+import { poleposition } from '../i18n/poleposition';
+import type { Idioma } from '../i18n/idiomas';
+
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
+---
+<Landing
+  lang={lang}
+  app="poleposition"
+  conteudo={poleposition}
+  imagens={{ hero, funcionalidades: { analise, tracado, card } }}
+/>

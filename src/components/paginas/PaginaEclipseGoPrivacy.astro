@@ -1,0 +1,56 @@
+---
+// Política de privacidade do EclipseGo (/eclipsego-privacy.html, URL contratual de ADR-001, e /<código>/eclipsego-privacy.html): a página
+// inteira, com a prop `lang`; as cascas ficam em src/pages/ (ADR-007 §3). Texto em
+// src/content/legal/eclipsego-privacy.<código>.md; hero,
+// botão e <head> em i18n/legal.ts. Footer só com o e-mail entre os canais e a política do EclipseGo
+// marcada como atual; o acento da casca vem de `app` (WP-10 fatia 2).
+import { getEntry, render } from 'astro:content';
+import LegalLayout from '../../layouts/LegalLayout.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
+import { legal } from '../../i18n/legal';
+import { rota, type Idioma } from '../../i18n/idiomas';
+
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
+const x = legal[lang];
+const home = rota(lang, 'index.html');
+const entrada = await getEntry('legal', `eclipsego-privacy.${lang}`);
+if (!entrada) throw new Error(`src/content/legal/eclipsego-privacy.${lang}.md ausente`);
+const { Content, headings } = await render(entrada);
+---
+<LegalLayout
+  lang={lang}
+  caminho="eclipsego-privacy.html"
+  title={x.eclipsego_privacy_title}
+  description={x.eclipsego_privacy_description}
+  titulo={x.eclipsego_privacy_h1}
+  lastUpdated={entrada.data.lastUpdated}
+  app="eclipsego"
+  favicon="/assets/eclipse-go-favicon.png"
+  headings={headings}
+  voltar={{ href: rota(lang, 'eclipsego.html'), texto: x.voltar_app }}
+>
+  <Nav
+    slot="nav"
+    lang={lang}
+    caminho="eclipsego-privacy.html"
+    inicio={home}
+    itens={[
+      { href: `${home}#sobre`, chave: 'nav_about' },
+      { href: `${home}#portfolio`, chave: 'nav_portfolio' },
+      { href: `${home}#contato`, chave: 'nav_contact' },
+    ]}
+  />
+  <Content />
+  <Footer
+    slot="footer"
+    lang={lang}
+    inicio={home}
+    redes={{}}
+    politicaAtual="eclipsego-privacy.html"
+  />
+</LegalLayout>

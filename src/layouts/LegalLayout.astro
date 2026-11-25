@@ -1,0 +1,180 @@
+---
+// Layout das páginas legais (WP-10, fatia 3), sobre o Base: o `Legal LottoExpert.dc.html` do handoff
+// da rodada 3 (LG), o mesmo para as 5 páginas e as 2 línguas — o app muda o nome, o ícone e o
+// acento da casca (`data-app`, fatia 2), nunca o corpo (resposta 6 do usuário, 2026-11-22).
+// Página em papel (LG:11); Nav e Footer escuros, como na fatia 2; topo (app, h1, data) escuro
+// desde o WP-30, fatia 4.
+//
+// O corpo é o `.md` de src/content/legal/ (slot padrão), sem nenhuma mudança de texto (ADR-004); a
+// tipografia vem do bloco "Texto legal" de src/styles/global.css, só com tokens de papel. Título
+// (h1) e data ficam no hero, uma vez: o plugin de src/markdown/legal.mjs tira os dois do corpo, e a
+// data vem do front-matter `lastUpdated`.
+//
+// Sumário (LG:21-30 e LG:51-59): os `##` do corpo (`headings` do `render()`, profundidade 2), com o
+// número separado pela regra do handoff (LG:161). Lateral e fixo a partir de 1024 px; recolhível
+// (`<details>`) abaixo. Os dois estão no HTML e um fica `display:none` por largura. Sem JS: sem
+// realce da seção atual (resposta 4). O `href` é `#secao-N` pela posição do `##`, o mesmo `id` que
+// o plugin idDosTitulosLegais põe (ADR-007 §6), nunca pelo texto.
+//
+// Omitidos do handoff (respostas de 2026-11-22): o selo "Documento Legal" (1), o aviso de
+// prevalência do pt no en (2; a cláusula nasce no repositório do app, D8 b1) e o seletor pt/en do
+// hero (3; o do Nav basta). O "voltar" não tem referência no handoff: botão secundário depois do
+// corpo, em `data-legal-voltar` — o fim do corpo para o §12 do tools/check_site.py.
+// Impressão (resposta 7): sem Nav, Footer, sumário e voltar; fundo branco.
+// Destaques (decisão do usuário, 2026-11-22, auditoria da fatia 3): as notas que as páginas antigas
+// punham em caixa voltam em caixa de papel, só por CSS, sem tocar no texto; ver global.css.
+import type { MarkdownHeading } from 'astro';
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import path from 'node:path';
+import Base from './Base.astro';
+import { legal, dataLegal, rotuloData } from '../i18n/legal';
+import { atributosLink, type Idioma } from '../i18n/idiomas';
+import { apps, type ChaveApp } from '../i18n/apps';
+import Icon from '../components/Icon.astro';
+
+interface Props {
+  lang: Idioma;
+  /** caminho pt da página, ex.: 'eclipsego-privacy.html' */
+  caminho: string;
+  title: string;
+  description: string;
+  /** h1 do hero */
+  titulo: string;
+  /** front-matter `lastUpdated` (`AAAA-MM` ou `AAAA-MM-DD`) */
+  lastUpdated: string;
+  /** app da página: `data-app` no <html> (Base.astro), nome e ícone do hero */
+  app: ChaveApp;
+  /** ícone do app: caminho do PNG em public/assets/ (o da aba, Base.astro); o exibido no hero é a
+   *  cópia de mesmo nome em src/assets/img/, pelo astro:assets (ADR-006) */
+  favicon: string;
+  /** `headings` do `render()` do `.md`: o sumário */
+  headings: MarkdownHeading[];
+  /** botão depois do corpo */
+  voltar: { href: string; texto: string };
+}
+
+const { lang, caminho, title, description, titulo, lastUpdated, app, favicon, headings, voltar } = Astro.props;
+const x = legal[lang];
+// Documento do corpo (`lottoexpert-terms`…): `data-doc` no `.legal-corpo`, para as caixas de destaque
+// de global.css (bloco "Texto legal") valerem só no documento delas. Vem do caminho, sem prop nova.
+const doc = caminho.replace(/\.html$/, '');
+
+const imagens = import.meta.glob<{ default: ImageMetadata }>('../assets/img/*.png', { eager: true });
+const icone = imagens[`../assets/img/${path.posix.basename(favicon)}`];
+if (!icone) throw new Error(`favicon ${favicon}: sem cópia em src/assets/img/ (ADR-006)`);
+
+// "3. Dados coletados" → número "3" e título "Dados coletados" (LG:161); `##` sem número (o "Resumo
+// de Segurança dos Dados (Google Play)" do Pole Position) fica só com o texto.
+const secoes = headings
+  .filter((h) => h.depth === 2)
+  .map((h, i) => {
+    const m = h.text.match(/^(\d+)\.\s*(.+)$/);
+    return { href: `#secao-${i + 1}`, n: m ? m[1] : '', texto: m ? m[2] : h.text };
+  });
+
+// Item do sumário: 44 px de alvo, anel interno (a lista lateral rola e cortaria o anel de fora);
+// acento do app sobre o papel (`-light`) no número, no filete do hover e no anel (WP-30, fatia 4).
+const classeItemLateral =
+  'flex gap-2 min-h-11 px-2.5 py-2.5 rounded-md border-l-2 border-transparent text-small text-paper-text-2 no-underline hover:border-app-acc-light hover:bg-paper-chip hover:text-paper-ink anel-foco-acc-interno';
+const classeItemRecolhivel =
+  'flex gap-2 min-h-11 px-2 py-2.5 text-[15px] leading-[22px] text-paper-ink no-underline border-t border-paper-chip hover:bg-paper-chip anel-foco-acc-interno';
+
+// Ícone do topo a 48 px: 2x só se o PNG tiver os 96 px (o do EclipseGo tem 48; sem ampliar).
+const densidades = icone.default.width >= 96 ? [1, 2] : [1];
+---
+<Base
+  title={title}
+  description={description}
+  lang={lang}
+  caminho={caminho}
+  tema="ghf"
+  app={app}
+  favicon={favicon}
+  classeBody="bg-paper text-paper-ink font-sans antialiased selection:bg-paper-link selection:text-paper print:bg-paper-raised"
+>
+  <div class="contents print:hidden"><slot name="nav" /></div>
+
+  {/* Topo escuro + corpo claro (WP-30, fatia 4; respostas do usuário de 2026-11-24): o topo
+      (app, h1 e data) é escuro, com o ornamento e o acento `app-acc` das landings; o corpo segue em
+      papel, com o acento `app-acc-light` (links, barra das caixas, marca dos h2, número do
+      sumário). Nunca trocar: `app-acc` sobre papel não passa contraste. Aresta seca entre os dois.
+      O topo fica dentro do <main>: o "Pular para o conteúdo" leva ao título, e nenhum conteúdo
+      fica fora de landmark (axe `region`). `tabindex="-1"`: o Safari só move o foco para o destino
+      da âncora se ele for focável. Na impressão o topo perde fundo e ornamento e fica em tinta. */}
+  <main id="conteudo" tabindex="-1" class="focus-visible:outline-none">
+    <header class="orn-hero bg-bg text-text print:bg-transparent print:text-paper-ink print:before:hidden">
+      <div class="mx-auto box-border max-w-[1216px] px-4 t:px-8 py-10 t:py-14 lg:py-16 flex flex-col gap-5 print:px-0 print:py-0 print:pb-6">
+        <span class="flex items-center gap-3">
+          <Image
+            src={icone.default}
+            width={48}
+            height={48}
+            densities={densidades}
+            alt=""
+            loading="eager"
+            class="size-12 flex-none rounded-xl object-cover shadow-brilho print:shadow-none"
+          />
+          <span class="text-eyebrow uppercase text-app-acc print:text-paper-ink">{apps[app].nome}</span>
+        </span>
+        <h1 class="text-section text-balance wrap-break-word text-text print:text-paper-ink">{titulo}</h1>
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="inline-flex items-center gap-2 min-h-9 px-3.5 rounded-pill bg-surface border border-border-strong text-small print:bg-paper-chip print:border-paper-border">
+            <span class="text-text-2 print:text-paper-text-2">{rotuloData(lang)}</span>{' '}
+            <strong class="font-bold tabular-nums text-text print:text-paper-ink"><time datetime={lastUpdated}>{dataLegal(lang, lastUpdated)}</time></strong>
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <div class="mx-auto box-border max-w-[1216px] px-4 pt-8 pb-14 t:px-8 t:pt-12 t:pb-24 lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-14 lg:items-start print:px-0 print:pt-0 print:pb-0">
+      <nav
+        aria-label={x.nesta_pagina}
+        class="hidden lg:flex sticky top-4 max-h-[calc(100vh-32px)] overflow-auto flex-col gap-0.5 p-0.5 pr-2 print:hidden"
+      >
+        <span class="pl-3 pr-2.5 pb-2 text-label text-paper-text-2">{x.nesta_pagina}</span>
+        {secoes.map((s) => (
+          <a href={s.href} class={classeItemLateral}>
+            <span class="min-w-5 tabular-nums font-semibold text-app-acc-light">{s.n}</span>
+            <span>{s.texto}</span>
+          </a>
+        ))}
+      </nav>
+
+      <article class="min-w-0 max-w-[70ch]">
+        <details class="group lg:hidden mb-7 border border-paper-border rounded-ctl bg-paper-raised print:hidden">
+          <summary class="flex items-center justify-between gap-3 min-h-13 px-4 rounded-ctl cursor-pointer list-none [&::-webkit-details-marker]:hidden text-[15px] font-semibold focus-visible:outline-3 focus-visible:outline-app-acc-light focus-visible:-outline-offset-3">
+            {x.nesta_pagina}
+            <span class="inline-flex items-center gap-1.5 text-small font-medium text-paper-text-2">
+              {secoes.length} {x.secoes}
+              <Icon nome="chevron-down" class="transition-transform group-open:rotate-180" />
+            </span>
+          </summary>
+          <div class="flex flex-col px-2 pb-2.5">
+            {secoes.map((s) => (
+              <a href={s.href} class={classeItemRecolhivel}>
+                <span class="min-w-5.5 tabular-nums font-semibold text-app-acc-light">{s.n}</span>
+                <span>{s.texto}</span>
+              </a>
+            ))}
+          </div>
+        </details>
+
+        <div class="legal-corpo" data-doc={doc}>
+          <slot />
+        </div>
+
+        <div data-legal-voltar class="mt-12 print:hidden">
+          <a
+            {...atributosLink(lang, voltar.href)}
+            class="inline-flex items-center gap-2 min-h-11 px-5 rounded-ctl border border-border-strong text-paper-ink font-semibold no-underline hover:bg-paper-chip anel-foco-acc"
+          >
+            <Icon nome="arrow-left" /> <span>{voltar.texto}</span>
+          </a>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <div class="contents print:hidden"><slot name="footer" /></div>
+</Base>

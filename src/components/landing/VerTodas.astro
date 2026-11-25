@@ -1,0 +1,51 @@
+---
+// "Ver todas as funcionalidades" (WP-10, fatia 5; LA:58-75, D12): `<details>` com os grupos, sem
+// JS. Foco do `summary` em 3 px para dentro (o anel-foco-interno tem 2 px; desvio 12 da
+// especificação). Sem grupos, não renderiza. WP-30, fatia 2: raio `card-lg`, sombra de cartão e o
+// chevron (`chevron-down`) gira 180° e passa ao acento ao abrir (sem transição com "reduzir
+// movimento"); o mesmo padrão do FAQ (Faq.astro) e do "Ver tabela completa" de PlanosNiveis.astro.
+import Icon from '../Icon.astro';
+import type { GrupoTodas } from '../../i18n/landing';
+
+interface Props {
+  rotulo: string;
+  grupos: GrupoTodas[];
+}
+
+const { rotulo, grupos } = Astro.props;
+const total = grupos.reduce((n, g) => n + g.itens.length, 0);
+---
+{
+  grupos.length > 0 && (
+    <details class="group border border-border-strong rounded-card-lg bg-surface shadow-card">
+      <summary class="min-h-14 px-5 flex items-center justify-between gap-3 cursor-pointer text-base font-semibold list-none [&::-webkit-details-marker]:hidden rounded-card-lg hover:bg-raised focus-visible:outline-3 focus-visible:outline-brand focus-visible:-outline-offset-3 focus-visible:bg-raised">
+        {rotulo}
+        <span class="flex items-center gap-2.5 text-[13px] font-medium text-text-2">
+          {total}
+          <span aria-hidden="true" class="flex-none">
+            <Icon nome="chevron-down" class="size-5 text-text-2 group-open:text-app-acc group-open:rotate-180 transition-transform duration-[var(--dur-base)] ease-suave motion-reduce:transition-none" />
+          </span>
+        </span>
+      </summary>
+      <div class="px-5 pt-1 pb-6 grid grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-x-8 gap-y-6">
+        {grupos.map((g) => (
+          <div class="flex flex-col gap-0.5">
+            <h3 class="mb-1.5 text-[13px] font-semibold text-text-muted">{g.titulo}</h3>
+            {g.itens.map((item) => (
+              <div class="flex gap-2.5 items-baseline py-2 border-t border-border">
+                <span class="flex-1 text-sm leading-[21px]">
+                  <strong class="font-semibold">{item.nome}</strong> <span class="text-text-2">{item.descricao}</span>
+                </span>
+                {item.etiqueta && (
+                  <span class:list={['text-[11px] font-semibold whitespace-nowrap', item.etiqueta.pro ? 'text-app-acc' : 'text-text-2']}>
+                    {item.etiqueta.texto}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </details>
+  )
+}

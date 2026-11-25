@@ -1,0 +1,35 @@
+---
+// Nota dos planos (WP-10, fatia 5; LA:122-125): `role="note"`, selo opcional e o link dos termos
+// (caminho pt, pela D23).
+import { link, type Idioma } from '../../i18n/idiomas';
+
+interface Props {
+  lang: Idioma;
+  nota: { texto: string; selo?: string; termos?: string };
+  rotuloTermos: string;
+}
+
+const { lang, nota, rotuloTermos } = Astro.props;
+---
+<div role="note" class="flex gap-3 p-4 rounded-card bg-raised border border-border-strong">
+  {
+    nota.selo && (
+      <span aria-hidden="true" class="size-6 flex-none flex items-center justify-center rounded-full border-[1.5px] border-text text-[11px] font-extrabold">
+        {nota.selo}
+      </span>
+    )
+  }
+  <p class="text-sm leading-[22px] text-pretty">
+    {nota.texto}
+    {
+      nota.termos && (
+        <>
+          {' '}
+          <a {...link(lang, nota.termos)} class="text-text underline decoration-brand underline-offset-[3px] hover:decoration-2 active:text-brand rounded-[2px] anel-foco">
+            {rotuloTermos}
+          </a>
+        </>
+      )
+    }
+  </p>
+</div>

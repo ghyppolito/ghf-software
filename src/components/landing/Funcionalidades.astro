@@ -1,0 +1,116 @@
+---
+// Funcionalidades em destaque (WP-10, fatia 5; WP-30, fatia 2 na direção "engenharia luminosa"):
+// até 4, numeradas (01, 02…, decorativo). "Ver todas" (D12) fecha a seção.
+// - Com captura (D26): duas colunas a partir de 1024 px, texto primeiro no DOM e a captura na
+//   moldura (`Aparelho` `m`, inclinada -3° no desktop); a 1ª captura fica à esquerda, a 2ª à direita
+//   (`lg:order-first` alternado, contando só os itens com captura). Abaixo de 1024 px, o texto e
+//   depois a captura. Com `imagemTipo: 'documento'` (página de um arquivo gerado pelo app, WP-10
+//   fatia 7) ou `'imagem'` (imagem gerada pelo app para tela, fatia 8), a figura é o `Documento`
+//   (variante `papel` ou `imagem`) no lugar da moldura; o resto do bloco é o mesmo.
+// - Sem captura: cartão (`cartao-brilho`) com o ícone do item (`icone`, src/icons/fa/solid/), sem
+//   placeholder (D25/D26). Itens sem captura em sequência viram uma grade de cartões verticais (uma
+//   coluna por item a partir de 768 px); um sozinho é um cartão largo, ícone ao lado do texto.
+// - `.revela` no `<article>` (ou no cartão), nunca na figura; nada anima o hero.
+import Secao from './Secao.astro';
+import VerTodas from './VerTodas.astro';
+import Aparelho from './Aparelho.astro';
+import Documento from './Documento.astro';
+import Icon from '../Icon.astro';
+import type { ImageMetadata } from 'astro';
+import type { Funcionalidade, GrupoTodas } from '../../i18n/landing';
+
+interface Props {
+  titulo: string;
+  itens: Funcionalidade[];
+  imagens: Record<string, ImageMetadata>;
+  todas?: GrupoTodas[];
+  rotuloVerTodas: string;
+}
+
+const { titulo, itens, imagens, todas, rotuloVerTodas } = Astro.props;
+
+type Item = { f: Funcionalidade; n: string };
+type Bloco = { tipo: 'captura'; item: Item; esquerda: boolean } | { tipo: 'cartoes'; itens: Item[] };
+const blocos: Bloco[] = [];
+let capturas = 0;
+itens.forEach((f, i) => {
+  const item = { f, n: String(i + 1).padStart(2, '0') };
+  if (f.imagem) {
+    blocos.push({ tipo: 'captura', item, esquerda: capturas % 2 === 0 });
+    capturas++;
+    return;
+  }
+  const ultimo = blocos[blocos.length - 1];
+  if (ultimo?.tipo === 'cartoes') ultimo.itens.push(item);
+  else blocos.push({ tipo: 'cartoes', itens: [item] });
+});
+// Classes inteiras literais (o Tailwind não detecta concatenação).
+const COLUNAS: Record<number, string> = { 2: 'md:grid-cols-2', 3: 'md:grid-cols-3', 4: 'md:grid-cols-2 lg:grid-cols-4' };
+const atraso = ['[--i:0]', '[--i:1]', '[--i:2]', '[--i:3]'] as const;
+const classeEtiqueta = (pro?: boolean) =>
+  pro
+    ? 'self-start inline-flex items-center min-h-6 px-3 rounded-pill border border-app-acc/50 bg-app-panel text-app-acc text-label'
+    : 'self-start inline-flex items-center min-h-6 px-3 rounded-pill border border-border-strong text-text-2 text-label';
+---
+<Secao id="funcionalidades" titulo={titulo} classe="flex flex-col gap-10 lg:gap-14">
+  <div class="flex flex-col gap-[clamp(56px,8cqi,112px)]">
+    {
+      blocos.map((b) =>
+        b.tipo === 'captura' ? (
+          <article class="revela grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div class="flex flex-col gap-4 min-w-0 max-w-[560px]">
+              <span aria-hidden="true" class="text-eyebrow text-app-acc">{b.item.n}</span>
+              {b.item.f.etiqueta && <span class={classeEtiqueta(b.item.f.etiqueta.pro)}>{b.item.f.etiqueta.texto}</span>}
+              <h3 class="text-area lg:text-h2 text-text text-balance">{b.item.f.titulo}</h3>
+              <p class="text-body text-text-2 text-pretty">{b.item.f.descricao}</p>
+            </div>
+            <div class:list={[b.esquerda && 'lg:order-first']}>
+              {b.item.f.imagemTipo === 'documento' || b.item.f.imagemTipo === 'imagem' ? (
+                <Documento
+                  imagem={imagens[b.item.f.imagem!]}
+                  alt={b.item.f.alt!}
+                  variante={b.item.f.imagemTipo === 'imagem' ? 'imagem' : 'papel'}
+                />
+              ) : (
+                <Aparelho imagem={imagens[b.item.f.imagem!]} alt={b.item.f.alt!} tamanho="m" inclinado />
+              )}
+            </div>
+          </article>
+        ) : b.itens.length === 1 ? (
+          <article class="revela cartao-brilho rounded-card-lg shadow-card p-6 lg:p-8 relative flex flex-col md:flex-row gap-5 md:gap-6">
+            {b.itens[0].f.icone && (
+              <span aria-hidden="true" class="size-12 flex-none grid place-items-center rounded-[14px] bg-app-panel text-app-acc text-[22px]">
+                <Icon nome={b.itens[0].f.icone} />
+              </span>
+            )}
+            <span aria-hidden="true" class="absolute top-6 right-6 lg:top-8 lg:right-8 text-eyebrow text-app-acc">{b.itens[0].n}</span>
+            <div class="flex flex-col gap-3 min-w-0 max-w-[62ch]">
+              {b.itens[0].f.etiqueta && <span class={classeEtiqueta(b.itens[0].f.etiqueta.pro)}>{b.itens[0].f.etiqueta.texto}</span>}
+              <h3 class="text-area lg:text-h2 text-text text-balance pr-10">{b.itens[0].f.titulo}</h3>
+              <p class="text-body text-text-2 text-pretty">{b.itens[0].f.descricao}</p>
+            </div>
+          </article>
+        ) : (
+          <div class:list={['grid grid-cols-1 gap-5', COLUNAS[b.itens.length]]}>
+            {b.itens.map((it, k) => (
+              <article class={`revela ${atraso[k]} cartao-brilho rounded-card-lg shadow-card p-6 lg:p-8 flex flex-col`}>
+                <div class="flex items-start justify-between gap-4">
+                  {it.f.icone ? (
+                    <span aria-hidden="true" class="size-12 flex-none grid place-items-center rounded-[14px] bg-app-panel text-app-acc text-[22px]">
+                      <Icon nome={it.f.icone} />
+                    </span>
+                  ) : <span />}
+                  <span aria-hidden="true" class="text-eyebrow text-app-acc">{it.n}</span>
+                </div>
+                {it.f.etiqueta && <span class:list={['mt-6', classeEtiqueta(it.f.etiqueta.pro)]}>{it.f.etiqueta.texto}</span>}
+                <h3 class="mt-6 text-area text-text text-balance">{it.f.titulo}</h3>
+                <p class="mt-2 text-body text-text-2 text-pretty">{it.f.descricao}</p>
+              </article>
+            ))}
+          </div>
+        ),
+      )
+    }
+  </div>
+  {todas && todas.length > 0 && <VerTodas rotulo={rotuloVerTodas} grupos={todas} />}
+</Secao>

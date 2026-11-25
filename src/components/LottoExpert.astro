@@ -1,0 +1,28 @@
+---
+// Corpo da landing do LottoExpert, comum a /lottoexpert.html e /en/lottoexpert.html: o template de
+// landing (components/landing/, WP-10 fatia 9; D29) com o conteúdo de i18n/lottoexpert.ts. Nav e
+// footer ficam na página (paginas/PaginaLottoExpert.astro). tools/check_site.py §5 lê este arquivo
+// (FONTES_LOTTO): ele fica, mesmo fino.
+// Capturas (D26, respostas do usuário em 2026-11-24): telas do app 2.06.00 em src/assets/img/lottoexpert/,
+// sem edição (o astro:assets só redimensiona e converte). O hero é a Home, inteira na moldura de
+// aparelho (WP-30, fatia 2: sai o recorte quadrado). Scanner e prestação de contas ainda sem
+// captura: o destaque sai em cartão, com ícone.
+import Landing from './landing/Landing.astro';
+import hero from '../assets/img/lottoexpert/hero.png';
+import fechamento from '../assets/img/lottoexpert/fechamento.png';
+import bolao from '../assets/img/lottoexpert/bolao.png';
+import { lottoexpert } from '../i18n/lottoexpert';
+import type { Idioma } from '../i18n/idiomas';
+
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
+---
+<Landing
+  lang={lang}
+  app="lottoexpert"
+  conteudo={lottoexpert}
+  imagens={{ hero, funcionalidades: { fechamento, bolao } }}
+/>

@@ -72,12 +72,11 @@ decorativo — a informação está no texto da etiqueta —, mas na implementa�
 ### Defeitos conhecidos do export (corrigir na implementação, não copiar)
 
 - `--success` com dois valores: #C5E86C no bloco "tokens alterados", em `Home` e na nota 8 do
-  Design System; #DDF3A8 na tabela de estados semânticos do `GHF Kit v3`. Escolher um (ou dois
-  nomes) antes do WP-08.
+  Design System; #DDF3A8 na tabela de estados semânticos do `GHF Kit v3`. Decidido (D11,
+  2026-11-21): dois nomes, `--success` = #C5E86C e `--success-surface` = #DDF3A8.
 - Regra "destaque vs ver todas" (`GHF Kit v3` §6) fixa critérios de produto — 12 meses sem
-  atualização, 4 posições, selo "Indisponível" — que ninguém decidiu. É proposta, não regra: decisão
-  do usuário (`decisoes.md`) antes de virar código. A lista "ver todas" da home não é renderizada
-  (hoje fica vazia).
+  atualização, 4 posições, selo "Indisponível". Aprovados como estão (D12, 2026-11-21). A lista
+  "ver todas" da home não é renderizada (hoje fica vazia).
 - Texto legal: o arquivo em inglês da política não veio; o inglês da página legal é stub.
 - "Texto provisório" continua em `Landing LottoExpert.dc.html` (resíduo da rodada 2); "Como
   tratamos dados" continua no footer do kit sem página correspondente.
@@ -105,7 +104,6 @@ decorativo — a informação está no texto da etiqueta —, mas na implementa�
 - Estado "em breve" aplicado numa landing (item 5); aviso final de jogo responsável do LottoExpert
   (`[copy: redação final do aviso…]`); logo final para fundo escuro e com "desde 2004"
   (`LOGO-ANO-E-FUNDO-ESCURO-01`) — a proposta de logo do `GHF Kit v3` é a da v2.
-- Decisão do usuário sobre os limiares do item 6 e sobre o `--success` (dois valores).
 - Conferência no navegador (checklist do WP-19): TopoWalk em russo a 360, as 3 landings novas a
   1280, home, landing e legal a 768, troca de idioma da legal e foco.
 

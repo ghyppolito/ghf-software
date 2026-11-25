@@ -10,3 +10,6 @@ dist/
 
 # Relatórios locais de verificação
 .lighthouseci/
+
+# Bytecode do Python (unittest de tools/)
+__pycache__/

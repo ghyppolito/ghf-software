@@ -2,11 +2,11 @@
 id: WP-19
 titulo: A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2
 area: design
-status: blocked
+status: done
 depende_de: [WP-06]
 adr: []
 spec: docs/AVALIACAO.md
-decisoes: [D4, D8]
+decisoes: [D4, D8, D27]
 tamanho: S
 risco: baixo
 visual: true
@@ -16,6 +16,9 @@ branch: feat/wp-19-rodada-3-claude-design
 # WP-19 — A rodada 3 do Claude Design cobre as landings que faltam, o tablet e os defeitos da rodada 2
 
 **Depende de:** WP-06 (handoff da rodada 2 vigente) · **Achados roteados:** DESIGN-RODADA-3-01
+
+**Nota (2026-11-21, D27):** home e landing a 768 ficam no layout fluido do export. O item 3 do
+pedido não exige ramo de tablet para elas; o checklist a 768 continua.
 
 **Objetivo:** existe `design/handoff/<AAAA-MM-DD>-rodada-3/`, exportado pelo usuário do Claude
 Design, que cobre os 8 itens do pedido abaixo, e `design/README.md` o nomeia como handoff vigente.
@@ -120,5 +123,11 @@ Checklist (`python3 -m http.server 8080 -d "design/handoff/2026-10-13-rodada-3"`
 - Troca pt/en na legal (o en é stub, esperado).
 - `Landing App.dc.html?app=pole&suggest=de`: a faixa fecha e não volta na sessão.
 - Tab mostra foco em "Ver todas" e nos sociais do footer; selo "Publicado" distinto do verde do Pole no footer.
+
+**Checklist do usuário (2026-11-22):** item 2 (as três landings novas a 1280: `?app=topo`, `?app=pole`,
+`?app=eclipse`) — "já vi e estão boas"; item 4 (troca pt/en na legal) — ok. **Decisão do usuário:** os itens
+1, 3, 5 e 6 (TopoWalk em russo a 360; home, landing e legal a 768; faixa `suggest=de`; foco em "Ver todas" e
+nos sociais, selo "Publicado") passam para a **revisão final no site real**, no checklist da fatia 10 do WP-10
+— "seria melhor ver tudo no final". Com isso o WP-19 fecha e deixa de segurar as fatias 7–9 do WP-10.
 
 **Publicado em 2026-10-14** (PR #39 `develop → master`; o WP segue `blocked` pelo checklist de navegador da rodada 3).

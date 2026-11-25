@@ -1,0 +1,29 @@
+{
+  "idiomas": {
+    "pt": {
+      "hreflang": "pt-BR",
+      "ogLocale": "pt_BR",
+      "nome": "Português",
+      "rotuloData": "Última atualização:",
+      "meses": ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"]
+    },
+    "en": {
+      "hreflang": "en",
+      "ogLocale": "en_US",
+      "nome": "English",
+      "rotuloData": "Last updated:",
+      "meses": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    },
+    "es": {
+      "hreflang": "es",
+      "ogLocale": "es_ES",
+      "nome": "Español",
+      "rotuloData": "Última actualización:",
+      "meses": ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+    }
+  },
+  "paginas": {
+    "index.html": ["pt"],
+    "app-privacy.html": ["pt", "en", "es"]
+  }
+}

@@ -1,0 +1,55 @@
+---
+// Moldura de aparelho para captura de tela (WP-30, fatias 1 e 2; só CSS, nenhuma imagem de
+// moldura): o hero das landings (`g`) e as funcionalidades com captura (`m`, inclinada).
+// - `tamanho`: `m` = 300 px, `g` = 420 px de largura, 380 px a partir de 1024 px (o hero: o CTA ao
+//   lado fica na primeira tela; WP-30, fatia 2). Nunca maior que o contêiner. O `srcset` é o de 420.
+// - Borda de 10 px em `--color-raised`, raio 36, anel de 1 px e halo do acento (`shadow-brilho`);
+//   a imagem tem raio 26 e a proporção do próprio arquivo (a captura sai inteira, sem recorte: D26),
+//   `object-fit: cover` e `object-position` = `posicao` só por segurança.
+// - Densidade 2x só se o arquivo tem ao menos o dobro da largura exibida (sem ampliar); a captura
+//   do hero (`eager`) usa 1,5x no máximo (orçamento de imagem e LCP, ver `densidadeMax`).
+// - Halo desfocado atrás (::before, acento a 30%) só a partir de 768 px, estático; `inclinado` gira
+//   -3° só a partir de 1024 px. Nada cobre a captura.
+// - `loading="lazy"` salvo `eager` (a captura do hero: `fetchpriority="high"`). `alt` descritivo é
+//   obrigatório (ADR-006).
+// Classes inteiras literais (o Tailwind não detecta concatenação).
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  imagem: ImageMetadata;
+  alt: string;
+  /** `object-position` da captura (ex.: `top`, `50% 20%`) */
+  posicao?: string;
+  tamanho?: 'm' | 'g';
+  inclinado?: boolean;
+  eager?: boolean;
+}
+
+const { imagem, alt, posicao = 'top', tamanho = 'm', inclinado = false, eager = false } = Astro.props;
+if (!alt.trim()) throw new Error('Aparelho: `alt` vazio — a captura precisa de texto alternativo descritivo');
+
+const largura = tamanho === 'g' ? 420 : 300;
+// A captura do hero (eager, LCP) sai em 1,5x: a 2x estourava o orçamento de imagem de /lottoexpert.html
+// e levava o LCP a 2,48 s (decisão do usuário em 2026-11-24, WP-30 fatia 2). As demais ficam em 2x.
+const densidadeMax = eager ? 1.5 : 2;
+const densidades = imagem.width >= densidadeMax * largura ? [1, densidadeMax] : [1];
+const classeTamanho = tamanho === 'g' ? 'w-[420px] lg:w-[380px]' : 'w-[300px]';
+const classeInclinado = inclinado ? 'lg:-rotate-3' : '';
+---
+<figure
+  class={`relative isolate mx-auto max-w-full ${classeTamanho} ${classeInclinado} md:before:absolute md:before:-inset-6 md:before:-z-10 md:before:rounded-[48px] md:before:bg-app-acc/30 md:before:blur-[48px] md:before:content-['']`}
+>
+  <div class="rounded-[36px] border-[10px] border-raised bg-raised shadow-brilho">
+    <Image
+      src={imagem}
+      alt={alt}
+      width={largura}
+      densities={densidades}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : undefined}
+      class="block w-full h-auto rounded-[26px] object-cover"
+      style={`aspect-ratio: ${imagem.width}/${imagem.height}; object-position: ${posicao}`}
+    />
+  </div>
+</figure>

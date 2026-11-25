@@ -1,0 +1,30 @@
+---
+// Corpo da landing do TopoWalk, comum a /topowalk.html e /en/topowalk.html: o template de landing
+// (components/landing/, WP-10 fatia 7; D29) com o conteúdo de i18n/topowalk.ts, na direção visual
+// do WP-30. Nav e footer ficam na página (paginas/PaginaTopoWalk.astro).
+// Capturas (D26, respostas do usuário em 2026-11-24): telas do app 4.4.0 (master) em modo demo, em
+// src/assets/img/topowalk/, sem edição (o astro:assets só redimensiona e converte); local público
+// (Ibirapuera) e nomes fictícios. O hero é Resultados (área + mapa), inteiro na moldura de aparelho.
+// As quatro funcionalidades têm imagem (zigzag completo); a do laudo é a página do PDF gerado pelo
+// app, que sai como documento (`imagemTipo: 'documento'`), não como tela.
+import Landing from './landing/Landing.astro';
+import hero from '../assets/img/topowalk/hero.png';
+import camadas from '../assets/img/topowalk/camadas.png';
+import exclusao from '../assets/img/topowalk/exclusao.png';
+import laudo from '../assets/img/topowalk/laudo-pdf.png';
+import pontosFotos from '../assets/img/topowalk/pontos-fotos.png';
+import { topowalk } from '../i18n/topowalk';
+import type { Idioma } from '../i18n/idiomas';
+
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
+---
+<Landing
+  lang={lang}
+  app="topowalk"
+  conteudo={topowalk}
+  imagens={{ hero, funcionalidades: { camadas, exclusao, laudo, pontosFotos } }}
+/>

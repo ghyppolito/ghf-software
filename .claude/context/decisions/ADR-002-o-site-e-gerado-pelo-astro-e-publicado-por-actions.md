@@ -12,7 +12,7 @@ a raiz de `master` pelo Jekyll, e **tudo** o que está na raiz vai ao ar (`/CLAU
 
 ## Decisão
 
-1. **Astro** (7.3.8 em 2026-10-12, fixado exatamente em `package.json`) com Node `22.22`
+1. **Astro** (7.3.8 em 2026-10-12, fixado exatamente em `package.json`) com Node `22.22`[^wp25]
    (`engines` e `actions/setup-node`), `package-lock.json` versionado e `npm ci` no CI. Saída
    estática; telemetria desligada no CI (`ASTRO_TELEMETRY_DISABLED=1`, a mesma régua privacy-first).
 2. **URLs contratuais (ADR-001) saem como arquivo literal** em `dist/`. Página contratual
@@ -62,3 +62,7 @@ quatro repositórios em 2026-10-12: só `lottoexpert-privacy.html` e o convite).
 
 `astro.config.mjs`, `package.json`, `.github/workflows/deploy.yml` e `pr.yml`,
 `tools/check_site.py` (`CONTRATUAIS`, §4), ADR-001, D2, D5, D9, WP-07 e WP-08.
+
+[^wp25]: WP-25 (2026-11-21): Astro 7.4.7 e Node 22.23.5 no CI (piso 22.23.4), pela mesma política de versão exata
+    (`package.json` sem `^`/`~`, `node-version` exato no `setup-node`). A 7.4.7 sobe o piso de
+    `engines.node` para `>=22.23.4`; a decisão não muda.

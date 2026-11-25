@@ -1,0 +1,21 @@
+---
+// Corpo da landing do EclipseGo, comum a /eclipsego.html e /en/eclipsego.html: o template de
+// landing (components/landing/, WP-10 fatia 5; D29) com o conteúdo de i18n/eclipsego.ts. Nav e
+// footer ficam na página (paginas/PaginaEclipseGo.astro).
+// Capturas (D26, resposta do usuário em D29): a foto do aparelho é o hero; a tela do app é a da
+// "Linha do Tempo do Evento". As imagens ficam na raiz de src/assets/img/ (a Home importa a do
+// hero de lá). A foto sai quadrada, com borda e brilho do acento, sem moldura de aparelho
+// (`heroTipo: 'foto'`, WP-30 fatia 2).
+import Landing from './landing/Landing.astro';
+import fotoHero from '../assets/img/eclipsego_screenshot.png';
+import tela from '../assets/img/eclipsego_phone_screen.png';
+import { eclipsego } from '../i18n/eclipsego';
+import type { Idioma } from '../i18n/idiomas';
+
+interface Props {
+  lang: Idioma;
+}
+
+const { lang } = Astro.props;
+---
+<Landing lang={lang} app="eclipsego" conteudo={eclipsego} imagens={{ hero: fotoHero, heroTipo: 'foto', funcionalidades: { tela } }} />

@@ -1,0 +1,460 @@
+/*
+ * Tokens do sistema visual (ADR-008 §2, WP-10 fatia 1). Único arquivo de src/ com cor literal
+ * depois da fatia 10; até lá, src/styles/legado.css também tem (ADR-008 §5).
+ *
+ * Origem (handoff da rodada 3, design/handoff/2026-10-13-rodada-3/):
+ *   K3 = GHF Kit v3.dc.html · LJ = content/landings.js · LG = Legal LottoExpert.dc.html
+ * Um tema só (escuro). O "papel" é a superfície da página legal, não um segundo tema.
+ *
+ * Nomes: os do rótulo do Kit (K3:615), com o prefixo de namespace do Tailwind 4. O namespace
+ * `--text-*` do Tailwind é tamanho de fonte; por isso a cor de texto é `--color-text`,
+ * `--color-text-2`… (utilitários `text-text`, `text-text-2`), nunca `--text-2`.
+ * Os nomes curtos dos templates (`--sf`, `--bd2`, `--tx2`…) não entram aqui.
+ *
+ * Contraste (WCAG 2.x, especificação do site-ux da fatia 1):
+ * - `--color-border` (1,42 sobre --bg) é só divisória decorativa; limite de controle usa
+ *   `--color-border-strong` (3,95 / 3,72 / 3,30 sobre bg / surface / raised).
+ * - `--color-brand` sobre `--color-paper` é 1,89: no papel, link e foco são `--color-paper-link`.
+ * - `--color-app-*-edge` e as bordas `-edge` de warning/error/info ficam abaixo de 3:1: contorno
+ *   decorativo, sempre com texto ou glifo ao lado, nunca o único sinal.
+ * - Botão primário preenchido: texto `--color-bg` sobre o acento do app, nunca branco.
+ */
+
+/* ------------------------------------------------------------------ valores */
+@theme {
+  /* Superfícies, texto e marca — K3:577 (tema A, "Navy técnico") */
+  --color-bg: #0b1120; /* fundo; a nav também (navbg = bg) */
+  --color-surface: #111827; /* cartão, menu */
+  --color-raised: #1a2335; /* hover, faixa */
+  --color-border: #243046; /* divisória (decorativa) */
+  --color-border-strong: #66738d; /* controle, ≥ 3:1 (rodada 3, K3:417-420) */
+  --color-text: #f3f4f6;
+  --color-text-2: #c3c9d3; /* secundário */
+  --color-text-muted: #97a0b0; /* mudo, legenda */
+  --color-brand: #3cc8d0; /* teal GHF, foco */
+  --color-footer: #0e1524; /* fundo do footer (ft) */
+
+  /* Papel da página legal — K3:578 (paper), K3:611 e K3:624, LG:11 */
+  --color-paper: #f7f7f5;
+  --color-paper-ink: #15181c;
+  --color-paper-text-2: #4a5059;
+  --color-paper-border: #d9d7d1; /* divisória (1,34: decorativa) */
+  --color-paper-link: #0a6e75; /* link e foco no papel (LG:53) */
+  --color-paper-link-hover: #07565c;
+  /* Sem token no handoff (LITERAIS-SEM-TOKEN-LEGAL-01, resposta 8 do usuário, 2026-11-22): nome
+   * proposto aqui, valor do literal do handoff; o Claude Design confirma na próxima rodada. */
+  --color-paper-chip: #ecebe7; /* chip da data (LG:36), `code` (LG:78), cabeçalho da tabela (LG:117), hover do sumário (LG:25) */
+  --color-paper-raised: #ffffff; /* sumário recolhível (LG:52), tabela (LG:115) */
+
+  /* Acento por app — K3:597-604 (acc e light, rodada 3); edge de LJ:5,40,73,101.
+   * `light` é o acento sobre o papel. */
+  --color-app-lotto: #a78bfa;
+  --color-app-lotto-light: #6d28d9;
+  --color-app-lotto-edge: #6b5ba8;
+  --color-app-topo: #e38a57;
+  --color-app-topo-light: #a0491c;
+  --color-app-topo-edge: #8a5233;
+  --color-app-pole: #5fd47e;
+  --color-app-pole-light: #2a7741;
+  --color-app-pole-edge: #2f6b49;
+  --color-app-eclipse: #ee737d;
+  --color-app-eclipse-light: #ae3646;
+  --color-app-eclipse-edge: #8a3a44;
+
+  /* Semânticos — K3:619-622. Texto (`--color-<estado>`) sobre a tinta (`-tint`), borda `-edge`.
+   * No uso, glifo (✓ ! × i) e palavra são obrigatórios: nunca só cor.
+   * `--color-success` é o selo "Publicado" (D11; K3:430); `--color-success-surface` é o texto do
+   * estado "Backup concluído" (D11; K3:620) — o nome vem da D11, o papel é de texto. */
+  --color-success: #c5e86c;
+  --color-success-surface: #ddf3a8;
+  --color-success-tint: #1e2710;
+  --color-success-edge: #5f7a24;
+  --color-warning: #f7dc9a;
+  --color-warning-tint: #2e240c;
+  --color-warning-edge: #7a6020;
+  --color-error: #ffc2c7;
+  --color-error-tint: #3a1219;
+  --color-error-edge: #8a2e3a;
+  --color-info: #bdf1f4;
+  --color-info-tint: #0c2a2e;
+  --color-info-edge: #1f6a70;
+
+  /* Forma e sombra — K3:578 (r, rb, rc, sh) */
+  --radius-card: 12px;
+  --radius-pill: 999px;
+  --radius-ctl: 8px;
+  --shadow-pop: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --radius-card-lg: 20px; /* cartão grande da Home e das landings (WP-30) */
+
+  /* Direção visual "engenharia luminosa" (WP-30, fatia 1; sem referência no handoff, vale por D33
+   * (a) depois da aprovação do usuário). Faixa tingida das "Áreas": teal GHF ~7% sobre o bg. */
+  --color-band: #0e1e2c;
+  --color-band-edge: color-mix(in oklab, var(--color-brand) 22%, transparent);
+
+  /* Curva das transições e das entradas (WP-30). */
+  --ease-suave: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Fonte. Inter servida pelo site (ADR-006 §3): a variável é a da API `fonts` do
+   * astro.config.mjs, com o fallback de métricas ajustadas. Pesos 400–800 no subset; o 300 do
+   * brief não existe. Mono: a pilha padrão do Tailwind 3, que o site já usava. */
+  --font-sans: var(--fonte-inter);
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
+
+  /* Tipografia — K3:626-633, em px como no handoff. Display, H1 e H2 mudam de tamanho com a
+   * largura ("40/48 → 56/64"); o handoff não diz onde. Aqui ficam os dois valores (`-lg` é o
+   * grande); o ponto de troca é da fatia 2, no componente. */
+  --text-display: 40px;
+  --text-display--line-height: 48px;
+  --text-display--font-weight: 700;
+  --text-display--letter-spacing: -0.025em;
+  --text-display-lg: 56px;
+  --text-display-lg--line-height: 64px;
+  --text-display-lg--font-weight: 700;
+  --text-display-lg--letter-spacing: -0.025em;
+  --text-h1: 32px;
+  --text-h1--line-height: 40px;
+  --text-h1--font-weight: 700;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h1-lg: 44px;
+  --text-h1-lg--line-height: 52px;
+  --text-h1-lg--font-weight: 700;
+  --text-h1-lg--letter-spacing: -0.02em;
+  --text-h2: 24px;
+  --text-h2--line-height: 32px;
+  --text-h2--font-weight: 700;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h2-lg: 32px;
+  --text-h2-lg--line-height: 40px;
+  --text-h2-lg--font-weight: 700;
+  --text-h2-lg--letter-spacing: -0.015em;
+  --text-h3: 20px;
+  --text-h3--line-height: 28px;
+  --text-h3--font-weight: 600;
+  --text-body: 16px;
+  --text-body--line-height: 26px;
+  --text-body-legal: 18px;
+  --text-body-legal--line-height: 30px;
+  --text-small: 14px;
+  --text-small--line-height: 22px;
+  --text-label: 13px; /* caixa normal, sem tracking (lfs/ltt/lls) */
+  --text-label--line-height: 18px;
+  --text-label--font-weight: 600;
+
+  /* Escala expressiva da direção nova (WP-30, fatia 1): hero, título de seção, área, lead, eyebrow
+   * e o numeral grande do "Sobre". Fluida por `clamp`, sem ponto de troca. */
+  --text-hero: clamp(2.25rem, 1.4rem + 4.4vw, 4.5rem);
+  --text-hero--line-height: 1.04;
+  --text-hero--font-weight: 800;
+  --text-hero--letter-spacing: -0.035em;
+  --text-section: clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem);
+  --text-section--line-height: 1.12;
+  --text-section--font-weight: 700;
+  --text-section--letter-spacing: -0.02em;
+  --text-area: 22px;
+  --text-area--line-height: 28px;
+  --text-area--font-weight: 700;
+  --text-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  --text-lead--line-height: 1.55;
+  --text-eyebrow: 13px;
+  --text-eyebrow--line-height: 18px;
+  --text-eyebrow--font-weight: 700;
+  --text-eyebrow--letter-spacing: 0.08em;
+  /* Abaixo de 768 px o numeral fica em 96 px fixos (`text-numeral-sm`), o `clamp` daria 80. */
+  --text-numeral-sm: 96px;
+  --text-numeral-sm--line-height: 0.9;
+  --text-numeral-sm--font-weight: 800;
+  --text-numeral-sm--letter-spacing: -0.05em;
+  --text-numeral: clamp(5rem, 3rem + 10vw, 11rem);
+  --text-numeral--line-height: 0.9;
+  --text-numeral--font-weight: 800;
+  --text-numeral--letter-spacing: -0.05em;
+
+  /* Ramos de nav e footer — `Site Nav.dc.html:119` e `Site Footer.dc.html:65`: `m` < 600 px,
+   * `t` 600–1023, `d` ≥ 1024 (D27). O 600 não existe no Tailwind (sm = 640): a variante `t:` sai
+   * daqui, um lugar só. O `d` é o `lg:` (1024) padrão. Fatia 2. Em rem, como os do Tailwind
+   * (`--breakpoint-lg: 64rem`): o v4 ordena as variantes pelo valor, e unidade misturada poria
+   * `t:` depois de `lg:` no CSS, e o `t:` venceria no desktop. 37,5rem = 600 px. */
+  --breakpoint-t: 37.5rem;
+
+  /* Espaçamento — K3:635 (--s-1…--s-24 = 4…96 px, base 4). O `--spacing: 0.25rem` padrão do
+   * Tailwind 4 já gera a mesma escala (p-11 = 44 px, p-24 = 96 px): não se redefine.
+   * Alvo de toque mínimo: `min-h-11`. Seção: `py-16 lg:py-24`. */
+}
+
+/* ------------------------------------------------------------------ acento do app da página
+ * `data-app="lotto|topo|pole|eclipse"` no <html> aponta os aliases para o app (LA:11, K3:492);
+ * o seletor é `[data-app]`, sem `:root`, para valer também num elemento (o card de cada app na
+ * Home, WP-30);
+ * o componente usa `*-app-acc`, nunca o nome do app. Página sem `data-app` (home, 404,
+ * institucional): só o acento tem padrão, o teal da marca — o único que o handoff dá, no Nav sem
+ * app (`Site Nav.dc.html:123`, `acc = '#3CC8D0'`); `-light` e `-edge` sem app ficam indefinidos
+ * até uma fatia ter consumidor (ACENTO-PADRAO-SEM-APP-01, resposta 5 do usuário, 2026-11-22).
+ * Hover e ativo do primário: K3, seção 2 "Estados"; o ativo é 88% e não os 82% do K3, que davam
+ * texto `--bg` abaixo de 4,5:1 em lotto, topo e eclipse (4,20 / 4,39 / 4,07); 88% dá 4,98 / 5,21 /
+ * 7,16 / 4,80 (BOTAO-ATIVO-CONTRASTE-01, resposta 6, 2026-11-22; o Claude Design confirma). */
+@theme inline {
+  --color-app-acc: var(--app-acc);
+  --color-app-acc-light: var(--app-acc-light);
+  --color-app-acc-edge: var(--app-acc-edge);
+  --color-app-acc-hover: var(--acc-hover);
+  --color-app-acc-active: var(--acc-active);
+
+  /* Superfícies tingidas pelo acento (WP-30): `inline`, para resolver `--app-acc` no elemento —
+   * o card de cada app na Home (`<article data-app>`) pega a cor dele. */
+  --color-app-tint: color-mix(in oklab, var(--app-acc) 8%, var(--color-bg));
+  --color-app-panel: color-mix(in oklab, var(--app-acc) 14%, var(--color-surface));
+
+  /* Sombras com relevo (WP-30): filete claro no topo, sombra funda e, no `lift` e no `brilho`,
+   * o anel e o halo da cor do acento do elemento. */
+  --shadow-card: inset 0 1px 0 color-mix(in oklab, white 5%, transparent), 0 8px 24px rgb(0 0 0 / 0.35);
+  --shadow-lift:
+    inset 0 1px 0 color-mix(in oklab, white 7%, transparent), 0 18px 44px rgb(0 0 0 / 0.5),
+    0 0 0 1px color-mix(in oklab, var(--app-acc) 35%, transparent);
+  --shadow-brilho: var(--brilho-acc);
+}
+
+:root {
+  --app-acc: var(--color-brand);
+  /* Sem `data-app` (nenhuma legal hoje): o acento -light cai no link teal do papel, para o anel de foco
+     e as marcas não sumirem em silêncio (auditoria da fatia 4 do WP-30). */
+  --app-acc-light: var(--color-paper-link);
+
+  /* Movimento (WP-30): duração das transições e das entradas. */
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 700ms;
+
+  /* Ornamento (WP-30): glow radial do acento vazando do canto, glow de fechamento, grade de pontos
+   * e anéis concêntricos finos. Resolvidos no :root (o acento da página: o teal sem app, o do app
+   * com `data-app` no <html>). */
+  --grad-glow: radial-gradient(
+    60rem 34rem at 78% -8%,
+    color-mix(in oklab, var(--app-acc) 24%, transparent),
+    transparent 62%
+  );
+  --grad-glow-baixo: radial-gradient(
+    50rem 24rem at 50% 110%,
+    color-mix(in oklab, var(--app-acc) 20%, transparent),
+    transparent 65%
+  );
+  --orn-pontos: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-text) 14%, transparent) 1px,
+      transparent 1.6px
+    )
+    0 0 / 24px 24px;
+  --orn-aneis: repeating-radial-gradient(
+    circle at 80% 14%,
+    transparent 0 5.5rem,
+    color-mix(in oklab, var(--app-acc) 16%, transparent) 5.5rem calc(5.5rem + 1px)
+  );
+  /* Anéis concêntricos do "2004" do Sobre (Home), centrados, no teal da marca (WP-30, fatia 2:
+   * saiu da página). A máscara radial que os esmaece fica no elemento. */
+  --orn-aneis-sobre: repeating-radial-gradient(
+    circle at 50% 50%,
+    transparent 0 3.5rem,
+    color-mix(in oklab, var(--color-brand) 24%, transparent) 3.5rem calc(3.5rem + 1px)
+  );
+}
+
+/* Valores que dependem do acento e que valem também num elemento com `data-app` (o card de cada app
+ * na Home): declarados em `:root` e de novo em `[data-app]`, para o `var(--app-acc)` resolver no
+ * elemento (uma propriedade herdada leva o valor já resolvido no ancestral). Um lugar só para
+ * `btn-primario` e para os utilitários `bg-app-acc-hover`, `bg-app-acc-active` e `shadow-brilho`
+ * (@theme inline acima), WP-30 fatia 2.
+ * `--grad-glow-card`: o glow do canto superior direito do painel do card de app (Home). */
+:root,
+[data-app] {
+  --acc-hover: color-mix(in oklab, var(--app-acc) 80%, white);
+  --acc-active: color-mix(in oklab, var(--app-acc) 88%, black);
+  --brilho-acc:
+    0 0 0 1px color-mix(in oklab, var(--app-acc) 40%, transparent),
+    0 14px 56px -10px color-mix(in oklab, var(--app-acc) 40%, transparent);
+  --grad-glow-card: radial-gradient(
+    16rem 9rem at 100% 0%,
+    color-mix(in oklab, var(--app-acc) 38%, transparent),
+    transparent 70%
+  );
+}
+
+[data-app='lotto'] {
+  --app-acc: var(--color-app-lotto);
+  --app-acc-light: var(--color-app-lotto-light);
+  --app-acc-edge: var(--color-app-lotto-edge);
+}
+
+[data-app='topo'] {
+  --app-acc: var(--color-app-topo);
+  --app-acc-light: var(--color-app-topo-light);
+  --app-acc-edge: var(--color-app-topo-edge);
+}
+
+[data-app='pole'] {
+  --app-acc: var(--color-app-pole);
+  --app-acc-light: var(--color-app-pole-light);
+  --app-acc-edge: var(--color-app-pole-edge);
+}
+
+[data-app='eclipse'] {
+  --app-acc: var(--color-app-eclipse);
+  --app-acc-light: var(--color-app-eclipse-light);
+  --app-acc-edge: var(--color-app-eclipse-edge);
+}
+
+/* ------------------------------------------------------------------ ornamento, cartão e botões
+ * (WP-30, fatia 1). Ornamento do hero: pontos + anéis + glow num ::before atrás do conteúdo,
+ * esmaecido por máscara a partir do canto do glow. Decorativo: nada de texto sobre ele perde
+ * contraste (o texto fica em text/text-2). */
+@utility orn-hero {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: var(--orn-aneis), var(--orn-pontos), var(--grad-glow);
+    mask-image: radial-gradient(70% 80% at 75% 10%, black, transparent 75%);
+  }
+}
+
+/* Borda de 1 px em gradiente do acento (forte no canto superior esquerdo, some na diagonal). */
+@utility cartao-brilho {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+    linear-gradient(160deg, color-mix(in oklab, var(--app-acc) 55%, transparent), transparent 45%)
+      border-box;
+}
+
+/* Região rolável de lado (a tabela de planos; WP-30, fatia 2): uma sombra do acento na borda que
+ * ainda tem conteúdo, sem JS. A sombra fica presa à caixa (`scroll`); duas capas da cor do fundo,
+ * presas ao conteúdo (`local`), a cobrem quando a rolagem chega àquela borda. `--fundo-rolagem` é a
+ * cor do que está atrás (padrão `--color-bg`). Fica sob o conteúdo: célula opaca esconde a sombra. */
+@utility rolagem-sombra {
+  background:
+    linear-gradient(to right, var(--fundo-rolagem, var(--color-bg)) 30%, transparent) left center / 48px 100%
+      no-repeat local,
+    linear-gradient(to left, var(--fundo-rolagem, var(--color-bg)) 30%, transparent) right center / 48px 100%
+      no-repeat local,
+    radial-gradient(farthest-side at 0 50%, color-mix(in oklab, var(--app-acc) 45%, transparent), transparent)
+      left center / 16px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, color-mix(in oklab, var(--app-acc) 45%, transparent), transparent)
+      right center / 16px 100% no-repeat scroll;
+}
+
+/* Botões (WP-30; o CtaPlay passa a usá-los na fatia 2). Primário preenchido com o acento e texto
+ * --bg (nunca branco); um primário por viewport. Foco: `anel-foco` no elemento. O deslocamento do
+ * hover só sem "reduzir movimento". */
+@utility btn-primario {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 52px;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--app-acc);
+  color: var(--color-bg);
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--brilho-acc);
+  transition:
+    background-color var(--dur-fast) var(--ease-suave),
+    transform var(--dur-fast) var(--ease-suave);
+
+  &:hover {
+    background-color: var(--acc-hover);
+  }
+
+  &:active {
+    background-color: var(--acc-active);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: none;
+    }
+  }
+}
+
+@utility btn-secundario {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 52px;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border-strong);
+  background-color: transparent;
+  color: var(--color-text);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    border-color var(--dur-fast) var(--ease-suave),
+    background-color var(--dur-fast) var(--ease-suave);
+
+  &:hover {
+    border-color: var(--color-text);
+    background-color: color-mix(in oklab, var(--color-text) 6%, transparent);
+  }
+}
+
+/* ------------------------------------------------------------------ foco (K3, "Estados") */
+@utility anel-foco {
+  &:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+  }
+}
+
+/* No papel o teal não passa (1,89): o foco é o link do papel. */
+@utility anel-foco-papel {
+  &:focus-visible {
+    outline: 2px solid var(--color-paper-link);
+    outline-offset: 3px;
+  }
+}
+
+/* Anel interno no papel: item do sumário da página legal (LG:25, `outline-offset:-2px`). */
+@utility anel-foco-papel-interno {
+  &:focus-visible {
+    outline: 2px solid var(--color-paper-link);
+    outline-offset: -2px;
+  }
+}
+
+/* Foco no papel com o acento do app (`-light`, contraste ≥ 5,1 sobre o papel; WP-30, fatia 4):
+ * botão "voltar" e itens do sumário da página legal. Só em elemento sob `[data-app]`. */
+@utility anel-foco-acc {
+  &:focus-visible {
+    outline: 2px solid var(--app-acc-light);
+    outline-offset: 3px;
+  }
+}
+
+@utility anel-foco-acc-interno {
+  &:focus-visible {
+    outline: 2px solid var(--app-acc-light);
+    outline-offset: -2px;
+  }
+}
+
+/* Anel interno: em elemento dentro de caixa que corta (folha do menu, links do rodapé), o handoff
+ * põe o anel para dentro (`Site Nav.dc.html:76`, `Site Footer.dc.html:22`). Mesmo traço do
+ * `anel-foco`. */
+@utility anel-foco-interno {
+  &:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: -2px;
+  }
+}

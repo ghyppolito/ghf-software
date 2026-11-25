@@ -1,0 +1,158 @@
+---
+// Faixa de sugestão de idioma (WP-15, D8 c1, ADR-007 §7; desenho: especificação do site-ux no WP-15,
+// copy `band`/`bandGo`/`close`/`language` do handoff `content/i18n.js`). Quando a língua preferida
+// do visitante — a escolha gravada em `localStorage.ghf_lang` ou, sem ela, a primeira de
+// `navigator.languages` que a página tem — difere da língua da página, mostra uma faixa com um link
+// para a mesma página nessa língua. **Nunca navega sozinha**: o botão é um `<a href>` comum.
+//
+// - O texto vai no HTML, um `<template lang>` por outra língua da página, na língua sugerida: nada
+//   é buscado na rede, e sem JS nada aparece.
+// - Duas chaves de armazenamento, nenhuma com identificador, nada sai do navegador, sem cookie:
+//   `localStorage.ghf_lang` (só o código; gravado só no clique de um link de idioma — seletor,
+//   faixa ou link do par no corpo da legal (WP-26) —, lido só aqui) e
+//   `sessionStorage.ghf_faixa_idioma = "off"` (fechada nesta sessão).
+// - `position: fixed` embaixo, inserida depois do `load`, entrando por opacidade: não mexe no fluxo
+//   (CLS 0) e não disputa o LCP. Sem transição com `prefers-reduced-motion`.
+// - `<section aria-label>` (landmark `region`, como o handoff), sem `aria-live`: não interrompe o
+//   leitor de tela, que chega nela na ordem do DOM, no fim do `<body>`.
+// - Abaixo de md, uma linha só (texto + botão + ✕, ~62 px): o texto corta com reticências e o
+//   botão e o ✕ nunca encolhem; assim a faixa não cobre o CTA da Play da home a 360x568
+//   (especificação do site-ux: "reduzir a faixa em < md a uma linha"). O texto inteiro segue no DOM
+//   para o leitor de tela. De md para cima, texto e botões quebram como no handoff (`flex-wrap`).
+// - Fechar (✕ ou Esc) com o foco dentro da faixa leva o foco ao último elemento focável visível
+//   antes dela no DOM (a faixa é o fim do <body>: na prática, o último link do rodapé) — o foco não
+//   cai no <body>. Com o foco fora, ele não se move.
+// - Página com uma língua só: nada (nem template, nem script).
+// - Tokens do WP-10 (fatia 2, `Site Nav.dc.html:12-20`): cartão `raised` com borda `border-strong`,
+//   botão em pílula, ✕ como glifo (N:17) e o anel de foco teal. A posição fica a do WP-15 (fixa
+//   embaixo), não a do handoff (no topo, em fluxo): a faixa entra depois do `load` e, no topo,
+//   empurraria a página (resposta 4 do usuário, 2026-11-22).
+// - Fora da impressão (WP-10 fatia 3): fixa, ela cobriria o pé de cada folha da página legal.
+import { caminhoPublico, hreflang, linguasDe, type Idioma } from '../i18n/idiomas';
+import { t } from '../i18n/ui';
+
+interface Props {
+  lang: Idioma;
+  /** caminho pt da página atual */
+  caminho: string;
+}
+
+const { lang, caminho } = Astro.props;
+const linguas = linguasDe(caminho);
+const outras = linguas.filter((l) => l !== lang);
+---
+{
+  linguas.length >= 2 && (
+    <>
+      {outras.map((l) => (
+        <template data-faixa-idioma={l} data-lingua-pagina={lang} lang={hreflang(l)}>
+          <section
+            aria-label={t(l, 'idioma')}
+            lang={hreflang(l)}
+            class="fixed z-30 inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] md:inset-x-auto md:left-4 md:bottom-[calc(1rem+env(safe-area-inset-bottom))] md:max-w-[560px] flex flex-nowrap md:flex-wrap items-center gap-x-2 md:gap-x-3 gap-y-2 p-2 pl-3 md:p-3 md:pl-4 bg-raised border border-border-strong rounded-card shadow-pop opacity-0 translate-y-2 transition duration-200 ease-out motion-reduce:transition-none print:hidden"
+          >
+            <p class="min-w-0 flex-1 truncate md:flex-[1_1_220px] md:overflow-visible md:whitespace-normal text-[14px] leading-5 text-text">{t(l, 'faixa_idioma')}</p>
+            <div class="shrink-0 flex items-center gap-1 md:gap-2">
+              <a
+                href={caminhoPublico(l, caminho)}
+                data-troca-idioma={l}
+                class="inline-flex items-center min-h-11 px-3 md:px-4 rounded-pill border border-border-strong text-[14px] font-semibold text-text whitespace-nowrap md:whitespace-normal hover:bg-surface anel-foco"
+              >
+                {t(l, 'faixa_ir')}
+              </a>
+              <button
+                type="button"
+                aria-label={t(l, 'fechar')}
+                data-faixa-fechar
+                class="inline-flex items-center justify-center w-11 h-11 rounded-ctl text-[22px] leading-none text-text-2 hover:text-text hover:bg-surface anel-foco"
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+          </section>
+        </template>
+      ))}
+      <script>
+        const ESCOLHA = 'ghf_lang';
+        const FECHADA = 'ghf_faixa_idioma';
+        // Modo privado ou armazenamento bloqueado: a faixa age como sem preferência gravada.
+        function le(area: () => Storage, chave: string): string | null {
+          try {
+            return area().getItem(chave);
+          } catch {
+            return null;
+          }
+        }
+        function grava(area: () => Storage, chave: string, valor: string) {
+          try {
+            area().setItem(chave, valor);
+          } catch {
+            /* sem armazenamento: a escolha vale só até sair da página */
+          }
+        }
+
+        // A escolha é gravada só no clique de um link de idioma (seletor, faixa ou link do par no
+        // corpo da legal, WP-26), e a navegação é a do próprio link. Na página legal, a seção aberta
+        // (`#secao-N`) vai junto: o `id` vem da posição do título e é o mesmo em toda língua
+        // (ADR-007 §6; `Legal LottoExpert.dc.html:151`,
+        // WP-10 fatia 3). Só esse formato: âncora de outra página pode não existir na outra língua.
+        // Sem JS, o link vai ao topo da página.
+        document.addEventListener('click', (e) => {
+          const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[data-troca-idioma]');
+          if (!a?.dataset.trocaIdioma) return;
+          grava(() => localStorage, ESCOLHA, a.dataset.trocaIdioma);
+          if (/^#secao-\d+(-\d+)*$/.test(location.hash)) a.hash = location.hash;
+        });
+
+        // Último elemento focável e visível antes de `el` no DOM: para onde o foco vai ao fechar.
+        const FOCAVEIS =
+          'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])';
+        function anterior(el: Element): HTMLElement | null {
+          const antes = [...document.querySelectorAll<HTMLElement>(FOCAVEIS)].filter(
+            (x) =>
+              !el.contains(x) &&
+              el.compareDocumentPosition(x) & Node.DOCUMENT_POSITION_PRECEDING &&
+              x.getClientRects().length > 0,
+          );
+          return antes[antes.length - 1] ?? null;
+        }
+
+        function mostra() {
+          const modelos = [...document.querySelectorAll<HTMLTemplateElement>('template[data-faixa-idioma]')];
+          if (!modelos.length || le(() => sessionStorage, FECHADA) === 'off') return;
+          const pagina = modelos[0].dataset.linguaPagina;
+          const linguas = [pagina, ...modelos.map((m) => m.dataset.faixaIdioma)];
+          let preferida = le(() => localStorage, ESCOLHA);
+          if (!preferida || !linguas.includes(preferida)) {
+            const nav = navigator.languages?.length ? navigator.languages : [navigator.language];
+            preferida = nav.map((x) => (x || '').slice(0, 2).toLowerCase()).find((x) => linguas.includes(x)) ?? null;
+          }
+          if (!preferida || preferida === pagina) return;
+          const modelo = modelos.find((m) => m.dataset.faixaIdioma === preferida);
+          const faixa = modelo?.content.firstElementChild?.cloneNode(true) as HTMLElement | undefined;
+          if (!faixa) return;
+          document.body.append(faixa);
+          // dois quadros: o primeiro pinta com opacidade 0, o segundo dispara a transição
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              faixa.classList.remove('opacity-0', 'translate-y-2');
+              faixa.classList.add('opacity-100', 'translate-y-0');
+            }),
+          );
+          const fecha = () => {
+            grava(() => sessionStorage, FECHADA, 'off');
+            if (faixa.contains(document.activeElement)) anterior(faixa)?.focus();
+            faixa.remove();
+          };
+          faixa.querySelector('[data-faixa-fechar]')?.addEventListener('click', fecha);
+          faixa.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') fecha();
+          });
+        }
+
+        if (document.readyState === 'complete') mostra();
+        else window.addEventListener('load', mostra, { once: true });
+      </script>
+    </>
+  )
+}

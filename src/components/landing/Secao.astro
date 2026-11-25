@@ -1,0 +1,61 @@
+---
+// Seção de landing (WP-10, fatia 5; WP-30, fatia 2 na direção "engenharia luminosa"): a `<section>`
+// ocupa a largura inteira (o fundo vai de borda a borda) e o conteúdo fica num contêiner de 1216 px
+// com margem lateral fluida, um lugar só. Com `titulo`, um `<h2>` que nomeia a seção
+// (`aria-labelledby`); sem ele, `rotuladaPor` (id de um título visível que quem chama desenha no
+// slot) vira `aria-labelledby`, ou o `rotulo` vira `aria-label`. `classe` é o layout do contêiner
+// interno (classes literais de quem chama). `fundo` é o ritmo das seções (REVISAO-VISUAL §7):
+// `base` (sem fundo), `tint` (faixa tingida pelo acento do app) ou `surface` (superfície).
+// `compacta` é o respiro menor. As unidades `cqi` medem o `@container` do Landing.astro.
+interface Props {
+  id?: string;
+  /** id do `<h2>`; padrão `h-{id}` */
+  idTitulo?: string;
+  titulo?: string;
+  rotulo?: string;
+  /** id do título visível desenhado no slot (sem `titulo`) */
+  rotuladaPor?: string;
+  fundo?: 'base' | 'tint' | 'surface';
+  compacta?: boolean;
+  classe?: string;
+}
+
+const { id, idTitulo, titulo, rotulo, rotuladaPor, fundo = 'base', compacta = false, classe } = Astro.props;
+const idH = idTitulo ?? (id ? `h-${id}` : undefined);
+if (titulo && !idH) throw new Error(`Secao "${titulo}": título sem id (passe \`id\` ou \`idTitulo\`)`);
+if (!titulo && !rotulo && !rotuladaPor) throw new Error('Secao sem título nem rótulo');
+const temLead = Astro.slots.has('lead');
+// Classes inteiras literais (o Tailwind não detecta concatenação).
+const FUNDO = {
+  base: '',
+  tint: 'bg-app-tint border-y border-app-acc/20',
+  surface: 'bg-surface border-y border-border',
+} as const;
+---
+<section
+  id={id}
+  aria-labelledby={titulo ? idH : rotuladaPor}
+  aria-label={titulo || rotuladaPor ? undefined : rotulo}
+  class:list={[FUNDO[fundo], id && 'scroll-mt-4']}
+>
+  <div
+    class:list={[
+      'max-w-[1216px] mx-auto px-[clamp(16px,2.6cqi,32px)]',
+      compacta ? 'py-[clamp(40px,6cqi,72px)]' : 'py-[clamp(64px,9cqi,112px)]',
+      classe,
+    ]}
+  >
+    {
+      titulo &&
+        (temLead ? (
+          <div class="flex flex-col gap-4 max-w-[680px]">
+            <h2 id={idH} class="text-section text-balance text-text">{titulo}</h2>
+            <slot name="lead" />
+          </div>
+        ) : (
+          <h2 id={idH} class="text-section text-balance text-text">{titulo}</h2>
+        ))
+    }
+    <slot />
+  </div>
+</section>

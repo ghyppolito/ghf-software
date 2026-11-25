@@ -1,0 +1,142 @@
+---
+// Footer do site (WP-10, fatia 2; `Site Footer.dc.html`). `id="contato"` é o alvo do item Contato
+// da nav. Um visual só (`bg-footer`) e um DOM só para os três ramos (N:119, D27): `m` < 600 px,
+// `t` 600–1023 (variante `t:` de src/styles/tokens.css), `d` ≥ 1024 (`lg:`).
+// - m: marca, os 4 apps empilhados (título + links em linha) e contato.
+// - t: marca na primeira linha; os 4 apps em 4 colunas; contato embaixo.
+// - d: uma grade `1,3fr · 4×1fr · 1,3fr` — marca, os 4 apps e contato.
+// A ordem visual é a do DOM em toda largura (marca → apps → contato; WCAG 2.4.3). O `Site Footer`
+// põe o contato antes dos apps em m e t; seguir isso com `order` deixaria o Tab fora da ordem
+// visual (auditoria da fatia 2; desvio registrado no WP-10 e em RODAPE-ORDEM-M-T-01).
+// O bloco dos apps é um `<div>` só: em m e t é uma linha inteira da grade, em d é `lg:contents` e
+// os apps viram colunas. O handoff duplica o bloco; aqui não, para o leitor de tela não ouvir os
+// links duas vezes.
+// Links para páginas do site passam por `link()`/`atributosLink()`: na língua da página quando o
+// destino a tem; senão pela D23 (en, senão pt), com `hreflang` e `lang` do destino. O nome do app
+// entra no nome acessível de cada link por um `sr-only` ("Privacidade - LottoExpert", WCAG 2.4.4 e
+// 2.5.3). Hover só muda cor e sublinhado (FOOTER-HOVER-BOLD-01).
+// Fora, por decisão (resposta 7 do usuário, 2026-11-22; D25): "Este site não usa rastreadores nem
+// cookies" (depende da D3), "Como tratamos dados" (não há página), as colunas "Institucional" e
+// "Transparência & Políticas" (as 5 políticas ficam na coluna de cada app), os ícones circulares
+// (redes em texto com seta) e "Desenvolvido com ♥ por especialistas.".
+import Logo from './Logo.astro';
+import { t, EMAIL_SUPORTE, type ChaveUi } from '../i18n/ui';
+import { apps as dadosApps, ORDEM_APPS, ACENTO, COR_APP, REDES_GHF, type App } from '../i18n/apps';
+import { atributosLink, link as linkPagina, type Idioma } from '../i18n/idiomas';
+
+interface Props {
+  lang: Idioma;
+  /** destino do logo */
+  inicio: string;
+  /** canais da página (a landing de cada app aponta para os do app; canal ausente não aparece);
+   *  padrão: os da GHF (REDES_GHF). O e-mail aparece sempre. */
+  redes?: { youtube?: string; instagram?: string; tiktok?: string; facebook?: string };
+  /** caminho pt da landing atual: o link "Página do app" dele leva `aria-current` */
+  appAtual?: string;
+  /** caminho pt da página legal atual: o link da política leva `aria-current` */
+  politicaAtual?: string;
+}
+
+const {
+  lang,
+  inicio,
+  redes = REDES_GHF,
+  appAtual,
+  politicaAtual,
+} = Astro.props;
+
+// Ordem do brief §10 e dados de src/i18n/apps.ts (fonte única, WP-10 fatia 10a). O quadrado é a
+// cor do app (COR_APP: classe inteira literal).
+const apps = ORDEM_APPS.map((c) => {
+  const a: App = dadosApps[c];
+  return {
+    id: `rodape-app-${ACENTO[c]}`,
+    nome: a.nome,
+    quadrado: `size-2 flex-none rounded-[2px] ${COR_APP[c].fundo}`,
+    links: [
+      { caminho: a.pagina, chave: 'footer_app_page' },
+      { caminho: a.privacidade, chave: 'footer_privacy' },
+      ...(a.termos ? [{ caminho: a.termos, chave: 'footer_terms' }] : []),
+    ] as { caminho: string; chave: ChaveUi }[],
+  };
+});
+
+const redesTexto = [
+  { nome: 'YouTube', href: redes.youtube },
+  { nome: 'Instagram', href: redes.instagram },
+  { nome: 'TikTok', href: redes.tiktok },
+  { nome: 'Facebook', href: redes.facebook },
+].filter((r) => r.href);
+
+const ano = new Date().getFullYear();
+---
+<footer id="contato" class="bg-footer border-t border-border">
+  <div class="max-w-[1216px] mx-auto flex flex-col gap-6 lg:gap-10 pt-9 px-5 pb-7 t:pt-11 t:px-8 t:pb-6 lg:pt-14 lg:pb-7">
+    <div class="grid gap-x-8 gap-y-6 items-start t:grid-cols-2 lg:grid-cols-[minmax(0,1.3fr)_repeat(4,minmax(0,1fr))_minmax(0,1.3fr)]">
+      <!-- Marca -->
+      <div class="flex flex-col gap-3">
+        <div class="flex"><Logo link={atributosLink(lang, inicio)} texto carregamento="lazy" /></div>
+        <p class="max-w-[36ch] text-[14px] leading-[22px] text-text-2 text-pretty">{t(lang, 'footer_desc')}</p>
+      </div>
+
+      <!-- Apps: linha inteira em m e t, colunas da grade em d -->
+      <div class="col-span-full grid grid-cols-1 t:grid-cols-4 gap-x-6 pt-3 border-t border-border lg:contents">
+        {
+          apps.map((a) => (
+            <div class="flex flex-col min-w-0 py-1 border-t border-border t:py-0 t:border-t-0">
+              <p id={a.id} class="flex items-center gap-2 min-h-11 text-[15px] lg:text-[14px] font-bold text-text">
+                <span aria-hidden="true" class={a.quadrado} />
+                {a.nome}
+              </p>
+              <ul aria-labelledby={a.id} class="flex flex-row flex-wrap gap-x-5 t:flex-col">
+                {a.links.map((l) => (
+                  <li>
+                    {l.caminho === appAtual || l.caminho === politicaAtual ? (
+                      <a {...linkPagina(lang, l.caminho)} aria-current="page" class="flex items-center min-h-11 rounded-[4px] text-[14px] text-text underline decoration-brand underline-offset-[3px] anel-foco-interno">
+                        {t(lang, l.chave)}<span class="sr-only"> - {a.nome}</span>
+                      </a>
+                    ) : (
+                      <a {...linkPagina(lang, l.caminho)} class="flex items-center min-h-11 rounded-[4px] text-[14px] text-text-2 underline decoration-border-strong underline-offset-[3px] hover:text-text lg:no-underline lg:decoration-current lg:hover:underline anel-foco-interno focus-visible:text-text">
+                        {t(lang, l.chave)}<span class="sr-only"> - {a.nome}</span>
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Contato -->
+      <div class="flex flex-col min-w-0">
+        <p class="flex items-center min-h-11 text-[14px] font-bold text-text">{t(lang, 'nav_contact')}</p>
+        <a href={`mailto:${EMAIL_SUPORTE}`} class="flex items-center min-h-11 rounded-[4px] text-[14px] text-text underline decoration-brand underline-offset-[3px] [overflow-wrap:anywhere] anel-foco-interno">{EMAIL_SUPORTE}</a>
+        {
+          redesTexto.length > 0 && (
+            <ul class="flex flex-row flex-wrap gap-x-6 t:flex-col">
+              {redesTexto.map((r) => (
+                <li>
+                  <a href={r.href} target="_blank" rel="noopener noreferrer" class="flex items-center min-h-11 rounded-[4px] text-[14px] text-text-2 hover:text-text hover:underline anel-foco-interno focus-visible:text-text">
+                    {r.nome}&nbsp;<span aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </div>
+
+    <!-- Linha de baixo: só o © (F:50-53, sem "não usa rastreadores": D3) -->
+    <p class="flex flex-wrap items-center gap-x-6 gap-y-2 pt-4 border-t border-border text-[13px] leading-5 text-text-muted">
+      <span>&copy; <span id="year" class="tabular-nums">{ano}</span> {t(lang, 'footer_rights')}</span>
+    </p>
+  </div>
+</footer>
+
+<script>
+  // Ano corrente (o do build fica como texto sem JS).
+  const ano = document.getElementById('year');
+  if (ano) ano.textContent = String(new Date().getFullYear());
+</script>

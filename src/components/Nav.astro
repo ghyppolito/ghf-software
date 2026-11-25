@@ -1,0 +1,152 @@
+---
+// Nav do site (WP-10, fatia 2; `Site Nav.dc.html` e `GHF Kit v3.dc.html` §nav). Os itens são prop; o
+// markup é um só. Ramos do handoff (N:119, D27): `m` < 600 px, `t` 600–1023 (variante `t:` de
+// src/styles/tokens.css), `d` ≥ 1024 (`lg:`).
+// - Barra de 60 px em m e 68 em t e d, no fluxo, sem posição fixa (o handoff não define).
+// - Esquerda: logo (Logo.astro); com `app`, separador e o link da landing do app (favicon + nome).
+// - d: links e o seletor de idioma; sem botão de destaque (K3:344 "Nav sem CTA: o botão da Play é
+//   do hero"; a pílula "Contato" saiu, resposta 1 do usuário, 2026-11-22).
+// - t: seletor na barra e o botão "Menu"; a folha tem os links em 2 colunas.
+// - m: só o botão "Menu"; a folha tem os links em 1 coluna e o bloco de idioma.
+// O acento da marca da página atual é `--app-acc` (o `data-app` do <html>, Base.astro; sem app, o
+// teal da marca). A folha abre e fecha sem animação. Sem JS o botão não age e os links ficam
+// escondidos abaixo de 1024 px (como antes); home e políticas continuam no rodapé.
+import { Image } from 'astro:assets';
+import Logo from './Logo.astro';
+import SeletorIdioma from './SeletorIdioma.astro';
+import { t, type ChaveUi, type Idioma } from '../i18n/ui';
+import { atributosLink, link } from '../i18n/idiomas';
+import { apps, type ChaveApp } from '../i18n/apps';
+import { iconesApps } from '../assets/icones-apps';
+
+interface Item {
+  href: string;
+  chave: ChaveUi;
+}
+
+interface Props {
+  lang: Idioma;
+  /** caminho pt da página atual — o seletor de idioma leva à mesma página nas outras línguas */
+  caminho: string;
+  /** destino do logo */
+  inicio: string;
+  itens: Item[];
+  /** app da página: mostra favicon e nome ao lado do logo (fatias de landing e legal do WP-10) */
+  app?: ChaveApp;
+  /** href do item atual (`aria-current="page"` e a marca no acento) */
+  current?: string;
+}
+
+const { lang, caminho, inicio, itens, app, current } = Astro.props;
+---
+<header class="relative z-20">
+  <div class="h-15 t:h-17 flex items-center gap-4 pl-4 pr-2 t:px-[clamp(16px,2.6vw,32px)] border-b border-border bg-bg">
+    <Logo link={atributosLink(lang, inicio)} texto={!app} />
+    {
+      app && (
+        <>
+          <span aria-hidden="true" class="w-px h-6 flex-none bg-border-strong" />
+          <a {...link(lang, `${app}.html`)} class="flex items-center gap-2.5 min-h-11 min-w-0 rounded-ctl text-text anel-foco">
+            <span class="block size-7 flex-none overflow-hidden rounded-ctl">
+              <Image src={iconesApps[app]} width={28} height={28} densities={[1, 2]} alt="" loading="eager" class="size-full object-cover scale-[1.06]" />
+            </span>
+            <span class="truncate whitespace-nowrap text-[16px] font-bold">{apps[app].nome}</span>
+          </a>
+        </>
+      )
+    }
+    <span class="flex-1" />
+
+    <nav aria-label={t(lang, 'nav_principal')} class="hidden lg:flex gap-0.5">
+      {
+        itens.map((item) =>
+          item.href === current ? (
+            <a {...atributosLink(lang, item.href)} aria-current="page" class="flex items-center min-h-11 px-3 whitespace-nowrap text-[15px] font-medium text-text rounded-t-ctl shadow-[inset_0_-2px_0_var(--app-acc)] hover:bg-raised anel-foco">
+              {t(lang, item.chave)}
+            </a>
+          ) : (
+            <a {...atributosLink(lang, item.href)} class="flex items-center min-h-11 px-3 whitespace-nowrap text-[15px] font-medium text-text-2 rounded-t-ctl hover:text-text hover:bg-raised anel-foco">
+              {t(lang, item.chave)}
+            </a>
+          ),
+        )
+      }
+    </nav>
+
+    <div class="hidden t:flex flex-none">
+      <SeletorIdioma lang={lang} caminho={caminho} posicao="barra" />
+    </div>
+
+    <button
+      type="button"
+      id="menu-botao"
+      aria-expanded="false"
+      aria-controls="menu-movel"
+      data-rotulo-abrir={t(lang, 'menu')}
+      data-rotulo-fechar={t(lang, 'fechar')}
+      class="lg:hidden flex flex-none items-center gap-2.5 min-h-11 px-3 rounded-pill border border-border-strong text-[14px] font-semibold text-text aria-expanded:bg-raised anel-foco"
+    >
+      <span data-rotulo-menu>{t(lang, 'menu')}</span>
+      <span aria-hidden="true" class="flex flex-col gap-[3px]">
+        <span class="w-3.5 h-[1.5px] bg-text" />
+        <span class="w-3.5 h-[1.5px] bg-text" />
+        <span class="w-3.5 h-[1.5px] bg-text" />
+      </span>
+    </button>
+  </div>
+
+  {/* Folha sob a barra (N:72; K3:409 diz "folha cheia", o código do componente é sob a barra). */}
+  {/* `<nav>` com nome próprio ("Menu", o do botão que a controla): dois `<nav>` com o mesmo nome
+      reprovam `unique-landmark` do html-validate, mesmo com um deles escondido. */}
+  <div id="menu-movel" hidden class="lg:hidden absolute inset-x-0 top-full flex flex-col gap-0.5 px-2 pt-2 pb-4 bg-surface border-b border-border-strong shadow-pop">
+    <nav aria-label={t(lang, 'menu')}>
+      <ul class="grid grid-cols-1 t:grid-cols-2 gap-0.5">
+        {
+          itens.map((item) => (
+            <li>
+              {item.href === current ? (
+                <a {...atributosLink(lang, item.href)} aria-current="page" data-link-menu class="flex items-center min-h-[52px] px-3 py-1.5 rounded-ctl text-[18px] leading-6 font-semibold text-text shadow-[inset_3px_0_0_var(--app-acc)] hover:bg-raised anel-foco-interno">
+                  {t(lang, item.chave)}
+                </a>
+              ) : (
+                <a {...atributosLink(lang, item.href)} data-link-menu class="flex items-center min-h-[52px] px-3 py-1.5 rounded-ctl text-[18px] leading-6 font-semibold text-text hover:bg-raised anel-foco-interno">
+                  {t(lang, item.chave)}
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="t:hidden flex flex-col">
+      <SeletorIdioma lang={lang} caminho={caminho} posicao="menu" />
+    </div>
+  </div>
+</header>
+
+<script>
+  // Folha do menu (t e m): o botão alterna `hidden`, `aria-expanded` e o rótulo (Menu/Fechar). Um
+  // link da folha fecha; Esc fecha e devolve o foco ao botão; passar de 1024 px fecha. O foco não
+  // fica preso: não é diálogo modal.
+  const botao = document.getElementById('menu-botao');
+  const folha = document.getElementById('menu-movel');
+  const rotulo = botao?.querySelector('[data-rotulo-menu]');
+
+  function poe(aberto: boolean) {
+    if (!botao || !folha || !rotulo) return;
+    folha.hidden = !aberto;
+    botao.setAttribute('aria-expanded', String(aberto));
+    rotulo.textContent = (aberto ? botao.dataset.rotuloFechar : botao.dataset.rotuloAbrir) ?? '';
+  }
+
+  botao?.addEventListener('click', () => poe(folha?.hidden ?? false));
+  folha?.querySelectorAll('[data-link-menu]').forEach((a) => a.addEventListener('click', () => poe(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !folha || folha.hidden) return;
+    poe(false);
+    botao?.focus();
+  });
+  window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
+    if (e.matches) poe(false);
+  });
+</script>

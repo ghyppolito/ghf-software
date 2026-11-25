@@ -1,0 +1,7 @@
+index.html
+app-privacy.html
+en/app-privacy.html
+es/app-privacy.html
+assets/app.png
+lotto-expert/sweepstake-invite/lottoexpert-invite.html
+pt/app-privacy.html

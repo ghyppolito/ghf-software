@@ -1,40 +1,50 @@
 ---
-// Página de prova do build (WP-07). O Pages serve /404.html em qualquer profundidade:
-// caminhos absolutos, sem JS, pt e en lado a lado.
+// 404 do site (WP-10, fatia 4; `404.dc.html` da rodada 3). O Pages serve /404.html em qualquer
+// profundidade: todo link é absoluto (`/`, `/en/`, `/lottoexpert.html`…), pt e en lado a lado (não
+// há par por idioma). Nav e Footer da home (WP-22), com hrefs absolutos: a página só existe em pt
+// (`linguasDe('404.html')`), então sem seletor de idioma e sem `app` (o acento é o teal da marca).
+// O corpo é flex em coluna para o rodapé não flutuar no meio da tela com o conteúdo curto.
+// Duas colunas a partir de 1024 px: à esquerda o título, o "Voltar para o início" e o bloco en; à
+// direita a lista dos 4 apps, cada um com o link da landing e o da política de privacidade (URL
+// contratual, ADR-001). Copy (D25): só o texto que a página já tinha e rótulos de interface; o
+// eyebrow "Erro 404", o título "Esta página não existe." e os parágrafos do export ficam de fora.
 import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import ListaApps from '../components/ListaApps.astro';
+import { atributosLink } from '../i18n/idiomas';
+import { ORDEM_APPS } from '../i18n/apps';
+
+// Ordem, nomes, ícones e cores de src/i18n/apps.ts (fonte única, WP-10 fatia 10a), na lista
+// compartilhada com a Home (ListaApps.astro, variante `404`).
 ---
 <Base
   title="Página não encontrada · Page not found · GHF Software"
   description="Página não encontrada no site da GHF Software. Page not found."
+  lang="pt"
+  caminho="404.html"
+  tema="ghf"
   noindex
+  classeBody="bg-bg text-text font-sans antialiased selection:bg-brand selection:text-bg overflow-x-hidden min-h-screen flex flex-col"
 >
-  <main>
-    <section>
-      <h1>Página não encontrada</h1>
-      <p><a href="/">Voltar para o início</a></p>
-    </section>
-    <section lang="en">
-      <h2>Page not found</h2>
-      <p><a href="/">Back to the home page</a></p>
-    </section>
+  <Nav
+    lang="pt"
+    caminho="404.html"
+    inicio="/"
+    itens={[
+      { href: '/#sobre', chave: 'nav_about' },
+      { href: '/#portfolio', chave: 'nav_portfolio' },
+      { href: '/#contato', chave: 'nav_contact' },
+    ]}
+  />
+  <main id="conteudo" tabindex="-1" class="focus-visible:outline-none flex-1 w-full max-w-[1216px] mx-auto px-4 lg:px-8 py-10 lg:py-24 grid gap-8 lg:grid-cols-2 items-start">
+    <div class="flex flex-col items-start gap-4">
+      <h1 class="text-h1 lg:text-h1-lg text-text text-balance">Página não encontrada</h1>
+      <a {...atributosLink('pt', '/')} class="inline-flex items-center min-h-12 px-[22px] rounded-pill border border-border-strong text-small font-semibold text-text no-underline hover:bg-raised anel-foco">Voltar para o início</a>
+      <p lang="en" class="mt-2 text-body text-text-muted">Page not found</p>
+      <a {...atributosLink('pt', '/en/')} class="inline-flex items-center min-h-11 text-text-2 underline underline-offset-4 decoration-border-strong hover:text-text anel-foco">Back to the home page</a>
+    </div>
+    <ListaApps lang="pt" chaves={ORDEM_APPS} variante="404" />
   </main>
+  <Footer lang="pt" inicio="/" />
 </Base>
-
-<style>
-  main {
-    max-width: 32rem;
-    margin: 0 auto;
-    padding: 6rem 1.5rem;
-    display: grid;
-    gap: 2rem;
-  }
-  section {
-    background: var(--brand-surface);
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-  }
-  h1, h2 { margin: 0 0 0.75rem; font-size: 1.5rem; }
-  p { margin: 0; }
-  /* Alvo de toque de 44 px no único link de cada bloco. */
-  a { display: inline-flex; align-items: center; min-height: 44px; }
-</style>
