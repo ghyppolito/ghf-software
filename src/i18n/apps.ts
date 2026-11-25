@@ -61,7 +61,7 @@ export const apps = {
   // Play: SPORTS (repositório ../pole-position-app)
   poleposition: {
     nome: 'Pole Position', id: 'br.com.ghfsoftware.polepositionapp', categoria: 'SportsApplication', play: `${PLAY}br.com.ghfsoftware.polepositionapp`,
-    pagina: 'poleposition.html', privacidade: 'poleposition-privacy.html',
+    pagina: 'poleposition.html', privacidade: 'poleposition-privacy.html', termos: 'poleposition-terms.html',
     icone: '/assets/poleposition.png', tag: 'v2.2.0', atualizadoEm: '2026-10-16',
   },
   // Play: LIFESTYLE (a tag v1.0.1 é leve, criada em 2026-11-22 sobre f5c1d6b)

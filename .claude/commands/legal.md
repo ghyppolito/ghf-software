@@ -20,7 +20,7 @@ app publica um `.en.md` que `ORIGENS` não declara — achado, não mudança de 
 |---|---|---|
 | lottoexpert | `src/content/legal/lottoexpert-privacy.{pt,en}.md`, `lottoexpert-terms.{pt,en}.md` | `src/components/paginas/PaginaLottoExpertPrivacy.astro`, `PaginaLottoExpertTerms.astro` (cascas em `src/pages/` e `src/pages/[lang]/`) |
 | topowalk | `src/content/legal/topowalk-privacy.{pt,en}.md`, `topowalk-terms.{pt,en}.md` (pt e en espelhados do app, ADR-010) | `src/components/paginas/PaginaTopoWalkPrivacy.astro`, `PaginaTopoWalkTerms.astro` (cascas em `src/pages/` e `src/pages/[lang]/`) |
-| poleposition | `src/content/legal/poleposition-privacy.{pt,en}.md` | `src/components/paginas/PaginaPolePositionPrivacy.astro` (cascas em `src/pages/` e `src/pages/[lang]/`) |
+| poleposition | `src/content/legal/poleposition-privacy.{pt,en}.md`, `poleposition-terms.{pt,en}.md` | `src/components/paginas/PaginaPolePositionPrivacy.astro`, `PaginaPolePositionTerms.astro` (cascas em `src/pages/` e `src/pages/[lang]/`) |
 | eclipsego | `src/content/legal/eclipsego-privacy.{pt,en}.md`, `eclipsego-terms.{pt,en}.md` | `src/components/paginas/PaginaEclipseGoPrivacy.astro`, `PaginaEclipseGoTerms.astro` (cascas em `src/pages/` e `src/pages/[lang]/`) |
 
 O `.pt.md` é o corpo do `.md` do app no commit `origemCommit`, byte a byte, com o front-matter

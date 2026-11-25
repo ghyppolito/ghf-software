@@ -172,7 +172,7 @@ CONTRATUAIS = [
     ".well-known/assetlinks.json",
     "lottoexpert-privacy.html", "lottoexpert-terms.html",
     "topowalk-privacy.html", "topowalk-terms.html", "poleposition-privacy.html", "eclipsego-privacy.html",
-    "eclipsego-terms.html",
+    "eclipsego-terms.html", "poleposition-terms.html",
     "lotto-expert/sweepstake-invite/lottoexpert-invite.html",
 ]
 
@@ -182,7 +182,7 @@ PUBLICADAS = [
     "index.html",
     "lottoexpert.html", "lottoexpert-privacy.html", "lottoexpert-terms.html",
     "topowalk.html", "topowalk-privacy.html", "topowalk-terms.html",
-    "poleposition.html", "poleposition-privacy.html",
+    "poleposition.html", "poleposition-privacy.html", "poleposition-terms.html",
     "eclipsego.html", "eclipsego-privacy.html", "eclipsego-terms.html",
     "lotto-expert/sweepstake-invite/lottoexpert-invite.html",
 ]
@@ -220,6 +220,7 @@ LEGAL = {
     "topowalk-privacy.html": "src/content/legal/topowalk-privacy.pt.md",
     "topowalk-terms.html": "src/content/legal/topowalk-terms.pt.md",
     "poleposition-privacy.html": "src/content/legal/poleposition-privacy.pt.md",
+    "poleposition-terms.html": "src/content/legal/poleposition-terms.pt.md",
     "eclipsego-privacy.html": "src/content/legal/eclipsego-privacy.pt.md",
     "eclipsego-terms.html": "src/content/legal/eclipsego-terms.pt.md",
 }

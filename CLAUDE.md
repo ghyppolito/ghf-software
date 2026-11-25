@@ -26,7 +26,7 @@ está em `.claude/context/` e é lido **sob demanda**:
 
 | Documento | Autoridade |
 |---|---|
-| Repositório de cada app (`../lotto-expert/docs/PRIVACY_POLICY.md` e `TERMS_OF_SERVICE.md`; `../topo-walk/PRIVACY_POLICY.md` e `TERMS_OF_USE.md`, com os `.en.md`; `../pole-position/pole-position-app/PRIVACY_POLICY.md`; `../eclipse-go/docs/PRIVACY_POLICY.md` e `TERMS_OF_USE.md`) | **texto legal** — o site publica cópia; nunca é a origem |
+| Repositório de cada app (`../lotto-expert/docs/PRIVACY_POLICY.md` e `TERMS_OF_SERVICE.md`; `../topo-walk/PRIVACY_POLICY.md` e `TERMS_OF_USE.md`, com os `.en.md`; `../pole-position-app/PRIVACY_POLICY.md` e `TERMS_OF_USE.md`; `../eclipse-go/docs/PRIVACY_POLICY.md` e `TERMS_OF_USE.md`) | **texto legal** — o site publica cópia; nunca é a origem |
 | `../lotto-expert/docs/ASO_METADATA.md`, `LottoExpertContent.md` (e equivalentes) | copy de produto e funcionalidades de cada app |
 | `design/handoff/<data>/` (quando existir, D4) | sistema visual — prevalece sobre o que está no HTML |
 | `docs/AVALIACAO.md` | direção técnica e de design do site |
@@ -49,7 +49,7 @@ redirecionamento como substituto** — o Android App Links não segue redirect:
 /lottoexpert-privacy.html          /lottoexpert-terms.html
 /topowalk-privacy.html             /topowalk-terms.html
 /poleposition-privacy.html         /eclipsego-privacy.html
-/eclipsego-terms.html
+/eclipsego-terms.html              /poleposition-terms.html
 /lotto-expert/sweepstake-invite/lottoexpert-invite.html   (deep link do bolão; lê ?d= do link)
 ```
 

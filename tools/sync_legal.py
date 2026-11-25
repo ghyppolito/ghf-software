@@ -63,7 +63,8 @@ ORIGENS = {
     "lottoexpert-terms": ("lotto-expert", {"pt": "docs/TERMS_OF_SERVICE.md"}, "master"),
     "topowalk-privacy": ("topo-walk", {"pt": "PRIVACY_POLICY.md", "en": "PRIVACY_POLICY.en.md"}, "master"),
     "topowalk-terms": ("topo-walk", {"pt": "TERMS_OF_USE.md", "en": "TERMS_OF_USE.en.md"}, "master"),
-    "poleposition-privacy": ("pole-position/pole-position-app", {"pt": "PRIVACY_POLICY.md"}, "master"),
+    "poleposition-privacy": ("pole-position-app", {"pt": "PRIVACY_POLICY.md"}, "master"),
+    "poleposition-terms": ("pole-position-app", {"pt": "TERMS_OF_USE.md"}, "master"),
     "eclipsego-privacy": ("eclipse-go", {"pt": "docs/PRIVACY_POLICY.md"}, "main"),
     "eclipsego-terms": ("eclipse-go", {"pt": "docs/TERMS_OF_USE.md"}, "main"),
 }
@@ -102,7 +103,8 @@ def repo_presente(apps_dir, repo):
 
 def git(cwd, *args):
     """(código, stdout em bytes). Só leitura nos repositórios dos apps: rev-parse, show,
-    merge-base, branch -r --contains."""
+    merge-base, branch -r --contains, e (pelo §21 do check_site.py, via regras_apps.confere_tag)
+    log e tag --list. No repositório do site: status e diff."""
     r = subprocess.run(["git", "-C", cwd, *args], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return r.returncode, r.stdout
 

@@ -1,6 +1,6 @@
 ---
 lastUpdated: "2026-10"
-origemCommit: "00968f5aae7efb3614f7061ec4feed7b1dde9932"
+origemCommit: "192e62423a659c2aead19a8326a314eb94aac99c"
 ---
 # Política de Privacidade — Pole Position: Race Analytics
 
@@ -85,7 +85,7 @@ Todos esses dados são armazenados exclusivamente no banco de dados local do dis
 
 O App integra o **Firebase Analytics** (Google LLC) para coleta anônima de métricas de uso. Os dados coletados incluem:
 
-- **Eventos de comportamento no app:** fluxos percorridos (onboarding, criação de circuito, início e encerramento de sessão, análise de sessão), ações de configuração (alteração de tema, orientação, TTS) e ações no histórico. Sessão e circuito aparecem só por identificadores numéricos internos — o número sequencial do registro no banco local, que não identifica o usuário —, sem nome nem localização. Três marcos de ativação são enviados uma única vez por instalação, sem nenhum parâmetro: primeiro circuito criado, primeira e segunda sessão com volta gravada.
+- **Eventos de comportamento no app:** fluxos percorridos (onboarding, criação de circuito, início e encerramento de sessão, análise de sessão), ações de configuração (alteração de tema, orientação, TTS) e ações no histórico. Sessão e circuito aparecem só por identificadores numéricos internos — o número sequencial do registro no banco local, que não identifica o usuário —, sem nome nem localização. Quatro marcos de ativação são enviados uma única vez por instalação, sem nenhum parâmetro: primeiro circuito criado, primeira e segunda sessão com volta gravada, e segunda sessão com volta gravada num mesmo circuito, sem dizer qual.
 - **Sinais técnicos da cronometragem:** contagem de quantas passagens pela linha foram descartadas pelas guardas do cronômetro, por motivo de categoria fechada, enviada ao fim da sessão. Não inclui localização, circuito nem tempo.
 - **Sinais técnicos da sessão**, só com valores numéricos e de categoria fechada:
   - encerramento da sessão: contagem de voltas, **duração total da sessão** (do início ao encerramento) e se o encerramento foi automático;
@@ -94,7 +94,7 @@ O App integra o **Firebase Analytics** (Google LLC) para coleta anônima de mét
   - perda de sinal de GPS: **duração sem sinal de GPS**, número da volta e se o sinal voltou.
 
   São durações da sessão inteira ou do intervalo sem sinal, nunca tempo de volta ou de setor; na pista aberta encerrada automaticamente ao fim do percurso, a duração total da sessão soma o percurso e o tempo antes da largada, e não é o tempo do percurso. Os sinais de falha vão também ao Crashlytics (ver seção 2.6).
-- **Propriedades agregadas do usuário:** modo de tema, modo TTS ativo, quantidade total de circuitos criados e estágio de ativação (nenhum, circuito criado, uma ou duas sessões com volta gravada).
+- **Propriedades agregadas do usuário:** modo de tema, modo TTS ativo e estágio de ativação (nenhum, circuito criado, uma ou duas sessões com volta gravada).
 - **Dados técnicos do dispositivo:** coletados automaticamente pelo Firebase, incluindo modelo do dispositivo, versão do Android, idioma do sistema e país de origem (derivado do IP, não armazenado como dado bruto).
 - **Origem da instalação:** o Firebase lê da Google Play Store de onde veio a instalação (por exemplo, o link ou a campanha da página do App na loja). É uma informação de canal de aquisição, enviada junto com os demais dados de uso e associada, como eles, ao identificador de instância do Firebase. Não inclui o ID de publicidade.
 
