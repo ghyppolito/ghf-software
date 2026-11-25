@@ -9,7 +9,11 @@
 // Fora, por resposta do usuário (sem origem na master): "100% offline" (há Google Maps e Firebase),
 // "GPS de 10 Hz", "antenas externas Bluetooth" e a tabela comparativa (MyChron/Alfano, preços).
 // - `meta`: `title` e `description` já publicados (nome e descrição curta da PP-ficha; WP-21, D19).
-// - `resumo`: o texto do card da Home, movido de home.ts sem edição (o card lê `tag` e `curta`).
+// - `resumo` (decisão do usuário, 2026-11-24): `descricao` = descrição curta da ficha da Play
+//   (`docs/aso_plan.md` §4.3, pt e en, origin/master); `curta` resume a mesma frase sem "offline",
+//   "alta frequência" nem "real-time" (sem origem na master). Título do destaque 01: "Painel ao vivo" /
+//   "Live dashboard" (ficha: "Painel ao vivo… legível em movimento"), aprovado pelo usuário.
+// - `resumo` (histórico): o texto do card da Home, movido de home.ts sem edição (o card lê `tag` e `curta`).
 //   Ainda diz "offline"/"real-time" sem origem: achado da fatia, não redigido aqui.
 // - `hero`: o nome da PP-ficha (o ": " divide o h1); `lead` = 1ª frase e 2º parágrafo da descrição
 //   completa da PP-ficha, verbatim. `meta`: PP-ficha ("sem anúncios", "GRATUITO") e PP-README
@@ -45,8 +49,8 @@ export const poleposition = {
     resumo: {
       tag: 'Kart & Automobilismo',
       descricao:
-        'Transforma seu smartphone numa interface de telemetria offline. Com GPS de alta frequência, Força G lateral em tempo real e detecção vetorial de parciais.',
-      curta: 'Telemetria de kart e automobilismo real-time.',
+        'Lap timer GPS: cronômetro de voltas, parciais, velocidade e força G na pista.',
+      curta: 'Cronômetro GPS de voltas para track day.',
     },
     hero: {
       titulo: 'Pole Position: Cronômetro GPS',
@@ -56,7 +60,7 @@ export const poleposition = {
     },
     funcionalidades: [
       {
-        titulo: 'Painel do Piloto (Live Dash)',
+        titulo: 'Painel ao vivo',
         descricao:
           'Design de alto contraste F1 otimizado para sol direto. Dígitos tabelados, congelamento pós-volta de 3s, deltas e parciais coloridas.',
         icone: 'gauge-high',
@@ -184,8 +188,8 @@ export const poleposition = {
     resumo: {
       tag: 'Karting & Motorsport',
       descricao:
-        'Transforms your smartphone into an offline telemetry dashboard. Featuring high-frequency GPS, real-time lateral G-force, and rigorous vector split detection.',
-      curta: 'Real-time kart and motorsport telemetry.',
+        'GPS lap timer with sector splits, speed and G-force telemetry for track days.',
+      curta: 'GPS lap timer for track days.',
     },
     hero: {
       titulo: 'Pole Position: GPS Lap Timer',
@@ -195,7 +199,7 @@ export const poleposition = {
     },
     funcionalidades: [
       {
-        titulo: 'Pilot Panel (Live Dash)',
+        titulo: 'Live dashboard',
         descricao:
           'F1-style high contrast design optimized for direct sunlight. Monospace table digits, 3s post-lap freeze, deltas, and color-coded sectors.',
         icone: 'gauge-high',
