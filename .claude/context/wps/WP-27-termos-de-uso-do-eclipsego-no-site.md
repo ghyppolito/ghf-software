@@ -2,7 +2,7 @@
 id: WP-27
 titulo: Os termos de uso do EclipseGo existem no site em pt e en, e a política aponta para o commit da main, espelhados do repositório do app
 area: legal
-status: doing
+status: done
 depende_de: []
 adr: [ADR-001, ADR-004, ADR-005, ADR-007, ADR-010]
 spec: ""
@@ -239,3 +239,10 @@ mal, ficha apontando antes da página existir dá 404 ao revisor da loja.
 5. Quem escreve os termos e quando chegam à branch principal do app: respondido em 2026-11-24 — o
    usuário escreveu `docs/TERMS_OF_USE.md`, na `main` pelo PR #3 do app.
 6. Publicação: D28 (B), integração e deploy único.
+
+## Registro de execução (2026-11-25)
+
+Commits: `2d06c2d` (termos pt espelhados, en traduzido, `origemCommit` da política), `ffc84e1` ("claims" na cláusula do foro, revisão do usuário), `2768663` (a reancoragem do `sync_legal.py` nunca recua para commit ancestral; auditoria). Critérios verdes. O usuário revisou a tradução: "wilful misconduct" mantido; "claims" no foro.
+
+**Pendente, só do usuário:** checklist de navegador de `/eclipsego-terms.html` e `/en/eclipsego-terms.html` a 360 e 1280. O caminho de reancoragem não tem unittest (`SYNC-REANCORAGEM-SEM-TESTE-01`, backlog).
+
