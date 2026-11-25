@@ -217,6 +217,9 @@
 
 :root {
   --app-acc: var(--color-brand);
+  /* Sem `data-app` (nenhuma legal hoje): o acento -light cai no link teal do papel, para o anel de foco
+     e as marcas não sumirem em silêncio (auditoria da fatia 4 do WP-30). */
+  --app-acc-light: var(--color-paper-link);
 
   /* Movimento (WP-30): duração das transições e das entradas. */
   --dur-fast: 150ms;
