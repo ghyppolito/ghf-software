@@ -1,6 +1,6 @@
 ---
 lastUpdated: "2026-11"
-origemCommit: "cfbff63d47b59e5c97f4c6dce74ac88cef216070"
+origemCommit: "c584d195a418c086d31c6ee035a02c9b58cb23b5"
 ---
 # Terms of Use — TopoWalk
 
@@ -14,7 +14,7 @@ The processing of personal data is described on a separate page, the [Privacy Po
 
 ## 1. Who Provides TopoWalk
 
-TopoWalk is developed and provided by **GHF Software**, the trade name of ‹fill in: full name›, an individual, ‹fill in: city/state›, Brazil.
+TopoWalk is developed and provided by **GHF Software**, the trade name of Gustavo Hyppólito, an individual, Campinas, São Paulo, Brazil.
 
 Contact: **support@ghfsoftware.com**
 
@@ -141,7 +141,7 @@ You may stop using TopoWalk at any time by uninstalling the app. The licence in 
 
 ## 12. Governing Law and Jurisdiction
 
-These terms are governed by the **laws of Brazil**. The courts of the judicial district of ‹fill in: city/state› are chosen as the forum.
+These terms are governed by the **laws of Brazil**. The courts of the judicial district of Campinas, São Paulo, are chosen as the forum.
 
 If you are a **consumer**, this choice does not deprive you of the protection of the mandatory rules of the country where you live, and you may bring proceedings in the courts of your place of residence. In the European Union, you may also use your country's dispute resolution platform or the alternative dispute resolution bodies for consumer disputes.
 
@@ -153,7 +153,7 @@ If any clause of these terms is held to be invalid, the remaining clauses remain
 
 Questions about these terms:
 
-**GHF Software** — ‹fill in: full name›, ‹fill in: city/state›, Brazil\
+**GHF Software** — Gustavo Hyppólito, Campinas, São Paulo, Brazil\
 Email: **support@ghfsoftware.com**
 
 ---

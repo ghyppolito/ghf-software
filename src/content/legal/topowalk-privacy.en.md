@@ -1,6 +1,6 @@
 ---
 lastUpdated: "2026-11"
-origemCommit: "cfbff63d47b59e5c97f4c6dce74ac88cef216070"
+origemCommit: "c584d195a418c086d31c6ee035a02c9b58cb23b5"
 ---
 # Privacy Policy — TopoWalk
 
@@ -14,7 +14,7 @@ This Privacy Policy describes how the **TopoWalk** app, developed by **GHF Softw
 
 TopoWalk is an Android app developed by **GHF Software** for field topographic surveying. We are not a data collection company.
 
-**Data controller** (Art. 5(VI) LGPD — Brazilian General Data Protection Law, Law No. 13,709/2018; Art. 4(7) GDPR): **GHF Software**, the trade name of ‹fill in: full name›, an individual, ‹fill in: city/state›, Brazil — email **support@ghfsoftware.com**. No separate data protection officer (DPO) has been appointed; this same email address handles all requests concerning personal data (section 13).
+**Data controller** (Art. 5(VI) LGPD — Brazilian General Data Protection Law, Law No. 13,709/2018; Art. 4(7) GDPR): **GHF Software**, the trade name of Gustavo Hyppólito, an individual, Campinas, São Paulo, Brazil — email **support@ghfsoftware.com**. No separate data protection officer (DPO) has been appointed; this same email address handles all requests concerning personal data (section 13).
 
 Your surveys — points, measurements, photos and reports — **stay on your device** and are not sent to any server of ours. The only exception is the **TopoWalk Pro migration** service described in section 2.11, which exists for a limited time, stores only an identifier with no name or email, and **does not touch your survey data**.
 
@@ -433,7 +433,7 @@ We recommend that you review this policy periodically.
 
 Questions, requests or comments about this Privacy Policy, and the requests in section 13, can be sent to:
 
-**GHF Software** — ‹fill in: full name›, ‹fill in: city/state›, Brazil\
+**GHF Software** — Gustavo Hyppólito, Campinas, São Paulo, Brazil\
 Email: **support@ghfsoftware.com**
 
 ---

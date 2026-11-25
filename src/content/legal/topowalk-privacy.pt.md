@@ -1,6 +1,6 @@
 ---
 lastUpdated: "2026-11"
-origemCommit: "cfbff63d47b59e5c97f4c6dce74ac88cef216070"
+origemCommit: "c584d195a418c086d31c6ee035a02c9b58cb23b5"
 ---
 # Política de Privacidade — TopoWalk
 
@@ -14,7 +14,7 @@ Esta Política de Privacidade descreve como o aplicativo **TopoWalk**, desenvolv
 
 O TopoWalk é um aplicativo Android desenvolvido por **GHF Software** para fins de levantamento topográfico de campo. Não somos uma empresa de coleta de dados.
 
-**Controlador dos dados** (LGPD art. 5º, VI; GDPR art. 4º, 7): **GHF Software**, nome comercial de ‹preencher: nome completo›, pessoa física, ‹preencher: cidade/UF›, Brasil — e-mail **support@ghfsoftware.com**. Não há encarregado (DPO) nomeado separadamente; esse mesmo e-mail atende todas as solicitações sobre dados pessoais (seção 13).
+**Controlador dos dados** (LGPD art. 5º, VI; GDPR art. 4º, 7): **GHF Software**, nome comercial de Gustavo Hyppólito, pessoa física, Campinas/SP, Brasil — e-mail **support@ghfsoftware.com**. Não há encarregado (DPO) nomeado separadamente; esse mesmo e-mail atende todas as solicitações sobre dados pessoais (seção 13).
 
 Os seus levantamentos — pontos, medições, fotos e relatórios — **ficam no seu aparelho** e não são enviados a nenhum servidor nosso. A única exceção é o serviço de **migração do TopoWalk Pro** descrito na seção 2.11, que existe por tempo limitado, guarda apenas um identificador sem nome nem e-mail, e **não toca nos seus dados de levantamento**.
 
@@ -433,7 +433,7 @@ Recomendamos que você revise esta política periodicamente.
 
 Dúvidas, solicitações ou comentários sobre esta Política de Privacidade, e os pedidos da seção 13, podem ser enviados para:
 
-**GHF Software** — ‹preencher: nome completo›, ‹preencher: cidade/UF›, Brasil\
+**GHF Software** — Gustavo Hyppólito, Campinas/SP, Brasil\
 E-mail: **support@ghfsoftware.com**
 
 ---

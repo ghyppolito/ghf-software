@@ -1,6 +1,6 @@
 ---
 lastUpdated: "2026-11"
-origemCommit: "cfbff63d47b59e5c97f4c6dce74ac88cef216070"
+origemCommit: "c584d195a418c086d31c6ee035a02c9b58cb23b5"
 ---
 # Termos de Uso — TopoWalk
 
@@ -14,7 +14,7 @@ O tratamento de dados pessoais está descrito numa página própria, a [Polític
 
 ## 1. Quem Fornece o TopoWalk
 
-O TopoWalk é desenvolvido e fornecido por **GHF Software**, nome comercial de ‹preencher: nome completo›, pessoa física, ‹preencher: cidade/UF›, Brasil.
+O TopoWalk é desenvolvido e fornecido por **GHF Software**, nome comercial de Gustavo Hyppólito, pessoa física, Campinas/SP, Brasil.
 
 Contato: **support@ghfsoftware.com**
 
@@ -141,7 +141,7 @@ Você pode parar de usar o TopoWalk a qualquer momento, desinstalando o aplicati
 
 ## 12. Lei Aplicável e Foro
 
-Estes termos são regidos pelas **leis do Brasil**. Fica eleito o foro da comarca de ‹preencher: cidade/UF›.
+Estes termos são regidos pelas **leis do Brasil**. Fica eleito o foro da comarca de Campinas/SP.
 
 Se você é **consumidor**, esta escolha não lhe tira a proteção das normas obrigatórias do país onde mora, e você pode propor ação no foro do seu domicílio. Na União Europeia, você também pode usar a plataforma de resolução de litígios do seu país ou os organismos de resolução alternativa de conflitos de consumo.
 
@@ -153,7 +153,7 @@ Se uma cláusula destes termos for considerada inválida, as demais continuam va
 
 Dúvidas sobre estes termos:
 
-**GHF Software** — ‹preencher: nome completo›, ‹preencher: cidade/UF›, Brasil\
+**GHF Software** — Gustavo Hyppólito, Campinas/SP, Brasil\
 E-mail: **support@ghfsoftware.com**
 
 ---
