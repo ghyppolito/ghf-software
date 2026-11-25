@@ -33,7 +33,9 @@
 // - `privacidade`: a landing antiga não tinha frase de privacidade; é a de POL §1 (pt:17, en:17), sem
 //   a exceção da migração do Pro, que não toca no levantamento.
 // - `faq`: TW-str `help_q1`, `help_q7`, `help_q8`, `help_q15`, `help_q16` e `help_q9`, literais (pt e
-//   en do app).
+//   en do app). Dois desvios do literal, por decisão do usuário (2026-11-24): "seqüencialmente" →
+//   "sequencialmente" em `help_a1`, e "(Pro)" depois da tela de locação em `help_a15` (pt e en), porque
+//   a locação é Pro; a correção da string no app fica como achado (TOPO-APP-STRINGS-FAQ-01).
 import type { Idioma } from './idiomas';
 import type { ConteudoApp } from './landing';
 
@@ -205,7 +207,7 @@ export const topowalk = {
       {
         pergunta: 'Como medir uma área?',
         resposta:
-          'Vá até o primeiro ponto do terreno e toque em "Começar". Caminhe até os demais pontos e os adicione seqüencialmente. Mapeando 3 ou mais pontos, a área do polígono será calculada.',
+          'Vá até o primeiro ponto do terreno e toque em "Começar". Caminhe até os demais pontos e os adicione sequencialmente. Mapeando 3 ou mais pontos, a área do polígono será calculada.',
       },
       {
         pergunta: 'Posso corrigir ou continuar um levantamento já salvo?',
@@ -220,7 +222,7 @@ export const topowalk = {
       {
         pergunta: 'Posso carregar o KML do meu CAR e caminhar até os vértices?',
         resposta:
-          'Pode. No Histórico, abra o menu e toque em "Camadas importadas" e depois em "Importar arquivo". KML, KMZ, GeoJSON, GPX e CSV funcionam — o arquivo do CAR, do SIGEF ou o que o cliente mandou entra como camada de referência, desenhada no mapa sem mexer nos seus levantamentos. Toque em qualquer ponto da camada para caminhar até ele pela tela de locação. O arquivo é copiado para dentro do app, então a camada continua lá mesmo que você apague ou mova o original.',
+          'Pode. No Histórico, abra o menu e toque em "Camadas importadas" e depois em "Importar arquivo". KML, KMZ, GeoJSON, GPX e CSV funcionam — o arquivo do CAR, do SIGEF ou o que o cliente mandou entra como camada de referência, desenhada no mapa sem mexer nos seus levantamentos. Toque em qualquer ponto da camada para caminhar até ele pela tela de locação (Pro). O arquivo é copiado para dentro do app, então a camada continua lá mesmo que você apague ou mova o original.',
       },
       {
         pergunta: 'Como desconto um açude ou uma benfeitoria da área?',
@@ -416,7 +418,7 @@ export const topowalk = {
       {
         pergunta: 'Can I load the KML of my property and walk to the corners?',
         resposta:
-          'Yes. In History, open the menu and tap "Imported layers", then "Import file". KML, KMZ, GeoJSON, GPX and CSV all work — the file from your land registry or from your client comes in as a reference layer, drawn on the map without touching your surveys. Tap any point of the layer to walk to it with the stake-out screen. The file is copied into the app, so it stays there even if you delete or move the original.',
+          'Yes. In History, open the menu and tap "Imported layers", then "Import file". KML, KMZ, GeoJSON, GPX and CSV all work — the file from your land registry or from your client comes in as a reference layer, drawn on the map without touching your surveys. Tap any point of the layer to walk to it with the stake-out screen (Pro). The file is copied into the app, so it stays there even if you delete or move the original.',
       },
       {
         pergunta: 'How do I subtract a pond or a building from the area?',
