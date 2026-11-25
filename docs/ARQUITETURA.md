@@ -118,7 +118,7 @@ redirecionamento (o Android App Links não segue redirect):
 /lottoexpert-privacy.html   /lottoexpert-terms.html
 /topowalk-privacy.html      /topowalk-terms.html
 /poleposition-privacy.html  /eclipsego-privacy.html
-/eclipsego-terms.html
+/eclipsego-terms.html       /poleposition-terms.html
 /lotto-expert/sweepstake-invite/lottoexpert-invite.html
 ```
 

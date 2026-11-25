@@ -84,7 +84,7 @@ All of this data is stored exclusively in the local database of the device (Room
 
 The App integrates **Firebase Analytics** (Google LLC) for anonymous usage metrics collection. Collected data includes:
 
-- **App behavior events:** user flows (onboarding, track creation, starting and ending sessions, session analysis), configuration actions (theme changes, screen orientation, TTS) and history actions. Sessions and tracks appear only as internal numeric identifiers — the sequential number of the record in the local database, which does not identify the user —, with no name or location. Three activation milestones are sent only once per installation, with no parameters: first track created, first and second session with a recorded lap.
+- **App behavior events:** user flows (onboarding, track creation, starting and ending sessions, session analysis), configuration actions (theme changes, screen orientation, TTS) and history actions. Sessions and tracks appear only as internal numeric identifiers — the sequential number of the record in the local database, which does not identify the user —, with no name or location. Four activation milestones are sent only once per installation, with no parameters: first track created, first and second session with a recorded lap, and second session with a recorded lap on the same track, without saying which one.
 - **Timing technical signals:** a count of how many line crossings were discarded by the lap timer's guards, by closed-category reason, sent at the end of the session. It does not include location, track, or time.
 - **Session technical signals**, with numeric and closed-category values only:
   - session end: lap count, **total session duration** (from start to end) and whether the session was ended automatically;
@@ -93,7 +93,7 @@ The App integrates **Firebase Analytics** (Google LLC) for anonymous usage metri
   - GPS signal loss: **duration without GPS signal**, lap number and whether the signal came back.
 
   These are durations of the whole session or of the interval without signal, never lap or sector times; on an open track ended automatically at the end of the run, the total session duration adds up the run and the time before the start, and is not the run time. The failure signals are also sent to Crashlytics (see section 2.6).
-- **Aggregated user properties:** theme mode, active TTS mode, total tracks created and activation stage (none, track created, one or two sessions with a recorded lap).
+- **Aggregated user properties:** theme mode, active TTS mode and activation stage (none, track created, one or two sessions with a recorded lap).
 - **Technical device data:** automatically collected by Firebase, including device model, Android version, system language, and country of origin (derived from IP, not stored as raw data).
 - **Install source:** Firebase reads from the Google Play Store where the installation came from (for example, the link or the campaign of the App's store page). It is acquisition-channel information, sent along with the other usage data and associated, like them, with the Firebase instance identifier. It does not include the advertising ID.
 
