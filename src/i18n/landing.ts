@@ -26,6 +26,9 @@ export interface Funcionalidade {
   imagem?: string;
   /** obrigatório se há imagem */
   alt?: string;
+  /** ícone (nome em src/icons/fa/solid/) do destaque sem imagem, que sai em cartão (WP-30, fatia 2);
+   *  igual em todas as línguas */
+  icone?: string;
 }
 
 export interface GrupoTodas {
@@ -58,6 +61,9 @@ export type Planos = {
         colPago: string;
         colPagoSub: string;
         linhas: [string, string, string][];
+        /** índices (0-based) de `linhas` que ficam na tabela principal; as outras vão para "Ver
+         *  tabela completa" (WP-30, fatia 2). Iguais em todas as línguas. */
+        principais: number[];
       };
     }
   | {
@@ -99,10 +105,15 @@ interface RotulosLanding {
   /** com `{app}` no lugar do nome */
   ctaH: string;
   terms: string;
+  /** `<summary>` das linhas da comparação fora da tabela principal (WP-30, fatia 2) */
+  fullTable: string;
+  /** nome (só leitor de tela) da região rolável da tabela dentro do "Ver tabela completa" (WP-30, fatia 2) */
+  fullTableRegion: string;
 }
 
 // `cta`, `features`, `seeAll`, `proof`, `faqH`, `plans`, `freepro`, `privacy`, `privacyPolicy`,
-// `ctaH` e `terms` de `content/i18n.js` do export (rodada 3).
+// `ctaH` e `terms` de `content/i18n.js` do export (rodada 3). `fullTable` e `fullTableRegion`: rótulos
+// aprovados pelo usuário em 2026-11-24 (WP-30, fatia 2).
 export const rotulosLanding: Record<Idioma, RotulosLanding> = {
   pt: {
     cta: 'Baixar na Google Play',
@@ -116,6 +127,8 @@ export const rotulosLanding: Record<Idioma, RotulosLanding> = {
     privacyPolicy: 'Política de privacidade',
     ctaH: 'Baixe o {app}',
     terms: 'Termos de uso',
+    fullTable: 'Ver tabela completa',
+    fullTableRegion: 'Demais funcionalidades',
   },
   en: {
     cta: 'Get it on Google Play',
@@ -129,6 +142,8 @@ export const rotulosLanding: Record<Idioma, RotulosLanding> = {
     privacyPolicy: 'Privacy policy',
     ctaH: 'Get {app}',
     terms: 'Terms of use',
+    fullTable: 'See full table',
+    fullTableRegion: 'Other features',
   },
 };
 
@@ -150,6 +165,7 @@ function forma(c: ConteudoApp): unknown {
     funcionalidades: c.funcionalidades.map((f) => ({
       imagem: f.imagem ?? null,
       etiqueta: f.etiqueta ? { pro: !!f.etiqueta.pro } : null,
+      icone: f.icone ?? null,
     })),
     todas: c.todas?.map((g) => g.itens.map((i) => (i.etiqueta ? { pro: !!i.etiqueta.pro } : null))) ?? null,
     prova: c.prova?.length ?? null,
@@ -158,7 +174,7 @@ function forma(c: ConteudoApp): unknown {
           tipo: c.planos.tipo,
           nota: c.planos.nota ? { selo: c.planos.nota.selo !== undefined, termos: c.planos.nota.termos ?? null } : null,
           ...(c.planos.tipo === 'niveis'
-            ? { niveis: c.planos.niveis.map((n) => ({ d: !!n.destaque, p: n.periodo !== undefined })), linhas: c.planos.comparacao.linhas.length }
+            ? { niveis: c.planos.niveis.map((n) => ({ d: !!n.destaque, p: n.periodo !== undefined })), linhas: c.planos.comparacao.linhas.length, principais: c.planos.comparacao.principais }
             : { gratis: c.planos.gratis.itens.length, pro: c.planos.pro.itens.length, notaPro: c.planos.pro.nota !== undefined }),
         }
       : null,
@@ -183,6 +199,13 @@ export function exigeEspelho(app: string, c: Record<Idioma, ConteudoApp>, chaves
       erros.push(`[${l}] funcionalidades: ${x.funcionalidades.length} (1 a 4)`);
     }
     if (x.prova && (x.prova.length < 2 || x.prova.length > 4)) erros.push(`[${l}] prova: ${x.prova.length} (2 a 4)`);
+    if (x.planos?.tipo === 'niveis') {
+      const { linhas, principais } = x.planos.comparacao;
+      const unicos = new Set(principais);
+      if (unicos.size !== principais.length || principais.some((n) => !Number.isInteger(n) || n < 0 || n >= linhas.length)) {
+        erros.push(`[${l}] planos.comparacao.principais: índice repetido ou fora de 0..${linhas.length - 1}`);
+      }
+    }
     x.funcionalidades.forEach((f, i) => {
       if (f.imagem === undefined) return;
       if (!f.alt) erros.push(`[${l}] funcionalidades[${i}]: imagem \`${f.imagem}\` sem alt`);

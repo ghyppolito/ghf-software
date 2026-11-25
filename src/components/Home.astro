@@ -1,27 +1,36 @@
 ---
-// Corpo da home (/ e /en/): hero, grade dos apps, Sobre e Privacidade (WP-10, fatia 6;
-// `Home.dc.html` da rodada 3, D30). Textos em src/i18n/home.ts (o EclipseGo em eclipsego.ts), dados
-// dos apps em src/i18n/apps.ts. Nav e footer ficam em paginas/PaginaHome.astro.
+// Corpo da home (/ e /en/): hero, áreas de atuação, produtos (grade dos apps), Sobre, Privacidade e
+// CTA final de contato (WP-30, fatia 1: direção visual "engenharia luminosa", sobre a fatia 6 do
+// WP-10). Textos em src/i18n/home.ts (o EclipseGo e o LottoExpert no `<app>.ts`), dados dos apps em
+// src/i18n/apps.ts. Nav e footer ficam em paginas/PaginaHome.astro.
+// - Ritmo das seções: base (hero, com o ornamento `orn-hero`) → faixa tingida (áreas) → base
+//   (produtos) → superfície (Sobre) → base (privacidade) → glow de fechamento (contato).
 // - Cards na ordem de `ORDEM_APPS` (brief §10, mesmo peso); entra na grade o que `particionarApps`
-//   (D12) põe em `destaque`, o resto vai para "Todos os apps GHF" (VerTodasApps).
-// - O card inteiro é o alvo da landing (link esticado no nome, `after:inset-0`); o Play fica por
-//   cima (`relative z-10`). Sem botão primário, sem animação, sem transição.
-// - Ponto de troca mobile/desktop do export: 700 px, escrito em rem (`min-[43.75rem]:`), como o
-//   `t:` de tokens.css, para a ordem das variantes no CSS não inverter. Grade 1 / 2 / 4 colunas
-//   (700 / 1280): o `auto-fit` do export deixava um card sozinho entre ~810 e ~1065 px.
-// - `clamp` e tamanhos em px literais do export, sem token do Kit (LITERAIS-SEM-TOKEN-HOME-01); a
-//   cor é sempre token.
+//   (D12) põe em `destaque`, o resto vai para "Todos os apps GHF" (VerTodasApps). Dentro de
+//   `#portfolio` só os `<article>` de app e essa lista (§20 de tools/check_site.py).
+// - Cada card leva `data-app` (o acento do app, tokens.css): painel, glow, seta e hover na cor dele.
+//   O card inteiro é o alvo da landing (link esticado no nome, `after:inset-0`); o Play fica por
+//   cima (`absolute z-10`, desenhado no painel) e vem no fim do corpo no DOM: leitura e Tab vão
+//   do nome ao Play (WP-30, fatia 2). O anel de foco do link é o do card inteiro (`has-[…:focus-visible]`),
+//   sem `overflow-hidden` no `<article>`, para nada cortá-lo.
+// - Altura do painel do card: a variável `--painel` no `<article>` (96 / 112 px). O Play centra nela:
+//   `top` = (painel − 44 px do `min-h-11`) / 2. Mudou a altura ou o `min-h`, muda aqui também.
+// - Ponto de troca da grade dos apps: 700 px, escrito em rem (`min-[43.75rem]:`), como o `t:` de
+//   tokens.css, para a ordem das variantes no CSS não inverter. Grade 1 / 2 / 4 colunas (700 / 1280).
+// - Movimento: `.revela` (global.css) nas seções 2 a 6, nunca no hero nem no h1 (LCP); o
+//   deslocamento do hover só com `motion-safe:`. Sem script.
 // - `id="portfolio"` (não `apps`, como no export): Nav, 404 e landings apontam `/#portfolio`.
-// - Sobre e Privacidade são duas regiões (`<section>` com `aria-labelledby`) num `<div id="sobre">`
-//   que só faz a grade (fatia 10a, SOBRE-REGIAO-ENGLOBA-PRIVACIDADE-01): o `#sobre` fica no
-//   invólucro com o padding, para o salto da nav pousar onde pousava.
+//   `#contato` continua no footer (nav e landings apontam para ele); o CTA final é uma seção própria
+//   (`#fale`, `h-contato`), o alvo do botão "Contato" do hero. E-mail: `EMAIL_SUPORTE` (ui.ts).
 import { Image } from 'astro:assets';
 import { home } from '../i18n/home';
 import { eclipsego } from '../i18n/eclipsego';
-import { apps, ORDEM_APPS, COR_APP, particionarApps, hojeDoBuild, dataCurta, type ChaveApp } from '../i18n/apps';
-import { t } from '../i18n/ui';
+import { lottoexpert } from '../i18n/lottoexpert';
+import { apps, ORDEM_APPS, ACENTO, particionarApps, hojeDoBuild, dataCurta, type ChaveApp } from '../i18n/apps';
+import { t, EMAIL_SUPORTE } from '../i18n/ui';
 import { link, type Idioma } from '../i18n/idiomas';
 import { iconesApps } from '../assets/icones-apps';
+import Icon from './Icon.astro';
 import VerTodasApps from './VerTodasApps.astro';
 
 interface Props {
@@ -31,10 +40,11 @@ interface Props {
 const { lang } = Astro.props;
 const x = home[lang];
 
-// Resumo de cada card: o EclipseGo já está no formato de landing (eclipsego.ts); os outros três
-// leem home.ts até a landing deles migrar (fatias 7, 8 e 9: troca só a linha do app).
+// Resumo de cada card: o EclipseGo e o LottoExpert já estão no formato de landing (eclipsego.ts,
+// lottoexpert.ts); os outros dois leem home.ts até a landing deles migrar (fatias 7 e 8: troca só a
+// linha do app).
 const resumos: Record<ChaveApp, { tag: string; curta: string }> = {
-  lottoexpert: x.resumos.lottoexpert,
+  lottoexpert: lottoexpert[lang].resumo,
   topowalk: x.resumos.topowalk,
   poleposition: x.resumos.poleposition,
   eclipsego: eclipsego[lang].resumo,
@@ -42,48 +52,102 @@ const resumos: Record<ChaveApp, { tag: string; curta: string }> = {
 
 const { destaque, resto } = particionarApps(hojeDoBuild());
 const privacidade = t(lang, 'footer_privacy');
+const contato = t(lang, 'nav_contact');
+
+// h1: o trecho depois da primeira ", " sai em gradiente de texto (sem mudar a chave).
+const virgula = x.hero_title.indexOf(', ');
+if (virgula < 0) throw new Error(`home.ts hero_title (${lang}) sem ", ": o gradiente do h1 precisa dela`);
+const h1Antes = x.hero_title.slice(0, virgula + 1);
+const h1Depois = x.hero_title.slice(virgula + 2);
+
+// O "2004" grande do Sobre: o ano de `since_2004`, o mesmo do eyebrow e do JSON-LD.
+const fundacao = x.since_2004.match(/\d{4}/)?.[0];
+if (!fundacao) throw new Error(`home.ts since_2004 (${lang}) sem o ano de fundação`);
+
+// Ícone FA de cada área, na ordem de `areas` (home.ts). Índice também em `[--i:n]` (escalona a
+// entrada): classe inteira literal, o Tailwind não detecta concatenação.
+const iconesAreas = ['mobile-screen-button', 'cloud', 'microchip'] as const;
+const atraso = ['[--i:0]', '[--i:1]', '[--i:2]', '[--i:3]'] as const;
+const container = 'max-w-[1216px] mx-auto px-[clamp(16px,2.6vw,32px)]';
+const secaoPy = 'py-[clamp(64px,9vw,112px)]';
 ---
-<section aria-labelledby="h1" class="max-w-[1216px] mx-auto px-[clamp(16px,2.6vw,32px)] pt-[clamp(20px,6vw,80px)] pb-[clamp(16px,3vw,40px)] flex flex-col gap-[clamp(8px,1.4vw,16px)]">
-  <p class="hidden min-[43.75rem]:block text-[14px] font-semibold text-brand">GHF Software · {x.since_2004}</p>
-  <h1 id="h1" class="text-[length:clamp(26px,4.6vw,56px)] leading-[1.12] font-bold tracking-[-0.025em] max-w-[16ch] text-balance text-text">{x.hero_title}</h1>
-  <p class="hidden min-[43.75rem]:block text-lg text-text-2 max-w-[52ch] text-pretty">{x.hero_desc}</p>
+<section aria-labelledby="h1" class="orn-hero">
+  <div class={`${container} py-[clamp(56px,9vw,128px)]`}>
+    <div class="max-w-[980px] flex flex-col gap-5 lg:gap-6">
+      <p class="text-eyebrow uppercase text-brand">GHF Software · {x.since_2004}</p>
+      <h1 id="h1" class="text-hero text-balance text-text">
+        {h1Antes} <span class="t:block bg-linear-to-r from-brand to-info bg-clip-text text-transparent">{h1Depois}</span>
+      </h1>
+      <p class="text-lead text-text-2 max-w-[56ch] text-pretty">{x.hero_desc}</p>
+      <div class="mt-3 flex flex-col t:flex-row gap-3">
+        <a href="#portfolio" class="btn-primario anel-foco w-full t:w-auto">
+          {x.cta_produtos}<span aria-hidden="true">→</span>
+        </a>
+        <a href="#fale" class="btn-secundario anel-foco w-full t:w-auto">{contato}</a>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section id="portfolio" aria-labelledby="h-apps" class="max-w-[1216px] mx-auto px-[clamp(16px,2.6vw,32px)]">
-  <h2 id="h-apps" class="sr-only">{x.apps_titulo}</h2>
+<section id="areas" aria-labelledby="h-areas" class="bg-band border-y border-band-edge">
+  <div class={`${container} ${secaoPy}`}>
+    <h2 id="h-areas" class="text-section text-balance text-text">{x.areas_titulo}</h2>
+    <ul class="mt-10 lg:mt-12 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+      {x.areas.map((area, i) => (
+        <li class={`revela ${atraso[i]} cartao-brilho rounded-card-lg p-6 md:p-5 lg:p-8 shadow-card flex flex-col`}>
+          <div class="flex items-start justify-between gap-4">
+            <span aria-hidden="true" class="size-12 flex-none grid place-items-center rounded-[14px] bg-app-panel text-app-acc text-[22px]">
+              <Icon nome={iconesAreas[i]} />
+            </span>
+            <span aria-hidden="true" class="text-eyebrow text-brand">{`0${i + 1}`}</span>
+          </div>
+          <h3 class="mt-6 text-area text-text text-balance">{area.titulo}</h3>
+          <p class="mt-2 text-body text-text-2 text-pretty">{area.texto}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section id="portfolio" aria-labelledby="h-apps" class={`${container} ${secaoPy}`}>
+  <h2 id="h-apps" class="text-section text-balance text-text">{x.apps_titulo}</h2>
   {
     destaque.length > 0 && (
-      <div class="grid grid-cols-1 min-[43.75rem]:grid-cols-2 xl:grid-cols-4 gap-[clamp(8px,1.4vw,16px)]">
-        {destaque.map((c) => {
+      <div class="mt-10 lg:mt-12 grid grid-cols-1 min-[43.75rem]:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
+        {destaque.map((c, i) => {
           const a = apps[c];
           const r = resumos[c];
           return (
-            <article class="relative flex flex-col gap-2.5 overflow-hidden rounded-card border border-border bg-surface p-4 hover:border-border-strong hover:bg-raised">
-              <span aria-hidden="true" class={`absolute inset-x-0 top-0 h-[3px] ${COR_APP[c].fundo}`} />
-              <div class="flex items-center gap-3">
-                <Image src={iconesApps[c]} alt="" width={44} height={44} densities={[1, 2]} loading="eager" class="size-11 flex-none rounded-[10px] object-cover bg-raised" />
-                <div class="flex-1 min-w-0">
-                  <h3 class="text-lg/6 font-bold">
-                    <a {...link(lang, a.pagina)} class="text-text no-underline after:absolute after:inset-0 after:content-[''] anel-foco rounded-[4px] [overflow-wrap:anywhere]">{a.nome}</a>
-                  </h3>
-                  <span class="text-[12px] leading-4 text-text-2 flex items-center gap-1.5">
-                    <span aria-hidden="true" class="font-extrabold text-success">✓</span>
-                    {x.selo_publicado}
-                  </span>
+            <article
+              data-app={ACENTO[c]}
+              class={`revela ${atraso[i]} [--painel:96px] lg:[--painel:112px] relative flex flex-col rounded-card-lg border border-border bg-surface shadow-card transition-[translate,box-shadow,border-color] duration-[var(--dur-base)] ease-suave hover:border-app-acc/55 hover:shadow-lift motion-safe:hover:-translate-y-[3px] has-[h3_a:focus-visible]:outline-2 has-[h3_a:focus-visible]:outline-brand has-[h3_a:focus-visible]:outline-offset-[3px]`}
+            >
+              <div class="relative h-(--painel) flex items-center justify-between gap-3 px-5 rounded-t-[19px] bg-app-panel border-b border-app-acc/30 overflow-hidden">
+                <span aria-hidden="true" class="absolute inset-0 [background:var(--grad-glow-card)]" />
+                <span aria-hidden="true" class="absolute inset-0 [background:var(--orn-pontos)] [mask-image:linear-gradient(to_left,black,transparent_70%)] opacity-70" />
+                <Image src={iconesApps[c]} alt="" width={56} height={56} densities={[1, 2]} class="relative size-14 flex-none rounded-[14px] object-cover bg-raised shadow-card" />
+              </div>
+              <div class="flex-1 flex flex-col gap-2 p-5">
+                <h3 class="text-h3 font-bold">
+                  <a {...link(lang, a.pagina)} class="text-text no-underline after:absolute after:inset-0 after:rounded-card-lg after:content-[''] focus-visible:outline-none [overflow-wrap:anywhere]">{a.nome}</a>
+                </h3>
+                <span class="text-label text-text-2 flex items-center gap-1.5">
+                  <span aria-hidden="true" class="font-extrabold text-success">✓</span>
+                  {x.selo_publicado}
+                </span>
+                <p class="mt-1 text-small text-text-2 text-pretty">{r.curta}</p>
+                <div class="mt-auto pt-4 border-t border-border flex items-end justify-between gap-3">
+                  <div class="flex flex-col gap-0.5 min-w-0">
+                    <span class="text-label text-text">{r.tag}</span>
+                    <span class="text-[13px] leading-[18px] text-text-muted">
+                      {x.atualizado}: <time datetime={a.atualizadoEm}>{dataCurta(a.atualizadoEm, lang)}</time>
+                    </span>
+                  </div>
+                  <span aria-hidden="true" class="text-[18px] leading-none font-semibold text-app-acc">→</span>
                 </div>
-                <a href={a.play} target="_blank" rel="noopener noreferrer" aria-label={x.play_rotulo.replace('{app}', a.nome)} class="relative z-10 min-h-11 px-3.5 inline-flex items-center gap-1 flex-none rounded-pill border border-border-strong text-[13px] font-semibold text-text no-underline hover:border-text anel-foco">
+                <a href={a.play} target="_blank" rel="noopener noreferrer" aria-label={x.play_rotulo.replace('{app}', a.nome)} class="absolute z-10 right-5 top-[calc((var(--painel)-44px)/2)] min-h-11 px-4 inline-flex items-center gap-1.5 flex-none rounded-pill border border-border-strong bg-bg/40 text-[13px] font-semibold text-text no-underline transition-colors duration-[var(--dur-fast)] hover:border-text hover:bg-text/6 anel-foco">
                   {x.play_curto}<span aria-hidden="true">↗</span>
                 </a>
-              </div>
-              <p class="text-[14px] leading-[21px] text-text-2 text-pretty">{r.curta}</p>
-              <div class="mt-auto pt-1.5 border-t border-border flex items-center justify-between gap-2">
-                <div class="flex flex-col">
-                  <span class="hidden min-[43.75rem]:block text-[13px] text-text-muted">{r.tag}</span>
-                  <span class="text-[12px] leading-4 text-text-muted">
-                    {x.atualizado}: <time datetime={a.atualizadoEm}>{dataCurta(a.atualizadoEm, lang)}</time>
-                  </span>
-                </div>
-                <span aria-hidden="true" class={`hidden min-[43.75rem]:inline text-[14px] font-semibold ${COR_APP[c].texto}`}>→</span>
               </div>
             </article>
           );
@@ -94,23 +158,50 @@ const privacidade = t(lang, 'footer_privacy');
   <VerTodasApps lang={lang} chaves={resto} />
 </section>
 
-<div id="sobre" class="max-w-[1216px] mx-auto px-[clamp(16px,2.6vw,32px)] py-[clamp(48px,7vw,96px)] grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-[clamp(28px,4vw,48px)]">
-  <section aria-labelledby="h-sobre" class="flex flex-col gap-3">
-    <h2 id="h-sobre" class="text-[length:clamp(22px,2.4vw,28px)] leading-[1.25] font-bold text-text">{x.sobre_titulo}</h2>
-    <p class="text-body text-text-2 text-pretty" set:html={x.about_p1Html} />
-  </section>
-  <section aria-labelledby="h-privacidade" class="flex flex-col gap-3">
-    <h2 id="h-privacidade" class="text-[length:clamp(22px,2.4vw,28px)] leading-[1.25] font-bold text-text">{privacidade}</h2>
-    <ul class="flex flex-wrap gap-x-5">
+<section id="sobre" aria-labelledby="h-sobre" class="bg-surface border-y border-border">
+  <div class={`${container} ${secaoPy} grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 lg:gap-16 items-center`}>
+    <div class="lg:order-2 relative isolate grid place-items-center">
+      <span aria-hidden="true" class="absolute inset-0 -z-10 [background:var(--orn-aneis-sobre)] [mask-image:radial-gradient(closest-side,black,transparent)]" />
+      <div aria-hidden="true" class="revela text-numeral-sm md:text-numeral bg-linear-to-br from-brand to-info bg-clip-text text-transparent py-4 lg:py-10">{fundacao}</div>
+    </div>
+    <div class="lg:order-1 flex flex-col gap-5 max-w-[62ch]">
+      <h2 id="h-sobre" class="text-section text-balance text-text">{x.sobre_titulo}</h2>
+      <p class="text-lead text-text text-pretty" set:html={x.about_leadHtml} />
+      <p class="text-body text-text-2 text-pretty" set:html={x.about_restHtml} />
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="h-privacidade" class={`${container} ${secaoPy}`}>
+  <div class="revela rounded-card-lg border border-border bg-surface shadow-card p-5 t:p-6 lg:p-8">
+    <div class="flex items-center gap-4">
+      <span aria-hidden="true" class="size-12 flex-none grid place-items-center rounded-[14px] bg-app-panel text-app-acc text-[22px]">
+        <Icon nome="shield-halved" />
+      </span>
+      <h2 id="h-privacidade" class="text-h2 lg:text-h2-lg text-text">{privacidade}</h2>
+    </div>
+    <ul class="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-2 t:gap-3">
       {
         ORDEM_APPS.map((c) => (
           <li>
-            <a {...link(lang, apps[c].privacidade)} class="min-h-11 flex items-center text-[15px] text-text underline decoration-brand underline-offset-4 hover:decoration-2 anel-foco">
-              {apps[c].nome}<span class="sr-only"> — {privacidade}</span>
+            <a {...link(lang, apps[c].privacidade)} data-app={ACENTO[c]} class="h-full min-h-14 px-3 t:px-4 py-2 flex items-center gap-2 t:gap-3 rounded-[12px] border border-border bg-bg text-[14px] t:text-[15px] font-semibold text-text no-underline transition-colors duration-[var(--dur-fast)] hover:border-app-acc hover:bg-raised anel-foco">
+              <span aria-hidden="true" class="size-2.5 flex-none rounded-full bg-app-acc" />
+              <span class="flex-1 min-w-0 [overflow-wrap:break-word]">{apps[c].nome}<span class="sr-only"> — {privacidade}</span></span>
+              <span aria-hidden="true" class="text-app-acc">→</span>
             </a>
           </li>
         ))
       }
     </ul>
-  </section>
-</div>
+  </div>
+</section>
+
+<section id="fale" aria-labelledby="h-contato" class="relative isolate overflow-hidden border-t border-border">
+  <span aria-hidden="true" class="revela-glow absolute inset-0 -z-10 [background:var(--grad-glow-baixo)]" />
+  <span aria-hidden="true" class="absolute inset-x-0 bottom-0 h-1/2 -z-10 [background:var(--orn-pontos)] [mask-image:linear-gradient(to_top,black,transparent)]" />
+  <div class={`${container} py-[clamp(72px,10vw,128px)] flex flex-col items-center gap-5 text-center`}>
+    <h2 id="h-contato" class="revela text-section text-balance text-text">{contato}</h2>
+    <p class="revela [--i:1] text-lead text-text-2 max-w-[48ch] text-pretty">{x.contato_frase}</p>
+    <a href={`mailto:${EMAIL_SUPORTE}`} class="revela [--i:2] mt-3 btn-primario anel-foco max-w-full [overflow-wrap:anywhere]">{EMAIL_SUPORTE}</a>
+  </div>
+</section>

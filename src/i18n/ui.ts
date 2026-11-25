@@ -9,17 +9,22 @@
 // conteúdo" (WCAG 2.4.1), que o handoff não tem (resposta 8 do usuário, 2026-11-22).
 // Landings do WP-10 (fatia 5): `nav_funcionalidades`, `nav_planos`, `nav_gratis_pro`, `nav_faq` e
 // `nav_privacidade` são `features`/`plans`/`freepro`/`faq`/`privacy` de `content/i18n.js`.
+// WP-30 (fatia 1, resposta do usuário em 2026-11-24): `nav_portfolio` passa de "Portfólio"/"Portfolio"
+// a "Produtos"/"Products", o título da seção de apps da Home; a âncora continua `#portfolio`.
+// WP-30 (fatia 2, copy aprovada pelo usuário em 2026-11-24): `footer_desc` = `hero_desc` de home.ts,
+// verbatim. `EMAIL_SUPORTE`: o e-mail de contato, um lugar só (footer e CTA final da Home).
 // `Idioma` vem do mapa (idiomas.ts); fica reexportado aqui para os dicionários de src/i18n/.
 import type { Idioma } from './idiomas';
 
 export type { Idioma };
 
 export const SITE = 'https://ghfsoftware.com';
+export const EMAIL_SUPORTE = 'support@ghfsoftware.com';
 
 export const ui = {
   pt: {
     nav_about: 'Sobre Nós',
-    nav_portfolio: 'Portfólio',
+    nav_portfolio: 'Produtos',
     nav_contact: 'Contato',
     nav_principal: 'Principal',
     nav_funcionalidades: 'Funcionalidades',
@@ -30,7 +35,7 @@ export const ui = {
     menu: 'Menu',
     pular: 'Pular para o conteúdo',
     footer_desc:
-      'Engenharia de software de ponta para aplicações Mobile e Internet das Coisas. Criando o futuro, com performance desde 2004.',
+      'Apps nativos, plataformas em nuvem e IA aplicada, projetados e mantidos pela GHF Software desde 2004.',
     footer_app_page: 'Página do app',
     footer_privacy: 'Privacidade',
     footer_terms: 'Termos de uso',
@@ -42,7 +47,7 @@ export const ui = {
   },
   en: {
     nav_about: 'About Us',
-    nav_portfolio: 'Portfolio',
+    nav_portfolio: 'Products',
     nav_contact: 'Contact',
     nav_principal: 'Main',
     nav_funcionalidades: 'Features',
@@ -53,7 +58,7 @@ export const ui = {
     menu: 'Menu',
     pular: 'Skip to content',
     footer_desc:
-      'Cutting-edge software engineering for Mobile and IoT applications. Creating the future with performance since 2004.',
+      'Native apps, cloud platforms and applied AI, designed and maintained by GHF Software since 2004.',
     footer_app_page: 'App page',
     footer_privacy: 'Privacy',
     footer_terms: 'Terms of use',

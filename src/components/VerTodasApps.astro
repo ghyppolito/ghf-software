@@ -3,7 +3,7 @@
 // entrou na grade (app sem atualização há mais de 12 meses, retirado da Play ou além do 4º). Sem
 // desenho no handoff (HOME-VER-TODAS-SEM-DESENHO-01): a lista da 404 (ListaApps.astro, variante
 // `home`). App `indisponivel`: nome sem link, selo "Indisponível" e só o link da política. Lista
-// vazia: não renderiza.
+// vazia: não renderiza. WP-30 (fatia 1): título em eyebrow e mais distância da grade.
 import ListaApps from './ListaApps.astro';
 import { type ChaveApp } from '../i18n/apps';
 import { home } from '../i18n/home';
@@ -19,8 +19,8 @@ const x = home[lang];
 ---
 {
   chaves.length > 0 && (
-    <div class="mt-[clamp(24px,3vw,40px)] flex flex-col gap-2">
-      <h3 class="text-[13px] font-semibold text-text-muted">{x.todos_apps}</h3>
+    <div class="mt-[clamp(40px,5vw,64px)] flex flex-col gap-3">
+      <h3 class="text-eyebrow uppercase text-text-muted">{x.todos_apps}</h3>
       <ListaApps lang={lang} chaves={chaves} variante="home" />
     </div>
   )

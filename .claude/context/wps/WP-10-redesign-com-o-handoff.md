@@ -2,7 +2,7 @@
 id: WP-10
 titulo: A home e as landings de app seguem o sistema visual do handoff
 area: design
-status: doing
+status: todo
 depende_de: [WP-06, WP-08]
 adr: [ADR-001, ADR-004, ADR-005, ADR-006, ADR-007, ADR-008, ADR-009]
 spec: docs/AVALIACAO.md
@@ -16,6 +16,8 @@ branch: feat/wp-10-fatia-10a-aceite-parcial
 # WP-10 — A home e as landings de app seguem o sistema visual do handoff
 
 **Depende de:** WP-06 (handoff), WP-08 (componentes únicos) · **Achados roteados:** ECLIPSE-ICONE-OFFLINE-01 (ícone do card "offline" do EclipseGo, D21), POLE-PRINTS-2X-01 (do WP-12) · o WP-19 (rodada 3) está `done` e não segura mais as landings
+
+**Retomada (2026-11-24):** o WP-30 está `done`. Retomar depois do WP-32: fatias 7 (TopoWalk), 8 (Pole Position), 9 (capturas do scanner e da prestação de contas do LottoExpert) e 10b, já na direção do WP-30 (`design/REVISAO-VISUAL.md` §7). A fatia 9 fica parcial na `feat/wp-10-fatia-9-lottoexpert`. A 10b recebe `LEGAL-VOLTAR-BORDA-CASCA-01` e `ICONE-ECLIPSE-48PX-01`; a 7, `TOPOWALK-SELO-CONTRASTE-01`.
 
 **Objetivo:** tokens do handoff em `src/styles/tokens.css` (`@theme`, ADR-008); home com hierarquia por app (um
 toque até o app certo); as 4 landings com a mesma anatomia (hero + CTA → 3–5 funcionalidades
@@ -371,6 +373,38 @@ prova é o checklist de navegador.
    **Bloqueio para fechar (não para começar):** a copy que falte na fonte (D25) e as capturas
    das funcionalidades destacadas (D26). O repositório só tem o mockup do hero e os logos das loterias.
    Quem desbloqueia: o usuário.
+   **Respostas do usuário (2026-11-24, versão 2.06.00 fechada, em teste interno):**
+   - **Destaques (4, teto do template):** scanner, fechamento com garantia, bolão e prestação de
+     contas. Teimosinha, Meu Desempenho, conferência, resultados e backup vão para `todas`, sem imagem.
+   - **Capturas (D26):** o agente captura no emulador (`../lotto-expert/scripts/emulador.sh`,
+     `emulator-5580`, build debug 2.06.00, Pro pelo toggle de debug), com dados de exemplo sem dado
+     pessoal. Feitas: Home (hero), fechamento da Lotofácil, bolão "Turma do Trabalho" lacrado. Faltam:
+     **scanner**, que o usuário captura no próprio celular com bilhete real; **prestação de contas**,
+     depois do sorteio da Mega-Sena 3090 (bolão de exemplo já lacrado nesse concurso). Telas da 2.06.00
+     valem mesmo antes da Play; se a versão mudar, recapturar.
+   - **`/en/`:** mesmas capturas em pt (o app só tem pt), com `alt` em inglês, como no EclipseGo.
+   - **Topo:** título e descrição da ficha da Play (`LottoExpert: Loterias e Bolão`, D19 b), sem o
+     selo "Vantagem Competitiva" — fecha `LOTTO-COPY-VANTAGEM-01`. Imagem do hero: a Home com as
+     estimativas de prêmio; o `alt` descreve a tela sem falar em ganho.
+   - **Meta do hero:** "Grátis, com assinatura Pro opcional · Android 8.0 ou superior" (texto do usuário).
+   - **Fechamento:** 8 modalidades, como a ficha da Play (D19 a); `lottoexpert.ts:40` muda.
+   - **Prestação de contas:** grátis, sem etiqueta Pro.
+   **Respostas adicionais do usuário (2026-11-24):**
+   - **Lead:** a descrição curta (ASO:20) mais a frase de ASO:31. "Pro", e não "Premium", na landing.
+   - **Recorte do hero:** a prop opcional é autorizada; valor `50% 17%` (nome inteiro, borda dos cards
+     Quina/Lotomania cortada), escolhido contra `20%`.
+   - **Estrutura:** a grade de 9 logos sai; a seção "Como o app trabalha" entra. Meta: "Grátis, com plano
+     Pro opcional · Android 8.0 ou superior". O scanner diz "na Lotofácil e na Mega-Sena". Linha da tabela:
+     "Gerador para todas as loterias". O resumo da Home fica.
+   - **Deploy único só depois da 2.06.00 na produção da Play** (nota na D13).
+   **Entregue parcial (2026-11-24; commits 662e9ad e dc1dc7d, branch `feat/wp-10-fatia-9-lottoexpert`, não enviada; não fecha):**
+   - `src/i18n/lottoexpert.ts` no formato `ConteudoApp`; `LottoExpert.astro` vira invólucro de `PaginaLottoExpert` (tema `ghf`).
+   - `Hero.astro` ganha a prop opcional `posicao` e o `Landing` a `heroPosicao` (desvio do template, documentado). `PlanosNiveis`: espaço antes do período quando não começa com "/".
+   - A Home lê o resumo de `lottoexpert.ts`; `home.ts` perde `resumos.lottoexpert`.
+   - Capturas `hero`, `fechamento` e `bolao` 1080x1920 da 2.06.00 em demo mode. Removidos: mockup, `lottoexpert.png` e os 9 logos.
+   - Orçamento Lighthouse de `/lottoexpert.html` (325778 / 144680) autorizado. Medido: perf 98, a11y 100, bp 100, seo 100, LCP 2,25 s.
+   - Prova: build, `check_site.py` (raiz e `dist`), contrato, html-validate, unittest 42 OK, `test:css` 21 pass. `lychee` não rodou localmente (CI cobre).
+   **Falta para fechar a fatia 9 (4 destaques com captura):** scanner (o usuário captura no celular com bilhete real; o agente recorta só a barra de status) e prestação de contas (o agente captura no `emulator-5580` depois do sorteio da Mega-Sena 3090, de 24/11/2026; bolão "Turma do Trabalho" já lacrado nesse concurso). Depois: `apps.ts` (`tag` e `atualizadoEm` da 2.06.00) quando a versão chegar à Play.
 10. A fatia 10 se divide em 10a e 10b (D29, complemento de 2026-11-22). As duas ficam numa
     posição diferente da ordem: a 10a vem logo depois da 6, a 10b é a última.
 
