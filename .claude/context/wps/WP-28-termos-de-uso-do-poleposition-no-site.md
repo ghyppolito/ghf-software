@@ -2,7 +2,7 @@
 id: WP-28
 titulo: Os termos de uso do Pole Position existem no site em pt e en, espelhados do repositório do app
 area: legal
-status: doing
+status: done
 depende_de: []
 adr: [ADR-001, ADR-004, ADR-005, ADR-007]
 spec: ""
@@ -144,3 +144,19 @@ mal, ficha apontando antes da página existir dá 404 ao revisor da loja.
 4. Inglês: o `/en/` nasce junto (caminho B); a ficha en cita `/en/...` se o Play pedir.
 5. Quem escreve o `TERMS_OF_SERVICE.md` e quando chega à branch principal do app: em aberto — pré-condição do passo 1.
 6. Publicação: D28 (B), integração e deploy único.
+
+## Registro de execução (2026-11-25)
+
+- Origem: `pole-position-app@192e624` (origin/master, PR #328 do app), `TERMS_OF_USE.md` sem en (o site
+  traduz, D7). Caminho da origem corrigido para `../pole-position-app` (PP-ORIGEM-CAMINHO-01,
+  CLAUDE-MD-POLE-CAMINHO-01, SYNC-LEGAL-DOCSTRING-GIT-01 resolvidos): §4 e §21 voltam a conferir o Pole.
+- Política atualizada da mesma origem (seção 2: quatro marcos de ativação; sai "circuitos criados"); en
+  atualizado só nesses itens. Data da política continua "outubro de 2026" (POLE-PRIVACY-SEM-DATA-NOVA-01,
+  nota para o app).
+- Página `/poleposition-terms.html` (pt e `/en/`), rodapé, URL contratual. Commits `b04b905`, `0ee1ca6`.
+- Revisão do usuário na tradução: foro "the courts of the consumer's domicile have jurisdiction";
+  renúncia na forma do EclipseGo ("Failure to enforce any provision does not constitute a waiver…").
+  Nome "Hyppolito" sem acento na origem: POLE-TERMOS-NOME-ACENTO-01 (nota para o app).
+- Verificação: build, check_site (raiz e dist) ✅, sync_legal --todos --check "nada a fazer",
+  unittest 43 OK, html-validate e contrato ok. Pendente: navegador (/poleposition-terms.html e /en/) e,
+  depois do deploy, a URL na ficha da Play.
