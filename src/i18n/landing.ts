@@ -26,10 +26,12 @@ export interface Funcionalidade {
   imagem?: string;
   /** obrigatório se há imagem */
   alt?: string;
-  /** como a imagem sai (WP-10, fatia 7): `captura` (tela do app na moldura de aparelho, o padrão) ou
+  /** como a imagem sai (WP-10, fatia 7): `captura` (tela do app na moldura de aparelho, o padrão),
    *  `documento` (página de um arquivo gerado pelo app, ex.: o laudo PDF do TopoWalk, em papel com
-   *  borda e brilho do acento; landing/Documento.astro); igual em todas as línguas */
-  imagemTipo?: 'captura' | 'documento';
+   *  borda e brilho do acento; landing/Documento.astro) ou `imagem` (fatia 8: imagem que o app gera
+   *  para tela, ex.: o card PNG de compartilhamento do Pole Position; a mesma figura do documento,
+   *  em superfície escura em vez de papel); igual em todas as línguas */
+  imagemTipo?: 'captura' | 'documento' | 'imagem';
   /** ícone (nome em src/icons/fa/solid/) do destaque sem imagem, que sai em cartão (WP-30, fatia 2);
    *  igual em todas as línguas */
   icone?: string;

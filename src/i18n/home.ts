@@ -9,10 +9,11 @@
 //   traz o pt destes quatro: o en ("Published", "Unavailable", "{app} on Google Play") é tradução.
 // - `resumos`: tag, texto longo e texto curto de cada app, no formato `ConteudoApp['resumo']`
 //   (landing.ts), movidos sem edição das chaves antigas (`tag_*`, `app_*_desc`, `hero_*_desc`).
-//   O card usa só `tag` e `curta` (D30 (3)). Cada fatia de landing (7, 8, 9) move o objeto para o
-//   `<app>.ts` e troca uma linha no Home.astro. O do EclipseGo já está em eclipsego.ts, o do
-//   LottoExpert em lottoexpert.ts (fatia 9, texto mantido por resposta do usuário em 2026-11-24) e o
-//   do TopoWalk em topowalk.ts (fatia 7, texto igual).
+//   O card usa só `tag` e `curta` (D30 (3)). Cada fatia de landing (7, 8, 9) moveu o objeto para o
+//   `<app>.ts` e trocou uma linha no Home.astro: o do EclipseGo está em eclipsego.ts, o do
+//   LottoExpert em lottoexpert.ts (fatia 9, texto mantido por resposta do usuário em 2026-11-24), o
+//   do TopoWalk em topowalk.ts (fatia 7, texto igual) e o do Pole Position em poleposition.ts
+//   (fatia 8, texto igual). Não sobra resumo aqui.
 // - WP-30, fatia 1 (respostas do usuário em 2026-11-24, D25 e D33): `hero_title` e `hero_desc`
 //   novos (o h1 e o subtítulo aprovados),
 //   `apps_titulo` passa a "Produtos"/"Products", `areas_titulo` e `areas` (as três áreas de atuação,
@@ -25,7 +26,6 @@
 
 import type { Idioma } from './ui';
 
-type Resumo = { tag: string; descricao: string; curta: string };
 type Area = { titulo: string; texto: string };
 
 type TextosHome = {
@@ -55,7 +55,6 @@ type TextosHome = {
   about_leadHtml: string;
   /** o resto do texto do Sobre */
   about_restHtml: string;
-  resumos: { poleposition: Resumo };
 };
 
 export const home = {
@@ -91,14 +90,6 @@ export const home = {
       'A <strong>GHF Software</strong> é impulsionada pela paixão por resolver problemas complexos com soluções elegantes.',
     about_restHtml:
       'Nossa empresa foi fundada por um <strong>Arquiteto de Sistemas</strong> com profunda bagagem técnica e experiência em desenvolvimento de software e soluções atuando ativamente <strong>desde 2004</strong>.',
-    resumos: {
-      poleposition: {
-        tag: 'Kart & Automobilismo',
-        descricao:
-          'Transforma seu smartphone numa interface de telemetria offline. Com GPS de alta frequência, Força G lateral em tempo real e detecção vetorial de parciais.',
-        curta: 'Telemetria de kart e automobilismo real-time.',
-      },
-    },
   },
   en: {
     title: 'GHF Software — Software engineering, phone to cloud', // ≤ 60 caracteres (check_site); versão curta aprovada pelo usuário em 2026-11-24
@@ -128,13 +119,5 @@ export const home = {
       '<strong>GHF Software</strong> is driven by a passion for solving complex mechanics into elegant solutions.',
     about_restHtml:
       'Founded by a <strong>Systems Architect</strong> with profound technical background actively operating <strong>since 2004</strong>.',
-    resumos: {
-      poleposition: {
-        tag: 'Karting & Motorsport',
-        descricao:
-          'Transforms your smartphone into an offline telemetry dashboard. Featuring high-frequency GPS, real-time lateral G-force, and rigorous vector split detection.',
-        curta: 'Real-time kart and motorsport telemetry.',
-      },
-    },
   },
 } as const satisfies Record<Idioma, TextosHome>;
